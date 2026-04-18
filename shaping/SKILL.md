@@ -116,6 +116,47 @@ Rules:
 - What requirement is still not accounted for?
 - Are we missing a requirement because the current options all feel wrong?
 
+## Kick-off: From selected shape to slices
+
+Use this as an optional exercise before handing work off to breadboarding or slice planning.
+
+The purpose is to make the full implied scope visible and externalize the grouping and sequencing work that strong builders often do in their heads.
+
+### Step 1 — Dump
+List every task implied by the selected shape.
+
+Do not organize yet. Prioritize completeness over structure.
+
+### Step 2 — Affinitize
+Group tasks by asking: which tasks can be completed together, in isolation from the rest?
+
+Use unnamed groups first. Do not name them until they are filled.
+
+This helps the grouping emerge from the actual work rather than from pre-conceived categories.
+
+Constraints:
+- maximum 10 groups
+- groups remain unnamed until populated
+- a task belongs in a group when it can be completed in isolation alongside the others in that group
+
+### Step 3 — Name
+Once groups are filled, give each one a name.
+
+Names should reflect what the group does. These names become scope handles — shorthand for the mechanisms being built.
+
+### Step 4 — Flag unknowns
+Look across the named groups and ask: which are more unknown than the others?
+
+Start by identifying what is routine and familiar. What remains are the unknowns.
+
+Flag unknown groups explicitly before sequencing.
+
+Output from this exercise:
+- named groups
+- unknown groups flagged
+
+This output feeds naturally into breadboarding and then into slice sequencing.
+
 ## Transition to breadboarding
 
 Move from shaping to breadboarding when:
