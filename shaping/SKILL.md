@@ -33,6 +33,33 @@ Recommended statuses:
 - Undecided
 - Out
 
+### Requirement smell test
+
+Before keeping a line in `R`, ask:
+
+1. Would this still need to be true if we built the solution in a completely different way?
+2. Does it name a specific UI, runtime, vendor, protocol, storage method, or architecture?
+3. Is this describing an underlying need or constraint, or just one proposed way to satisfy it?
+4. Can this be rewritten as a capability, outcome, or constraint instead of an implementation choice?
+
+If a line names a mechanism, it probably belongs in the shape, not the requirements.
+
+Common signs that an `R` is really a solution choice:
+- names a specific interface like TUI, modal, web app, or input field
+- names a specific implementation like local LLM, cron job, REST API, SQLite, or queue
+- names a specific provider or dependency
+- describes how the system should work internally rather than what must be true
+
+Examples:
+- ❌ `Use a TUI`
+- ✅ `User can inspect and change the current state from one interaction surface`
+
+- ❌ `Fetch timezone data from the internet on every load`
+- ✅ `Timezone data must be accurate at runtime for the requested locale`
+
+- ❌ `Use a local LLM to change locales and dates`
+- ✅ `User can change locales and time window through natural-language input`
+
 ### Shapes
 Shapes are competing or composable solution directions.
 
@@ -52,6 +79,7 @@ If a part has internal alternatives, use nested notation:
 3. Keep the notation stable as the conversation evolves.
 4. When a fit check fails, either improve the shape or add the missing requirement.
 5. When a shape is selected, detail it rather than inventing a new sibling shape unless it is truly an alternative.
+6. If a requirement names a mechanism, rewrite it as a need or move it into the shape.
 
 ## Recommended document structure
 
@@ -115,6 +143,8 @@ Rules:
 - What requirement is this part satisfying?
 - What requirement is still not accounted for?
 - Are we missing a requirement because the current options all feel wrong?
+- Is this requirement actually a solution choice in disguise?
+- If we changed the interface or implementation completely, would this still need to be true?
 
 ## Kick-off: From selected shape to slices
 
