@@ -122,3 +122,66 @@ If you add a diagram:
 ## Transition to slicing
 
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
+
+## Sequencing slices: two passes
+
+Slice order is not intuitive. Sequence slices with two passes, in order.
+
+### Pass 1 — Dependencies
+Map which slices depend on other slices.
+
+A slice depends on another when it requires affordances, data structures, routes, or stores that the other slice produces.
+
+Start with slices that have no dependencies and work upward through the causal chain. This gives you the minimum valid ordering — constraints you cannot violate.
+
+### Pass 2 — Unknowns
+Among slices that are valid starting points, ask: which has the biggest unknown?
+
+An unknown is something where you do not yet know if it is feasible, how it works, or how long it will take.
+
+Move the slice with the biggest unknown as early as possible. This creates the most time to resolve the hard problem before it becomes a crisis.
+
+Start by identifying what is routine and familiar. What remains are the unknowns.
+
+The final sequence is:
+- dependencies set the floor
+- unknowns break ties within that floor
+
+## Exit conditions are defined right-to-left
+
+A slice is done when it produces the output the next slice needs as input — not when it is abstractly complete.
+
+Before finalizing each slice boundary, look at what comes immediately after it in the sequence.
+
+Ask: what does the next slice need in order to start?
+
+The current slice must deliver exactly that — no more, no less.
+
+This prevents two common failure modes:
+- **Scope creep left** — building things that are only needed much later, before the next slice actually needs them
+- **Underdelivery** — stopping before the next slice has what it needs to begin
+
+When writing the demo statement for each slice, include what it produces for the next slice to consume.
+
+Use this format:
+- `Produces: [what this slice outputs for the next slice]`
+
+If you cannot name what the slice produces for the next one, the slice boundary may be wrong.
+
+## Cutting
+
+When the breadboard implies more than 9 slices, cut — do not compress.
+
+Compressing forces slices that are too large to demo a single mechanism. Cutting removes mechanisms from the current cycle entirely.
+
+Present cut candidates explicitly. Do not silently merge or omit them.
+
+Use this format:
+- **In scope (this cycle):** Slices V1–VN demonstrating mechanisms X, Y, Z
+- **Cut (not this cycle):** Mechanisms A, B — reason for deferral
+
+The human decides what gets cut. This is an appetite decision. The breadboard's job is to make the trade-off visible, not to make the call.
+
+When a slice is cut, add a **Cut** section at the bottom of the slice summary with a one-line reason. Do not delete it. Deferred work is different from rejected work.
+
+Cutting is also available later at implementation gates. If a slice runs long or reveals unexpected complexity, a later slice can be cut rather than extending the timeline.
