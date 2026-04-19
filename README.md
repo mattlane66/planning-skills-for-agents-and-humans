@@ -8,6 +8,10 @@ The emphasis is on legibility:
 - map places, affordances, state, and wiring before losing the plot
 - keep high-level and low-level planning artifacts aligned as the work evolves
 
+## Planning Skills vs. Spec Kit
+
+This repo is not a replacement for Spec Kit. It is a complementary planning layer. Use these skills earlier in the process to frame the problem, separate requirements from mechanisms, compare shapes, breadboard the system, and slice the work into demoable scopes. Then use a broader spec-driven workflow like Spec Kit when you want project-level specs, plans, tasks, and implementation orchestration.
+
 ## Skills
 
 ### `/framing-doc`
