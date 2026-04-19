@@ -29,6 +29,18 @@ Map a system into places, affordances, stores, and wiring so behavior is concret
 ### `/breadboard-reflection`
 Compare a breadboard to the implementation, repair drift, and look for design smells such as hidden state, weak boundaries, or missing steps.
 
+## Examples
+
+If you want to see the skills used step by step, start in [`examples/`](./examples).
+
+The included `simple-grocery-list` example walks through:
+- raw source notes
+- a frame
+- shaping with competing directions
+- an optional kickoff doc
+- a breadboard
+- a post-implementation breadboard reflection
+
 ## Install
 
 ```bash
