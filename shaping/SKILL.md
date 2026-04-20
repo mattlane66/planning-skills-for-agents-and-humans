@@ -19,6 +19,14 @@ Turn a fuzzy request into a concrete shaping document that keeps three things se
 
 Shaping is iterative. Requirements sharpen the shape. Shapes reveal missing requirements. The work is to keep both visible at the same time without collapsing them into each other.
 
+## Starting points
+
+You can start from either side:
+- **Start from requirements** — describe the problem, constraints, or pain points first, then let shapes emerge
+- **Start from a shape** — capture a solution already in mind, then extract or revise requirements as you go
+
+There is no required order. Requirements and shapes inform each other throughout.
+
 ## Main artifacts
 
 ### Requirements
@@ -32,6 +40,8 @@ Recommended statuses:
 - Nice-to-have
 - Undecided
 - Out
+
+Keep the top level scannable. If requirements proliferate, group related ones rather than letting the top level grow without structure.
 
 ### Requirement smell test
 
@@ -65,12 +75,35 @@ Shapes are competing or composable solution directions.
 
 Use letters for alternative directions:
 - `A`, `B`, `C`
+- `CURRENT` may be used to describe the existing system as a baseline
 
 Use numbered parts for mechanisms inside a chosen direction:
 - `B1`, `B2`, `B3`
 
 If a part has internal alternatives, use nested notation:
 - `B3-A`, `B3-B`
+
+Give each serious shape a short title that characterizes the approach.
+
+## Shape parts and flagged unknowns
+
+Shape parts should describe mechanisms, not intentions.
+
+- ✅ `Persist filter state in the URL and restore it on load`
+- ❌ `State should work better`
+
+Use a flag when a mechanism is described at a high level but is not yet concretely understood.
+
+| Part | Mechanism | Flag |
+|------|-----------|:----:|
+| B1 | Save state in URL | |
+| B2 | Integrate local LLM command parser | ⚠️ |
+
+Meaning:
+- empty flag = mechanism is concretely understood enough to count as known
+- `⚠️` = described in outline, but the how is still unresolved
+
+A flagged unknown should not be treated as confidently solved in a fit check. Resolve it or spike it.
 
 ## Working rules
 
@@ -80,6 +113,22 @@ If a part has internal alternatives, use nested notation:
 4. When a fit check fails, either improve the shape or add the missing requirement.
 5. When a shape is selected, detail it rather than inventing a new sibling shape unless it is truly an alternative.
 6. If a requirement names a mechanism, rewrite it as a need or move it into the shape.
+7. Avoid tautologies where the shape merely repeats the requirement in different words.
+8. Prefer vertical mechanisms over horizontal buckets where possible.
+
+## Possible actions
+
+These can happen in any order as the shaping evolves:
+- populate requirements
+- sketch a shape
+- detail a shape into parts
+- explore alternatives for a part
+- run a fit check
+- extract new requirements revealed by the fit check
+- spike an unknown
+- decide among alternatives
+- breadboard the selected shape
+- slice the breadboarded shape
 
 ## Recommended document structure
 
@@ -135,16 +184,83 @@ Rules:
 - Put explanations below the table, not inside shape cells
 - If something is still unknown, it is not yet a pass
 
-## Good prompts for the shaping conversation
+If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
 
-- What problem is worth solving here?
-- What constraints are actually non-negotiable?
-- What solution directions are meaningfully different?
-- What requirement is this part satisfying?
-- What requirement is still not accounted for?
-- Are we missing a requirement because the current options all feel wrong?
-- Is this requirement actually a solution choice in disguise?
-- If we changed the interface or implementation completely, would this still need to be true?
+## Communication
+
+### Show full tables
+
+When displaying requirements, shapes, or fit checks, show the full table rather than a summary whenever practical. Shaping is collaborative negotiation. Partial views hide what matters.
+
+### Keep changes visible
+
+When revising tables, make changed lines easy to spot. The user should not have to mentally diff a whole table to understand what moved.
+
+## Spikes
+
+A spike is an investigation task used when a part is still uncertain and you need objective information about how something works or what concrete steps would be required.
+
+### Purpose
+
+Use a spike to:
+- learn how the current system works in the relevant area
+- identify what would need to change to achieve the mechanism
+- surface constraints that affect the solution
+- reduce uncertainty before pretending a flagged part is understood
+
+### File management
+
+Create spikes in their own file when the investigation is substantial.
+
+Examples:
+- `spike-llm-runtime.md`
+- `spike-search-index.md`
+
+### Good spike questions
+
+Ask questions about mechanics, for example:
+- Where is the current logic?
+- How does this behavior actually happen today?
+- What would need to change to support the proposed mechanism?
+- What constraints or dependencies affect this part?
+
+Avoid vague yes/no questions and avoid using the spike only to guess effort.
+
+### Minimal spike structure
+
+```md
+## [Part] Spike: [Title]
+
+### Context
+Why this needs investigation.
+
+### Goal
+What we are trying to learn.
+
+### Questions
+| # | Question |
+|---|----------|
+| Q1 | ... |
+| Q2 | ... |
+
+### Acceptance
+Spike is complete when all questions are answered and the mechanism can be described concretely.
+```
+
+## Detailing a selected shape
+
+When a shape is chosen, detail it rather than turning it into a new sibling shape.
+
+Use `Detail B` to show that the work is a deeper breakdown of shape `B`, not a new alternative.
+
+Detailing usually produces:
+- places
+- UI affordances
+- non-UI affordances
+- stores
+- wiring
+
+At that point, use the breadboarding skill.
 
 ## Kick-off: From selected shape to slices
 
@@ -186,6 +302,36 @@ Output from this exercise:
 - unknown groups flagged
 
 This output feeds naturally into breadboarding and then into slice sequencing.
+
+## Documents and ripple consistency
+
+Shaping usually leaves behind multiple planning artifacts at different levels.
+
+Typical stack:
+- frame
+- shaping doc
+- breadboard or slices doc
+- slice plans
+
+Truth has to stay consistent across levels. If a mechanism changes in the shaping doc, downstream artifacts may need updates. If implementation planning reveals a new mechanism, the shaping doc may need to reflect it.
+
+Whenever making a change:
+1. identify which artifact level you are touching
+2. ask whether it affects artifacts above or below
+3. update affected layers in the same operation when possible
+
+## Good prompts for the shaping conversation
+
+- What problem is worth solving here?
+- What constraints are actually non-negotiable?
+- What solution directions are meaningfully different?
+- What requirement is this part satisfying?
+- What requirement is still not accounted for?
+- Are we missing a requirement because the current options all feel wrong?
+- Is this requirement actually a solution choice in disguise?
+- If we changed the interface or implementation completely, would this still need to be true?
+- Which parts are still flagged unknowns?
+- What should we spike next?
 
 ## Transition to breadboarding
 
