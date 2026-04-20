@@ -5,7 +5,7 @@ A set of planning skills for turning fuzzy requests, messy transcripts, and part
 The emphasis is on legibility:
 - frame the problem before racing to implementation
 - compare alternatives before locking in a solution
-- map places, affordances, state, and wiring before losing the plot
+- map places, affordances, state, and wiring before losing the plot while maintaining latitude
 - keep high-level and low-level planning artifacts aligned as the work evolves
 
 ## Planning Skills vs. Spec Kit
