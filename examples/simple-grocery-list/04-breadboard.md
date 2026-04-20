@@ -43,6 +43,59 @@ planning: true
 | S1 | P1 | items | Array of grocery items with text and `bought` boolean |
 | S2 | P1 | hideBought | Boolean controlling whether bought items are filtered from view |
 
+## Mermaid diagram
+
+```mermaid
+flowchart TD
+  subgraph P1["P1 Grocery list page"]
+    U1["U1 item input"]
+    U2["U2 add button"]
+    U3["U3 bought checkbox"]
+    U4["U4 hide-bought toggle"]
+    U5["U5 visible items list"]
+
+    N1["N1 submit item"]
+    N2["N2 normalize item text"]
+    N3["N3 validate duplicate"]
+    N4["N4 toggle bought state"]
+    N5["N5 compute visible items"]
+    N6["N6 set hide-bought state"]
+    N7["N7 update items store"]
+    N8["N8 render visible items"]
+
+    S1[("S1 items")]
+    S2[("S2 hideBought")]
+  end
+
+  subgraph P2["P2 Local storage boundary"]
+    N9["N9 save list state"]
+    N10["N10 load list state on startup"]
+  end
+
+  U1 --> N1
+  U2 --> N1
+  U3 --> N4
+  U4 --> N6
+
+  N1 --> N2
+  N2 --> N3
+  N3 --> N7
+  N4 --> N7
+  N6 --> N5
+  N5 --> N8
+  N7 --> N9
+  N10 --> N7
+
+  S1 -.-> N7
+  S1 -.-> N8
+  S2 -.-> N8
+  S1 -.-> N9
+  S2 -.-> N9
+  N8 -.-> U5
+  N10 -.-> S1
+  N10 -.-> S2
+```
+
 ## Notes
 
 - The chosen shape uses one item store plus a visibility filter, not separate Needed and Bought stores.
