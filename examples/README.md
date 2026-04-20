@@ -2,7 +2,7 @@
 
 This folder contains a simple, end-to-end example showing how to use the skills in this repo in a realistic order.
 
-The example is intentionally much simpler than the larger shaping walkthroughs this repo was inspired by. The goal is to make it obvious:
+The example is intentionally much simpler than your real world situation. The goal is to make it obvious:
 - what to start with
 - which skill to use next
 - what each output should look like
