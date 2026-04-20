@@ -45,6 +45,82 @@ The included `simple-grocery-list` example walks through:
 - a breadboard
 - a post-implementation breadboard reflection
 
+## Using these skills outside Claude Code
+
+These skills are packaged for Claude Code, but the method is portable.
+
+The `SKILL.md` files are plain Markdown instructions. In tools like Cursor, Codex, or other agent environments, use them as reusable prompt templates or repo-local instruction docs.
+
+The core workflow stays the same:
+
+1. Start with raw notes or transcripts.
+2. Create a frame.
+3. Shape the problem and compare options.
+4. Choose a direction.
+5. Breadboard the chosen shape.
+6. Reflect against implementation later when code exists.
+
+What changes across tools is just **how you invoke the instructions**, not the method itself.
+
+### Plain markdown workflow
+
+The simplest portable setup is to keep the skill files in your repo and point your tool at them explicitly.
+
+Example structure:
+
+```text
+docs/planning-skills/
+  framing-doc.md
+  shaping.md
+  breadboarding.md
+  kickoff-doc.md
+  breadboard-reflection.md
+
+planning/
+  frame.md
+  shaping.md
+  breadboard.md
+```
+
+Example prompt:
+
+```text
+Read docs/planning-skills/shaping.md first.
+Then help me shape this feature.
+Separate requirements from mechanisms, compare options, run a fit check, and write the result to planning/shaping.md.
+```
+
+### Cursor
+
+In Cursor, these skills work best as repo-local rules, prompt files, or docs the agent is told to read before acting.
+
+Example prompt:
+
+```text
+Use the breadboarding instructions from docs/planning-skills/breadboarding.md.
+Create a breadboard for the chosen shape in planning/breadboard.md.
+Focus on places, affordances, visible consequences, and hidden system behavior that matters.
+```
+
+### Codex
+
+In Codex-style workflows, these skills work best as reusable prompt files or planning docs checked into the repo.
+
+Example prompt:
+
+```text
+Read docs/planning-skills/framing-doc.md first.
+Turn these notes into a frame with Source, Problem, Outcome, and Boundaries.
+Write the result to planning/frame.md.
+```
+
+### Summary
+
+- **Claude Code**: native skill packaging
+- **Other tools**: prompt-template or repo-doc packaging
+
+So the workflow is tool-agnostic in substance, but Claude-specific in packaging.
+
 ## Install
 
 ```bash
