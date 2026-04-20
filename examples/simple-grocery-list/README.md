@@ -39,7 +39,7 @@ Compare your output to `01-frame.md`.
 
 ## Step 2 — Shape the problem and compare solution directions
 
-Use `/shaping` once the problem is clear enough to define requirements and compare solution directions. I use requirements and criteria interchangeably, which I define as unit items that give us the fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.). I also determine if a criterion is a Must Have or not.
+Use `/shaping` once the problem is clear enough to define requirements and compare solution directions.
 
 Example prompt:
 
