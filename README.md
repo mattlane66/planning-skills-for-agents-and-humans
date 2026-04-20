@@ -22,7 +22,7 @@ More directly (including [HumanLayer](https://www.humanlayer.dev)):
 Turn source material such as interview transcript syntheses, strategy notes, stakeholder messages, etc. into a frame that captures the living world context and boundaries, current approach and result, and desired outcome.
 
 ### `/shaping`
-Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
+Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction. (NOTE: I use requirements and criteria interchangeably, which I define as unit items that give us the fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.). I also determine if a criterion is a Must Have or not.)
 
 ### `/breadboarding`
 Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
