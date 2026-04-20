@@ -1,20 +1,58 @@
 ---
 name: breadboarding
-description: Map a system into places, affordances, stores, and wiring.
+description: Map a chosen solution into places, affordances, consequences, stores, and wiring.
 planning: true
 ---
 
 # Breadboarding
 
-Use this skill when the team needs to understand how a system behaves, where changes land, and how UI and non-UI elements connect.
+Use this skill when the team needs to understand how a chosen solution behaves, where the user is, what they can do there, and what hidden system consequences matter.
 
 ## Goal
 
 Produce a legible system map that shows:
 - the places a person or operator can be in
 - the affordances available in those places
+- the important hidden system consequences
 - the stores or state that matter
 - the wiring between all of them
+
+## What breadboarding is
+
+Breadboarding is a lightweight UI shorthand.
+
+It separates what users can interact with in the interface from what happens in the code or design system underneath.
+
+The places act like interface endpoints or bounded states. The affordances show what the user can do there. The wiring explains what happens between what the user sees.
+
+Because it uses words instead of pictures, and because the important things are the components and their connections, you can quickly play out an idea and judge whether the sequence of actions actually serves the use case.
+
+## Center of gravity
+
+A breadboard is mainly about:
+- place
+- affordance
+- visible consequence
+- the hidden system behavior that matters to the product behavior
+
+It is **not** mainly a service graph.
+
+If the diagram starts to read like:
+- service → service → store → render
+
+then it is probably too implementation-heavy.
+
+Prefer wording that stays tied to product behavior, such as:
+- check duplicate
+- save list
+- restore saved state on launch
+- hide bought items from current view
+
+rather than internal decomposition such as:
+- normalize service
+- filtering service
+- state manager
+- renderer pipeline
 
 ## Core concepts
 
@@ -25,7 +63,12 @@ Examples:
 - a page
 - a blocking modal
 - a full-screen edit mode
-- a backend boundary when mapping a cross-system flow
+- a meaningful system boundary when it affects product behavior
+
+Ask:
+- what place is the user in?
+- what can they do from here?
+- what visibly changes after they do it?
 
 ### Affordances
 Affordances are the things that can be acted upon or that produce effects.
@@ -36,12 +79,19 @@ Use these prefixes:
 - `S` for stores or state
 - `P` for places
 
+Keep non-UI affordances close to product-relevant consequences.
+
 ### Wiring
 Wiring explains behavior.
 
 Track two kinds:
 - **Wires Out** for control flow: what triggers what
-- **Returns To** for data flow: where outputs or state are consumed
+- **Returns To** for data flow or visible consequence: where outputs or state are consumed
+
+A good breadboard should help answer:
+- what can the user do here?
+- what happens next?
+- what changes in the product?
 
 ## Required tables
 
@@ -74,10 +124,11 @@ Track two kinds:
 1. Identify the workflow or effect to explain.
 2. List the places involved.
 3. Identify the concrete affordances in each place.
-4. Add the stores that shape the behavior.
-5. Fill in control flow with **Wires Out**.
-6. Fill in data flow with **Returns To**.
-7. Check that every visible effect can be explained by the wiring.
+4. Add the hidden system consequences that matter to product behavior.
+5. Add the stores that shape the behavior.
+6. Fill in control flow with **Wires Out**.
+7. Fill in data flow and visible consequence with **Returns To**.
+8. Check that every visible effect can be explained by the wiring.
 
 ## Quality checks
 
@@ -85,6 +136,8 @@ Track two kinds:
 - Every code affordance should either trigger something, return something, or both.
 - Avoid vague affordance names like `database`, `logic`, or `handler stuff`.
 - Prefer real names that point to a thing someone can find in code or design.
+- Prefer product-facing hidden behavior over abstract service decomposition.
+- Make important user-visible consequences first-class.
 
 ## Recommended output structure
 
@@ -116,7 +169,10 @@ planning: true
 A Mermaid diagram is optional. The tables are the source of truth.
 
 If you add a diagram:
+- group nodes by place first
+- make affordances under each place visible
 - keep IDs consistent with the tables
+- show product consequences, not only internal calls
 - treat the diagram as a rendering of the tables, not the other way around
 
 ## Transition to slicing
