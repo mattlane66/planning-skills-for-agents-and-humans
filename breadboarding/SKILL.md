@@ -17,6 +17,47 @@ Produce a legible system map that shows:
 - the stores or state that matter
 - the wiring between all of them
 
+The tables are the source of truth. Mermaid diagrams are optional visualizations for humans.
+
+## Use cases
+
+Breadboarding serves three common functions:
+
+### 1. Mapping an existing system
+
+Use this when you do not yet understand how an existing system works in concrete detail.
+
+Input:
+- codebase or systems to analyze
+- a workflow description from the perspective of someone trying to make an effect happen
+
+Output:
+- Places table
+- UI affordances table
+- Non-UI affordances table
+- Stores table
+- optional Mermaid diagram
+
+### 2. Designing from shaped parts
+
+Use this when shaping has already produced mechanisms and you need to detail them into concrete affordances and wiring.
+
+Input:
+- chosen shape and parts
+- the requirements or outcomes those parts must satisfy
+- optionally the existing system they need to connect to
+
+Output:
+- Places table
+- UI affordances table
+- Non-UI affordances table
+- Stores table
+- optional Mermaid diagram
+
+### 3. Mixtures of existing and new
+
+Often you need both: existing affordances that remain, plus new affordances from the chosen shape. Breadboard them together so the full story is visible.
+
 ## What breadboarding is
 
 Breadboarding is a lightweight UI shorthand.
@@ -70,6 +111,20 @@ Ask:
 - what can they do from here?
 - what visibly changes after they do it?
 
+### The blocking test
+
+The simplest test for whether something is a different place: can you interact with what is behind it?
+
+- **No** → different place
+- **Yes** → same place with local state changes
+
+### Local state vs place navigation
+
+When a control changes state, ask whether everything changed or only a subset while the surroundings stayed the same.
+
+- local state = same place, changed subset
+- place navigation = the user is now somewhere else in a meaningful sense
+
 ### Make meaningful user-visible states first-class
 
 If a state changes what the user can do next or what they can see, consider representing it as its own place.
@@ -82,6 +137,12 @@ Examples:
 
 Do not hide important user-visible states inside only non-UI affordances.
 
+### Place IDs
+
+Places are first-class elements in the model and should get IDs such as `P1`, `P2`, `P3`.
+
+Use place IDs so navigation wires can point to places directly.
+
 ### Affordances
 Affordances are the things that can be acted upon or that produce effects.
 
@@ -92,6 +153,16 @@ Use these prefixes:
 - `P` for places
 
 Keep non-UI affordances close to product-relevant consequences.
+
+### Containment vs wiring
+
+Containment and wiring are different relationships.
+
+- **Containment** = which place an affordance belongs to
+- **Wiring** = what an affordance triggers or feeds
+
+The Place column answers: where does this affordance live?
+The Wires Out and Returns To columns answer: what does it trigger and where does its output go?
 
 ### Wiring
 Wiring explains behavior.
@@ -104,6 +175,16 @@ A good breadboard should help answer:
 - what can the user do here?
 - what happens next?
 - what changes in the product?
+
+### Navigation wiring
+
+When an affordance causes navigation, wire to the **place itself**, not to an affordance inside that place.
+
+Good:
+- `N1 → P2`
+
+Less useful:
+- `N1 → U7`
 
 ### Show product-relevant branches explicitly
 
@@ -141,16 +222,30 @@ Examples:
 |----|-------|-------|-------------|
 | S1 | P1 | results | Search results array |
 
-## Procedure
+## Procedures
+
+### Mapping an existing system
 
 1. Identify the workflow or effect to explain.
 2. List the places involved.
-3. Identify the concrete affordances in each place.
-4. Add the hidden system consequences that matter to product behavior.
-5. Add the stores that shape the behavior.
-6. Fill in control flow with **Wires Out**.
-7. Fill in data flow and visible consequence with **Returns To**.
-8. Check that every visible effect can be explained by the wiring.
+3. Trace the code or system to find all components touched by that flow.
+4. Identify the concrete affordances in each place.
+5. Name real things that exist in the code or design — not abstractions.
+6. Add the hidden system consequences that matter to product behavior.
+7. Add the stores that shape the behavior.
+8. Fill in control flow with **Wires Out**.
+9. Fill in data flow and visible consequence with **Returns To**.
+10. Verify that every visible effect can be explained by the wiring.
+
+### Designing from shaped parts
+
+1. List the mechanisms from the chosen shape.
+2. Translate each mechanism into UI and non-UI affordances.
+3. Identify whether each affordance lives in an existing place or a new place.
+4. Add the stores and hidden consequences those affordances need.
+5. Wire the affordances together.
+6. If there is an existing system, add the existing affordances the new ones must connect to.
+7. Check that every displayed effect has a source and every important mechanism is represented.
 
 ## Quality checks
 
@@ -161,6 +256,43 @@ Examples:
 - Prefer product-facing hidden behavior over abstract service decomposition.
 - Make important user-visible consequences first-class.
 - Make product-relevant branches explicit when they change what the user sees next.
+
+## Rules for real affordances
+
+### Not every mechanism is an affordance
+
+Some things are just implementation mechanisms and should not get their own node unless they are truly meaningful at breadboard level.
+
+Examples often better omitted:
+- wrapper elements
+- internal transforms that do not matter to the product behavior
+- low-level navigation plumbing when wiring directly to the destination place is clearer
+
+### Every displayed UI needs a source
+
+If a UI affordance displays data, the breadboard should show where that data comes from.
+
+### Every N must connect
+
+If a non-UI affordance has no Wires Out and no Returns To, something is probably missing or the affordance may not deserve its own row.
+
+### Side effects need stores
+
+If a hidden consequence affects external state, represent that state as a store when it matters.
+
+Examples:
+- browser URL
+- local storage
+- clipboard
+- browser history
+
+### Place stores where they enable behavior
+
+A store belongs where its data enables behavior, not merely where it gets written.
+
+### Backend is a place when it matters
+
+Resolvers, APIs, and database behavior are not just floating infrastructure. When they are part of the story of how the product works, model them as a place with their own affordances and stores.
 
 ## Recommended output structure
 
@@ -201,6 +333,34 @@ If you add a diagram:
 ## Transition to slicing
 
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
+
+## Slicing
+
+A vertical slice is a group of UI and non-UI affordances that does something demo-able.
+
+### Core rule
+
+Every slice must end in visible, demo-able UI. A slice without an observable output is a horizontal layer, not a vertical slice.
+
+### Good slicing questions
+
+- What is the smallest subset that demonstrates the core mechanism working?
+- What can I show a stakeholder to prove this mechanism exists?
+- Does this slice have both an entry point and an observable result?
+
+### Slice size
+
+- too small = no meaningful demo
+- too big = multiple unrelated journeys tangled together
+- right size = one coherent mechanism with a clear demo
+
+### Slicing procedure
+
+1. Identify the smallest demo-able increment.
+2. Layer additional mechanisms as later slices.
+3. Assign affordances to the slice where they are first needed.
+4. Allow wires to future slices if they reflect the eventual system and are not implemented yet.
+5. Write a demo statement and `Produces:` line for each slice.
 
 ## Sequencing slices: two passes
 
