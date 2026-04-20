@@ -31,15 +31,15 @@ Example prompt:
 
 ```text
 Use /framing-doc on examples/simple-grocery-list/00-source-notes.md.
-Create a short frame with Source, Problem, Outcome, and Boundaries.
-Keep solution ideas out of the problem statement unless they are true constraints.
+Create a short frame with Source, Situational Context, and Outcome.
+Keep solution ideas out of the problem/opportunity statement unless they are true/real-world boundary constraints.
 ```
 
 Compare your output to `01-frame.md`.
 
 ## Step 2 — Shape the problem and compare solution directions
 
-Use `/shaping` once the problem is clear enough to define requirements and compare solution directions.
+Use `/shaping` once the problem is clear enough to define requirements and compare solution directions. I use requirements and criteria interchangeably, which I define as unit items that give us the fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.). I also determine if a criterion is a Must Have or not.
 
 Example prompt:
 
@@ -97,7 +97,7 @@ What to notice:
 
 Use `/breadboard-reflection` after code exists and you want to compare the breadboard to reality.
 
-Always sync the breadboard to implementation first. Only then critique the design.
+Always sync the breadboard to implementation first, which helps to critique the final design.
 
 Example prompt:
 
@@ -111,7 +111,7 @@ Compare your output to `05-breadboard-reflection.md`.
 
 ## Quick rule of thumb
 
-- **Messy notes or transcript?** → `/framing-doc`
+- **Messy notes about the raw idea/strategy/opportunity and/or interview transcript?** → `/framing-doc`
 - **Need requirements and solution options?** → `/shaping`
 - **Need a handoff doc for another builder?** → `/kickoff-doc`
 - **Need to make the chosen direction legible as a system?** → `/breadboarding`
