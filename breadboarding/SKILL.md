@@ -70,6 +70,18 @@ Ask:
 - what can they do from here?
 - what visibly changes after they do it?
 
+### Make meaningful user-visible states first-class
+
+If a state changes what the user can do next or what they can see, consider representing it as its own place.
+
+Examples:
+- empty state
+- duplicate warning shown
+- bought items hidden
+- restored-on-launch state
+
+Do not hide important user-visible states inside only non-UI affordances.
+
 ### Affordances
 Affordances are the things that can be acted upon or that produce effects.
 
@@ -92,6 +104,16 @@ A good breadboard should help answer:
 - what can the user do here?
 - what happens next?
 - what changes in the product?
+
+### Show product-relevant branches explicitly
+
+When a hidden rule can lead to different user-visible outcomes, represent that split in the breadboard.
+
+Examples:
+- duplicate → show duplicate message
+- not duplicate → add item and show updated list
+- hide-bought on → bought item disappears from current view
+- hide-bought off → bought item remains visible with updated state
 
 ## Required tables
 
@@ -138,6 +160,7 @@ A good breadboard should help answer:
 - Prefer real names that point to a thing someone can find in code or design.
 - Prefer product-facing hidden behavior over abstract service decomposition.
 - Make important user-visible consequences first-class.
+- Make product-relevant branches explicit when they change what the user sees next.
 
 ## Recommended output structure
 
