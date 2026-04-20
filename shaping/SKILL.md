@@ -115,6 +115,7 @@ A flagged unknown should not be treated as confidently solved in a fit check. Re
 6. If a requirement names a mechanism, rewrite it as a need or move it into the shape.
 7. Avoid tautologies where the shape merely repeats the requirement in different words.
 8. Prefer vertical mechanisms over horizontal buckets where possible.
+9. If a shape passes visible checks but still feels wrong, there is probably a missing requirement.
 
 ## Possible actions
 
