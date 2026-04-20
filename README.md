@@ -1,6 +1,6 @@
 # Planning Skills for Agents and Humans
 
-A set of planning skills for turning fuzzy requests, messy transcripts, and partial designs into artifacts that humans and agents can actually build from. These skills are perfect for when considering meaningfully large and strategically important feature development (discrete bets that are 2, 3, 4, 5, or 6 weeks in length).
+A set of planning skills for turning fuzzy requests, messy transcripts, and partial designs into artifacts that humans and agents can actually build from. These skills are perfect for when considering meaningfully large and strategically important feature development (discrete bets that have time budgets of 2, 3, 4, 5, or 6 weeks for small launch teams).
 
 The emphasis is on legibility:
 - frame the problem before racing to implementation
