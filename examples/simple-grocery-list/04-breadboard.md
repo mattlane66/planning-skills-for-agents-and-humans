@@ -45,33 +45,52 @@ planning: true
 
 ## Mermaid diagram
 
+This diagram is a rendering of the tables above. The tables remain the source of truth.
+
 ```mermaid
-flowchart TD
+flowchart LR
   subgraph P1["P1 Grocery list page"]
-    U1["U1 item input"]
-    U2["U2 add button"]
-    U3["U3 bought checkbox"]
-    U4["U4 hide-bought toggle"]
-    U5["U5 visible items list"]
+    direction TB
 
-    N1["N1 submit item"]
-    N2["N2 normalize item text"]
-    N3["N3 validate duplicate"]
-    N4["N4 toggle bought state"]
-    N5["N5 compute visible items"]
-    N6["N6 set hide-bought state"]
-    N7["N7 update items store"]
-    N8["N8 render visible items"]
+    subgraph P1UI["UI affordances"]
+      direction TB
+      U1["U1 add-form / item input"]
+      U2["U2 add-form / add button"]
+      U3["U3 item-row / bought checkbox"]
+      U4["U4 filters / hide-bought toggle"]
+      U5["U5 list-view / visible items list"]
+    end
 
-    S1[("S1 items")]
-    S2[("S2 hideBought")]
+    subgraph P1SYS["System affordances"]
+      direction TB
+      N1["N1 add-form / submit item"]
+      N2["N2 item-service / normalize item text"]
+      N3["N3 item-service / validate duplicate"]
+      N4["N4 item-service / toggle bought state"]
+      N5["N5 filter-service / compute visible items"]
+      N6["N6 filters / set hide-bought state"]
+      N7["N7 item-service / update items store"]
+      N8["N8 list-view / render visible items"]
+    end
+
+    subgraph P1STORE["Stores"]
+      direction TB
+      S1[("S1 items")]
+      S2[("S2 hideBought")]
+    end
   end
 
   subgraph P2["P2 Local storage boundary"]
-    N9["N9 save list state"]
-    N10["N10 load list state on startup"]
+    direction TB
+
+    subgraph P2SYS["System affordances"]
+      direction TB
+      N9["N9 persistence / save list state"]
+      N10["N10 persistence / load list state on startup"]
+    end
   end
 
+  %% control flow
   U1 --> N1
   U2 --> N1
   U3 --> N4
@@ -86,14 +105,15 @@ flowchart TD
   N7 --> N9
   N10 --> N7
 
-  S1 -.-> N7
-  S1 -.-> N8
-  S2 -.-> N8
-  S1 -.-> N9
-  S2 -.-> N9
-  N8 -.-> U5
-  N10 -.-> S1
-  N10 -.-> S2
+  %% returns / data flow
+  S1 -. "items" .-> N7
+  S1 -. "items" .-> N8
+  S2 -. "hideBought" .-> N8
+  S1 -. "items" .-> N9
+  S2 -. "hideBought" .-> N9
+  N8 -. "visible items" .-> U5
+  N10 -. "restore items" .-> S1
+  N10 -. "restore filter" .-> S2
 ```
 
 ## Notes
