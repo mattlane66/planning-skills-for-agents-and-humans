@@ -1,4 +1,4 @@
-# Examples
+# Example
 
 This folder contains a simple, end-to-end example showing how to use the skills in this repo in a realistic order.
 
