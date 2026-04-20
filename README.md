@@ -21,9 +21,6 @@ More directly (including [HumanLayer](https://www.humanlayer.dev)):
 ### `/framing-doc`
 Turn source material such as interview transcript syntheses, strategy notes, stakeholder messages, etc. into a frame that captures the living world context and boundaries, current approach and result, and desired outcome.
 
-### `/kickoff-doc`
-Turn a kickoff conversation into a builder-facing reference doc organized around the territory being built rather than the order people happened to speak.
-
 ### `/shaping`
 Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
 
@@ -32,6 +29,9 @@ Map a system into places/screens/states, affordances, stores, and the wiring so 
 
 ### `/breadboard-reflection`
 Compare a breadboard to the implementation, repair drift, and look for design smells such as hidden state, weak boundaries, or missing steps.
+
+### `/kickoff-doc`
+Turn a kickoff conversation into a builder-facing reference doc organized around the territory being built.
 
 ## Examples
 
