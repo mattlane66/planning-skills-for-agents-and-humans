@@ -19,16 +19,16 @@ More directly (including [HumanLayer](https://www.humanlayer.dev)):
 ## Skills
 
 ### `/framing-doc`
-Turn source material such as transcripts, notes, stakeholder messages, or call recordings into a frame that captures the problem, desired outcome, and boundaries.
+Turn source material such as interview transcript syntheses, strategy notes, stakeholder messages, etc. into a frame that captures the living world context and boundaries, current approach and result, and desired outcome.
 
 ### `/kickoff-doc`
 Turn a kickoff conversation into a builder-facing reference doc organized around the territory being built rather than the order people happened to speak.
 
 ### `/shaping`
-Collaboratively define requirements, sketch alternative approaches, compare their fit, and detail the selected direction.
+Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
 
 ### `/breadboarding`
-Map a system into places, affordances, stores, and wiring so behavior is concrete before implementation gets fragmented.
+Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
 
 ### `/breadboard-reflection`
 Compare a breadboard to the implementation, repair drift, and look for design smells such as hidden state, weak boundaries, or missing steps.
