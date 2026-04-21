@@ -21,6 +21,19 @@ It also includes one important shaping lesson: some early solution ideas belong 
 - `04-breadboard.md` — output of `/breadboarding`
 - `05-breadboard-reflection.md` — post-implementation example of `/breadboard-reflection`
 
+## Core workflow
+
+1. Start with messy source material.
+2. Create a frame.
+3. Shape the problem and compare solution directions.
+4. Choose a direction.
+5. Breadboard the chosen shape.
+6. Reflect only after implementation exists.
+
+## Optional handoff step
+
+Create a kickoff doc only if another builder needs a clean reference doc organized by system area.
+
 ## Step 1 — Start with messy source material
 
 Open `00-source-notes.md`.
@@ -31,8 +44,8 @@ Example prompt:
 
 ```text
 Use /framing-doc on examples/simple-grocery-list/00-source-notes.md.
-Create a short frame with Source, Situational Context, and Outcome.
-Keep solution ideas out of the problem/opportunity statement unless they are true/real-world boundary constraints.
+Create a short frame with Source, Problem, Outcome, and Less about / More about if needed.
+Keep solution ideas out of the problem statement unless they are true constraints.
 ```
 
 Compare your output to `01-frame.md`.
@@ -58,23 +71,7 @@ What to notice:
 - the fit check makes trade-offs visible
 - the chosen direction is explicit
 
-## Step 3 — Create a kickoff doc only if you need a handoff
-
-Use `/kickoff-doc` when a project has already been discussed and shaped enough that another builder needs a clean reference doc.
-
-If you are working solo, you may not need this step.
-
-Example prompt:
-
-```text
-Use /kickoff-doc on examples/simple-grocery-list/02-shaping.md.
-Create a builder-facing kickoff doc organized by system area, not by conversation order.
-Capture the chosen direction only.
-```
-
-Compare your output to `03-kickoff.md`.
-
-## Step 4 — Breadboard the chosen shape
+## Step 3 — Breadboard the chosen shape
 
 Use `/breadboarding` after a direction is chosen and concrete enough to map.
 
@@ -93,11 +90,11 @@ What to notice:
 - UI, code, and state are visible in one system view
 - slices come after the structure is visible
 
-## Step 5 — Reflect only after implementation exists
+## Step 4 — Reflect only after implementation exists
 
 Use `/breadboard-reflection` after code exists and you want to compare the breadboard to reality.
 
-Always sync the breadboard to implementation first, which helps to critique the final design.
+Always sync the breadboard to implementation first, then critique the design.
 
 Example prompt:
 
@@ -109,10 +106,26 @@ First sync the artifact to reality, then identify smells and propose fixes.
 
 Compare your output to `05-breadboard-reflection.md`.
 
+## Optional Step 5 — Create a kickoff doc for handoff
+
+Use `/kickoff-doc` when a project has already been discussed and shaped enough that another builder needs a clean reference doc.
+
+If you are working solo, you may not need this step.
+
+Example prompt:
+
+```text
+Use /kickoff-doc on examples/simple-grocery-list/02-shaping.md.
+Create a builder-facing kickoff doc organized by system area, not by conversation order.
+Capture the chosen direction only.
+```
+
+Compare your output to `03-kickoff.md`.
+
 ## Quick rule of thumb
 
 - **Messy notes about the raw idea/strategy/opportunity and/or interview transcript?** → `/framing-doc`
 - **Need requirements and solution options?** → `/shaping`
-- **Need a handoff doc for another builder?** → `/kickoff-doc`
 - **Need to make the chosen direction legible as a system?** → `/breadboarding`
 - **Need to compare implementation to the breadboard later?** → `/breadboard-reflection`
+- **Need a handoff doc for another builder?** → `/kickoff-doc`
