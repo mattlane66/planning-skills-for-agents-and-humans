@@ -2,6 +2,7 @@
 name: kickoff-doc
 description: Turn kickoff notes or transcripts into a builder-facing reference document organized by system area.
 planning: true
+shaping: true
 ---
 
 # Kickoff Document
@@ -95,6 +96,7 @@ Do not:
 ```md
 ---
 planning: true
+shaping: true
 ---
 
 # [Project] — Kickoff
