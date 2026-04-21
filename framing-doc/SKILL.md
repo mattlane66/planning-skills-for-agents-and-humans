@@ -2,6 +2,7 @@
 name: framing-doc
 description: Create a framing document from notes, messages, or conversation transcripts.
 planning: true
+shaping: true
 ---
 
 # Framing Document
@@ -82,6 +83,7 @@ If you cannot trace the claim back to the source, cut it.
 ```md
 ---
 planning: true
+shaping: true
 ---
 
 # [Project] — Frame
