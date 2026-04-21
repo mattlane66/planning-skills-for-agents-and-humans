@@ -27,6 +27,15 @@ You can start from either side:
 
 There is no required order. Requirements and shapes inform each other throughout.
 
+## Working with an existing shaping doc
+
+When a shaping doc already has a selected shape:
+1. show the fit check for the selected shape only
+2. summarize what is still unsolved
+3. call out any requirement rows that are still undecided or currently fail for the selected shape
+
+This gives the user immediate context on where the shaping stands and what still needs work.
+
 ## Main artifacts
 
 ### Requirements
@@ -41,7 +50,7 @@ Recommended statuses:
 - Undecided
 - Out
 
-Keep the top level scannable. If requirements proliferate, group related ones rather than letting the top level grow without structure.
+Keep the top level scannable. Prefer no more than 9 top-level requirements. If requirements proliferate, group related ones into chunks and use sub-requirements such as `R3.1`, `R3.2` rather than letting the top level grow without structure.
 
 ### Requirement smell test
 
@@ -85,6 +94,20 @@ If a part has internal alternatives, use nested notation:
 
 Give each serious shape a short title that characterizes the approach.
 
+Good titles capture the essence of the approach in a few words.
+
+Examples:
+- ✅ `B: Single-list model with visibility filter`
+- ✅ `C: URL-driven state restoration`
+- ❌ `B: The solution`
+- ❌ `C: Add a search input with some debounce and a whole bunch of browser-state handling`
+
+### Notation persistence
+
+Keep notation stable throughout the conversation as an audit trail.
+
+When refining or composing later directions, reference earlier parts rather than silently renaming everything. Stable notation helps the user track what changed and why.
+
 ## Shape parts and flagged unknowns
 
 Shape parts should describe mechanisms, not intentions.
@@ -104,6 +127,12 @@ Meaning:
 - `⚠️` = described in outline, but the how is still unresolved
 
 A flagged unknown should not be treated as confidently solved in a fit check. Resolve it or spike it.
+
+### Extract shared logic
+
+When the same logic appears in multiple parts, extract it into a standalone part rather than duplicating it.
+
+This keeps the shape cleaner and makes later fit checks, detailing, and slicing easier to reason about.
 
 ## Working rules
 
@@ -187,15 +216,29 @@ Rules:
 
 If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
 
+### Macro fit check
+
+Use a macro fit check when working at a higher level and many mechanisms are still unresolved.
+
+Instead of asking only whether the shape passes, ask two things:
+- is the requirement addressed at a high level?
+- is it actually answered concretely yet?
+
+This is useful when early shapes feel directionally right but are still full of flagged unknowns.
+
 ## Communication
 
 ### Show full tables
 
 When displaying requirements, shapes, or fit checks, show the full table rather than a summary whenever practical. Shaping is collaborative negotiation. Partial views hide what matters.
 
+### Mark changes with 🟡
+
+When re-rendering a requirements table, shape table, or fit check after making changes, mark changed or added lines with `🟡` so the user can instantly spot what changed.
+
 ### Keep changes visible
 
-When revising tables, make changed lines easy to spot. The user should not have to mentally diff a whole table to understand what moved.
+The user should not have to mentally diff a whole table to understand what moved.
 
 ## Spikes
 
@@ -304,15 +347,24 @@ Output from this exercise:
 
 This output feeds naturally into breadboarding and then into slice sequencing.
 
-## Documents and ripple consistency
+## Phases and document lifecycle
 
-Shaping usually leaves behind multiple planning artifacts at different levels.
+Shaping moves through two main phases:
+- shaping
+- slicing
 
-Typical stack:
+Typical document stack:
 - frame
 - shaping doc
 - breadboard or slices doc
 - slice plans
+
+The frame captures the why.
+The shaping doc captures requirements, shapes, fit checks, and the selected direction.
+The breadboard or slices doc captures how the chosen direction becomes concrete and incremental.
+Slice plans capture implementation detail for individual slices.
+
+## Documents and ripple consistency
 
 Truth has to stay consistent across levels. If a mechanism changes in the shaping doc, downstream artifacts may need updates. If implementation planning reveals a new mechanism, the shaping doc may need to reflect it.
 
