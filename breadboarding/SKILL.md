@@ -2,6 +2,7 @@
 name: breadboarding
 description: Map a chosen solution into places, affordances, consequences, stores, and wiring.
 planning: true
+shaping: true
 ---
 
 # Breadboarding
@@ -382,6 +383,7 @@ A chunk should have its own separate detailed view when needed.
 ```md
 ---
 planning: true
+shaping: true
 ---
 
 # [Project] — Breadboard
