@@ -121,10 +121,10 @@ A flagged unknown should not be treated as confidently solved in a fit check. Re
 
 These can happen in any order as the shaping evolves:
 - populate requirements
-- sketch a shape
-- detail a shape into parts
+- sketch a shape at a high level
+- detail a shape into parts or affordances
 - explore alternatives for a part
-- run a fit check
+- test a shape with a fit check
 - extract new requirements revealed by the fit check
 - spike an unknown
 - decide among alternatives
