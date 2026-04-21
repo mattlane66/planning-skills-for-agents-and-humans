@@ -58,6 +58,28 @@ Output:
 
 Often you need both: existing affordances that remain, plus new affordances from the chosen shape. Breadboard them together so the full story is visible.
 
+## Reading a whiteboard breadboard
+
+Hand-drawn or whiteboard breadboards use a visual stacking format rather than tables. The same concepts still apply: places, affordances, wiring, and hidden system consequences.
+
+Common visual conventions:
+- place block at the top of a stack
+- affordances stacked under the place they belong to
+- code affordances often floating between place stacks
+- solid arrows for control flow
+- dashed arrows for returns or data flow
+- indented or colored blocks for conditional branches
+- containing boxes for larger system boundaries
+- notes or annotations for open questions and rationale
+
+How to read one:
+1. identify the places first
+2. read each place stack top to bottom
+3. trace solid arrows for what triggers what
+4. trace dashed arrows for where output or data flows
+5. note conditionals and boundaries
+6. translate the stacks into standard tables
+
 ## What breadboarding is
 
 Breadboarding is a lightweight UI shorthand.
@@ -125,6 +147,14 @@ When a control changes state, ask whether everything changed or only a subset wh
 - local state = same place, changed subset
 - place navigation = the user is now somewhere else in a meaningful sense
 
+### Modes as places
+
+When a mode changes the whole perceptual context — for example read mode vs edit mode — model it as a different place.
+
+Examples:
+- `PLACE: CMS Page (Read Mode)`
+- `PLACE: CMS Page (Edit Mode)`
+
 ### Make meaningful user-visible states first-class
 
 If a state changes what the user can do next or what they can see, consider representing it as its own place.
@@ -142,6 +172,26 @@ Do not hide important user-visible states inside only non-UI affordances.
 Places are first-class elements in the model and should get IDs such as `P1`, `P2`, `P3`.
 
 Use place IDs so navigation wires can point to places directly.
+
+### Subplaces
+
+Use subplaces when a place contains a distinct widget or section that needs its own local scope.
+
+Examples:
+- `P2.1`
+- `P2.2`
+
+Subplaces help show what is in scope inside a larger place without pretending it is a separate top-level destination.
+
+### Place references
+
+When a nested place has many internal affordances and would clutter the parent, use a place reference.
+
+Pattern:
+- `_letter-browser`
+- `_settings-panel`
+
+The reference appears in the parent place as a UI affordance and wires to the full place definition elsewhere.
 
 ### Affordances
 Affordances are the things that can be acted upon or that produce effects.
@@ -294,6 +344,39 @@ A store belongs where its data enables behavior, not merely where it gets writte
 
 Resolvers, APIs, and database behavior are not just floating infrastructure. When they are part of the story of how the product works, model them as a place with their own affordances and stores.
 
+## Catalog of elements and relationships
+
+### Elements
+
+| Element | ID pattern | Meaning |
+|---------|------------|---------|
+| Place | P1, P2 | bounded context of interaction |
+| Subplace | P2.1, P2.2 | scoped area inside a larger place |
+| Place reference | _name | detached nested place reference |
+| UI affordance | U1, U2 | something the user can see or interact with |
+| Non-UI affordance | N1, N2 | hidden mechanism with meaningful identity |
+| Store | S1, S2 | state that is written and read |
+| Chunk | freeform | collapsed subsystem in a larger diagram |
+
+### Relationships
+
+| Relationship | Meaning | Where captured |
+|--------------|---------|----------------|
+| Containment | affordance belongs to a place | Place column |
+| Wires Out | control flow | Wires Out column |
+| Returns To | data flow / visible consequence | Returns To column |
+
+## Chunking
+
+Chunking collapses a subsystem into a single node in the main diagram when it has one clear entry, one clear output, and too many internals to keep the main view readable.
+
+Use chunking when:
+- the subsystem has many internals
+- the main diagram is becoming unreadable
+- you still need to preserve the boundary signal between the main system and the subsystem
+
+A chunk should have its own separate detailed view when needed.
+
 ## Recommended output structure
 
 ```md
@@ -323,12 +406,27 @@ planning: true
 
 A Mermaid diagram is optional. The tables are the source of truth.
 
+### Diagram rules
+
 If you add a diagram:
 - group nodes by place first
 - make affordances under each place visible
 - keep IDs consistent with the tables
 - show product consequences, not only internal calls
 - treat the diagram as a rendering of the tables, not the other way around
+
+### Visualization conventions
+
+- solid arrows = control flow / Wires Out
+- dashed arrows = returns / data flow / visible consequence
+- wire navigation to places directly
+- use place IDs as subgraph IDs when possible
+- use place references for detached nested places
+- use chunks when a subsystem would otherwise overwhelm the main diagram
+
+### Optional workflow annotations
+
+For teaching or walkthrough diagrams, you may add numbered workflow step annotations to guide the reader through the main path.
 
 ## Transition to slicing
 
