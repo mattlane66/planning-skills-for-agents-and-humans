@@ -2,6 +2,7 @@
 name: shaping
 description: Collaboratively shape a problem and compare solution directions before implementation.
 planning: true
+shaping: true
 ---
 
 # Shaping
@@ -14,6 +15,27 @@ Turn a fuzzy request into a concrete shaping document that keeps three things se
 - the requirements
 - the solution directions
 - the evidence that a chosen direction actually fits
+
+## Document hierarchy
+
+Planning artifacts live at different levels of abstraction. Truth has to stay consistent across those levels.
+
+From high to low:
+1. **Frame** — the why: source, problem, outcome, boundaries
+2. **Shaping doc** — the what and candidate how: requirements, shapes, fit checks, selected direction
+3. **Breadboard or slices doc** — the concrete behavior and increments: places, affordances, stores, wiring, slice boundaries
+4. **Slice plans** — the per-slice implementation detail
+
+Each lower level adds detail. Each higher level is a designed view into the levels below.
+
+Changes ripple both ways:
+- change at a higher level may require downstream updates
+- a discovery at a lower level may require updates upstream
+
+Whenever making a change:
+1. identify which level you are touching
+2. ask whether it affects artifacts above or below
+3. update affected layers in the same operation when possible
 
 ## Core idea
 
@@ -84,7 +106,7 @@ Shapes are competing or composable solution directions.
 
 Use letters for alternative directions:
 - `A`, `B`, `C`
-- `CURRENT` may be used to describe the existing system as a baseline
+- `CURRENT` should be used as the standard baseline when describing the existing system before proposing alternatives
 
 Use numbered parts for mechanisms inside a chosen direction:
 - `B1`, `B2`, `B3`
@@ -98,9 +120,21 @@ Good titles capture the essence of the approach in a few words.
 
 Examples:
 - ✅ `B: Single-list model with visibility filter`
+- ✅ `CURRENT: Existing list page with inline add flow`
 - ✅ `C: URL-driven state restoration`
 - ❌ `B: The solution`
 - ❌ `C: Add a search input with some debounce and a whole bunch of browser-state handling`
+
+### CURRENT as baseline
+
+When the work touches an existing system, model that existing behavior as `CURRENT` first. Treat it as the standard baseline shape, not an optional flourish.
+
+Use `CURRENT` to:
+- show what exists today
+- anchor proposed changes against reality
+- make deltas legible before introducing `A`, `B`, or `C`
+
+Then compare alternatives against `CURRENT` rather than shaping in a vacuum.
 
 ### Notation persistence
 
@@ -145,6 +179,7 @@ This keeps the shape cleaner and makes later fit checks, detailing, and slicing 
 7. Avoid tautologies where the shape merely repeats the requirement in different words.
 8. Prefer vertical mechanisms over horizontal buckets where possible.
 9. If a shape passes visible checks but still feels wrong, there is probably a missing requirement.
+10. Model the existing system as `CURRENT` when the change is not greenfield.
 
 ## Possible actions
 
@@ -165,6 +200,7 @@ These can happen in any order as the shaping evolves:
 ```md
 ---
 planning: true
+shaping: true
 ---
 
 # [Project] — Shaping
@@ -177,23 +213,29 @@ planning: true
 
 ## Shapes
 
+### CURRENT: [Existing system baseline]
+
+| Part | Mechanism | Flag |
+|------|-----------|:----:|
+| CURRENT1 | ... | |
+
 ### A: [Short title]
 
-| Part | Mechanism |
-|------|-----------|
-| A1 | ... |
+| Part | Mechanism | Flag |
+|------|-----------|:----:|
+| A1 | ... | |
 
 ### B: [Short title]
 
-| Part | Mechanism |
-|------|-----------|
-| B1 | ... |
+| Part | Mechanism | Flag |
+|------|-----------|:----:|
+| B1 | ... | |
 
 ## Fit Check
 
-| Req | Requirement | Status | A | B |
-|-----|-------------|--------|---|---|
-| R0 | ... | Core goal | ✅ | ❌ |
+| Req | Requirement | Status | CURRENT | A | B |
+|-----|-------------|--------|---------|---|---|
+| R0 | ... | Core goal | ✅ | ✅ | ❌ |
 
 ## Decision
 
@@ -215,6 +257,28 @@ Rules:
 - If something is still unknown, it is not yet a pass
 
 If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
+
+### Component-scoped fit checks
+
+When comparing alternatives inside one part, run a local fit check instead of forcing every choice into the top-level matrix.
+
+Example:
+
+```md
+## B3: State persistence alternative
+
+| Req | Requirement | Status | B3-A | B3-B |
+|-----|-------------|--------|------|------|
+| R1 | State survives refresh | Must-have | ✅ | ❌ |
+| R2 | Back button restores state | Must-have | ✅ | ✅ |
+```
+
+Use this when:
+- one part contains real alternatives
+- the decision can be made locally
+- the rest of the selected shape stays unchanged
+
+Keep the top-level fit check for comparing whole directions. Use component-scoped fit checks to resolve alternatives within a direction.
 
 ### Macro fit check
 
@@ -251,6 +315,8 @@ Use a spike to:
 - identify what would need to change to achieve the mechanism
 - surface constraints that affect the solution
 - reduce uncertainty before pretending a flagged part is understood
+
+Investigate before proposing when confidence in the mechanism is low. A spike should discover how the existing system works and what concrete changes would be needed before the shape claims the part is understood.
 
 ### File management
 
@@ -290,6 +356,16 @@ What we are trying to learn.
 ### Acceptance
 Spike is complete when all questions are answered and the mechanism can be described concretely.
 ```
+
+### Acceptance guidance
+
+Acceptance should describe the understanding the spike will produce, not the decision you will make afterward.
+
+Examples:
+- ✅ `We can describe how state is restored today and what would need to change.`
+- ✅ `We can describe the concrete steps needed to support the proposed mechanism.`
+- ❌ `We can decide whether to proceed.`
+- ❌ `We can answer whether this is a blocker.`
 
 ## Detailing a selected shape
 
