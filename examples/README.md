@@ -1,20 +1,28 @@
-# Example
+# Examples
 
-This folder contains a simple, end-to-end example showing how to use the skills in this repo in a realistic order.
+This folder contains end-to-end examples showing how to use the skills in this repo in realistic situations.
 
-The example is intentionally much simpler than your real world situation. The goal is to make it obvious:
+The goal is to make it obvious:
 - what to start with
 - which skill to use next
 - what each output should look like
 - when a skill is optional
 - how the artifacts relate to one another
 
-## Example: Simple Grocery List
+## Examples in this folder
 
-The `simple-grocery-list/` example walks through a tiny feature from messy notes to shaped direction to breadboard.
+### 1. Simple Grocery List
+
+The `simple-grocery-list/` example is the simplest greenfield path.
+
+It demonstrates:
+- framing from messy notes
+- shaping with two directions
+- breadboarding a chosen shape
+- post-implementation breadboard reflection
+- optional kickoff handoff
 
 Recommended reading order:
-
 1. `simple-grocery-list/README.md`
 2. `simple-grocery-list/00-source-notes.md`
 3. `simple-grocery-list/01-frame.md`
@@ -23,17 +31,45 @@ Recommended reading order:
 6. `simple-grocery-list/05-breadboard-reflection.md`
 7. `simple-grocery-list/03-kickoff.md`
 
-## What this example demonstrates
+### 2. Brownfield Member Admin Search
 
-- **`/framing-doc`** turns messy source material into a frame.
-- **`/shaping`** separates requirements from solution choices and compares solution directions.
-- **`/breadboarding`** maps the selected shape into places, affordances, stores, and wiring.
-- **`/breadboard-reflection`** is used later, after code exists, to sync the breadboard to implementation and find drift or design smells.
-- - **`/kickoff-doc`** creates a builder-facing reference doc after the direction is chosen.
+The `brownfield-member-admin-search/` example shows how to shape a change against an existing system.
+
+It demonstrates:
+- `CURRENT` as the baseline
+- shaping a change against existing behavior
+- breadboarding existing and new affordances together
+- a brownfield flow where the new mechanism must preserve the old system’s structure
+
+Recommended reading order:
+1. `brownfield-member-admin-search/README.md`
+2. `brownfield-member-admin-search/00-current-system-notes.md`
+3. `brownfield-member-admin-search/01-frame.md`
+4. `brownfield-member-admin-search/02-shaping.md`
+5. `brownfield-member-admin-search/03-breadboard.md`
+
+### 3. Spike-Driven Time Window Filter
+
+The `spike-driven-time-window-filter/` example shows how to use shaping when a promising direction still contains a real unknown.
+
+It demonstrates:
+- a flagged unknown (`⚠️`)
+- a standalone spike file
+- refining the chosen shape after the spike
+- breadboarding the now-concrete shape
+
+Recommended reading order:
+1. `spike-driven-time-window-filter/README.md`
+2. `spike-driven-time-window-filter/00-source-notes.md`
+3. `spike-driven-time-window-filter/01-frame.md`
+4. `spike-driven-time-window-filter/02-shaping-initial.md`
+5. `spike-driven-time-window-filter/03-spike-natural-language-window.md`
+6. `spike-driven-time-window-filter/04-shaping-after-spike.md`
+7. `spike-driven-time-window-filter/05-breadboard.md`
 
 ## Suggested workflow
 
-Use the example as a pattern, not a template to copy blindly.
+Use the examples as patterns, not templates to copy blindly.
 
 1. Start with raw notes, requests, or transcripts.
 2. Create a frame.
