@@ -1,6 +1,7 @@
 # Planning Skills for Agents and Humans
 
 A set of planning skills for turning fuzzy requests, messy transcripts, and partial designs into artifacts that humans and agents can actually build from. These skills are perfect for when considering meaningfully large and strategically important feature development (discrete bets that have time budgets of 2, 3, 4, 5, or 6 weeks for small launch teams). These skills are at their most potent (especially the spiking aspect in shaping) when grounded in the context of your codebase, providing the essential 'ground truth' needed for both humans and agents to execute with high confidence.
+Now, maybe AI could one-shot a simple app instead of using these skills. But, going through this process means you and your team will have a view of how the solution works. You can understand the system and can ask questions about all of the documents that explain how and why it's put together the way it is so when you want to make improvements and changes later you can.
 
 The emphasis is on pre-development legibility:
 - frame the problem before racing to implementation
