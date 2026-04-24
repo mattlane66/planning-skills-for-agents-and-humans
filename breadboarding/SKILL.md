@@ -434,6 +434,15 @@ For teaching or walkthrough diagrams, you may add numbered workflow step annotat
 
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
 
+Before proposing slices, optionally run the kickoff grouping pass from the shaping skill:
+
+1. Dump all elements implied by the selected shape.
+2. Affinitize them into groups that can be completed together.
+3. Name each group as a stable scope handle.
+4. Flag the biggest unknown per group.
+
+Use those groups as the raw material for slice boundaries.
+
 ## Slicing
 
 A vertical slice is a group of UI and non-UI affordances that does something demo-able.
