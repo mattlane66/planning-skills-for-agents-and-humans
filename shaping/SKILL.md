@@ -56,6 +56,12 @@ When a shaping doc already has a selected shape:
 2. summarize what is still unsolved
 3. call out any requirement rows that are still undecided or currently fail for the selected shape
 
+When summarizing what remains unsolved, explicitly list:
+- undecided requirements
+- failed requirement rows
+- flagged unknown shape parts
+- spikes needed before the shape can be treated as understood
+
 This gives the user immediate context on where the shaping stands and what still needs work.
 
 ## Main artifacts
@@ -237,6 +243,12 @@ shaping: true
 |-----|-------------|--------|---------|---|---|
 | R0 | ... | Core goal | ✅ | ✅ | ❌ |
 
+## Reverse Fit Check
+
+| Shape Part | Mechanism | Requirement(s) Served | Justified? |
+|------------|-----------|------------------------|:----------:|
+| B1 | ... | R2, R4 | ✅ |
+
 ## Decision
 
 Chosen direction: B
@@ -257,6 +269,23 @@ Rules:
 - If something is still unknown, it is not yet a pass
 
 If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
+
+### Reverse fit check: shape parts against requirements
+
+After checking requirements against shapes, also check whether every selected shape part is justified by at least one requirement.
+
+Use this to catch unjustified mechanisms, accidental scope creep, or parts that exist because they sounded useful rather than because they satisfy the shaped problem.
+
+| Shape Part | Mechanism | Requirement(s) Served | Justified? |
+|------------|-----------|------------------------|:----------:|
+| B1 | Persist filter state in the URL | R2, R4 | ✅ |
+| B2 | Add export-to-CSV action | — | ❌ |
+
+Rules:
+- Use binary values only: `✅` or `❌`
+- If a part is not justified, remove it, mark it Cut, or add the missing requirement and rerun the fit check.
+- Do not let implementation convenience create untracked scope.
+- A flagged unknown can be justified by a requirement but still not understood enough to pass the main fit check.
 
 ### Component-scoped fit checks
 
