@@ -17,6 +17,22 @@ More directly (including [HumanLayer](https://www.humanlayer.dev)):
 - Spec Kit = turn that decision into a structured build plan
 - HumanLayer = help agents carry out the work reliably in real code
 
+## Mode discipline
+
+These skills are primarily for planning before implementation.
+
+Default mode is planning/shaping:
+- do not write runnable implementation code
+- do not create full schemas, framework code, or production files
+- use plain language, tables, lightweight pseudo-structures, and Mermaid where useful
+
+Only move into implementation when the user or team explicitly selects a slice to build.
+
+When building:
+- implement only the selected slice
+- preserve the shaped intent
+- update planning artifacts if implementation discoveries change the plan
+
 ## Skills
 
 ### `/framing-doc`
@@ -167,3 +183,19 @@ Then add the hook in your Claude settings:
 ```
 
 The hook checks markdown files whose frontmatter includes either `planning: true` or `shaping: true`.
+
+When a planning artifact changes, check whether updates are needed in:
+
+- frame
+- shaping.md
+- requirements table
+- shape parts / mechanisms
+- CURRENT baseline or selected Detail X
+- fit checks
+- unknowns / spikes
+- breadboard tables
+- wiring table
+- Mermaid diagram
+- slices.md
+- slice definitions and sequencing
+- slice plan files
