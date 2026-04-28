@@ -3,6 +3,8 @@
 A set of planning skills for turning fuzzy requests, messy transcripts, and partial designs into artifacts that humans and agents can actually build from. These skills are perfect for when considering meaningfully large and strategically important feature development (discrete bets that have time budgets of 2, 3, 4, 5, or 6 weeks for small launch teams). These skills are at their most potent (especially the spiking aspect in shaping) when grounded in the context of your codebase, providing the essential 'ground truth' needed for both humans and agents to execute with high confidence.
 Now, maybe AI could one-shot a simple app instead of using these skills. But, going through this process means you and your team will have a view of how the solution works (and will render better results as you get more concrete in your prompts). You can understand the system and can ask questions about all of the documents that explain how and why it's put together the way it is so when you want to make improvements and changes later you can. Ideally, you use these skills to help manage a collaborative [shaping session](https://www.figma.com/community/file/1490786031847199566/shaping-session-playing-field-copy-me-template).
 
+AI coding tools have become powerful new prototyping instruments, but they work best after good upstream/uphill shaping.
+
 Get a quick lightweight feel for these design skills [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
 
 <img width="1453" height="713" alt="Screenshot 2026-04-24 at 10 05 13 PM" src="https://github.com/user-attachments/assets/8b3848cc-3968-4792-8d77-5c38b81ce3b1" />
