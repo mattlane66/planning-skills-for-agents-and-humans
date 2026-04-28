@@ -17,7 +17,7 @@ The emphasis is on pre-development legibility:
 
 This repo is not a replacement for [Spec Kit](https://github.com/github/spec-kit). It is a complementary planning layer. Use these skills earlier in the process to frame the problem, separate requirements from mechanisms, compare shapes, breadboard the system, and slice the work into demoable scopes. Then use a broader spec-driven workflow like Spec Kit when you want project-level specs, plans, tasks, and implementation orchestration.
 More directly (including [HumanLayer](https://www.humanlayer.dev)):
-- Planning Skills = figure out what to build and how to structure it
+- Planning Skills = figure out what to build to get people from where they are to where they ought to be and how to structure and derisk it
 - Spec Kit = turn planning skills' vertical slices into an agent-specific implementation build plan while specifying exact file paths, dependencies, order, and test structure.
 - HumanLayer = help agents carry out the build work reliably in real complex codebases 
 
