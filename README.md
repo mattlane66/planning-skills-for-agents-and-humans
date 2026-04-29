@@ -78,6 +78,17 @@ See [`docs/agent-context-feeding.md`](./docs/agent-context-feeding.md) for:
 - chunking rules for large artifacts
 - drift-handling protocol when implementation reality conflicts with the plan
 
+## Canvas export
+
+Breadboard tables are the source of truth. Mermaid diagrams are portable visual projections. Canvas tools such as TLDraw, Excalidraw, FigJam, and Miro are review and collaboration surfaces.
+
+See [`docs/canvas-export.md`](./docs/canvas-export.md) for the canvas export contract:
+
+- stable ID rules for canvas-friendly diagrams
+- Mermaid-to-canvas adapter pattern
+- static image export versus semantic object export
+- guidance for keeping tables authoritative over diagrams and canvases
+
 ## Examples
 
 If you want to see the skills used step by step, start in [`examples/`](./examples).
