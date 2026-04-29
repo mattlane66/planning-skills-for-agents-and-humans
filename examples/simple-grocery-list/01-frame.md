@@ -1,8 +1,29 @@
 ---
 planning: true
+artifact_type: frame
+status: selected
+source_of_truth: true
+feeds:
+  - shaping
+  - context-packet
 ---
 
 # Simple Grocery List — Frame
+
+# Context Card
+
+## Use this when
+An agent is checking whether later shaping, breadboarding, or implementation still fits the original grocery-list problem and desired outcome.
+
+## Must preserve
+- fast capture
+- clear in-store scanning
+- same-device persistence
+- no accounts, sign-in, pricing, recipes, categories, or store-specific logic
+
+## Ignore unless asked
+- broader household-management ideas
+- meal planning or shopping optimization
 
 ## Source
 
