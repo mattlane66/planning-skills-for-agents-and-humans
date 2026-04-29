@@ -1,8 +1,30 @@
 ---
 planning: true
+artifact_type: shaping
+status: selected
+source_of_truth: true
+feeds:
+  - breadboard
+  - context-packet
 ---
 
 # Simple Grocery List — Shaping
+
+# Context Card
+
+## Use this when
+An agent is comparing the selected single-list direction against the requirements or preparing to breadboard the chosen shape.
+
+## Must preserve
+- chosen direction: A, single list with bought toggle and hide-bought filter
+- requirements R0–R5
+- bought items are hidden without being deleted
+- same-device local persistence
+- duplicate prevention at add time
+
+## Ignore unless asked
+- Shape B as an implementation instruction
+- categories, accounts, pricing, recipes, or store-specific logic
 
 ## Requirements
 
