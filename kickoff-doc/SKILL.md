@@ -97,9 +97,30 @@ Do not:
 ---
 planning: true
 shaping: true
+artifact_type: kickoff
+status: draft
+source_of_truth: true
+feeds:
+  - implementation-packet
+  - context-packet
 ---
 
 # [Project] — Kickoff
+
+# Context Card
+
+## Use this when
+An agent needs the builder-facing reference after the team has already converged.
+
+## Must preserve
+- frame constraints
+- shaped territory sections
+- decisions attached to the system area they affect
+- explicit exclusions or unresolved questions
+
+## Ignore unless asked
+- transcript order
+- side conversations that did not become shaped territory
 
 ## Frame
 
@@ -130,3 +151,12 @@ shaping: true
 ## Rule of thumb
 
 If a builder would need to reread the original transcript to understand one part of the system, the kickoff doc is not finished.
+
+## Self-check before finishing
+
+- The document is organized by shaped territory, not transcript order.
+- Every area explains what it is, what belongs there, how it behaves, and how it connects to neighboring areas.
+- Decisions sit next to the area they affect rather than in a generic dump section.
+- Build sequence, slice order, and implementation tasks are not mixed into the reference doc unless clearly marked as handoff context.
+- Claims are supported by the source or clearly marked as open questions.
+- The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.
