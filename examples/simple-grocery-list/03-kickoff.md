@@ -1,8 +1,32 @@
 ---
 planning: true
+artifact_type: kickoff
+status: selected
+source_of_truth: true
+feeds:
+  - implementation-packet
+  - context-packet
 ---
 
 # Simple Grocery List — Kickoff
+
+# Context Card
+
+## Use this when
+An agent needs the builder-facing reference for the selected grocery-list direction.
+
+## Must preserve
+- one main list surface
+- quick-add input at the top
+- inline bought/unbought toggling
+- hide-bought as a display-only filter
+- local persistence without accounts
+- duplicate prevention at add time
+
+## Ignore unless asked
+- separate Needed and Bought sections
+- build sequence beyond the first-version constraints
+- categories, sharing, pricing, recipes, or store-specific behavior
 
 ## Frame
 
