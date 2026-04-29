@@ -14,6 +14,7 @@ The emphasis is on pre-development legibility:
 - compare alternatives before locking in a solution
 - map places, affordances, state, and wiring before losing the plot while maintaining latitude
 - keep high-level and low-level planning artifacts aligned as the work evolves
+- feed planning artifacts to agents at the right fidelity so they preserve shaped intent instead of drowning in context
 
 ## Planning Skills vs. Spec Kit
 
@@ -39,6 +40,12 @@ When building:
 - preserve the shaped intent
 - update planning artifacts if implementation discoveries change the plan
 
+## Cross-agent setup
+
+Use [`AGENTS.md`](./AGENTS.md) as the tool-neutral instruction surface for agents that understand repo-level instruction files. It captures the default mode, workflow, authority order, context-feeding rules, stable ID handling, drift protocol, and completion standard.
+
+Claude Code users can install the skills natively. Other tools such as Cursor, Codex, and similar agent environments can use the same `SKILL.md` files as repo-local rules, prompt files, or reusable docs. The method is tool-agnostic even when some packaging details are tool-specific.
+
 ## Skills
 
 ### `/framing-doc`
@@ -56,6 +63,21 @@ Compare a breadboard to the implementation, repair drift, and look for design sm
 ### `/kickoff-doc`
 Turn a kickoff conversation into a builder-facing reference doc organized around the territory being built.
 
+### `/feed-planning-context`
+Prepare framing, shaping, breadboard, kickoff, slice, or reflection artifacts for agent implementation work without overloading context. This skill packages the active task, source artifacts, authority order, must-preserve constraints, stable IDs, non-goals, current slice, and verification target into a compact context packet. It does not implement code.
+
+## Agent context feeding
+
+Planning artifacts are most useful to coding agents when they are fed at the right fidelity. Do not paste the whole planning stack by default. Use a compact context packet that tells the agent what to use, what to ignore, what to preserve, and how to verify alignment.
+
+See [`docs/agent-context-feeding.md`](./docs/agent-context-feeding.md) for:
+
+- context packet templates
+- artifact-specific prompts for framing docs, shaping docs, breadboards, slice plans, kickoff docs, and reflections
+- stable ID conventions for requirements, places, affordances, stores, and slices
+- chunking rules for large artifacts
+- drift-handling protocol when implementation reality conflicts with the plan
+
 ## Examples
 
 If you want to see the skills used step by step, start in [`examples/`](./examples).
@@ -68,11 +90,9 @@ The included `simple-grocery-list` example walks through:
 - a breadboard
 - a post-implementation breadboard reflection
 
-## Using these skills outside Claude Code
+## Using these skills across agent tools
 
-These skills are packaged for Claude Code, but the method is portable.
-
-The `SKILL.md` files are plain Markdown instructions. In tools like Cursor, Codex, or other agent environments, use them as reusable prompt templates or repo-local instruction docs.
+The `SKILL.md` files are plain Markdown instructions. Use them as native skills where supported, or as reusable prompt templates / repo-local instruction docs elsewhere.
 
 The core workflow stays the same:
 
@@ -81,7 +101,8 @@ The core workflow stays the same:
 3. Shape the problem and compare options.
 4. Choose a direction.
 5. Breadboard the chosen shape.
-6. Reflect against implementation later when code exists.
+6. Feed the selected planning artifacts into the agent as a compact context packet.
+7. Reflect against implementation later when code exists.
 
 What changes across tools is just **how you invoke the instructions**, not the method itself.
 
@@ -98,11 +119,13 @@ docs/planning-skills/
   breadboarding.md
   kickoff-doc.md
   breadboard-reflection.md
+  feed-planning-context.md
 
 planning/
   frame.md
   shaping.md
   breadboard.md
+  slices.md
 ```
 
 Example prompt:
@@ -141,10 +164,11 @@ Write the result to planning/frame.md.
 
 - **Claude Code**: native skill packaging
 - **Other tools**: prompt-template or repo-doc packaging
+- **All agents**: use `AGENTS.md` as the neutral repo-level instruction surface when supported
 
-So the workflow is tool-agnostic in substance, but Claude-specific in packaging.
+So the workflow is tool-agnostic in substance, with optional tool-specific packaging.
 
-## Install
+## Install for Claude Code
 
 ```bash
 git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
@@ -154,11 +178,12 @@ ln -s ~/.local/share/planning-skills-for-agents-and-humans/kickoff-doc ~/.claude
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/shaping ~/.claude/skills/shaping
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/breadboarding ~/.claude/skills/breadboarding
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/breadboard-reflection ~/.claude/skills/breadboard-reflection
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/feed-planning-context ~/.claude/skills/feed-planning-context
 ```
 
 Each skill should be a direct child of `~/.claude/skills/`.
 
-## Hook
+## Optional Claude Code hook
 
 This repo includes a small hook that reminds the agent to update related planning artifacts when a planning document changes.
 
