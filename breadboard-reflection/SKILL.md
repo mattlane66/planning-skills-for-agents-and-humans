@@ -61,9 +61,30 @@ If the answer requires two verbs joined by "and" or "or," the boundary may be wr
 ```md
 ---
 planning: true
+artifact_type: breadboard-reflection
+status: draft
+source_of_truth: true
+feeds:
+  - planning-update
+  - implementation-followup
 ---
 
 # [Project] — Breadboard Reflection
+
+# Context Card
+
+## Use this when
+An agent is comparing implementation reality against the intended breadboard and deciding what planning artifacts or implementation follow-ups need repair.
+
+## Must preserve
+- distinction between synced reality and design critique
+- observed drift
+- missing behavior
+- accidental behavior
+- proposed fixes
+
+## Ignore unless asked
+- speculative redesigns not grounded in the synced implementation
 
 ## What was synced
 - ...
@@ -83,3 +104,13 @@ planning: true
 ## Rule
 
 Do not start critiquing the design until the breadboard has first been made accurate.
+
+## Self-check before finishing
+
+- Relevant implementation or system reality was inspected before critique.
+- The reflection separates sync-to-reality findings from design critique.
+- Missing, stale, or wrong breadboard nodes are named explicitly.
+- Design smells are tied to concrete places, affordances, stores, or wiring.
+- Proposed fixes explain the expected improvement.
+- Planning updates and implementation follow-ups are separated.
+- The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.
