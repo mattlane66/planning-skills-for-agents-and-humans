@@ -115,3 +115,12 @@ shaping: true
 - Make each problem and outcome line traceable to the source.
 - Use boundaries only when they help prevent a likely wrong direction.
 - The frame is the why, not the how.
+
+## Self-check before finishing
+
+- Source material is separate from interpretation.
+- Every problem and outcome claim is traceable to source material or explicitly marked as an inference.
+- Outcome lines describe effects, not mechanisms.
+- Boundaries prevent likely wrong directions without over-constraining the solution space.
+- Any option landscape explains why this frame is chosen now without creating a roadmap for rejected options.
+- The artifact has planning frontmatter when it will feed downstream agent work.
