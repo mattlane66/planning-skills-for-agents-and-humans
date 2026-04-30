@@ -1,0 +1,16 @@
+{
+  "name": "planning-skills-for-agents-and-humans",
+  "description": "Example MCP client configuration for exposing planning skills as tools.",
+  "mcpServers": {
+    "planning-skills": {
+      "command": "node",
+      "args": ["mcp-server/dist/index.js"],
+      "cwd": "."
+    }
+  },
+  "notes": [
+    "This is an example adapter config, not an official Gemini marketplace manifest.",
+    "Verify the exact Gemini or AI Studio configuration shape before publishing.",
+    "Run `npm install` and `npm run build` from mcp-server before using this command."
+  ]
+}
