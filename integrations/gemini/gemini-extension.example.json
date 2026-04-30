@@ -1,0 +1,12 @@
+{
+  "name": "planning-skills-for-agents-and-humans",
+  "description": "Example MCP client configuration for exposing planning skills as tools. Adapt this file to the current Gemini or MCP host configuration format before use.",
+  "mcpServers": {
+    "planning-skills": {
+      "command": "node",
+      "args": [
+        "/absolute/path/to/planning-skills-for-agents-and-humans/mcp-server/dist/index.js"
+      ]
+    }
+  }
+}
