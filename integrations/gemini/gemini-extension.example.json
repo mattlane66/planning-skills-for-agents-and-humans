@@ -1,0 +1,10 @@
+{
+  "name": "planning-skills-for-agents-and-humans",
+  "description": "Example client config for exposing the planning skills through an MCP server. This is a starting point, not an official Google manifest.",
+  "mcpServers": {
+    "planning-skills": {
+      "command": "node",
+      "args": ["mcp-server/dist/index.js"]
+    }
+  }
+}
