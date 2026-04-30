@@ -1,0 +1,17 @@
+{
+  "name": "planning-skills-for-agents-and-humans",
+  "version": "0.1.0",
+  "description": "Example local MCP adapter configuration for exposing Markdown planning skills as callable tools.",
+  "mcpServers": {
+    "planning-skills": {
+      "command": "node",
+      "args": ["mcp-server/dist/index.js"],
+      "env": {}
+    }
+  },
+  "notes": [
+    "This is an example manifest, not a guarantee of official Gemini extension compatibility.",
+    "Check the current Gemini or Google AI Studio documentation for the exact manifest shape expected by your target client.",
+    "The Markdown skill folders remain the source of truth. The MCP server is only an adapter."
+  ]
+}
