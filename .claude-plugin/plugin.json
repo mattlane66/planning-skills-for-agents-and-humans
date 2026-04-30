@@ -1,0 +1,12 @@
+{
+  "name": "planning-skills",
+  "description": "Turn fuzzy requests, messy transcripts, and partial designs into planning artifacts that humans and agents can build from. Includes framing, shaping, breadboarding, kickoff docs, planning-context packets, and breadboard reflection.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Matt Lane",
+    "url": "https://github.com/mattlane66"
+  },
+  "homepage": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+  "repository": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+  "license": "MIT"
+}
