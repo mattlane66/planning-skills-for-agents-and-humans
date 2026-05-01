@@ -1,0 +1,20 @@
+{
+  "name": "planning-skills-marketplace",
+  "interface": {
+    "displayName": "Planning Skills for Agents and Humans"
+  },
+  "plugins": [
+    {
+      "name": "planning-skills-for-agents-and-humans",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
