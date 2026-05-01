@@ -1,0 +1,35 @@
+{
+  "name": "planning-skills-for-agents-and-humans",
+  "version": "0.1.0",
+  "description": "Planning workflows for framing, shaping, kickoff docs, breadboarding, breadboard reflection, and compact context packets.",
+  "author": {
+    "name": "Matt Lane",
+    "url": "https://github.com/mattlane66"
+  },
+  "repository": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "shaping",
+    "breadboarding",
+    "product-development",
+    "agent-skills",
+    "codex-plugin"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Planning Skills for Agents and Humans",
+    "shortDescription": "Frame, shape, breadboard, package context, and reflect before building.",
+    "longDescription": "A set of reusable planning workflows that help humans and agents turn fuzzy requests, messy notes, partial product ideas, kickoff conversations, and implementation discoveries into clear builder-facing artifacts.",
+    "developerName": "Matt Lane",
+    "category": "Productivity",
+    "capabilities": ["Read", "Write"],
+    "websiteURL": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+    "defaultPrompt": [
+      "Use Planning Skills for Agents and Humans to frame this product idea before implementation.",
+      "Use the shaping skill to compare possible approaches before choosing one.",
+      "Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.",
+      "Use the feed-planning-context skill to package the active planning artifacts for an implementation agent."
+    ]
+  }
+}
