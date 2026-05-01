@@ -1,0 +1,32 @@
+name: MCP Server Build
+
+on:
+  pull_request:
+    paths:
+      - "mcp-server/**"
+      - ".github/workflows/mcp-server-build.yml"
+  push:
+    paths:
+      - "mcp-server/**"
+      - ".github/workflows/mcp-server-build.yml"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        working-directory: mcp-server
+        run: npm install
+
+      - name: Build MCP server
+        working-directory: mcp-server
+        run: npm run build
