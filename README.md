@@ -181,15 +181,35 @@ So the workflow is tool-agnostic in substance, with optional tool-specific packa
 
 ## Install for Claude Code
 
+### As a Claude Code plugin
+
+Use the repository root as the plugin directory:
+
+```bash
+git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
+cd ~/.local/share/planning-skills-for-agents-and-humans
+claude --plugin-dir .
+```
+
+Then reload plugins in Claude Code:
+
+```text
+/reload-plugins
+```
+
+### As direct local skills
+
+If you prefer direct skill symlinks, link each folder from the repo's `skills/` directory:
+
 ```bash
 git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
 
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/framing-doc ~/.claude/skills/framing-doc
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/kickoff-doc ~/.claude/skills/kickoff-doc
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/shaping ~/.claude/skills/shaping
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/breadboarding ~/.claude/skills/breadboarding
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/breadboard-reflection ~/.claude/skills/breadboard-reflection
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/feed-planning-context ~/.claude/skills/feed-planning-context
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/framing-doc ~/.claude/skills/framing-doc
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/kickoff-doc ~/.claude/skills/kickoff-doc
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/shaping ~/.claude/skills/shaping
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboarding ~/.claude/skills/breadboarding
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboard-reflection ~/.claude/skills/breadboard-reflection
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/feed-planning-context ~/.claude/skills/feed-planning-context
 ```
 
 Each skill should be a direct child of `~/.claude/skills/`.
