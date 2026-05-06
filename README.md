@@ -46,6 +46,8 @@ Use [`AGENTS.md`](./AGENTS.md) as the tool-neutral instruction surface for agent
 
 Claude Code users can install the skills natively. Other tools such as Cursor, Codex, and similar agent environments can use the same `SKILL.md` files as repo-local rules, prompt files, or reusable docs. The method is tool-agnostic even when some packaging details are tool-specific.
 
+For exact tool-by-tool invocation differences, see [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md). Claude supports project slash commands in this repo; Codex and Gemini-style clients use plugin, local skill, MCP, or prompt-recipe invocation rather than Claude-style slash commands.
+
 ## Skills
 
 ### `/framing-doc`
@@ -115,7 +117,7 @@ The core workflow stays the same:
 6. Feed the selected planning artifacts into the agent as a compact context packet.
 7. Reflect against implementation later when code exists.
 
-What changes across tools is just **how you invoke the instructions**, not the method itself.
+What changes across tools is just **how you invoke the instructions**, not the method itself. See [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md) for the current support matrix and prompt recipes.
 
 ### Plain markdown workflow
 
