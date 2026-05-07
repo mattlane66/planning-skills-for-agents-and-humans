@@ -22,7 +22,33 @@ This repo is not a replacement for [Spec Kit](https://github.com/github/spec-kit
 Comparatively (including [HumanLayer](https://www.humanlayer.dev)):
 - Planning Skills = figure out what to build to get people from where they are to where they ought to be and how to structure and derisk it
 - Spec Kit = turn planning skills' vertical slices into an agent-specific implementation build plan while specifying exact file paths, dependencies, order, and test structure.
-- HumanLayer = help agents carry out the build work reliably in real complex codebases 
+- HumanLayer = help agents carry out the build work reliably in real complex codebases
+
+1. Raw notes / customer evidence / idea
+   ↓
+2. Planning Skills: framing
+   Output: problem, forces, outcome, boundaries
+   ↓
+3. Planning Skills: shaping
+   Output: options, fit checks, selected approach, non-goals
+   ↓
+4. Planning Skills: breadboarding
+   Output: places, affordances, stores, state, wiring
+   ↓
+5. Planning Skills: slices
+   Output: demoable vertical slices, risk/dependency order
+   ↓
+6. Planning Skills: feed-planning-context
+   Output: compact implementation packet
+   ↓
+7. Spec Kit
+   Output: spec.md, plan.md, data-model.md, contracts, tasks.md
+   ↓
+8. HumanLayer / CodeLayer / Claude Code / Codex
+   Output: implementation, tests, PRs, review loops
+   ↓
+9. Breadboard reflection
+   Output: detect drift, update artifacts, repair intent/code mismatch
 
 ## Mode discipline
 
