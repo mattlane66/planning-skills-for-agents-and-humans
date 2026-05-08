@@ -18,10 +18,10 @@ The work should get clearer at every step.
 A request is often a clue, not the real problem.
 
 **Framing the problem before writing the plan.**  
-A team needs to know the situation, the current approach, the desired outcome, the boundary, and the appetite.
+A team needs to know the situation, the current approach, the desired outcome, the boundary, and the [appetite](https://world.hey.com/jason/appetites-instead-of-estimates-192d39ba).
 
 **Mapping the behavior before polishing the screen.**  
-Rough flows, sketches, tables, and state maps reveal how the thing works faster than finished-looking mockups.
+Rough flows, sketches, and fit checks reveal how the thing works faster than finished-looking mockups.
 
 **Checking system reality before trusting the idea.**  
 The data, code, permissions, edge cases, and legacy constraints are part of the design.
@@ -36,7 +36,7 @@ The process exists to help people think, decide, and collaborate.
 Plans are guesses. Real use teaches the team what the plan could not know.
 
 **Using AI to preserve intent and execute bounded work.**  
-AI should help carry context, shape options, and build clear slices. It should not invent the strategy the team skipped.
+AI should help carry context, assist in shaping options, spiking unknowns, and structuring clear demoable slices. It should not invent the strategy.
 
 ---
 
