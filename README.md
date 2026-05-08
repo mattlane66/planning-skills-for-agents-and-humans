@@ -5,6 +5,19 @@ Now, maybe AI could one-shot a simple app instead of using these skills. But, go
 
 AI coding tools have become powerful new prototyping instruments, but they work best after good upstream/uphill shaping.
 
+## Operating philosophy
+
+Start here: [The Work Should Get Clearer](./MANIFESTO.md).
+
+This repo helps teams preserve intent as work moves from idea to implementation. Use the skills at the handoffs where meaning is most likely to get lost:
+
+- `/framing-doc` for turning raw notes or requests into a clear problem frame
+- `/shaping` for comparing paths and selecting a bounded direction
+- `/breadboarding` for making behavior, state, affordances, and wiring visible
+- `/kickoff-doc` for preparing the build team
+- `/feed-planning-context` for giving AI agents bounded context
+- `/breadboard-reflection` for repairing drift between plan and implementation
+
 Get a quick lightweight feel for these design skills [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
 
 <img width="1453" height="713" alt="Screenshot 2026-04-24 at 10 05 13 PM" src="https://github.com/user-attachments/assets/8b3848cc-3968-4792-8d77-5c38b81ce3b1" />
