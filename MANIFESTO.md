@@ -12,7 +12,7 @@ The work should get clearer at every step.
 
 ---
 
-## We value
+## Values
 
 **Understanding the struggle before accepting the request.**  
 A request is often a clue, not the real problem.
