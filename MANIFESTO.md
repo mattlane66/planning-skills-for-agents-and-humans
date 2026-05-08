@@ -73,7 +73,7 @@ It is a way to stop intent from getting lost.
 | A framed problem needs paths, tradeoffs, risks, and a selected direction | `/shaping` |
 | A selected path needs visible behavior, state, affordances, and wiring | `/breadboarding` |
 | The build team needs a shared reference before creating tasks | `/kickoff-doc` |
-| An AI agent needs bounded context for one slice | `/feed-planning-context` |
+| An AI agent needs bounded context to vertically slice | `/feed-planning-context` |
 | The implementation has drifted from the plan | `/breadboard-reflection` |
 
 Use these skills when the work changes modes and intent could get lost.
@@ -88,7 +88,7 @@ Do not use them to add ceremony.
 
 A request is only a starting point.
 
-Before estimating, assigning, or prototyping, ask:
+Before assigning or prototyping, ask:
 
 - Who is struggling?
 - What are they trying to do?
@@ -124,11 +124,11 @@ A good frame names:
 
 ### 3. Watch the work before solving it.
 
-When the problem is unclear, study the real workflow.
+When the problem is very unclear, study the real workflow (contextual inquiry).
 
 Write down the steps, workarounds, tool-switching, waiting, rework, and extra effort.
 
-The workaround often points toward the solution.
+The workaround often points toward a better solution.
 
 ---
 
@@ -160,7 +160,7 @@ The team is ready to shape when it can explain:
 - the desired outcome
 - the boundary
 
-If it cannot, the work is not ready.
+If it cannot, the mandate to shape is not wise.
 
 Use `/shaping` when the problem is clear enough to compare paths, make tradeoffs, expose risks, and choose a direction.
 
@@ -173,9 +173,10 @@ Bring in the people who can remove doubt:
 - product
 - design
 - engineering
-- QA
+But also:
 - support
 - sales
+- data
 - operations
 - legal
 - security
@@ -205,7 +206,7 @@ Put that system reality into the shape.
 
 ### 10. Show behavior before making it beautiful.
 
-Use rough maps, simple diagrams, tables, sketches, state maps, or quick prototypes.
+Use affordance map diagrams (UI breadboards), tables, sketches, or quick prototypes.
 
 Show:
 
@@ -229,18 +230,20 @@ Do not fall in love with the first idea.
 Compare possible paths against:
 
 - the problem frame
-- the appetite
+- inside an appetite
 - technical limits
 - cost
 - risk
 - complexity
 - user value
 
+...and other specific requirements/criteria (fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.).
+
 ---
 
 ### 12. Test only the unknowns that block a decision.
 
-When the team cannot answer a hard question, run a focused test.
+When the team cannot answer a hard question, run a focused test (e.g., a spike).
 
 Come back with a decision, not a report.
 
@@ -389,11 +392,11 @@ Use `/breadboard-reflection` when implementation reality disagrees with the plan
 
 Humans frame and shape.
 
-Tools preserve context.
+Tools help us get unstuck and preserve context.
 
 Agents execute bounded work.
 
-Reality updates the artifacts.
+Reality updates the artifacts, ideally via agents.
 
 Do not give AI a blurry task and call the result strategy.
 
@@ -409,11 +412,9 @@ Can we clearly say:
 - What do people do now?
 - What happens now?
 - What better result do they want?
-- What pushes, pulls, blocks, or protects the current way?
 - What will we change, and what will we leave alone?
 - How much time will we spend?
 - Do we have evidence, or only a strong hunch?
-- What would change our mind?
 
 ### Shape Go
 
@@ -425,7 +426,7 @@ Can we clearly say:
 - Where are the risky logic, data, permissions, or dependencies?
 - What did we cut?
 - What still needs a focused test?
-- Why does this fit the appetite?
+- Why does this fit up to the appetite?
 - Where do builders still have room to decide?
 
 ### Build Go
@@ -459,7 +460,7 @@ Do not use meetings to cover for unclear work.
 Do not bring QA in only at the end.  
 Do not use cooldown as hidden build time.  
 Do not let AI invent missing intent.  
-Do not treat drift as failure.
+Do not let drift run silent.
 
 Treat **silent drift** as failure.
 
