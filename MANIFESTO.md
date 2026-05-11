@@ -423,7 +423,7 @@ Can we clearly say and answer:
 
 - What path did we choose?
 - Does this improve an existing feature, get more people to use it, get people to use it more, or support a new workflow?
-- Does this need be or what needs to be 1.) Obvious, 2. Used often, 3. Rarely used 
+- Does this need be (or what needs to be) 1.) Obvious, 2. Used often, 3. Rarely used 
 - What are the main parts?
 - How does the system behave under the interface?
 - Where are the risky logic, data, permissions, or dependencies?
