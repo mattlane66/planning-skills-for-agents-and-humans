@@ -404,7 +404,7 @@ Do not give AI a blurry task and call the result strategy.
 
 ## Go / No-Go Checks
 
-### Frame Go
+### [Frame](https://docs.google.com/document/d/1FW840A7WSbQr4ijk7zY4zvIY_-uXoyZbEdTJZXDX54o/edit?usp=sharing) Go
 
 Can we clearly say:
 
@@ -415,12 +415,15 @@ Can we clearly say:
 - What will we change, and what will we leave alone?
 - How much time will we spend?
 - Do we have evidence, or only a strong hunch?
+- What goes wrong if we do nothing?
 
-### Shape Go
+### [Shape](https://docs.google.com/document/d/1Yncw-DhizyI24B8A2xkNF8Z0OllKy3MufqHH4DcjNRw/edit?usp=sharing) Go
 
 Can we clearly say:
 
 - What path did we choose?
+- Does this improve an existing feature, get more people to use it, get people to use it more, or support a new workflow?
+- Does this need be or what needs to be 1.) Obvious, 2. Used often, 3. Rarely used 
 - What are the main parts?
 - How does the system behave under the interface?
 - Where are the risky logic, data, permissions, or dependencies?
@@ -492,6 +495,7 @@ No more.
 
 ---
 
-## One Sentence
-
 Do not go from idea to tickets. Move from real struggle to clear opportunity, from clear opportunity to shaped path, from shaped path to visible behavior, from visible behavior to working slices, and from shipped reality back into learning.
+
+<img width="2172" height="724" alt="Opportunity-Solution_Model" src="https://github.com/user-attachments/assets/543154e4-7640-4627-8263-693257235b02" />
+This opportunity-solution system is a high-level boundary-location fit model. It identifies what is required to produce a design (the elements within “The Field”) and defines what a successful design must achieve—namely, outperform the current baseline outcome.
