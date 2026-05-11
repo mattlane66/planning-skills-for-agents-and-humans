@@ -406,7 +406,7 @@ Do not give AI a blurry task and call the result strategy.
 
 ### [Frame](https://docs.google.com/document/d/1FW840A7WSbQr4ijk7zY4zvIY_-uXoyZbEdTJZXDX54o/edit?usp=sharing) Go
 
-Can we clearly say:
+Can we clearly say and answer:
 
 - What is the real struggling moment?
 - What do people do now?
@@ -419,7 +419,7 @@ Can we clearly say:
 
 ### [Shape](https://docs.google.com/document/d/1Yncw-DhizyI24B8A2xkNF8Z0OllKy3MufqHH4DcjNRw/edit?usp=sharing) Go
 
-Can we clearly say:
+Can we clearly say and answer:
 
 - What path did we choose?
 - Does this improve an existing feature, get more people to use it, get people to use it more, or support a new workflow?
@@ -434,7 +434,7 @@ Can we clearly say:
 
 ### Build Go
 
-Can we clearly say:
+Can we clearly say and answer:
 
 - Where does the feature start?
 - What product areas change?
