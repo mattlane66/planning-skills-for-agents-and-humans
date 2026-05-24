@@ -6,7 +6,7 @@ The skills are most powerful when grounded in your codebase. That context provid
 AI may be able to one-shot a simple app without this process. But for larger bets, the process gives you and your team a shared view of how the solution works. It also makes your prompts better as the work gets more concrete. And it leaves behind documents you can question later, so you can understand how and why the system was put together before you change it.
 Ideally, you use these skills to help run, or process data from, a collaborative [shaping session](https://www.figma.com/community/file/1490786031847199566/shaping-session-playing-field-copy-me-template).
 
-AI coding tools have become powerful new prototyping instruments, but they work best after good upstream/uphill shaping.
+AI coding tools have become powerful new prototyping instruments, but they work best after good upstream/uphill shaping. Humans need to own the planning stack.
 
 ## Operating philosophy
 
