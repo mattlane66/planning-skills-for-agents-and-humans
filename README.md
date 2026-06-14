@@ -21,7 +21,7 @@ This repo helps teams preserve intent as work moves from idea to implementation.
 - `/feed-planning-context` for giving AI agents bounded context
 - `/breadboard-reflection` for repairing drift between plan and implementation
 
-Get a quick lightweight feel for these design skills [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
+Get a quick lightweight feel for these design skills with this Custom GPT [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
 
 <img width="1453" height="713" alt="Screenshot 2026-04-24 at 10 05 13 PM" src="https://github.com/user-attachments/assets/8b3848cc-3968-4792-8d77-5c38b81ce3b1" />
 
