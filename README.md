@@ -16,7 +16,7 @@ This repo helps teams preserve intent as work moves from idea to implementation.
 
 - `/framing-doc` for turning raw notes or requests into a clear problem frame
 - `/shaping` for comparing paths and selecting a bounded direction
-- `/breadboarding` for making behavior, state, affordances, and wiring visible
+- `/breadboarding` for making behavior, state, affordances, and wiring visible (aka as an Interaction Schematic)
 - `/kickoff-doc` for preparing the build team
 - `/feed-planning-context` for giving AI agents bounded context
 - `/breadboard-reflection` for repairing drift between plan and implementation
