@@ -13,6 +13,8 @@ The goal is to prevent common agent failures:
 - implementing mechanisms that no longer fit the frame
 - changing the breadboard silently when code reality pushes back
 - treating raw notes, selected requirements, and build instructions as equal authority
+- inventing interface details such as field names, nullability, enum values, or error cases
+- coding from an ordinary breadboard when an executable breadboard is needed
 
 ## Core rule
 
@@ -25,11 +27,23 @@ A good context packet tells the agent:
 3. which sections matter first
 4. which sections should be ignored unless needed
 5. what constraints, IDs, and non-goals must be preserved
-6. what verification target proves the work stayed aligned
+6. which executable breadboard or interface contracts must be preserved, when present
+7. what verification target proves the work stayed aligned
+
+## Artifact roles
+
+Breadboard = structure of the solution.
+
+Interface contract = what crosses a boundary.
+
+Executable breadboard = structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
+
+Context packet = the exact subset handed to the build agent.
+
+Use ordinary breadboards while shaping. Use executable breadboards when a selected slice is ready for implementation preparation.
 
 ## Context packet template
 
-```md
 # Context Packet
 
 ## Task
@@ -39,11 +53,15 @@ What the agent should do now.
 - @planning/frame.md
 - @planning/breadboard.md
 - @planning/slices.md
+- @planning/executable-breadboard.md, when the selected slice is ready for implementation
+- @planning/interface-contracts.md, when boundary contracts are split out separately
 
 ## Use these sections first
 - frame.md: Outcome, Constraints, Non-goals
-- breadboard.md: Places, Affordances, Stores, Wiring
+- breadboard.md: Places, Affordances, Stores, Wiring, Interface contract candidates
 - slices.md: Selected slice, Demo, Produces
+- executable-breadboard.md: Selected slice, Relevant breadboard structure, Interface contracts, Example starting data, Example runs, Edge cases, Acceptance tests, Open decisions, Verification target
+- interface-contracts.md: Contract IDs, boundaries, input shapes, output shapes, branches, errors, open decisions
 
 ## Do not use unless needed
 - raw interview notes
@@ -57,6 +75,9 @@ What the agent should do now.
 - explicit non-goals
 - selected slice boundary
 - demo path
+- executable-breadboard fixtures, example runs, expected outputs, edge cases, and acceptance tests, when present
+- contract IDs and boundary names, when present
+- field names, required/optional distinctions, enum values, nullability, units, and error cases, when specified
 
 ## Required behavior
 1. Restate the relevant constraints.
@@ -64,143 +85,148 @@ What the agent should do now.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
 5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-```
+6. Do not invent missing field names, nullability, enum values, expected outputs, fixtures, edge cases, or error cases; flag them.
 
 ## Standard context card
 
 Add a short context card near the top of important planning artifacts. This lets the artifact explain how it should be read.
 
-```md
 ---
-artifact_type: breadboard
+artifact_type: executable-breadboard
 project: example-project
 status: selected
 source_of_truth: true
 feeds:
-  - slice-plan
   - implementation
+  - tests
+  - reflection
 ---
 
 # Context Card
 
 ## Use this when
-The agent is implementing, slicing, or checking whether code still matches the planned interaction.
+The agent is implementing or testing the selected slice.
 
 ## Must preserve
-- P1, P2, P3 place IDs
-- selected affordance names
-- user-visible demo path
+- selected slice boundary
+- demo path
+- place and affordance IDs
+- fixtures and example runs
+- expected outputs
+- acceptance tests
 - explicit non-goals
+- contract IDs and boundary details, when present
 
 ## Ignore unless asked
 - rejected shapes
 - early brainstorming
 - unresolved nice-to-haves
-```
 
 ## Stable ID convention
 
 Use stable IDs for anything the agent may need to trace from planning into implementation.
 
-```md
-REQ-01: User can recover from an incomplete plan.
-P-01: Planning dashboard.
-AFF-03: Continue selected slice.
-STORE-02: Slice status.
-SLICE-01: Resume unfinished work.
-```
+Examples:
+
+- REQ-01: User can recover from an incomplete plan.
+- P-01: Planning dashboard.
+- AFF-03: Continue selected slice.
+- STORE-02: Slice status.
+- CONTRACT-01: Resume slice request/response.
+- SLICE-01: Resume unfinished work.
+- RUN-01: Happy path for resuming a slice.
+- E-01: Missing saved slice state.
 
 Avoid renaming IDs just to improve wording. If the meaning changes, create a new ID or add a short change note.
+
+## Executable breadboards in context packets
+
+Use an executable breadboard when the selected slice is ready to be handed to a coding agent or engineer.
+
+Treat it as the source of truth for the buildable behavior of the selected slice: structure, fixtures, example runs, expected outputs, edge cases, acceptance tests, and open decisions.
+
+Preserve:
+
+- selected slice ID and boundary
+- demo path
+- relevant places, affordances, stores, states, rules, and wiring
+- interface contracts embedded in the executable breadboard
+- fixture names and starting data
+- example runs
+- expected user-visible results
+- expected state changes and side effects
+- edge cases
+- acceptance tests
+- verification target
+- open decisions the agent must not invent
+
+Do not expand beyond the selected slice. If implementation reality conflicts with the executable breadboard, surface the drift instead of silently changing the plan.
+
+## Interface contracts in context packets
+
+Use an interface contract when a selected slice crosses a meaningful boundary and field-level guessing would create rework.
+
+Examples:
+
+- UI -> backend
+- frontend -> API
+- service -> store
+- agent -> tool
+- import -> parser
+- parser -> normalized object
+- canvas object -> markdown artifact
+- MCP server -> client
+- app -> external integration
+
+When present, an interface contract should be treated as the source of truth for boundary-level input/output details unless the user's latest instruction, selected slice, or executable breadboard says otherwise.
+
+Preserve:
+
+- contract IDs
+- boundary names
+- field names
+- required vs optional distinctions
+- enum values
+- nullability
+- units, such as cents instead of dollars
+- branches and error cases
+- open decisions
+
+Do not invent missing details. If a field-level decision is missing, surface it as an open decision before coding.
 
 ## Artifact-specific feeding prompts
 
 ### Framing doc to agent
 
-```md
-Use @planning/frame.md.
-
-First extract:
-1. desired outcome
-2. current struggle
-3. constraints
-4. non-goals
-5. open questions
-
-Then tell me whether the requested implementation fits the frame.
-Do not edit code yet.
-```
+Use @planning/frame.md. First extract desired outcome, current struggle, constraints, non-goals, and open questions. Then tell me whether the requested implementation fits the frame. Do not edit code yet.
 
 ### Shaping doc to agent
 
-```md
-Use @planning/shaping.md.
-
-Treat the selected shape as the current direction.
-Use rejected shapes only to understand tradeoffs, not as implementation instructions.
-
-Before coding, produce:
-1. selected requirements
-2. shape parts that must be preserved
-3. known unknowns or spikes
-4. build risks implied by the shape
-5. any mismatch between the requested task and the selected direction
-```
+Use @planning/shaping.md. Treat the selected shape as the current direction. Use rejected shapes only to understand tradeoffs, not as implementation instructions. Before coding, produce selected requirements, shape parts that must be preserved, known unknowns or spikes, build risks implied by the shape, and any mismatch between the requested task and the selected direction.
 
 ### Breadboard to agent
 
-```md
-Use @planning/breadboard.md.
+Use @planning/breadboard.md. Treat Places, Affordances, Stores, Wiring, and Interface contract candidates as the source of truth for structure. Before coding, identify files likely affected, code responsibilities implied by each affordance, risks where the existing code may not support the breadboard, first slice to implement, and boundary crossings where an interface contract would reduce guessing. Do not change the breadboard silently.
 
-Treat Places, Affordances, Stores, and Wiring as the source of truth.
-Before coding, produce:
-1. files likely affected
-2. code responsibilities implied by each affordance
-3. risks where the existing code may not support the breadboard
-4. first slice to implement
+### Executable breadboard to agent
 
-Do not change the breadboard silently. If implementation reality changes it, propose a planning update.
-```
+Use @planning/executable-breadboard.md. Treat it as the build handoff for the selected slice. Before coding, restate the slice boundary, list fixtures and example runs, identify interface contracts to preserve, list expected user-visible results, state changes, side effects, and acceptance tests, and flag missing decisions. Implement only the selected slice.
+
+### Interface contract to agent
+
+Use @planning/interface-contracts.md. Before coding, extract contract IDs, boundaries, input fields, output fields, required vs optional fields, enum values, nullable fields, branches and error cases, and open decisions. Then report which decisions are fully specified, which are missing, and which tests should prove the contract is satisfied. Do not invent missing field names, nullability, enum values, or error cases.
 
 ### Slice plan to agent
 
-```md
-Use @planning/slices.md.
-
-Focus only on the selected slice.
-Before coding, restate:
-1. slice boundary
-2. demo path
-3. Produces line
-4. explicit exclusions
-5. verification target
-
-Implement only this slice unless I explicitly expand scope.
-```
+Use @planning/slices.md. Focus only on the selected slice. Before coding, restate slice boundary, demo path, Produces line, explicit exclusions, and verification target. Implement only this slice unless the user explicitly expands scope.
 
 ### Kickoff doc to agent
 
-```md
-Use @planning/kickoff.md.
-
-Summarize the build appetite, selected slice, demo path, exclusions, and verification target.
-Then produce an implementation plan.
-Only code after the plan is accepted.
-```
+Use @planning/kickoff.md. Summarize the build appetite, selected slice, demo path, exclusions, and verification target. Then produce an implementation plan.
 
 ### Breadboard reflection to agent
 
-```md
-Use @planning/breadboard-reflection.md and @planning/breadboard.md.
-
-Compare implementation reality to the intended places, affordances, stores, wiring, and slices.
-Return:
-1. matches
-2. drift
-3. missing behavior
-4. accidental behavior
-5. planning artifacts that need repair
-6. implementation follow-ups
-```
+Use @planning/breadboard-reflection.md plus the selected breadboard and executable breadboard if present. Compare implementation reality to the intended places, affordances, stores, wiring, interface contracts, example runs, acceptance tests, and slices. Return matches, drift, missing behavior, accidental behavior, planning artifacts that need repair, and implementation follow-ups.
 
 ## Chunking rules
 
@@ -219,19 +245,22 @@ When feeding large planning material to an agent:
 
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
-1. the user’s latest explicit instruction
+1. the user's latest explicit instruction
 2. selected slice or kickoff doc
-3. selected breadboard
-4. selected shaping direction
-5. framing doc
-6. raw notes and transcripts
-7. rejected alternatives and brainstorming
+3. executable breadboard, when present
+4. selected interface contract, for boundary-level input/output details
+5. selected breadboard
+6. selected shaping direction
+7. framing doc
+8. raw notes and transcripts
+9. rejected alternatives and brainstorming
 
 ## Drift protocol
 
 If implementation reality conflicts with the planning artifact, the agent should not silently patch around the plan.
 
-```md
+Use this structure:
+
 ## Planning drift found
 
 The selected artifact says:
@@ -247,7 +276,6 @@ Options:
 
 Recommended move:
 - ...
-```
 
 ## Anti-patterns
 
@@ -258,4 +286,7 @@ Avoid:
 - asking for code before the agent has restated the slice boundary
 - letting the agent rename IDs during implementation
 - treating raw notes as more authoritative than selected artifacts
+- coding from an ordinary breadboard when fixtures, example runs, expected outputs, or acceptance tests are needed
+- inventing missing field names, enum values, nullability, fixtures, expected outputs, edge cases, or error cases
+- treating plain-language interface contracts as permission to create production schemas during planning
 - using `CLAUDE.md` as a dumping ground for project-specific details that should live in planning artifacts

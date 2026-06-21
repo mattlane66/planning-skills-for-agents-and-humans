@@ -8,6 +8,8 @@ SKILLS=(
   "framing-doc"
   "shaping"
   "breadboarding"
+  "interface-contracts"
+  "executable-breadboards"
   "kickoff-doc"
   "feed-planning-context"
   "breadboard-reflection"
