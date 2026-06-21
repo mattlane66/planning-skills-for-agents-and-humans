@@ -16,7 +16,7 @@ When planning, prefer:
 - tables
 - lightweight pseudo-structures
 - Mermaid diagrams when helpful
-- stable IDs for requirements, places, affordances, stores, contracts, and slices
+- stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, and slices
 
 When implementing, preserve shaped intent and update planning artifacts if implementation discoveries change the plan.
 
@@ -28,8 +28,9 @@ When implementing, preserve shaped intent and update planning artifacts if imple
 4. Breadboard places, affordances, stores, and wiring.
 5. Slice into demoable increments.
 6. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
-7. Feed only the relevant planning context to the implementation agent.
-8. Reflect against implementation and repair drift.
+7. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
+8. Feed only the relevant planning context to the implementation agent.
+9. Reflect against implementation and repair drift.
 
 ## Skill map
 
@@ -39,9 +40,20 @@ Use the repo skills as reusable instructions:
 - `shaping/` — define requirements/criteria, compare alternative shapes, run fit checks, and detail the selected direction.
 - `breadboarding/` — map places, affordances, stores, wiring, diagrams, and demoable slices.
 - `interface-contracts/` — turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
+- `executable-breadboards/` — turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
 - `kickoff-doc/` — create a builder-facing reference after the team has converged.
 - `breadboard-reflection/` — compare implementation to the breadboard and repair drift.
 - `feed-planning-context/` — package planning artifacts into a compact context packet for implementation work.
+
+## Artifact taxonomy
+
+Breadboard = structure of the solution.
+
+Interface contract = what crosses a boundary.
+
+Executable breadboard = breadboard + interface contracts + fixtures + example runs + expected outputs + tests.
+
+Context packet = the exact subset handed to the build agent.
 
 ## Authority order
 
@@ -49,12 +61,13 @@ When artifacts disagree, use this default authority order unless the user says o
 
 1. the user’s latest explicit instruction
 2. selected slice or kickoff doc
-3. selected interface contract, for boundary-level input/output details
-4. selected breadboard
-5. selected shaping direction
-6. framing doc
-7. raw notes and transcripts
-8. rejected alternatives and brainstorming
+3. executable breadboard, when present
+4. selected interface contract, for boundary-level input/output details
+5. selected breadboard
+6. selected shaping direction
+7. framing doc
+8. raw notes and transcripts
+9. rejected alternatives and brainstorming
 
 Do not treat a newer brainstorming note as a higher-authority artifact unless it explicitly changes the selected direction.
 
@@ -72,7 +85,7 @@ Do not collapse:
 - rejected alternatives into active requirements
 - raw notes into source-of-truth instructions
 
-During planning, keep interface contracts in plain language. Do not create full OpenAPI, JSON Schema, database schema, framework code, or production contract files unless the user explicitly asks or the selected slice has moved into implementation preparation.
+During planning, keep interface contracts and executable breadboards in plain language. Do not create full OpenAPI, JSON Schema, database schema, framework code, production contract files, production test files, or mocks unless the user explicitly asks or the selected slice has moved into implementation preparation.
 
 ## Context feeding
 
@@ -88,6 +101,7 @@ Before implementation work, create or request a compact context packet that incl
 - must-preserve constraints
 - selected requirements
 - relevant places, affordances, stores, and wiring
+- relevant executable breadboard examples, when present
 - relevant interface contracts, when present
 - current slice
 - non-goals and exclusions
@@ -104,9 +118,29 @@ Preserve IDs such as:
 - `AFF-01`
 - `STORE-01`
 - `CONTRACT-01` or `C1`
+- `RUN-01`
+- `EDGE-01`
 - `SLICE-01`
 
 Do not rename stable IDs just to improve wording. If the meaning changes, create a planning update or new ID.
+
+## Executable breadboards
+
+When an executable breadboard is present, preserve:
+
+- selected slice ID and boundary
+- relevant breadboard structure
+- interface contracts
+- example starting data or fixtures
+- example runs
+- expected user-visible results
+- expected state changes
+- expected side effects
+- edge cases
+- acceptance tests
+- open decisions
+
+Do not invent missing fixtures, expected outputs, edge cases, or acceptance tests. Flag them before coding.
 
 ## Interface contracts
 
@@ -157,6 +191,7 @@ Before declaring work complete, check:
 - rejected alternatives stayed marked as rejected
 - non-goals were preserved
 - stable IDs were preserved
+- executable breadboard examples were preserved when present
 - interface contracts were preserved when present
 - planning artifacts were updated if implementation discoveries changed the plan
-- implementation work, when present, maps back to requirement/affordance/store/contract/slice IDs
+- implementation work, when present, maps back to requirement/affordance/store/contract/example-run/edge-case/slice IDs
