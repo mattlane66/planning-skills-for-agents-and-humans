@@ -15,6 +15,14 @@ This skill prepares planning context only. It does not write production schemas 
 
 Produce a plain-language contract that makes boundary-crossing data exchanges explicit enough for an implementation agent to build and test without inventing field names, nullability, enum values, or error cases.
 
+## Relationship to executable breadboards
+
+An interface contract is boundary detail.
+
+An executable breadboard is the build handoff for a selected slice: structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
+
+Use this skill separately when boundary detail is complex enough to deserve its own artifact. Otherwise, the contract table can live directly inside an executable breadboard.
+
 ## Use this when
 
 Use this after a breadboard or selected slice when the work depends on data moving across a meaningful boundary:
@@ -37,6 +45,7 @@ Use whichever inputs are available:
 
 - selected breadboard
 - selected slice
+- executable breadboard, if already present
 - wires from UI affordances to non-UI affordances
 - stores and state affected by the exchange
 - product-relevant branches
@@ -55,6 +64,7 @@ Use whichever inputs are available:
 8. Name branches and errors.
 9. Flag open decisions instead of inventing them.
 10. Add a verification target.
+11. Note whether the contract should be embedded in the executable breadboard or split out as a separate artifact.
 
 ## Output format
 
@@ -64,6 +74,7 @@ Use whichever inputs are available:
 ## Source references
 - Breadboard artifact:
 - Selected slice:
+- Executable breadboard, if present:
 - Related shaping artifact:
 
 ## Contract summary
@@ -103,7 +114,7 @@ Use whichever inputs are available:
 
 ## Contract table shorthand
 
-When the contract is still embedded in a breadboard, use this table:
+When the contract is still embedded in a breadboard or executable breadboard, use this table:
 
 | ID | Trigger / Wire | From | To | Request / Input Shape | Response / Output Shape | Branches / Errors | Open Decisions |
 |---|---|---|---|---|---|---|---|
@@ -195,6 +206,7 @@ Do not invent missing field names, nullability, enum values, or error cases. Fla
 - Open decisions are flagged instead of invented.
 - Verification targets are concrete.
 - The contract stays within the selected slice.
+- The contract can be embedded inside an executable breadboard or referenced by one.
 
 ## Do not
 
@@ -202,4 +214,4 @@ Do not invent missing field names, nullability, enum values, or error cases. Fla
 - infer missing field names when the source artifacts do not specify them
 - invent enum values or nullability rules
 - expand the contract beyond the selected slice
-- treat the contract as more authoritative than the user's latest instruction or selected slice
+- treat the contract as more authoritative than the user's latest instruction, selected slice, or executable breadboard
