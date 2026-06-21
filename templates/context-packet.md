@@ -1,24 +1,26 @@
 # Context Packet
 
 ## Task
-What the implementation or planning agent should do now.
+What the next planning or implementation move should do.
 
 ## Source artifacts
 - @planning/frame.md
 - @planning/shaping.md
 - @planning/breadboard.md
 - @planning/slices.md
-- @planning/interface-contracts.md, when boundary detail matters
+- @planning/executable-breadboard.md, when the selected slice is ready for build handoff
+- @planning/interface-contracts.md, when boundary detail is split out separately
 
 ## Authority order
 1. User's latest explicit instruction
 2. Selected slice or kickoff doc
-3. Selected interface contract, for boundary-level input/output details
-4. Selected breadboard
-5. Selected shaping direction
-6. Framing doc
-7. Raw notes and transcripts
-8. Rejected alternatives and brainstorming
+3. Executable breadboard, when present
+4. Selected interface contract, for boundary-level input/output details
+5. Selected breadboard
+6. Selected shaping direction
+7. Framing doc
+8. Raw notes and transcripts
+9. Rejected alternatives and brainstorming
 
 ## Use these sections first
 - ...
@@ -33,9 +35,10 @@ What the implementation or planning agent should do now.
 - stable requirement IDs
 - stable place and affordance IDs
 - store IDs
+- selected slice boundary
+- executable breadboard fixtures, example runs, expected outputs, and acceptance tests, when present
 - contract IDs and boundary names, when present
 - field names, required/optional distinctions, enum values, nullability, and error cases, when specified
-- selected slice boundary
 - explicit non-goals
 - demo path
 
@@ -44,6 +47,17 @@ What the implementation or planning agent should do now.
 
 ## Relevant places / affordances / stores
 - ...
+
+## Relevant executable breadboard
+- Selected slice:
+- Example starting data / fixtures:
+- Example runs:
+- Expected user-visible results:
+- Expected state changes:
+- Expected side effects:
+- Edge cases:
+- Acceptance tests:
+- Open decisions:
 
 ## Relevant interface contracts
 - Contract:
@@ -62,13 +76,13 @@ What the implementation or planning agent should do now.
 ## Open questions
 - ...
 
-## Required behavior for the implementation agent
+## Build-handoff behavior
 1. Restate the relevant constraints.
 2. Identify implementation implications.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
 5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-6. Do not invent missing field names, nullability, enum values, or error cases; flag them.
+6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, or acceptance tests instead of inventing them.
 
 ## Verification target
 - ...
