@@ -4,7 +4,7 @@ A plain-language interface contract describes what crosses a boundary before cod
 
 It is not the implementation. It is the agreement between parts of the system: what one side sends, what the other side returns, what can fail, and which decisions are still unresolved.
 
-Use this after a breadboard or selected slice when the work depends on data moving across a meaningful boundary.
+Use this when a selected slice depends on data moving across a meaningful boundary and field-level guessing would cause rework.
 
 ## Where this fits
 
@@ -12,8 +12,8 @@ Use this after a breadboard or selected slice when the work depends on data movi
 Framing
   -> Shaping
   -> Breadboard
-  -> Slices
-  -> Plain-language interface contract, when boundary detail matters
+  -> Slice selection
+  -> Executable breadboard, when ready to build
   -> Feed planning context
   -> Spec Kit / Build agent
 ```
@@ -22,9 +22,39 @@ The breadboard says what exists.
 
 The slice says what is being built now.
 
-The interface contract says what must move across the boundary.
+The interface contract says what must move across a boundary.
+
+The executable breadboard says what should happen with real input, what output should result, and what test proves it.
 
 The context packet tells the agent what to preserve while building.
+
+## Relationship to executable breadboards
+
+An interface contract is one part of an executable breadboard.
+
+Use this taxonomy:
+
+```text
+Breadboard
+= structure of the solution
+
+Interface contract
+= what crosses a boundary
+
+Executable breadboard
+= breadboard + interface contracts + fixtures + example runs + expected outputs + tests
+
+Context packet
+= the exact subset handed to the build agent
+```
+
+Interface contracts can live in three places:
+
+1. embedded as candidates inside an ordinary breadboard
+2. split into a separate interface-contract artifact when boundary complexity deserves it
+3. included inside an executable breadboard when preparing a build handoff
+
+Do not treat the interface contract as the whole build handoff. It only specifies boundary-level input and output detail. The executable breadboard adds the example run and verification target.
 
 ## Use this when
 
@@ -105,7 +135,7 @@ Examples:
 
 ## Contract candidate table
 
-Use this inside a breadboard or as the starting point for a separate contract artifact.
+Use this inside a breadboard, inside an executable breadboard, or as the starting point for a separate contract artifact.
 
 | ID | Trigger / Wire | From | To | Request / Input Shape | Response / Output Shape | Branches / Errors | Open Decisions |
 |---|---|---|---|---|---|---|---|
