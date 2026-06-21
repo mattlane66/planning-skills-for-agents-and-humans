@@ -7,6 +7,7 @@ source_of_truth: true
 feeds:
   - slices
   - interface-contracts
+  - executable-breadboard
   - context-packet
   - implementation
 ---
@@ -16,7 +17,7 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent is implementing, slicing, creating interface contracts, or checking whether code still matches the planned interaction.
+An agent is shaping, slicing, creating interface contracts, preparing an executable breadboard, or checking whether code still matches the planned interaction.
 
 ## Must preserve
 - stable place IDs
@@ -45,13 +46,13 @@ An agent is implementing, slicing, creating interface contracts, or checking whe
 
 | ID | Place | Component | Affordance | Control | Wires Out | Returns To |
 |---|---|---|---|---|---|---|
-| U1 | P1 | ... | ... | ... | → N1 | — |
+| U1 | P1 | ... | ... | ... | -> N1 | — |
 
 ## Non-UI affordances
 
 | ID | Place | Component | Affordance | Control | Wires Out | Returns To |
 |---|---|---|---|---|---|---|
-| N1 | P1 | ... | ... | call | → S1 | → U1 |
+| N1 | P1 | ... | ... | call | -> S1 | -> U1 |
 
 ## Stores
 
@@ -67,17 +68,23 @@ An agent is implementing, slicing, creating interface contracts, or checking whe
 
 ## Interface contract candidates (optional)
 
-Use this section when a wire crosses a meaningful boundary: UI → backend, frontend → API, service → store, agent → tool, import → parser, or external integration.
+Use this section when a wire crosses a meaningful boundary: UI -> backend, frontend -> API, service -> store, agent -> tool, import -> parser, or external integration.
+
+These candidates may later be split into a separate interface-contract artifact or embedded inside an executable breadboard.
 
 | ID | Trigger / Wire | From | To | Request / Input Shape | Response / Output Shape | Branches / Errors | Open Decisions |
 |---|---|---|---|---|---|---|---|
-| C1 | U1 → N1 | UI | API | user_id: string; items: array | order_id: string; status: pending | missing item, invalid quantity | Should promo codes be nullable or omitted? |
+| C1 | U1 -> N1 | UI | API | user_id: string; items: array | order_id: string; status: pending | missing item, invalid quantity | Should promo codes be nullable or omitted? |
 
 ## Slice candidates
 
 | Slice | Affordances / stores included | Demo | Produces | Unknowns |
 |---|---|---|---|---|
 | V1 | ... | ... | ... | ... |
+
+## Build handoff note
+
+Once a slice is selected and ready for implementation, convert the relevant part of this breadboard into an executable breadboard with examples, expected results, edge cases, and acceptance tests.
 
 ## Notes
 - ...
@@ -89,3 +96,4 @@ Use this section when a wire crosses a meaningful boundary: UI → backend, fron
 - [ ] Product-relevant branches are explicit.
 - [ ] Meaningful boundary crossings have interface contract candidates when field-level detail would reduce agent guessing.
 - [ ] Slices are vertical and demoable.
+- [ ] The selected slice can be converted into an executable breadboard before build handoff.
