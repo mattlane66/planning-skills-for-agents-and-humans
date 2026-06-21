@@ -10,6 +10,7 @@ Use this guide when you are new to the repo and want to know which planning move
 | You know the problem but not the right solution | `/shape` or `shaping/SKILL.md` | Requirements, alternative shapes, fit check, selected direction |
 | You selected a direction and need to make it concrete | `/breadboard` or `breadboarding/SKILL.md` | Places, affordances, stores, wiring, and slice candidates |
 | Your selected slice crosses a meaningful boundary and field-level guessing would cause rework | `interface-contracts/SKILL.md` | Plain-language contracts for inputs, outputs, branches, errors, and open decisions |
+| Your selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable executable breadboard for the selected slice |
 | You have too much planning context for an implementation agent | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order and verification target |
 | You have code and need to compare it to the plan | `/reflect-breadboard` or `breadboard-reflection/SKILL.md` | Drift, synced reality, design smells, and follow-ups |
 | You need a builder-facing handoff reference | `/kickoff` or `kickoff-doc/SKILL.md` | A kickoff doc organized by shaped territory |
@@ -22,7 +23,8 @@ messy notes
   -> shape
   -> breadboard
   -> select slice
-  -> add plain-language interface contracts, when boundary detail matters
+  -> add interface contracts, when boundary detail matters
+  -> create executable breadboard, when ready for build handoff
   -> feed context
   -> build
   -> reflect
@@ -37,6 +39,7 @@ Check that you have:
 - explicit non-goals
 - a breadboard or slice boundary
 - plain-language interface contracts for meaningful boundary crossings, when field-level detail matters
+- an executable breadboard when the slice needs examples, fixtures, expected outputs, edge cases, or tests
 - a verification target
 - a human decision on what is in scope now
 
@@ -45,5 +48,5 @@ Check that you have:
 Use this default prompt:
 
 ```text
-Use this repo's planning workflow. First decide whether we should frame, shape, breadboard, create an interface contract, feed context, build, or reflect. Do not implement code until a slice is selected and the verification target is clear.
+Use this repo's planning workflow. First decide whether we should frame, shape, breadboard, create an interface contract, create an executable breadboard, feed context, build, or reflect. Do not implement code until a slice is selected and the verification target is clear.
 ```
