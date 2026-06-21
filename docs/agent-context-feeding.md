@@ -13,6 +13,7 @@ The goal is to prevent common agent failures:
 - implementing mechanisms that no longer fit the frame
 - changing the breadboard silently when code reality pushes back
 - treating raw notes, selected requirements, and build instructions as equal authority
+- inventing interface details such as field names, nullability, enum values, or error cases
 
 ## Core rule
 
@@ -25,7 +26,8 @@ A good context packet tells the agent:
 3. which sections matter first
 4. which sections should be ignored unless needed
 5. what constraints, IDs, and non-goals must be preserved
-6. what verification target proves the work stayed aligned
+6. which interface contracts must be preserved, when present
+7. what verification target proves the work stayed aligned
 
 ## Context packet template
 
@@ -39,11 +41,13 @@ What the agent should do now.
 - @planning/frame.md
 - @planning/breadboard.md
 - @planning/slices.md
+- @planning/interface-contracts.md, when boundary detail matters
 
 ## Use these sections first
 - frame.md: Outcome, Constraints, Non-goals
-- breadboard.md: Places, Affordances, Stores, Wiring
+- breadboard.md: Places, Affordances, Stores, Wiring, Interface contract candidates
 - slices.md: Selected slice, Demo, Produces
+- interface-contracts.md: Contract IDs, boundaries, input shapes, output shapes, branches, errors, open decisions
 
 ## Do not use unless needed
 - raw interview notes
@@ -57,6 +61,8 @@ What the agent should do now.
 - explicit non-goals
 - selected slice boundary
 - demo path
+- contract IDs and boundary names, when present
+- field names, required/optional distinctions, enum values, nullability, and error cases, when specified
 
 ## Required behavior
 1. Restate the relevant constraints.
@@ -64,6 +70,7 @@ What the agent should do now.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
 5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
+6. Do not invent missing field names, nullability, enum values, or error cases; flag them.
 ```
 
 ## Standard context card
@@ -78,19 +85,21 @@ status: selected
 source_of_truth: true
 feeds:
   - slice-plan
+  - interface-contracts
   - implementation
 ---
 
 # Context Card
 
 ## Use this when
-The agent is implementing, slicing, or checking whether code still matches the planned interaction.
+The agent is implementing, slicing, creating interface contracts, or checking whether code still matches the planned interaction.
 
 ## Must preserve
 - P1, P2, P3 place IDs
 - selected affordance names
 - user-visible demo path
 - explicit non-goals
+- contract IDs and boundary details, when present
 
 ## Ignore unless asked
 - rejected shapes
@@ -107,10 +116,43 @@ REQ-01: User can recover from an incomplete plan.
 P-01: Planning dashboard.
 AFF-03: Continue selected slice.
 STORE-02: Slice status.
+CONTRACT-01: Resume slice request/response.
 SLICE-01: Resume unfinished work.
 ```
 
 Avoid renaming IDs just to improve wording. If the meaning changes, create a new ID or add a short change note.
+
+## Interface contracts in context packets
+
+Use an interface contract when a selected slice crosses a meaningful boundary and field-level guessing would create rework.
+
+Examples:
+
+- UI -> backend
+- frontend -> API
+- service -> store
+- agent -> tool
+- import -> parser
+- parser -> normalized object
+- canvas object -> markdown artifact
+- MCP server -> client
+- app -> external integration
+
+When present, an interface contract should be treated as the source of truth for boundary-level input/output details unless the user's latest instruction or selected slice says otherwise.
+
+Preserve:
+
+- contract IDs
+- boundary names
+- field names
+- required vs optional distinctions
+- enum values
+- nullability
+- units, such as cents instead of dollars
+- branches and error cases
+- open decisions
+
+Do not invent missing details. If a field-level decision is missing, surface it as an open decision before coding.
 
 ## Artifact-specific feeding prompts
 
@@ -151,14 +193,39 @@ Before coding, produce:
 ```md
 Use @planning/breadboard.md.
 
-Treat Places, Affordances, Stores, and Wiring as the source of truth.
+Treat Places, Affordances, Stores, Wiring, and Interface contract candidates as the source of truth.
 Before coding, produce:
 1. files likely affected
 2. code responsibilities implied by each affordance
 3. risks where the existing code may not support the breadboard
 4. first slice to implement
+5. boundary crossings where an interface contract would reduce guessing
 
 Do not change the breadboard silently. If implementation reality changes it, propose a planning update.
+```
+
+### Interface contract to agent
+
+```md
+Use @planning/interface-contracts.md.
+
+Before coding, extract:
+1. contract IDs
+2. boundaries
+3. input fields
+4. output fields
+5. required vs optional fields
+6. enum values
+7. nullable fields
+8. branches and error cases
+9. open decisions
+
+Then report:
+- which decisions are fully specified
+- which decisions are still missing
+- which tests should prove the contract is satisfied
+
+Do not invent missing field names, nullability, enum values, or error cases. Flag them.
 ```
 
 ### Slice plan to agent
@@ -192,7 +259,7 @@ Only code after the plan is accepted.
 ```md
 Use @planning/breadboard-reflection.md and @planning/breadboard.md.
 
-Compare implementation reality to the intended places, affordances, stores, wiring, and slices.
+Compare implementation reality to the intended places, affordances, stores, wiring, interface contracts, and slices.
 Return:
 1. matches
 2. drift
@@ -221,11 +288,12 @@ When artifacts disagree, use this default authority order unless the user says o
 
 1. the user’s latest explicit instruction
 2. selected slice or kickoff doc
-3. selected breadboard
-4. selected shaping direction
-5. framing doc
-6. raw notes and transcripts
-7. rejected alternatives and brainstorming
+3. selected interface contract, for boundary-level input/output details
+4. selected breadboard
+5. selected shaping direction
+6. framing doc
+7. raw notes and transcripts
+8. rejected alternatives and brainstorming
 
 ## Drift protocol
 
@@ -258,4 +326,6 @@ Avoid:
 - asking for code before the agent has restated the slice boundary
 - letting the agent rename IDs during implementation
 - treating raw notes as more authoritative than selected artifacts
+- inventing missing field names, enum values, nullability, or error cases
+- treating plain-language interface contracts as permission to create production schemas during planning
 - using `CLAUDE.md` as a dumping ground for project-specific details that should live in planning artifacts
