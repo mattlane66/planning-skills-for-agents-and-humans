@@ -5,6 +5,7 @@ artifact_type: interface-contracts
 status: draft
 source_of_truth: true
 feeds:
+  - executable-breadboard
   - context-packet
   - implementation
 ---
@@ -14,7 +15,15 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent is preparing to implement a selected slice that crosses meaningful boundaries.
+A selected slice crosses meaningful boundaries and the builder needs exact input, output, branch, and error details.
+
+## Relationship to executable breadboards
+
+An interface contract is boundary detail.
+
+An executable breadboard is the full build handoff for a selected slice: structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
+
+Use this artifact separately when boundary detail is complex. Otherwise, include the same contract table directly inside the executable breadboard.
 
 ## Must preserve
 - contract IDs
@@ -34,13 +43,14 @@ An agent is preparing to implement a selected slice that crosses meaningful boun
 ## Source references
 - Breadboard artifact:
 - Selected slice:
+- Executable breadboard, if present:
 - Related shaping artifact:
 
 ## Contract summary
 
 | ID | Boundary | Why this contract matters | Related breadboard IDs | Related slice |
 |---|---|---|---|---|
-| C1 | ... | ... | U1 → N1 | V1 |
+| C1 | ... | ... | U1 -> N1 | V1 |
 
 ## Contracts
 
@@ -95,3 +105,4 @@ Do not invent missing field names, nullability, enum values, or error cases. Fla
 - [ ] Branches and errors are named.
 - [ ] Open decisions are flagged instead of invented.
 - [ ] Verification targets are concrete.
+- [ ] The contract can be embedded inside an executable breadboard or referenced by one.
