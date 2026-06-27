@@ -5,6 +5,8 @@ This repo already contains Claude-compatible `SKILL.md` files as the canonical s
 - `framing-doc/SKILL.md`
 - `shaping/SKILL.md`
 - `breadboarding/SKILL.md`
+- `interface-contracts/SKILL.md`
+- `executable-breadboards/SKILL.md`
 - `kickoff-doc/SKILL.md`
 - `feed-planning-context/SKILL.md`
 - `breadboard-reflection/SKILL.md`
@@ -16,6 +18,8 @@ Use this file when preparing the repo for Claude Code plugin submission or when 
 Do not maintain a second hand-edited copy of the skills under `skills/`.
 
 The top-level skill folders are the source of truth. If a plugin bundle needs a `skills/` directory, generate it from the top-level folders so skill content cannot drift.
+
+Slash commands in `.claude/commands/`, `.claude/loop.md`, lifecycle hooks, and orchestration docs are invocation surfaces around the skills. They should stay thin and should not become a second copy of the method.
 
 ## Plugin manifest
 
@@ -43,6 +47,8 @@ dist/claude-code-plugin/
   skills/framing-doc/SKILL.md
   skills/shaping/SKILL.md
   skills/breadboarding/SKILL.md
+  skills/interface-contracts/SKILL.md
+  skills/executable-breadboards/SKILL.md
   skills/kickoff-doc/SKILL.md
   skills/feed-planning-context/SKILL.md
   skills/breadboard-reflection/SKILL.md
@@ -72,6 +78,8 @@ When adding or renaming a skill:
 1. Add or update the canonical top-level skill folder.
 2. Ensure the skill has a valid `SKILL.md` with frontmatter.
 3. Update `scripts/build-claude-plugin.sh` if the folder name changed.
-4. Run the build script.
-5. Inspect `dist/claude-code-plugin` before packaging or submission.
-6. Keep marketplace copy aligned with the README and plugin manifest.
+4. Update `.claude-plugin/plugin.json` if the packaged capability set changed.
+5. Run the build script.
+6. Run `scripts/check-repo-health.sh`.
+7. Inspect `dist/claude-code-plugin` before packaging or submission.
+8. Keep marketplace copy aligned with the README and plugin manifest.

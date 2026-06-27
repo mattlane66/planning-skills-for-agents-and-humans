@@ -9,9 +9,20 @@ The Codex plugin includes these skills:
 - `framing-doc`
 - `shaping`
 - `breadboarding`
+- `interface-contracts`
+- `executable-breadboards`
 - `breadboard-reflection`
 - `kickoff-doc`
 - `feed-planning-context`
+
+The repo also includes tool-neutral orchestration and harnessing docs:
+
+- `.agent-orchestration.yaml`
+- `docs/codex-usage.md`
+- `docs/agent-workflow.md`
+- `docs/loop-prompting.md`
+- `docs/agent-run-records.md`
+- `docs/lifecycle-hooks.md`
 
 ## Repo-local marketplace
 
@@ -61,7 +72,19 @@ Use the breadboarding skill to map places, affordances, stores, state, and wirin
 ```
 
 ```text
+Use the interface-contracts skill to define the plain-language boundary contracts for this selected slice.
+```
+
+```text
+Use the executable-breadboards skill to create examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.
+```
+
+```text
 Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.
+```
+
+```text
+Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts.
 ```
 
 ## Maintenance
@@ -72,6 +95,8 @@ Keep the root skill folders and the `skills/` copies aligned:
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
 breadboarding/                -> skills/breadboarding/
+interface-contracts/          -> skills/interface-contracts/
+executable-breadboards/       -> skills/executable-breadboards/
 breadboard-reflection/        -> skills/breadboard-reflection/
 kickoff-doc/                  -> skills/kickoff-doc/
 feed-planning-context/        -> skills/feed-planning-context/

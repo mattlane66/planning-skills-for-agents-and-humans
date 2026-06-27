@@ -1,8 +1,10 @@
 # Agent Workflow
 
-Use this workflow when an agent is helping turn unclear product work into buildable planning artifacts.
+Use this workflow when an agent is helping turn unclear product work into buildable planning artifacts and implementation handoffs.
 
-The workflow is tool-neutral. It works with Claude Code, Cursor, Codex, and other agentic environments. The exact invocation differs by tool; the planning discipline should stay the same.
+The workflow is tool-neutral. It works with Claude Code, Cursor, Codex, Gemini CLI, and other agentic environments. The exact invocation differs by tool; the planning discipline should stay the same.
+
+For machine-readable orchestration, use `.agent-orchestration.yaml`.
 
 ## 1. Explore
 
@@ -30,21 +32,66 @@ Outputs:
 
 Use the `framing-doc` skill.
 
-## 3. Shape
+## 3. Criteria
+
+Use this mode when the team needs to define the standards for judging fit before proposing mechanisms.
+
+Outputs:
+- requirements / criteria table
+- must-have / nice-to-have / out / undecided statuses
+- mechanism parking lot
+- open criteria questions
+
+Use the `shaping` skill or the `/criteria` command where supported.
+
+Do not propose shapes in Criteria mode.
+
+## 4. Sketch shapes
 
 Use this mode when multiple solution directions are possible.
 
 Outputs:
-- requirements or criteria
-- alternative shapes
-- selected shape
+- CURRENT baseline when applicable
+- 2-4 alternative shapes
+- shape parts
+- flagged unknowns
+- spike candidates
+
+Use the `shaping` skill or the `/sketch-shapes` command where supported.
+
+Do not select a direction in Sketch Shapes mode.
+
+## 5. Fit check
+
+Use this mode when the team needs to compare alternatives before choosing.
+
+Outputs:
 - fit check
 - reverse fit check
-- unknowns or spikes
+- failed or undecided requirement rows
+- unjustified mechanisms
+- decision-readiness note
 
-Use the `shaping` skill.
+Use the `shaping` skill or the `/fit-check` command where supported.
 
-## 4. Detail
+Do not select a direction unless the human explicitly chooses one.
+
+## 6. Select shape
+
+Use this mode when the human is ready to choose a direction.
+
+Outputs:
+- selected shape
+- rejected alternatives
+- trade-offs
+- remaining unknowns
+- next handoff
+
+Use the `shaping` skill or the `/select-shape` command where supported.
+
+Do not invent a human decision.
+
+## 7. Breadboard
 
 Use this mode when the selected shape needs to become concrete enough to slice.
 
@@ -58,7 +105,40 @@ Outputs:
 
 Use the `breadboarding` skill.
 
-## 5. Feed context
+## 8. Interface contracts
+
+Use this mode when the selected slice crosses meaningful boundaries.
+
+Outputs:
+- contract IDs
+- boundary names
+- inputs
+- outputs
+- branches and error cases
+- open decisions
+
+Use the `interface-contracts` skill.
+
+Keep this in plain language unless the user explicitly asks for production schema or contract files.
+
+## 9. Executable breadboard
+
+Use this mode when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
+
+Outputs:
+- fixtures / starting data
+- example runs
+- expected visible results
+- expected state changes
+- expected side effects
+- edge cases
+- acceptance tests
+
+Use the `executable-breadboards` skill.
+
+Do not invent missing expected outputs or edge cases. Flag them before build work.
+
+## 10. Feed context
 
 Use this mode before implementation work, especially when planning artifacts are long or numerous.
 
@@ -72,18 +152,43 @@ Outputs:
 
 Use the `feed-planning-context` skill.
 
-## 6. Build
+## 11. Build
 
-Use this mode only after a slice is selected.
+Use this mode only after a slice is selected and the relevant planning context has been fed.
 
 Rules:
 - implement only the selected slice
 - preserve shaped intent
 - keep stable IDs intact
-- map implementation work back to requirements, affordances, stores, or slices
+- map implementation work back to requirements, affordances, stores, contracts, example runs, edge cases, or slices
 - propose a planning update if implementation reality conflicts with the plan
+- create an agent run log for meaningful implementation runs
 
-## 7. Reflect
+## 12. Check drift
+
+Use this mode during or after implementation work when the agent may have drifted from the selected planning artifacts.
+
+Outputs must be exactly one of:
+
+```text
+No planning drift found.
+```
+
+or
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
+```
+
+Use `/check-drift`, `templates/drift-check.md`, and `docs/loop-prompting.md` where supported.
+
+Do not implement code in Check Drift mode.
+
+## 13. Reflect
 
 Use this mode after implementation exists.
 
@@ -108,6 +213,8 @@ Before moving forward, ask:
 - Are non-goals visible?
 - Are stable IDs preserved?
 - Is the next output useful to both humans and agents?
+- Does a build step have a selected slice and compact context packet?
+- Does meaningful implementation need a drift check or run log?
 
 ## Common failure modes
 
@@ -115,7 +222,9 @@ Avoid:
 
 - jumping from notes directly to implementation
 - treating a rejected shape as the selected direction
+- selecting a shape before criteria and alternatives are visible
 - pasting all raw context instead of feeding a compact context packet
 - silently changing the plan when code reality pushes back
 - using build mode before a slice exists
 - treating reflection as critique before syncing the breadboard to reality
+- letting hooks become a hidden method instead of a reminder layer

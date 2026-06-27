@@ -27,6 +27,16 @@ const skills = {
     description: 'Map places/screens/states, affordances, stores, and wiring so behavior is concrete before implementation.',
     path: 'breadboarding/SKILL.md',
   },
+  'interface-contracts': {
+    title: 'Interface Contracts',
+    description: 'Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.',
+    path: 'interface-contracts/SKILL.md',
+  },
+  'executable-breadboards': {
+    title: 'Executable Breadboards',
+    description: 'Turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.',
+    path: 'executable-breadboards/SKILL.md',
+  },
   'breadboard-reflection': {
     title: 'Breadboard Reflection',
     description: 'Compare a breadboard to implementation, repair drift, and identify design smells.',
@@ -50,8 +60,14 @@ const artifactTemplates = {
   frame: `# Frame\n\n## Source material\n\n## Current reality\n\n## Current approach and result\n\n## Desired outcome\n\n## Boundaries\n\n## Requirements / criteria\n\n| ID | Criterion | Must have? | Notes |\n| --- | --- | --- | --- |\n`,
   shaping: `# Shaping\n\n## Problem frame\n\n## Requirements / criteria\n\n| ID | Criterion | Must have? | Why it matters |\n| --- | --- | --- | --- |\n\n## Alternative shapes\n\n| Option | Mechanism | Strengths | Risks |\n| --- | --- | --- | --- |\n\n## Fit check\n\n| Criterion | Option A | Option B | Option C | Notes |\n| --- | --- | --- | --- | --- |\n\n## Selected direction\n\n## Unknowns / spikes\n`,
   breadboard: `# Breadboard\n\n## Places\n\n| Place ID | Place / screen / state | Purpose |\n| --- | --- | --- |\n\n## Affordances\n\n| Affordance ID | Place ID | User can... | Visible result |\n| --- | --- | --- | --- |\n\n## Stores / state\n\n| Store ID | Data / state | Owner | Notes |\n| --- | --- | --- | --- |\n\n## Wiring\n\n| From | Action | To | System behavior |\n| --- | --- | --- | --- |\n\n## Slices\n\n| Slice ID | Scope | Dependencies | Verification target |\n| --- | --- | --- | --- |\n`,
+  'interface-contract': `# Interface Contract\n\n## Contract ID\n\n## Boundary\n\n## Source artifact\n\n## Purpose\n\n## Inputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Outputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Branches and error cases\n\n| Case | Condition | Expected behavior |\n| --- | --- | --- |\n\n## Open decisions\n`,
+  'executable-breadboard': `# Executable Breadboard\n\n## Selected slice\n\n## Source breadboard rows\n\n## Interface contracts in scope\n\n## Fixtures / starting data\n\n## Example runs\n\n| Run ID | Starting state | Action | Expected visible result | Expected state change |\n| --- | --- | --- | --- | --- |\n\n## Edge cases\n\n| Edge ID | Case | Expected behavior |\n| --- | --- | --- |\n\n## Acceptance tests\n\n| Test ID | Proves | How to verify |\n| --- | --- | --- |\n\n## Open decisions\n`,
   kickoff: `# Kickoff Doc\n\n## Territory\n\n## What we are building\n\n## What we are not building\n\n## Requirements / constraints\n\n## Risks and unknowns\n\n## First slice\n\n## Verification target\n`,
   'context-packet': `# Agent Context Packet\n\n## Active task\n\n## Source artifacts\n\n## Authority order\n\n## Must-preserve constraints\n\n## Stable IDs in scope\n\n## Non-goals\n\n## Current slice\n\n## Verification target\n`,
+  reflection: `# Breadboard Reflection\n\n## Implementation reality synced\n\n## Selected breadboard says\n\n## Current implementation does\n\n## Drift found\n\n| ID | Drift | Risk | Recommended move |\n| --- | --- | --- | --- |\n\n## Planning updates\n\n## Implementation follow-ups\n`,
+  'drift-check': `# Drift Check\n\nReturn only one of the two forms below.\n\n## No drift\n\nNo planning drift found.\n\n## Drift\n\nPlanning drift found:\n- Selected artifact says:\n- Current implementation direction is:\n- Risk:\n- Recommended move:\n`,
+  'agent-run-log': `# Agent Run Log\n\n## Task\n\n## Mode\n\n## Source artifacts used\n\n## Authority order\n\n## Selected slice\n\n## Files inspected\n\n## Files changed\n\n## Decisions made\n\n## Drift checks\n\n## Planning updates needed\n\n## Verification run\n\n## Handoff notes\n`,
+  'orchestration-plan': `# Agent Orchestration Plan\n\n## Active mode\n\n## Required source artifacts\n\n## Allowed outputs\n\n## Forbidden moves\n\n## Human decision gate\n\n## Next mode\n\n## Drift / reflection checkpoint\n`,
 } as const;
 
 type ArtifactName = keyof typeof artifactTemplates;
@@ -114,6 +130,14 @@ server.tool(
       recommendations.push('breadboarding');
     }
 
+    if (normalized.includes('boundary') || normalized.includes('contract') || normalized.includes('api') || normalized.includes('interface')) {
+      recommendations.push('interface-contracts');
+    }
+
+    if (normalized.includes('fixture') || normalized.includes('example run') || normalized.includes('expected output') || normalized.includes('acceptance test') || normalized.includes('testable')) {
+      recommendations.push('executable-breadboards');
+    }
+
     if (normalized.includes('implement') || normalized.includes('agent') || normalized.includes('context') || normalized.includes('build')) {
       recommendations.push('feed-planning-context');
     }
@@ -138,13 +162,26 @@ server.tool(
 
 server.tool(
   'get_artifact_template',
-  'Return a starter Markdown template for a planning artifact.',
+  'Return a starter Markdown template for a planning, orchestration, or reflection artifact.',
   {
     artifact: z.enum(Object.keys(artifactTemplates) as [ArtifactName, ...ArtifactName[]]),
   },
   async ({ artifact }) => {
     return {
       content: [{ type: 'text', text: artifactTemplates[artifact] }],
+    };
+  },
+);
+
+server.tool(
+  'get_orchestration_manifest',
+  'Return the tool-neutral orchestration manifest for planning harnesses.',
+  {},
+  async () => {
+    const content = await readFile(join(repoRoot, '.agent-orchestration.yaml'), 'utf8');
+
+    return {
+      content: [{ type: 'text', text: content }],
     };
   },
 );

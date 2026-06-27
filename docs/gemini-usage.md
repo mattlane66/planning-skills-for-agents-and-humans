@@ -12,7 +12,7 @@ Gemini CLI discovers project-local custom commands from:
 .gemini/commands/
 ```
 
-This repo includes Gemini-native command wrappers for the shaping gates:
+This repo includes Gemini-native command wrappers for shaping gates and drift checks:
 
 | Command | Purpose |
 |---|---|
@@ -20,6 +20,7 @@ This repo includes Gemini-native command wrappers for the shaping gates:
 | `/sketch-shapes` | Sketch alternative shapes against accepted criteria without selecting one. |
 | `/fit-check` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
+| `/check-drift` | Check implementation direction against selected planning artifacts and stop if drift is found. |
 
 These commands use Gemini's TOML command format and inject the relevant repo instructions and source files.
 
@@ -41,6 +42,28 @@ From a Gemini CLI session in the repository, run:
 
 ```text
 /select-shape planning/shaping.md "Choose B"
+```
+
+```text
+/check-drift planning/context-packet.md src/features/onboarding/
+```
+
+## Drift check output
+
+`/check-drift` should return only one of:
+
+```text
+No planning drift found.
+```
+
+or
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
 ```
 
 ## Reloading commands
@@ -67,6 +90,8 @@ Keep the workflow details in:
 AGENTS.md
 shaping/SKILL.md
 docs/human-decision-gates.md
+docs/loop-prompting.md
+templates/drift-check.md
 ```
 
 Update Gemini command files only when the invocation behavior, stopping point, or user-facing command name changes.

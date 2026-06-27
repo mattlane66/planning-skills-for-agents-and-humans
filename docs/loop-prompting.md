@@ -2,7 +2,7 @@
 
 Claude Code includes `/loop` for repeatedly running a prompt during a live session. This repo does not replace `/loop`. It gives `/loop` a planning-specific use: periodically checking whether implementation work is still aligned with the selected planning artifacts.
 
-Use loop prompting during long implementation or refactor sessions where an agent may drift from the frame, selected shape, breadboard, slice boundary, non-goals, or verification target.
+Use loop prompting during long implementation or refactor sessions where an agent may drift from the frame, selected shape, breadboard, selected slice, interface contracts, executable breadboard, non-goals, or verification target.
 
 ## What this is
 
@@ -14,6 +14,7 @@ It asks the agent to keep checking:
 - are we preserving the must-preserve constraints?
 - are we respecting explicit non-goals?
 - are we implementing the selected shape, not a discarded alternative?
+- are we preserving interface contracts and executable breadboard examples?
 - has implementation reality revealed a conflict that should update the plan?
 - does the current code still satisfy the verification target?
 
@@ -25,20 +26,21 @@ Do not use loop prompting to:
 - expand scope
 - silently rewrite the selected shape
 - turn implementation discoveries into unreviewed product decisions
+- replace `/check-drift`
 - replace `/breadboard-reflection`
 
-Use `/breadboard-reflection` when there is already implementation to compare against the breadboard. Use `/loop` while the implementation session is still running and drift can still be caught early.
+Use `/check-drift` for an explicit point-in-time drift check. Use `/breadboard-reflection` when there is already implementation to compare against the breadboard. Use `/loop` while the implementation session is still running and drift can still be caught early.
 
 ## Basic prompt
 
 ```text
-/loop 10m Check whether the current work still matches the selected slice, must-preserve constraints, non-goals, breadboard, and verification target. If there is drift, stop and return a "Planning drift found" note instead of continuing.
+/loop 10m Check whether the current work still matches the selected slice, must-preserve constraints, non-goals, breadboard, interface contracts, executable breadboard, and verification target. If there is drift, stop and return a "Planning drift found" note instead of continuing.
 ```
 
 ## Stronger prompt
 
 ```text
-/loop 10m Check planning alignment against the active context packet, selected slice, shaping doc, breadboard, non-goals, and verification target.
+/loop 10m Check planning alignment against the active context packet, selected slice, shaping doc, breadboard, interface contracts, executable breadboard, non-goals, and verification target.
 
 Return only one of:
 
@@ -49,34 +51,36 @@ Return only one of:
    - Risk:
    - Recommended move:
 
-Do not expand scope. Do not invent new requirements. If implementation reality conflicts with the plan, propose a planning update instead of silently drifting.
+Do not expand scope. Do not invent new requirements. If implementation reality conflicts with the plan, propose a planning update or slice split instead of silently drifting.
+```
+
+## `/check-drift`
+
+Use `/check-drift` when you want a direct drift check without setting up a recurring loop.
+
+```text
+/check-drift planning/context-packet.md src/features/onboarding/
+```
+
+Expected output is only one of:
+
+```text
+No planning drift found.
+```
+
+or
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
 ```
 
 ## Recommended `.claude/loop.md`
 
-Claude Code can use `.claude/loop.md` when `/loop` is run without an inline prompt. Put this in the implementation repo, not necessarily in this skills repo:
-
-```md
-Check planning alignment.
-
-Use the active context packet, selected slice, shaping doc, breadboard, non-goals, and verification target.
-
-Return only one of:
-
-1. No planning drift found.
-2. Planning drift found:
-   - Selected artifact says:
-   - Current implementation direction is:
-   - Risk:
-   - Recommended move:
-
-Rules:
-- Do not expand scope.
-- Do not invent new requirements.
-- Do not treat discarded alternatives as selected direction.
-- Do not silently change the breadboard.
-- If implementation reality conflicts with the plan, propose a planning update instead of continuing.
-```
+Claude Code can use `.claude/loop.md` when `/loop` is run without an inline prompt. This repo includes a default `.claude/loop.md` that checks planning alignment against the active context packet, selected slice, shaping doc, breadboard, interface contracts, executable breadboard, non-goals, and verification target.
 
 ## When to use it
 
@@ -102,7 +106,7 @@ Slice
   ↓
 Feed planning context
   ↓
-Implement with /loop planning checks
+Implement with /loop planning checks and /check-drift checkpoints
   ↓
 Breadboard reflection when code exists
 ```

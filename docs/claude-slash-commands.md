@@ -21,6 +21,7 @@ The commands live in:
 | `/breadboard` | `breadboarding/SKILL.md` | Map places, affordances, stores, wiring, and demoable slices. |
 | `/kickoff` | `kickoff-doc/SKILL.md` | Turn kickoff notes or transcripts into a builder-facing reference document. |
 | `/feed-context` | `feed-planning-context/SKILL.md` | Package planning artifacts into a compact context packet for implementation work. |
+| `/check-drift` | `AGENTS.md` + `docs/loop-prompting.md` | Check implementation direction against selected planning artifacts and stop if drift is found. |
 | `/reflect-breadboard` | `breadboard-reflection/SKILL.md` | Sync a breadboard to implementation reality and identify design smells or drift. |
 
 ## Shaping gate commands
@@ -36,6 +37,28 @@ Use the smaller shaping gate commands when you want to prevent the agent from on
 5. `/breadboard` — make the selected shape concrete only after selection.
 
 These commands are intentionally thin wrappers around `shaping/SKILL.md`. They narrow the stopping point; they do not create a second copy of the method.
+
+## Drift and loop commands
+
+Use `/check-drift` during implementation or refactoring to verify that work still matches the selected planning artifacts.
+
+It must return only one of:
+
+```text
+No planning drift found.
+```
+
+or
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
+```
+
+Claude Code can also use `.claude/loop.md` as the default `/loop` prompt for recurring planning-alignment checks during long implementation sessions.
 
 ## Usage
 
@@ -75,6 +98,10 @@ From a Claude Code session in the repository, run commands with arguments:
 
 ```text
 /feed-context planning/frame.md planning/shaping.md planning/breadboard.md
+```
+
+```text
+/check-drift planning/context-packet.md src/features/onboarding/
 ```
 
 ```text
