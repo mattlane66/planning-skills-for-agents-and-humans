@@ -37,6 +37,11 @@ const skills = {
     description: 'Turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.',
     path: 'executable-breadboards/SKILL.md',
   },
+  dumplink: {
+    title: 'Dumplink',
+    description: 'Turn a shaped project into vertical task groups, risk states, dependency-aware sequence, scope cuts, and a bounded agent handoff.',
+    path: 'dumplink/SKILL.md',
+  },
   'breadboard-reflection': {
     title: 'Breadboard Reflection',
     description: 'Compare a breadboard to implementation, repair drift, and identify design smells.',
@@ -62,8 +67,9 @@ const artifactTemplates = {
   breadboard: `# Breadboard\n\n## Places\n\n| Place ID | Place / screen / state | Purpose |\n| --- | --- | --- |\n\n## Affordances\n\n| Affordance ID | Place ID | User can... | Visible result |\n| --- | --- | --- | --- |\n\n## Stores / state\n\n| Store ID | Data / state | Owner | Notes |\n| --- | --- | --- | --- |\n\n## Wiring\n\n| From | Action | To | System behavior |\n| --- | --- | --- | --- |\n\n## Slices\n\n| Slice ID | Scope | Dependencies | Verification target |\n| --- | --- | --- | --- |\n`,
   'interface-contract': `# Interface Contract\n\n## Contract ID\n\n## Boundary\n\n## Source artifact\n\n## Purpose\n\n## Inputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Outputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Branches and error cases\n\n| Case | Condition | Expected behavior |\n| --- | --- | --- |\n\n## Open decisions\n`,
   'executable-breadboard': `# Executable Breadboard\n\n## Selected slice\n\n## Source breadboard rows\n\n## Interface contracts in scope\n\n## Fixtures / starting data\n\n## Example runs\n\n| Run ID | Starting state | Action | Expected visible result | Expected state change |\n| --- | --- | --- | --- | --- |\n\n## Edge cases\n\n| Edge ID | Case | Expected behavior |\n| --- | --- | --- |\n\n## Acceptance tests\n\n| Test ID | Proves | How to verify |\n| --- | --- | --- |\n\n## Open decisions\n`,
+  dumplink: `# Dumplink Plan\n\n## Project boundary\n\n## Task dump\n\n| ID | Task | Type | Known/Unknown | Notes |\n| --- | --- | --- | --- | --- |\n\n## Task groups\n\n| ID | Name | Included tasks | User/system behavior produced | Risk state | Cuttable? | Notes |\n| --- | --- | --- | --- | --- | --- | --- |\n\n## Dependency map\n\n| From | To | Why this dependency exists | Risk if delayed |\n| --- | --- | --- | --- |\n\n## Build sequence\n\n| Order | Task group | Why now | Demo/checkpoint | Exit condition |\n| --- | --- | --- | --- | --- |\n\n## Scope cuts\n\n| Cut option | Remove/defer | Preserved behavior | Cost of cutting | Later decision |\n| --- | --- | --- | --- | --- |\n\n## Acceptance checks\n\n## Agent handoff packet\n\nActive slice:\nSource artifacts:\nMust preserve:\nDo not build:\nTask group to implement:\nRelevant tasks:\nKnown unknowns:\nAcceptance check:\nStop condition:\n`,
   kickoff: `# Kickoff Doc\n\n## Territory\n\n## What we are building\n\n## What we are not building\n\n## Requirements / constraints\n\n## Risks and unknowns\n\n## First slice\n\n## Verification target\n`,
-  'context-packet': `# Agent Context Packet\n\n## Active task\n\n## Source artifacts\n\n## Authority order\n\n## Must-preserve constraints\n\n## Stable IDs in scope\n\n## Non-goals\n\n## Current slice\n\n## Verification target\n`,
+  'context-packet': `# Agent Context Packet\n\n## Active task\n\n## Source artifacts\n\n## Authority order\n\n## Must-preserve constraints\n\n## Stable IDs in scope\n\n## Non-goals\n\n## Relevant executable breadboard\n\n## Relevant interface contracts\n\n## Relevant Dumplink plan\n\n## Current slice\n\n## Execution contract\n- Goal condition:\n- Required checks:\n- Allowed files / areas:\n- Out-of-scope changes:\n- Return-to-planning conditions:\n- Checkpoint cadence:\n- Verification caveats:\n\n## Verification target\n`,
   reflection: `# Breadboard Reflection\n\n## Implementation reality synced\n\n## Selected breadboard says\n\n## Current implementation does\n\n## Drift found\n\n| ID | Drift | Risk | Recommended move |\n| --- | --- | --- | --- |\n\n## Planning updates\n\n## Implementation follow-ups\n`,
   'drift-check': `# Drift Check\n\nReturn only one of the two forms below.\n\n## No drift\n\nNo planning drift found.\n\n## Drift\n\nPlanning drift found:\n- Selected artifact says:\n- Current implementation direction is:\n- Risk:\n- Recommended move:\n`,
   'agent-run-log': `# Agent Run Log\n\n## Task\n\n## Mode\n\n## Source artifacts used\n\n## Authority order\n\n## Selected slice\n\n## Files inspected\n\n## Files changed\n\n## Decisions made\n\n## Drift checks\n\n## Planning updates needed\n\n## Verification run\n\n## Handoff notes\n`,
@@ -138,6 +144,10 @@ server.tool(
       recommendations.push('executable-breadboards');
     }
 
+    if (normalized.includes('task group') || normalized.includes('dependency') || normalized.includes('sequence') || normalized.includes('scope cut') || normalized.includes('dumplink')) {
+      recommendations.push('dumplink');
+    }
+
     if (normalized.includes('implement') || normalized.includes('agent') || normalized.includes('context') || normalized.includes('build')) {
       recommendations.push('feed-planning-context');
     }
@@ -146,7 +156,7 @@ server.tool(
       recommendations.push('breadboard-reflection');
     }
 
-    const defaultWorkflow: SkillName[] = ['framing-doc', 'shaping', 'breadboarding', 'feed-planning-context'];
+    const defaultWorkflow: SkillName[] = ['framing-doc', 'shaping', 'breadboarding', 'dumplink', 'feed-planning-context'];
     const workflow = recommendations.length > 0 ? Array.from(new Set(recommendations)) : defaultWorkflow;
 
     return {

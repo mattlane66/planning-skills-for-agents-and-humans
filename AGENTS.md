@@ -16,7 +16,7 @@ When planning, prefer:
 - tables
 - lightweight pseudo-structures
 - Mermaid diagrams when helpful
-- stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, and slices
+- stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, task groups, and slices
 
 When implementing, preserve shaped intent and update planning artifacts if implementation discoveries change the plan.
 
@@ -46,9 +46,10 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 5. Slice into demoable increments.
 6. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
 7. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
-8. Feed only the relevant planning context to the implementation agent.
-9. Check for drift during implementation.
-10. Reflect against implementation and repair drift.
+8. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
+9. Feed only the relevant planning context to the implementation agent.
+10. Check for drift during implementation.
+11. Reflect against implementation and repair drift.
 
 ## Shaping gates
 
@@ -73,6 +74,7 @@ Use the repo skills as reusable instructions:
 - `breadboarding/` — map places, affordances, stores, wiring, diagrams, and demoable slices.
 - `interface-contracts/` — turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
 - `executable-breadboards/` — turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
+- `dumplink/` — turn a shaped project into vertical task groups, risk states, dependencies, scope cuts, acceptance checks, and a bounded agent handoff.
 - `kickoff-doc/` — create a builder-facing reference after the team has converged.
 - `breadboard-reflection/` — compare implementation to the breadboard and repair drift.
 - `feed-planning-context/` — package planning artifacts into a compact context packet for implementation work.
@@ -85,7 +87,11 @@ Interface contract = what crosses a boundary.
 
 Executable breadboard = breadboard + interface contracts + fixtures + example runs + expected outputs + tests.
 
+Dumplink = vertical task grouping + risk/dependency sequencing + scope cuts for a selected shaped project.
+
 Context packet = the exact subset handed to the build agent.
+
+Execution contract = the goal condition, required checks, allowed files, out-of-scope changes, return-to-planning conditions, checkpoint cadence, and verification caveats inside a context packet.
 
 Drift check = a point-in-time alignment check during implementation.
 
@@ -99,11 +105,12 @@ When artifacts disagree, use this default authority order unless the user says o
 2. selected slice or kickoff doc
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected breadboard
-6. selected shaping direction
-7. framing doc
-8. raw notes and transcripts
-9. rejected alternatives and brainstorming
+5. selected Dumplink task group and sequence, for task-group scope and build order
+6. selected breadboard
+7. selected shaping direction
+8. framing doc
+9. raw notes and transcripts
+10. rejected alternatives and brainstorming
 
 Do not treat a newer brainstorming note as a higher-authority artifact unless it explicitly changes the selected direction.
 
@@ -120,6 +127,7 @@ Do not collapse:
 - selected shapes into implementation details
 - rejected alternatives into active requirements
 - raw notes into source-of-truth instructions
+- Dumplink task groups into disconnected horizontal tickets
 
 During planning, keep interface contracts and executable breadboards in plain language. Do not create full OpenAPI, JSON Schema, database schema, framework code, production contract files, production test files, or mocks unless the user explicitly asks or the selected slice has moved into implementation preparation.
 
@@ -139,8 +147,10 @@ Before implementation work, create or request a compact context packet that incl
 - relevant places, affordances, stores, and wiring
 - relevant executable breadboard examples, when present
 - relevant interface contracts, when present
+- relevant Dumplink task group, dependencies, cuts, and acceptance checks, when present
 - current slice
 - non-goals and exclusions
+- execution contract
 - verification target
 
 Use `docs/agent-context-feeding.md` and `feed-planning-context/SKILL.md` for the detailed protocol.
@@ -165,7 +175,7 @@ Planning drift found:
 - Recommended move:
 ```
 
-Do not implement inside a drift check. Do not update planning artifacts silently. If implementation reality conflicts with the plan, recommend a planning update, contract update, executable breadboard update, or slice split before continuing.
+Do not implement inside a drift check. Do not update planning artifacts silently. If implementation reality conflicts with the plan, recommend a planning update, contract update, executable breadboard update, Dumplink sequence update, or slice split before continuing.
 
 Use `docs/loop-prompting.md`, `templates/drift-check.md`, and `/check-drift` where supported.
 
@@ -194,6 +204,9 @@ Preserve IDs such as:
 - `CONTRACT-01` or `C1`
 - `RUN-01`
 - `EDGE-01`
+- `T1`
+- `TG1`
+- `CUT-01`
 - `SLICE-01`
 
 Do not rename stable IDs just to improve wording. If the meaning changes, create a planning update or new ID.
@@ -232,6 +245,22 @@ When an interface contract is present, preserve:
 
 Do not invent missing field names, nullability, enum values, or error cases. Flag them before coding.
 
+## Dumplink plans
+
+When a Dumplink plan is present, preserve:
+
+- task IDs
+- task group IDs
+- risk states
+- dependency links
+- build sequence
+- scope cuts
+- acceptance checks
+- active task group boundary
+- stop condition
+
+Do not flatten Dumplink output into a generic horizontal backlog. Do not treat cuttable task groups as active scope unless the user explicitly expands the appetite or changes the selected scope.
+
 ## Drift protocol
 
 If implementation reality conflicts with the selected planning artifact, do not silently patch around the plan.
@@ -267,6 +296,7 @@ Before declaring work complete, check:
 - stable IDs were preserved
 - executable breadboard examples were preserved when present
 - interface contracts were preserved when present
+- Dumplink task group boundaries, dependencies, cuts, and acceptance checks were preserved when present
 - planning artifacts were updated if implementation discoveries changed the plan
-- implementation work, when present, maps back to requirement/affordance/store/contract/example-run/edge-case/slice IDs
+- implementation work, when present, maps back to requirement/affordance/store/contract/example-run/edge-case/task-group/slice IDs
 - meaningful implementation runs have an agent run log or equivalent handoff note
