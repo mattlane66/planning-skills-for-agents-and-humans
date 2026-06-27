@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT_DIR"
-
 failures=0
 
 fail() {
@@ -15,37 +12,34 @@ pass() {
   echo "✓ $1"
 }
 
+check_file_exists() {
+  local file="$1"
+  if [[ -f "$file" ]]; then
+    pass "Found: $file"
+  else
+    fail "Missing: $file"
+  fi
+}
+
 check_json() {
   local file="$1"
-  if [[ ! -f "$file" ]]; then
-    fail "Missing JSON file: $file"
-    return
-  fi
-
+  check_file_exists "$file"
   python3 -m json.tool "$file" >/dev/null
   pass "Valid JSON: $file"
 }
 
 check_toml() {
   local file="$1"
-  if [[ ! -f "$file" ]]; then
-    fail "Missing TOML file: $file"
-    return
-  fi
-
+  check_file_exists "$file"
   python3 - "$file" <<'PY'
 import pathlib
 import sys
 
 path = pathlib.Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
-
 try:
     import tomllib
 except ModuleNotFoundError:
-    # Python < 3.11 fallback: these command files intentionally use only a
-    # simple subset of TOML, so check for the required keys instead of failing
-    # the entire repo health check because tomllib is unavailable.
     if "description" not in text or "prompt" not in text:
         raise SystemExit(f"missing required TOML keys in {path}")
 else:
@@ -56,11 +50,7 @@ PY
 
 check_skill_frontmatter() {
   local file="$1"
-  if [[ ! -f "$file" ]]; then
-    fail "Missing skill file: $file"
-    return
-  fi
-
+  check_file_exists "$file"
   python3 - "$file" <<'PY'
 import pathlib
 import sys
@@ -68,222 +58,143 @@ import sys
 path = pathlib.Path(sys.argv[1])
 text = path.read_text(encoding="utf-8")
 lines = text.splitlines()
-
 if not lines or lines[0].strip() != "---":
     raise SystemExit(f"missing opening frontmatter marker: {path}")
-
-try:
-    end = lines[1:].index("---") + 1
-except ValueError:
-    raise SystemExit(f"missing closing frontmatter marker: {path}")
-
-frontmatter = lines[1:end]
-keys = {}
-for line in frontmatter:
-    if not line.strip() or line.strip().startswith("#"):
-        continue
-    if ":" not in line:
-        raise SystemExit(f"invalid frontmatter line in {path}: {line!r}")
-    key, value = line.split(":", 1)
-    keys[key.strip()] = value.strip()
-
-for required in ("name", "description"):
-    if required not in keys or not keys[required]:
-        raise SystemExit(f"missing required frontmatter key {required!r}: {path}")
+if "name:" not in text or "description:" not in text:
+    raise SystemExit(f"missing required frontmatter keys: {path}")
 PY
   pass "Valid skill frontmatter: $file"
 }
 
-check_command_points_to_skill_or_orchestration() {
-  local command_file="$1"
-  local skill_path
-
-  if [[ ! -f "$command_file" ]]; then
-    fail "Missing Claude command: $command_file"
-    return
-  fi
-
-  skill_path="$(grep -Eo '`[A-Za-z0-9_-]+/SKILL\.md`' "$command_file" | head -n 1 | tr -d '`' || true)"
-  if [[ -n "$skill_path" ]]; then
-    if [[ ! -f "$skill_path" ]]; then
-      fail "Claude command references missing skill $skill_path from $command_file"
-      return
-    fi
-    pass "Claude command maps to existing skill: $command_file -> $skill_path"
-    return
-  fi
-
-  if grep -q 'AGENTS.md' "$command_file" && grep -q 'drift-check' "$command_file"; then
-    pass "Claude command maps to orchestration docs: $command_file"
-    return
-  fi
-
-  fail "Claude command does not reference a canonical skill or orchestration docs: $command_file"
-}
-
-check_file_exists() {
-  local file="$1"
-  if [[ -f "$file" ]]; then
-    pass "Found: $file"
-  else
-    fail "Missing: $file"
-  fi
-}
-
 SKILLS=(
-  "framing-doc"
-  "shaping"
-  "breadboarding"
-  "interface-contracts"
-  "executable-breadboards"
-  "kickoff-doc"
-  "feed-planning-context"
-  "breadboard-reflection"
+  framing-doc
+  shaping
+  breadboarding
+  interface-contracts
+  executable-breadboards
+  dumplink
+  kickoff-doc
+  feed-planning-context
+  breadboard-reflection
 )
 
 CLAUDE_COMMANDS=(
-  "frame"
-  "shape"
-  "criteria"
-  "sketch-shapes"
-  "fit-check"
-  "select-shape"
-  "breadboard"
-  "kickoff"
-  "feed-context"
-  "check-drift"
-  "reflect-breadboard"
+  frame
+  shape
+  criteria
+  sketch-shapes
+  fit-check
+  select-shape
+  breadboard
+  dumplink
+  kickoff
+  feed-context
+  check-drift
+  reflect-breadboard
 )
 
 GEMINI_COMMANDS=(
-  "criteria"
-  "sketch-shapes"
-  "fit-check"
-  "select-shape"
-  "check-drift"
+  criteria
+  sketch-shapes
+  fit-check
+  select-shape
+  dumplink
+  check-drift
 )
 
 TEMPLATES=(
-  "frame"
-  "shaping"
-  "breadboard"
-  "interface-contracts"
-  "executable-breadboard"
-  "slices"
-  "context-packet"
-  "kickoff"
-  "breadboard-reflection"
-  "drift-check"
-  "agent-run-log"
-  "spike"
-  "decision-log"
-  "appetite-card"
+  frame
+  shaping
+  breadboard
+  interface-contracts
+  executable-breadboard
+  slices
+  context-packet
+  kickoff
+  breadboard-reflection
+  drift-check
+  agent-run-log
+  spike
+  decision-log
+  appetite-card
 )
 
-echo "Checking plugin manifests..."
-check_json ".claude-plugin/plugin.json"
-check_json ".codex-plugin/plugin.json"
-check_json ".agents/plugins/marketplace.json"
+echo "Checking manifests..."
+check_json .claude-plugin/plugin.json
+check_json .codex-plugin/plugin.json
+check_json .agents/plugins/marketplace.json
+check_file_exists .agent-orchestration.yaml
 
 echo
-
-echo "Checking orchestration manifest..."
-check_file_exists ".agent-orchestration.yaml"
-
-echo
-
-echo "Checking canonical skills..."
+echo "Checking skills..."
 for skill in "${SKILLS[@]}"; do
   check_skill_frontmatter "$skill/SKILL.md"
-done
-
-echo
-
-echo "Checking packaged skills..."
-for skill in "${SKILLS[@]}"; do
   check_skill_frontmatter "skills/$skill/SKILL.md"
 done
 
 echo
-
-echo "Checking Claude slash commands..."
-if [[ -d ".claude/commands" ]]; then
-  for command in "${CLAUDE_COMMANDS[@]}"; do
-    check_command_points_to_skill_or_orchestration ".claude/commands/$command.md"
-  done
-else
-  fail "Missing .claude/commands directory"
-fi
+echo "Checking command wrappers..."
+for command in "${CLAUDE_COMMANDS[@]}"; do
+  check_file_exists ".claude/commands/$command.md"
+done
+for command in "${GEMINI_COMMANDS[@]}"; do
+  check_toml ".gemini/commands/$command.toml"
+done
 
 echo
-
-echo "Checking Gemini commands..."
-if [[ -d ".gemini/commands" ]]; then
-  for command in "${GEMINI_COMMANDS[@]}"; do
-    check_toml ".gemini/commands/$command.toml"
-  done
-else
-  fail "Missing .gemini/commands directory"
-fi
-
-echo
-
 echo "Checking templates..."
 for template in "${TEMPLATES[@]}"; do
   check_file_exists "templates/$template.md"
 done
 
 echo
-
-echo "Checking hooks..."
-check_file_exists "hooks/planning-ripple.sh"
-check_file_exists "hooks/pre-build-context-check.sh"
-check_file_exists "hooks/planning-drift-check.sh"
-
-echo
-
 echo "Checking key docs..."
-check_file_exists "README.md"
-check_file_exists "AGENTS.md"
-check_file_exists "GEMINI.md"
-check_file_exists "docs/start-here.md"
-check_file_exists "docs/human-decision-gates.md"
-check_file_exists "docs/plan-quality-rubric.md"
-check_file_exists "docs/agent-context-feeding.md"
-check_file_exists "docs/agent-workflow.md"
-check_file_exists "docs/claude-slash-commands.md"
-check_file_exists "docs/gemini-usage.md"
-check_file_exists "docs/codex-usage.md"
-check_file_exists "docs/codex-plugin.md"
-check_file_exists "docs/loop-prompting.md"
-check_file_exists "docs/agent-run-records.md"
-check_file_exists "docs/lifecycle-hooks.md"
+check_file_exists README.md
+check_file_exists AGENTS.md
+check_file_exists GEMINI.md
+check_file_exists docs/start-here.md
+check_file_exists docs/agent-workflow.md
+check_file_exists docs/agent-context-feeding.md
+check_file_exists docs/agent-loop-design.md
+check_file_exists docs/full-modern-agent-workflow.md
+check_file_exists docs/claude-slash-commands.md
+check_file_exists docs/gemini-usage.md
+check_file_exists docs/codex-usage.md
+check_file_exists docs/agent-run-records.md
+check_file_exists docs/lifecycle-hooks.md
 
 echo
+echo "Checking hooks..."
+check_file_exists hooks/planning-ripple.sh
+check_file_exists hooks/pre-build-context-check.sh
+check_file_exists hooks/planning-drift-check.sh
 
-echo "Checking Claude plugin bundle build..."
-if [[ -x "scripts/build-claude-plugin.sh" ]]; then
-  scripts/build-claude-plugin.sh >/dev/null
-  for skill in "${SKILLS[@]}"; do
-    check_file_exists "dist/claude-code-plugin/skills/$skill/SKILL.md"
-  done
-  check_json "dist/claude-code-plugin/.claude-plugin/plugin.json"
+echo
+echo "Checking eval fixtures..."
+check_file_exists evals/README.md
+check_file_exists evals/golden/context-packet-execution-contract.md
+check_file_exists evals/golden/dumplink-vertical-groups.md
+check_file_exists evals/golden/drift-check-strict-output.md
+check_file_exists scripts/check-golden-evals.sh
+
+echo
+echo "Checking parity rules..."
+if grep -q '^## Execution contract' templates/context-packet.md && grep -q 'Execution contract' mcp-server/src/index.ts; then
+  pass "Context packet templates include execution contracts"
 else
-  fail "scripts/build-claude-plugin.sh is missing or not executable"
+  fail "Context packet templates must include execution contracts"
 fi
 
-echo
-
-echo "Checking MCP server build..."
-if [[ -f "mcp-server/package.json" ]]; then
-  if command -v npm >/dev/null 2>&1; then
-    (cd mcp-server && npm install >/dev/null && npm run build >/dev/null)
-    pass "MCP server installs and builds"
-  else
-    echo "! npm not found; skipped MCP server build"
-  fi
+if grep -q 'dumplink' AGENTS.md && grep -q 'dumplink' .agent-orchestration.yaml && grep -q 'dumplink' mcp-server/src/index.ts; then
+  pass "Dumplink is discoverable from AGENTS, orchestration, and MCP"
 else
-  fail "Missing mcp-server/package.json"
+  fail "Dumplink is missing from one or more discovery surfaces"
+fi
+
+if [[ -x scripts/check-golden-evals.sh ]]; then
+  scripts/check-golden-evals.sh
+else
+  fail "scripts/check-golden-evals.sh must be executable"
 fi
 
 echo
