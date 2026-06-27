@@ -21,6 +21,8 @@ This repo helps teams preserve intent as work moves from idea to implementation.
 - `/feed-planning-context` for giving AI agents bounded context
 - `/breadboard-reflection` for repairing drift between plan and implementation
 
+Claude Code users can also use thinner project slash commands when they want to stop at human decision gates instead of one-shotting the whole shape: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`. See [`docs/claude-slash-commands.md`](./docs/claude-slash-commands.md).
+
 Get a quick lightweight feel for these design skills with this Custom GPT [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
 
 <img width="1453" height="713" alt="Screenshot 2026-04-24 at 10 05 13 PM" src="https://github.com/user-attachments/assets/8b3848cc-3968-4792-8d77-5c38b81ce3b1" />
@@ -45,8 +47,8 @@ Comparatively (including [HumanLayer](https://www.humanlayer.dev)):
 2. Planning Skills: framing
    Output: problem, forces, outcome, boundaries
    ↓
-3. Planning Skills: shaping
-   Output: options, fit checks, selected approach, non-goals
+3. Planning Skills: criteria, shape sketches, fit checks, selected approach
+   Output: requirements, options, fit checks, selected approach, non-goals
    ↓
 4. Planning Skills: breadboarding
    Output: places, affordances, stores, state, wiring
@@ -95,6 +97,8 @@ Turn source material such as interview transcript syntheses, strategy notes, sta
 
 ### `/shaping`
 Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
+
+In Claude Code, the shaping work can also be run as smaller gate commands when the team wants to pause between moves: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`.
 
 ### `/breadboarding`
 Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
@@ -151,11 +155,10 @@ The core workflow stays the same:
 
 1. Start with raw notes or transcripts.
 2. Create a frame.
-3. Shape the problem and compare options.
-4. Choose a direction.
-5. Breadboard the chosen shape.
-6. Feed the selected planning artifacts into the agent as a compact context packet.
-7. Reflect against implementation later when code exists.
+3. Shape the problem: criteria, alternative shapes, fit checks, and selected direction.
+4. Breadboard the chosen shape.
+5. Feed the selected planning artifacts into the agent as a compact context packet.
+6. Reflect against implementation later when code exists.
 
 What changes across tools is just **how you invoke the instructions**, not the method itself.
 
@@ -215,7 +218,7 @@ Write the result to planning/frame.md.
 
 ### Summary
 
-- **Claude Code**: native skill packaging
+- **Claude Code**: native skill packaging and optional project slash commands
 - **Other tools**: prompt-template or repo-doc packaging
 - **All agents**: use `AGENTS.md` as the neutral repo-level instruction surface when supported
 
