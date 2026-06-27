@@ -1,0 +1,282 @@
+version: 1
+name: planning-skills-for-agents-and-humans
+purpose: >-
+  Tool-neutral orchestration contract for using this repository as a planning
+  and harness layer around agentic implementation work.
+
+principles:
+  - planning_before_implementation
+  - human_decision_gates_before_scope_expansion
+  - compact_context_before_build
+  - drift_checks_during_build
+  - reflection_after_implementation
+
+authority_order:
+  - latest_user_instruction
+  - selected_slice_or_kickoff_doc
+  - executable_breadboard
+  - selected_interface_contract
+  - selected_breadboard
+  - selected_shaping_direction
+  - framing_doc
+  - raw_notes_and_transcripts
+  - rejected_alternatives_and_brainstorming
+
+modes:
+  explore:
+    purpose: Understand the source material, current system, and unknowns.
+    allowed_outputs:
+      - source_notes
+      - current_state_summary
+      - open_questions
+      - relevant_files_or_artifacts
+      - risks_and_unknowns
+    forbidden:
+      - production_code
+      - selected_direction
+      - implementation_plan
+    exit_gate: source_material_understood
+
+  frame:
+    skill: framing-doc
+    purpose: Name the problem, outcome, forces, and boundaries.
+    allowed_outputs:
+      - frame
+      - problem
+      - outcome
+      - boundaries
+      - criteria_candidates
+    forbidden:
+      - production_code
+      - selected_shape
+    exit_gate: frame_accepted
+
+  criteria:
+    skill: shaping
+    command_aliases:
+      claude: /criteria
+      gemini: /criteria
+    purpose: Define requirements / criteria before proposing mechanisms.
+    allowed_outputs:
+      - requirements_table
+      - criteria_status
+      - mechanism_parking_lot
+      - open_criteria_questions
+    forbidden:
+      - solution_shapes
+      - selected_direction
+      - breadboard
+      - production_code
+    exit_gate: requirements_accepted
+
+  sketch_shapes:
+    skill: shaping
+    command_aliases:
+      claude: /sketch-shapes
+      gemini: /sketch-shapes
+    purpose: Make multiple possible directions visible without selecting one.
+    allowed_outputs:
+      - current_baseline
+      - alternative_shapes
+      - shape_parts
+      - flagged_unknowns
+      - spike_candidates
+    forbidden:
+      - selected_direction_without_human_choice
+      - breadboard
+      - production_code
+    exit_gate: alternatives_visible
+
+  fit_check:
+    skill: shaping
+    command_aliases:
+      claude: /fit-check
+      gemini: /fit-check
+    purpose: Compare candidate shapes against requirements and reverse-check mechanisms.
+    allowed_outputs:
+      - fit_check
+      - reverse_fit_check
+      - failed_requirements
+      - unjustified_mechanisms
+      - decision_readiness_note
+    forbidden:
+      - selected_direction_without_human_choice
+      - breadboard
+      - production_code
+    exit_gate: decision_ready
+
+  select_shape:
+    skill: shaping
+    command_aliases:
+      claude: /select-shape
+      gemini: /select-shape
+    purpose: Record the human-selected direction or stop with a decision-ready summary.
+    allowed_outputs:
+      - selected_direction
+      - rejected_alternatives
+      - tradeoffs
+      - remaining_unknowns
+      - next_handoff
+    forbidden:
+      - invented_human_decision
+      - production_code
+    exit_gate: shape_selected
+
+  breadboard:
+    skill: breadboarding
+    purpose: Make the selected shape concrete as places, affordances, stores, and wiring.
+    requires:
+      - selected_direction
+    allowed_outputs:
+      - places
+      - ui_affordances
+      - non_ui_affordances
+      - stores
+      - wiring
+      - branches
+      - slice_candidates
+    forbidden:
+      - production_code
+    exit_gate: breadboard_accepted
+
+  slice:
+    skill: breadboarding
+    purpose: Split the accepted breadboard into demoable increments.
+    requires:
+      - accepted_breadboard
+    allowed_outputs:
+      - slice_ids
+      - slice_boundaries
+      - exclusions
+      - dependencies
+      - verification_targets
+    forbidden:
+      - production_code
+    exit_gate: slice_selected
+
+  interface_contract:
+    skill: interface-contracts
+    purpose: Define plain-language contracts for meaningful boundaries crossed by the selected slice.
+    requires:
+      - selected_slice
+      - selected_breadboard
+    allowed_outputs:
+      - contract_ids
+      - boundary_names
+      - inputs
+      - outputs
+      - branches
+      - error_cases
+      - open_decisions
+    forbidden:
+      - production_schema_unless_explicitly_requested
+    exit_gate: contracts_accepted
+
+  executable_breadboard:
+    skill: executable-breadboards
+    purpose: Add examples, fixtures, expected outputs, edge cases, and tests to a selected slice handoff.
+    requires:
+      - selected_slice
+      - selected_breadboard
+    allowed_outputs:
+      - fixtures
+      - example_runs
+      - expected_outputs
+      - expected_state_changes
+      - edge_cases
+      - acceptance_tests
+    forbidden:
+      - production_code_unless_explicitly_requested
+    exit_gate: build_handoff_ready
+
+  feed_context:
+    skill: feed-planning-context
+    purpose: Create the compact context packet for implementation.
+    requires:
+      - selected_slice
+    allowed_outputs:
+      - context_packet
+      - authority_order
+      - must_preserve_constraints
+      - non_goals
+      - verification_target
+    forbidden:
+      - whole_planning_stack_dump_by_default
+      - production_code
+    exit_gate: context_packet_ready
+
+  build:
+    purpose: Implement only the selected slice from the compact context packet.
+    requires:
+      - selected_slice
+      - context_packet
+    allowed_outputs:
+      - implementation
+      - tests
+      - verification_results
+      - planning_updates_if_reality_changed
+      - agent_run_log
+    forbidden:
+      - scope_expansion_without_planning_update
+      - discarded_alternative_as_active_scope
+      - silent_plan_change
+    recurring_checks:
+      - drift_check
+      - selected_slice_boundary
+      - non_goals
+      - verification_target
+    exit_gate: selected_slice_verified
+
+  check_drift:
+    command_aliases:
+      claude: /check-drift
+      gemini: /check-drift
+    purpose: Check implementation direction against selected planning artifacts.
+    allowed_outputs:
+      - no_planning_drift_found
+      - planning_drift_found
+    required_response_shape:
+      no_drift: No planning drift found.
+      drift:
+        - Selected artifact says
+        - Current implementation direction is
+        - Risk
+        - Recommended move
+    forbidden:
+      - implementation_changes
+      - scope_expansion
+      - new_requirements
+
+  reflect:
+    skill: breadboard-reflection
+    purpose: Compare implementation reality to the breadboard and repair drift.
+    requires:
+      - implementation_exists
+      - selected_breadboard
+    allowed_outputs:
+      - synced_reality
+      - drift
+      - missing_behavior
+      - accidental_behavior
+      - planning_updates
+      - implementation_followups
+    forbidden:
+      - critique_before_syncing_reality
+      - silent_breadboard_rewrite
+    exit_gate: reflection_recorded
+
+artifacts:
+  frame: templates/framing-doc.md
+  shaping: templates/shaping.md
+  breadboard: templates/breadboard.md
+  interface_contracts: templates/interface-contracts.md
+  executable_breadboard: templates/executable-breadboard.md
+  context_packet: templates/context-packet.md
+  drift_check: templates/drift-check.md
+  agent_run_log: templates/agent-run-log.md
+  breadboard_reflection: templates/breadboard-reflection.md
+
+hooks:
+  planning_ripple: hooks/planning-ripple.sh
+  pre_build_context_check: hooks/pre-build-context-check.sh
+  planning_drift_check: hooks/planning-drift-check.sh
