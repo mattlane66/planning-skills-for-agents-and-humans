@@ -32,6 +32,20 @@ When implementing, preserve shaped intent and update planning artifacts if imple
 8. Feed only the relevant planning context to the implementation agent.
 9. Reflect against implementation and repair drift.
 
+## Shaping gates
+
+The broad shaping step can be run all at once, but agents should not collapse it into an automatic decision when the user wants deliberation.
+
+When finer control is useful, split shaping into these gates:
+
+1. Criteria — define the requirements / criteria before proposing mechanisms.
+2. Shape sketches — make multiple possible directions visible without selecting one.
+3. Fit check — compare shapes against criteria and check whether each mechanism is justified.
+4. Shape selection — record the human choice or stop with a decision-ready summary.
+5. Breadboard handoff — only breadboard after the selected shape is explicit.
+
+Do not one-shot from fuzzy request to selected shape when the user asks for a fit check, sketches, alternatives, or gate-by-gate shaping.
+
 ## Skill map
 
 Use the repo skills as reusable instructions:
