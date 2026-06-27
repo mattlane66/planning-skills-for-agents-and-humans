@@ -1,8 +1,8 @@
 # Codex usage
 
-Codex should use `AGENTS.md` as the shared repo-level instruction surface.
+Codex should use `AGENTS.md` as the shared repo-level instruction surface and `.agent-orchestration.yaml` as the machine-readable workflow contract when a harness or agent wrapper can consume structured planning metadata.
 
-That means Codex should follow the same planning defaults, authority order, shaping gates, context-feeding rules, stable ID rules, drift protocol, and completion standard as other agents.
+That means Codex should follow the same planning defaults, authority order, shaping gates, context-feeding rules, stable ID rules, drift protocol, run-log expectations, and completion standard as other agents.
 
 ## What carries over directly
 
@@ -15,14 +15,18 @@ Codex should honor the workflow in `AGENTS.md`:
 5. Record the selected shape only when the human chooses one.
 6. Breadboard the selected shape.
 7. Slice into demoable increments.
-8. Feed only the relevant planning context to implementation.
-9. Reflect against implementation and repair drift.
+8. Add interface contracts when the selected slice crosses meaningful boundaries.
+9. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
+10. Feed only the relevant planning context to implementation.
+11. Check drift during implementation.
+12. Reflect against implementation and repair drift.
 
 The important behavior is the gate discipline:
 
 - do not one-shot from fuzzy request to selected shape when the user asks for alternatives, sketches, or fit checks
 - do not write production code unless the user explicitly selects a slice to build or asks for implementation
 - preserve planning artifacts and update them when implementation discoveries change the plan
+- create a run log or handoff note after meaningful implementation work
 
 ## Equivalent Codex prompts
 
@@ -77,6 +81,24 @@ Map places, affordances, stores, wiring, branches, and slice candidates.
 Do not implement.
 ```
 
+### Interface contract
+
+```text
+Use AGENTS.md and interface-contracts/SKILL.md.
+Create plain-language interface contracts only for the selected slice boundaries in [breadboard or slice artifact].
+Do not create production schemas, OpenAPI files, database schemas, or tests unless I explicitly ask.
+```
+
+### Executable breadboard
+
+```text
+Use AGENTS.md and executable-breadboards/SKILL.md.
+Create an executable breadboard for [selected slice].
+Include fixtures, example runs, expected visible results, expected state changes, edge cases, and acceptance tests.
+Flag missing expected outputs or edge cases instead of inventing them.
+Do not implement yet.
+```
+
 ## Context packet before implementation
 
 Before using Codex for build work, use the context-feeding protocol instead of pasting the whole planning stack.
@@ -89,3 +111,36 @@ Do not implement yet.
 ```
 
 Then give Codex the packet and explicitly name the selected slice to build.
+
+## Drift check during implementation
+
+Use this prompt before commits, after meaningful code changes, or whenever the agent may have drifted from the selected slice:
+
+```text
+Use AGENTS.md, docs/loop-prompting.md, and templates/drift-check.md.
+Check drift between [context packet / selected planning artifacts] and [changed files or implementation direction].
+Return only one of:
+
+No planning drift found.
+
+or
+
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
+
+Do not implement changes inside this drift check.
+```
+
+## Agent run log after meaningful work
+
+Use this prompt after a meaningful implementation run:
+
+```text
+Use templates/agent-run-log.md and docs/agent-run-records.md.
+Create a concise agent run log for this session.
+Include task, mode, source artifacts used, files inspected, files changed, decisions made, drift checks, verification run, planning updates needed, and handoff notes.
+Do not make the run log the source of truth for product decisions; point to any planning artifacts that need updates.
+```
