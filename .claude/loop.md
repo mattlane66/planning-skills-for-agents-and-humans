@@ -1,6 +1,6 @@
 Check planning alignment.
 
-Use the active context packet, selected slice, shaping doc, breadboard, non-goals, and verification target.
+Use the active context packet, selected slice, shaping doc, breadboard, interface contracts, executable breadboard, non-goals, and verification target.
 
 Return only one of:
 
@@ -12,8 +12,9 @@ Return only one of:
    - Recommended move:
 
 Rules:
+
 - Do not expand scope.
 - Do not invent new requirements.
 - Do not treat discarded alternatives as selected direction.
-- Do not silently change the breadboard.
-- If implementation reality conflicts with the plan, propose a planning update instead of continuing.
+- Do not silently change the breadboard, contract, executable breadboard, or context packet.
+- If implementation reality conflicts with the plan, propose a planning update or slice split instead of continuing.
