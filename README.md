@@ -21,7 +21,7 @@ This repo helps teams preserve intent as work moves from idea to implementation.
 - `/feed-planning-context` for giving AI agents bounded context
 - `/breadboard-reflection` for repairing drift between plan and implementation
 
-Claude Code users can also use thinner project slash commands when they want to stop at human decision gates instead of one-shotting the whole shape: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`. See [`docs/claude-slash-commands.md`](./docs/claude-slash-commands.md).
+Claude Code and Gemini CLI users can also use thinner project slash commands when they want to stop at human decision gates instead of one-shotting the whole shape: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`. Codex users can use the equivalent prompt forms in [`docs/codex-usage.md`](./docs/codex-usage.md). See [`docs/claude-slash-commands.md`](./docs/claude-slash-commands.md) and [`docs/gemini-usage.md`](./docs/gemini-usage.md).
 
 Get a quick lightweight feel for these design skills with this Custom GPT [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
 
@@ -62,7 +62,7 @@ Comparatively (including [HumanLayer](https://www.humanlayer.dev)):
 7. Spec Kit
    Output: spec.md, plan.md, data-model.md, contracts, tasks.md
    ↓
-8. HumanLayer / CodeLayer / Claude Code / Codex
+8. HumanLayer / CodeLayer / Claude Code / Gemini CLI / Codex
    Output: implementation, tests, PRs, review loops
    ↓
 9. Breadboard reflection
@@ -88,7 +88,7 @@ When building:
 
 Use [`AGENTS.md`](./AGENTS.md) as the tool-neutral instruction surface for agents that understand repo-level instruction files. It captures the default mode, workflow, authority order, context-feeding rules, stable ID handling, drift protocol, and completion standard.
 
-Claude Code users can install the skills natively. Other tools such as Cursor, Codex, and similar agent environments can use the same `SKILL.md` files as repo-local rules, prompt files, or reusable docs. The method is tool-agnostic even when some packaging details are tool-specific.
+Claude Code users can install the skills natively and use `.claude/commands/` for slash-command wrappers. Gemini CLI users can use `GEMINI.md` and `.gemini/commands/`. Codex users should rely on `AGENTS.md` plus the prompt equivalents in [`docs/codex-usage.md`](./docs/codex-usage.md). Other tools such as Cursor and similar agent environments can use the same `SKILL.md` files as repo-local rules, prompt files, or reusable docs.
 
 ## Skills
 
@@ -98,7 +98,7 @@ Turn source material such as interview transcript syntheses, strategy notes, sta
 ### `/shaping`
 Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
 
-In Claude Code, the shaping work can also be run as smaller gate commands when the team wants to pause between moves: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`.
+In Claude Code and Gemini CLI, the shaping work can also be run as smaller gate commands when the team wants to pause between moves: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`. In Codex, use the equivalent prompt forms in [`docs/codex-usage.md`](./docs/codex-usage.md).
 
 ### `/breadboarding`
 Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
@@ -204,23 +204,38 @@ Create a breadboard for the chosen shape in planning/breadboard.md.
 Focus on places, affordances, visible consequences, and hidden system behavior that matters.
 ```
 
+### Gemini CLI
+
+Gemini CLI uses the root [`GEMINI.md`](./GEMINI.md), which imports [`AGENTS.md`](./AGENTS.md), and the project-local commands in `.gemini/commands/`.
+
+See [`docs/gemini-usage.md`](./docs/gemini-usage.md) for:
+
+- `/criteria`
+- `/sketch-shapes`
+- `/fit-check`
+- `/select-shape`
+
 ### Codex
 
-In Codex-style workflows, these skills work best as reusable prompt files or planning docs checked into the repo.
+Codex-style workflows should use [`AGENTS.md`](./AGENTS.md) and the prompt equivalents in [`docs/codex-usage.md`](./docs/codex-usage.md).
 
 Example prompt:
 
 ```text
-Read docs/planning-skills/framing-doc.md first.
-Turn these notes into a frame with Source, Problem, Outcome, and Boundaries.
-Write the result to planning/frame.md.
+Use AGENTS.md and shaping/SKILL.md.
+Run the fit-check gate only.
+Compare the existing criteria and candidate shapes in planning/shaping.md.
+Do not select a direction unless I explicitly choose one.
+Do not breadboard or implement.
 ```
 
 ### Summary
 
-- **Claude Code**: native skill packaging and optional project slash commands
+- **Claude Code**: native skill packaging and `.claude/commands/`
+- **Gemini CLI**: `GEMINI.md` plus `.gemini/commands/`
+- **Codex**: `AGENTS.md` plus prompt equivalents in `docs/codex-usage.md`
 - **Other tools**: prompt-template or repo-doc packaging
-- **All agents**: use `AGENTS.md` as the neutral repo-level instruction surface when supported
+- **All agents**: preserve the same planning gates and source-of-truth artifacts
 
 So the workflow is tool-agnostic in substance, with optional tool-specific packaging.
 
