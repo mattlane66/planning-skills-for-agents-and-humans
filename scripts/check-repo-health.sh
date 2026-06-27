@@ -26,6 +26,24 @@ check_json() {
   pass "Valid JSON: $file"
 }
 
+check_toml() {
+  local file="$1"
+  if [[ ! -f "$file" ]]; then
+    fail "Missing TOML file: $file"
+    return
+  fi
+
+  python3 - "$file" <<'PY'
+import pathlib
+import sys
+import tomllib
+
+path = pathlib.Path(sys.argv[1])
+tomllib.loads(path.read_text(encoding="utf-8"))
+PY
+  pass "Valid TOML: $file"
+}
+
 check_skill_frontmatter() {
   local file="$1"
   if [[ ! -f "$file" ]]; then
@@ -66,7 +84,7 @@ PY
   pass "Valid skill frontmatter: $file"
 }
 
-check_command_points_to_skill() {
+check_command_points_to_skill_or_orchestration() {
   local command_file="$1"
   local skill_path
 
@@ -76,17 +94,21 @@ check_command_points_to_skill() {
   fi
 
   skill_path="$(grep -Eo '`[A-Za-z0-9_-]+/SKILL\.md`' "$command_file" | head -n 1 | tr -d '`' || true)"
-  if [[ -z "$skill_path" ]]; then
-    fail "Claude command does not reference a canonical skill: $command_file"
+  if [[ -n "$skill_path" ]]; then
+    if [[ ! -f "$skill_path" ]]; then
+      fail "Claude command references missing skill $skill_path from $command_file"
+      return
+    fi
+    pass "Claude command maps to existing skill: $command_file -> $skill_path"
     return
   fi
 
-  if [[ ! -f "$skill_path" ]]; then
-    fail "Claude command references missing skill $skill_path from $command_file"
+  if grep -q 'AGENTS.md' "$command_file" && grep -q 'drift-check' "$command_file"; then
+    pass "Claude command maps to orchestration docs: $command_file"
     return
   fi
 
-  pass "Claude command maps to existing skill: $command_file -> $skill_path"
+  fail "Claude command does not reference a canonical skill or orchestration docs: $command_file"
 }
 
 check_file_exists() {
@@ -102,28 +124,47 @@ SKILLS=(
   "framing-doc"
   "shaping"
   "breadboarding"
+  "interface-contracts"
+  "executable-breadboards"
   "kickoff-doc"
   "feed-planning-context"
   "breadboard-reflection"
 )
 
-COMMANDS=(
+CLAUDE_COMMANDS=(
   "frame"
   "shape"
+  "criteria"
+  "sketch-shapes"
+  "fit-check"
+  "select-shape"
   "breadboard"
   "kickoff"
   "feed-context"
+  "check-drift"
   "reflect-breadboard"
+)
+
+GEMINI_COMMANDS=(
+  "criteria"
+  "sketch-shapes"
+  "fit-check"
+  "select-shape"
+  "check-drift"
 )
 
 TEMPLATES=(
   "frame"
   "shaping"
   "breadboard"
+  "interface-contracts"
+  "executable-breadboard"
   "slices"
   "context-packet"
   "kickoff"
   "breadboard-reflection"
+  "drift-check"
+  "agent-run-log"
   "spike"
   "decision-log"
   "appetite-card"
@@ -133,6 +174,11 @@ echo "Checking plugin manifests..."
 check_json ".claude-plugin/plugin.json"
 check_json ".codex-plugin/plugin.json"
 check_json ".agents/plugins/marketplace.json"
+
+echo
+
+echo "Checking orchestration manifest..."
+check_file_exists ".agent-orchestration.yaml"
 
 echo
 
@@ -152,11 +198,22 @@ echo
 
 echo "Checking Claude slash commands..."
 if [[ -d ".claude/commands" ]]; then
-  for command in "${COMMANDS[@]}"; do
-    check_command_points_to_skill ".claude/commands/$command.md"
+  for command in "${CLAUDE_COMMANDS[@]}"; do
+    check_command_points_to_skill_or_orchestration ".claude/commands/$command.md"
   done
 else
   fail "Missing .claude/commands directory"
+fi
+
+echo
+
+echo "Checking Gemini commands..."
+if [[ -d ".gemini/commands" ]]; then
+  for command in "${GEMINI_COMMANDS[@]}"; do
+    check_toml ".gemini/commands/$command.toml"
+  done
+else
+  fail "Missing .gemini/commands directory"
 fi
 
 echo
@@ -168,15 +225,29 @@ done
 
 echo
 
+echo "Checking hooks..."
+check_file_exists "hooks/planning-ripple.sh"
+check_file_exists "hooks/pre-build-context-check.sh"
+check_file_exists "hooks/planning-drift-check.sh"
+
+echo
+
 echo "Checking key docs..."
 check_file_exists "README.md"
 check_file_exists "AGENTS.md"
+check_file_exists "GEMINI.md"
 check_file_exists "docs/start-here.md"
 check_file_exists "docs/human-decision-gates.md"
 check_file_exists "docs/plan-quality-rubric.md"
 check_file_exists "docs/agent-context-feeding.md"
 check_file_exists "docs/agent-workflow.md"
 check_file_exists "docs/claude-slash-commands.md"
+check_file_exists "docs/gemini-usage.md"
+check_file_exists "docs/codex-usage.md"
+check_file_exists "docs/codex-plugin.md"
+check_file_exists "docs/loop-prompting.md"
+check_file_exists "docs/agent-run-records.md"
+check_file_exists "docs/lifecycle-hooks.md"
 
 echo
 
