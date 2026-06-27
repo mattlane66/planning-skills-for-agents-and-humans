@@ -128,6 +128,8 @@ Check drift during build
 Reflect after implementation exists
 ```
 
+For exact tool-by-tool invocation differences, see [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md). Claude supports project slash commands in this repo; Codex and Gemini-style clients use plugin, local skill, MCP, or prompt-recipe invocation rather than Claude-style slash commands.
+
 ## Skills
 
 ### `/framing-doc`
@@ -206,7 +208,7 @@ The core workflow stays the same:
 7. Check drift during implementation.
 8. Reflect against implementation later when code exists.
 
-What changes across tools is just **how you invoke the instructions**, not the method itself.
+What changes across tools is just **how you invoke the instructions**, not the method itself. See [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md) for the current support matrix and prompt recipes.
 
 ### Plain markdown workflow
 
