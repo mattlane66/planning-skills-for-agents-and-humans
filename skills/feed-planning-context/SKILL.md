@@ -11,7 +11,7 @@ This skill prepares context only. It does not implement code.
 
 ## Goal
 
-Create a compact context packet from the provided planning artifacts so an agent can understand the current task, the authority of each artifact, the selected direction, the slice boundary, executable breadboard examples when present, interface contracts when present, and the verification target.
+Create a compact context packet from the provided planning artifacts so an agent can understand the current task, the authority of each artifact, the selected direction, the slice boundary, executable breadboard examples when present, interface contracts when present, the execution contract, and the verification target.
 
 ## Inputs
 
@@ -40,8 +40,9 @@ Use whichever artifacts the user provides or points to:
 6. Preserve field names, required/optional distinctions, enum values, nullability, and error cases when interface contracts are present.
 7. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
 8. Name explicit non-goals and exclusions.
-9. Add a verification target.
-10. Stop after preparing the context packet.
+9. Add an execution contract.
+10. Add a verification target.
+11. Stop after preparing the context packet.
 
 ## Output format
 
@@ -99,6 +100,15 @@ Use whichever artifacts the user provides or points to:
 - Produces: ...
 - Exclusions: ...
 
+## Execution contract
+- Goal condition:
+- Required checks:
+- Allowed files / areas:
+- Out-of-scope changes:
+- Return-to-planning conditions:
+- Checkpoint cadence:
+- Verification caveats:
+
 ## Open questions
 - ...
 
@@ -109,6 +119,7 @@ Use whichever artifacts the user provides or points to:
 4. Propose a plan before editing code.
 5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
 6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, or acceptance tests instead of inventing them.
+7. Work toward the goal condition, run the required checks, and report incomplete verification directly.
 
 ## Verification target
 - ...
@@ -188,6 +199,18 @@ When interface contracts are present, preserve:
 - open decisions
 
 If a field-level decision is missing, flag it. Do not invent it during context packaging.
+
+## Execution contract handling
+
+The execution contract turns the context packet into a loop-ready handoff. It should name:
+
+- the concrete goal condition that would make the work complete
+- the checks that should be run before completion
+- the files, folders, or areas the agent may touch
+- the changes that are outside the selected slice
+- the conditions that should return work to planning
+- the checkpoint cadence for multi-step work
+- the caveats to report when verification is incomplete
 
 ## Drift handling
 
