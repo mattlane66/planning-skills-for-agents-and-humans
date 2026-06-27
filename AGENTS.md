@@ -2,7 +2,7 @@
 
 Use this repo to turn fuzzy requests, messy transcripts, partial designs, and implementation discoveries into planning artifacts that humans and agents can build from.
 
-These instructions are tool-neutral. They are intended for Claude Code, Cursor, Codex, and other agentic coding or writing environments.
+These instructions are tool-neutral. They are intended for Claude Code, Cursor, Codex, Gemini CLI, and other agentic coding or writing environments.
 
 ## Default mode
 
@@ -20,6 +20,23 @@ When planning, prefer:
 
 When implementing, preserve shaped intent and update planning artifacts if implementation discoveries change the plan.
 
+## Orchestration manifest
+
+Use `.agent-orchestration.yaml` as the machine-readable workflow and harness contract.
+
+It defines:
+
+- modes
+- required source artifacts
+- allowed outputs
+- forbidden moves
+- human decision gates
+- command aliases
+- artifact templates
+- optional lifecycle hooks
+
+If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specific instruction for the active mode. If the conflict changes product scope or implementation behavior, stop and ask for a planning update.
+
 ## Canonical workflow
 
 1. Frame the problem.
@@ -30,7 +47,8 @@ When implementing, preserve shaped intent and update planning artifacts if imple
 6. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
 7. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
 8. Feed only the relevant planning context to the implementation agent.
-9. Reflect against implementation and repair drift.
+9. Check for drift during implementation.
+10. Reflect against implementation and repair drift.
 
 ## Shaping gates
 
@@ -68,6 +86,10 @@ Interface contract = what crosses a boundary.
 Executable breadboard = breadboard + interface contracts + fixtures + example runs + expected outputs + tests.
 
 Context packet = the exact subset handed to the build agent.
+
+Drift check = a point-in-time alignment check during implementation.
+
+Agent run log = a lightweight audit trail of a meaningful agent run.
 
 ## Authority order
 
@@ -122,6 +144,44 @@ Before implementation work, create or request a compact context packet that incl
 - verification target
 
 Use `docs/agent-context-feeding.md` and `feed-planning-context/SKILL.md` for the detailed protocol.
+
+## Drift checks and loops
+
+During implementation or refactoring, use a drift check when there is risk that the agent has moved away from the selected planning artifacts.
+
+A drift check must return only one of:
+
+```text
+No planning drift found.
+```
+
+or
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
+```
+
+Do not implement inside a drift check. Do not update planning artifacts silently. If implementation reality conflicts with the plan, recommend a planning update, contract update, executable breadboard update, or slice split before continuing.
+
+Use `docs/loop-prompting.md`, `templates/drift-check.md`, and `/check-drift` where supported.
+
+## Agent run logs
+
+Create an agent run log after meaningful agent runs that change implementation files, planning artifacts, or durable decisions.
+
+Use `templates/agent-run-log.md` and `docs/agent-run-records.md`.
+
+A run log should not replace source-of-truth planning artifacts. If the run discovers a planning issue, update or request an update to the relevant artifact.
+
+## Lifecycle hooks
+
+Optional lifecycle hooks live in `hooks/` and are documented in `docs/lifecycle-hooks.md`.
+
+Use hooks as reminders and guardrails only. They should not become a hidden planning method or implementation harness.
 
 ## Stable IDs
 
@@ -209,3 +269,4 @@ Before declaring work complete, check:
 - interface contracts were preserved when present
 - planning artifacts were updated if implementation discoveries changed the plan
 - implementation work, when present, maps back to requirement/affordance/store/contract/example-run/edge-case/slice IDs
+- meaningful implementation runs have an agent run log or equivalent handoff note
