@@ -157,6 +157,7 @@ check_file_exists docs/agent-workflow.md
 check_file_exists docs/agent-context-feeding.md
 check_file_exists docs/agent-loop-design.md
 check_file_exists docs/full-modern-agent-workflow.md
+check_file_exists docs/dumplink-usage.md
 check_file_exists docs/claude-slash-commands.md
 check_file_exists docs/gemini-usage.md
 check_file_exists docs/codex-usage.md
@@ -191,10 +192,10 @@ else
   fail "Dumplink is missing from one or more discovery surfaces"
 fi
 
-if [[ -x scripts/check-golden-evals.sh ]]; then
-  scripts/check-golden-evals.sh
+if [[ -f scripts/check-golden-evals.sh ]]; then
+  bash scripts/check-golden-evals.sh
 else
-  fail "scripts/check-golden-evals.sh must be executable"
+  fail "scripts/check-golden-evals.sh is missing"
 fi
 
 echo
