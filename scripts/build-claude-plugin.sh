@@ -10,6 +10,7 @@ SKILLS=(
   "breadboarding"
   "interface-contracts"
   "executable-breadboards"
+  "dumplink"
   "kickoff-doc"
   "feed-planning-context"
   "breadboard-reflection"
