@@ -1,8 +1,6 @@
 ---
 name: dumplink
 description: Turn a shaped project into vertical task groups, dependency-aware sequence, risk state, and variable-scope build plan.
-planning: true
-shaping: true
 ---
 
 # Dumplink

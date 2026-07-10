@@ -1,316 +1,107 @@
 # Planning Skills for Agents and Humans
 
-These planning skills turn fuzzy requests, messy transcripts, and partial designs into artifacts that humans and agents can actually build from. They help you clarify what the thing must be, so you are free to explore all the ways it might be.
-They are best suited to meaningfully large, strategically important feature work: discrete bets with 2–6 week time budgets for small launch teams.
-The skills are most powerful when grounded in your codebase. That context provides the ground truth humans and agents need to execute with confidence, especially during the spiking work inside shaping.
-AI may be able to one-shot a simple app without this process. But for larger bets, the process gives you and your team a shared view of how the solution works. It also makes your prompts better as the work gets more concrete. And it leaves behind documents you can question later, so you can understand how and why the system was put together before you change it.
-Ideally, you use these skills to help run, or process data from, a collaborative [shaping session](https://www.figma.com/community/file/1490786031847199566/shaping-session-playing-field-copy-me-template).
+Turn a fuzzy feature into a selected, testable, vertically sliced implementation packet—without letting the agent invent scope.
 
-AI coding tools have become powerful new prototyping instruments, but they work best after good upstream/uphill shaping. Humans need to own the planning stack.
+These skills help product and engineering teams preserve intent from raw evidence through implementation. They are most useful for strategically important feature work with a bounded appetite, usually a 2–6 week bet for a small launch team.
 
-## Operating philosophy
+**New here? Start with the [10-minute guide](./docs/start-here.md).**
 
-Start here: [The Work Should Get Clearer](./MANIFESTO.md).
-
-This repo helps teams preserve intent as work moves from idea to implementation. Use the skills at the handoffs where meaning is most likely to get lost:
-
-- `/framing-doc` for turning raw notes or requests into a clear problem frame
-- `/shaping` for comparing paths and selecting a bounded direction
-- `/breadboarding` for making behavior, state, affordances, and wiring visible (aka as an Interaction Schematic)
-- `/interface-contracts` for making boundary-crossing data exchanges explicit
-- `/executable-breadboards` for adding examples, fixtures, expected outputs, edge cases, and acceptance tests before build handoff
-- `/kickoff-doc` for preparing the build team
-- `/feed-planning-context` for giving AI agents bounded context
-- `/breadboard-reflection` for repairing drift between plan and implementation
-
-Claude Code and Gemini CLI users can also use thinner project slash commands when they want to stop at human decision gates instead of one-shotting the whole shape: `/criteria`, `/sketch-shapes`, `/fit-check`, `/select-shape`, and `/check-drift`. Codex users can use the equivalent prompt forms in [`docs/codex-usage.md`](./docs/codex-usage.md). See [`docs/claude-slash-commands.md`](./docs/claude-slash-commands.md) and [`docs/gemini-usage.md`](./docs/gemini-usage.md).
-
-Get a quick lightweight feel for these design skills with this Custom GPT [here](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).
-
-<img width="1453" height="713" alt="Screenshot 2026-04-24 at 10 05 13 PM" src="https://github.com/user-attachments/assets/8b3848cc-3968-4792-8d77-5c38b81ce3b1" />
-
-The emphasis is on pre-development legibility:
-- frame the problem before racing to implementation
-- compare alternatives before locking in a solution
-- map places, affordances, state, and wiring before losing the plot while maintaining latitude
-- keep high-level and low-level planning artifacts aligned as the work evolves
-- feed planning artifacts to agents at the right fidelity so they preserve shaped intent instead of drowning in context
-- check drift during implementation before accidental scope becomes product behavior
-
-## Planning Skills vs. Spec Kit
-
-This repo is not a replacement for [Spec Kit](https://github.com/github/spec-kit). It is a complementary planning layer. Use these skills earlier in the process to frame the problem, separate requirements from mechanisms, compare shapes, breadboard the system, and slice the work into demoable scopes. Then use a broader spec-driven workflow like Spec Kit when you want project-level specs, plans, tasks, and implementation orchestration.
-Comparatively (including [HumanLayer](https://www.humanlayer.dev)):
-- Planning Skills = figure out what to build to get people from where they are to where they ought to be and how to structure and derisk it
-- Spec Kit = turn planning skills' vertical slices into an agent-specific implementation build plan while specifying exact file paths, dependencies, order, and test structure.
-- HumanLayer = help agents carry out the build work reliably in real complex codebases
-
-1. Raw notes / customer evidence / idea
-   ↓
-2. Planning Skills: framing
-   Output: problem, forces, outcome, boundaries
-   ↓
-3. Planning Skills: criteria, shape sketches, fit checks, selected approach
-   Output: requirements, options, fit checks, selected approach, non-goals
-   ↓
-4. Planning Skills: breadboarding
-   Output: places, affordances, stores, state, wiring
-   ↓
-5. Planning Skills: slices, contracts, executable breadboard
-   Output: demoable vertical slices, boundary contracts, examples, fixtures, expected outputs, edge cases, acceptance tests
-   ↓
-6. Planning Skills: feed-planning-context
-   Output: compact implementation packet
-   ↓
-7. Spec Kit
-   Output: spec.md, plan.md, data-model.md, contracts, tasks.md
-   ↓
-8. HumanLayer / CodeLayer / Claude Code / Gemini CLI / Codex
-   Output: implementation, tests, PRs, review loops
-   ↓
-9. Drift checks and breadboard reflection
-   Output: detect drift, update artifacts, repair intent/code mismatch
-
-## Mode discipline
-
-These skills are primarily for planning before implementation.
-
-Default mode is planning/shaping:
-- do not write runnable implementation code
-- do not create full schemas, framework code, or production files
-- use plain language, tables, lightweight pseudo-structures, and Mermaid where useful
-
-Only move into implementation when the user or team explicitly selects a slice to build.
-
-When building:
-- implement only the selected slice
-- preserve the shaped intent
-- update planning artifacts if implementation discoveries change the plan
-- leave a run log or handoff note after meaningful agent work
-
-## Cross-agent setup
-
-Use [`AGENTS.md`](./AGENTS.md) as the tool-neutral instruction surface for agents that understand repo-level instruction files. It captures the default mode, workflow, authority order, context-feeding rules, stable ID handling, drift protocol, and completion standard.
-
-Use [`.agent-orchestration.yaml`](./.agent-orchestration.yaml) as the machine-readable workflow and harness contract for tools that can consume structured mode, gate, artifact, hook, and command metadata.
-
-Claude Code users can install the skills natively and use `.claude/commands/` for slash-command wrappers. Gemini CLI users can use `GEMINI.md` and `.gemini/commands/`. Codex users should rely on `AGENTS.md` plus the prompt equivalents in [`docs/codex-usage.md`](./docs/codex-usage.md). Other tools such as Cursor and similar agent environments can use the same `SKILL.md` files as repo-local rules, prompt files, or reusable docs.
-
-## Agent orchestration and harnessing
-
-This repo is not a full agent runtime. It is the planning and harness contract layer.
-
-Use these files when wiring the repo into an agent harness:
-
-- [`.agent-orchestration.yaml`](./.agent-orchestration.yaml) — machine-readable modes, gates, allowed outputs, forbidden moves, artifacts, and hooks
-- [`docs/agent-workflow.md`](./docs/agent-workflow.md) — human-readable workflow modes
-- [`docs/loop-prompting.md`](./docs/loop-prompting.md) — recurring planning-alignment checks
-- [`templates/drift-check.md`](./templates/drift-check.md) — strict drift-check output format
-- [`templates/agent-run-log.md`](./templates/agent-run-log.md) — audit trail for meaningful agent runs
-- [`docs/agent-run-records.md`](./docs/agent-run-records.md) — when and how to record agent runs
-- [`docs/lifecycle-hooks.md`](./docs/lifecycle-hooks.md) — optional hook setup for context and drift reminders
-
-The intended harness loop is:
+## The core workflow
 
 ```text
-Choose mode
-  ↓
-Load only relevant artifacts
-  ↓
-Run the skill or command for that mode
-  ↓
-Stop at the human gate
-  ↓
-Feed compact context before build
-  ↓
-Check drift during build
-  ↓
-Reflect after implementation exists
+messy evidence
+  -> frame the problem
+  -> compare solution shapes
+  -> select a direction
+  -> breadboard the behavior
+  -> select a demoable slice
+  -> give the build agent bounded context
+  -> check drift while building
 ```
 
-For exact tool-by-tool invocation differences, see [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md). Claude supports project slash commands in this repo; Codex and Gemini-style clients use plugin, local skill, MCP, or prompt-recipe invocation rather than Claude-style slash commands.
+The three core moves are:
 
-## Skills
+| Move | Use it when | Output |
+| --- | --- | --- |
+| [`framing-doc`](./framing-doc/SKILL.md) | You have notes, transcripts, requests, or an unclear problem. | Source, problem, desired outcome, boundaries, and criteria candidates. |
+| [`shaping`](./shaping/SKILL.md) | You need requirements, alternative approaches, fit checks, and a selected direction. | A bounded shape with tradeoffs, non-goals, and remaining unknowns. |
+| [`breadboarding`](./breadboarding/SKILL.md) | A direction is selected and its behavior needs to become concrete. | Places, affordances, stores, wiring, branches, and slice candidates. |
 
-### `/framing-doc`
-Turn source material such as interview transcript syntheses, strategy notes, stakeholder messages, etc. into a frame that captures the living world context and boundaries, current approach and result, and desired outcome. (NOTE: I use requirements and criteria interchangeably, which I define as unit items that give us the fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.). I also determine if a criterion is a Must Have or not.)
+Start there. Add the advanced moves only when the work needs them.
 
-### `/shaping`
-Collaboratively define requirements/criteria, list alternative approaches, compare their fit, and detail the selected direction.
+## Advanced workflow
 
-In Claude Code and Gemini CLI, the shaping work can also be run as smaller gate commands when the team wants to pause between moves: `/criteria`, `/sketch-shapes`, `/fit-check`, and `/select-shape`. In Codex, use the equivalent prompt forms in [`docs/codex-usage.md`](./docs/codex-usage.md).
+| Skill | Add it when | Output |
+| --- | --- | --- |
+| [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |
+| [`executable-breadboards`](./executable-breadboards/SKILL.md) | A slice needs fixtures, example runs, edge cases, and acceptance tests before build handoff. | A buildable, testable slice contract. |
+| [`dumplink`](./dumplink/SKILL.md) | Selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts. | A bounded task-group plan and agent handoff packet. |
+| [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the planning stack. | A compact context packet with an execution contract and verification target. |
+| [`breadboard-reflection`](./breadboard-reflection/SKILL.md) | Implementation exists and may differ from the intended behavior. | Synced reality, drift, design smells, and explicit correction options. |
+| [`kickoff-doc`](./kickoff-doc/SKILL.md) | Builders need a durable reference organized by product territory. | A builder-facing kickoff document. |
 
-### `/breadboarding`
-Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
-
-### `/interface-contracts`
-Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
-
-### `/executable-breadboards`
-Turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
-
-### `/breadboard-reflection`
-Compare a breadboard to the implementation, repair drift, and look for design smells such as hidden state, weak boundaries, or missing steps.
-
-### `/kickoff-doc`
-Turn a kickoff conversation into a builder-facing reference doc organized around the territory being built.
-
-### `/feed-planning-context`
-Prepare framing, shaping, breadboard, kickoff, slice, or reflection artifacts for agent implementation work without overloading context. This skill packages the active task, source artifacts, authority order, must-preserve constraints, stable IDs, non-goals, current slice, and verification target into a compact context packet. It does not implement code.
-
-## Agent context feeding
-
-Planning artifacts are most useful to coding agents when they are fed at the right fidelity. Do not paste the whole planning stack by default. Use a compact context packet that tells the agent what to use, what to ignore, what to preserve, and how to verify alignment.
-
-See [`docs/agent-context-feeding.md`](./docs/agent-context-feeding.md) for:
-
-- context packet templates
-- artifact-specific prompts for framing docs, shaping docs, breadboards, slice plans, kickoff docs, and reflections
-- stable ID conventions for requirements, places, affordances, stores, and slices
-- chunking rules for large artifacts
-- drift-handling protocol when implementation reality conflicts with the plan
-
-## Canvas export
-
-Breadboard tables are the source of truth. Mermaid diagrams are portable visual projections. Canvas tools such as TLDraw, Excalidraw, FigJam, and Miro are review and collaboration surfaces.
-
-See [`docs/canvas-export.md`](./docs/canvas-export.md) for the canvas export contract:
-
-- stable ID rules for canvas-friendly diagrams
-- Mermaid-to-canvas adapter pattern
-- static image export versus semantic object export
-- guidance for keeping tables authoritative over diagrams and canvases
-
-## Examples
-
-If you want to see the skills used step by step, start in [`examples/`](./examples).
-
-The included `simple-grocery-list` example walks through:
-- raw source notes
-- a frame
-- shaping with competing directions
-- an optional kickoff doc
-- a breadboard
-- a post-implementation breadboard reflection
-
-## Using these skills across agent tools
-
-The `SKILL.md` files are plain Markdown instructions. Use them as native skills where supported, or as reusable prompt templates / repo-local instruction docs elsewhere.
-
-The core workflow stays the same:
-
-1. Start with raw notes or transcripts.
-2. Create a frame.
-3. Shape the problem: criteria, alternative shapes, fit checks, and selected direction.
-4. Breadboard the chosen shape.
-5. Add contracts and executable breadboard details when the selected slice needs them.
-6. Feed the selected planning artifacts into the agent as a compact context packet.
-7. Check drift during implementation.
-8. Reflect against implementation later when code exists.
-
-What changes across tools is just **how you invoke the instructions**, not the method itself. See [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md) for the current support matrix and prompt recipes.
-
-### Plain markdown workflow
-
-The simplest portable setup is to keep the skill files in your repo and point your tool at them explicitly.
-
-Example structure:
+## First useful prompt
 
 ```text
-docs/planning-skills/
-  framing-doc.md
-  shaping.md
-  breadboarding.md
-  interface-contracts.md
-  executable-breadboards.md
-  kickoff-doc.md
-  breadboard-reflection.md
-  feed-planning-context.md
+Use this repository's planning workflow.
 
-planning/
-  frame.md
-  shaping.md
-  breadboard.md
-  interface-contracts.md
-  executable-breadboard.md
-  context-packet.md
-  runs/
+First determine whether this work needs framing, shaping, or breadboarding.
+Do not implement code until a direction and demoable slice are selected.
+Keep requirements separate from mechanisms, preserve explicit non-goals,
+and stop at human decisions about scope, appetite, or direction.
+
+Source material:
+[paste notes, transcript, request, or links here]
 ```
 
-Example prompt:
+The tool-neutral operating rules live in [`AGENTS.md`](./AGENTS.md). The machine-readable modes, gates, allowed outputs, forbidden moves, artifacts, and hooks live in [`.agent-orchestration.yaml`](./.agent-orchestration.yaml).
 
-```text
-Read docs/planning-skills/shaping.md first.
-Then help me shape this feature.
-Separate requirements from mechanisms, compare options, run a fit check, and write the result to planning/shaping.md.
-```
+## Why this exists
 
-### Cursor
+AI coding tools can one-shot simple applications. Larger bets fail differently: the agent fills missing product decisions, requirements collapse into mechanisms, rejected ideas return as scope, or implementation silently drifts from the selected direction.
 
-In Cursor, these skills work best as repo-local rules, prompt files, or docs the agent is told to read before acting.
+This repository makes the planning stack explicit enough for humans and agents to share:
 
-Example prompt:
+- what problem is being solved
+- which requirements judge fitness
+- which shape was selected and which were rejected
+- how the behavior and state fit together
+- what the current slice includes and excludes
+- what the implementation agent must preserve
+- what proves the slice is complete
+- when reality requires the plan to change
 
-```text
-Use the breadboarding instructions from docs/planning-skills/breadboarding.md.
-Create a breadboard for the chosen shape in planning/breadboard.md.
-Focus on places, affordances, visible consequences, and hidden system behavior that matters.
-```
+The operating philosophy is in [The Work Should Get Clearer](./MANIFESTO.md).
 
-### Gemini CLI
+## Planning Skills, Spec Kit, and implementation harnesses
 
-Gemini CLI uses the root [`GEMINI.md`](./GEMINI.md), which imports [`AGENTS.md`](./AGENTS.md), and the project-local commands in `.gemini/commands/`.
+These tools address different layers:
 
-See [`docs/gemini-usage.md`](./docs/gemini-usage.md) for:
+| Layer | Primary question |
+| --- | --- |
+| **Planning Skills** | What should we build, which path fits, and what intent must survive implementation? |
+| **Spec Kit** | How should the selected slice become an implementation-specific plan, task structure, and technical specification? |
+| **Implementation harnesses** | How should agents execute, test, review, and recover reliably inside a real codebase? |
 
-- `/criteria`
-- `/sketch-shapes`
-- `/fit-check`
-- `/select-shape`
-- `/check-drift`
+Planning Skills is the upstream planning and alignment layer, not a replacement for either downstream category.
 
-### Codex
+## Use across agent tools
 
-Codex-style workflows should use [`AGENTS.md`](./AGENTS.md), [`.agent-orchestration.yaml`](./.agent-orchestration.yaml), and the prompt equivalents in [`docs/codex-usage.md`](./docs/codex-usage.md).
+The method is tool-agnostic. Invocation differs by environment:
 
-Example prompt:
+| Environment | Recommended surface |
+| --- | --- |
+| Claude Code | Plugin skills plus `.claude/commands/` wrappers |
+| Codex | Codex plugin, `AGENTS.md`, and prompt recipes |
+| Gemini CLI | `GEMINI.md` plus `.gemini/commands/` wrappers |
+| MCP-compatible clients | The optional server under `mcp-server/` |
+| Cursor and other agents | `AGENTS.md`, canonical `SKILL.md` files, and templates |
 
-```text
-Use AGENTS.md and shaping/SKILL.md.
-Run the fit-check gate only.
-Compare the existing criteria and candidate shapes in planning/shaping.md.
-Do not select a direction unless I explicitly choose one.
-Do not breadboard or implement.
-```
+See the [invocation matrix](./docs/agent-invocation-matrix.md) for exact mappings.
 
-### MCP server
+### Claude Code
 
-The included MCP server exposes planning skills and starter artifact templates to tools that prefer capability discovery over pasted docs.
-
-It can return:
-
-- planning skill instructions
-- artifact templates
-- the orchestration manifest
-
-See `mcp-server/src/index.ts` for the exposed tool surface.
-
-### Summary
-
-- **Claude Code**: native skill packaging, `.claude/commands/`, `.claude/loop.md`, optional hooks
-- **Gemini CLI**: `GEMINI.md` plus `.gemini/commands/`
-- **Codex**: `AGENTS.md`, `.agent-orchestration.yaml`, plugin skills, and prompt equivalents in `docs/codex-usage.md`
-- **MCP-compatible tools**: MCP server for skill and template discovery
-- **Other tools**: prompt-template or repo-doc packaging
-- **All agents**: preserve the same planning gates and source-of-truth artifacts
-
-So the workflow is tool-agnostic in substance, with optional tool-specific packaging.
-
-## Install for Claude Code
-
-### As a Claude Code plugin
-
-Use the repository root as the plugin directory:
+Clone the repository and use it as a plugin directory:
 
 ```bash
 git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
@@ -318,59 +109,57 @@ cd ~/.local/share/planning-skills-for-agents-and-humans
 claude --plugin-dir .
 ```
 
-Then reload plugins in Claude Code:
+See [Claude Code plugin guidance](./docs/claude-code-plugin.md) and [slash commands](./docs/claude-slash-commands.md).
 
-```text
-/reload-plugins
-```
+### Codex
 
-### As direct local skills
+Use the packaged skills through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), with `AGENTS.md` as the repo-level instruction surface.
 
-If you prefer direct skill symlinks, link each folder from the repo's `skills/` directory:
+See [Codex plugin installation](./docs/codex-plugin.md) and [Codex prompt recipes](./docs/codex-usage.md).
 
-```bash
-git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
+### Gemini CLI
 
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/framing-doc ~/.claude/skills/framing-doc
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/kickoff-doc ~/.claude/skills/kickoff-doc
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/shaping ~/.claude/skills/shaping
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboarding ~/.claude/skills/breadboarding
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/interface-contracts ~/.claude/skills/interface-contracts
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/executable-breadboards ~/.claude/skills/executable-breadboards
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboard-reflection ~/.claude/skills/breadboard-reflection
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/feed-planning-context ~/.claude/skills/feed-planning-context
-```
+Open the repository in Gemini CLI so `GEMINI.md` imports the shared agent instructions and `.gemini/commands/` exposes the project commands.
 
-Each skill should be a direct child of `~/.claude/skills/`.
+See [Gemini CLI usage](./docs/gemini-usage.md).
 
-## Optional Claude Code hooks
-
-This repo includes small hooks that remind the agent to keep planning artifacts and implementation aligned.
+### MCP server
 
 ```bash
-mkdir -p ~/.claude/hooks
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/hooks/planning-ripple.sh ~/.claude/hooks/planning-ripple.sh
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/hooks/pre-build-context-check.sh ~/.claude/hooks/pre-build-context-check.sh
-ln -s ~/.local/share/planning-skills-for-agents-and-humans/hooks/planning-drift-check.sh ~/.claude/hooks/planning-drift-check.sh
+cd mcp-server
+npm ci
+npm run check
+npm start
 ```
 
-See [`docs/lifecycle-hooks.md`](./docs/lifecycle-hooks.md) for setup examples.
+See the [MCP server README](./mcp-server/README.md) for client configuration and exposed tools.
 
-The hooks are reminders, not a hidden planning method. They help check whether updates are needed in:
+## Examples
 
-- frame
-- shaping.md
-- requirements table
-- shape parts / mechanisms
-- CURRENT baseline or selected Detail X
-- fit checks
-- unknowns / spikes
-- breadboard tables
-- interface contracts
-- executable breadboard examples
-- wiring table
-- Mermaid diagram
-- slices.md
-- slice definitions and sequencing
-- context packet
-- agent run log
+- [`simple-grocery-list`](./examples/simple-grocery-list/) is a deliberately small walkthrough of the foundational workflow.
+- [`existing-codebase-drift`](./examples/existing-codebase-drift/) demonstrates how to surface differences between an intended breadboard and implementation reality.
+
+These are teaching examples, not evidence of comparative model performance. A realistic codebase-scale case study remains a useful next addition.
+
+## Repository integrity
+
+The root skill folders are canonical. The `skills/` directory is generated packaging for plugin consumers.
+
+After changing a canonical skill:
+
+```bash
+bash scripts/sync-packaged-skills.sh
+bash scripts/check-repo-health.sh
+```
+
+The health check verifies packaged-skill parity, manifest and artifact references, version parity, command wrappers, generated plugin output, and the MCP build and tests. See [CI health](./docs/ci-health-workflow.md).
+
+The fixtures under `evals/` are structural contract checks, not behavioral model benchmarks.
+
+## License
+
+Released under the [MIT License](./LICENSE).
+
+## Optional lightweight demo
+
+For a quick conversational feel before installing the repository, try the [Shape to Slice Assistant](https://chatgpt.com/g/g-699222e353288191afb01ea178db6da6-shape-to-slice-assistant).

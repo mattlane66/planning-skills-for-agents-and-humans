@@ -1,3 +1,8 @@
 .DS_Store
 __MACOSX/
 ._*
+
+dist/
+mcp-server/dist/
+mcp-server/node_modules/
+__pycache__/

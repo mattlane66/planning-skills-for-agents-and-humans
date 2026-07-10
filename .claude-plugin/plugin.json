@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "planning-skills",
-  "description": "Turn fuzzy requests, messy transcripts, and partial designs into planning artifacts that humans and agents can build from. Includes framing, shaping, breadboarding, interface contracts, executable breadboards, kickoff docs, planning-context packets, drift checks, and breadboard reflection.",
-  "version": "1.0.1",
+  "description": "Turn fuzzy requests, messy transcripts, and partial designs into planning artifacts that humans and agents can build from. Includes framing, shaping, breadboarding, interface contracts, executable breadboards, vertical task grouping, context packets, drift checks, and reflection.",
+  "version": "1.1.0",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"

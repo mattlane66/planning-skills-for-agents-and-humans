@@ -1,4 +1,4 @@
-# Golden eval: drift check strict output
+# Contract fixture: drift check strict output
 
 ## Input
 

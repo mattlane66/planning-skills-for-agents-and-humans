@@ -146,12 +146,12 @@ modes:
     exit_gate: reflection_recorded
 
 artifacts:
-  frame: templates/framing-doc.md
+  frame: templates/frame.md
   shaping: templates/shaping.md
   breadboard: templates/breadboard.md
   interface_contracts: templates/interface-contracts.md
   executable_breadboard: templates/executable-breadboard.md
-  dumplink: dumplink/SKILL.md
+  dumplink: templates/dumplink.md
   context_packet: templates/context-packet.md
   drift_check: templates/drift-check.md
   agent_run_log: templates/agent-run-log.md

@@ -17,9 +17,10 @@ Codex should honor the workflow in `AGENTS.md`:
 7. Slice into demoable increments.
 8. Add interface contracts when the selected slice crosses meaningful boundaries.
 9. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
-10. Feed only the relevant planning context to implementation.
-11. Check drift during implementation.
-12. Reflect against implementation and repair drift.
+10. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+11. Feed only the relevant planning context to implementation.
+12. Check drift during implementation.
+13. Reflect against implementation and repair drift.
 
 The important behavior is the gate discipline:
 
@@ -99,6 +100,14 @@ Flag missing expected outputs or edge cases instead of inventing them.
 Do not implement yet.
 ```
 
+### Dumplink
+
+```text
+Use AGENTS.md and dumplink/SKILL.md.
+Create a Dumplink plan for [selected shaped work] only if it needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.
+Preserve the selected shape, appetite, and non-goals. Do not create a horizontal discipline backlog or implement code.
+```
+
 ## Context packet before implementation
 
 Before using Codex for build work, use the context-feeding protocol instead of pasting the whole planning stack.
@@ -106,7 +115,7 @@ Before using Codex for build work, use the context-feeding protocol instead of p
 ```text
 Use AGENTS.md and feed-planning-context/SKILL.md.
 Create a compact context packet for implementing [selected slice].
-Include only the relevant frame, shaping decision, breadboard rows, contracts, examples, edge cases, non-goals, and verification target.
+Include only the relevant frame, shaping decision, breadboard rows, contracts, examples, Dumplink task group when present, non-goals, execution contract, and verification target.
 Do not implement yet.
 ```
 

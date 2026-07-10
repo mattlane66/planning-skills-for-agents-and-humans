@@ -1,8 +1,6 @@
 ---
 name: breadboarding
 description: Map a chosen solution into places, affordances, consequences, stores, and wiring.
-planning: true
-shaping: true
 ---
 
 # Breadboarding

@@ -1,7 +1,7 @@
 {
   "name": "planning-skills-for-agents-and-humans",
-  "version": "0.1.0",
-  "description": "Planning workflows for framing, shaping, breadboarding, interface contracts, executable breadboards, context packets, reflection, and agent harnessing.",
+  "version": "1.1.0",
+  "description": "Planning workflows for framing, shaping, breadboarding, interface contracts, executable breadboards, vertical task grouping, context packets, reflection, and agent harnessing.",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"
@@ -34,6 +34,7 @@
       "Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.",
       "Use the interface-contracts skill to define plain-language contracts for the selected slice boundaries.",
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
+      "Use the dumplink skill when selected work needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.",
       "Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.",
       "Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts."
     ]

@@ -4,6 +4,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 DIST_DIR="$ROOT_DIR/dist/claude-code-plugin"
 
+bash "$ROOT_DIR/scripts/sync-packaged-skills.sh" --check
+
 SKILLS=(
   "framing-doc"
   "shaping"

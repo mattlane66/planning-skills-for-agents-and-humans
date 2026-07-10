@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -uo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$ROOT_DIR"
 
 failures=0
 
@@ -16,54 +19,81 @@ check_file_exists() {
   local file="$1"
   if [[ -f "$file" ]]; then
     pass "Found: $file"
-  else
-    fail "Missing: $file"
+    return 0
   fi
+  fail "Missing: $file"
+  return 1
 }
 
 check_json() {
   local file="$1"
-  check_file_exists "$file"
-  python3 -m json.tool "$file" >/dev/null
-  pass "Valid JSON: $file"
+  check_file_exists "$file" || return
+  if python3 -m json.tool "$file" >/dev/null; then
+    pass "Valid JSON: $file"
+  else
+    fail "Invalid JSON: $file"
+  fi
 }
 
 check_toml() {
   local file="$1"
-  check_file_exists "$file"
-  python3 - "$file" <<'PY'
+  check_file_exists "$file" || return
+  if python3 - "$file" <<'PY'
 import pathlib
 import sys
+import tomllib
 
 path = pathlib.Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
-try:
-    import tomllib
-except ModuleNotFoundError:
-    if "description" not in text or "prompt" not in text:
-        raise SystemExit(f"missing required TOML keys in {path}")
-else:
-    tomllib.loads(text)
+tomllib.loads(path.read_text(encoding="utf-8"))
 PY
-  pass "Valid TOML: $file"
+  then
+    pass "Valid TOML: $file"
+  else
+    fail "Invalid TOML: $file"
+  fi
 }
 
 check_skill_frontmatter() {
   local file="$1"
-  check_file_exists "$file"
-  python3 - "$file" <<'PY'
+  check_file_exists "$file" || return
+  if python3 - "$file" <<'PY'
 import pathlib
 import sys
 
 path = pathlib.Path(sys.argv[1])
-text = path.read_text(encoding="utf-8")
-lines = text.splitlines()
+lines = path.read_text(encoding="utf-8").splitlines()
 if not lines or lines[0].strip() != "---":
     raise SystemExit(f"missing opening frontmatter marker: {path}")
-if "name:" not in text or "description:" not in text:
-    raise SystemExit(f"missing required frontmatter keys: {path}")
+try:
+    end = lines[1:].index("---") + 1
+except ValueError as exc:
+    raise SystemExit(f"missing closing frontmatter marker: {path}") from exc
+
+keys = {}
+for line in lines[1:end]:
+    if not line.strip() or line.lstrip().startswith("#"):
+        continue
+    if line[0].isspace():
+        continue
+    if ":" not in line:
+        raise SystemExit(f"invalid frontmatter line in {path}: {line!r}")
+    key, value = line.split(":", 1)
+    keys[key.strip()] = value.strip()
+
+for required in ("name", "description"):
+    if not keys.get(required):
+        raise SystemExit(f"missing required frontmatter key {required!r}: {path}")
+
+allowed = {"name", "description", "allowed-tools", "license", "metadata"}
+unexpected = sorted(set(keys) - allowed)
+if unexpected:
+    raise SystemExit(f"unexpected frontmatter keys in {path}: {', '.join(unexpected)}")
 PY
-  pass "Valid skill frontmatter: $file"
+  then
+    pass "Valid skill frontmatter: $file"
+  else
+    fail "Invalid skill frontmatter: $file"
+  fi
 }
 
 SKILLS=(
@@ -79,58 +109,45 @@ SKILLS=(
 )
 
 CLAUDE_COMMANDS=(
-  frame
-  shape
-  criteria
-  sketch-shapes
-  fit-check
-  select-shape
-  breadboard
-  dumplink
-  kickoff
-  feed-context
-  check-drift
-  reflect-breadboard
+  frame shape criteria sketch-shapes fit-check select-shape breadboard dumplink
+  kickoff feed-context check-drift reflect-breadboard
 )
 
-GEMINI_COMMANDS=(
-  criteria
-  sketch-shapes
-  fit-check
-  select-shape
-  dumplink
-  check-drift
-)
+GEMINI_COMMANDS=(criteria sketch-shapes fit-check select-shape dumplink check-drift)
 
 TEMPLATES=(
-  frame
-  shaping
-  breadboard
-  interface-contracts
-  executable-breadboard
-  slices
-  context-packet
-  kickoff
-  breadboard-reflection
-  drift-check
-  agent-run-log
-  spike
-  decision-log
-  appetite-card
+  frame shaping breadboard interface-contracts executable-breadboard dumplink
+  slices context-packet kickoff breadboard-reflection drift-check agent-run-log
+  orchestration-plan spike decision-log appetite-card
 )
 
-echo "Checking manifests..."
+DOCS=(
+  README.md AGENTS.md GEMINI.md CHANGELOG.md LICENSE
+  docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
+  docs/agent-loop-design.md docs/full-modern-agent-workflow.md
+  docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
+  docs/codex-usage.md docs/agent-invocation-matrix.md docs/agent-run-records.md
+  docs/lifecycle-hooks.md docs/human-decision-gates.md docs/plan-quality-rubric.md
+)
+
+echo "Checking manifests and licensing..."
 check_json .claude-plugin/plugin.json
 check_json .codex-plugin/plugin.json
 check_json .agents/plugins/marketplace.json
 check_file_exists .agent-orchestration.yaml
+check_file_exists LICENSE
 
 echo
-echo "Checking skills..."
+echo "Checking canonical and packaged skills..."
 for skill in "${SKILLS[@]}"; do
   check_skill_frontmatter "$skill/SKILL.md"
   check_skill_frontmatter "skills/$skill/SKILL.md"
 done
+if bash scripts/sync-packaged-skills.sh --check; then
+  pass "All packaged skills match their canonical root skills"
+else
+  fail "One or more packaged skills differ from their canonical root skills"
+fi
 
 echo
 echo "Checking command wrappers..."
@@ -142,60 +159,97 @@ for command in "${GEMINI_COMMANDS[@]}"; do
 done
 
 echo
-echo "Checking templates..."
+echo "Checking templates and orchestration references..."
 for template in "${TEMPLATES[@]}"; do
   check_file_exists "templates/$template.md"
 done
+if python3 - <<'PY'
+import pathlib
+import re
+
+manifest = pathlib.Path(".agent-orchestration.yaml").read_text(encoding="utf-8")
+artifacts = manifest.split("\nartifacts:\n", 1)[1].split("\nhooks:\n", 1)[0]
+paths = re.findall(r"^  [a-z_]+:\s+([^\s]+)$", artifacts, flags=re.MULTILINE)
+missing = [path for path in paths if not pathlib.Path(path).is_file()]
+if missing:
+    raise SystemExit("Missing orchestration artifacts: " + ", ".join(missing))
+PY
+then
+  pass "Every orchestration artifact reference resolves"
+else
+  fail "One or more orchestration artifact references are broken"
+fi
 
 echo
-echo "Checking key docs..."
-check_file_exists README.md
-check_file_exists AGENTS.md
-check_file_exists GEMINI.md
-check_file_exists docs/start-here.md
-check_file_exists docs/agent-workflow.md
-check_file_exists docs/agent-context-feeding.md
-check_file_exists docs/agent-loop-design.md
-check_file_exists docs/full-modern-agent-workflow.md
-check_file_exists docs/dumplink-usage.md
-check_file_exists docs/claude-slash-commands.md
-check_file_exists docs/gemini-usage.md
-check_file_exists docs/codex-usage.md
-check_file_exists docs/agent-run-records.md
-check_file_exists docs/lifecycle-hooks.md
+echo "Checking documentation and discovery surfaces..."
+for file in "${DOCS[@]}"; do
+  check_file_exists "$file"
+done
+for required in "docs/start-here.md" "dumplink" "MIT"; do
+  if grep -q "$required" README.md; then
+    pass "README includes $required"
+  else
+    fail "README is missing $required"
+  fi
+done
+if python3 scripts/check-local-links.py; then
+  pass "Local Markdown links resolve"
+else
+  fail "One or more local Markdown links are broken"
+fi
 
 echo
-echo "Checking hooks..."
+echo "Checking version parity..."
+if python3 - <<'PY'
+import json
+
+with open(".claude-plugin/plugin.json", encoding="utf-8") as f:
+    claude = json.load(f)["version"]
+with open(".codex-plugin/plugin.json", encoding="utf-8") as f:
+    codex = json.load(f)["version"]
+with open("mcp-server/package.json", encoding="utf-8") as f:
+    mcp = json.load(f)["version"]
+if len({claude, codex, mcp}) != 1:
+    raise SystemExit(f"Version mismatch: Claude={claude}, Codex={codex}, MCP={mcp}")
+PY
+then
+  pass "Claude, Codex, and MCP versions match"
+else
+  fail "Claude, Codex, and MCP versions do not match"
+fi
+
+echo
+echo "Checking hooks and contract fixtures..."
 check_file_exists hooks/planning-ripple.sh
 check_file_exists hooks/pre-build-context-check.sh
 check_file_exists hooks/planning-drift-check.sh
-
-echo
-echo "Checking eval fixtures..."
-check_file_exists evals/README.md
-check_file_exists evals/golden/context-packet-execution-contract.md
-check_file_exists evals/golden/dumplink-vertical-groups.md
-check_file_exists evals/golden/drift-check-strict-output.md
-check_file_exists scripts/check-golden-evals.sh
-
-echo
-echo "Checking parity rules..."
-if grep -q '^## Execution contract' templates/context-packet.md && grep -q 'Execution contract' mcp-server/src/index.ts; then
-  pass "Context packet templates include execution contracts"
+if bash scripts/check-golden-evals.sh; then
+  pass "Contract fixture checks passed"
 else
-  fail "Context packet templates must include execution contracts"
+  fail "Contract fixture checks failed"
 fi
 
-if grep -q 'dumplink' AGENTS.md && grep -q 'dumplink' .agent-orchestration.yaml && grep -q 'dumplink' mcp-server/src/index.ts; then
-  pass "Dumplink is discoverable from AGENTS, orchestration, and MCP"
+echo
+echo "Building generated Claude bundle..."
+if bash scripts/build-claude-plugin.sh >/dev/null; then
+  for skill in "${SKILLS[@]}"; do
+    check_file_exists "dist/claude-code-plugin/skills/$skill/SKILL.md"
+  done
+  check_json dist/claude-code-plugin/.claude-plugin/plugin.json
 else
-  fail "Dumplink is missing from one or more discovery surfaces"
+  fail "Claude plugin bundle failed to build"
 fi
 
-if [[ -f scripts/check-golden-evals.sh ]]; then
-  bash scripts/check-golden-evals.sh
+echo
+echo "Checking MCP server..."
+if command -v npm >/dev/null 2>&1; then
+  if (cd mcp-server && npm ci --ignore-scripts && npm run check); then
+    pass "MCP server installs, builds, and passes tests"
+  else
+    fail "MCP server verification failed"
+  fi
 else
-  fail "scripts/check-golden-evals.sh is missing"
+  fail "npm is required to verify the MCP server"
 fi
 
 echo

@@ -1,10 +1,12 @@
 # Simple Grocery List — Step-by-Step Example
 
-This example shows how to use the skills in this repo on a tiny, easy-to-understand feature:
+This example shows the foundational Frame → Shape → Breadboard workflow on a tiny, easy-to-understand feature:
 
 > A shared grocery list app where a user can add items, mark them as bought, hide bought items, and keep the list between sessions on the same device.
 
 The point is not the app itself. The point is to make the workflow obvious.
+
+It intentionally stops short of the advanced interface-contract, executable-breadboard, Dumplink, context-packet, drift-check, and run-log steps. Use [`docs/start-here.md`](../../docs/start-here.md) to choose those moves when a larger project needs them.
 
 ## Why this example is useful
 

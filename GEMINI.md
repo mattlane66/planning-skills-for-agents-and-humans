@@ -10,5 +10,7 @@ Gemini CLI users can also use project-local custom commands in `.gemini/commands
 - `/sketch-shapes`
 - `/fit-check`
 - `/select-shape`
+- `/dumplink`
+- `/check-drift`
 
-These commands are Gemini-native wrappers around the same shaping workflow. They should preserve the same decision gates as `AGENTS.md` rather than creating a parallel method.
+These commands are Gemini-native wrappers around the same planning workflow. They should preserve the same decision gates and authority order as `AGENTS.md` rather than creating a parallel method.
