@@ -19,6 +19,7 @@ The commands live in:
 | `/fit-check` | `shaping/SKILL.md` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | `shaping/SKILL.md` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
 | `/breadboard` | `breadboarding/SKILL.md` | Map places, affordances, stores, wiring, and demoable slices. |
+| `/dumplink` | `dumplink/SKILL.md` | Create vertical task groups, dependency-aware sequence, risk states, scope cuts, and a bounded handoff. |
 | `/kickoff` | `kickoff-doc/SKILL.md` | Turn kickoff notes or transcripts into a builder-facing reference document. |
 | `/feed-context` | `feed-planning-context/SKILL.md` | Package planning artifacts into a compact context packet for implementation work. |
 | `/check-drift` | `AGENTS.md` + `docs/loop-prompting.md` | Check implementation direction against selected planning artifacts and stop if drift is found. |
@@ -93,6 +94,10 @@ From a Claude Code session in the repository, run commands with arguments:
 ```
 
 ```text
+/dumplink planning/shaping.md planning/breadboard.md
+```
+
+```text
 /kickoff transcripts/kickoff-call.md
 ```
 
@@ -118,6 +123,9 @@ Keep the canonical workflow details in the skill files:
 framing-doc/SKILL.md
 shaping/SKILL.md
 breadboarding/SKILL.md
+interface-contracts/SKILL.md
+executable-breadboards/SKILL.md
+dumplink/SKILL.md
 kickoff-doc/SKILL.md
 feed-planning-context/SKILL.md
 breadboard-reflection/SKILL.md

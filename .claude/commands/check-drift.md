@@ -18,11 +18,12 @@ Check against the highest-authority available artifacts, in this order:
 2. selected slice or kickoff doc
 3. executable breadboard, when present
 4. selected interface contract, when present
-5. selected breadboard
-6. selected shaping direction
-7. framing doc
-8. raw notes and transcripts
-9. rejected alternatives and brainstorming
+5. selected Dumplink task group and sequence, when present
+6. selected breadboard
+7. selected shaping direction
+8. framing doc
+9. raw notes and transcripts
+10. rejected alternatives and brainstorming
 
 Inspect only what is needed to answer the drift question. Do not broaden into a full code review.
 
@@ -35,6 +36,7 @@ Pay special attention to:
 - breadboard places, affordances, stores, and wiring
 - interface contracts
 - executable breadboard examples, fixtures, expected outputs, edge cases, and tests
+- active Dumplink task group, dependency order, risk state, and scope cuts
 - verification target
 
 Return only one of these forms:

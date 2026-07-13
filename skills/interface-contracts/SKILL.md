@@ -1,8 +1,6 @@
 ---
 name: interface-contracts
 description: Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
-planning: true
-shaping: true
 ---
 
 # Plain-Language Interface Contracts
@@ -68,7 +66,6 @@ Use whichever inputs are available:
 
 ## Output format
 
-```md
 # [Project] — Plain-Language Interface Contracts
 
 ## Source references
@@ -110,7 +107,6 @@ Use whichever inputs are available:
 
 **Verification target**
 - ...
-```
 
 ## Contract table shorthand
 
@@ -126,74 +122,31 @@ When the contract is still embedded in a breadboard or executable breadboard, us
 
 Name the two parts exchanging data.
 
-Examples:
-
-- `U1 Submit order -> N2 Create order endpoint`
-- `N3 Import file -> N4 Normalize rows`
-- `Agent action -> GitHub issue creation tool`
-
 ### Input shape
 
-Include:
-
-- field names
-- types when known
-- required vs optional
-- arrays or nested objects
-- IDs and references
-- nullable fields
-- units, such as cents instead of dollars
+Include field names, types when known, required vs optional, arrays or nested objects, IDs and references, nullable fields, and units such as cents instead of dollars.
 
 ### Output shape
 
-Include:
-
-- success response
-- user-visible result
-- state written or updated
-- fields the next slice depends on
+Include the success response, user-visible result, state written or updated, and fields the next slice depends on.
 
 ### Branches and errors
 
 Name the non-happy paths the implementation must handle.
 
-Examples:
-
-- missing required field
-- invalid enum value
-- duplicate record
-- permission denied
-- unavailable external service
-- partial import success
+Examples: missing required field, invalid enum value, duplicate record, permission denied, unavailable external service, or partial import success.
 
 ### Open decisions
 
 List decisions that should not be invented by the implementation agent.
 
-Examples:
-
-- Should a missing optional value be omitted or sent as `null`?
-- Is status limited to `pending`, `confirmed`, and `failed`?
-- Are prices represented in cents or decimal dollars?
-- Who owns the canonical ID: client, server, imported system, or database?
+Examples: whether missing optional values are omitted or null, allowed status values, money units, or who owns the canonical ID.
 
 ## Formalization prompt
 
 Use this only when moving from planning into implementation preparation:
 
-```text
-Turn this plain-language interface contract into the smallest useful formal contract for the selected slice.
-
-Use OpenAPI 3.1, JSON Schema, TypeScript types, validators, or tests only if useful for the current implementation step.
-
-Before writing code, report:
-1. decisions that are fully specified
-2. decisions that are missing
-3. assumptions you would otherwise have to invent
-4. tests that would prove the implementation satisfies the contract
-
-Do not invent missing field names, nullability, enum values, or error cases. Flag them.
-```
+Turn this plain-language interface contract into the smallest useful formal contract for the selected slice. Use OpenAPI 3.1, JSON Schema, TypeScript types, validators, or tests only if useful for the current implementation step. Before writing code, report decisions that are fully specified, decisions that are missing, assumptions you would otherwise have to invent, and tests that would prove the implementation satisfies the contract. Do not invent missing field names, nullability, enum values, or error cases. Flag them.
 
 ## Quality checks
 

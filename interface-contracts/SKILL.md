@@ -1,8 +1,6 @@
 ---
 name: interface-contracts
 description: Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
-planning: true
-shaping: true
 ---
 
 # Plain-Language Interface Contracts

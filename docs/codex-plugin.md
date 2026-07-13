@@ -11,6 +11,7 @@ The Codex plugin includes these skills:
 - `breadboarding`
 - `interface-contracts`
 - `executable-breadboards`
+- `dumplink`
 - `breadboard-reflection`
 - `kickoff-doc`
 - `feed-planning-context`
@@ -80,6 +81,10 @@ Use the executable-breadboards skill to create examples, fixtures, expected outp
 ```
 
 ```text
+Use the dumplink skill to create vertical task groups, dependency-aware sequence, risk states, and scope cuts for this selected work.
+```
+
+```text
 Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.
 ```
 
@@ -97,9 +102,17 @@ shaping/                      -> skills/shaping/
 breadboarding/                -> skills/breadboarding/
 interface-contracts/          -> skills/interface-contracts/
 executable-breadboards/       -> skills/executable-breadboards/
+dumplink/                     -> skills/dumplink/
 breadboard-reflection/        -> skills/breadboard-reflection/
 kickoff-doc/                  -> skills/kickoff-doc/
 feed-planning-context/        -> skills/feed-planning-context/
 ```
 
-The root folders are useful for humans and other agent tools. The `skills/` folder is the plugin-packaged form Codex reads through `.codex-plugin/plugin.json`.
+The root folders are canonical. The `skills/` folder is the generated plugin-packaged form Codex reads through `.codex-plugin/plugin.json`.
+
+After changing a canonical skill, run:
+
+```bash
+bash scripts/sync-packaged-skills.sh
+bash scripts/check-repo-health.sh
+```

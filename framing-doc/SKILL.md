@@ -1,8 +1,6 @@
 ---
 name: framing-doc
 description: Create a framing document from notes, messages, or conversation transcripts.
-planning: true
-shaping: true
 ---
 
 # Framing Document

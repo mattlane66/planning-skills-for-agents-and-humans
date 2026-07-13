@@ -12,7 +12,7 @@ Gemini CLI discovers project-local custom commands from:
 .gemini/commands/
 ```
 
-This repo includes Gemini-native command wrappers for shaping gates and drift checks:
+This repo includes Gemini-native command wrappers for shaping gates, vertical task grouping, and drift checks:
 
 | Command | Purpose |
 |---|---|
@@ -20,6 +20,7 @@ This repo includes Gemini-native command wrappers for shaping gates and drift ch
 | `/sketch-shapes` | Sketch alternative shapes against accepted criteria without selecting one. |
 | `/fit-check` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
+| `/dumplink` | Turn selected shaped work into vertical task groups, dependency order, risk states, and scope cuts. |
 | `/check-drift` | Check implementation direction against selected planning artifacts and stop if drift is found. |
 
 These commands use Gemini's TOML command format and inject the relevant repo instructions and source files.
@@ -42,6 +43,10 @@ From a Gemini CLI session in the repository, run:
 
 ```text
 /select-shape planning/shaping.md "Choose B"
+```
+
+```text
+/dumplink planning/shaping.md planning/breadboard.md
 ```
 
 ```text

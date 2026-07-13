@@ -21,6 +21,12 @@ Example workspace layout:
       SKILL.md
     breadboarding/
       SKILL.md
+    interface-contracts/
+      SKILL.md
+    executable-breadboards/
+      SKILL.md
+    dumplink/
+      SKILL.md
     breadboard-reflection/
       SKILL.md
     kickoff-doc/
@@ -46,6 +52,7 @@ The MCP server exposes the planning skills as callable tools:
 - `get_planning_skill`
 - `recommend_planning_workflow`
 - `get_artifact_template`
+- `get_orchestration_manifest`
 
 This lets an agent retrieve the right planning instructions on demand instead of requiring the whole repo to be pasted into context.
 
