@@ -1,8 +1,6 @@
 ---
 name: shaping
 description: Collaboratively shape a problem and compare solution directions before implementation.
-planning: true
-shaping: true
 ---
 
 # Shaping

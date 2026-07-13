@@ -9,8 +9,10 @@ The Codex plugin includes these skills:
 - `framing-doc`
 - `shaping`
 - `breadboarding`
+- `statechart`
 - `interface-contracts`
 - `executable-breadboards`
+- `dumplink`
 - `breadboard-reflection`
 - `kickoff-doc`
 - `feed-planning-context`
@@ -72,11 +74,19 @@ Use the breadboarding skill to map places, affordances, stores, state, and wirin
 ```
 
 ```text
+Use the statechart skill to derive transitions for a selected stateful portion of an accepted breadboard without replacing the breadboard as source of truth.
+```
+
+```text
 Use the interface-contracts skill to define the plain-language boundary contracts for this selected slice.
 ```
 
 ```text
 Use the executable-breadboards skill to create examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.
+```
+
+```text
+Use the dumplink skill to create vertical task groups, dependency-aware sequence, risk states, and scope cuts for this selected work.
 ```
 
 ```text
@@ -95,11 +105,20 @@ Keep the root skill folders and the `skills/` copies aligned:
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
 breadboarding/                -> skills/breadboarding/
+statechart/                   -> skills/statechart/
 interface-contracts/          -> skills/interface-contracts/
 executable-breadboards/       -> skills/executable-breadboards/
+dumplink/                     -> skills/dumplink/
 breadboard-reflection/        -> skills/breadboard-reflection/
 kickoff-doc/                  -> skills/kickoff-doc/
 feed-planning-context/        -> skills/feed-planning-context/
 ```
 
-The root folders are useful for humans and other agent tools. The `skills/` folder is the plugin-packaged form Codex reads through `.codex-plugin/plugin.json`.
+The root folders are canonical. `skill-inventory.txt` defines the complete packaged set, and the `skills/` folder is the generated form Codex reads through `.codex-plugin/plugin.json`.
+
+After changing a canonical skill, run:
+
+```bash
+bash scripts/sync-packaged-skills.sh
+bash scripts/check-repo-health.sh
+```

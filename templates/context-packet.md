@@ -7,6 +7,7 @@ What the next planning or implementation move should do.
 - @planning/frame.md
 - @planning/shaping.md
 - @planning/breadboard.md
+- @planning/statechart.md, when a selected stateful scope needs it
 - @planning/slices.md
 - @planning/executable-breadboard.md, when the selected slice is ready for build handoff
 - @planning/interface-contracts.md, when boundary detail is split out separately
@@ -17,11 +18,14 @@ What the next planning or implementation move should do.
 2. Selected slice or kickoff doc
 3. Executable breadboard, when present
 4. Selected interface contract, for boundary-level input/output details
-5. Selected breadboard
-6. Selected shaping direction
-7. Framing doc
-8. Raw notes and transcripts
-9. Rejected alternatives and brainstorming
+5. Selected Dumplink task group and sequence, for task-group scope and build order
+6. Selected breadboard
+7. Selected shaping direction
+8. Framing doc
+9. Raw notes and transcripts
+10. Rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it.
 
 ## Use these sections first
 - ...
@@ -41,6 +45,7 @@ What the next planning or implementation move should do.
 - contract IDs and boundary names, when present
 - field names, required/optional distinctions, enum values, nullability, and error cases, when specified
 - Dumplink task group IDs, dependency order, risk states, and cuts, when present
+- statechart state and transition IDs with their source breadboard IDs, when present
 - explicit non-goals
 - demo path
 
@@ -49,6 +54,12 @@ What the next planning or implementation move should do.
 
 ## Relevant places / affordances / stores
 - ...
+
+## Relevant statechart
+- Selected scope:
+- States and transitions:
+- Source breadboard IDs:
+- Explicit gaps:
 
 ## Relevant executable breadboard
 - Selected slice:

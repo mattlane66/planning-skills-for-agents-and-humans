@@ -16,25 +16,25 @@ planning: true
 
 | ID | Place | Component | Affordance | Control | Wires Out | Returns To |
 |----|-------|-----------|------------|---------|-----------|------------|
-| U1 | P1 | add-form | item input | type | → N1 | — |
+| U1 | P1 | add-form | item input | type | → S3 | — |
 | U2 | P1 | add-form | add button | click | → N1 | — |
 | U3 | P1 | item-row | bought checkbox | click | → N4 | — |
 | U4 | P1 | filters | hide-bought toggle | click | → N6 | — |
 | U5 | P1 | list-view | visible items list | display | — | ← N8 |
-| U6 | P2 | add-form | duplicate message | display | — | ← N2 |
+| U6 | P2 | add-form | duplicate message | display | — | — |
 
 ## Non-UI Affordances
 
 | ID | Place | Component | Affordance | Control | Wires Out | Returns To |
 |----|-------|-----------|------------|---------|-----------|------------|
-| N1 | P1 | add-form | submit add request | call | → N2 | — |
-| N2 | P1 | item-rules | check duplicate | call | → N3, → U6 | — |
+| N1 | P1 | add-form | submit add request | call | → N2 | ← S3 |
+| N2 | P1 | item-rules | check duplicate | call | → N3, → P2 | — |
 | N3 | P1 | item-rules | add item to list | call | → N7 | — |
 | N4 | P1 | item-rules | update bought state | call | → N7 | — |
 | N5 | P1 | filters | apply hide-bought rule to current view | call | → N8 | — |
 | N6 | P1 | filters | update hide-bought preference | call | → N7 | — |
-| N7 | P1 | item-state | update current list state | call | → N9, → N5 | ← S1, S2 |
-| N8 | P1 | list-view | show current visible list | call | — | ← S1, S2 |
+| N7 | P1 | item-state | update current list state | call | → S1, S2, N9, N5 | ← S1, S2 |
+| N8 | P1 | list-view | show current visible list | call | — | → U5; ← S1, S2 |
 | N9 | P3 | persistence | save list and filter state | call | — | ← S1, S2 |
 | N10 | P3 | persistence | restore saved list and filter on startup | call | → N7 | → S1, S2 |
 
@@ -44,6 +44,7 @@ planning: true
 |----|-------|-------|-------------|
 | S1 | P1 | items | Array of grocery items with text and `bought` boolean |
 | S2 | P1 | hideBought | Boolean controlling whether bought items are filtered from view |
+| S3 | P1 | itemDraft | Current text in the add-item input before submission |
 
 ## Mermaid diagram
 
@@ -79,6 +80,7 @@ flowchart LR
       direction TB
       S1[("S1 items")]
       S2[("S2 hideBought")]
+      S3[("S3 itemDraft")]
     end
   end
 
@@ -94,20 +96,23 @@ flowchart LR
   end
 
   %% user actions
-  U1 --> N1
+  U1 -. "draft text" .-> S3
   U2 --> N1
   U3 --> N4
   U4 --> N6
 
   %% add flow
+  S3 -. "item text" .-> N1
   N1 --> N2
-  N2 -- "duplicate" --> U6
+  N2 -- "duplicate" --> P2
   N2 -- "not duplicate" --> N3
   N3 --> N7
 
   %% bought / filter flow
   N4 --> N7
   N6 --> N7
+  N7 -. "write items" .-> S1
+  N7 -. "write filter" .-> S2
   N7 --> N5
   N5 --> N8
   N8 -. "visible list" .-> U5

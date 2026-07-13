@@ -1,7 +1,7 @@
 ---
 description: Turn kickoff notes or transcripts into a builder-facing reference document organized by shaped territory.
 argument-hint: [kickoff notes/transcript paths and desired output path]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `kickoff-doc/SKILL.md` first and follow it as the primary instruction for this command.

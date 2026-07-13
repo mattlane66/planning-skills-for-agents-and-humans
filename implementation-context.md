@@ -1,215 +1,120 @@
 # Implementation Context
 
-A canonical handoff packet for turning selected planning artifacts into production implementation work.
+Compatibility template for handing one selected slice to an implementation agent.
 
-Use this after a direction and slice have been selected, and before asking a coding agent, Spec Kit workflow, or implementation harness to edit code. The goal is to preserve shaped intent while giving the builder enough concrete context to produce verifiable code.
-
-This file is intentionally not a full PRD, full transcript, or full planning archive. It is the smallest implementation-facing packet that can support the next build move.
+Prefer [`templates/context-packet.md`](./templates/context-packet.md) for new work. This file uses the same authority order and execution-contract rules so older links do not create a competing source of truth.
 
 ## When to use this
 
-Use `implementation-context.md` when:
-
-- a slice is selected for implementation
-- the agent needs enough context to edit code safely
-- planning artifacts exist, but should not all be pasted into context
-- you want to hand shaped work to Spec Kit, Claude Code, Codex, Cursor, HumanLayer, or another coding workflow
-- the team needs an authority order for resolving conflicts between code, tests, mocks, and planning docs
-
-Do not use this to replace framing, shaping, breadboarding, or slicing. This is the bridge from selected planning work into implementation.
-
-## How to use this
-
-1. Copy this file into the target project, usually as `planning/implementation-context.md`.
-2. Fill it for one selected slice only.
-3. Keep source artifacts referenced by path instead of pasting every upstream document.
-4. Feed this packet to the coding agent before implementation.
-5. If implementation reality conflicts with the packet, use the drift protocol instead of silently changing intent.
+Use it after a human has selected a direction and demoable slice, immediately before implementation. Reference upstream artifacts by path and include only the rows needed for the active slice.
 
 ## Template
 
 ```md
 # Implementation Context
 
-## Selected slice
+## Active task
 
-### Slice ID
-`SLICE-__`
+### Selected slice
+`V1`
 
 ### Build now
-What is being implemented in this pass.
+What this implementation pass must produce.
 
 ### Do not build now
-Explicit exclusions and non-goals for this pass.
+Explicit exclusions and non-goals.
 
 ### Demo path
 The smallest user-visible path that proves the slice works.
 
 ## Source artifacts
 
-List only the source artifacts needed for this implementation pass.
-
 - `planning/frame.md`
 - `planning/shaping.md`
 - `planning/breadboard.md`
-- `planning/slices.md`
-- `planning/kickoff.md`
-- `planning/breadboard-reflection.md`
+- `planning/statechart.md`, when relevant to this slice
+- `planning/interface-contracts.md`, when relevant
+- `planning/executable-breadboard.md`, when present
+- `planning/dumplink.md`, when an active task group governs scope or sequence
+- `planning/kickoff.md`, when present
 
 ## Authority order
 
-When artifacts disagree, use this order unless the user explicitly changes it.
-
 1. User's latest explicit instruction
-2. Existing production code and tests
-3. This implementation context packet
-4. Selected slice or kickoff doc
-5. Selected breadboard
-6. Selected shaping direction
-7. Framing doc
-8. Raw notes and transcripts
-9. Rejected alternatives and brainstorming
+2. Selected slice or kickoff doc
+3. Executable breadboard, when present
+4. Selected interface contract, for boundary-level input/output details
+5. Selected Dumplink task group and sequence, for task-group scope and build order
+6. Selected breadboard
+7. Selected shaping direction
+8. Framing doc
+9. Raw notes and transcripts
+10. Rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
 
 ## Must preserve
 
-The implementation must preserve:
-
-- selected requirement IDs: `REQ-__`
-- selected place IDs: `P-__`
-- selected affordance IDs: `AFF-__`
-- selected store IDs: `STORE-__`
-- selected slice ID: `SLICE-__`
+- selected requirement IDs
+- relevant place, affordance, and store IDs
+- selected slice ID and boundary
+- relevant statechart and transition IDs, when present
+- relevant contract IDs and field-level decisions, when present
+- executable examples, fixtures, expected outputs, and acceptance tests, when present
+- active Dumplink task-group boundary and sequence, when present
 - explicit non-goals
 - visible demo path
-- user-facing language or behavior that is already approved
 
-## System objects
+## Relevant behavior
 
-Name the domain objects, records, stores, services, external systems, or data structures this slice touches.
+| Source ID | Actor or system | Action / event | Expected response | Visible consequence |
+| --- | --- | --- | --- | --- |
 
-| ID | Object | Responsibility | Notes |
-|---|---|---|---|
-| `OBJ-01` |  |  |  |
+## Relevant statechart
 
-## Affordances and system responses
+- Selected scope:
+- States and transitions:
+- Source breadboard IDs:
+- Explicit gaps:
 
-Map each user/system action to the system response it must trigger.
+## Data and interface contracts
 
-| Affordance ID | Actor | Action | System response | Visible consequence |
-|---|---|---|---|---|
-| `AFF-01` | User |  |  |  |
+| Contract ID | Boundary | Inputs | Outputs | Branches / errors | Open decisions |
+| --- | --- | --- | --- | --- | --- |
 
-## State rules
+Do not invent missing field names, nullability, enum values, units, or error behavior.
 
-Define the states the implementation must handle.
+## Fixtures and example runs
 
-| State | Expected behavior | Notes |
-|---|---|---|
-| Loading |  |  |
-| Empty |  |  |
-| Success |  |  |
-| Error |  |  |
-| Disabled |  |  |
-| Permission denied |  |  |
+| Run ID | Starting state | Action | Expected visible result | Expected state change |
+| --- | --- | --- | --- | --- |
 
-## Data and API contracts
+## Acceptance checks
 
-Define any required data shape, API payload, event, command, query, migration, or schema change.
+| Check ID | Proves | How to verify |
+| --- | --- | --- |
 
-```ts
-// Add types, payloads, or schemas here when useful.
-```
+## Execution contract
 
-## Acceptance criteria
+- Goal condition:
+- Required checks:
+- Allowed files / areas:
+- Out-of-scope changes:
+- Return-to-planning conditions:
+- Checkpoint cadence:
+- Verification caveats:
 
-Use behavior-level criteria that can be checked by tests or manual QA.
+## Verification target
 
-```gherkin
-Given ...
-When ...
-Then ...
-```
-
-## Tests to add or preserve
-
-### Existing tests to preserve
-
-- `path/to/existing.test.ts`
-
-### New tests to add
-
-- `path/to/new.test.ts` — expected behavior
-
-### Manual QA
-
-- [ ] Demo path works
-- [ ] Empty state works
-- [ ] Error state works
-- [ ] Permission boundary works
-- [ ] Non-goals were not accidentally built
-
-## Implementation hints
-
-Likely files, modules, components, services, or commands. These are hints, not authority over the existing codebase.
-
-- `path/to/file`
-- `path/to/module`
-
-## Verification commands
-
-Commands to run before calling the work complete.
-
-```bash
-# examples
-npm test
-npm run lint
-npm run typecheck
-```
-
-## Rollout and safety notes
-
-Document anything needed to ship safely.
-
-- migration or backfill needed:
-- feature flag needed:
-- observability/logging needed:
-- analytics/event tracking needed:
-- accessibility requirements:
-- security/privacy considerations:
+What observable result proves the selected slice is complete.
 
 ## Drift protocol
 
-If implementation reality conflicts with this packet, do not silently patch around the plan.
+If implementation reality conflicts with this packet:
 
-Return:
-
-```md
-## Planning drift found
-
-The selected artifact says:
-- ...
-
-The implementation reality is:
-- ...
-
-Options:
-1. Update the code to match the artifact.
-2. Update the artifact because the original assumption was wrong.
-3. Split the slice and defer the conflicting part.
-
-Recommended move:
-- ...
-```
-
-## Done standard
-
-Before declaring work complete, verify:
-
-- [ ] implementation stayed inside the selected slice
-- [ ] code maps back to requirement, affordance, store, and slice IDs
-- [ ] acceptance criteria pass
-- [ ] relevant tests were added or preserved
-- [ ] non-goals were not implemented
-- [ ] planning drift was reported or repaired
-- [ ] follow-up planning changes are noted
+1. Name what the selected artifact says.
+2. Name what the implementation currently does or requires.
+3. Explain the product or scope risk.
+4. Recommend updating the code, updating the planning artifact, or splitting/cutting the slice.
+5. Do not silently change intent.
 ```

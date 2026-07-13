@@ -1,7 +1,7 @@
 ---
 description: Run fit checks and reverse fit checks across existing shapes without selecting a direction.
 argument-hint: [shaping file, criteria, shapes, notes, or selected comparison set]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.

@@ -44,7 +44,7 @@ An agent or engineer is ready to implement a selected slice and needs concrete e
 
 | ID | Slice | Demo path | Produces | Explicit exclusions |
 |---|---|---|---|---|
-| SLICE-01 | ... | ... | ... | ... |
+| V1 | ... | ... | ... | ... |
 
 ## Relevant breadboard structure
 

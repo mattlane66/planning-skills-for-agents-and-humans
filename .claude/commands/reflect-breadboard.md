@@ -1,7 +1,7 @@
 ---
 description: Sync a breadboard to implementation reality, identify drift, and find design smells.
 argument-hint: [breadboard path and implementation paths]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `breadboard-reflection/SKILL.md` first and follow it as the primary instruction for this command.

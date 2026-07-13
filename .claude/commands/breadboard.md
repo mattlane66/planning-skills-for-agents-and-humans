@@ -1,7 +1,7 @@
 ---
 description: Map a selected shape into places, affordances, stores, consequences, and wiring.
 argument-hint: [selected shape, requirements, notes, or target breadboard file]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `breadboarding/SKILL.md` first and follow it as the primary instruction for this command.

@@ -72,6 +72,10 @@ It is a way to stop intent from getting lost.
 | Raw notes, transcript, interview, or request need to become a clear problem | `/framing-doc` |
 | A framed problem needs paths, tradeoffs, risks, and a selected direction | `/shaping` |
 | A selected path needs visible behavior, state, affordances, and wiring | `/breadboarding` |
+| A selected stateful scope needs a precise transition model | `/statechart` |
+| A selected slice crosses a meaningful data or system boundary | `/interface-contracts` |
+| A selected slice needs fixtures, examples, edge cases, and acceptance checks | `/executable-breadboards` |
+| Selected work needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | `/dumplink` |
 | The build team needs a shared reference before creating tasks | `/kickoff-doc` |
 | An AI agent needs bounded context to vertically slice | `/feed-planning-context` |
 | The implementation has drifted from the plan | `/breadboard-reflection` |
@@ -245,7 +249,7 @@ Compare possible paths against:
 
 When the team cannot answer a hard question, run a focused test (e.g., a spike).
 
-Come back with a decision, not a report.
+Come back with evidence that resolves or sharpens the decision, not an unbounded report.
 
 ---
 

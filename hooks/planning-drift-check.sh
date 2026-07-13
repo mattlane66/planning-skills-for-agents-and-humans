@@ -14,7 +14,7 @@ fi
 
 should_remind=false
 
-if [[ "$tool_name" =~ ^(Write|Edit|MultiEdit)$ ]] && [[ -n "$file_path" ]] && [[ ! "$file_path" =~ (^planning/|^docs/|\.md$) ]]; then
+if [[ "$tool_name" =~ ^(Write|Edit)$ ]] && [[ -n "$file_path" ]] && [[ ! "$file_path" =~ (^planning/|^docs/|\.md$) ]]; then
   should_remind=true
 fi
 
@@ -29,7 +29,9 @@ Planning drift check:
 - Return only "No planning drift found." or the Planning drift found block.
 - Do not silently expand scope, change the selected shape, or implement rejected alternatives.
 MSG
-  exit 2
+  if [[ "${PLANNING_HOOK_STRICT:-0}" == "1" ]]; then
+    exit 2
+  fi
 fi
 
 exit 0

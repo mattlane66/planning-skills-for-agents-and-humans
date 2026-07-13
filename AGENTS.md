@@ -204,21 +204,19 @@ Use hooks as reminders and guardrails only. They should not become a hidden plan
 
 ## Stable IDs
 
-Preserve IDs such as:
+For new artifacts, default to the compact IDs used by the canonical templates:
 
-- `REQ-01`
-- `P-01`
-- `AFF-01`
-- `STORE-01`
-- `ST-01`
-- `TR-01`
-- `CONTRACT-01` or `C1`
-- `RUN-01`
-- `EDGE-01`
-- `T1`
-- `TG1`
-- `CUT-01`
-- `SLICE-01`
+- `R0`, `R1` — requirements / criteria
+- `P1` — places
+- `U1`, `N1` — UI and non-UI affordances
+- `S1` — stores
+- `ST1`, `TR1` — states and transitions
+- `C1` — interface contracts
+- `RUN1`, `E1` — example runs and edge cases
+- `SP1`, `T1`, `TG1`, `CUT1` — spikes, tasks, task groups, and cuts
+- `V1` — vertical slices
+
+Imported artifacts may already use forms such as `REQ-01`, `AFF-01`, or `SLICE-01`. Preserve those IDs rather than translating them solely for style consistency.
 
 Do not rename stable IDs just to improve wording. If the meaning changes, create a planning update or new ID.
 

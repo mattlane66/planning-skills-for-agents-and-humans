@@ -26,12 +26,12 @@ A good loop keeps working until a verifiable condition is met.
 Example:
 
 ```text
-/goal SLICE-01 is implemented, npm test exits 0, no files outside src/planning/* are changed, and the breadboard reflection has no unresolved drift.
+/goal V1 is implemented, npm test exits 0, no files outside src/planning/* are changed, and the breadboard reflection has no unresolved drift.
 ```
 
 Why this works:
 
-- `SLICE-01` gives the work a boundary.
+- `V1` gives the work a boundary.
 - `npm test exits 0` gives the work a check.
 - `no files outside src/planning/*` limits expansion.
 - `no unresolved drift` keeps implementation tied back to the planning artifact.

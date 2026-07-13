@@ -4,11 +4,14 @@ Use the shared repo-level agent instructions below as the primary context for Ge
 
 @./AGENTS.md
 
-Gemini CLI users can also use project-local custom commands in `.gemini/commands/` for gate-by-gate shaping:
+Gemini CLI users can also use project-local custom commands in `.gemini/commands/` for planning gates, optional state modeling, task grouping, and drift checks:
 
 - `/criteria`
 - `/sketch-shapes`
 - `/fit-check`
 - `/select-shape`
+- `/statechart`
+- `/dumplink`
+- `/check-drift`
 
-These commands are Gemini-native wrappers around the same shaping workflow. They should preserve the same decision gates as `AGENTS.md` rather than creating a parallel method.
+These commands are Gemini-native wrappers around the same planning workflow. They should preserve the same decision gates and authority order as `AGENTS.md` rather than creating a parallel method.

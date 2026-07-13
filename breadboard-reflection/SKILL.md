@@ -1,7 +1,6 @@
 ---
 name: breadboard-reflection
 description: Reflect on a breadboard by syncing it to implementation and finding design smells.
-planning: true
 ---
 
 # Breadboard Reflection

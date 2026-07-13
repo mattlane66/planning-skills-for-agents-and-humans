@@ -1,7 +1,7 @@
 ---
 description: Create or update only the requirements / criteria table before sketching solution shapes.
 argument-hint: [problem, notes, transcript, frame, or existing shaping file]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.
