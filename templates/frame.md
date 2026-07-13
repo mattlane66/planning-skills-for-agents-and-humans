@@ -46,6 +46,12 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 ### More about
 - ...
 
+## Criteria candidates (optional)
+
+| ID | Candidate criterion | Evidence or inference |
+|---|---|---|
+| R0 | ... | ... |
+
 ## Open questions
 - ...
 
@@ -54,3 +60,4 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - [ ] Problem lines are traceable to source or marked as inference.
 - [ ] Outcome lines describe effects, not mechanisms.
 - [ ] Boundaries prevent likely wrong directions without over-constraining the solution.
+- [ ] Criteria candidates, when present, are traceable, mechanism-free, and clearly preliminary.
