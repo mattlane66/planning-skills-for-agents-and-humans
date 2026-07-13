@@ -6,6 +6,50 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
+## When should I use these skills?
+
+You do not have to begin your idea inside this repo.
+
+Start wherever it is easiest to think: a conversation, whiteboard, document, Claude Design, Codex, rough prototype, or pile of notes. Explore freely while you are still discovering what the idea might be.
+
+Use these skills when the idea becomes important enough that you do not want its meaning to live only inside a conversation or disappear between prompts. This repo is the bridge between **playing with an idea** and **building it deliberately**.
+
+That usually happens when:
+
+- there are several plausible ways to solve the problem
+- a prototype looks promising, but you do not yet understand how it should behave
+- an agent is about to modify a real codebase
+- the work will take days or weeks rather than minutes
+- several people or agents need to share the same understanding
+- important requirements, boundaries, or decisions could easily be forgotten
+- you need to hand the work from exploration into implementation
+- implementation may be drifting away from the original intent
+
+### It is a mode switch, not necessarily a tool switch
+
+You can use the same agent for exploration, planning, and implementation. What changes is what you ask it to do:
+
+- **Explore:** “Help me think through this idea. Show me possibilities.”
+- **Plan:** “Stop proposing finished implementations. Clarify the problem, compare approaches, and record the decisions.”
+- **Build:** “Implement only this selected slice. Preserve these requirements and verify it against the breadboard.”
+
+A practical workflow is:
+
+1. Play with the idea in whichever tool helps you think.
+2. Stop when the work becomes consequential or ambiguous.
+3. Use the smallest skill that resolves the current uncertainty.
+4. Make the human decision about direction and scope.
+5. Give the coding agent a bounded slice and compact context packet.
+6. Check drift as implementation evolves.
+
+For example, you might begin in Claude Design by generating and revising screens. Once something feels promising, bring the useful outputs—screens, notes, decisions, unanswered questions, and transcript—into framing, shaping, and breadboarding before asking Codex to build a selected slice.
+
+You can also begin directly in Codex. For a small, obvious task, just make the change. For a larger or ambiguous task, tell Codex to use the relevant planning skill and stop before implementation or selection unless you explicitly authorize the next gate.
+
+Do not add planning ceremony where it provides no value. A small copy change, contained bug fix, disposable experiment, low-risk script, or already-clear change may not need the full workflow.
+
+> Use the smallest planning move that prevents an important misunderstanding.
+
 ## The core workflow
 
 ```text
