@@ -53,12 +53,13 @@ To support reliable export into canvas tools:
 A canvas exporter should be structured as adapters around a shared pipeline:
 
 ```text
-Markdown source
-  -> Mermaid block extractor
-  -> Mermaid renderer
-  -> Canvas-neutral diagram objects
+Breadboard Markdown tables
+  -> normalized breadboard model
+  -> Mermaid or canvas-neutral diagram objects
   -> Target adapter
 ```
+
+The normalized breadboard model is an in-memory typed graph derived from the tables. It may be serialized as JSON when a downstream tool needs machine-readable graph data, but JSON is not a required planning artifact.
 
 Target adapters may include:
 
