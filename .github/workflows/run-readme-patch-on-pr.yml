@@ -1,0 +1,50 @@
+name: Apply README usage patch
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  apply-patch:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Apply patch and remove temporary workflows
+        shell: bash
+        run: |
+          python <<'PY'
+          from pathlib import Path
+          import re
+
+          source = Path('.github/workflows/patch-readme-when-to-use.yml').read_text(encoding='utf-8')
+          match = re.search(r"section = r'''(.*?)'''", source, re.S)
+          if not match:
+              raise SystemExit('Could not extract README section from temporary workflow')
+
+          section = match.group(1)
+          readme = Path('README.md')
+          text = readme.read_text(encoding='utf-8')
+          marker = '## Operating philosophy'
+          if '## When should I use these skills?' not in text:
+              if marker not in text:
+                  raise SystemExit(f'Could not find README marker: {marker}')
+              text = text.replace(marker, section + '\n\n' + marker, 1)
+              readme.write_text(text, encoding='utf-8')
+          PY
+
+          rm .github/workflows/patch-readme-when-to-use.yml
+          rm .github/workflows/run-readme-patch-on-pr.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md .github/workflows/patch-readme-when-to-use.yml .github/workflows/run-readme-patch-on-pr.yml
+          git commit -m "Explain when to use the planning skills"
+          git push
