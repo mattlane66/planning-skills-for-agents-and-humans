@@ -50,6 +50,48 @@ Do not add planning ceremony where it provides no value. A small copy change, co
 
 > Use the smallest planning move that prevents an important misunderstanding.
 
+### Use the skills in the repository where the product is being built
+
+Install or reference these skills once, then open the product repository you are actually working on. The Planning Skills repository supplies the method and reusable instructions; project-specific frames, shaping decisions, breadboards, slices, and implementation packets should normally live beside the product code they govern.
+
+Do not replace an existing project `AGENTS.md` with this repository's file. Prefer an installed plugin, point the agent at the relevant canonical `SKILL.md`, or selectively merge the planning rules that fit the project. Existing product-specific instructions remain authoritative for that codebase unless the team explicitly changes them.
+
+See [Using Planning Skills in a product repository](./docs/using-in-a-product-repo.md) for the practical setup.
+
+### Recommended project layout
+
+A simple default is:
+
+```text
+planning/
+  frame.md
+  shaping.md
+  breadboard.md
+  sketch-reconciliation.md
+  statechart.md
+  slices.md
+  interface-contracts.md
+  executable-breadboard.md
+  dumplink.md
+  kickoff.md
+  context-packet.md
+  spikes/
+  runs/
+```
+
+This is a convention, not a requirement. Keep one clearly active artifact for each planning level unless the project intentionally versions them. Preserve rejected alternatives in the shaping artifact, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
+
+### Choose the handoff artifact by its job
+
+| Artifact | Use it for |
+| --- | --- |
+| **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
+| **Executable breadboard** | The behavioral and test contract for one selected slice. |
+| **Dumplink plan** | Vertical task groups, risk, dependency order, sequence, and appetite-based cuts. |
+| **Context packet** | The exact subset of planning material handed to the active implementation agent. |
+
+A common path is: selected shape and breadboard → optional kickoff reference → executable breadboard and/or Dumplink when needed → context packet → implementation. Not every project needs every artifact.
+
 ## The core workflow
 
 ```text
