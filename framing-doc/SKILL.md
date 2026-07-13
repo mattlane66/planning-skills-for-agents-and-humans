@@ -15,6 +15,8 @@ Create a framing document with four main parts:
 - outcome
 - boundaries
 
+When the source already suggests standards by which a solution should be judged, also capture optional criteria candidates for the shaping step.
+
 When the source material includes multiple options or directions, make clear why this frame is being chosen now instead of the others.
 
 ## Before you start
@@ -57,6 +59,18 @@ Describe what success looks like at the level of effect.
 Add boundaries when there is an obvious wrong direction to avoid.
 
 Use `Less about / More about` when people were clearly drawing a line around what kind of solution fits and what kind does not.
+
+### Criteria candidates (optional)
+
+Capture preliminary standards only when the source clearly suggests what a good solution must achieve or avoid.
+
+Use IDs such as `R0`, `R1`, and `R2`, but mark the section as candidates rather than accepted requirements. The shaping step is responsible for testing, revising, prioritizing, or rejecting them.
+
+Criteria candidates must:
+- describe needs, outcomes, or constraints rather than mechanisms
+- remain traceable to the source or be marked as inference
+- avoid selecting a solution direction
+- avoid must-have / nice-to-have status unless a human already made that decision
 
 ## Key discipline: evidence, not editorializing
 
@@ -123,6 +137,12 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## More about
 - ...
+
+## Criteria candidates (optional)
+
+| ID | Candidate criterion | Evidence or inference |
+|---|---|---|
+| R0 | ... | ... |
 ```
 
 ## Rules
@@ -131,6 +151,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Keep outcome focused on the result, not the mechanism.
 - Make each problem and outcome line traceable to the source.
 - Use boundaries only when they help prevent a likely wrong direction.
+- Treat criteria candidates as preliminary input to shaping, not accepted requirements.
 - The frame is the why, not the how.
 
 ## Self-check before finishing
@@ -139,5 +160,6 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Every problem and outcome claim is traceable to source material or explicitly marked as an inference.
 - Outcome lines describe effects, not mechanisms.
 - Boundaries prevent likely wrong directions without over-constraining the solution space.
+- Criteria candidates, when present, describe needs or constraints, remain traceable, and are clearly preliminary.
 - Any option landscape explains why this frame is chosen now without creating a roadmap for rejected options.
 - The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.
