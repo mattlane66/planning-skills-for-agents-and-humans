@@ -12,7 +12,7 @@ Gemini CLI discovers project-local custom commands from:
 .gemini/commands/
 ```
 
-This repo includes Gemini-native command wrappers for shaping gates, optional statecharts, vertical task grouping, and drift checks:
+This repo includes Gemini-native command wrappers for shaping gates, sketch reconciliation, optional statecharts, vertical task grouping, and drift checks:
 
 | Command | Purpose |
 |---|---|
@@ -20,6 +20,7 @@ This repo includes Gemini-native command wrappers for shaping gates, optional st
 | `/sketch-shapes` | Sketch alternative shapes against accepted criteria without selecting one. |
 | `/fit-check` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
+| `/reconcile-sketch` | Map a dropped visual to planning IDs, surface proposed deltas, and apply only accepted changes. |
 | `/statechart` | Derive a transition table and Mermaid projection for a selected stateful portion of an accepted breadboard. |
 | `/dumplink` | Turn selected shaped work into vertical task groups, dependency order, risk states, and scope cuts. |
 | `/check-drift` | Check implementation direction against selected planning artifacts and stop if drift is found. |
@@ -45,6 +46,12 @@ From a Gemini CLI session in the repository, run:
 ```text
 /select-shape planning/shaping.md "Choose B"
 ```
+
+```text
+/reconcile-sketch planning/shaping.md planning/breadboard.md /path/to/sketch.png
+```
+
+You can instead attach or paste the image in the same command prompt when Gemini CLI supports image input.
 
 ```text
 /statechart planning/breadboard.md "Scope: V2 retry and cancellation"
@@ -99,6 +106,7 @@ Keep the workflow details in:
 ```text
 AGENTS.md
 shaping/SKILL.md
+sketch-reconciliation/SKILL.md
 statechart/SKILL.md
 docs/human-decision-gates.md
 docs/loop-prompting.md

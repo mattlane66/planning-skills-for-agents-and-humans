@@ -41,16 +41,17 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 
 1. Frame the problem.
 2. Shape requirements and alternatives.
-3. Select a direction.
-4. Breadboard places, affordances, stores, and wiring.
-5. Optionally derive a statechart for a selected stateful scope when the wiring alone is hard to reason about.
-6. Slice into demoable increments.
-7. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
-8. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
-9. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
-10. Feed only the relevant planning context to the implementation agent.
-11. Check for drift during implementation.
-12. Reflect against implementation and repair drift.
+3. Reconcile sketches, screenshots, wireframes, mockups, or whiteboards explicitly when they reveal missing or conflicting detail.
+4. Select a direction.
+5. Breadboard places, affordances, stores, and wiring.
+6. Optionally derive a statechart for a selected stateful scope when the wiring alone is hard to reason about.
+7. Slice into demoable increments.
+8. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
+9. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
+10. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
+11. Feed only the relevant planning context to the implementation agent.
+12. Check for drift during implementation.
+13. Reflect against implementation and repair drift.
 
 The statechart step is optional. It is a derived view of the accepted breadboard, not a new source of truth or a prerequisite for slicing.
 
@@ -66,6 +67,8 @@ When finer control is useful, split shaping into these gates:
 4. Shape selection — record the human choice or stop with a decision-ready summary.
 5. Breadboard handoff — only breadboard after the selected shape is explicit.
 
+Run sketch reconciliation at any gate when a visual introduces evidence that may clarify or change the active artifacts. Separate visible observations from interpretations, show proposed deltas, and stop for a human decision before changing requirements, selected behavior, or scope unless the user's instruction already authorizes the change.
+
 Do not one-shot from fuzzy request to selected shape when the user asks for a fit check, sketches, alternatives, or gate-by-gate shaping.
 
 ## Skill map
@@ -74,6 +77,7 @@ Use the repo skills as reusable instructions:
 
 - `framing-doc/` — turn raw material into a frame with context, current approach/result, desired outcome, boundaries, and criteria.
 - `shaping/` — define requirements/criteria, compare alternative shapes, run fit checks, and detail the selected direction.
+- `sketch-reconciliation/` — map attached visuals to stable planning IDs, surface gaps and conflicts, and apply only accepted deltas across affected artifacts.
 - `breadboarding/` — map places, affordances, stores, wiring, diagrams, and demoable slices.
 - `statechart/` — turn a selected stateful portion of an accepted breadboard into a transition table and Mermaid statechart while surfacing missing behavior.
 - `interface-contracts/` — turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
@@ -86,6 +90,8 @@ Use the repo skills as reusable instructions:
 ## Artifact taxonomy
 
 Breadboard = structure of the solution.
+
+Sketch reconciliation = a non-authoritative record of visual observations, mappings, proposed deltas, decisions, and downstream ripple updates.
 
 Statechart = optional derived behavioral view of a selected stateful portion of the breadboard.
 
@@ -119,6 +125,8 @@ When artifacts disagree, use this default authority order unless the user says o
 10. rejected alternatives and brainstorming
 
 A statechart is derived from the selected breadboard and never outranks it. If they disagree, update the breadboard first and regenerate the statechart.
+
+A sketch-reconciliation record never outranks a selected artifact. Accepted deltas become authoritative only when they are applied to the relevant frame, shaping, breadboard, slice, contract, or executable-breadboard artifact.
 
 Do not treat a newer brainstorming note as a higher-authority artifact unless it explicitly changes the selected direction.
 
@@ -214,6 +222,7 @@ For new artifacts, default to the compact IDs used by the canonical templates:
 - `C1` — interface contracts
 - `RUN1`, `E1` — example runs and edge cases
 - `SP1`, `T1`, `TG1`, `CUT1` — spikes, tasks, task groups, and cuts
+- `OBS1`, `D1` — visual observations and proposed reconciliation deltas
 - `V1` — vertical slices
 
 Imported artifacts may already use forms such as `REQ-01`, `AFF-01`, or `SLICE-01`. Preserve those IDs rather than translating them solely for style consistency.
@@ -321,6 +330,7 @@ Before declaring work complete, check:
 - rejected alternatives stayed marked as rejected
 - non-goals were preserved
 - stable IDs were preserved
+- visual observations were separated from interpretations and no sketch silently changed selected behavior or scope
 - statechart states and transitions remain traceable to the breadboard when a statechart is present
 - executable breadboard examples were preserved when present
 - interface contracts were preserved when present

@@ -39,14 +39,15 @@ Use whichever artifacts the user provides or points to:
 3. Extract only the context needed for the next move.
 4. Preserve stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, and slices.
 5. Preserve executable breadboard fixtures, example runs, expected outputs, state changes, side effects, edge cases, and acceptance tests when present.
-6. Preserve field names, required/optional distinctions, enum values, nullability, and error cases when interface contracts are present.
-7. Preserve relevant statechart states and transitions with their source breadboard IDs when present; the breadboard remains authoritative.
-8. Preserve the active Dumplink task group, dependencies, risk state, cuts, and acceptance checks when present.
-9. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
-10. Name explicit non-goals and exclusions.
-11. Add an execution contract.
-12. Add a verification target.
-13. Stop after preparing the context packet.
+6. When a sketch-reconciliation record exists, include accepted changes only after they have been applied to the authoritative artifacts. Exclude pending, rejected, and ambiguous visual deltas from build instructions.
+7. Preserve field names, required/optional distinctions, enum values, nullability, and error cases when interface contracts are present.
+8. Preserve relevant statechart states and transitions with their source breadboard IDs when present; the breadboard remains authoritative.
+9. Preserve the active Dumplink task group, dependencies, risk state, cuts, and acceptance checks when present.
+10. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
+11. Name explicit non-goals and exclusions.
+12. Add an execution contract.
+13. Add a verification target.
+14. Stop after preparing the context packet.
 
 ## Output format
 

@@ -5,4 +5,5 @@ __MACOSX/
 dist/
 mcp-server/dist/
 mcp-server/node_modules/
+visualizer/node_modules/
 __pycache__/

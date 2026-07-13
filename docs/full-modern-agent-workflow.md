@@ -6,7 +6,7 @@ Use it when work is large enough that a coding agent should not jump directly fr
 
 ## Flow
 
-Messy notes → frame → criteria → sketch shapes → fit check → select shape → breadboard → optional statechart → selected-slice contracts and executable examples as needed → optional Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
+Messy notes → frame → criteria → sketch shapes → fit check → reconcile visual evidence when present → select shape → breadboard → optional statechart → selected-slice contracts and executable examples as needed → optional Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
 
 ## Stages
 
@@ -16,6 +16,7 @@ Messy notes → frame → criteria → sketch shapes → fit check → select sh
 | Criteria | Define the standards for judging fit before mechanisms take over. | requirements / criteria table |
 | Sketch shapes | Make multiple solution shapes visible without selecting one. | candidate shapes |
 | Fit check | Compare shapes against criteria and reverse-check mechanisms. | fit check + reverse fit check |
+| Sketch reconciliation, as needed | Map visual evidence to planning IDs, expose gaps or conflicts, and apply only accepted deltas. | `planning/sketch-reconciliation.md` plus synchronized source artifacts |
 | Select shape | Record the human-selected direction. | selected direction + rejected alternatives |
 | Breadboard | Map places, affordances, stores, wiring, and slice candidates. | `planning/breadboard.md` |
 | Statechart, optional | Derive a precise behavioral view when a selected stateful scope is hard to reason about from wiring alone. | `planning/statechart.md` |
@@ -54,6 +55,7 @@ A modern agent workflow is complete when:
 
 - requirements stayed separate from mechanisms
 - the human-selected shape is explicit
+- consequential visual evidence was reconciled without silent scope or behavior changes
 - breadboard structure is preserved
 - statechart states and transitions remain traceable to the breadboard when a statechart is present
 - boundary contracts are explicit where needed

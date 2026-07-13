@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.2.0 - Visual reconciliation and live planning views
+
+### Added
+
+- Added the `sketch-reconciliation` skill and `/reconcile-sketch` wrappers for Claude Code and Gemini CLI.
+- Added a durable sketch-reconciliation template with observation, mapping, delta, decision, fit-impact, and ripple sections.
+- Added a local Mermaid viewer that watches one or more planning Markdown files and hot-reloads every diagram in the browser.
+- Added exact MCP routing for `R x A`, `A x R`, spike, shape-update, sketch-reconciliation, slicing, slice-planning, and execution-verification shorthand.
+
+### Improved
+
+- Extended the tool-neutral orchestration contract with an explicit visual-reconciliation gate.
+- Added regression coverage for the conversational prompts used in an end-to-end shaping session.
+- Extended repository health checks to validate the new skill, command surfaces, visualizer package, and viewer documentation.
+
 ## v1.1.0 — Release integrity
 
 ### Fixed

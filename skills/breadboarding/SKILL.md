@@ -61,6 +61,8 @@ Often you need both: existing affordances that remain, plus new affordances from
 
 Hand-drawn or whiteboard breadboards use a visual stacking format rather than tables. The same concepts still apply: places, affordances, wiring, and hidden system consequences.
 
+If the visual is being compared with an existing selected shape or breadboard and may change behavior or scope, use the `sketch-reconciliation` skill first. Translate only accepted deltas into the canonical breadboard tables.
+
 Common visual conventions:
 - place block at the top of a stack
 - affordances stacked under the place they belong to

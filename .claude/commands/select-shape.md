@@ -23,7 +23,7 @@ If the user has explicitly chosen a shape:
 - summarize why the selected shape fits the accepted criteria
 - list any known trade-offs
 - list flagged unknowns that still require spikes
-- identify the next handoff: `/breadboard`, spike, or criteria revision
+- identify the next handoff: `/reconcile-sketch` when a visual needs review, `/breadboard`, spike, or criteria revision
 
 If the user has not explicitly chosen a shape:
 

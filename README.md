@@ -56,6 +56,7 @@ Do not add planning ceremony where it provides no value. A small copy change, co
 messy evidence
   -> frame the problem
   -> compare solution shapes
+  -> reconcile sketches or screenshots when they reveal missing detail
   -> select a direction
   -> breadboard the behavior
   -> optionally model complex state
@@ -78,6 +79,7 @@ Start there. Add the advanced moves only when the work needs them.
 
 | Skill | Add it when | Output |
 | --- | --- | --- |
+| [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) | A sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active plan. | Visual observations mapped to stable IDs, explicit deltas, a human decision gate, and synchronized accepted updates. |
 | [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
 | [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | [`executable-breadboards`](./executable-breadboards/SKILL.md) | A slice needs fixtures, example runs, edge cases, and acceptance tests before build handoff. | A buildable, testable slice contract. |
@@ -86,12 +88,14 @@ Start there. Add the advanced moves only when the work needs them.
 | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) | Implementation exists and may differ from the intended behavior. | Synced reality, drift, design smells, and explicit correction options. |
 | [`kickoff-doc`](./kickoff-doc/SKILL.md) | Builders need a durable reference organized by product territory. | A builder-facing kickoff document. |
 
+See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the visual-to-plan procedure and command examples.
+
 ## First useful prompt
 
 ```text
 Use this repository's planning workflow.
 
-First determine whether this work needs framing, shaping, or breadboarding.
+First determine whether this work needs framing, shaping, sketch reconciliation, or breadboarding.
 Do not implement code until a direction and demoable slice are selected.
 Keep requirements separate from mechanisms, preserve explicit non-goals,
 and stop at human decisions about scope, appetite, or direction.
@@ -183,11 +187,22 @@ npm start
 
 See the [MCP server README](./mcp-server/README.md) for client configuration and exposed tools.
 
+### Live Mermaid viewer
+
+Watch the diagrams in one or more planning artifacts and refresh them in a local browser after every save:
+
+```bash
+bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/04-breadboard.md
+```
+
+The viewer uses a pinned local Mermaid package, binds to localhost, and uploads nothing. See [visual hot reload](./docs/visual-hot-reload.md).
+
 ## Examples
 
 - [`simple-grocery-list`](./examples/simple-grocery-list/) is a deliberately small walkthrough of the foundational workflow.
 - [`existing-codebase-drift`](./examples/existing-codebase-drift/) demonstrates how to surface differences between an intended breadboard and implementation reality.
 - [`statechart-retry-workflow`](./examples/statechart-retry-workflow/) shows how to derive a traceable statechart when retries, cancellation, and timeouts make breadboard wiring harder to review.
+- [`sketch-reconciliation`](./examples/sketch-reconciliation/) shows how a dropped visual becomes mapped observations and accepted planning deltas without silently overriding the selected shape.
 
 These are teaching examples, not evidence of comparative model performance. A realistic codebase-scale case study remains a useful next addition.
 
@@ -202,7 +217,7 @@ bash scripts/sync-packaged-skills.sh
 bash scripts/check-repo-health.sh
 ```
 
-The health check verifies packaged-skill parity, manifest and artifact references, version parity, command wrappers, generated plugin output, and the MCP build and tests. See [CI health](./docs/ci-health-workflow.md).
+The health check verifies packaged-skill parity, manifest and artifact references, version parity, command wrappers, generated plugin output, the visual hot-reload viewer, and the MCP build and tests. See [CI health](./docs/ci-health-workflow.md).
 
 The fixtures under `evals/` are structural contract checks, not behavioral model benchmarks.
 

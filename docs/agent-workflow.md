@@ -91,7 +91,23 @@ Use the `shaping` skill or the `/select-shape` command where supported.
 
 Do not invent a human decision.
 
-## 7. Breadboard
+## 7. Reconcile visual evidence, as needed
+
+Use this mode whenever a sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active frame, shape, breadboard, or slices.
+
+Outputs:
+- visible observations separated from interpretations
+- observation-to-plan mapping with stable IDs
+- missing, conflicting, clarifying, covered, and ambiguous items
+- proposed deltas with fit and scope impact
+- human accept, revise, reject, or defer decision
+- synchronized accepted updates and ripple status
+
+Use the `sketch-reconciliation` skill or `/reconcile-sketch` command where supported.
+
+Do not let the visual silently override selected behavior or scope. Do not infer hidden behavior from appearance alone.
+
+## 8. Breadboard
 
 Use this mode when the selected shape needs to become concrete enough to slice.
 
@@ -105,7 +121,7 @@ Outputs:
 
 Use the `breadboarding` skill.
 
-## 8. Statechart, optional
+## 9. Statechart, optional
 
 Use this mode only when a selected stateful portion of an accepted breadboard is difficult to reason about from wiring alone.
 
@@ -119,7 +135,7 @@ Use the `statechart` skill. The breadboard remains authoritative.
 
 Do not invent retry, timeout, cancellation, hierarchy, or parallel behavior.
 
-## 9. Interface contracts
+## 10. Interface contracts
 
 Use this mode when the selected slice crosses meaningful boundaries.
 
@@ -135,7 +151,7 @@ Use the `interface-contracts` skill.
 
 Keep this in plain language unless the user explicitly asks for production schema or contract files.
 
-## 10. Executable breadboard
+## 11. Executable breadboard
 
 Use this mode when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
 
@@ -152,7 +168,7 @@ Use the `executable-breadboards` skill.
 
 Do not invent missing expected outputs or edge cases. Flag them before build work.
 
-## 11. Dumplink, optional
+## 12. Dumplink, optional
 
 Use this mode when selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
 
@@ -166,7 +182,7 @@ Outputs:
 
 Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog.
 
-## 12. Feed context
+## 13. Feed context
 
 Use this mode before implementation work, especially when planning artifacts are long or numerous.
 
@@ -182,7 +198,7 @@ Outputs:
 
 Use the `feed-planning-context` skill.
 
-## 13. Build
+## 14. Build
 
 Use this mode only after a slice is selected and the relevant planning context has been fed.
 
@@ -194,7 +210,7 @@ Rules:
 - propose a planning update if implementation reality conflicts with the plan
 - create an agent run log for meaningful implementation runs
 
-## 14. Check drift
+## 15. Check drift
 
 Use this mode during or after implementation work when the agent may have drifted from the selected planning artifacts.
 
@@ -218,7 +234,7 @@ Use `/check-drift`, `templates/drift-check.md`, and `docs/loop-prompting.md` whe
 
 Do not implement code in Check Drift mode.
 
-## 15. Reflect
+## 16. Reflect
 
 Use this mode after implementation exists.
 
@@ -242,6 +258,7 @@ Before moving forward, ask:
 - Are rejected alternatives clearly marked?
 - Are non-goals visible?
 - Are stable IDs preserved?
+- If a visual changed the understanding, were observations mapped and deltas accepted explicitly?
 - Is the next output useful to both humans and agents?
 - Does a build step have a selected slice and compact context packet?
 - Are optional statechart or Dumplink artifacts being used only where their triggering complexity exists?
@@ -254,6 +271,7 @@ Avoid:
 - jumping from notes directly to implementation
 - treating a rejected shape as the selected direction
 - selecting a shape before criteria and alternatives are visible
+- treating a newer-looking sketch as authority or inferring hidden behavior from a static image
 - pasting all raw context instead of feeding a compact context packet
 - silently changing the plan when code reality pushes back
 - using build mode before a slice exists

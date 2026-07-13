@@ -13,15 +13,16 @@ Codex should honor the workflow in `AGENTS.md`:
 3. Sketch alternative shapes.
 4. Fit-check the alternatives.
 5. Record the selected shape only when the human chooses one.
-6. Breadboard the selected shape.
-7. Optionally derive a statechart when a selected stateful scope is hard to reason about from wiring alone.
-8. Slice into demoable increments.
-9. Add interface contracts when the selected slice crosses meaningful boundaries.
-10. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
-11. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
-12. Feed only the relevant planning context to implementation.
-13. Check drift during implementation.
-14. Reflect against implementation and repair drift.
+6. Reconcile sketches or screenshots explicitly whenever they reveal missing or conflicting detail.
+7. Breadboard the selected shape.
+8. Optionally derive a statechart when a selected stateful scope is hard to reason about from wiring alone.
+9. Slice into demoable increments.
+10. Add interface contracts when the selected slice crosses meaningful boundaries.
+11. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
+12. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+13. Feed only the relevant planning context to implementation.
+14. Check drift during implementation.
+15. Reflect against implementation and repair drift.
 
 The important behavior is the gate discipline:
 
@@ -72,6 +73,16 @@ Run the shape-selection gate only.
 Record this human decision: [chosen shape].
 Preserve rejected shapes as rejected and identify the next handoff.
 Do not breadboard or implement unless the selected shape is explicit and I ask for it.
+```
+
+### Reconcile a sketch or screenshot
+
+```text
+Use AGENTS.md and sketch-reconciliation/SKILL.md.
+Reconcile the attached visual with [frame, shaping, breadboard, or slice artifacts].
+Separate visible observations from interpretations and map each observation to stable planning IDs.
+Show proposed deltas and their fit/scope impact. Do not change selected behavior or scope until I accept them unless this prompt explicitly authorizes the update.
+After acceptance, update every affected artifact and rerun fit checks when requirements or shape parts changed.
 ```
 
 ### Breadboard

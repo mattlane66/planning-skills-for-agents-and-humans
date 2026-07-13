@@ -13,7 +13,7 @@ Command arguments / source context:
 
 Task: produce or update the Decision section of a shaping artifact.
 
-Use this command when the team is ready to choose a direction, record that choice, and prepare the next breadboarding or spike handoff.
+Use this command when the team is ready to choose a direction, record that choice, and prepare the next sketch-reconciliation, breadboarding, or spike handoff.
 
 If the user has explicitly chosen a shape:
 
@@ -22,7 +22,7 @@ If the user has explicitly chosen a shape:
 - summarize why the selected shape fits the accepted criteria
 - list any known trade-offs
 - list flagged unknowns that still require spikes
-- identify the next handoff: `/breadboard`, spike, or criteria revision
+- identify the next handoff: `/reconcile-sketch` when a visual needs review, `/breadboard`, spike, or criteria revision
 
 If the user has not explicitly chosen a shape:
 

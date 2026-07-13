@@ -35,6 +35,7 @@ A statechart is derived from the selected breadboard and never outranks it.
 - old discarded alternatives
 - brainstorming notes
 - rejected shapes
+- unaccepted sketch-reconciliation deltas
 
 ## Must preserve
 - stable requirement IDs
@@ -48,6 +49,7 @@ A statechart is derived from the selected breadboard and never outranks it.
 - statechart state and transition IDs with their source breadboard IDs, when present
 - explicit non-goals
 - demo path
+- accepted visual changes as written into the authoritative artifacts; do not promote pending reconciliation proposals
 
 ## Selected requirements
 - ...

@@ -63,6 +63,7 @@ Planning artifacts make loops safer because each artifact answers a different co
 | --- | --- |
 | Frame | Why does this matter, and what world are we changing? |
 | Shaping doc | Which direction was selected, and what was rejected? |
+| Sketch reconciliation | Which visual observations were accepted, rejected, or left ambiguous, and where were accepted deltas applied? |
 | Breadboard | What places, affordances, stores, and wiring make the solution work? |
 | Interface contract | What crosses a boundary, and what must remain stable? |
 | Executable breadboard | What examples, fixtures, expected outputs, edge cases, and tests define the selected slice? |

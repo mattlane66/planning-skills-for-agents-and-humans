@@ -39,6 +39,20 @@ Human confirms:
 
 Do not breadboard every option unless the human asks for more exploration.
 
+## Gate 3A — Visual deltas accepted, when needed
+
+Use this gate when a sketch, screenshot, wireframe, mockup, or whiteboard appears to add or contradict behavior.
+
+Human confirms:
+
+- visible observations are separated from agent interpretations
+- proposed deltas map to existing planning IDs or add explicit new IDs
+- requirements remain needs rather than drawn controls
+- selected behavior and scope change only where intended
+- accepted deltas should ripple to the named downstream artifacts
+
+Do not let visual recency silently override the selected shape or breadboard.
+
 ## Gate 4 — Appetite set
 
 Human decides how much time and scope the bet deserves.

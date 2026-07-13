@@ -23,6 +23,7 @@ The planning method is shared across tools. Invocation surfaces differ.
 | Fit-check | `shaping/SKILL.md` | `/fit-check` | `/fit-check` | “Run the fit-check gate only…” |
 | Select shape | `shaping/SKILL.md` | `/select-shape` | `/select-shape` | “Record my selected shape…” |
 | Full shaping pass | `shaping/SKILL.md` | `/shape` | Prompt the skill directly | “Use the shaping skill…” |
+| Reconcile a visual | `sketch-reconciliation/SKILL.md` | `/reconcile-sketch` | `/reconcile-sketch` | “Reconcile this attached sketch with the active planning artifacts…” |
 | Breadboard | `breadboarding/SKILL.md` | `/breadboard` | Prompt the skill directly | “Use the breadboarding skill…” |
 | Model complex state | `statechart/SKILL.md` | `/statechart` | `/statechart` | “Use the statechart skill…” |
 | Define boundary contracts | `interface-contracts/SKILL.md` | Prompt the skill directly | Prompt the skill directly | “Use interface-contracts…” |

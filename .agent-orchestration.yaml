@@ -6,6 +6,7 @@ purpose: >-
 
 principles:
   - planning_before_implementation
+  - visual_evidence_requires_explicit_reconciliation
   - human_decision_gates_before_scope_expansion
   - vertical_grouping_before_task_backlog
   - compact_context_before_build
@@ -70,6 +71,15 @@ modes:
     allowed_outputs: [selected_direction, rejected_alternatives, tradeoffs, remaining_unknowns, next_handoff]
     forbidden: [invented_human_decision, production_code]
     exit_gate: shape_selected
+
+  reconcile_sketch:
+    skill: sketch-reconciliation
+    command_aliases: { claude: /reconcile-sketch, gemini: /reconcile-sketch }
+    purpose: Reconcile a visual with planning artifacts without silently changing selected behavior or scope.
+    requires: [visual, planning_artifact]
+    allowed_outputs: [visual_observations, observation_to_plan_mapping, ambiguities, conflicts, proposed_deltas, accepted_updates, fit_check_impact, ripple_status]
+    forbidden: [invented_hidden_behavior, silent_scope_change, visual_as_automatic_source_of_truth, production_code]
+    exit_gate: deltas_accepted_rejected_or_deferred
 
   breadboard:
     skill: breadboarding
@@ -166,6 +176,7 @@ modes:
 artifacts:
   frame: templates/frame.md
   shaping: templates/shaping.md
+  sketch_reconciliation: templates/sketch-reconciliation.md
   breadboard: templates/breadboard.md
   statechart: templates/statechart.md
   slices: templates/slices.md

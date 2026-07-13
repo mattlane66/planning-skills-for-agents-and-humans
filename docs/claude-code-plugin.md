@@ -4,6 +4,7 @@ This repo already contains Claude-compatible `SKILL.md` files as the canonical s
 
 - `framing-doc/SKILL.md`
 - `shaping/SKILL.md`
+- `sketch-reconciliation/SKILL.md`
 - `breadboarding/SKILL.md`
 - `statechart/SKILL.md`
 - `interface-contracts/SKILL.md`
@@ -56,6 +57,7 @@ dist/claude-code-plugin/
   templates/drift-check.md
   skills/framing-doc/SKILL.md
   skills/shaping/SKILL.md
+  skills/sketch-reconciliation/SKILL.md
   skills/breadboarding/SKILL.md
   skills/statechart/SKILL.md
   skills/interface-contracts/SKILL.md
