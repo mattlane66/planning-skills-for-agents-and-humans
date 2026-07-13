@@ -1,6 +1,6 @@
 ---
 name: feed-planning-context
-description: Prepare framing, shaping, breadboard, executable breadboard, kickoff, slice, interface contract, or reflection artifacts for agent implementation work without overloading context.
+description: Prepare relevant planning artifacts, including optional statechart and Dumplink context, for agent implementation work without overloading context.
 ---
 
 # Feed Planning Context
@@ -11,7 +11,7 @@ This skill prepares context only. It does not implement code.
 
 ## Goal
 
-Create a compact context packet from the provided planning artifacts so an agent can understand the current task, the authority of each artifact, the selected direction, the slice boundary, executable breadboard examples when present, interface contracts when present, the execution contract, and the verification target.
+Create a compact context packet from the provided planning artifacts so an agent can understand the current task, artifact authority, selected direction, slice boundary, relevant statechart rows, executable examples, interface contracts, Dumplink task group, execution contract, and verification target when each is present.
 
 ## Inputs
 
@@ -23,8 +23,10 @@ Use whichever artifacts the user provides or points to:
 - fit check
 - reverse fit check
 - breadboard
+- statechart for the selected scope, when present
 - executable breadboard
 - interface contract sketch or plain-language interface contract
+- Dumplink plan, when present
 - slice plan
 - kickoff doc
 - breadboard reflection
@@ -38,11 +40,13 @@ Use whichever artifacts the user provides or points to:
 4. Preserve stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, and slices.
 5. Preserve executable breadboard fixtures, example runs, expected outputs, state changes, side effects, edge cases, and acceptance tests when present.
 6. Preserve field names, required/optional distinctions, enum values, nullability, and error cases when interface contracts are present.
-7. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
-8. Name explicit non-goals and exclusions.
-9. Add an execution contract.
-10. Add a verification target.
-11. Stop after preparing the context packet.
+7. Preserve relevant statechart states and transitions with their source breadboard IDs when present; the breadboard remains authoritative.
+8. Preserve the active Dumplink task group, dependencies, risk state, cuts, and acceptance checks when present.
+9. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
+10. Name explicit non-goals and exclusions.
+11. Add an execution contract.
+12. Add a verification target.
+13. Stop after preparing the context packet.
 
 ## Output format
 
@@ -75,6 +79,12 @@ Use whichever artifacts the user provides or points to:
 ## Relevant places / affordances / stores
 - ...
 
+## Relevant statechart
+- Selected scope:
+- States and transitions:
+- Source breadboard IDs:
+- Explicit gaps:
+
 ## Relevant executable breadboard
 - Selected slice:
 - Example starting data / fixtures:
@@ -93,6 +103,15 @@ Use whichever artifacts the user provides or points to:
 - Output shape:
 - Branches / errors:
 - Open decisions:
+
+## Relevant Dumplink plan
+- Active task group:
+- Relevant tasks:
+- Risk state:
+- Dependencies:
+- Cuttable scope:
+- Acceptance checks:
+- Stop condition:
 
 ## Current slice
 - Slice: ...
@@ -133,11 +152,14 @@ When artifacts disagree, use this default authority order unless the user says o
 2. selected slice or kickoff doc
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected breadboard
-6. selected shaping direction
-7. framing doc
-8. raw notes and transcripts
-9. rejected alternatives and brainstorming
+5. selected Dumplink task group and sequence, for task-group scope and build order
+6. selected breadboard
+7. selected shaping direction
+8. framing doc
+9. raw notes and transcripts
+10. rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it.
 
 ## Chunking rules
 
@@ -154,16 +176,9 @@ When artifacts are large:
 
 ## Stable ID handling
 
-Preserve IDs such as:
+For new artifacts, use the compact conventions in `AGENTS.md`: `R0`, `P1`, `U1`, `N1`, `S1`, `ST1`, `TR1`, `C1`, `RUN1`, `E1`, `TG1`, and `V1`.
 
-- REQ-01
-- P-01
-- AFF-01
-- STORE-01
-- CONTRACT-01 or C1
-- RUN-01
-- EDGE-01
-- SLICE-01
+Preserve any established legacy IDs such as `REQ-01` or `SLICE-01` rather than renaming them for style.
 
 Do not rename IDs for style. If meaning changes, mark it as a planning update.
 
@@ -199,6 +214,14 @@ When interface contracts are present, preserve:
 - open decisions
 
 If a field-level decision is missing, flag it. Do not invent it during context packaging.
+
+## Statechart handling
+
+When a statechart is present, include only the states and transitions relevant to the selected slice. Preserve their source breadboard IDs and explicit gaps. If the statechart and breadboard disagree, use the breadboard and request that the statechart be regenerated.
+
+## Dumplink handling
+
+When a Dumplink plan is present, preserve the active task group, vertical boundary, risk state, dependency order, cuttable scope, acceptance checks, and stop condition. Do not activate deferred groups or flatten the plan into a horizontal backlog.
 
 ## Execution contract handling
 

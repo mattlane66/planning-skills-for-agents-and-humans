@@ -1,0 +1,18 @@
+description = "Derive a transition table and Mermaid statechart for a selected stateful portion of an accepted breadboard."
+
+prompt = """
+Use this repository's planning instructions and Statechart skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{statechart/SKILL.md}
+
+Command arguments / source context:
+{{args}}
+
+Task: create or update a statechart artifact for only the selected stateful scope of an accepted breadboard.
+
+Include the source scope, state inventory, transition table, Mermaid stateDiagram-v2 projection, and gaps with proposed breadboard updates.
+
+Preserve source breadboard IDs. Mark unsupported behavior as inferred or missing. Do not invent retries, timeouts, cancellation, hierarchy, or parallel regions. The accepted breadboard remains authoritative. Do not implement code.
+"""

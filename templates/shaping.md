@@ -88,7 +88,7 @@ Rejected directions:
 
 | ID | Question | Why it matters | Acceptance |
 |---|---|---|---|
-| SP-01 | ... | ... | ... |
+| SP1 | ... | ... | ... |
 
 ## Next move
 - [ ] Breadboard selected shape

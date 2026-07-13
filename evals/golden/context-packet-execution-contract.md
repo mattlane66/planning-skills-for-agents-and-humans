@@ -1,4 +1,4 @@
-# Golden eval: context packet execution contract
+# Contract fixture: context packet execution contract
 
 ## Input
 

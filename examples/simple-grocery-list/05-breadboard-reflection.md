@@ -32,7 +32,7 @@ After reading the implementation, the following differences were found:
 | F1 | Return to one `items` store with a `bought` boolean | Matches the chosen shape and simplifies state reasoning |
 | F2 | Restore the `hide bought` toggle as a display-only filter | Re-separates item state from visibility control |
 | F3 | Normalize text before duplicate comparison | Makes duplicate detection behave consistently |
-| F4 | Update the breadboard tables to reflect the actual implementation before any further critique | Prevents design discussion from being based on stale artifacts |
+| F4 | Keep a synchronized current-state view beside the accepted-intent breadboard until the human decides which should change | Prevents stale critique without silently replacing the selected plan |
 
 ## Updated breadboard notes
 

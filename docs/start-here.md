@@ -10,6 +10,7 @@ Use this guide when you are new to the repo and want to know which planning move
 | You need criteria before solution ideas | `/criteria` or `shaping/SKILL.md` | Requirements / criteria separated from mechanisms |
 | You know the problem but not the right solution | `/sketch-shapes`, `/fit-check`, `/select-shape`, `/shape`, or `shaping/SKILL.md` | Alternative shapes, fit check, selected direction |
 | You selected a direction and need to make it concrete | `/breadboard` or `breadboarding/SKILL.md` | Places, affordances, stores, wiring, and slice candidates |
+| A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | A derived state inventory, transition table, Mermaid projection, and explicit gaps |
 | Your selected slice crosses a meaningful boundary and field-level guessing would cause rework | `interface-contracts/SKILL.md` | Plain-language contracts for inputs, outputs, branches, errors, and open decisions |
 | Your selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable executable breadboard for the selected slice |
 | The selected work needs vertical task groups, dependency-aware sequence, risk states, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A Dumplink plan with task groups, build sequence, cuts, checks, and agent handoff |
@@ -30,6 +31,7 @@ messy notes
   -> fit check
   -> select shape
   -> breadboard
+  -> statechart, only when state complexity warrants it
   -> select slice
   -> add interface contracts, when boundary detail matters
   -> create executable breadboard, when ready for build handoff
@@ -48,6 +50,7 @@ Check that you have:
 - requirements separated from mechanisms
 - explicit non-goals
 - a breadboard or slice boundary
+- a statechart only when the selected scope's state behavior is difficult to understand from breadboard wiring alone
 - plain-language interface contracts for meaningful boundary crossings, when field-level detail matters
 - an executable breadboard when the slice needs examples, fixtures, expected outputs, edge cases, or tests
 - a Dumplink plan when the work needs task groups, dependency order, risk states, or scope cuts
@@ -81,5 +84,5 @@ Planning drift found:
 Use this default prompt:
 
 ```text
-Use this repo's planning workflow. First decide whether we should frame, define criteria, sketch shapes, fit-check, select a shape, breadboard, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until a slice is selected and the verification target is clear.
+Use this repo's planning workflow. First decide whether we should frame, define criteria, sketch shapes, fit-check, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until a slice is selected and the verification target is clear.
 ```

@@ -1,7 +1,7 @@
 ---
 description: Package planning artifacts into a compact context packet for implementation work.
 argument-hint: [planning artifact paths, selected slice, or implementation task]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `feed-planning-context/SKILL.md` first and follow it as the primary instruction for this command.

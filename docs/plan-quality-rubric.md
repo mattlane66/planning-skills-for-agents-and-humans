@@ -28,6 +28,18 @@ Score each line as:
 | Human gates | Agent decides implicitly | Some decisions surfaced | Scope/appetite/direction decisions are explicit |
 | Drift handling | Plan changes silently | Drift is noted but unresolved | Drift options are stated and require a decision |
 
+## Optional artifact checks
+
+Score these only when the corresponding artifact is present or clearly needed. They do not change the readiness-band total above.
+
+| Artifact | 0 | 1 | 2 |
+|---|---|---|---|
+| Statechart | Replaces or contradicts the breadboard | Partly traceable or contains assumptions | Every state and transition traces to breadboard IDs; gaps are explicit |
+| Interface contracts | Agent must guess fields or error behavior | Main path exists but edge decisions are missing | Inputs, outputs, branches, errors, and open decisions are explicit |
+| Executable breadboard | No judgeable examples | Examples exist but expected results are vague | Fixtures, example runs, expected outputs, edge cases, and checks are complete |
+| Dumplink | Horizontal discipline backlog | Some vertical grouping but unclear cuts or risk | Groups are judgeable, risk-aware, dependency-aware, and cuttable |
+| Context packet | Whole planning stack is dumped | Relevant scope exists but execution boundaries are weak | Only relevant context is included with authority, non-goals, execution contract, and verification |
+
 ## Readiness bands
 
 | Score | Interpretation |

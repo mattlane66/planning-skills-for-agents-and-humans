@@ -64,9 +64,22 @@ Why it stayed out:
 - Shape B gives stronger visual separation between needed and bought items, but it introduces more structure than this first version needs.
 - Both shapes fit the requirements. The difference is mostly about simplicity versus stronger categorization.
 
-## Decision
+## Reverse Fit Check
 
-Chosen direction: **A**
+| Shape part | Requirement served | Justified? | Notes |
+|---|---|---|---|
+| A1 quick-add input | R0 | Yes | Directly supports fast capture. |
+| A2 single item store | R1, R2, R3, R4 | Yes | Keeps bought state and visibility behavior legible in one model. |
+| A3 bought checkbox | R1 | Yes | Supports bought and undo behavior. |
+| A4 hide-bought toggle | R2, R3 | Yes | Hides without deleting. |
+| A5 local persistence | R4 | Yes | Required for return visits on the same device. |
+| A6 duplicate check | R5 | Yes, but cuttable | Serves the nice-to-have duplicate criterion and can be deferred if appetite tightens. |
+
+No Shape A mechanism is currently unsupported by a requirement.
+
+## Human Decision
+
+Recorded human choice: **A**
 
 Reason:
 - It satisfies all current requirements.

@@ -1,27 +1,32 @@
 # Planning Skills MCP Server
 
-This is an optional MCP adapter for Planning Skills for Agents and Humans.
+This optional MCP adapter exposes the repository's canonical planning skills, artifact templates, and orchestration manifest to MCP-compatible clients.
 
-The server exposes the repository's `SKILL.md` files and a few starter artifact templates as MCP tools. It does not replace the skills; it gives MCP-capable clients a clean way to retrieve and use them.
+It reads root `SKILL.md` files and `templates/` at runtime. The server does not maintain separate copies of either source.
 
 ## Tools
 
-- `list_planning_skills` — list available planning skills and short descriptions.
-- `get_planning_skill` — return the full `SKILL.md` instructions for one skill.
-- `recommend_planning_workflow` — recommend a sequence of skills based on a situation description.
-- `get_artifact_template` — return a starter Markdown template for a frame, shaping doc, breadboard, kickoff doc, or context packet.
+- `list_planning_skills` — list every available planning skill and its purpose.
+- `get_planning_skill` — return the canonical instructions for one skill.
+- `recommend_planning_workflow` — recommend the next skill or sequence while respecting prerequisites and human decision gates.
+- `get_artifact_template` — return a canonical starter template from `templates/`.
+- `get_orchestration_manifest` — return `.agent-orchestration.yaml`.
 
-## Install
+The skill list follows `skill-inventory.txt`, and the artifact tool covers every template named in `.agent-orchestration.yaml`. The recommender does not assume every project needs every step. Statechart is recommended only for explicit state-complexity signals, and Dumplink only for task grouping, risk, dependency, or scope-cut signals. A generic request to build something is routed through the core planning workflow unless the situation says a selected slice or context packet already exists.
+
+## Install and verify
 
 From this directory:
 
 ```bash
-npm install
-npm run build
+npm ci
+npm run check
 npm start
 ```
 
-## Example MCP client config
+Use `npm run dev` while editing the server.
+
+## Example MCP client configuration
 
 ```json
 {
@@ -34,8 +39,8 @@ npm start
 }
 ```
 
-Use an absolute path in real client configs unless your client explicitly runs from the repository root.
+Use an absolute path unless the client explicitly runs from the repository root.
 
 ## Boundary
 
-This package is a generic MCP server. It may be used by Gemini-style, Claude-style, Cursor-style, or other MCP-capable environments, but each client has its own configuration format and support surface.
+This is a generic stdio MCP server, not a hosted service or full agent runtime. Individual clients have their own configuration and capability-discovery conventions.

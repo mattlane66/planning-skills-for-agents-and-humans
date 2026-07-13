@@ -1,4 +1,4 @@
-# Golden eval: Dumplink vertical groups
+# Contract fixture: Dumplink vertical groups
 
 ## Input
 

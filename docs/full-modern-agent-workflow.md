@@ -6,7 +6,7 @@ Use it when work is large enough that a coding agent should not jump directly fr
 
 ## Flow
 
-Messy notes → frame → criteria → sketch shapes → fit check → select shape → breadboard → interface contracts → executable breadboard → Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
+Messy notes → frame → criteria → sketch shapes → fit check → select shape → breadboard → optional statechart → selected-slice contracts and executable examples as needed → optional Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
 
 ## Stages
 
@@ -18,6 +18,7 @@ Messy notes → frame → criteria → sketch shapes → fit check → select sh
 | Fit check | Compare shapes against criteria and reverse-check mechanisms. | fit check + reverse fit check |
 | Select shape | Record the human-selected direction. | selected direction + rejected alternatives |
 | Breadboard | Map places, affordances, stores, wiring, and slice candidates. | `planning/breadboard.md` |
+| Statechart, optional | Derive a precise behavioral view when a selected stateful scope is hard to reason about from wiring alone. | `planning/statechart.md` |
 | Interface contracts | Define boundary-crossing data exchanges before agents guess field-level details. | `planning/interface-contracts.md` |
 | Executable breadboard | Add fixtures, examples, expected outputs, edge cases, and acceptance tests. | `planning/executable-breadboard.md` |
 | Dumplink | Create vertical task groups, dependency sequence, risk states, scope cuts, and an agent handoff packet. | `planning/dumplink.md` |
@@ -33,7 +34,7 @@ Messy notes → frame → criteria → sketch shapes → fit check → select sh
 - authority order
 - must-preserve constraints
 - current slice
-- relevant contracts, executable examples, and Dumplink task group
+- relevant statechart rows, contracts, executable examples, and Dumplink task group when present
 - execution contract
 - verification target
 
@@ -54,6 +55,7 @@ A modern agent workflow is complete when:
 - requirements stayed separate from mechanisms
 - the human-selected shape is explicit
 - breadboard structure is preserved
+- statechart states and transitions remain traceable to the breadboard when a statechart is present
 - boundary contracts are explicit where needed
 - executable examples and edge cases exist where needed
 - Dumplink task groups are vertical and risk-aware

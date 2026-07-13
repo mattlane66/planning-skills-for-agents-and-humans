@@ -1,8 +1,6 @@
 ---
 name: executable-breadboards
 description: Convert a selected breadboard slice into a buildable, testable handoff artifact with examples, fixtures, expected outputs, edge cases, and acceptance tests.
-planning: true
-shaping: true
 ---
 
 # Executable Breadboards
@@ -72,7 +70,6 @@ Use whichever artifacts are available:
 
 ## Output format
 
-```md
 # [Project] — Executable Breadboard
 
 ## Source references
@@ -148,7 +145,6 @@ Expected side effects:
 
 ## Verification target
 - ...
-```
 
 ## Relationship to other artifacts
 

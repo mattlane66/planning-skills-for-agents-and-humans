@@ -125,7 +125,7 @@ This explains the system shape, but it still leaves the implementation agent gue
 
 ## Selected slice
 
-SLICE-01: Add an objection to a published argument.
+V1: Add an objection to a published argument.
 
 ## Relevant objects
 
