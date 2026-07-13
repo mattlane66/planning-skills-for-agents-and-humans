@@ -287,3 +287,46 @@ When a Dumplink plan is present, preserve:
 - acceptance checks
 - active task group boundary
 - stop condition
+
+Do not flatten Dumplink output into a generic horizontal backlog. Do not treat cuttable task groups as active scope unless the user explicitly expands the appetite or changes the selected scope.
+
+## Drift protocol
+
+If implementation reality conflicts with the selected planning artifact, do not silently patch around the plan.
+
+Return:
+
+```md
+## Planning drift found
+
+The selected artifact says:
+- ...
+
+The implementation reality is:
+- ...
+
+Options:
+1. Update the code to match the artifact.
+2. Update the artifact because the original assumption was wrong.
+3. Split the slice and defer the conflicting part.
+
+Recommended move:
+- ...
+```
+
+## Completion standard
+
+Before declaring work complete, check:
+
+- the task stayed within the selected mode
+- active requirements are separated from mechanisms
+- rejected alternatives stayed marked as rejected
+- non-goals were preserved
+- stable IDs were preserved
+- statechart states and transitions remain traceable to the breadboard when a statechart is present
+- executable breadboard examples were preserved when present
+- interface contracts were preserved when present
+- Dumplink task group boundaries, dependencies, cuts, and acceptance checks were preserved when present
+- planning artifacts were updated if implementation discoveries changed the plan
+- implementation work, when present, maps back to requirement/affordance/store/state/transition/contract/example-run/edge-case/task-group/slice IDs
+- meaningful implementation runs have an agent run log or equivalent handoff note
