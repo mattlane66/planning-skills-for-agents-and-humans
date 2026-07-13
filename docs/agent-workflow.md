@@ -105,7 +105,21 @@ Outputs:
 
 Use the `breadboarding` skill.
 
-## 8. Interface contracts
+## 8. Statechart, optional
+
+Use this mode only when a selected stateful portion of an accepted breadboard is difficult to reason about from wiring alone.
+
+Outputs:
+- state inventory
+- transition table
+- Mermaid statechart projection
+- gaps and proposed breadboard updates
+
+Use the `statechart` skill. The breadboard remains authoritative.
+
+Do not invent retry, timeout, cancellation, hierarchy, or parallel behavior.
+
+## 9. Interface contracts
 
 Use this mode when the selected slice crosses meaningful boundaries.
 
@@ -121,7 +135,7 @@ Use the `interface-contracts` skill.
 
 Keep this in plain language unless the user explicitly asks for production schema or contract files.
 
-## 9. Executable breadboard
+## 10. Executable breadboard
 
 Use this mode when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
 
@@ -138,7 +152,21 @@ Use the `executable-breadboards` skill.
 
 Do not invent missing expected outputs or edge cases. Flag them before build work.
 
-## 10. Feed context
+## 11. Dumplink, optional
+
+Use this mode when selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
+
+Outputs:
+- task dump and vertical task groups
+- risk states
+- dependency map and build sequence
+- scope cuts
+- acceptance checks
+- bounded agent handoff packet
+
+Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog.
+
+## 12. Feed context
 
 Use this mode before implementation work, especially when planning artifacts are long or numerous.
 
@@ -147,12 +175,14 @@ Outputs:
 - authority order
 - must-preserve constraints
 - selected slice
+- relevant statechart rows, contracts, executable examples, and Dumplink task group when present
 - non-goals
+- execution contract
 - verification target
 
 Use the `feed-planning-context` skill.
 
-## 11. Build
+## 13. Build
 
 Use this mode only after a slice is selected and the relevant planning context has been fed.
 
@@ -160,11 +190,11 @@ Rules:
 - implement only the selected slice
 - preserve shaped intent
 - keep stable IDs intact
-- map implementation work back to requirements, affordances, stores, contracts, example runs, edge cases, or slices
+- map implementation work back to requirements, affordances, stores, statechart transitions, contracts, example runs, edge cases, task groups, or slices
 - propose a planning update if implementation reality conflicts with the plan
 - create an agent run log for meaningful implementation runs
 
-## 12. Check drift
+## 14. Check drift
 
 Use this mode during or after implementation work when the agent may have drifted from the selected planning artifacts.
 
@@ -188,7 +218,7 @@ Use `/check-drift`, `templates/drift-check.md`, and `docs/loop-prompting.md` whe
 
 Do not implement code in Check Drift mode.
 
-## 13. Reflect
+## 15. Reflect
 
 Use this mode after implementation exists.
 
@@ -214,6 +244,7 @@ Before moving forward, ask:
 - Are stable IDs preserved?
 - Is the next output useful to both humans and agents?
 - Does a build step have a selected slice and compact context packet?
+- Are optional statechart or Dumplink artifacts being used only where their triggering complexity exists?
 - Does meaningful implementation need a drift check or run log?
 
 ## Common failure modes

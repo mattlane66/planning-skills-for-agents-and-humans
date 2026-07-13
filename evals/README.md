@@ -14,4 +14,5 @@ bash scripts/check-golden-evals.sh
 
 - context packets include execution contracts
 - Dumplink clusters vertically instead of by discipline
+- Statechart output stays traceable to and subordinate to the accepted breadboard
 - drift checks use the strict output format

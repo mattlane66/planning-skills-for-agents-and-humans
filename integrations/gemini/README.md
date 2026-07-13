@@ -21,6 +21,8 @@ Example workspace layout:
       SKILL.md
     breadboarding/
       SKILL.md
+    statechart/
+      SKILL.md
     interface-contracts/
       SKILL.md
     executable-breadboards/

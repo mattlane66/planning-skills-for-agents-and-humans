@@ -81,6 +81,7 @@ modes:
 
   statechart:
     skill: statechart
+    command_aliases: { claude: /statechart, gemini: /statechart }
     purpose: Derive a transition table and Mermaid statechart for a selected stateful portion of an accepted breadboard.
     requires: [accepted_breadboard, selected_scope_or_slice]
     allowed_outputs: [state_inventory, transition_table, mermaid_statechart, gaps_and_proposed_breadboard_updates]
@@ -120,6 +121,15 @@ modes:
     forbidden: [horizontal_ticket_backlog, production_code, scope_expansion_without_appetite_change]
     exit_gate: task_group_selected_or_sequence_accepted
 
+  kickoff:
+    skill: kickoff-doc
+    command_aliases: { claude: /kickoff }
+    purpose: Create a durable builder-facing reference organized by shaped product territory.
+    requires: [selected_direction]
+    allowed_outputs: [territory, selected_direction, boundaries, system_areas, first_slice, verification_target]
+    forbidden: [invented_human_decision, production_code, rejected_alternative_as_active_scope]
+    exit_gate: kickoff_reference_ready_or_skipped
+
   feed_context:
     skill: feed-planning-context
     purpose: Create the compact context packet for implementation.
@@ -157,13 +167,20 @@ artifacts:
   frame: templates/frame.md
   shaping: templates/shaping.md
   breadboard: templates/breadboard.md
+  statechart: templates/statechart.md
+  slices: templates/slices.md
   interface_contracts: templates/interface-contracts.md
   executable_breadboard: templates/executable-breadboard.md
   dumplink: templates/dumplink.md
+  kickoff: templates/kickoff.md
   context_packet: templates/context-packet.md
   drift_check: templates/drift-check.md
   agent_run_log: templates/agent-run-log.md
+  orchestration_plan: templates/orchestration-plan.md
   breadboard_reflection: templates/breadboard-reflection.md
+  spike: templates/spike.md
+  decision_log: templates/decision-log.md
+  appetite_card: templates/appetite-card.md
 
 hooks:
   planning_ripple: hooks/planning-ripple.sh

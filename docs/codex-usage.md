@@ -14,13 +14,14 @@ Codex should honor the workflow in `AGENTS.md`:
 4. Fit-check the alternatives.
 5. Record the selected shape only when the human chooses one.
 6. Breadboard the selected shape.
-7. Slice into demoable increments.
-8. Add interface contracts when the selected slice crosses meaningful boundaries.
-9. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
-10. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
-11. Feed only the relevant planning context to implementation.
-12. Check drift during implementation.
-13. Reflect against implementation and repair drift.
+7. Optionally derive a statechart when a selected stateful scope is hard to reason about from wiring alone.
+8. Slice into demoable increments.
+9. Add interface contracts when the selected slice crosses meaningful boundaries.
+10. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
+11. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+12. Feed only the relevant planning context to implementation.
+13. Check drift during implementation.
+14. Reflect against implementation and repair drift.
 
 The important behavior is the gate discipline:
 
@@ -90,6 +91,15 @@ Create plain-language interface contracts only for the selected slice boundaries
 Do not create production schemas, OpenAPI files, database schemas, or tests unless I explicitly ask.
 ```
 
+### Statechart
+
+```text
+Use AGENTS.md and statechart/SKILL.md.
+Derive a statechart for [selected stateful scope] from [accepted breadboard].
+Preserve source breadboard IDs and mark unsupported behavior as inferred or missing.
+Treat the breadboard as authoritative and do not implement code.
+```
+
 ### Executable breadboard
 
 ```text
@@ -115,7 +125,7 @@ Before using Codex for build work, use the context-feeding protocol instead of p
 ```text
 Use AGENTS.md and feed-planning-context/SKILL.md.
 Create a compact context packet for implementing [selected slice].
-Include only the relevant frame, shaping decision, breadboard rows, contracts, examples, Dumplink task group when present, non-goals, execution contract, and verification target.
+Include only the relevant frame, shaping decision, breadboard rows, statechart rows when present, contracts, examples, Dumplink task group when present, non-goals, execution contract, and verification target.
 Do not implement yet.
 ```
 

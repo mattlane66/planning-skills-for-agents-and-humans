@@ -1,7 +1,7 @@
 ---
 description: Check implementation direction against selected planning artifacts and stop if drift is found.
 argument-hint: [context packet, planning artifacts, implementation path, or notes]
-allowed-tools: Read, Glob, Grep, LS, Bash
+allowed-tools: Read, Glob, Grep, Bash
 ---
 
 Read `AGENTS.md`, `docs/loop-prompting.md`, and `templates/drift-check.md` first.
@@ -25,6 +25,8 @@ Check against the highest-authority available artifacts, in this order:
 9. raw notes and transcripts
 10. rejected alternatives and brainstorming
 
+A statechart is derived from the selected breadboard and never outranks it.
+
 Inspect only what is needed to answer the drift question. Do not broaden into a full code review.
 
 Pay special attention to:
@@ -34,6 +36,7 @@ Pay special attention to:
 - non-goals and exclusions
 - selected shape versus rejected alternatives
 - breadboard places, affordances, stores, and wiring
+- relevant statechart states and transitions with their source breadboard IDs
 - interface contracts
 - executable breadboard examples, fixtures, expected outputs, edge cases, and tests
 - active Dumplink task group, dependency order, risk state, and scope cuts

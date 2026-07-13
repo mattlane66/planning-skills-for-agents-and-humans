@@ -2,11 +2,11 @@
 
 This example shows the foundational Frame → Shape → Breadboard workflow on a tiny, easy-to-understand feature:
 
-> A shared grocery list app where a user can add items, mark them as bought, hide bought items, and keep the list between sessions on the same device.
+> A small same-device grocery list where a user can add items, mark them as bought, hide bought items, and keep the list between sessions.
 
 The point is not the app itself. The point is to make the workflow obvious.
 
-It intentionally stops short of the advanced interface-contract, executable-breadboard, Dumplink, context-packet, drift-check, and run-log steps. Use [`docs/start-here.md`](../../docs/start-here.md) to choose those moves when a larger project needs them.
+It intentionally stops short of the advanced interface-contract, executable-breadboard, Dumplink, context-packet, drift-check, and run-log steps. It also skips Statechart because this small flow is already legible in the breadboard wiring. Use [`docs/start-here.md`](../../docs/start-here.md) to choose those moves when a larger project needs them.
 
 ## Why this example is useful
 
@@ -62,7 +62,7 @@ Example prompt:
 Use /shaping with examples/simple-grocery-list/01-frame.md.
 Create requirements, then sketch two solution directions.
 Keep requirements free of named mechanisms unless they are true constraints.
-Then run a fit check and choose a direction for V1.
+Then run a fit check and reverse fit check. Stop with a decision-ready summary so the human can choose the direction for V1.
 ```
 
 Compare your output to `02-shaping.md`.
@@ -72,6 +72,7 @@ What to notice:
 - there are two shapes, not one
 - the fit check makes trade-offs visible
 - the chosen direction is explicit
+- the example records a human selection rather than asking the agent to choose
 
 ## Step 3 — Breadboard the chosen shape
 

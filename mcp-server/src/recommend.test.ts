@@ -34,8 +34,16 @@ test('uses Dumplink only when task grouping signals are present', () => {
 
 test('uses Statechart only when state-complexity signals are present', () => {
   assert.deepEqual(
-    recommendPlanningWorkflow('Derive a statechart for retries, timeouts, and lifecycle transitions'),
+    recommendPlanningWorkflow('Derive a statechart from the accepted breadboard for retries and timeouts'),
     ['statechart'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Use the approved breadboard to document lifecycle guard conditions'),
+    ['statechart'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('We need a state machine for retries and lifecycle transitions'),
+    ['breadboarding', 'statechart'],
   );
   assert.equal(recommendPlanningWorkflow('What should I do next?').includes('statechart'), false);
 });

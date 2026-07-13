@@ -6,9 +6,9 @@ export const skillNames = [
   'interface-contracts',
   'executable-breadboards',
   'dumplink',
-  'breadboard-reflection',
   'kickoff-doc',
   'feed-planning-context',
+  'breadboard-reflection',
 ] as const;
 
 export type SkillName = (typeof skillNames)[number];
@@ -56,15 +56,25 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
   }
 
   const selectedDirection = includesAny(normalized, ['selected shape', 'chosen shape', 'selected direction', 'chosen direction']);
+  const acceptedBreadboard = includesAny(normalized, [
+    'accepted breadboard',
+    'approved breadboard',
+    'selected breadboard',
+    'from the breadboard',
+  ]);
   if (!selectedDirection && includesAny(normalized, ['criteria', 'requirement', 'compare options', 'alternative', 'shape', 'tradeoff', 'direction'])) {
     recommendations.push('shaping');
   }
 
-  if (selectedDirection || includesAny(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring'])) {
+  if (!acceptedBreadboard && (selectedDirection || includesAny(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring']))) {
     recommendations.push('breadboarding');
   }
 
-  if (includesAny(normalized, ['statechart', 'state machine', 'lifecycle', 'retry', 'timeout', 'guard condition'])) {
+  const statechartRequested = includesAny(normalized, ['statechart', 'state machine', 'lifecycle', 'retry', 'timeout', 'guard condition']);
+  if (statechartRequested && !acceptedBreadboard && !recommendations.includes('breadboarding')) {
+    recommendations.push('breadboarding');
+  }
+  if (statechartRequested) {
     recommendations.push('statechart');
   }
 

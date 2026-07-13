@@ -8,6 +8,7 @@ from urllib.parse import unquote
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+INLINE_MARKDOWN = re.compile(r"`([^`\n]+\.md)`")
 SKIP_PREFIXES = ("http://", "https://", "mailto:", "#")
 SKIP_PARTS = {"node_modules", "dist", ".git"}
 
@@ -37,6 +38,18 @@ for document in markdown_files():
         if not candidate.resolve().exists():
             relative_document = document.relative_to(ROOT)
             failures.append(f"{relative_document}: {raw_target}")
+
+    if "examples" in document.relative_to(ROOT).parts:
+        for match in INLINE_MARKDOWN.finditer(text):
+            raw_target = match.group(1)
+            if match.start() > 0 and text[match.start() - 1] == "[" and text[match.end() :].startswith("]("):
+                continue
+            if any(marker in raw_target for marker in ("*", "{", "}", "<", ">")):
+                continue
+            candidate = ROOT / raw_target if raw_target.startswith("examples/") else document.parent / raw_target
+            if not candidate.resolve().exists():
+                relative_document = document.relative_to(ROOT)
+                failures.append(f"{relative_document}: `{raw_target}`")
 
 if failures:
     print("Broken local Markdown links:", file=sys.stderr)

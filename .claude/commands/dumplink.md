@@ -1,7 +1,7 @@
 ---
 description: Turn a selected shaped project into vertical task groups, dependency-aware sequence, risk states, scope cuts, and an agent handoff packet.
 argument-hint: [shaping doc, breadboard, selected slice, appetite, or notes]
-allowed-tools: Read, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `AGENTS.md` and `dumplink/SKILL.md` first.

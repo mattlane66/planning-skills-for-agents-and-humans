@@ -34,9 +34,13 @@ A good context packet tells the agent:
 
 Breadboard = structure of the solution.
 
+Statechart = optional derived behavioral view of a selected stateful portion of the breadboard.
+
 Interface contract = what crosses a boundary.
 
 Executable breadboard = structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
+
+Dumplink = vertical task grouping, risk/dependency sequence, and scope cuts for selected shaped work.
 
 Context packet = the exact subset handed to the build agent.
 
@@ -52,16 +56,20 @@ What the agent should do now.
 ## Source artifacts
 - @planning/frame.md
 - @planning/breadboard.md
+- @planning/statechart.md, when the selected scope needs it
 - @planning/slices.md
 - @planning/executable-breadboard.md, when the selected slice is ready for implementation
 - @planning/interface-contracts.md, when boundary contracts are split out separately
+- @planning/dumplink.md, when task-group scope or sequence matters
 
 ## Use these sections first
 - frame.md: Outcome, Constraints, Non-goals
 - breadboard.md: Places, Affordances, Stores, Wiring, Interface contract candidates
+- statechart.md: Relevant states, transitions, source breadboard IDs, and explicit gaps
 - slices.md: Selected slice, Demo, Produces
 - executable-breadboard.md: Selected slice, Relevant breadboard structure, Interface contracts, Example starting data, Example runs, Edge cases, Acceptance tests, Open decisions, Verification target
 - interface-contracts.md: Contract IDs, boundaries, input shapes, output shapes, branches, errors, open decisions
+- dumplink.md: Active task group, dependencies, risk state, cuts, acceptance checks, and stop condition
 
 ## Do not use unless needed
 - raw interview notes
@@ -78,6 +86,8 @@ What the agent should do now.
 - executable-breadboard fixtures, example runs, expected outputs, edge cases, and acceptance tests, when present
 - contract IDs and boundary names, when present
 - field names, required/optional distinctions, enum values, nullability, units, and error cases, when specified
+- statechart state and transition IDs with their source breadboard IDs, when present
+- active Dumplink task group, dependency order, risk state, cuts, and acceptance checks, when present
 
 ## Required behavior
 1. Restate the relevant constraints.
@@ -126,16 +136,18 @@ The agent is implementing or testing the selected slice.
 
 Use stable IDs for anything the agent may need to trace from planning into implementation.
 
-Examples:
+For new artifacts, use the compact conventions from `AGENTS.md`:
 
-- REQ-01: User can recover from an incomplete plan.
-- P-01: Planning dashboard.
-- AFF-03: Continue selected slice.
-- STORE-02: Slice status.
-- CONTRACT-01: Resume slice request/response.
-- SLICE-01: Resume unfinished work.
-- RUN-01: Happy path for resuming a slice.
-- E-01: Missing saved slice state.
+- R1: User can recover from an incomplete plan.
+- P1: Planning dashboard.
+- U3: Continue selected slice.
+- S2: Slice status.
+- C1: Resume slice request/response.
+- V1: Resume unfinished work.
+- RUN1: Happy path for resuming a slice.
+- E1: Missing saved slice state.
+
+Preserve established legacy IDs rather than translating them only for style.
 
 Avoid renaming IDs just to improve wording. If the meaning changes, create a new ID or add a short change note.
 
@@ -249,11 +261,14 @@ When artifacts disagree, use this default authority order unless the user says o
 2. selected slice or kickoff doc
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected breadboard
-6. selected shaping direction
-7. framing doc
-8. raw notes and transcripts
-9. rejected alternatives and brainstorming
+5. selected Dumplink task group and sequence, for task-group scope and build order
+6. selected breadboard
+7. selected shaping direction
+8. framing doc
+9. raw notes and transcripts
+10. rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it.
 
 ## Drift protocol
 

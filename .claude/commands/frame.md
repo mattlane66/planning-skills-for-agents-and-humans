@@ -1,7 +1,7 @@
 ---
 description: Create a framing document from notes, messages, transcripts, or source files.
 argument-hint: [source notes/files and desired output path]
-allowed-tools: Read, Write, Edit, MultiEdit, Glob, Grep, LS
+allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
 Read `framing-doc/SKILL.md` first and follow it as the primary instruction for this command.

@@ -9,6 +9,7 @@ The Codex plugin includes these skills:
 - `framing-doc`
 - `shaping`
 - `breadboarding`
+- `statechart`
 - `interface-contracts`
 - `executable-breadboards`
 - `dumplink`
@@ -73,6 +74,10 @@ Use the breadboarding skill to map places, affordances, stores, state, and wirin
 ```
 
 ```text
+Use the statechart skill to derive transitions for a selected stateful portion of an accepted breadboard without replacing the breadboard as source of truth.
+```
+
+```text
 Use the interface-contracts skill to define the plain-language boundary contracts for this selected slice.
 ```
 
@@ -100,6 +105,7 @@ Keep the root skill folders and the `skills/` copies aligned:
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
 breadboarding/                -> skills/breadboarding/
+statechart/                   -> skills/statechart/
 interface-contracts/          -> skills/interface-contracts/
 executable-breadboards/       -> skills/executable-breadboards/
 dumplink/                     -> skills/dumplink/
@@ -108,7 +114,7 @@ kickoff-doc/                  -> skills/kickoff-doc/
 feed-planning-context/        -> skills/feed-planning-context/
 ```
 
-The root folders are canonical. The `skills/` folder is the generated plugin-packaged form Codex reads through `.codex-plugin/plugin.json`.
+The root folders are canonical. `skill-inventory.txt` defines the complete packaged set, and the `skills/` folder is the generated form Codex reads through `.codex-plugin/plugin.json`.
 
 After changing a canonical skill, run:
 

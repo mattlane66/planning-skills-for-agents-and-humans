@@ -103,13 +103,16 @@ See the [invocation matrix](./docs/agent-invocation-matrix.md) for exact mapping
 
 ### Claude Code
 
-Clone the repository and use it as a plugin directory:
+Clone the repository, build the complete plugin layout, and use the generated bundle:
 
 ```bash
 git clone https://github.com/mattlane66/planning-skills-for-agents-and-humans.git ~/.local/share/planning-skills-for-agents-and-humans
 cd ~/.local/share/planning-skills-for-agents-and-humans
-claude --plugin-dir .
+bash scripts/build-claude-plugin.sh
+claude --plugin-dir dist/claude-code-plugin
 ```
+
+Plugin entries are namespaced, for example `/planning-skills:frame` and `/planning-skills:statechart`.
 
 See [Claude Code plugin guidance](./docs/claude-code-plugin.md) and [slash commands](./docs/claude-slash-commands.md).
 
@@ -140,12 +143,13 @@ See the [MCP server README](./mcp-server/README.md) for client configuration and
 
 - [`simple-grocery-list`](./examples/simple-grocery-list/) is a deliberately small walkthrough of the foundational workflow.
 - [`existing-codebase-drift`](./examples/existing-codebase-drift/) demonstrates how to surface differences between an intended breadboard and implementation reality.
+- [`statechart-retry-workflow`](./examples/statechart-retry-workflow/) shows how to derive a traceable statechart when retries, cancellation, and timeouts make breadboard wiring harder to review.
 
 These are teaching examples, not evidence of comparative model performance. A realistic codebase-scale case study remains a useful next addition.
 
 ## Repository integrity
 
-The root skill folders are canonical. The `skills/` directory is generated packaging for plugin consumers.
+The root skill folders are canonical. [`skill-inventory.txt`](./skill-inventory.txt) defines the complete set, and the `skills/` directory is generated packaging for plugin consumers.
 
 After changing a canonical skill:
 

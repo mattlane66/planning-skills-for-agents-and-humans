@@ -63,6 +63,7 @@ Human checks:
 - hidden system consequences are visible
 - stores and wiring explain the behavior
 - product-relevant branches are explicit
+- any derived statechart remains traceable to the breadboard and exposes rather than invents missing behavior
 
 Do not slice from a vague or partially understood breadboard.
 
@@ -77,6 +78,7 @@ Human confirms:
 - `Produces` line
 - exclusions
 - verification target
+- active Dumplink task group and cuts, when task grouping governs the build pass
 
 Do not implement outside the selected slice unless the human expands scope.
 

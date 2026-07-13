@@ -25,11 +25,11 @@ for candidate in \
 done
 
 looks_like_build=false
-if [[ "$tool_name" =~ ^(Write|Edit|MultiEdit)$ ]] && [[ -n "$file_path" ]] && [[ ! "$file_path" =~ (^planning/|^docs/|\.md$) ]]; then
+if [[ "$tool_name" =~ ^(Write|Edit)$ ]] && [[ -n "$file_path" ]] && [[ ! "$file_path" =~ (^planning/|^docs/|\.md$) ]]; then
   looks_like_build=true
 fi
 
-if [[ "$tool_name" == "Bash" ]] && [[ "$command_text" =~ (npm|pnpm|yarn|bun|pytest|cargo|go|make|gradle|mvn|swift|xcodebuild|tsc|vite|next|rails|python|node) ]]; then
+if [[ "$tool_name" == "Bash" ]] && [[ "$command_text" =~ (npm[[:space:]]+(run|test|exec)|pnpm[[:space:]]+(run|test|exec)|yarn[[:space:]]+(run|test)|bun[[:space:]]+(run|test)|pytest|python[[:space:]]+-m[[:space:]]+pytest|cargo[[:space:]]+(build|test|run)|go[[:space:]]+(build|test|run)|make([[:space:]]|$)|gradle|mvn[[:space:]]+(test|package|verify)|swift[[:space:]]+(build|test)|xcodebuild|tsc([[:space:]]|$)|vite([[:space:]]|$)|next[[:space:]]+(build|dev)|rails[[:space:]]+(test|server)) ]]; then
   looks_like_build=true
 fi
 
@@ -41,7 +41,9 @@ Pre-build context check:
 - Expected paths include planning/context-packet.md, planning/agent-context-packet.md, planning/context.md, or .agent-context.md.
 - If this is a tiny unshaped change, continue intentionally.
 MSG
-  exit 2
+  if [[ "${PLANNING_HOOK_STRICT:-0}" == "1" ]]; then
+    exit 2
+  fi
 fi
 
 exit 0

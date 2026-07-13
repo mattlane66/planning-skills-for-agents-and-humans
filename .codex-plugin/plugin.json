@@ -1,7 +1,7 @@
 {
   "name": "planning-skills-for-agents-and-humans",
   "version": "1.1.0",
-  "description": "Planning workflows for framing, shaping, breadboarding, interface contracts, executable breadboards, vertical task grouping, context packets, reflection, and agent harnessing.",
+  "description": "Planning workflows for framing, shaping, breadboarding, derived statecharts, interface contracts, executable breadboards, vertical task grouping, context packets, reflection, and agent harnessing.",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"
@@ -12,6 +12,7 @@
     "planning",
     "shaping",
     "breadboarding",
+    "statecharts",
     "interface-contracts",
     "executable-breadboards",
     "agent-orchestration",
@@ -23,7 +24,7 @@
   "interface": {
     "displayName": "Planning Skills for Agents and Humans",
     "shortDescription": "Frame, shape, breadboard, package context, check drift, and reflect before building.",
-    "longDescription": "A set of reusable planning workflows that help humans and agents turn fuzzy requests, messy notes, partial product ideas, kickoff conversations, selected slices, interface contracts, executable breadboards, and implementation discoveries into clear builder-facing artifacts.",
+    "longDescription": "A set of reusable planning workflows that help humans and agents turn fuzzy requests, messy notes, partial product ideas, selected breadboards, optional statecharts, selected slices, interface contracts, executable breadboards, and implementation discoveries into clear builder-facing artifacts.",
     "developerName": "Matt Lane",
     "category": "Productivity",
     "capabilities": ["Read", "Write"],
@@ -32,6 +33,7 @@
       "Use Planning Skills for Agents and Humans to frame this product idea before implementation.",
       "Use the shaping skill to compare possible approaches before choosing one.",
       "Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.",
+      "Use the statechart skill only when a selected stateful portion of an accepted breadboard needs a transition table and behavioral projection.",
       "Use the interface-contracts skill to define plain-language contracts for the selected slice boundaries.",
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
       "Use the dumplink skill when selected work needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.",

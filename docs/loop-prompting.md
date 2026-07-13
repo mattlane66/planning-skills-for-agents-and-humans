@@ -125,7 +125,7 @@ Use @planning/context-packet.md as the source of truth for this implementation s
 
 ```text
 Planning drift found:
-- Selected artifact says: SLICE-01 only supports creating a draft plan, not publishing it.
+- Selected artifact says: V1 only supports creating a draft plan, not publishing it.
 - Current implementation direction is: adding a Publish button and publish-state handling.
 - Risk: expands scope beyond the selected slice and creates new product behavior not shaped yet.
 - Recommended move: remove publish behavior from this slice or update the shaping/slice artifact before continuing.

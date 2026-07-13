@@ -4,17 +4,10 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT_DIR"
 
-SKILLS=(
-  framing-doc
-  shaping
-  breadboarding
-  interface-contracts
-  executable-breadboards
-  dumplink
-  kickoff-doc
-  feed-planning-context
-  breadboard-reflection
-)
+SKILLS=()
+while IFS= read -r skill || [[ -n "$skill" ]]; do
+  [[ -n "$skill" ]] && SKILLS+=("$skill")
+done < skill-inventory.txt
 
 mode="${1:-sync}"
 

@@ -6,15 +6,19 @@ The workflow checks:
 
 - plugin manifests and the repository license
 - strict skill frontmatter
+- canonical skill inventory coverage, including optional Statechart
+- Bash 3-compatible inventory loading for macOS and Linux environments
 - byte-for-byte parity between canonical root skills and packaged `skills/` copies
-- Claude and Gemini command wrappers
-- artifact templates and every path referenced by `.agent-orchestration.yaml`
+- current Claude command frontmatter/tool names and valid Gemini wrappers
+- executable modes for scripts and hooks
+- artifact templates, every path referenced by `.agent-orchestration.yaml`, and matching MCP exposure
 - required documentation and README discovery links
 - local Markdown links
+- example-local inline Markdown file references
 - version parity across Claude, Codex, and MCP packages
-- contract fixtures for execution contracts, vertical task groups, and drift output
-- the generated Claude plugin bundle
-- reproducible MCP installation, TypeScript compilation, and tests using `npm ci`
+- contract fixtures for execution contracts, Statechart authority, vertical task groups, and drift output
+- the generated Claude plugin bundle, including canonical skills, non-duplicate commands, license, and bundle-local supporting references
+- reproducible MCP installation, TypeScript compilation, recommendation tests, and stdio tool smoke tests using `npm ci`
 
 Run the same checks locally from the repository root:
 

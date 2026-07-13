@@ -12,7 +12,7 @@ It reads root `SKILL.md` files and `templates/` at runtime. The server does not 
 - `get_artifact_template` — return a canonical starter template from `templates/`.
 - `get_orchestration_manifest` — return `.agent-orchestration.yaml`.
 
-The recommender does not assume every project needs every step. In particular, Dumplink is recommended only when task grouping, risk, dependency, or scope-cut signals are present. A generic request to build something is routed through the core planning workflow unless the situation says a selected slice or context packet already exists.
+The skill list follows `skill-inventory.txt`, and the artifact tool covers every template named in `.agent-orchestration.yaml`. The recommender does not assume every project needs every step. Statechart is recommended only for explicit state-complexity signals, and Dumplink only for task grouping, risk, dependency, or scope-cut signals. A generic request to build something is routed through the core planning workflow unless the situation says a selected slice or context packet already exists.
 
 ## Install and verify
 

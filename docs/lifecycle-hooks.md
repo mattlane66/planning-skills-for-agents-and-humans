@@ -31,7 +31,7 @@ planning/context.md
 .agent-context.md
 ```
 
-This is intentionally a reminder, not a complete policy engine. Small unshaped changes may not need a context packet.
+This is intentionally a non-blocking reminder by default, not a complete policy engine. Small unshaped changes may not need a context packet.
 
 ### `planning-drift-check.sh`
 
@@ -62,7 +62,7 @@ Planning drift found:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit|Bash",
+        "matcher": "Write|Edit|Bash",
         "hooks": [
           {
             "type": "command",
@@ -74,7 +74,7 @@ Planning drift found:
     ],
     "PostToolUse": [
       {
-        "matcher": "Write|Edit|MultiEdit|Bash",
+        "matcher": "Write|Edit|Bash",
         "hooks": [
           {
             "type": "command",
@@ -109,6 +109,12 @@ chmod +x ~/.claude/hooks/planning-ripple.sh
 chmod +x ~/.claude/hooks/pre-build-context-check.sh
 chmod +x ~/.claude/hooks/planning-drift-check.sh
 ```
+
+The repository commits these hook files as executable. The `chmod` commands are only a fallback for filesystems or copy operations that discard executable modes.
+
+## Optional strict mode
+
+By default the hooks print guidance and exit successfully. To make a matched reminder block with exit code 2, set `PLANNING_HOOK_STRICT=1` in the hook command environment. Use strict mode deliberately: a PreToolUse exit code 2 blocks the matched tool call.
 
 ## Design principle
 

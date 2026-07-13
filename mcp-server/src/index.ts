@@ -48,11 +48,6 @@ const skills: Record<SkillName, { title: string; description: string; path: stri
     description: 'Turn selected shaped work into vertical task groups, dependency-aware sequence, risk states, scope cuts, and a bounded handoff.',
     path: 'dumplink/SKILL.md',
   },
-  'breadboard-reflection': {
-    title: 'Breadboard Reflection',
-    description: 'Compare a breadboard to implementation, repair drift, and identify design smells.',
-    path: 'breadboard-reflection/SKILL.md',
-  },
   'kickoff-doc': {
     title: 'Kickoff Doc',
     description: 'Turn a kickoff conversation into a builder-facing reference organized around the territory being built.',
@@ -63,6 +58,11 @@ const skills: Record<SkillName, { title: string; description: string; path: stri
     description: 'Package planning artifacts into compact context for agent implementation without overloading context.',
     path: 'feed-planning-context/SKILL.md',
   },
+  'breadboard-reflection': {
+    title: 'Breadboard Reflection',
+    description: 'Compare a breadboard to implementation, repair drift, and identify design smells.',
+    path: 'breadboard-reflection/SKILL.md',
+  },
 };
 
 const artifactTemplates = {
@@ -70,6 +70,7 @@ const artifactTemplates = {
   shaping: 'templates/shaping.md',
   breadboard: 'templates/breadboard.md',
   statechart: 'templates/statechart.md',
+  slices: 'templates/slices.md',
   'interface-contract': 'templates/interface-contracts.md',
   'executable-breadboard': 'templates/executable-breadboard.md',
   dumplink: 'templates/dumplink.md',
@@ -79,6 +80,9 @@ const artifactTemplates = {
   'drift-check': 'templates/drift-check.md',
   'agent-run-log': 'templates/agent-run-log.md',
   'orchestration-plan': 'templates/orchestration-plan.md',
+  spike: 'templates/spike.md',
+  'decision-log': 'templates/decision-log.md',
+  'appetite-card': 'templates/appetite-card.md',
 } as const;
 
 type ArtifactName = keyof typeof artifactTemplates;
