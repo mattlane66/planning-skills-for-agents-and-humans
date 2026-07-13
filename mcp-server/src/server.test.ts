@@ -31,7 +31,7 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
     args: [resolve('dist/index.js')],
     stderr: 'pipe',
   });
-  const client = new Client({ name: 'planning-skills-test', version: '1.1.0' });
+  const client = new Client({ name: 'planning-skills-test', version: '1.2.0' });
 
   try {
     await client.connect(transport);
@@ -74,6 +74,27 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
     });
     assert.match(textContent(template), /## Transition table/);
     assert.match(textContent(template), /stateDiagram-v2/);
+
+    const sketchSkill = await client.callTool({
+      name: 'get_planning_skill',
+      arguments: { skill: 'sketch-reconciliation' },
+    });
+    assert.match(textContent(sketchSkill), /observations before interpretations/i);
+
+    const sketchTemplate = await client.callTool({
+      name: 'get_artifact_template',
+      arguments: { artifact: 'sketch-reconciliation' },
+    });
+    assert.match(textContent(sketchTemplate), /## Observation-to-plan mapping/);
+
+    const recommendation = await client.callTool({
+      name: 'recommend_planning_workflow',
+      arguments: {
+        situation: "We're missing something. See this attached sketch. What does it change in Shape A?",
+      },
+    });
+    assert.match(textContent(recommendation), /1\. sketch-reconciliation/);
+    assert.doesNotMatch(textContent(recommendation), /framing-doc/);
 
     for (const [artifact, heading] of [
       ['slices', /# \[Project\] — Slices/],

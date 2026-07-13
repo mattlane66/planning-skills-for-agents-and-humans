@@ -195,6 +195,7 @@ These can happen in any order as the shaping evolves:
 - test a shape with a fit check
 - extract new requirements revealed by the fit check
 - spike an unknown
+- reconcile a sketch, screenshot, wireframe, mockup, or whiteboard through the `sketch-reconciliation` skill when visual evidence may change the active artifacts
 - decide among alternatives
 - breadboard the selected shape
 - slice the breadboarded shape
@@ -408,6 +409,12 @@ Detailing usually produces:
 - wiring
 
 At that point, use the breadboarding skill.
+
+## Visual evidence
+
+When the user drops in a sketch or screenshot and asks what is missing or what should change, use the `sketch-reconciliation` skill. Do not treat the image as an automatic shape update.
+
+The reconciliation must separate visible observations from interpretations, map observations to existing IDs, show proposed deltas, and apply accepted changes across every affected layer. Rerun fit checks when requirements or shape parts change.
 
 ## Kick-off: From selected shape to slices
 

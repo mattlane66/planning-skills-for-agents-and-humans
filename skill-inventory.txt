@@ -1,5 +1,6 @@
 framing-doc
 shaping
+sketch-reconciliation
 breadboarding
 statechart
 interface-contracts

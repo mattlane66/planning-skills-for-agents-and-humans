@@ -14,6 +14,15 @@ It reads root `SKILL.md` files and `templates/` at runtime. The server does not 
 
 The skill list follows `skill-inventory.txt`, and the artifact tool covers every template named in `.agent-orchestration.yaml`. The recommender does not assume every project needs every step. Statechart is recommended only for explicit state-complexity signals, and Dumplink only for task grouping, risk, dependency, or scope-cut signals. A generic request to build something is routed through the core planning workflow unless the situation says a selected slice or context packet already exists.
 
+Conversational shorthand from an active shaping session is routed directly instead of restarting the workflow:
+
+- `show me R x A`, `A x R`, `rotate the fit check` -> `shaping`
+- `spike A2`, `update A`, `add R` -> `shaping`
+- `see this sketch`, attached screenshot/wireframe reconciliation -> `sketch-reconciliation`
+- `let's slice it` -> `breadboarding`
+- implementation planning for the first/next/active slice -> `executable-breadboards`, then `feed-planning-context`
+- run/interact/verify execution requests -> `feed-planning-context` before the host agent executes
+
 ## Install and verify
 
 From this directory:

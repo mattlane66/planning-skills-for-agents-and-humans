@@ -21,6 +21,6 @@ Produce or update a shaping artifact that separates but connects:
 - fit check
 - reverse fit check
 - decision
-- next breadboarding or spike handoff
+- next sketch-reconciliation, breadboarding, or spike handoff
 
 Default to planning mode. Do not write production code unless the user explicitly selects a slice to build.

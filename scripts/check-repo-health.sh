@@ -148,19 +148,19 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  frame shape criteria sketch-shapes fit-check select-shape breadboard statechart dumplink
+  frame shape criteria sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  frame shape criteria sketch-shapes fit-check select-shape breadboard
+  frame shape criteria sketch-shapes fit-check select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
 )
 
-GEMINI_COMMANDS=(criteria sketch-shapes fit-check select-shape statechart dumplink check-drift)
+GEMINI_COMMANDS=(criteria sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
 
 TEMPLATES=(
-  frame shaping breadboard statechart interface-contracts executable-breadboard dumplink
+  frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
   slices context-packet kickoff breadboard-reflection drift-check agent-run-log
   orchestration-plan spike decision-log appetite-card
 )
@@ -172,19 +172,25 @@ DOCS=(
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
   docs/codex-usage.md docs/agent-invocation-matrix.md docs/agent-run-records.md
   docs/lifecycle-hooks.md docs/human-decision-gates.md docs/plan-quality-rubric.md
-  docs/statechart-usage.md implementation-context.md skill-inventory.txt
+  docs/statechart-usage.md docs/sketch-reconciliation.md docs/visual-hot-reload.md
+  implementation-context.md skill-inventory.txt
   examples/existing-codebase-drift/02-implementation-reality.md
   examples/existing-codebase-drift/03-breadboard-reflection.md
   examples/statechart-retry-workflow/01-accepted-breadboard.md
   examples/statechart-retry-workflow/02-derived-statechart.md
+  examples/sketch-reconciliation/README.md
+  examples/sketch-reconciliation/02-availability-sketch.svg
+  examples/sketch-reconciliation/03-reconciliation.md
 )
 
 echo "Checking manifests and licensing..."
 check_json .claude-plugin/plugin.json
 check_json .codex-plugin/plugin.json
 check_json .agents/plugins/marketplace.json
+check_json visualizer/package.json
 check_file_exists .agent-orchestration.yaml
 check_file_exists LICENSE
+check_file_exists visualizer/package-lock.json
 if python3 - <<'PY'
 import json
 import pathlib
@@ -296,6 +302,24 @@ if grep -q "statechart" AGENTS.md \
 else
   fail "Statechart is missing from one or more canonical consumer surfaces"
 fi
+if grep -q "sketch-reconciliation" AGENTS.md \
+  && grep -q "skill: sketch-reconciliation" .agent-orchestration.yaml \
+  && grep -q "templates/sketch-reconciliation.md" mcp-server/src/index.ts \
+  && grep -q "sketch-reconciliation" .codex-plugin/plugin.json \
+  && grep -q "sketch-reconciliation" skill-inventory.txt \
+  && grep -q "reconcile-sketch" docs/claude-slash-commands.md; then
+  pass "Sketch reconciliation is discoverable across canonical consumer surfaces"
+else
+  fail "Sketch reconciliation is missing from one or more canonical consumer surfaces"
+fi
+if grep -q "watch-planning-diagrams.sh" README.md \
+  && grep -q "watch-planning-diagrams.sh" docs/visual-hot-reload.md \
+  && [[ -f visualizer/src/server.mjs ]] \
+  && [[ -f visualizer/test/viewer.test.mjs ]]; then
+  pass "Visual hot-reload viewer is documented and testable"
+else
+  fail "Visual hot-reload viewer is incomplete or undiscoverable"
+fi
 if python3 scripts/check-local-links.py; then
   pass "Local Markdown links resolve"
 else
@@ -382,6 +406,18 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_json dist/claude-code-plugin/.claude-plugin/plugin.json
 else
   fail "Claude plugin bundle failed to build"
+fi
+
+echo
+echo "Checking visual hot-reload viewer..."
+if command -v npm >/dev/null 2>&1; then
+  if (cd visualizer && npm ci --ignore-scripts && npm run check); then
+    pass "Visual viewer installs and passes tests"
+  else
+    fail "Visual viewer verification failed"
+  fi
+else
+  fail "npm is required to verify the visual viewer"
 fi
 
 echo

@@ -8,7 +8,7 @@ What the agent was asked to do.
 
 ## Mode
 
-Explore / Frame / Criteria / Sketch Shapes / Fit Check / Select Shape / Breadboard / Statechart / Slice / Interface Contract / Executable Breadboard / Dumplink / Kickoff / Feed Context / Build / Check Drift / Reflect.
+Explore / Frame / Criteria / Sketch Shapes / Fit Check / Select Shape / Reconcile Sketch / Breadboard / Statechart / Slice / Interface Contract / Executable Breadboard / Dumplink / Kickoff / Feed Context / Build / Check Drift / Reflect.
 
 ## Source artifacts used
 

@@ -17,7 +17,9 @@ jobs:
         with:
           node-version: "22"
           cache: npm
-          cache-dependency-path: mcp-server/package-lock.json
+          cache-dependency-path: |
+            mcp-server/package-lock.json
+            visualizer/package-lock.json
 
       - name: Check repository health
         run: bash scripts/check-repo-health.sh

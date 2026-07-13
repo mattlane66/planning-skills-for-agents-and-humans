@@ -2,6 +2,8 @@
 
 Planning artifacts are most useful to agents when they are fed at the right fidelity. Do not paste the whole planning stack by default. Package the small amount of context the agent needs for the current phase, name the source artifacts, and preserve stable IDs so the agent can trace implementation work back to the plan.
 
+When a sketch-reconciliation record exists, feed accepted changes only after they have been written into the authoritative frame, shaping, breadboard, or slice artifacts. Keep pending, rejected, and ambiguous visual deltas out of the build contract.
+
 ## Why this exists
 
 The skills in this repo produce human-readable planning artifacts. Agent context feeding turns those artifacts into machine-usable working context without flattening them into generic instructions.
@@ -76,6 +78,7 @@ What the agent should do now.
 - old discarded alternatives
 - brainstorming notes
 - rejected shapes
+- unaccepted sketch-reconciliation deltas
 
 ## Must preserve
 - stable requirement IDs

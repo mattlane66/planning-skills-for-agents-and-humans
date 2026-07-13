@@ -20,6 +20,7 @@ The unqualified names below apply when Claude Code is running in this repository
 | `/sketch-shapes` | `shaping/SKILL.md` | Sketch alternative shapes against accepted criteria without selecting one. |
 | `/fit-check` | `shaping/SKILL.md` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | `shaping/SKILL.md` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
+| `/reconcile-sketch` | `sketch-reconciliation/SKILL.md` | Reconcile a sketch, screenshot, wireframe, mockup, or whiteboard with planning IDs and apply only accepted deltas. |
 | `/breadboard` | `breadboarding/SKILL.md` | Map places, affordances, stores, wiring, and demoable slices. |
 | `/statechart` | `statechart/SKILL.md` | Derive a transition table and Mermaid statechart for a selected stateful scope. |
 | `/dumplink` | `dumplink/SKILL.md` | Create vertical task groups, dependency-aware sequence, risk states, scope cuts, and a bounded handoff. |
@@ -38,7 +39,8 @@ Use the smaller shaping gate commands when you want to prevent the agent from on
 2. `/sketch-shapes` — make multiple possible directions visible.
 3. `/fit-check` — compare shapes against criteria and check whether each mechanism is justified.
 4. `/select-shape` — record the human decision or stop with a decision-ready summary.
-5. `/breadboard` — make the selected shape concrete only after selection.
+5. `/reconcile-sketch` — use whenever a dropped visual may clarify or change the active artifacts.
+6. `/breadboard` — make the selected shape concrete only after selection.
 
 These commands are intentionally thin wrappers around `shaping/SKILL.md`. They narrow the stopping point; they do not create a second copy of the method.
 
@@ -93,6 +95,12 @@ From a Claude Code session in the repository, run commands with arguments:
 ```
 
 ```text
+/reconcile-sketch planning/shaping.md planning/breadboard.md /path/to/sketch.png
+```
+
+You can instead attach or paste the image in the same command prompt when the client supports image input. With the installed plugin bundle, use `/planning-skills:reconcile-sketch`.
+
+```text
 /breadboard planning/selected-shape.md
 ```
 
@@ -129,6 +137,7 @@ Keep the canonical workflow details in the skill files:
 ```text
 framing-doc/SKILL.md
 shaping/SKILL.md
+sketch-reconciliation/SKILL.md
 breadboarding/SKILL.md
 statechart/SKILL.md
 interface-contracts/SKILL.md

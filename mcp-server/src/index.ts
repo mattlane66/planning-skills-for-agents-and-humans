@@ -23,6 +23,11 @@ const skills: Record<SkillName, { title: string; description: string; path: stri
     description: 'Define requirements and criteria, compare alternative approaches, and detail the selected direction before implementation.',
     path: 'shaping/SKILL.md',
   },
+  'sketch-reconciliation': {
+    title: 'Sketch Reconciliation',
+    description: 'Reconcile a sketch, screenshot, wireframe, mockup, or whiteboard with planning artifacts without silently changing scope.',
+    path: 'sketch-reconciliation/SKILL.md',
+  },
   breadboarding: {
     title: 'Breadboarding',
     description: 'Map places, affordances, stores, state, and wiring so behavior is concrete before implementation.',
@@ -81,6 +86,7 @@ const artifactTemplates = {
   'agent-run-log': 'templates/agent-run-log.md',
   'orchestration-plan': 'templates/orchestration-plan.md',
   spike: 'templates/spike.md',
+  'sketch-reconciliation': 'templates/sketch-reconciliation.md',
   'decision-log': 'templates/decision-log.md',
   'appetite-card': 'templates/appetite-card.md',
 } as const;
@@ -89,7 +95,7 @@ type ArtifactName = keyof typeof artifactTemplates;
 
 const server = new McpServer({
   name: 'planning-skills-for-agents-and-humans',
-  version: '1.1.0',
+  version: '1.2.0',
 });
 
 server.tool('list_planning_skills', 'List the available planning skills and their intended uses.', {}, async () => {

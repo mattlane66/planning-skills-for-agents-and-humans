@@ -6,7 +6,7 @@ The workflow checks:
 
 - plugin manifests and the repository license
 - strict skill frontmatter
-- canonical skill inventory coverage, including optional Statechart
+- canonical skill inventory coverage, including optional Statechart and Sketch Reconciliation
 - Bash 3-compatible inventory loading for macOS and Linux environments
 - byte-for-byte parity between canonical root skills and packaged `skills/` copies
 - current Claude command frontmatter/tool names and valid Gemini wrappers
@@ -18,6 +18,7 @@ The workflow checks:
 - version parity across Claude, Codex, and MCP packages
 - contract fixtures for execution contracts, Statechart authority, vertical task groups, and drift output
 - the generated Claude plugin bundle, including canonical skills, non-duplicate commands, license, and bundle-local supporting references
+- reproducible visual-viewer installation and hot-reload server tests using the pinned Mermaid package
 - reproducible MCP installation, TypeScript compilation, recommendation tests, and stdio tool smoke tests using `npm ci`
 
 Run the same checks locally from the repository root:

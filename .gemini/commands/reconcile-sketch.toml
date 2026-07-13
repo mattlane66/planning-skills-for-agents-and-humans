@@ -1,0 +1,16 @@
+description = "Reconcile a sketch, screenshot, mockup, wireframe, or whiteboard with existing planning artifacts without silently changing scope."
+
+prompt = """
+Use this repository's planning instructions and Sketch Reconciliation skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{sketch-reconciliation/SKILL.md}
+
+Command arguments, visual, and source context:
+{{args}}
+
+Inspect the visual, separate observations from interpretations, map observations to stable planning IDs, and show proposed deltas.
+
+Stop for a human decision before changing requirements, selected mechanisms, scope, or behavior unless the user explicitly authorized those changes in this request. After acceptance, update every affected planning layer together and rerun fit checks when requirements or shape parts changed. Do not implement production code.
+"""

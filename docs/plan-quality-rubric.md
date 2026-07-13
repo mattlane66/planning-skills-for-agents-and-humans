@@ -35,6 +35,7 @@ Score these only when the corresponding artifact is present or clearly needed. T
 | Artifact | 0 | 1 | 2 |
 |---|---|---|---|
 | Statechart | Replaces or contradicts the breadboard | Partly traceable or contains assumptions | Every state and transition traces to breadboard IDs; gaps are explicit |
+| Sketch reconciliation | Visual is treated as truth or hidden behavior is guessed | Observations exist but mappings or decisions are incomplete | Observations and interpretations are separate; deltas cite evidence, map to stable IDs, pass a human gate, and ripple to affected artifacts |
 | Interface contracts | Agent must guess fields or error behavior | Main path exists but edge decisions are missing | Inputs, outputs, branches, errors, and open decisions are explicit |
 | Executable breadboard | No judgeable examples | Examples exist but expected results are vague | Fixtures, example runs, expected outputs, edge cases, and checks are complete |
 | Dumplink | Horizontal discipline backlog | Some vertical grouping but unclear cuts or risk | Groups are judgeable, risk-aware, dependency-aware, and cuttable |

@@ -9,6 +9,7 @@ Use this guide when you are new to the repo and want to know which planning move
 | You have messy notes, a transcript, or a fuzzy request | `/frame` or `framing-doc/SKILL.md` | A frame with source, problem, outcome, and boundaries |
 | You need criteria before solution ideas | `/criteria` or `shaping/SKILL.md` | Requirements / criteria separated from mechanisms |
 | You know the problem but not the right solution | `/sketch-shapes`, `/fit-check`, `/select-shape`, `/shape`, or `shaping/SKILL.md` | Alternative shapes, fit check, selected direction |
+| You dropped in a sketch, screenshot, wireframe, mockup, or whiteboard and need to know what it changes | `/reconcile-sketch`, `sketch-reconciliation/SKILL.md`, or the [sketch reconciliation guide](./sketch-reconciliation.md) | Observable visual evidence mapped to planning IDs, proposed deltas, a decision gate, and synchronized accepted updates |
 | You selected a direction and need to make it concrete | `/breadboard` or `breadboarding/SKILL.md` | Places, affordances, stores, wiring, and slice candidates |
 | A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | A derived state inventory, transition table, Mermaid projection, and explicit gaps |
 | Your selected slice crosses a meaningful boundary and field-level guessing would cause rework | `interface-contracts/SKILL.md` | Plain-language contracts for inputs, outputs, branches, errors, and open decisions |
@@ -29,6 +30,7 @@ messy notes
   -> criteria
   -> sketch shapes
   -> fit check
+  -> reconcile visual evidence whenever a sketch or screenshot changes the understanding
   -> select shape
   -> breadboard
   -> statechart, only when state complexity warrants it
@@ -48,6 +50,7 @@ Check that you have:
 
 - a selected shape, not just brainstorming
 - requirements separated from mechanisms
+- every consequential sketch or screenshot reconciled explicitly, with accepted deltas written back to the authoritative artifacts
 - explicit non-goals
 - a breadboard or slice boundary
 - a statechart only when the selected scope's state behavior is difficult to understand from breadboard wiring alone
@@ -84,5 +87,5 @@ Planning drift found:
 Use this default prompt:
 
 ```text
-Use this repo's planning workflow. First decide whether we should frame, define criteria, sketch shapes, fit-check, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until a slice is selected and the verification target is clear.
+Use this repo's planning workflow. First decide whether we should frame, define criteria, sketch shapes, fit-check, reconcile a visual, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until a slice is selected and the verification target is clear.
 ```
