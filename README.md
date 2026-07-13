@@ -17,6 +17,7 @@ This repo helps teams preserve intent as work moves from idea to implementation.
 - `/framing-doc` for turning raw notes or requests into a clear problem frame
 - `/shaping` for comparing paths and selecting a bounded direction
 - `/breadboarding` for making behavior, state, affordances, and wiring visible (aka as an Interaction Schematic)
+- `/statechart` for deriving a transition table and Mermaid statechart from a selected stateful portion of an accepted breadboard
 - `/interface-contracts` for making boundary-crossing data exchanges explicit
 - `/executable-breadboards` for adding examples, fixtures, expected outputs, edge cases, and acceptance tests before build handoff
 - `/kickoff-doc` for preparing the build team
@@ -33,6 +34,7 @@ The emphasis is on pre-development legibility:
 - frame the problem before racing to implementation
 - compare alternatives before locking in a solution
 - map places, affordances, state, and wiring before losing the plot while maintaining latitude
+- derive a statechart only when a selected scope has enough state complexity to justify one
 - keep high-level and low-level planning artifacts aligned as the work evolves
 - feed planning artifacts to agents at the right fidelity so they preserve shaped intent instead of drowning in context
 - check drift during implementation before accidental scope becomes product behavior
@@ -56,19 +58,22 @@ Comparatively (including [HumanLayer](https://www.humanlayer.dev)):
 4. Planning Skills: breadboarding
    Output: places, affordances, stores, state, wiring
    ↓
-5. Planning Skills: slices, contracts, executable breadboard
+5. Optional Planning Skills: statechart for a selected stateful scope
+   Output: state inventory, transition table, Mermaid statechart, gaps
+   ↓
+6. Planning Skills: slices, contracts, executable breadboard
    Output: demoable vertical slices, boundary contracts, examples, fixtures, expected outputs, edge cases, acceptance tests
    ↓
-6. Planning Skills: feed-planning-context
+7. Planning Skills: feed-planning-context
    Output: compact implementation packet
    ↓
-7. Spec Kit
+8. Spec Kit
    Output: spec.md, plan.md, data-model.md, contracts, tasks.md
    ↓
-8. HumanLayer / CodeLayer / Claude Code / Gemini CLI / Codex
+9. HumanLayer / CodeLayer / Claude Code / Gemini CLI / Codex
    Output: implementation, tests, PRs, review loops
    ↓
-9. Drift checks and breadboard reflection
+10. Drift checks and breadboard reflection
    Output: detect drift, update artifacts, repair intent/code mismatch
 
 ## Mode discipline
@@ -143,6 +148,11 @@ In Claude Code and Gemini CLI, the shaping work can also be run as smaller gate 
 ### `/breadboarding`
 Map a system into places/screens/states, affordances, stores, and the wiring so behavior is concrete and vertically sliced and sequenced (based on unknowns/most risky parts and dependencies first) before implementation gets fragmented.
 
+### `/statechart`
+Turn a selected stateful portion of an accepted breadboard into a state inventory, transition table, and Mermaid statechart. Preserve breadboard IDs, mark unsupported interpretations as inferred or missing, and keep the breadboard tables authoritative.
+
+Use it only when state complexity warrants it—for example, retries, timeouts, approvals, lifecycle stages, background messages, or several valid actions from the same state.
+
 ### `/interface-contracts`
 Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
 
@@ -203,10 +213,11 @@ The core workflow stays the same:
 2. Create a frame.
 3. Shape the problem: criteria, alternative shapes, fit checks, and selected direction.
 4. Breadboard the chosen shape.
-5. Add contracts and executable breadboard details when the selected slice needs them.
-6. Feed the selected planning artifacts into the agent as a compact context packet.
-7. Check drift during implementation.
-8. Reflect against implementation later when code exists.
+5. Optionally derive a statechart for a selected stateful scope.
+6. Add contracts and executable breadboard details when the selected slice needs them.
+7. Feed the selected planning artifacts into the agent as a compact context packet.
+8. Check drift during implementation.
+9. Reflect against implementation later when code exists.
 
 What changes across tools is just **how you invoke the instructions**, not the method itself. See [`docs/agent-invocation-matrix.md`](./docs/agent-invocation-matrix.md) for the current support matrix and prompt recipes.
 
@@ -221,6 +232,7 @@ docs/planning-skills/
   framing-doc.md
   shaping.md
   breadboarding.md
+  statechart.md
   interface-contracts.md
   executable-breadboards.md
   kickoff-doc.md
@@ -231,6 +243,7 @@ planning/
   frame.md
   shaping.md
   breadboard.md
+  statechart.md
   interface-contracts.md
   executable-breadboard.md
   context-packet.md
@@ -335,6 +348,7 @@ ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/framing-doc ~/
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/kickoff-doc ~/.claude/skills/kickoff-doc
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/shaping ~/.claude/skills/shaping
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboarding ~/.claude/skills/breadboarding
+ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/statechart ~/.claude/skills/statechart
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/interface-contracts ~/.claude/skills/interface-contracts
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/executable-breadboards ~/.claude/skills/executable-breadboards
 ln -s ~/.local/share/planning-skills-for-agents-and-humans/skills/breadboard-reflection ~/.claude/skills/breadboard-reflection
@@ -366,6 +380,7 @@ The hooks are reminders, not a hidden planning method. They help check whether u
 - fit checks
 - unknowns / spikes
 - breadboard tables
+- statechart tables and Mermaid projection, when present
 - interface contracts
 - executable breadboard examples
 - wiring table

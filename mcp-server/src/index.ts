@@ -27,6 +27,11 @@ const skills = {
     description: 'Map places/screens/states, affordances, stores, and wiring so behavior is concrete before implementation.',
     path: 'breadboarding/SKILL.md',
   },
+  statechart: {
+    title: 'Statechart',
+    description: 'Turn a selected stateful portion of a breadboard into a transition table and Mermaid statechart without replacing the breadboard.',
+    path: 'statechart/SKILL.md',
+  },
   'interface-contracts': {
     title: 'Interface Contracts',
     description: 'Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.',
@@ -65,6 +70,7 @@ const artifactTemplates = {
   frame: `# Frame\n\n## Source material\n\n## Current reality\n\n## Current approach and result\n\n## Desired outcome\n\n## Boundaries\n\n## Requirements / criteria\n\n| ID | Criterion | Must have? | Notes |\n| --- | --- | --- | --- |\n`,
   shaping: `# Shaping\n\n## Problem frame\n\n## Requirements / criteria\n\n| ID | Criterion | Must have? | Why it matters |\n| --- | --- | --- | --- |\n\n## Alternative shapes\n\n| Option | Mechanism | Strengths | Risks |\n| --- | --- | --- | --- |\n\n## Fit check\n\n| Criterion | Option A | Option B | Option C | Notes |\n| --- | --- | --- | --- | --- |\n\n## Selected direction\n\n## Unknowns / spikes\n`,
   breadboard: `# Breadboard\n\n## Places\n\n| Place ID | Place / screen / state | Purpose |\n| --- | --- | --- |\n\n## Affordances\n\n| Affordance ID | Place ID | User can... | Visible result |\n| --- | --- | --- | --- |\n\n## Stores / state\n\n| Store ID | Data / state | Owner | Notes |\n| --- | --- | --- | --- |\n\n## Wiring\n\n| From | Action | To | System behavior |\n| --- | --- | --- | --- |\n\n## Slices\n\n| Slice ID | Scope | Dependencies | Verification target |\n| --- | --- | --- | --- |\n`,
+  statechart: `# Statechart\n\n## Source\n- Breadboard:\n- Scope or slice:\n\n## State inventory\n\n| State ID | Source breadboard IDs | State | Parent state | Meaning | Status |\n| --- | --- | --- | --- | --- | --- |\n\n## Transition table\n\n| Transition ID | From | Trigger type | Event | Guard | Effect | To | Source wiring | Status |\n| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n\n## Mermaid statechart\n\n\`\`\`mermaid\nstateDiagram-v2\n\`\`\`\n\n## Gaps and proposed breadboard updates\n`,
   'interface-contract': `# Interface Contract\n\n## Contract ID\n\n## Boundary\n\n## Source artifact\n\n## Purpose\n\n## Inputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Outputs\n\n| Field | Required? | Type / shape | Notes |\n| --- | --- | --- | --- |\n\n## Branches and error cases\n\n| Case | Condition | Expected behavior |\n| --- | --- | --- |\n\n## Open decisions\n`,
   'executable-breadboard': `# Executable Breadboard\n\n## Selected slice\n\n## Source breadboard rows\n\n## Interface contracts in scope\n\n## Fixtures / starting data\n\n## Example runs\n\n| Run ID | Starting state | Action | Expected visible result | Expected state change |\n| --- | --- | --- | --- | --- |\n\n## Edge cases\n\n| Edge ID | Case | Expected behavior |\n| --- | --- | --- |\n\n## Acceptance tests\n\n| Test ID | Proves | How to verify |\n| --- | --- | --- |\n\n## Open decisions\n`,
   dumplink: `# Dumplink Plan\n\n## Project boundary\n\n## Task dump\n\n| ID | Task | Type | Known/Unknown | Notes |\n| --- | --- | --- | --- | --- |\n\n## Task groups\n\n| ID | Name | Included tasks | User/system behavior produced | Risk state | Cuttable? | Notes |\n| --- | --- | --- | --- | --- | --- | --- |\n\n## Dependency map\n\n| From | To | Why this dependency exists | Risk if delayed |\n| --- | --- | --- | --- |\n\n## Build sequence\n\n| Order | Task group | Why now | Demo/checkpoint | Exit condition |\n| --- | --- | --- | --- | --- |\n\n## Scope cuts\n\n| Cut option | Remove/defer | Preserved behavior | Cost of cutting | Later decision |\n| --- | --- | --- | --- | --- |\n\n## Acceptance checks\n\n## Agent handoff packet\n\nActive slice:\nSource artifacts:\nMust preserve:\nDo not build:\nTask group to implement:\nRelevant tasks:\nKnown unknowns:\nAcceptance check:\nStop condition:\n`,
@@ -134,6 +140,17 @@ server.tool(
 
     if (normalized.includes('screen') || normalized.includes('flow') || normalized.includes('state') || normalized.includes('breadboard') || normalized.includes('system')) {
       recommendations.push('breadboarding');
+    }
+
+    if (
+      normalized.includes('statechart') ||
+      normalized.includes('state machine') ||
+      normalized.includes('lifecycle') ||
+      normalized.includes('timeout') ||
+      normalized.includes('retry') ||
+      normalized.includes('guard')
+    ) {
+      recommendations.push('statechart');
     }
 
     if (normalized.includes('boundary') || normalized.includes('contract') || normalized.includes('api') || normalized.includes('interface')) {

@@ -16,7 +16,7 @@ When planning, prefer:
 - tables
 - lightweight pseudo-structures
 - Mermaid diagrams when helpful
-- stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, task groups, and slices
+- stable IDs for requirements, places, affordances, stores, contracts, states, transitions, example runs, edge cases, task groups, and slices
 
 When implementing, preserve shaped intent and update planning artifacts if implementation discoveries change the plan.
 
@@ -43,13 +43,16 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 2. Shape requirements and alternatives.
 3. Select a direction.
 4. Breadboard places, affordances, stores, and wiring.
-5. Slice into demoable increments.
-6. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
-7. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
-8. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
-9. Feed only the relevant planning context to the implementation agent.
-10. Check for drift during implementation.
-11. Reflect against implementation and repair drift.
+5. Optionally derive a statechart for a selected stateful scope when the wiring alone is hard to reason about.
+6. Slice into demoable increments.
+7. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
+8. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
+9. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
+10. Feed only the relevant planning context to the implementation agent.
+11. Check for drift during implementation.
+12. Reflect against implementation and repair drift.
+
+The statechart step is optional. It is a derived view of the accepted breadboard, not a new source of truth or a prerequisite for slicing.
 
 ## Shaping gates
 
@@ -72,6 +75,7 @@ Use the repo skills as reusable instructions:
 - `framing-doc/` — turn raw material into a frame with context, current approach/result, desired outcome, boundaries, and criteria.
 - `shaping/` — define requirements/criteria, compare alternative shapes, run fit checks, and detail the selected direction.
 - `breadboarding/` — map places, affordances, stores, wiring, diagrams, and demoable slices.
+- `statechart/` — turn a selected stateful portion of an accepted breadboard into a transition table and Mermaid statechart while surfacing missing behavior.
 - `interface-contracts/` — turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
 - `executable-breadboards/` — turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
 - `dumplink/` — turn a shaped project into vertical task groups, risk states, dependencies, scope cuts, acceptance checks, and a bounded agent handoff.
@@ -82,6 +86,8 @@ Use the repo skills as reusable instructions:
 ## Artifact taxonomy
 
 Breadboard = structure of the solution.
+
+Statechart = optional derived behavioral view of a selected stateful portion of the breadboard.
 
 Interface contract = what crosses a boundary.
 
@@ -111,6 +117,8 @@ When artifacts disagree, use this default authority order unless the user says o
 8. framing doc
 9. raw notes and transcripts
 10. rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it. If they disagree, update the breadboard first and regenerate the statechart.
 
 Do not treat a newer brainstorming note as a higher-authority artifact unless it explicitly changes the selected direction.
 
@@ -145,6 +153,7 @@ Before implementation work, create or request a compact context packet that incl
 - must-preserve constraints
 - selected requirements
 - relevant places, affordances, stores, and wiring
+- relevant statechart rows when a statechart exists and the task depends on that behavior
 - relevant executable breadboard examples, when present
 - relevant interface contracts, when present
 - relevant Dumplink task group, dependencies, cuts, and acceptance checks, when present
@@ -201,6 +210,8 @@ Preserve IDs such as:
 - `P-01`
 - `AFF-01`
 - `STORE-01`
+- `ST-01`
+- `TR-01`
 - `CONTRACT-01` or `C1`
 - `RUN-01`
 - `EDGE-01`
@@ -210,6 +221,24 @@ Preserve IDs such as:
 - `SLICE-01`
 
 Do not rename stable IDs just to improve wording. If the meaning changes, create a planning update or new ID.
+
+## Statecharts
+
+Use a statechart only for a selected scope or slice whose behavior is difficult to understand from breadboard wiring alone.
+
+Preserve:
+
+- source breadboard IDs for every state and transition
+- the selected scope boundary
+- events and trigger types
+- guards
+- product-relevant effects
+- destination states
+- explicit gaps and assumptions
+
+Do not invent retry, cancellation, timeout, failure, hierarchy, or parallel behavior. Mark unsupported interpretations as inferred or missing and recommend a breadboard update.
+
+The state-transition table is the primary statechart output. Mermaid is a visual projection of that table.
 
 ## Executable breadboards
 
@@ -294,9 +323,10 @@ Before declaring work complete, check:
 - rejected alternatives stayed marked as rejected
 - non-goals were preserved
 - stable IDs were preserved
+- statechart states and transitions remain traceable to the breadboard when a statechart is present
 - executable breadboard examples were preserved when present
 - interface contracts were preserved when present
 - Dumplink task group boundaries, dependencies, cuts, and acceptance checks were preserved when present
 - planning artifacts were updated if implementation discoveries changed the plan
-- implementation work, when present, maps back to requirement/affordance/store/contract/example-run/edge-case/task-group/slice IDs
+- implementation work, when present, maps back to requirement/affordance/store/state/transition/contract/example-run/edge-case/task-group/slice IDs
 - meaningful implementation runs have an agent run log or equivalent handoff note
