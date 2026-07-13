@@ -79,6 +79,14 @@ modes:
     forbidden: [production_code]
     exit_gate: breadboard_accepted
 
+  statechart:
+    skill: statechart
+    purpose: Derive a transition table and Mermaid statechart for a selected stateful portion of an accepted breadboard.
+    requires: [accepted_breadboard, selected_scope_or_slice]
+    allowed_outputs: [state_inventory, transition_table, mermaid_statechart, gaps_and_proposed_breadboard_updates]
+    forbidden: [production_code, invented_behavior, statechart_as_source_of_truth]
+    exit_gate: statechart_reviewed_or_skipped
+
   slice:
     skill: breadboarding
     purpose: Split the accepted breadboard into demoable increments.
