@@ -2,6 +2,10 @@
 
 Use this guide when you are new to the repo and want to know which planning move to make first.
 
+> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a subset; Codex users should use the equivalent natural-language prompts.
+
+Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
+
 ## Pick the current state
 
 | Current state | Use | Output |
@@ -21,6 +25,10 @@ Use this guide when you are new to the repo and want to know which planning move
 | You have code and need to compare it to the plan | `/reflect-breadboard` or `breadboard-reflection/SKILL.md` | Drift, synced reality, design smells, and follow-ups |
 | You need a builder-facing handoff reference | `/kickoff` or `kickoff-doc/SKILL.md` | A kickoff doc organized by shaped territory |
 | You are wiring a harness or external agent runtime | `.agent-orchestration.yaml` | Machine-readable modes, gates, artifacts, forbidden moves, and hooks |
+
+## Recommended artifact home
+
+Keep project-specific outputs in the product repository, usually under `planning/`. A typical starting set is `frame.md`, `shaping.md`, `breadboard.md`, `slices.md`, and `context-packet.md`; add reconciliation records and other advanced artifacts only when their triggering complexity exists.
 
 ## Minimal flow
 
