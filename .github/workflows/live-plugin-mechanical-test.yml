@@ -1,0 +1,92 @@
+name: Live Claude Code plugin validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-plugin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Run repository health checks
+        run: bash scripts/check-repo-health.sh
+
+      - name: Build Claude Code plugin bundle
+        run: bash scripts/build-claude-plugin.sh
+
+      - name: Assert expected bundle surfaces
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f dist/claude-code-plugin/.claude-plugin/plugin.json
+          test -f dist/claude-code-plugin/commands/frame.md
+          test -f dist/claude-code-plugin/commands/fit-check.md
+          test -f dist/claude-code-plugin/commands/breadboard.md
+          test -f dist/claude-code-plugin/skills/framing-doc/SKILL.md
+          test -f dist/claude-code-plugin/skills/shaping/SKILL.md
+          test -f dist/claude-code-plugin/skills/breadboarding/SKILL.md
+          grep -q '"name": "planning-skills"' dist/claude-code-plugin/.claude-plugin/plugin.json
+
+      - name: Install Claude Code
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL https://claude.ai/install.sh | bash
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+
+      - name: Show Claude Code version
+        run: claude --version
+
+      - name: Validate generated plugin with Claude Code
+        run: claude plugin validate "$GITHUB_WORKSPACE/dist/claude-code-plugin" --strict
+
+      - name: Prepare blank live-test repository
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/planning-skills-live-test
+          cd /tmp/planning-skills-live-test
+          git init
+          cat > source.md <<'EOF'
+          # Time comparison application
+
+          Create a terminal application that compares local times across several locations.
+          Each location is a column and rows represent hours in a selected time window.
+          Users can configure defaults, add or remove locations, and change the date.
+          Time-zone and daylight-saving behavior must be accurate.
+
+          Start by planning. Do not implement until a direction and demoable slice are selected.
+          EOF
+
+      - name: Execute namespaced slash command when credentials are available
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${ANTHROPIC_API_KEY:-}" ]; then
+            echo "LIVE_AGENT_EXECUTION=SKIPPED_NO_ANTHROPIC_API_KEY"
+            exit 0
+          fi
+
+          cd /tmp/planning-skills-live-test
+          timeout 300 claude \
+            --plugin-dir "$GITHUB_WORKSPACE/dist/claude-code-plugin" \
+            --dangerously-skip-permissions \
+            -p "/planning-skills:frame source.md Save the result as planning/frame.md. Do not shape or implement yet."
+
+          test -f planning/frame.md
+          grep -q '^## Source' planning/frame.md
+          grep -q '^## Problem' planning/frame.md
+          grep -q '^## Outcome' planning/frame.md
+          test ! -d src
+          echo "LIVE_AGENT_EXECUTION=PASSED"
