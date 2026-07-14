@@ -17,6 +17,7 @@ The unqualified names below apply when Claude Code is running in this repository
 | `/frame` | `framing-doc/SKILL.md` | Create a framing document from notes, messages, or transcripts. |
 | `/shape` | `shaping/SKILL.md` | Separate requirements from mechanisms, compare directions, fit-check alternatives, and select a bounded direction. |
 | `/criteria` | `shaping/SKILL.md` | Create or update only the requirements / criteria table before sketching shapes. |
+| `/appetite` | `shaping/SKILL.md` | Set the fixed time or scope budget and cut line before selecting a shape. |
 | `/sketch-shapes` | `shaping/SKILL.md` | Sketch alternative shapes against accepted criteria without selecting one. |
 | `/fit-check` | `shaping/SKILL.md` | Run fit checks and reverse fit checks across existing shapes without choosing for the human. |
 | `/select-shape` | `shaping/SKILL.md` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
@@ -36,11 +37,12 @@ Use `/shape` when you want the broad shaping workflow in one pass.
 Use the smaller shaping gate commands when you want to prevent the agent from one-shotting the shape:
 
 1. `/criteria` — define the standards for judging fit.
-2. `/sketch-shapes` — make multiple possible directions visible.
-3. `/fit-check` — compare shapes against criteria and check whether each mechanism is justified.
-4. `/select-shape` — record the human decision or stop with a decision-ready summary.
-5. `/reconcile-sketch` — use whenever a dropped visual may clarify or change the active artifacts.
-6. `/breadboard` — make the selected shape concrete only after selection.
+2. `/appetite` — set the budget and cut line that shapes must fit.
+3. `/sketch-shapes` — make multiple possible directions visible.
+4. `/fit-check` — compare shapes against criteria and appetite, and check whether each mechanism is justified.
+5. `/select-shape` — record the human decision or stop with a decision-ready summary.
+6. `/reconcile-sketch` — use whenever a dropped visual may clarify or change the active artifacts.
+7. `/breadboard` — make the selected shape concrete only after selection.
 
 These commands are intentionally thin wrappers around `shaping/SKILL.md`. They narrow the stopping point; they do not create a second copy of the method.
 
@@ -80,6 +82,10 @@ From a Claude Code session in the repository, run commands with arguments:
 
 ```text
 /criteria planning/frame.md
+```
+
+```text
+/appetite planning/shaping.md "Two weeks, one engineer; cut reporting before core capture"
 ```
 
 ```text

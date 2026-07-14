@@ -38,5 +38,5 @@ Do not write production code.
 
 End with a short Gate 2 readiness note:
 
-- `Ready for /sketch-shapes` when the criteria are good enough to judge alternatives
+- `Ready for /appetite` when the criteria are good enough to bound the bet
 - `Needs human decision` when criteria are still missing, conflicting, or mechanism-heavy

@@ -9,8 +9,9 @@ Use this skill when a request is still ambiguous, multiple solution directions a
 
 ## Goal
 
-Turn a fuzzy request into a concrete shaping document that keeps three things separate but connected:
+Turn a fuzzy request into a concrete shaping document that keeps four things separate but connected:
 - the requirements
+- the appetite and cut line
 - the solution directions
 - the evidence that a chosen direction actually fits
 
@@ -20,7 +21,7 @@ Planning artifacts live at different levels of abstraction. Truth has to stay co
 
 From high to low:
 1. **Frame** — the why: source, problem, outcome, boundaries
-2. **Shaping doc** — the what and candidate how: requirements, shapes, fit checks, selected direction
+2. **Shaping doc** — the what and candidate how: requirements, appetite, shapes, fit checks, selected direction
 3. **Breadboard or slices doc** — the concrete behavior and increments: places, affordances, stores, wiring, slice boundaries
 4. **Slice plans** — the per-slice implementation detail
 
@@ -51,8 +52,9 @@ There is no required order. Requirements and shapes inform each other throughout
 
 When a shaping doc already has a selected shape:
 1. show the fit check for the selected shape only
-2. summarize what is still unsolved
-3. call out any requirement rows that are still undecided or currently fail for the selected shape
+2. show how the selected shape fits the accepted appetite and where the cut line sits
+3. summarize what is still unsolved
+4. call out any requirement rows that are still undecided or currently fail for the selected shape
 
 When summarizing what remains unsolved, explicitly list:
 - undecided requirements
@@ -77,6 +79,22 @@ Recommended statuses:
 - Out
 
 Keep the top level scannable. Prefer no more than 9 top-level requirements. If requirements proliferate, group related ones into chunks and use sub-requirements such as `R3.1`, `R3.2` rather than letting the top level grow without structure.
+
+### Appetite
+
+Appetite is the fixed time or scope budget the team is willing to spend on the bet. It constrains the shapes; it is not an estimate produced after a shape has already won.
+
+Set the appetite after the requirements are accepted and before selecting a shape. Record:
+
+- time budget or other fixed scope budget
+- team shape and review point
+- explicit cut line
+- uncertainty the team accepts
+- unknowns that must be resolved by a spike before selection or build
+
+Use the `Appetite` section in `templates/shaping.md` for a compact decision. Use `templates/appetite-card.md` when the appetite needs its own durable owner, rationale, or revisit conditions.
+
+If appetite is still undecided, shapes may be explored, but no shape should be recorded as selected. Mark the decision as blocked on appetite rather than allowing an open-ended specification.
 
 ### Requirement smell test
 
@@ -184,11 +202,13 @@ This keeps the shape cleaner and makes later fit checks, detailing, and slicing 
 8. Prefer vertical mechanisms over horizontal buckets where possible.
 9. If a shape passes visible checks but still feels wrong, there is probably a missing requirement.
 10. Model the existing system as `CURRENT` when the change is not greenfield.
+11. Treat appetite as a constraint on selection: prefer cuts or a smaller shape over silently expanding the budget.
 
 ## Possible actions
 
 These can happen in any order as the shaping evolves:
 - populate requirements
+- set or revise the appetite and cut line
 - sketch a shape at a high level
 - detail a shape into parts or affordances
 - explore alternatives for a part
@@ -215,6 +235,15 @@ shaping: true
 | ID | Requirement | Status |
 |----|-------------|--------|
 | R0 | ... | Core goal |
+
+## Appetite
+
+- Time budget:
+- Team shape:
+- Review point:
+- Cut line:
+- Accepted uncertainty:
+- Must-resolve unknowns:
 
 ## Shapes
 
@@ -248,6 +277,13 @@ shaping: true
 |------------|-----------|------------------------|:----------:|
 | B1 | ... | R2, R4 | ✅ |
 
+## Appetite Fit
+
+| Shape | Fits appetite? | Required cuts | Uncertainty / spike |
+|-------|:---------------:|---------------|---------------------|
+| A | ✅ | ... | ... |
+| B | ❌ | ... | ... |
+
 ## Decision
 
 Chosen direction: B
@@ -266,6 +302,7 @@ Rules:
 - Use binary values only: `✅` or `❌`
 - Put explanations below the table, not inside shape cells
 - If something is still unknown, it is not yet a pass
+- After the requirements matrix, check whether each viable shape fits the accepted appetite and name the cuts or spikes needed to make it fit
 
 If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
 
@@ -470,7 +507,7 @@ Typical document stack:
 - slice plans
 
 The frame captures the why.
-The shaping doc captures requirements, shapes, fit checks, and the selected direction.
+The shaping doc captures requirements, appetite, shapes, fit checks, and the selected direction.
 The breadboard or slices doc captures how the chosen direction becomes concrete and incremental.
 Slice plans capture implementation detail for individual slices.
 
@@ -487,6 +524,7 @@ Whenever making a change:
 
 - What problem is worth solving here?
 - What constraints are actually non-negotiable?
+- What appetite does this bet deserve, and where is the cut line?
 - What solution directions are meaningfully different?
 - What requirement is this part satisfying?
 - What requirement is still not accounted for?
@@ -500,6 +538,7 @@ Whenever making a change:
 
 Move from shaping to breadboarding when:
 - one direction is chosen
+- its fit with the accepted appetite and cut line is explicit
 - its mechanisms are concrete enough to map
 - you need to show places, affordances, stores, and wiring
 

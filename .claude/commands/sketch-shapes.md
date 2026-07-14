@@ -8,7 +8,7 @@ Read `shaping/SKILL.md` first and follow it as the primary instruction for this 
 
 Use this slash command when the user wants multiple possible directions made visible before committing to one.
 
-Also read `docs/human-decision-gates.md` and stop before Gate 3: Shape selected.
+Also read `docs/human-decision-gates.md`. Confirm Gate 2A: Appetite set before sketching, and stop before Gate 3: Shape selected. If appetite is missing, stop and recommend `/appetite`.
 
 User request and source context:
 
@@ -24,6 +24,7 @@ Include:
 - numbered shape parts such as `A1`, `A2`, `B1`, `B2`
 - flagged unknowns with `⚠️` where a mechanism is still not concretely understood
 - spike candidates for unresolved mechanics when needed
+- a short note on how each shape could fit the appetite or where it already exceeds the cut line
 
 Keep requirements and mechanisms separate:
 

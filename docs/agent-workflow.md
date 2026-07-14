@@ -46,7 +46,22 @@ Use the `shaping` skill or the `/criteria` command where supported.
 
 Do not propose shapes in Criteria mode.
 
-## 4. Sketch shapes
+## 4. Set appetite
+
+Use this mode after requirements are accepted and before a shape is selected.
+
+Outputs:
+- fixed time or scope budget
+- team shape and review point
+- explicit cut line
+- accepted uncertainty
+- must-resolve unknowns or spike threshold
+
+Use the `shaping` skill, `/appetite` command where supported, and `templates/appetite-card.md` when the decision needs its own artifact.
+
+Do not derive the appetite from a preferred shape. Shapes may be explored while appetite is open, but selection waits until the appetite is explicit.
+
+## 5. Sketch shapes
 
 Use this mode when multiple solution directions are possible.
 
@@ -61,13 +76,14 @@ Use the `shaping` skill or the `/sketch-shapes` command where supported.
 
 Do not select a direction in Sketch Shapes mode.
 
-## 5. Fit check
+## 6. Fit check
 
 Use this mode when the team needs to compare alternatives before choosing.
 
 Outputs:
 - fit check
 - reverse fit check
+- appetite fit and required cuts
 - failed or undecided requirement rows
 - unjustified mechanisms
 - decision-readiness note
@@ -76,7 +92,7 @@ Use the `shaping` skill or the `/fit-check` command where supported.
 
 Do not select a direction unless the human explicitly chooses one.
 
-## 6. Select shape
+## 7. Select shape
 
 Use this mode when the human is ready to choose a direction.
 
@@ -91,7 +107,7 @@ Use the `shaping` skill or the `/select-shape` command where supported.
 
 Do not invent a human decision.
 
-## 7. Reconcile visual evidence, as needed
+## 8. Reconcile visual evidence, as needed
 
 Use this mode whenever a sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active frame, shape, breadboard, or slices.
 
@@ -107,7 +123,7 @@ Use the `sketch-reconciliation` skill or `/reconcile-sketch` command where suppo
 
 Do not let the visual silently override selected behavior or scope. Do not infer hidden behavior from appearance alone.
 
-## 8. Breadboard
+## 9. Breadboard
 
 Use this mode when the selected shape needs to become concrete enough to slice.
 
@@ -121,7 +137,7 @@ Outputs:
 
 Use the `breadboarding` skill.
 
-## 9. Statechart, optional
+## 10. Statechart, optional
 
 Use this mode only when a selected stateful portion of an accepted breadboard is difficult to reason about from wiring alone.
 
@@ -135,7 +151,30 @@ Use the `statechart` skill. The breadboard remains authoritative.
 
 Do not invent retry, timeout, cancellation, hierarchy, or parallel behavior.
 
-## 10. Interface contracts
+## 11. Select slice
+
+Use this mode after the breadboard is accepted and a demoable increment must be chosen.
+
+Outputs:
+- selected slice ID and boundary
+- demo path and `Produces` line
+- exclusions and dependencies
+- verification target
+
+Use the `breadboarding` skill. Do not implement outside the selected slice.
+
+## 12. Kickoff reference, optional
+
+Use this mode when builders need a durable human-readable map of the shaped product territory.
+
+Outputs:
+- selected direction and boundaries
+- system areas and important behavior
+- first slice and verification target
+
+Use the `kickoff-doc` skill or `/kickoff` where supported. The kickoff document is a reference, not the build sequence.
+
+## 13. Interface contracts
 
 Use this mode when the selected slice crosses meaningful boundaries.
 
@@ -151,7 +190,7 @@ Use the `interface-contracts` skill.
 
 Keep this in plain language unless the user explicitly asks for production schema or contract files.
 
-## 11. Executable breadboard
+## 14. Executable breadboard
 
 Use this mode when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
 
@@ -168,7 +207,7 @@ Use the `executable-breadboards` skill.
 
 Do not invent missing expected outputs or edge cases. Flag them before build work.
 
-## 12. Dumplink, optional
+## 15. Dumplink, optional
 
 Use this mode when selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
 
@@ -182,7 +221,7 @@ Outputs:
 
 Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog.
 
-## 13. Feed context
+## 16. Feed context
 
 Use this mode before implementation work, especially when planning artifacts are long or numerous.
 
@@ -190,6 +229,7 @@ Outputs:
 - compact context packet
 - authority order
 - must-preserve constraints
+- accepted appetite and cut line
 - selected slice
 - relevant statechart rows, contracts, executable examples, and Dumplink task group when present
 - non-goals
@@ -198,7 +238,7 @@ Outputs:
 
 Use the `feed-planning-context` skill.
 
-## 14. Build
+## 17. Build
 
 Use this mode only after a slice is selected and the relevant planning context has been fed.
 
@@ -210,7 +250,7 @@ Rules:
 - propose a planning update if implementation reality conflicts with the plan
 - create an agent run log for meaningful implementation runs
 
-## 15. Check drift
+## 18. Check drift
 
 Use this mode during or after implementation work when the agent may have drifted from the selected planning artifacts.
 
@@ -234,7 +274,7 @@ Use `/check-drift`, `templates/drift-check.md`, and `docs/loop-prompting.md` whe
 
 Do not implement code in Check Drift mode.
 
-## 16. Reflect
+## 19. Reflect
 
 Use this mode after implementation exists.
 
@@ -255,6 +295,7 @@ Before moving forward, ask:
 - Is the current mode clear?
 - Is there a source artifact for the next step?
 - Are requirements still separate from mechanisms?
+- Is the appetite and cut line explicit before shape selection?
 - Are rejected alternatives clearly marked?
 - Are non-goals visible?
 - Are stable IDs preserved?

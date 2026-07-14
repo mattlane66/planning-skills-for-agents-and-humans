@@ -7,8 +7,8 @@ The planning method is shared across tools. Invocation surfaces differ.
 | Environment | Recommended invocation | Project commands | Notes |
 | --- | --- | --- | --- |
 | Claude Code | Plugin skills plus `.claude/commands/` | Yes | Command wrappers point to canonical root skills and shared orchestration docs. |
-| Codex | Codex plugin plus natural-language prompts | No Claude-style slash commands | The manifest packages the generated `skills/` directory; `AGENTS.md` supplies repo-level rules. |
-| Gemini CLI | `GEMINI.md` plus `.gemini/commands/` | Yes, using Gemini TOML commands | The commands inject canonical root skills and shared planning docs. |
+| Codex | Codex plugin plus natural-language prompts | No Claude-style slash commands | The manifest packages the generated `skills/` directory; the active product repository's own `AGENTS.md` remains authoritative. |
+| Gemini CLI | Skill folders plus adapted `.gemini/commands/` | Yes, using Gemini TOML commands | Preserve product instructions and update repo-local `@{...}` includes when installed paths differ. |
 | MCP-compatible clients | Tools exposed by `mcp-server/` | Client-dependent | The server reads canonical root skills and artifact templates at runtime. |
 | Cursor and other agents | `AGENTS.md`, root `SKILL.md` files, and templates | Tool-dependent | Point the agent explicitly at the relevant canonical skill. |
 | Plain Markdown | Read the relevant root `SKILL.md` | No | Portable fallback with no plugin dependency. |
@@ -19,6 +19,7 @@ The planning method is shared across tools. Invocation surfaces differ.
 | --- | --- | --- | --- | --- |
 | Frame | `framing-doc/SKILL.md` | `/frame` | Prompt the skill directly | “Use the framing-doc skill…” |
 | Define criteria | `shaping/SKILL.md` | `/criteria` | `/criteria` | “Run the criteria gate only…” |
+| Set appetite | `shaping/SKILL.md` + `templates/appetite-card.md` | `/appetite` | `/appetite` | “Set the bounded appetite and cut line…” |
 | Sketch alternatives | `shaping/SKILL.md` | `/sketch-shapes` | `/sketch-shapes` | “Sketch shapes without selecting…” |
 | Fit-check | `shaping/SKILL.md` | `/fit-check` | `/fit-check` | “Run the fit-check gate only…” |
 | Select shape | `shaping/SKILL.md` | `/select-shape` | `/select-shape` | “Record my selected shape…” |

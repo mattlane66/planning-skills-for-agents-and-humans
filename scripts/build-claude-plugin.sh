@@ -12,14 +12,43 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < "$ROOT_DIR/skill-inventory.txt"
 
 rm -rf "$DIST_DIR"
-mkdir -p "$DIST_DIR/.claude-plugin" "$DIST_DIR/skills" "$DIST_DIR/commands" "$DIST_DIR/docs" "$DIST_DIR/templates"
+mkdir -p \
+  "$DIST_DIR/.claude-plugin" \
+  "$DIST_DIR/skills" \
+  "$DIST_DIR/commands" \
+  "$DIST_DIR/docs" \
+  "$DIST_DIR/templates" \
+  "$DIST_DIR/hooks"
 
 cp "$ROOT_DIR/.claude-plugin/plugin.json" "$DIST_DIR/.claude-plugin/plugin.json"
-cp "$ROOT_DIR/AGENTS.md" "$DIST_DIR/AGENTS.md"
 cp "$ROOT_DIR/LICENSE" "$DIST_DIR/LICENSE"
+cp "$ROOT_DIR/.agent-orchestration.yaml" "$DIST_DIR/.agent-orchestration.yaml"
+cp "$ROOT_DIR/docs/agent-context-feeding.md" "$DIST_DIR/docs/agent-context-feeding.md"
+cp "$ROOT_DIR/docs/agent-run-records.md" "$DIST_DIR/docs/agent-run-records.md"
 cp "$ROOT_DIR/docs/human-decision-gates.md" "$DIST_DIR/docs/human-decision-gates.md"
+cp "$ROOT_DIR/docs/lifecycle-hooks.md" "$DIST_DIR/docs/lifecycle-hooks.md"
 cp "$ROOT_DIR/docs/loop-prompting.md" "$DIST_DIR/docs/loop-prompting.md"
-cp "$ROOT_DIR/templates/drift-check.md" "$DIST_DIR/templates/drift-check.md"
+cp "$ROOT_DIR/templates/"*.md "$DIST_DIR/templates/"
+cp "$ROOT_DIR/hooks/"*.sh "$DIST_DIR/hooks/"
+
+rewrite_args=(
+  -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
+  -e 's#\.agent-orchestration\.yaml#${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml#g'
+  -e 's#docs/agent-context-feeding\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md#g'
+  -e 's#docs/agent-run-records\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-run-records.md#g'
+  -e 's#docs/human-decision-gates\.md#${CLAUDE_PLUGIN_ROOT}/docs/human-decision-gates.md#g'
+  -e 's#docs/lifecycle-hooks\.md#${CLAUDE_PLUGIN_ROOT}/docs/lifecycle-hooks.md#g'
+  -e 's#docs/loop-prompting\.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
+  -e 's#templates/#${CLAUDE_PLUGIN_ROOT}/templates/#g'
+  -e 's#hooks/#${CLAUDE_PLUGIN_ROOT}/hooks/#g'
+)
+for skill in "${SKILLS[@]}"; do
+  rewrite_args+=(
+    -e "s#$skill/SKILL.md#\${CLAUDE_PLUGIN_ROOT}/skills/$skill/SKILL.md#g"
+  )
+done
+
+sed "${rewrite_args[@]}" "$ROOT_DIR/AGENTS.md" > "$DIST_DIR/AGENTS.md"
 
 for skill in "${SKILLS[@]}"; do
   source_file="$ROOT_DIR/$skill/SKILL.md"
@@ -31,7 +60,7 @@ for skill in "${SKILLS[@]}"; do
   fi
 
   mkdir -p "$target_dir"
-  cp "$source_file" "$target_dir/SKILL.md"
+  sed "${rewrite_args[@]}" "$source_file" > "$target_dir/SKILL.md"
 done
 
 for command_file in "$ROOT_DIR"/.claude/commands/*.md; do
@@ -52,25 +81,13 @@ for command_file in "$ROOT_DIR"/.claude/commands/*.md; do
     continue
   fi
 
-  sed_args=(
-    -e 's#AGENTS.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
-    -e 's#docs/human-decision-gates.md#${CLAUDE_PLUGIN_ROOT}/docs/human-decision-gates.md#g'
-    -e 's#docs/loop-prompting.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
-    -e 's#templates/drift-check.md#${CLAUDE_PLUGIN_ROOT}/templates/drift-check.md#g'
-  )
-  for skill in "${SKILLS[@]}"; do
-    sed_args+=(
-      -e "s#$skill/SKILL.md#\${CLAUDE_PLUGIN_ROOT}/skills/$skill/SKILL.md#g"
-    )
-  done
-
-  sed "${sed_args[@]}" "$command_file" > "$DIST_DIR/commands/$command_name.md"
+  sed "${rewrite_args[@]}" "$command_file" > "$DIST_DIR/commands/$command_name.md"
 done
 
 cat > "$DIST_DIR/README.md" <<'EOF'
 # Planning Skills Claude Code Plugin Bundle
 
-This generated bundle mirrors the canonical Planning Skills `SKILL.md` files from the repository root. Its command wrappers use bundle-local references, and its license and supporting planning instructions are included.
+This generated bundle mirrors the canonical Planning Skills `SKILL.md` files from the repository root. Skills, command wrappers, and shared agent instructions use bundle-local references. The orchestration manifest, reusable docs, templates, hooks, and license they depend on are included.
 
 Claude namespaces plugin skills and commands with the manifest name. For example:
 

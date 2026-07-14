@@ -7,6 +7,7 @@ purpose: >-
 principles:
   - planning_before_implementation
   - visual_evidence_requires_explicit_reconciliation
+  - bounded_appetite_before_shape_selection
   - human_decision_gates_before_scope_expansion
   - vertical_grouping_before_task_backlog
   - compact_context_before_build
@@ -48,19 +49,30 @@ modes:
     forbidden: [solution_shapes, selected_direction, breadboard, production_code]
     exit_gate: requirements_accepted
 
+  appetite:
+    skill: shaping
+    command_aliases: { claude: /appetite, gemini: /appetite }
+    purpose: Set the fixed time or scope budget and cut line that candidate shapes must fit.
+    requires: [accepted_requirements]
+    allowed_outputs: [appetite, team_shape, review_point, cut_line, accepted_unknowns, spike_threshold]
+    forbidden: [unbounded_scope, selected_direction_without_human_choice, production_code]
+    exit_gate: appetite_set
+
   sketch_shapes:
     skill: shaping
     command_aliases: { claude: /sketch-shapes, gemini: /sketch-shapes }
     purpose: Make multiple possible directions visible without selecting one.
-    allowed_outputs: [current_baseline, alternative_shapes, shape_parts, flagged_unknowns, spike_candidates]
+    requires: [accepted_requirements, appetite]
+    allowed_outputs: [current_baseline, alternative_shapes, shape_parts, appetite_fit_notes, flagged_unknowns, spike_candidates]
     forbidden: [selected_direction_without_human_choice, breadboard, production_code]
     exit_gate: alternatives_visible
 
   fit_check:
     skill: shaping
     command_aliases: { claude: /fit-check, gemini: /fit-check }
-    purpose: Compare candidate shapes against requirements and reverse-check mechanisms.
-    allowed_outputs: [fit_check, reverse_fit_check, failed_requirements, unjustified_mechanisms, decision_readiness_note]
+    purpose: Compare candidate shapes against requirements and appetite, then reverse-check mechanisms.
+    requires: [candidate_shapes, appetite]
+    allowed_outputs: [fit_check, reverse_fit_check, appetite_fit, cut_options, failed_requirements, unjustified_mechanisms, decision_readiness_note]
     forbidden: [selected_direction_without_human_choice, breadboard, production_code]
     exit_gate: decision_ready
 
@@ -68,7 +80,8 @@ modes:
     skill: shaping
     command_aliases: { claude: /select-shape, gemini: /select-shape }
     purpose: Record the human-selected direction or stop with a decision-ready summary.
-    allowed_outputs: [selected_direction, rejected_alternatives, tradeoffs, remaining_unknowns, next_handoff]
+    requires: [fit_check, appetite]
+    allowed_outputs: [selected_direction, appetite_fit, rejected_alternatives, tradeoffs, remaining_unknowns, next_handoff]
     forbidden: [invented_human_decision, production_code]
     exit_gate: shape_selected
 
@@ -144,7 +157,7 @@ modes:
     skill: feed-planning-context
     purpose: Create the compact context packet for implementation.
     requires: [selected_slice]
-    allowed_outputs: [context_packet, authority_order, must_preserve_constraints, non_goals, execution_contract, verification_target]
+    allowed_outputs: [context_packet, authority_order, must_preserve_constraints, accepted_appetite, cut_line, non_goals, execution_contract, verification_target]
     forbidden: [whole_planning_stack_dump_by_default, production_code]
     exit_gate: context_packet_ready
 

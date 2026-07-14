@@ -2,7 +2,7 @@
 
 These are intentionally messy notes. They mix problem statements, desired outcomes, and early solution ideas.
 
-Use them as the input to `/framing-doc`.
+Use them as the input to the `framing-doc` skill.
 
 ---
 

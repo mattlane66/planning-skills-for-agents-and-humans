@@ -34,7 +34,10 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 ## Appetite
 - Time budget:
 - Team shape:
+- Review point:
 - Cut line:
+- Accepted uncertainty:
+- Must-resolve unknowns:
 
 ## Requirements
 
@@ -75,6 +78,13 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 | Shape part | Mechanism | Requirement(s) served | Justified? |
 |---|---|---|:---:|
 | B1 | ... | R1 | ✅ |
+
+## Appetite fit
+
+| Shape | Fits appetite? | Required cuts | Uncertainty / spike |
+|---|:---:|---|---|
+| A | ... | ... | ... |
+| B | ... | ... | ... |
 
 ## Decision
 

@@ -8,7 +8,7 @@ This file is intentionally thin so Claude Code gets the same cross-agent workflo
 
 - Use the native skill folders in this repo when installed under `~/.claude/skills/`.
 - Keep `AGENTS.md` as the source of truth for mode discipline, authority order, context feeding, stable IDs, drift protocol, and completion standards.
-- Keep Claude-specific hook setup in the README under `Optional Claude Code hook`.
+- Keep Claude-specific hook setup aligned with [`docs/lifecycle-hooks.md`](./docs/lifecycle-hooks.md).
 
 ## Reminder
 

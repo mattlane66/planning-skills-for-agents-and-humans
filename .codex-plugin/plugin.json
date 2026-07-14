@@ -1,7 +1,7 @@
 {
   "name": "planning-skills-for-agents-and-humans",
   "version": "1.2.0",
-  "description": "Planning workflows for framing, shaping, sketch reconciliation, breadboarding, derived statecharts, interface contracts, executable breadboards, vertical task grouping, context packets, reflection, and agent harnessing.",
+  "description": "Planning workflows for framing, appetite-aware shaping, sketch reconciliation, breadboarding, derived statecharts, interface contracts, executable breadboards, vertical task grouping, context packets, reflection, and agent harnessing.",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"
@@ -24,7 +24,7 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Planning Skills for Agents and Humans",
-    "shortDescription": "Frame, shape, reconcile visuals, breadboard, package context, and check drift before building.",
+    "shortDescription": "Frame, bound appetite, shape, reconcile visuals, breadboard, package context, and check drift.",
     "longDescription": "A set of reusable planning workflows that help humans and agents turn fuzzy requests, messy notes, sketches, screenshots, partial product ideas, selected breadboards, optional statecharts, selected slices, interface contracts, executable breadboards, and implementation discoveries into clear builder-facing artifacts.",
     "developerName": "Matt Lane",
     "category": "Productivity",
@@ -33,6 +33,7 @@
     "defaultPrompt": [
       "Use Planning Skills for Agents and Humans to frame this product idea before implementation.",
       "Use the shaping skill to compare possible approaches before choosing one.",
+      "Use the shaping skill to set a bounded appetite and cut line before selecting an approach.",
       "Use the sketch-reconciliation skill to map an attached sketch or screenshot to planning IDs and propose explicit deltas without silently changing scope.",
       "Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.",
       "Use the statechart skill only when a selected stateful portion of an accepted breadboard needs a transition table and behavioral projection.",

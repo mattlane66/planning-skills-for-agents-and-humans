@@ -148,16 +148,16 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  frame shape criteria sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
+  frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  frame shape criteria sketch-shapes fit-check select-shape reconcile-sketch breadboard
+  frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
 )
 
-GEMINI_COMMANDS=(criteria sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
+GEMINI_COMMANDS=(criteria appetite sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
 
 TEMPLATES=(
   frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
@@ -170,9 +170,11 @@ DOCS=(
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
-  docs/codex-usage.md docs/agent-invocation-matrix.md docs/agent-run-records.md
+  docs/claude-code-plugin.md docs/codex-plugin.md docs/codex-usage.md
+  docs/agent-invocation-matrix.md docs/agent-run-records.md docs/using-in-a-product-repo.md
   docs/lifecycle-hooks.md docs/human-decision-gates.md docs/plan-quality-rubric.md
   docs/statechart-usage.md docs/sketch-reconciliation.md docs/visual-hot-reload.md
+  integrations/gemini/README.md
   implementation-context.md skill-inventory.txt
   examples/existing-codebase-drift/02-implementation-reality.md
   examples/existing-codebase-drift/03-breadboard-reflection.md
@@ -312,6 +314,17 @@ if grep -q "sketch-reconciliation" AGENTS.md \
 else
   fail "Sketch reconciliation is missing from one or more canonical consumer surfaces"
 fi
+if grep -q "Appetite card" AGENTS.md \
+  && grep -q "^  appetite:" .agent-orchestration.yaml \
+  && grep -q "templates/appetite-card.md" mcp-server/src/index.ts \
+  && grep -q "appetite-card.md" shaping/SKILL.md \
+  && grep -q "/appetite" docs/claude-slash-commands.md \
+  && grep -q "/appetite" docs/gemini-usage.md \
+  && grep -q "### Appetite" docs/codex-usage.md; then
+  pass "Appetite is discoverable and gated across canonical consumer surfaces"
+else
+  fail "Appetite is missing from one or more canonical consumer surfaces"
+fi
 if grep -q "watch-planning-diagrams.sh" README.md \
   && grep -q "watch-planning-diagrams.sh" docs/visual-hot-reload.md \
   && [[ -f visualizer/src/server.mjs ]] \
@@ -400,9 +413,51 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   done
   check_file_exists dist/claude-code-plugin/AGENTS.md
   check_file_exists dist/claude-code-plugin/LICENSE
+  check_file_exists dist/claude-code-plugin/.agent-orchestration.yaml
+  check_file_exists dist/claude-code-plugin/docs/agent-context-feeding.md
+  check_file_exists dist/claude-code-plugin/docs/agent-run-records.md
   check_file_exists dist/claude-code-plugin/docs/human-decision-gates.md
+  check_file_exists dist/claude-code-plugin/docs/lifecycle-hooks.md
   check_file_exists dist/claude-code-plugin/docs/loop-prompting.md
-  check_file_exists dist/claude-code-plugin/templates/drift-check.md
+  for template in "${TEMPLATES[@]}"; do
+    check_file_exists "dist/claude-code-plugin/templates/$template.md"
+  done
+  check_file_exists dist/claude-code-plugin/hooks/planning-ripple.sh
+  check_file_exists dist/claude-code-plugin/hooks/pre-build-context-check.sh
+  check_file_exists dist/claude-code-plugin/hooks/planning-drift-check.sh
+  if python3 - <<'PY'
+import pathlib
+import re
+
+bundle = pathlib.Path("dist/claude-code-plugin")
+documents = [bundle / "AGENTS.md", *bundle.glob("skills/*/SKILL.md"), *bundle.glob("commands/*.md")]
+pattern = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9._/-]+)")
+missing = []
+for document in documents:
+    text = document.read_text(encoding="utf-8")
+    for relative in pattern.findall(text):
+        relative = relative.rstrip(".,;:")
+        if not (bundle / relative).exists():
+            missing.append(f"{document.relative_to(bundle)} -> {relative}")
+if missing:
+    raise SystemExit("Missing bundle-local references: " + ", ".join(sorted(set(missing))))
+
+required_rewrites = {
+    bundle / "AGENTS.md": ["${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml", "${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md", "${CLAUDE_PLUGIN_ROOT}/hooks/"],
+    bundle / "skills/sketch-reconciliation/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/templates/sketch-reconciliation.md"],
+    bundle / "skills/feed-planning-context/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/AGENTS.md"],
+}
+for document, expected in required_rewrites.items():
+    text = document.read_text(encoding="utf-8")
+    absent = [value for value in expected if value not in text]
+    if absent:
+        raise SystemExit(f"Missing rewritten references in {document}: {absent}")
+PY
+  then
+    pass "Claude bundle support references are self-contained"
+  else
+    fail "Claude bundle has missing or non-local support references"
+  fi
   check_json dist/claude-code-plugin/.claude-plugin/plugin.json
 else
   fail "Claude plugin bundle failed to build"
