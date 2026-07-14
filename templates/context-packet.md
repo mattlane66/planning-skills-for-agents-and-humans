@@ -6,6 +6,7 @@ What the next planning or implementation move should do.
 ## Source artifacts
 - @planning/frame.md
 - @planning/shaping.md
+- @planning/appetite.md, when appetite is recorded separately from shaping
 - @planning/breadboard.md
 - @planning/statechart.md, when a selected stateful scope needs it
 - @planning/slices.md
@@ -41,6 +42,7 @@ A statechart is derived from the selected breadboard and never outranks it.
 - stable requirement IDs
 - stable place and affordance IDs
 - store IDs
+- accepted appetite and cut line
 - selected slice boundary
 - executable breadboard fixtures, example runs, expected outputs, and acceptance tests, when present
 - contract IDs and boundary names, when present

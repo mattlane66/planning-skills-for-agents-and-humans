@@ -26,6 +26,20 @@ Human confirms:
 
 Do not select a shape until requirements are good enough to judge fit.
 
+## Gate 2A — Appetite set
+
+Human decides how much time and scope the bet deserves before a shape is selected.
+
+Human confirms:
+
+- time budget or other fixed scope budget
+- team shape and review point
+- explicit cut line
+- how much uncertainty is acceptable
+- which unknowns require a spike before selection or build
+
+Do not let an agent choose an attractive shape first and turn its implied scope into the budget. Shapes may be explored while appetite is undecided, but selection waits until the appetite is explicit.
+
 ## Gate 3 — Shape selected
 
 Human chooses a direction after seeing alternatives and fit checks.
@@ -53,20 +67,7 @@ Human confirms:
 
 Do not let visual recency silently override the selected shape or breadboard.
 
-## Gate 4 — Appetite set
-
-Human decides how much time and scope the bet deserves.
-
-Human confirms:
-
-- time budget or appetite
-- what is intentionally cut
-- how much uncertainty is acceptable
-- whether a spike is needed before build work
-
-Do not let an agent turn an open-ended plan into an unbounded spec.
-
-## Gate 5 — Breadboard accepted
+## Gate 4 — Breadboard accepted
 
 Human confirms the intended behavior before slicing.
 
@@ -81,7 +82,7 @@ Human checks:
 
 Do not slice from a vague or partially understood breadboard.
 
-## Gate 6 — Slice selected
+## Gate 5 — Slice selected
 
 Human chooses what gets built first.
 
@@ -96,7 +97,7 @@ Human confirms:
 
 Do not implement outside the selected slice unless the human expands scope.
 
-## Gate 7 — Drift decision
+## Gate 6 — Drift decision
 
 When implementation reality conflicts with the plan, human chooses the correction.
 

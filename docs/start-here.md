@@ -12,6 +12,7 @@ Run the workflow from the product repository you are planning or building. Keep 
 |---|---|---|
 | You have messy notes, a transcript, or a fuzzy request | `/frame` or `framing-doc/SKILL.md` | A frame with source, problem, outcome, and boundaries |
 | You need criteria before solution ideas | `/criteria` or `shaping/SKILL.md` | Requirements / criteria separated from mechanisms |
+| Your criteria are accepted but the bet has no budget or cut line | `/appetite`, `shaping/SKILL.md`, or `templates/appetite-card.md` | A fixed time or scope budget, cut line, accepted uncertainty, and spike threshold |
 | You know the problem but not the right solution | `/sketch-shapes`, `/fit-check`, `/select-shape`, `/shape`, or `shaping/SKILL.md` | Alternative shapes, fit check, selected direction |
 | You dropped in a sketch, screenshot, wireframe, mockup, or whiteboard and need to know what it changes | `/reconcile-sketch`, `sketch-reconciliation/SKILL.md`, or the [sketch reconciliation guide](./sketch-reconciliation.md) | Observable visual evidence mapped to planning IDs, proposed deltas, a decision gate, and synchronized accepted updates |
 | You selected a direction and need to make it concrete | `/breadboard` or `breadboarding/SKILL.md` | Places, affordances, stores, wiring, and slice candidates |
@@ -36,6 +37,7 @@ Keep project-specific outputs in the product repository, usually under `planning
 messy notes
   -> frame
   -> criteria
+  -> set appetite and cut line
   -> sketch shapes
   -> fit check
   -> reconcile visual evidence whenever a sketch or screenshot changes the understanding
@@ -58,6 +60,7 @@ Check that you have:
 
 - a selected shape, not just brainstorming
 - requirements separated from mechanisms
+- an accepted appetite and cut line set before shape selection
 - every consequential sketch or screenshot reconciled explicitly, with accepted deltas written back to the authoritative artifacts
 - explicit non-goals
 - a breadboard or slice boundary
@@ -95,5 +98,5 @@ Planning drift found:
 Use this default prompt:
 
 ```text
-Use this repo's planning workflow. First decide whether we should frame, define criteria, sketch shapes, fit-check, reconcile a visual, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until a slice is selected and the verification target is clear.
+Use this repo's planning workflow. First decide whether we should frame, define criteria, set appetite, sketch shapes, fit-check, reconcile a visual, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until the appetite and slice are selected and the verification target is clear.
 ```

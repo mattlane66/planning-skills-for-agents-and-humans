@@ -15,6 +15,7 @@ Score each line as:
 | Frame preserved | No clear problem/outcome | Problem or outcome is vague | Problem, outcome, and boundaries are explicit |
 | Source traceability | Claims are unsupported | Some claims trace to source | Important claims are traceable or marked as inference |
 | Requirements vs mechanisms | Mixed together | Mostly separated with some leakage | Requirements describe needs; mechanisms live in shapes |
+| Appetite and cut line | Missing or derived from a preferred shape | Budget exists but cuts or uncertainty are vague | Appetite, cut line, accepted uncertainty, and revisit conditions are explicit before selection |
 | Alternatives considered | Only one solution asserted | Alternatives are shallow | Meaningful alternatives are compared |
 | Selected direction | Not explicit | Implied but not named | Selected shape is explicit and stable |
 | Rejected alternatives | Hidden or mixed into active work | Mentioned but not clearly rejected | Rejected ideas remain labeled as rejected |
@@ -45,19 +46,22 @@ Score these only when the corresponding artifact is present or clearly needed. T
 
 | Score | Interpretation |
 |---:|---|
-| 0–12 | Not ready. Continue framing or shaping. |
-| 13–22 | Directional but risky. Clarify weak spots before building. |
-| 23–30 | Ready for slice planning or tightly bounded implementation. |
+| 0–13 | Not ready. Continue framing or shaping. |
+| 14–24 | Directional but risky. Clarify weak spots before building. |
+| 25–32 | Ready for slice planning or tightly bounded implementation. |
 
 ## Required passes before implementation
 
 Before build work starts, these dimensions should score `2`:
 
 - selected direction
+- appetite and cut line
 - slice quality
 - non-goals
 - verification target
 - human gates
+
+For agent implementation, the optional Context packet check must also score `2`; build mode requires a compact packet with an execution contract.
 
 ## Quick review prompt
 

@@ -19,6 +19,7 @@ Use whichever artifacts the user provides or points to:
 
 - framing doc
 - shaping doc
+- appetite card, when appetite is recorded separately
 - selected shape
 - fit check
 - reverse fit check
@@ -44,10 +45,11 @@ Use whichever artifacts the user provides or points to:
 8. Preserve relevant statechart states and transitions with their source breadboard IDs when present; the breadboard remains authoritative.
 9. Preserve the active Dumplink task group, dependencies, risk state, cuts, and acceptance checks when present.
 10. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
-11. Name explicit non-goals and exclusions.
-12. Add an execution contract.
-13. Add a verification target.
-14. Stop after preparing the context packet.
+11. Preserve the accepted appetite and cut line.
+12. Name explicit non-goals and exclusions.
+13. Add an execution contract.
+14. Add a verification target.
+15. Stop after preparing the context packet.
 
 ## Output format
 
@@ -73,6 +75,7 @@ Use whichever artifacts the user provides or points to:
 
 ## Must preserve
 - ...
+- Accepted appetite and cut line: ...
 
 ## Selected requirements
 - ...

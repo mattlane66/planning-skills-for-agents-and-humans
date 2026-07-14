@@ -66,6 +66,7 @@ A simple default is:
 planning/
   frame.md
   shaping.md
+  appetite.md          # optional when the appetite needs its own decision record
   breadboard.md
   sketch-reconciliation.md
   statechart.md
@@ -85,18 +86,22 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 
 | Artifact | Use it for |
 | --- | --- |
+| **Appetite card** | The fixed time or scope budget, cut line, accepted uncertainty, and revisit conditions that shapes must fit. |
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
 | **Dumplink plan** | Vertical task groups, risk, dependency order, sequence, and appetite-based cuts. |
 | **Context packet** | The exact subset of planning material handed to the active implementation agent. |
 
-A common path is: selected shape and breadboard → optional kickoff reference → executable breadboard and/or Dumplink when needed → context packet → implementation. Not every project needs every artifact.
+A common path is: accepted criteria and appetite → selected shape and breadboard → optional kickoff reference → executable breadboard and/or Dumplink when needed → context packet → implementation. Not every project needs every artifact.
+
+Set appetite before selecting a shape. Use the `Appetite` section in the [shaping template](./templates/shaping.md) for a compact decision or the standalone [appetite card](./templates/appetite-card.md) when ownership, rationale, and revisit conditions need their own record.
 
 ## The core workflow
 
 ```text
 messy evidence
   -> frame the problem
+  -> define criteria and set appetite
   -> compare solution shapes
   -> reconcile sketches or screenshots when they reveal missing detail
   -> select a direction
@@ -112,7 +117,7 @@ The three core moves are:
 | Move | Use it when | Output |
 | --- | --- | --- |
 | [`framing-doc`](./framing-doc/SKILL.md) | You have notes, transcripts, requests, or an unclear problem. | Source, problem, desired outcome, boundaries, and criteria candidates. |
-| [`shaping`](./shaping/SKILL.md) | You need requirements, alternative approaches, fit checks, and a selected direction. | A bounded shape with tradeoffs, non-goals, and remaining unknowns. |
+| [`shaping`](./shaping/SKILL.md) | You need requirements, appetite, alternative approaches, fit checks, and a selected direction. | A bounded shape with a cut line, tradeoffs, non-goals, and remaining unknowns. |
 | [`breadboarding`](./breadboarding/SKILL.md) | A direction is selected and its behavior needs to become concrete. | Places, affordances, stores, wiring, branches, and slice candidates. |
 
 Start there. Add the advanced moves only when the work needs them.
@@ -138,8 +143,8 @@ See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the v
 Use this repository's planning workflow.
 
 First determine whether this work needs framing, shaping, sketch reconciliation, or breadboarding.
-Do not implement code until a direction and demoable slice are selected.
-Keep requirements separate from mechanisms, preserve explicit non-goals,
+Do not implement code until an appetite, direction, and demoable slice are selected.
+Keep requirements separate from mechanisms, preserve the cut line and explicit non-goals,
 and stop at human decisions about scope, appetite, or direction.
 
 Source material:
@@ -214,9 +219,9 @@ See [Codex plugin installation](./docs/codex-plugin.md) and [Codex prompt recipe
 
 ### Gemini CLI
 
-Open the repository in Gemini CLI so `GEMINI.md` imports the shared agent instructions and `.gemini/commands/` exposes the project commands.
+For work on this Planning Skills repository, open it directly so `GEMINI.md` imports the shared agent instructions. For real product work, copy or symlink the needed skill folders into the product repository, or use the MCP adapter. The repo-local TOML commands are adapter examples: if you copy them, update their `@{...}` includes to the installed skill and support-file paths. Keep the product repository's own instructions authoritative.
 
-See [Gemini CLI usage](./docs/gemini-usage.md).
+See [Gemini CLI usage](./docs/gemini-usage.md) and the [Gemini/MCP integration guide](./integrations/gemini/README.md).
 
 ### MCP server
 

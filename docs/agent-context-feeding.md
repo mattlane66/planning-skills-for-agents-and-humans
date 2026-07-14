@@ -25,12 +25,13 @@ Feed the agent the smallest context packet that can support the next move.
 A good context packet tells the agent:
 
 1. what task it is doing now
-2. which planning artifacts are source material
+2. which planning artifacts are source material and how conflicts are resolved
 3. which sections matter first
 4. which sections should be ignored unless needed
-5. what constraints, IDs, and non-goals must be preserved
-6. which executable breadboard or interface contracts must be preserved, when present
-7. what verification target proves the work stayed aligned
+5. what constraints, IDs, accepted appetite, cut line, and non-goals must be preserved
+6. which slice is current and which executable breadboard or interface contracts must be preserved, when present
+7. what execution contract governs the build loop
+8. what verification target proves the work stayed aligned
 
 ## Artifact roles
 
@@ -50,55 +51,86 @@ Use ordinary breadboards while shaping. Use executable breadboards when a select
 
 ## Context packet template
 
+Use [`templates/context-packet.md`](../templates/context-packet.md) as the canonical copyable template. Its required structure is summarized here so the guide and template cannot imply different handoff contracts:
+
+```md
 # Context Packet
 
 ## Task
-What the agent should do now.
+What the next planning or implementation move should do.
 
 ## Source artifacts
-- @planning/frame.md
-- @planning/breadboard.md
-- @planning/statechart.md, when the selected scope needs it
-- @planning/slices.md
-- @planning/executable-breadboard.md, when the selected slice is ready for implementation
-- @planning/interface-contracts.md, when boundary contracts are split out separately
-- @planning/dumplink.md, when task-group scope or sequence matters
+- Only the relevant frame, shaping, breadboard, slice, contract, executable-breadboard, Dumplink, kickoff, or reconciliation artifacts.
+
+## Authority order
+1. User's latest explicit instruction
+2. Selected slice or kickoff doc
+3. Executable breadboard, when present
+4. Selected interface contract, for boundary-level details
+5. Selected Dumplink task group and sequence
+6. Selected breadboard
+7. Selected shaping direction
+8. Framing doc
+9. Raw notes and transcripts
+10. Rejected alternatives and brainstorming
 
 ## Use these sections first
-- frame.md: Outcome, Constraints, Non-goals
-- breadboard.md: Places, Affordances, Stores, Wiring, Interface contract candidates
-- statechart.md: Relevant states, transitions, source breadboard IDs, and explicit gaps
-- slices.md: Selected slice, Demo, Produces
-- executable-breadboard.md: Selected slice, Relevant breadboard structure, Interface contracts, Example starting data, Example runs, Edge cases, Acceptance tests, Open decisions, Verification target
-- interface-contracts.md: Contract IDs, boundaries, input shapes, output shapes, branches, errors, open decisions
-- dumplink.md: Active task group, dependencies, risk state, cuts, acceptance checks, and stop condition
+- ...
 
 ## Do not use unless needed
-- raw interview notes
-- old discarded alternatives
-- brainstorming notes
-- rejected shapes
-- unaccepted sketch-reconciliation deltas
+- raw notes, rejected shapes, and unaccepted reconciliation deltas
 
 ## Must preserve
-- stable requirement IDs
-- stable place and affordance IDs
-- explicit non-goals
-- selected slice boundary
-- demo path
-- executable-breadboard fixtures, example runs, expected outputs, edge cases, and acceptance tests, when present
-- contract IDs and boundary names, when present
-- field names, required/optional distinctions, enum values, nullability, units, and error cases, when specified
-- statechart state and transition IDs with their source breadboard IDs, when present
-- active Dumplink task group, dependency order, risk state, cuts, and acceptance checks, when present
+- stable IDs, accepted appetite and cut line, explicit non-goals, selected slice boundary, demo path, and any relevant contracts, examples, statechart rows, or Dumplink boundaries
 
-## Required behavior
+## Selected requirements
+- ...
+
+## Relevant places / affordances / stores
+- ...
+
+## Relevant statechart
+- ...
+
+## Relevant executable breadboard
+- ...
+
+## Relevant interface contracts
+- ...
+
+## Relevant Dumplink plan
+- ...
+
+## Current slice
+- Slice:
+- Demo:
+- Produces:
+- Exclusions:
+
+## Execution contract
+- Goal condition:
+- Required checks:
+- Allowed files / areas:
+- Out-of-scope changes:
+- Return-to-planning conditions:
+- Checkpoint cadence:
+- Verification caveats:
+
+## Open questions
+- ...
+
+## Build-handoff behavior
 1. Restate the relevant constraints.
 2. Identify implementation implications.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
-5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-6. Do not invent missing field names, nullability, enum values, expected outputs, fixtures, edge cases, or error cases; flag them.
+5. Propose a planning update instead of silently drifting.
+6. Flag missing contract or executable-example details instead of inventing them.
+7. Run the required checks and report incomplete verification directly.
+
+## Verification target
+- ...
+```
 
 ## Standard context card
 

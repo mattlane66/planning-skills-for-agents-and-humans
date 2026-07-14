@@ -40,18 +40,20 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 ## Canonical workflow
 
 1. Frame the problem.
-2. Shape requirements and alternatives.
-3. Reconcile sketches, screenshots, wireframes, mockups, or whiteboards explicitly when they reveal missing or conflicting detail.
-4. Select a direction.
-5. Breadboard places, affordances, stores, and wiring.
-6. Optionally derive a statechart for a selected stateful scope when the wiring alone is hard to reason about.
-7. Slice into demoable increments.
-8. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
-9. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
-10. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
-11. Feed only the relevant planning context to the implementation agent.
-12. Check for drift during implementation.
-13. Reflect against implementation and repair drift.
+2. Define and accept the requirements / criteria.
+3. Set a bounded appetite and cut line before selecting a solution shape.
+4. Compare alternative shapes and check their fit against both the criteria and appetite.
+5. Reconcile sketches, screenshots, wireframes, mockups, or whiteboards explicitly when they reveal missing or conflicting detail.
+6. Select a direction.
+7. Breadboard places, affordances, stores, and wiring.
+8. Optionally derive a statechart for a selected stateful scope when the wiring alone is hard to reason about.
+9. Slice into demoable increments.
+10. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
+11. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
+12. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
+13. Feed only the relevant planning context to the implementation agent.
+14. Check for drift during implementation.
+15. Reflect against implementation and repair drift.
 
 The statechart step is optional. It is a derived view of the accepted breadboard, not a new source of truth or a prerequisite for slicing.
 
@@ -62,10 +64,11 @@ The broad shaping step can be run all at once, but agents should not collapse it
 When finer control is useful, split shaping into these gates:
 
 1. Criteria — define the requirements / criteria before proposing mechanisms.
-2. Shape sketches — make multiple possible directions visible without selecting one.
-3. Fit check — compare shapes against criteria and check whether each mechanism is justified.
-4. Shape selection — record the human choice or stop with a decision-ready summary.
-5. Breadboard handoff — only breadboard after the selected shape is explicit.
+2. Appetite — set the time or scope budget, cut line, accepted uncertainty, and spike threshold before selection.
+3. Shape sketches — make multiple possible directions visible without selecting one.
+4. Fit check — compare shapes against criteria and appetite, and check whether each mechanism is justified.
+5. Shape selection — record the human choice or stop with a decision-ready summary.
+6. Breadboard handoff — only breadboard after the selected shape is explicit.
 
 Run sketch reconciliation at any gate when a visual introduces evidence that may clarify or change the active artifacts. Separate visible observations from interpretations, show proposed deltas, and stop for a human decision before changing requirements, selected behavior, or scope unless the user's instruction already authorizes the change.
 
@@ -90,6 +93,8 @@ Use the repo skills as reusable instructions:
 ## Artifact taxonomy
 
 Breadboard = structure of the solution.
+
+Appetite card = the fixed time or scope budget, cut line, accepted uncertainty, and conditions that require a spike or revisit.
 
 Sketch reconciliation = a non-authoritative record of visual observations, mappings, proposed deltas, decisions, and downstream ripple updates.
 
@@ -159,6 +164,7 @@ Before implementation work, create or request a compact context packet that incl
 - sections to use first
 - sections to ignore unless needed
 - must-preserve constraints
+- accepted appetite and cut line
 - selected requirements
 - relevant places, affordances, stores, and wiring
 - relevant statechart rows when a statechart exists and the task depends on that behavior

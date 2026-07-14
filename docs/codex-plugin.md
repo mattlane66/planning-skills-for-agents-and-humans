@@ -8,6 +8,7 @@ The Codex plugin includes these skills:
 
 - `framing-doc`
 - `shaping`
+- `sketch-reconciliation`
 - `breadboarding`
 - `statechart`
 - `interface-contracts`
@@ -57,6 +58,8 @@ Look for:
 Planning Skills for Agents and Humans
 ```
 
+Open the product repository where the planning artifacts and implementation live, then invoke the installed skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.
+
 ## Use
 
 Example prompts:
@@ -67,6 +70,10 @@ Use Planning Skills for Agents and Humans to frame this feature before implement
 
 ```text
 Use the shaping skill to compare possible solution directions before choosing one.
+```
+
+```text
+Use the shaping skill to set a bounded appetite and cut line before selecting a direction.
 ```
 
 ```text
@@ -104,6 +111,7 @@ Keep the root skill folders and the `skills/` copies aligned:
 ```text
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
+sketch-reconciliation/        -> skills/sketch-reconciliation/
 breadboarding/                -> skills/breadboarding/
 statechart/                   -> skills/statechart/
 interface-contracts/          -> skills/interface-contracts/

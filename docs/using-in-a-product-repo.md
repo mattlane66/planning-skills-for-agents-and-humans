@@ -29,6 +29,7 @@ Do not copy this repository's root `AGENTS.md` over a product repository's exist
 planning/
   frame.md
   shaping.md
+  appetite.md          # optional when appetite is recorded separately
   breadboard.md
   sketch-reconciliation.md
   statechart.md
@@ -54,6 +55,7 @@ From the product repository, give the agent the available evidence and ask it to
 Use the Planning Skills workflow in this product repository.
 First decide whether this work needs framing, shaping, sketch reconciliation, or breadboarding.
 Do not implement until a direction and demoable slice are selected.
+Set or confirm the appetite and cut line before selecting a shape.
 
 Source material:
 [notes, transcript, screenshots, links, or existing files]

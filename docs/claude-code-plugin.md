@@ -49,12 +49,17 @@ This creates:
 ```text
 dist/claude-code-plugin/
   .claude-plugin/plugin.json
+  .agent-orchestration.yaml
   AGENTS.md
   LICENSE
   commands/*.md
+  hooks/*.sh
+  docs/agent-context-feeding.md
+  docs/agent-run-records.md
   docs/human-decision-gates.md
+  docs/lifecycle-hooks.md
   docs/loop-prompting.md
-  templates/drift-check.md
+  templates/*.md
   skills/framing-doc/SKILL.md
   skills/shaping/SKILL.md
   skills/sketch-reconciliation/SKILL.md
@@ -78,7 +83,7 @@ Building first ensures that both canonical skills and command wrappers use Claud
 
 Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:framing-doc` for the canonical skill or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
 
-The build rewrites command references to `${CLAUDE_PLUGIN_ROOT}` and includes the small set of supporting files they read. This keeps the generated commands independent of the clone path and the target project's contents.
+The build rewrites support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. It includes the orchestration manifest, reusable docs, templates, and hooks those instructions reference, so the plugin does not depend on same-named files in the target project.
 
 ## Marketplace publication
 

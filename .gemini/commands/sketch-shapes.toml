@@ -23,6 +23,7 @@ Include:
 - numbered shape parts such as `A1`, `A2`, `B1`, `B2`
 - flagged unknowns where a mechanism is still not concretely understood
 - spike candidates for unresolved mechanics when needed
+- a short note on how each shape could fit the appetite or where it exceeds the cut line
 
 Keep requirements and mechanisms separate:
 
@@ -31,6 +32,8 @@ Keep requirements and mechanisms separate:
 - do not silently turn one option into the selected direction
 
 If sketching reveals missing or changed criteria, add a short `Possible criteria discovered` section instead of silently changing accepted requirements.
+
+Confirm Gate 2A: Appetite set before sketching. If appetite is missing, stop and recommend `/appetite`.
 
 Stop before Gate 3: Shape selected.
 

@@ -4,6 +4,15 @@ planning: true
 
 # Simple Grocery List — Shaping
 
+## Appetite
+
+- Time budget: a few focused days for a deliberately small first version
+- Team shape: one builder
+- Review point: a working same-device demo
+- Cut line: no accounts, sharing, categories, pricing, recipes, or store-specific behavior
+- Accepted uncertainty: lightweight visual polish can remain rough for the demo
+- Must-resolve unknowns: none before shape selection
+
 ## Requirements
 
 | ID | Requirement | Status |
@@ -63,6 +72,13 @@ Why it stayed out:
 - Shape A keeps all item state in one list and uses filtering to control what is visible.
 - Shape B gives stronger visual separation between needed and bought items, but it introduces more structure than this first version needs.
 - Both shapes fit the requirements. The difference is mostly about simplicity versus stronger categorization.
+
+## Appetite Fit
+
+| Shape | Fits appetite? | Required cuts | Uncertainty / spike |
+|---|:---:|---|---|
+| A | ✅ | Keep duplicate handling simple and same-device only | None before selection |
+| B | ✅ | Avoid section-management features beyond collapse | None before selection |
 
 ## Reverse Fit Check
 

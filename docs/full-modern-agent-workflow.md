@@ -6,7 +6,7 @@ Use it when work is large enough that a coding agent should not jump directly fr
 
 ## Flow
 
-Messy notes → frame → criteria → sketch shapes → fit check → reconcile visual evidence when present → select shape → breadboard → optional statechart → selected-slice contracts and executable examples as needed → optional Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
+Messy notes → frame → criteria → appetite → sketch shapes → fit check → reconcile visual evidence when present → select shape → breadboard → optional statechart → select a slice → optional kickoff reference → selected-slice contracts and executable examples as needed → optional Dumplink → context packet with execution contract → build with drift checks → run log → reflection.
 
 ## Stages
 
@@ -14,12 +14,15 @@ Messy notes → frame → criteria → sketch shapes → fit check → reconcile
 | --- | --- | --- |
 | Frame | Name the problem, outcome, forces, and boundaries. | `planning/frame.md` |
 | Criteria | Define the standards for judging fit before mechanisms take over. | requirements / criteria table |
+| Appetite | Set the fixed time or scope budget, cut line, accepted uncertainty, and spike threshold before selection. | shaping Appetite section or `planning/appetite.md` |
 | Sketch shapes | Make multiple solution shapes visible without selecting one. | candidate shapes |
 | Fit check | Compare shapes against criteria and reverse-check mechanisms. | fit check + reverse fit check |
 | Sketch reconciliation, as needed | Map visual evidence to planning IDs, expose gaps or conflicts, and apply only accepted deltas. | `planning/sketch-reconciliation.md` plus synchronized source artifacts |
 | Select shape | Record the human-selected direction. | selected direction + rejected alternatives |
 | Breadboard | Map places, affordances, stores, wiring, and slice candidates. | `planning/breadboard.md` |
 | Statechart, optional | Derive a precise behavioral view when a selected stateful scope is hard to reason about from wiring alone. | `planning/statechart.md` |
+| Select slice | Choose a demoable increment with explicit exclusions and a verification target. | `planning/slices.md` |
+| Kickoff, optional | Create a durable human-readable map of the shaped territory; do not use it as the build sequence. | `planning/kickoff.md` |
 | Interface contracts | Define boundary-crossing data exchanges before agents guess field-level details. | `planning/interface-contracts.md` |
 | Executable breadboard | Add fixtures, examples, expected outputs, edge cases, and acceptance tests. | `planning/executable-breadboard.md` |
 | Dumplink | Create vertical task groups, dependency sequence, risk states, scope cuts, and an agent handoff packet. | `planning/dumplink.md` |
@@ -54,6 +57,7 @@ or:
 A modern agent workflow is complete when:
 
 - requirements stayed separate from mechanisms
+- the appetite and cut line were explicit before shape selection
 - the human-selected shape is explicit
 - consequential visual evidence was reconciled without silent scope or behavior changes
 - breadboard structure is preserved
