@@ -96,6 +96,10 @@ A common path is: accepted criteria and appetite → selected shape and breadboa
 
 Set appetite before selecting a shape. Use the `Appetite` section in the [shaping template](./templates/shaping.md) for a compact decision or the standalone [appetite card](./templates/appetite-card.md) when ownership, rationale, and revisit conditions need their own record.
 
+An estimate is not a prediction made before the work. It is the output of preliminary design work.
+First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
+You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
+
 ## The core workflow
 
 ```text
