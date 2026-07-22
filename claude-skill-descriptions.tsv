@@ -1,0 +1,11 @@
+framing-doc	Create a frame from research, notes, requests, or transcripts when the current problem, desired outcome, boundaries, and evidence need to become explicit.
+shaping	Shape ambiguous product work before implementation by defining criteria and appetite, comparing solution directions, and recording the selected shape and cut line.
+sketch-reconciliation	Reconcile a screenshot, wireframe, mockup, whiteboard, or sketch with existing planning artifacts when visual evidence may change the frame, criteria, scope, or shape.
+breadboarding	Map a selected or existing system into places, affordances, stores, consequences, and wiring when its concrete behavior or candidate vertical slices need clarification.
+statechart	Derive states and transitions from an accepted breadboard when retries, timeouts, approvals, lifecycle stages, or multiple valid actions make behavior difficult to review.
+interface-contracts	Define plain-language inputs, outputs, branches, errors, and open decisions when a selected slice crosses a meaningful data, service, or system boundary.
+executable-breadboards	Turn a selected slice into fixtures, example runs, expected outputs, edge cases, and acceptance tests when it is ready for a buildable behavioral handoff.
+dumplink	Plan selected work as vertical task groups with dependencies, risks, sequence, and appetite-based cuts when implementation needs more than a simple slice handoff.
+kickoff-doc	Create a builder-facing kickoff document from accepted planning artifacts when a team needs a durable reference organized by shaped product territory.
+feed-planning-context	Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice.
+breadboard-reflection	Compare implementation with the accepted breadboard and slice when code or a prototype exists and the team needs synced reality, drift, design smells, and correction options.
