@@ -2,7 +2,7 @@
 
 Use these prompts after uploading and enabling the Planning Skills in Claude. Run them with realistic but disposable source material. The goal is to verify skill selection and behavior, not the quality of a particular product idea.
 
-For every test, confirm that Claude loads the intended skill, preserves human decision gates, and does not silently advance into implementation.
+For every positive test, confirm that Claude loads the intended skill, preserves human decision gates, and does not silently advance into implementation.
 
 ## `framing-doc`
 
@@ -91,6 +91,40 @@ Use my breadboard-reflection skill. Compare this implemented prototype with the 
 ```
 
 Expected: a factual comparison that allows either the implementation or the plan to change explicitly.
+
+## Automatic-selection test
+
+Do not name a skill:
+
+```text
+I have a transcript, three screenshots of the current workflow, and a stakeholder request. Before proposing any solution, turn the evidence into a clear statement of the current problem, desired outcome, boundaries, and unresolved questions.
+```
+
+Expected: Claude selects `framing-doc` rather than jumping to shaping, breadboarding, or UI generation.
+
+## Near-neighbor routing test
+
+```text
+We have already selected a slice. It sends a request from the client to an API and then to a payment provider. Clarify exactly what crosses each boundary, including required inputs, possible outputs, errors, and unresolved field decisions.
+```
+
+Expected: Claude selects `interface-contracts`, not general shaping or executable breadboarding.
+
+## Command-wrapper distinction test
+
+```text
+Define criteria for this frame, but do not propose shapes yet. Use the relevant installed Planning Skill. Treat /criteria as a Claude Code shortcut, not as a separate uploaded skill.
+```
+
+Expected: Claude uses the `shaping` skill and stops after the criteria gate.
+
+## Negative trigger test
+
+```text
+Rewrite this two-sentence meeting invitation so it sounds warmer and more concise.
+```
+
+Expected: no Planning Skill loads. The presence of broad words such as “plan,” “shape,” or “frame” in unrelated requests should not trigger the repository workflow.
 
 ## Cross-surface fallback test
 

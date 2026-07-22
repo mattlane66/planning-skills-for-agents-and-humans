@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Added a Claude and Claude Design workflow that separates canonical skills from Claude Code command wrappers.
+- Added uploadable Claude skill ZIP generation with optimized trigger metadata and bundled supporting resources.
+- Added positive, automatic-selection, near-neighbor, negative-trigger, command-wrapper, and cross-surface fallback tests for Claude skill invocation.
+
+### Improved
+
+- Added CI validation for every generated Claude upload package, including ZIP roots, metadata, cross-skill references, and required local resources.
+- Clarified when Claude Design should invoke a skill directly and when repository-aware work must return to Claude Code.
+
 ## v1.2.0 - Planning gates, visual reconciliation, and live planning views
 
 ### Added
