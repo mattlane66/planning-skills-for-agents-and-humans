@@ -1,5 +1,5 @@
 ---
-description: Sync a breadboard to implementation reality, identify drift, and find design smells.
+description: Compare accepted breadboard intent with implementation reality and prepare an explicit drift decision.
 argument-hint: [breadboard path and implementation paths]
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
@@ -12,10 +12,11 @@ User request and source context:
 
 $ARGUMENTS
 
-Run the reflection in two phases:
+Run the reflection in three phases:
 
-1. Sync to implementation reality first.
-2. Reflect on the design only after the breadboard accurately describes what exists.
+1. Record implementation reality without rewriting accepted intent.
+2. Compare intent and reality, then reflect on concrete design smells.
+3. Present correction options and stop for a human drift decision unless the user already authorized one.
 
 Produce or update a reflection artifact that includes, as applicable:
 
@@ -27,6 +28,7 @@ Produce or update a reflection artifact that includes, as applicable:
 - Design smells
 - Proposed planning updates
 - Implementation follow-ups
+- Drift decision needed or already authorized
 - Self-check
 
-Do not critique the design before syncing the breadboard to reality.
+Do not silently update the accepted breadboard to match the implementation.

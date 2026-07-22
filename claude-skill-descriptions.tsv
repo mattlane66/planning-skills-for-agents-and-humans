@@ -8,4 +8,4 @@ executable-breadboards	Turn a selected slice into fixtures, example runs, expect
 dumplink	Plan selected work as vertical task groups with dependencies, risks, sequence, and appetite-based cuts when implementation needs more than a simple slice handoff.
 kickoff-doc	Create a builder-facing kickoff document from accepted planning artifacts when a team needs a durable reference organized by shaped product territory.
 feed-planning-context	Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice.
-breadboard-reflection	Compare implementation with the accepted breadboard and slice when code or a prototype exists and the team needs synced reality, drift, design smells, and correction options.
+breadboard-reflection	Compare accepted intent with implementation reality when code or a prototype exists, preserve both separately, surface drift and design smells, and prepare an explicit correction decision.

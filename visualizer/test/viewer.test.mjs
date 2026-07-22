@@ -51,6 +51,9 @@ test('serves diagrams and broadcasts a reload when a watched file changes', asyn
     assert.equal(vendor.status, 200);
     assert.match(vendor.headers.get('content-type'), /javascript/);
 
+    const malformedVendorPath = await fetch(`${viewer.url}/vendor/%`);
+    assert.equal(malformedVendorPath.status, 400);
+
     const events = await fetch(`${viewer.url}/events`, { signal: eventsController.signal });
     assert.equal(events.status, 200);
     assert.ok(events.body);

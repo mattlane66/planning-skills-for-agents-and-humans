@@ -21,9 +21,16 @@ Produce or update a context packet that includes, as applicable:
 - Do not use unless needed
 - Must preserve
 - Selected requirements
+- Accepted appetite and cut line
+- Selected shape and explicit non-goals
 - Relevant places / affordances / stores
+- Relevant statechart rows, when present
+- Selected interface contracts, when present
+- Executable fixtures, examples, expected outputs, and checks, when present
+- Active Dumplink task group, dependencies, risk, and cuts, when present
 - Current slice
 - Open questions
+- Execution contract, including allowed areas and return-to-planning conditions
 - Required behavior for the implementation agent
 - Verification target
 

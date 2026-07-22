@@ -31,6 +31,13 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 - Outcome:
 - Non-goals:
 
+## Requirements
+
+| ID | Requirement | Status | Notes |
+|---|---|---|---|
+| R0 | ... | Core goal | ... |
+| R1 | ... | Must-have | ... |
+
 ## Appetite
 - Time budget:
 - Team shape:
@@ -38,13 +45,6 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 - Cut line:
 - Accepted uncertainty:
 - Must-resolve unknowns:
-
-## Requirements
-
-| ID | Requirement | Status | Notes |
-|---|---|---|---|
-| R0 | ... | Core goal | ... |
-| R1 | ... | Must-have | ... |
 
 ## Shapes
 

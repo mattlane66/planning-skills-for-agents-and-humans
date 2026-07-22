@@ -20,6 +20,14 @@ planning: true
 >
 > If I add "milk" twice by accident, it should probably stop me or at least make that obvious.
 
+## Current situation
+
+- Trigger or context: One partner remembers grocery items at different moments, then both need a dependable list while shopping.
+- Current approach: Items are sent through ad hoc text messages.
+- Current result: The messages are easy to add but hard to treat as a shared, current list of what is still needed.
+- Struggle or compromise: The pair loses state, scans crossed-out items, and cannot reliably distinguish pending from bought items.
+- Evidence and confidence: Directly supported by the source notes; shared-device and multi-user behavior remain unknown.
+
 ## Problem
 
 - The current list lives in ad hoc messages, so the state of what is still needed is easy to lose.

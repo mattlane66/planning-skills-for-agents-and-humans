@@ -89,7 +89,13 @@ export async function startViewer({
   };
 
   const server = createServer(async (request, response) => {
-    const requestUrl = new URL(request.url || '/', `http://${request.headers.host || host}`);
+    let requestUrl;
+    try {
+      requestUrl = new URL(request.url || '/', `http://${request.headers.host || host}`);
+    } catch {
+      response.writeHead(400).end('Bad request');
+      return;
+    }
 
     if (requestUrl.pathname === '/') {
       response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'text/html; charset=utf-8' });
@@ -128,7 +134,13 @@ export async function startViewer({
     }
 
     if (requestUrl.pathname.startsWith('/vendor/')) {
-      const relativePath = decodeURIComponent(requestUrl.pathname.slice('/vendor/'.length));
+      let relativePath;
+      try {
+        relativePath = decodeURIComponent(requestUrl.pathname.slice('/vendor/'.length));
+      } catch {
+        response.writeHead(400).end('Bad request');
+        return;
+      }
       const requestedPath = resolve(vendorRoot, relativePath);
       const allowedPrefix = `${resolve(vendorRoot)}${sep}`;
       if (!requestedPath.startsWith(allowedPrefix)) {

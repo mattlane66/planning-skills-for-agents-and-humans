@@ -174,6 +174,9 @@ DOCS=(
   docs/agent-invocation-matrix.md docs/agent-run-records.md docs/using-in-a-product-repo.md
   docs/lifecycle-hooks.md docs/human-decision-gates.md docs/plan-quality-rubric.md
   docs/statechart-usage.md docs/sketch-reconciliation.md docs/visual-hot-reload.md
+  docs/canvas-export.md docs/ci-health-workflow.md docs/claude-design-skill-tests.md
+  docs/claude-design-workflow.md docs/claude-skills-installation.md
+  docs/executable-breadboards.md docs/interface-contracts.md docs/loop-prompting.md
   integrations/gemini/README.md
   implementation-context.md skill-inventory.txt
   examples/existing-codebase-drift/02-implementation-reality.md
@@ -184,6 +187,13 @@ DOCS=(
   examples/sketch-reconciliation/02-availability-sketch.svg
   examples/sketch-reconciliation/03-reconciliation.md
 )
+
+echo "Checking uploadable Claude skills..."
+if python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/build_claude_skills.py; then
+  pass "Claude upload packager tests and package validation passed"
+else
+  fail "Claude upload packager tests or package validation failed"
+fi
 
 echo "Checking manifests and licensing..."
 check_json .claude-plugin/plugin.json
@@ -466,8 +476,8 @@ fi
 echo
 echo "Checking visual hot-reload viewer..."
 if command -v npm >/dev/null 2>&1; then
-  if (cd visualizer && npm ci --ignore-scripts && npm run check); then
-    pass "Visual viewer installs and passes tests"
+  if (cd visualizer && npm ci --ignore-scripts && npm run check && npm audit --audit-level=moderate); then
+    pass "Visual viewer installs, passes tests, and passes dependency audit"
   else
     fail "Visual viewer verification failed"
   fi
@@ -478,8 +488,8 @@ fi
 echo
 echo "Checking MCP server..."
 if command -v npm >/dev/null 2>&1; then
-  if (cd mcp-server && npm ci --ignore-scripts && npm run check); then
-    pass "MCP server installs, builds, and passes tests"
+  if (cd mcp-server && npm ci --ignore-scripts && npm run check && npm audit --audit-level=moderate); then
+    pass "MCP server installs, builds, passes tests, and passes dependency audit"
   else
     fail "MCP server verification failed"
   fi

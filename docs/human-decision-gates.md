@@ -38,7 +38,7 @@ Human confirms:
 - how much uncertainty is acceptable
 - which unknowns require a spike before selection or build
 
-Do not let an agent choose an attractive shape first and turn its implied scope into the budget. Shapes may be explored while appetite is undecided, but selection waits until the appetite is explicit.
+Do not let an agent choose an attractive shape first and turn its implied scope into the budget. Premature mechanism ideas may be parked while appetite is undecided, but comparative shape sketching and selection wait until the appetite is explicit.
 
 ## Gate 3 — Shape selected
 

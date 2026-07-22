@@ -16,17 +16,19 @@ Task: check whether the current implementation direction still matches the selec
 Check against the highest-authority available artifacts, in this order:
 
 1. latest explicit user instruction
-2. selected slice or kickoff doc
+2. selected slice
 3. executable breadboard, when present
 4. selected interface contract, when present
 5. selected Dumplink task group and sequence, when present
 6. selected breadboard
 7. selected shaping direction
-8. framing doc
-9. raw notes and transcripts
-10. rejected alternatives and brainstorming
+8. kickoff doc, for builder orientation only
+9. framing doc
+10. raw notes and transcripts
+11. rejected alternatives and brainstorming
 
 A statechart is derived from the selected breadboard and never outranks it.
+The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence.
 
 Inspect only what is needed to answer the drift question. Do not broaden into a full code review.
 

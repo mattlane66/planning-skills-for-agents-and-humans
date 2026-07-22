@@ -7,6 +7,8 @@
 - Non-goals:
 - Selected slice, when present:
 
+If a selected slice is present, all task groups and sequence below stay within it. If it is absent, this plan stops at candidate groups until a human selects the build boundary.
+
 ## Task dump
 
 | ID | Task | Type | Known / unknown | Notes |

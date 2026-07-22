@@ -153,17 +153,20 @@ Use whichever artifacts the user provides or points to:
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
 1. the user's latest explicit instruction
-2. selected slice or kickoff doc
+2. selected slice
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected Dumplink task group and sequence, for task-group scope and build order
+5. selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
 6. selected breadboard
 7. selected shaping direction
-8. framing doc
-9. raw notes and transcripts
-10. rejected alternatives and brainstorming
+8. kickoff doc, for builder orientation only
+9. framing doc
+10. raw notes and transcripts
+11. rejected alternatives and brainstorming
 
 A statechart is derived from the selected breadboard and never outranks it.
+
+Apply authority to the concern each artifact owns. The selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, an interface contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is a derived orientation reference, not build scope or sequence.
 
 ## Chunking rules
 

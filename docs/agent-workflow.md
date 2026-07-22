@@ -21,10 +21,13 @@ Do not implement code in Explore mode.
 
 ## 2. Frame
 
-Use this mode when the team needs to name the problem, outcome, and boundaries.
+Use this mode when the team needs to name the current situation, problem, outcome, and boundaries.
 
 Outputs:
 - source
+- trigger or context
+- current approach, workaround, or nonconsumption
+- current result and struggle
 - problem
 - outcome
 - less-about / more-about boundaries
@@ -59,7 +62,7 @@ Outputs:
 
 Use the `shaping` skill, `/appetite` command where supported, and `templates/appetite-card.md` when the decision needs its own artifact.
 
-Do not derive the appetite from a preferred shape. Shapes may be explored while appetite is open, but selection waits until the appetite is explicit.
+Do not derive the appetite from a preferred shape. Capture already-proposed ideas in a parking lot while appetite is open, but comparative shape sketching and selection wait until the appetite is explicit.
 
 ## 5. Sketch shapes
 
@@ -163,18 +166,7 @@ Outputs:
 
 Use the `breadboarding` skill. Do not implement outside the selected slice.
 
-## 12. Kickoff reference, optional
-
-Use this mode when builders need a durable human-readable map of the shaped product territory.
-
-Outputs:
-- selected direction and boundaries
-- system areas and important behavior
-- first slice and verification target
-
-Use the `kickoff-doc` skill or `/kickoff` where supported. The kickoff document is a reference, not the build sequence.
-
-## 13. Interface contracts
+## 12. Interface contracts
 
 Use this mode when the selected slice crosses meaningful boundaries.
 
@@ -190,7 +182,7 @@ Use the `interface-contracts` skill.
 
 Keep this in plain language unless the user explicitly asks for production schema or contract files.
 
-## 14. Executable breadboard
+## 13. Executable breadboard
 
 Use this mode when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
 
@@ -207,7 +199,7 @@ Use the `executable-breadboards` skill.
 
 Do not invent missing expected outputs or edge cases. Flag them before build work.
 
-## 15. Dumplink, optional
+## 14. Dumplink, optional
 
 Use this mode when selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
 
@@ -220,6 +212,17 @@ Outputs:
 - bounded agent handoff packet
 
 Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog.
+
+## 15. Kickoff reference, optional
+
+Use this mode when builders need a durable human-readable map of the shaped product territory after the selected build artifacts have converged.
+
+Outputs:
+- selected direction and boundaries
+- system areas and important behavior
+- first slice and verification target
+
+Use the `kickoff-doc` skill or `/kickoff` where supported. The kickoff document is a derived orientation reference, not build scope or sequence.
 
 ## 16. Feed context
 
@@ -279,12 +282,12 @@ Do not implement code in Check Drift mode.
 Use this mode after implementation exists.
 
 Outputs:
-- synced implementation reality
+- implementation reality recorded separately from accepted intent
 - drift
 - missing behavior
 - accidental behavior
-- planning updates
-- implementation follow-ups
+- planning-update and implementation-follow-up options
+- human drift decision or a clearly pending decision
 
 Use the `breadboard-reflection` skill.
 
@@ -316,5 +319,5 @@ Avoid:
 - pasting all raw context instead of feeding a compact context packet
 - silently changing the plan when code reality pushes back
 - using build mode before a slice exists
-- treating reflection as critique before syncing the breadboard to reality
+- silently rewriting the accepted breadboard to match implementation before a drift decision
 - letting hooks become a hidden method instead of a reminder layer

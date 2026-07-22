@@ -28,7 +28,7 @@ The unqualified names below apply when Claude Code is running in this repository
 | `/kickoff` | `kickoff-doc/SKILL.md` | Turn kickoff notes or transcripts into a builder-facing reference document. |
 | `/feed-context` | `feed-planning-context/SKILL.md` | Package planning artifacts into a compact context packet for implementation work. |
 | `/check-drift` | `AGENTS.md` + `docs/loop-prompting.md` | Check implementation direction against selected planning artifacts and stop if drift is found. |
-| `/reflect-breadboard` | `breadboard-reflection/SKILL.md` | Sync a breadboard to implementation reality and identify design smells or drift. |
+| `/reflect-breadboard` | `breadboard-reflection/SKILL.md` | Compare accepted intent with implementation reality and prepare an explicit drift decision. |
 
 ## Shaping gate commands
 

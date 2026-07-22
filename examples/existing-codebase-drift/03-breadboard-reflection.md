@@ -1,6 +1,6 @@
 # Account Settings — Breadboard Reflection
 
-## Implementation reality synced
+## Current implementation reality recorded
 
 The intended and current views are recorded side by side rather than silently overwriting either one.
 
@@ -31,6 +31,6 @@ Choose option 1. The original requirement says failure must be visible and recov
 
 ## Planning updates
 
-- Keep this synchronized current-state record alongside the accepted-intent breadboard until the decision is made.
+- Keep this current-state record alongside the accepted-intent breadboard until the decision is made.
 - If option 1 is selected, retain the intended breadboard and link the implementation follow-ups to `STORE-01`, `STORE-02`, `P-02`, `AFF-04`, and `AFF-05`.
 - If option 2 or 3 is selected, update the selected slice and verification target explicitly; do not silently rewrite them.
