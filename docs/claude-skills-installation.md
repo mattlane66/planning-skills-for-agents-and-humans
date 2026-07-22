@@ -15,16 +15,31 @@ If those controls are unavailable, ask your Team or Enterprise administrator to 
 From the repository root, run:
 
 ```bash
-bash scripts/build-claude-skills.sh
+python3 scripts/build_claude_skills.py
 ```
 
-This validates the trigger description for every canonical skill and creates one uploadable ZIP per skill under:
+This command:
+
+- validates that every canonical skill has exactly one upload description;
+- checks the description length and trigger language;
+- builds one ZIP per skill;
+- includes shared templates, documentation, hooks, and orchestration references used by the skill;
+- removes Claude Code-only cross-skill file references from the uploaded copy;
+- validates the ZIP root, metadata, and referenced files.
+
+The packages are written to:
 
 ```text
 dist/claude-skills/
 ```
 
-Each ZIP contains the matching skill folder as its root. The packages are generated from the canonical top-level skill folders; do not maintain separate hand-edited Claude copies.
+Each ZIP contains the matching skill folder as its root. The packages are generated from the canonical top-level skill folders and shared repository resources; do not maintain separate hand-edited Claude copies.
+
+To validate packages that have already been built without rebuilding them, run:
+
+```bash
+python3 scripts/build_claude_skills.py --check
+```
 
 ## Upload to Claude
 
@@ -73,9 +88,11 @@ Do not allow the canvas to become a second, conflicting source of truth.
 Use the prompts in [Claude Design skill test prompts](./claude-design-skill-tests.md). Confirm that Claude:
 
 - loads the intended skill;
+- does not load a planning skill for unrelated work;
+- distinguishes canonical skills from Claude Code command wrappers;
 - stops at required human decision gates;
 - produces the expected artifact;
 - does not invent implementation scope;
 - falls back cleanly to Claude Code when repository access is required.
 
-If Claude does not load a skill, first confirm that it is enabled, then make the request more explicit. If it still fails, refine the skill's frontmatter description and rebuild the ZIP.
+If Claude does not load a skill, first confirm that it is enabled, then make the request more explicit. If it still fails, refine the upload description in `claude-skill-descriptions.tsv` and rebuild the ZIP.
