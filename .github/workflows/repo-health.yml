@@ -22,7 +22,14 @@ jobs:
             visualizer/package-lock.json
 
       - name: Build and validate Claude upload skills
-        run: python3 scripts/build_claude_skills.py
+        run: python3 scripts/build_claude_skills.py 2>&1 | tee claude-skill-build.log
+
+      - name: Upload Claude skill diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: claude-skill-build-log
+          path: claude-skill-build.log
 
       - name: Check repository health
         run: bash scripts/check-repo-health.sh
