@@ -2,6 +2,14 @@
 
 Use Claude Code to invoke the planning skills, create authoritative artifacts, preserve stable IDs, and carry accepted decisions into implementation. Use Claude Design when the work benefits from a visual, spatial, or interactive surface.
 
+## Before you begin
+
+Direct invocation in Claude Design requires the relevant Planning Skills to be uploaded and enabled in Claude, with code execution and file creation available. See [Install Planning Skills in Claude and Claude Design](./claude-skills-installation.md).
+
+When an enabled skill is available in Claude Design, invoke it there explicitly or ask Claude to use it. A slash command is not guaranteed to appear for every custom skill in every Claude surface. When the skill is unavailable, or the work requires reading or updating the product repository, invoke it in Claude Code and bring the resulting artifact into Claude Design.
+
+In every case, project planning files in the product repository remain authoritative. Write accepted discoveries from Claude Design back through Claude Code.
+
 ## 1. Load context → `/framing-doc`
 
 **What you likely have:**  
@@ -13,7 +21,7 @@ Research notes, screenshots, stakeholder requests, an existing product, a rough 
 **How to use it:**  
 Use Claude Code to invoke `/framing-doc`, read the source material, and create the authoritative framing document in the product repository.
 
-Use Claude Design when screenshots, journeys, environments, or relationships would benefit from visual inspection. Upload the relevant material and use its chat to correct Claude’s interpretation before generating interfaces.
+When `framing-doc` is enabled in Claude Design, you may invoke it there to inspect screenshots, journeys, environments, or relationships visually. Otherwise, bring the Claude Code framing artifact and relevant source material into Claude Design. Use its chat to correct Claude’s interpretation before generating interfaces.
 
 **Result:**  
 A shared account of the current situation and why it is worth investigating.
@@ -59,9 +67,9 @@ A broad sense of what should improve, plus stakeholder expectations, technical l
 **How to use it:**  
 Invoke `/criteria` in Claude Code to convert that material into explicit criteria. Give each requirement, constraint, non-goal, and unknown a stable ID.
 
-Keep the resulting criteria visible beside the territory map in Claude Design. Remove proposed features disguised as requirements and restate them as observable outcomes or necessary conditions.
+If the shaping skill is enabled in Claude Design, it may help inspect or challenge the criteria there, but write all accepted changes back into the authoritative shaping artifact through Claude Code.
 
-Write all accepted changes back into the authoritative shaping artifact through Claude Code.
+Keep the resulting criteria visible beside the territory map in Claude Design. Remove proposed features disguised as requirements and restate them as observable outcomes or necessary conditions.
 
 **Result:**  
 A stable basis for judging proposed designs rather than relying on preference or polish.
@@ -88,7 +96,7 @@ For each shape, use a lightweight `/breadboard` pass to show:
 - major state changes
 - how actions lead to consequences
 
-Place all three on the Claude Design canvas and run the same representative scenario through each.
+When the relevant skills are enabled in Claude Design, you may perform these passes directly there. Otherwise, generate the structured artifacts in Claude Code and place all three on the Claude Design canvas. Run the same representative scenario through each.
 
 Use Claude Code to preserve the shape definitions, IDs, and behavioral differences in version-controlled planning files.
 
@@ -106,7 +114,7 @@ Several plausible shapes, each solving some parts of the problem while introduci
 **Both. Claude Code performs the structured comparison; Claude Design supports visual inspection and discussion.**
 
 **How to use it:**  
-Invoke `/fit-check` in Claude Code to compare each shape against the approved requirements and constraints.
+Invoke `/fit-check` in Claude Code to compare each shape against the approved requirements and constraints. If shaping is enabled in Claude Design, you may run the comparison there as well, but the recorded decision belongs in the repository.
 
 Use Claude Design to make the comparison inspectable. Each judgment should point to something visible in the sketch or breadboard.
 
@@ -149,9 +157,7 @@ Then identify the assumption whose failure would most undermine the shape.
 
 Use `executable-breadboards/SKILL.md` in Claude Code to define the smallest interactive slice that tests that uncertainty. Use realistic data and include a normal case, a difficult case, and an ambiguous case.
 
-Build or render that slice in Claude Design and interact with it rather than judging it only as a static composition.
-
-Use Claude Code when the slice needs real code, data behavior, tests, or integration with the existing product.
+When these skills are enabled in Claude Design, they may be invoked there to help render and interact with the slice. Use Claude Code whenever the slice needs repository access, real code, data behavior, tests, or integration with the existing product.
 
 **Result:**  
 A coherent behavioral model and a focused prototype that tests the design’s most important uncertainty.
@@ -186,7 +192,7 @@ Use Claude Design to make discrepancies visible:
 - invented behavior
 - discoveries that should update the plan
 
-Decide whether to correct the prototype, update the implementation, or revise the planning artifacts. Use Claude Code to make and preserve the accepted changes.
+If the relevant reflection skill is enabled in Claude Design, it may help surface discrepancies there. Decide whether to correct the prototype, update the implementation, or revise the planning artifacts. Use Claude Code to make and preserve the accepted changes.
 
 **Result:**  
 A reconciled prototype whose behavior, requirements, implementation, and underlying rationale remain aligned.
@@ -199,7 +205,7 @@ The repository supplies the planning methods and artifact structures.
 
 ### Claude Code is the primary environment for
 
-- invoking the repository’s skills
+- invoking the repository’s skills with full repository context
 - reading the product repository
 - creating authoritative planning artifacts
 - maintaining stable IDs and traceability
@@ -210,6 +216,7 @@ The repository supplies the planning methods and artifact structures.
 ### Claude Design is the working surface where you
 
 - bring visual source material together
+- invoke enabled skills when available
 - visualize the territory
 - place alternatives side by side
 - inspect behavioral breadboards
