@@ -18,6 +18,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## Must preserve
 - source-separated evidence
+- current approach and current result
 - problem/outcome distinction
 - explicit boundaries and non-goals
 
@@ -31,6 +32,13 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Options surfaced:
 - Why this frame is chosen now:
 - Why other options are not the priority right now:
+
+## Current situation
+- Trigger or context:
+- Current approach, workaround, or nonconsumption:
+- Current result:
+- Struggle or compromise:
+- Evidence and confidence:
 
 ## Problem
 - ...
@@ -57,6 +65,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## Self-check
 - [ ] Source is separate from interpretation.
+- [ ] Trigger, current approach, and current result are explicit or marked unknown.
 - [ ] Problem lines are traceable to source or marked as inference.
 - [ ] Outcome lines describe effects, not mechanisms.
 - [ ] Boundaries prevent likely wrong directions without over-constraining the solution.

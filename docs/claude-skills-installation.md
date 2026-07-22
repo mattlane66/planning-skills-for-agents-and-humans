@@ -27,6 +27,8 @@ This command:
 - removes Claude Code-only cross-skill file references from the uploaded copy;
 - validates the ZIP root, metadata, and referenced files.
 
+The default output is `dist/claude-skills/`. A custom output directory must either be empty or contain only packages from the canonical inventory plus the packager marker. The builder removes only generated ZIP files; it refuses repository roots, home directories, unrelated files, and unexpected nested content instead of recursively deleting the target.
+
 The packages are written to:
 
 ```text

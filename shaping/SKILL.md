@@ -42,11 +42,11 @@ Shaping is iterative. Requirements sharpen the shape. Shapes reveal missing requ
 
 ## Starting points
 
-You can start from either side:
+Exploration can start from either side:
 - **Start from requirements** — describe the problem, constraints, or pain points first, then let shapes emerge
-- **Start from a shape** — capture a solution already in mind, then extract or revise requirements as you go
+- **Start from a shape** — capture a solution already in mind in a mechanism parking lot, then extract or revise requirements before comparing it with alternatives
 
-There is no required order. Requirements and shapes inform each other throughout.
+Requirements and shapes inform each other throughout, but the formal decision sequence is fixed: accept criteria, set the appetite, compare candidate shapes, run the fit check, and then record the human selection. An idea captured early does not bypass those gates.
 
 ## Working with an existing shaping doc
 
@@ -94,7 +94,7 @@ Set the appetite after the requirements are accepted and before selecting a shap
 
 Use the `Appetite` section in `templates/shaping.md` for a compact decision. Use `templates/appetite-card.md` when the appetite needs its own durable owner, rationale, or revisit conditions.
 
-If appetite is still undecided, shapes may be explored, but no shape should be recorded as selected. Mark the decision as blocked on appetite rather than allowing an open-ended specification.
+If appetite is still undecided, preserve existing ideas in the mechanism parking lot but do not run the comparative shape-sketch gate or record a selection. Mark the work as blocked on appetite rather than allowing an open-ended specification.
 
 ### Requirement smell test
 

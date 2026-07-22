@@ -23,7 +23,7 @@ Codex should honor this workflow while also following the active product reposit
 13. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
 14. Feed only the relevant planning context to implementation.
 15. Check drift during implementation.
-16. Reflect against implementation and repair drift.
+16. Reflect against implementation, preserve accepted intent separately, and apply only an explicit drift decision.
 
 The important behavior is the gate discipline:
 

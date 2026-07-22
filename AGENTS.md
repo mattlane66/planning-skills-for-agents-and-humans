@@ -53,7 +53,7 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 12. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
 13. Feed only the relevant planning context to the implementation agent.
 14. Check for drift during implementation.
-15. Reflect against implementation and repair drift.
+15. Reflect against implementation, preserve intent and reality separately, and apply only an explicit drift decision.
 
 The statechart step is optional. It is a derived view of the accepted breadboard, not a new source of truth or a prerequisite for slicing.
 
@@ -87,7 +87,7 @@ Use the repo skills as reusable instructions:
 - `executable-breadboards/` — turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
 - `dumplink/` — turn a shaped project into vertical task groups, risk states, dependencies, scope cuts, acceptance checks, and a bounded agent handoff.
 - `kickoff-doc/` — create a builder-facing reference after the team has converged.
-- `breadboard-reflection/` — compare implementation to the breadboard and repair drift.
+- `breadboard-reflection/` — compare implementation reality with accepted intent, surface drift and design smells, and prepare an explicit correction decision.
 - `feed-planning-context/` — package planning artifacts into a compact context packet for implementation work.
 
 ## Artifact taxonomy
@@ -119,15 +119,18 @@ Agent run log = a lightweight audit trail of a meaningful agent run.
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
 1. the user’s latest explicit instruction
-2. selected slice or kickoff doc
+2. selected slice
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected Dumplink task group and sequence, for task-group scope and build order
+5. selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
 6. selected breadboard
 7. selected shaping direction
-8. framing doc
-9. raw notes and transcripts
-10. rejected alternatives and brainstorming
+8. kickoff doc, for builder orientation only
+9. framing doc
+10. raw notes and transcripts
+11. rejected alternatives and brainstorming
+
+Authority is concern-specific: the selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, a boundary contract governs its named exchange, and a Dumplink plan governs task grouping and order. None may expand the selected slice. A kickoff doc is a derived reference, not build scope or sequence; resolve conflicts against the selected artifacts above it.
 
 A statechart is derived from the selected breadboard and never outranks it. If they disagree, update the breadboard first and regenerate the statechart.
 

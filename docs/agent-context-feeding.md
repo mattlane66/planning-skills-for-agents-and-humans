@@ -64,15 +64,18 @@ What the next planning or implementation move should do.
 
 ## Authority order
 1. User's latest explicit instruction
-2. Selected slice or kickoff doc
+2. Selected slice
 3. Executable breadboard, when present
 4. Selected interface contract, for boundary-level details
-5. Selected Dumplink task group and sequence
+5. Selected Dumplink task group and sequence, within the selected slice
 6. Selected breadboard
 7. Selected shaping direction
-8. Framing doc
-9. Raw notes and transcripts
-10. Rejected alternatives and brainstorming
+8. Kickoff doc, for builder orientation only
+9. Framing doc
+10. Raw notes and transcripts
+11. Rejected alternatives and brainstorming
+
+The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence.
 
 ## Use these sections first
 - ...
@@ -269,11 +272,11 @@ Use @planning/slices.md. Focus only on the selected slice. Before coding, restat
 
 ### Kickoff doc to agent
 
-Use @planning/kickoff.md. Summarize the build appetite, selected slice, demo path, exclusions, and verification target. Then produce an implementation plan.
+Use @planning/kickoff.md for builder orientation. Resolve scope and sequence against the selected slice and higher-authority build artifacts. Summarize the build appetite, selected slice, demo path, exclusions, and verification target, then produce an implementation plan without promoting kickoff prose over those artifacts.
 
 ### Breadboard reflection to agent
 
-Use @planning/breadboard-reflection.md plus the selected breadboard and executable breadboard if present. Compare implementation reality to the intended places, affordances, stores, wiring, interface contracts, example runs, acceptance tests, and slices. Return matches, drift, missing behavior, accidental behavior, planning artifacts that need repair, and implementation follow-ups.
+Use @planning/breadboard-reflection.md plus the selected breadboard and executable breadboard if present. Record current implementation reality without overwriting accepted intent. Compare it with the intended places, affordances, stores, wiring, interface contracts, example runs, acceptance tests, and slices. Return matches, drift, missing behavior, accidental behavior, correction options, and the explicit decision needed before either truth changes.
 
 ## Chunking rules
 
@@ -293,17 +296,20 @@ When feeding large planning material to an agent:
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
 1. the user's latest explicit instruction
-2. selected slice or kickoff doc
+2. selected slice
 3. executable breadboard, when present
 4. selected interface contract, for boundary-level input/output details
-5. selected Dumplink task group and sequence, for task-group scope and build order
+5. selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
 6. selected breadboard
 7. selected shaping direction
-8. framing doc
-9. raw notes and transcripts
-10. rejected alternatives and brainstorming
+8. kickoff doc, for builder orientation only
+9. framing doc
+10. raw notes and transcripts
+11. rejected alternatives and brainstorming
 
 A statechart is derived from the selected breadboard and never outranks it.
+
+Authority is concern-specific: the selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, an interface contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is a derived reference, not build scope or sequence.
 
 ## Drift protocol
 

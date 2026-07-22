@@ -30,18 +30,22 @@ Command names in this guide are Claude Code shorthand. A plugin installation may
 
 ## 1. Load context → `framing-doc` (`/frame` in Claude Code)
 
-**What you likely have:**  
+**What you likely have:**
+
 Research notes, screenshots, stakeholder requests, an existing product, a rough idea, or a problem someone has asked you to solve.
 
-**Use:**  
+**Use:**
+
 **Claude Code first; Claude Design optionally.**
 
-**How to use it:**  
+**How to use it:**
+
 Use Claude Code to invoke the framing skill, read the source material, and create the authoritative framing document in the product repository.
 
 Use Claude Design when screenshots, journeys, environments, or relationships would benefit from visual inspection. Upload the relevant material and use its chat to correct Claude’s interpretation before generating interfaces.
 
-**Result:**  
+**Result:**
+
 A shared account of the current situation and why it is worth investigating.
 
 ---
@@ -94,7 +98,29 @@ A stable basis for judging proposed designs rather than relying on preference or
 
 ---
 
-## 4. Explore alternatives → `shaping` shape-sketch gate and lightweight `breadboarding`
+## 4. Set the appetite → `shaping` appetite gate (`/appetite`)
+
+**What you likely have:**
+
+Accepted criteria, but no explicit decision about how much time, scope, or uncertainty the work deserves.
+
+**Use:**
+
+**Claude Code for the authoritative appetite decision; Claude Design for keeping the cut line visible.**
+
+**How to use it:**
+
+Use the shaping skill's appetite gate to record the fixed budget, team shape, review point, cut line, accepted uncertainty, and any unknown that requires a spike before selection.
+
+Keep the appetite beside the criteria on the Claude Design canvas. Existing ideas may stay in a parking lot, but do not comparatively sketch or select shapes until the appetite is explicit.
+
+**Result:**
+
+A bounded bet that candidate shapes must fit rather than an estimate derived from a preferred design.
+
+---
+
+## 5. Explore alternatives → `shaping` shape-sketch gate and candidate behavior sketches
 
 **What you likely have:**  
 One obvious solution in mind, an existing interface that people expect you to improve, or several loosely formed ideas.
@@ -105,7 +131,7 @@ One obvious solution in mind, an existing interface that people expect you to im
 **How to use it:**  
 Use the shaping skill’s shape-sketch gate (`/sketch-shapes` in Claude Code) to generate three structurally different approaches—not three visual treatments of the same interface.
 
-For each shape, use a lightweight breadboarding pass to show:
+For each shape, create a candidate behavior sketch that shows only enough structure to compare it fairly:
 
 - places the user can be
 - actions available to the user
@@ -114,7 +140,7 @@ For each shape, use a lightweight breadboarding pass to show:
 - major state changes
 - how actions lead to consequences
 
-Place all three on the Claude Design canvas and run the same representative scenario through each.
+Place all three on the Claude Design canvas and run the same representative scenario through each. Keep these sketches inside the candidate shapes; they are not accepted breadboards and do not pass the breadboard gate.
 
 Use Claude Code to preserve the shape definitions, IDs, and behavioral differences in version-controlled planning files.
 
@@ -123,7 +149,7 @@ Three comparable models of how the product could work before committing to one.
 
 ---
 
-## 5. Evaluate and select → `shaping` fit and selection gates
+## 6. Evaluate and select → `shaping` fit and selection gates
 
 **What you likely have:**  
 Several plausible shapes, each solving some parts of the problem while introducing different tradeoffs.
@@ -134,7 +160,7 @@ Several plausible shapes, each solving some parts of the problem while introduci
 **How to use it:**  
 Use the shaping skill’s fit-check gate (`/fit-check` in Claude Code) to compare each shape against the approved requirements, appetite, and constraints.
 
-Use Claude Design to make the comparison inspectable. Each judgment should point to something visible in the sketch or breadboard.
+Use Claude Design to make the comparison inspectable. Each judgment should point to something visible in the candidate behavior sketch.
 
 Identify:
 
@@ -152,7 +178,7 @@ A traceable choice based on contextual fit rather than aesthetic preference.
 
 ---
 
-## 6. Develop the selected shape → `breadboarding` and `executable-breadboards`
+## 7. Develop and slice the selected shape → `breadboarding` and `executable-breadboards`
 
 **What you likely have:**  
 A selected product shape whose overall logic appears promising but whose detailed behavior remains unresolved.
@@ -171,20 +197,20 @@ Use `breadboarding` (`/breadboard` in Claude Code) to fully model the selected s
 - inputs and outputs
 - wiring between actions and consequences
 
-Then identify the assumption whose failure would most undermine the shape.
+Have a human accept the intended breadboard, then use the breadboarding skill to select the smallest vertical slice that can produce an observable result and test the most consequential uncertainty. Record the slice boundary, demo path, exclusions, `Produces` line, and verification target.
 
-Use `executable-breadboards` in Claude Code to define the smallest interactive slice that tests that uncertainty. Use realistic data and include a normal case, a difficult case, and an ambiguous case.
+Use `executable-breadboards` in Claude Code only after that slice is selected. Add realistic data and include a normal case, a difficult case, and an ambiguous case without expanding the slice.
 
 Build or render that slice in Claude Design and interact with it rather than judging it only as a static composition.
 
 Use Claude Code when the slice needs real code, data behavior, tests, or integration with the existing product.
 
 **Result:**  
-A coherent behavioral model and a focused prototype that tests the design’s most important uncertainty.
+A coherent behavioral model, an accepted slice, and a focused prototype that tests the design’s most important uncertainty.
 
 ---
 
-## 7. Validate and reconcile → executable tests and drift review
+## 8. Validate and reconcile → executable tests and drift review
 
 **What you likely have:**  
 An interactive prototype that has accumulated design decisions, discoveries, shortcuts, and behavior not present in the original plan.

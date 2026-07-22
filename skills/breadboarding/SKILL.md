@@ -434,14 +434,14 @@ For teaching or walkthrough diagrams, you may add numbered workflow step annotat
 
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
 
-Before proposing slices, optionally run the kickoff grouping pass from the shaping skill:
+Before proposing slices, optionally run an affinity-grouping pass over the selected shape:
 
 1. Dump all elements implied by the selected shape.
 2. Affinitize them into groups that can be completed together.
 3. Name each group as a stable scope handle.
 4. Flag the biggest unknown per group.
 
-Use those groups as the raw material for slice boundaries.
+Use those groups as raw material for slice boundaries, not as an implementation sequence or substitute for vertical slices.
 
 ## Slicing
 
@@ -449,7 +449,7 @@ A vertical slice is a group of UI and non-UI affordances that does something dem
 
 ### Core rule
 
-Every slice must end in visible, demo-able UI. A slice without an observable output is a horizontal layer, not a vertical slice.
+Every slice must end in an observable, judgeable result across the relevant product surface. That evidence may be UI, API output, CLI behavior, a processed event, a background-job result, or another end-to-end consequence appropriate to the product. A slice without observable evidence is a horizontal layer, not a vertical slice.
 
 ### Good slicing questions
 

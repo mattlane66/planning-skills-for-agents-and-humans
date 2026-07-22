@@ -16,7 +16,7 @@ A breadboard was created before implementation. Later, code was built quickly. T
 
 - `01-intended-breadboard.md` — the selected planning artifact before implementation
 - `02-implementation-reality.md` — notes from reading the existing code and behavior
-- `03-breadboard-reflection.md` — synced reality, drift, options, and recommended follow-up
+- `03-breadboard-reflection.md` — separate intent/reality records, drift, options, and a recommended decision
 
 ## How to use this example
 
@@ -24,7 +24,7 @@ Use the reflection skill:
 
 ```text
 Use /reflect-breadboard on examples/existing-codebase-drift/01-intended-breadboard.md and examples/existing-codebase-drift/02-implementation-reality.md.
-First sync the breadboard to implementation reality. Then identify drift, smells, and follow-ups.
+First record implementation reality without changing the accepted breadboard. Then compare, identify drift and smells, and prepare the correction decision.
 ```
 
 Compare your output to `03-breadboard-reflection.md`.

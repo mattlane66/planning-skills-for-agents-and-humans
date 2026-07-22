@@ -61,6 +61,8 @@ Ask for or infer from available artifacts:
 
 If the source material is weak, still proceed, but label assumptions.
 
+When a selected slice already exists, it is the hard outer boundary: task groups, dependencies, sequence, and cuts must stay inside it. When no slice has been selected, treat Dumplink groups as planning candidates and stop for a human slice or task-group decision before any build handoff.
+
 ## Output
 
 Create these sections:
@@ -236,6 +238,7 @@ A good Dumplink output:
 - sequences by risk and dependency, not convenience
 - names cuts explicitly
 - gives an implementation agent one bounded task group at a time
+- never expands an existing selected slice
 
 ## Common failure modes
 
@@ -247,3 +250,4 @@ A good Dumplink output:
 - Deferring dependency-unlocking work too late
 - Treating scope cuts as failure instead of appetite discipline
 - Feeding an agent the whole project instead of the active task group
+- Letting a task group quietly expand an existing selected slice

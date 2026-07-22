@@ -1,6 +1,6 @@
 ---
 name: breadboard-reflection
-description: Reflect on a breadboard by syncing it to implementation and finding design smells.
+description: Compare accepted breadboard intent with implementation reality, surface drift and design smells, and prepare an explicit correction decision.
 ---
 
 # Breadboard Reflection
@@ -9,24 +9,33 @@ Use this skill after a breadboard exists and implementation has started or alrea
 
 ## Goal
 
-Bring the breadboard back into alignment with reality, then use it to spot design problems that are otherwise easy to miss.
+Preserve accepted intent and implementation reality as two explicit views, identify the differences, and let a human decide which truth changes before rewriting authoritative artifacts.
 
-## Two-phase loop
+## Three-phase loop
 
-### 1. Sync to reality
-The code or implementation is the ground truth.
+### 1. Record implementation reality
+
+The implementation is ground truth for what the system does now. It does not automatically replace the accepted plan.
 
 Do this first:
 - read the relevant implementation
-- repair missing or wrong nodes
-- add hidden stores or omitted transitions
-- remove stale affordances
-- fix incorrect wiring
+- record actual places, affordances, stores, branches, and wiring
+- name hidden state or omitted transitions
+- cite concrete files, tests, observations, or runtime evidence
+- keep this current-state record separate from the accepted breadboard
 
-At the end of this phase, the breadboard should show what the system actually does.
+Do not repair, remove, or rewrite accepted breadboard nodes during this phase.
 
-### 2. Reflect on the design
-Once the breadboard is accurate, inspect the design itself.
+### 2. Compare intent with reality and reflect
+
+Compare the accepted breadboard and selected slice with the current-state record. Classify:
+- matches
+- drift
+- missing behavior
+- accidental or invented behavior
+- design smells visible in either the intended or current design
+
+Once the comparison is factual, inspect the design itself.
 
 Look for:
 - hidden state
@@ -55,61 +64,32 @@ For any affordance that feels off, ask:
 
 If the answer requires two verbs joined by "and" or "or," the boundary may be wrong.
 
+### 3. Prepare or apply the drift decision
+
+Present these options when intent and reality disagree:
+
+1. update implementation to match the accepted plan
+2. update the plan because an original assumption was wrong
+3. split the slice and defer the conflicting part
+
+Recommend a move with evidence, then stop for the human decision unless the user's current instruction already authorizes one option. After a decision, update only the chosen truth and any affected downstream artifacts; retain the reflection as the audit record.
+
 ## Output structure
 
-```md
----
-planning: true
-artifact_type: breadboard-reflection
-status: draft
-source_of_truth: true
-feeds:
-  - planning-update
-  - implementation-followup
----
-
-# [Project] — Breadboard Reflection
-
-# Context Card
-
-## Use this when
-An agent is comparing implementation reality against the intended breadboard and deciding what planning artifacts or implementation follow-ups need repair.
-
-## Must preserve
-- distinction between synced reality and design critique
-- observed drift
-- missing behavior
-- accidental behavior
-- proposed fixes
-
-## Ignore unless asked
-- speculative redesigns not grounded in the synced implementation
-
-## What was synced
-- ...
-
-## Smells found
-| ID | Smell | Where | Why it matters |
-|----|-------|-------|----------------|
-
-## Proposed fixes
-| ID | Change | Expected improvement |
-|----|--------|----------------------|
-
-## Updated breadboard notes
-- ...
-```
+Use `templates/breadboard-reflection.md`. Include inputs, inspected reality, matches, drift, missing behavior, accidental behavior, design smells, proposed fixes, and the drift decision needed or already authorized.
 
 ## Rule
 
-Do not start critiquing the design until the breadboard has first been made accurate.
+Do not silently rewrite the accepted breadboard to match implementation. Record reality first, compare it with intent, and require an explicit drift decision before changing either truth.
 
 ## Self-check before finishing
 
 - Relevant implementation or system reality was inspected before critique.
-- The reflection separates sync-to-reality findings from design critique.
+- Accepted intent and current implementation reality remain separate.
+- The reflection separates factual comparison from design critique.
 - Missing, stale, or wrong breadboard nodes are named explicitly.
 - Design smells are tied to concrete places, affordances, stores, or wiring.
 - Proposed fixes explain the expected improvement.
+- A human drift decision is recorded before authoritative plan changes are applied, unless the user's instruction already authorized the change.
 - Planning updates and implementation follow-ups are separated.
 - The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.

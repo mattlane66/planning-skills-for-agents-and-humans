@@ -7,10 +7,10 @@ For every positive test, confirm that Claude loads the intended skill, preserves
 ## `framing-doc`
 
 ```text
-Use my framing-doc skill. I have interview notes, screenshots of the current workflow, and a stakeholder request. Create a frame covering the source, current problem, desired outcome, boundaries, and criteria candidates. Do not propose UI yet.
+Use my framing-doc skill. I have interview notes, screenshots of the current workflow, and a stakeholder request. Create a frame covering the source, trigger, current approach, current result, current problem, desired outcome, boundaries, and criteria candidates. Do not propose UI yet.
 ```
 
-Expected: a frame grounded in the supplied evidence, with interpretation separated from source material.
+Expected: a frame grounded in the supplied evidence, with the present approach/result explicit and interpretation separated from source material.
 
 ## `shaping`
 
@@ -87,17 +87,17 @@ Expected: compact bounded context, with irrelevant planning history omitted.
 ## `breadboard-reflection`
 
 ```text
-Use my breadboard-reflection skill. Compare this implemented prototype with the accepted breadboard and selected slice. Separate synced reality, planning drift, design smells, and correction options.
+Use my breadboard-reflection skill. Compare this implemented prototype with the accepted breadboard and selected slice. Preserve intended and current behavior separately, identify planning drift and design smells, and stop for my correction decision.
 ```
 
-Expected: a factual comparison that allows either the implementation or the plan to change explicitly.
+Expected: a factual side-by-side comparison that changes neither implementation nor plan until the human chooses explicitly.
 
 ## Automatic-selection test
 
 Do not name a skill:
 
 ```text
-I have a transcript, three screenshots of the current workflow, and a stakeholder request. Before proposing any solution, turn the evidence into a clear statement of the current problem, desired outcome, boundaries, and unresolved questions.
+I have a transcript, three screenshots of the current workflow, and a stakeholder request. Before proposing any solution, turn the evidence into a clear statement of the trigger, current approach, current result, current problem, desired outcome, boundaries, and unresolved questions.
 ```
 
 Expected: Claude selects `framing-doc` rather than jumping to shaping, breadboarding, or UI generation.

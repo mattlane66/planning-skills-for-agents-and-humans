@@ -18,7 +18,7 @@ The work should get clearer at every step.
 A request is often a clue, not the real problem.
 
 **Framing the problem before writing the plan.**  
-A team needs to know the situation, the current approach, the desired outcome, the boundary, and the [appetite](https://world.hey.com/jason/appetites-instead-of-estimates-192d39ba).
+A team needs to know the trigger, current situation, current approach, current result, desired outcome, evidence, and boundary.
 
 **Mapping the behavior before polishing the screen.**  
 Rough flows, sketches, and fit checks reveal how the thing works faster than finished-looking mockups.
@@ -27,7 +27,7 @@ Rough flows, sketches, and fit checks reveal how the thing works faster than fin
 The data, code, permissions, edge cases, and legacy constraints are part of the design.
 
 **Building end-to-end slices before handing work across functions.**  
-“Backend done” or “design done” is not progress until useful behavior can be clicked, tested, and shown.
+“Backend done” or “design done” is not progress until useful behavior can be observed, tested, and demonstrated through the appropriate surface.
 
 **Using process to support judgment, not replace it.**  
 The process exists to help people think, decide, and collaborate.
@@ -43,19 +43,21 @@ AI should help carry context, assist in shaping options, spiking unknowns, and s
 ## The operating loop
 
 ```text
-Candidate
-→ Trace
+Observe the current situation
 → Frame
+→ Criteria
 → Appetite
-→ Shape
+→ Candidate shapes
 → Fit Check
-→ Behavior Map
-→ Starting Points
-→ Kickoff
-→ End-to-End Slices
-→ Wire
-→ Polish
-→ Cooldown
+→ Select
+→ Reconcile visual evidence when needed
+→ Breadboard
+→ Optional statechart
+→ Select an end-to-end slice
+→ Add contracts, executable evidence, task grouping, and kickoff reference when needed
+→ Feed a compact context packet
+→ Build with drift checks
+→ Reflect and decide how to resolve drift
 → Launch
 → Learn
 ```
@@ -69,16 +71,17 @@ It is a way to stop intent from getting lost.
 
 | Moment | Use |
 |---|---|
-| Raw notes, transcript, interview, or request need to become a clear problem | `/framing-doc` |
-| A framed problem needs paths, tradeoffs, risks, and a selected direction | `/shaping` |
-| A selected path needs visible behavior, state, affordances, and wiring | `/breadboarding` |
-| A selected stateful scope needs a precise transition model | `/statechart` |
-| A selected slice crosses a meaningful data or system boundary | `/interface-contracts` |
-| A selected slice needs fixtures, examples, edge cases, and acceptance checks | `/executable-breadboards` |
-| Selected work needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | `/dumplink` |
-| The build team needs a shared reference before creating tasks | `/kickoff-doc` |
-| An AI agent needs bounded context to vertically slice | `/feed-planning-context` |
-| The implementation has drifted from the plan | `/breadboard-reflection` |
+| Raw notes, transcript, interview, or request need to become a clear problem | [`framing-doc`](./framing-doc/SKILL.md) |
+| A framed problem needs criteria, appetite, alternatives, fit checks, and a selected direction | [`shaping`](./shaping/SKILL.md) |
+| A visual introduces missing or conflicting evidence | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) |
+| A selected path needs observable behavior, state, affordances, and wiring | [`breadboarding`](./breadboarding/SKILL.md) |
+| A selected stateful scope needs a precise transition model | [`statechart`](./statechart/SKILL.md) |
+| A selected slice crosses a meaningful data or system boundary | [`interface-contracts`](./interface-contracts/SKILL.md) |
+| A selected slice needs fixtures, examples, edge cases, and acceptance checks | [`executable-breadboards`](./executable-breadboards/SKILL.md) |
+| Selected work needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | [`dumplink`](./dumplink/SKILL.md) |
+| Builders need a durable orientation reference after the selected artifacts have converged | [`kickoff-doc`](./kickoff-doc/SKILL.md) |
+| An implementation agent needs the authoritative subset for one selected slice | [`feed-planning-context`](./feed-planning-context/SKILL.md) |
+| Implementation reality needs to be compared with accepted intent | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) |
 
 Use these skills when the work changes modes and intent could get lost.
 
@@ -99,7 +102,7 @@ Before assigning or prototyping, ask:
 - Why does it matter now?
 - Is this worth shaping into real work?
 
-Use `/framing-doc` when messy notes, interviews, transcripts, or stakeholder requests need to become a clear problem frame.
+Use `framing-doc` when messy notes, interviews, transcripts, or stakeholder requests need to become a clear problem frame.
 
 ---
 
@@ -121,7 +124,6 @@ A good frame names:
 - what happens now
 - the better result they want
 - what is inside and outside the work
-- how much time the problem is worth
 - how much evidence we have
 
 ---
@@ -152,6 +154,8 @@ Ask, “How much time and talent is this problem worth?”
 
 Appetite forces useful tradeoffs before the solution gets too big.
 
+Define the requirements or criteria first. Set the appetite and cut line before comparative shape sketching or selection; preserve premature mechanism ideas in a parking lot until the budget is explicit.
+
 ---
 
 ### 6. Shape only when the problem is clear.
@@ -166,7 +170,7 @@ The team is ready to shape when it can explain:
 
 If it cannot, the mandate to shape is not wise.
 
-Use `/shaping` when the problem is clear enough to compare paths, make tradeoffs, expose risks, and choose a direction.
+Use `shaping` when the problem is clear enough to compare paths, make tradeoffs, expose risks, and choose a direction.
 
 ---
 
@@ -177,7 +181,9 @@ Bring in the people who can remove doubt:
 - product
 - design
 - engineering
-But also:
+
+Also include:
+
 - support
 - sales
 - data
@@ -210,7 +216,7 @@ Put that system reality into the shape.
 
 ### 10. Show behavior before making it beautiful.
 
-Use affordance map diagrams (UI breadboards), tables, sketches, or quick prototypes.
+Use affordance maps, breadboards, tables, sketches, or quick prototypes.
 
 Show:
 
@@ -223,7 +229,7 @@ Show:
 
 Do this before polished screens.
 
-Use `/breadboarding` when the chosen path needs to become visible behavior, state, affordances, and wiring.
+Use `breadboarding` when the chosen path needs to become observable behavior, state, affordances, and wiring.
 
 ---
 
@@ -234,14 +240,15 @@ Do not fall in love with the first idea.
 Compare possible paths against:
 
 - the problem frame
-- inside an appetite
+- the accepted criteria
+- the appetite and cut line
 - technical limits
 - cost
 - risk
 - complexity
 - user value
 
-...and other specific requirements/criteria (fitness for solving the problem, i.e., standards or rules used to judge the quality of a solution, e.g., various '-ilities', customer forces, costs (time, dev effort, $), risks, compatibility and complexity, purpose-built for problem (reflective), etc.).
+Add the project-specific fitness criteria that matter—such as reliability, accessibility, compatibility, customer forces, cost, and effort—without disguising mechanisms as requirements.
 
 ---
 
@@ -276,24 +283,26 @@ Ask:
 
 Then define small end-to-end slices.
 
-Use `/kickoff-doc` when the build team needs a shared reference before creating tasks.
+Use `kickoff-doc` after the selected artifacts have converged when builders need a durable map of the shaped territory. Treat it as orientation, not as build scope or sequence.
 
 ---
 
 ### 15. Build small end-to-end slices.
 
-A slice should be wired, clicked, tested, and shown.
+A slice should produce an observable, testable, demonstrable end-to-end result through the appropriate UI, API, CLI, job, event, or other product surface.
 
 Progress means useful behavior works from end to end.
 
-Before asking an AI agent to build, use `/feed-planning-context` to give it:
+Before asking an AI agent to build, use `feed-planning-context` to give it only the authoritative context for the selected slice:
 
 - the frame
 - the selected shape
-- the relevant behavior map
+- the relevant breadboard behavior
 - the constraints
 - the non-goals
 - the current slice
+- relevant contracts, executable examples, or Dumplink task group, when present
+- the execution contract
 - the verification target
 
 ---
@@ -388,7 +397,7 @@ When the build no longer matches the plan, choose one:
 
 Silent drift is the failure.
 
-Use `/breadboard-reflection` when implementation reality disagrees with the plan and the team needs to repair the mismatch.
+Use `breadboard-reflection` to preserve accepted intent and current implementation reality separately, compare them, and prepare an explicit decision: update the code, update the plan, or split/cut the slice. Do not silently rewrite either truth.
 
 ---
 
@@ -400,7 +409,7 @@ Tools help us get unstuck and preserve context.
 
 Agents execute bounded work.
 
-Reality updates the artifacts, ideally via agents.
+Reality informs proposed artifact updates. A human decision, or an already explicit user instruction, authorizes which truth changes.
 
 Do not give AI a blurry task and call the result strategy.
 
@@ -408,7 +417,7 @@ Do not give AI a blurry task and call the result strategy.
 
 ## Go / No-Go Checks
 
-### [Frame](https://docs.google.com/document/d/1FW840A7WSbQr4ijk7zY4zvIY_-uXoyZbEdTJZXDX54o/edit?usp=sharing) Go
+### [Frame](./templates/frame.md) Go
 
 Can we clearly say and answer:
 
@@ -417,23 +426,32 @@ Can we clearly say and answer:
 - What happens now?
 - What better result do they want?
 - What will we change, and what will we leave alone?
-- How much time will we spend?
 - Do we have evidence, or only a strong hunch?
 - What goes wrong if we do nothing?
 
-### [Shape](https://docs.google.com/document/d/1Yncw-DhizyI24B8A2xkNF8Z0OllKy3MufqHH4DcjNRw/edit?usp=sharing) Go
+### Criteria and Appetite Go
+
+Can we clearly say and answer:
+
+- Which needs and constraints will judge every candidate shape?
+- Which are must-haves, nice-to-haves, or explicitly out of scope?
+- What fixed time or scope budget does the bet deserve?
+- What is the cut line?
+- Which unknowns require a spike or revisit?
+
+### [Shape](./templates/shaping.md) Go
 
 Can we clearly say and answer:
 
 - What path did we choose?
 - Does this improve an existing feature, get more people to use it, get people to use it more, or support a new workflow?
-- Does this need be (or what needs to be) 1.) Obvious, 2. Used often, 3. Rarely used 
+- Which parts need to be obvious, used often, or available only for rare cases?
 - What are the main parts?
 - How does the system behave under the interface?
 - Where are the risky logic, data, permissions, or dependencies?
 - What did we cut?
 - What still needs a focused test?
-- Why does this fit up to the appetite?
+- Why does this fit within the appetite?
 - Where do builders still have room to decide?
 
 ### Build Go

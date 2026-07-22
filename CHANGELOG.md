@@ -7,11 +7,20 @@
 - Added a Claude and Claude Design workflow that separates canonical skills from Claude Code command wrappers.
 - Added uploadable Claude skill ZIP generation with optimized trigger metadata and bundled supporting resources.
 - Added positive, automatic-selection, near-neighbor, negative-trigger, command-wrapper, and cross-surface fallback tests for Claude skill invocation.
+- Added packager safety tests and regression coverage for hidden support files and malformed visualizer paths.
+
+### Fixed
+
+- Preserved dot-prefixed support-file references in generated Claude skill packages and made piped CI failures propagate correctly.
+- Reconciled frame, appetite, shape-selection, kickoff-authority, context-feeding, and breadboard-reflection rules across canonical artifacts and adapters.
+- Removed moderate-or-higher MCP dependency vulnerabilities and made the visualizer return a bounded `400` response for malformed encoded paths.
 
 ### Improved
 
 - Added CI validation for every generated Claude upload package, including ZIP roots, metadata, cross-skill references, and required local resources.
 - Clarified when Claude Design should invoke a skill directly and when repository-aware work must return to Claude Code.
+- Made custom package-output cleanup non-recursive and fail closed around protected paths, unrelated content, directories, and symlinks.
+- Expanded repository health checks to run packager tests and dependency audits.
 
 ## v1.2.0 - Planning gates, visual reconciliation, and live planning views
 

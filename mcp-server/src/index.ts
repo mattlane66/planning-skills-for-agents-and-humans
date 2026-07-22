@@ -65,7 +65,7 @@ const skills: Record<SkillName, { title: string; description: string; path: stri
   },
   'breadboard-reflection': {
     title: 'Breadboard Reflection',
-    description: 'Compare a breadboard to implementation, repair drift, and identify design smells.',
+    description: 'Compare accepted breadboard intent with implementation reality, surface drift and design smells, and prepare an explicit correction decision.',
     path: 'breadboard-reflection/SKILL.md',
   },
 };

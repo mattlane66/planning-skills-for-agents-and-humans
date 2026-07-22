@@ -8,9 +8,9 @@ This is a post-implementation example.
 
 Assume the code was built, and now the team wants to compare the implementation to the breadboard.
 
-## What was synced to reality
+## Current implementation reality
 
-After reading the implementation, the following differences were found:
+After reading the implementation, the following current behaviors were recorded without changing the accepted breadboard:
 
 - Bought items are moved into a separate `boughtItems` array instead of being kept in one `items` store with a `bought` boolean.
 - The UI removes bought items immediately, so the `hide bought` toggle no longer controls visibility.
@@ -32,10 +32,14 @@ After reading the implementation, the following differences were found:
 | F1 | Return to one `items` store with a `bought` boolean | Matches the chosen shape and simplifies state reasoning |
 | F2 | Restore the `hide bought` toggle as a display-only filter | Re-separates item state from visibility control |
 | F3 | Normalize text before duplicate comparison | Makes duplicate detection behave consistently |
-| F4 | Keep a synchronized current-state view beside the accepted-intent breadboard until the human decides which should change | Prevents stale critique without silently replacing the selected plan |
+| F4 | Keep a separate current-state view beside the accepted-intent breadboard until the human decides which should change | Prevents stale critique without silently replacing the selected plan |
 
-## Updated breadboard notes
+## Drift decision needed
 
-- The intended design works best when item state and visibility are separate concerns.
-- The implementation drift suggests the toggle flow was optimized for immediacy instead of maintaining the cleaner model chosen during shaping.
-- Before any additional slicing or planning, the breadboard and code should be brought back into the same story.
+Options:
+
+1. Update the implementation to restore one item store, display-only filtering, and normalized duplicate checks.
+2. Update the plan after explicitly accepting the split-store behavior and loss of the hide-bought interaction.
+3. Split normalization or filtering into a later slice and narrow the current verification target.
+
+Recommended move: choose option 1 because the accepted shape and behavior remain internally consistent and the implementation introduced the mismatch. Stop for the human decision before changing either the code or accepted breadboard.

@@ -41,17 +41,18 @@ The smallest user-visible path that proves the slice works.
 ## Authority order
 
 1. User's latest explicit instruction
-2. Selected slice or kickoff doc
+2. Selected slice
 3. Executable breadboard, when present
 4. Selected interface contract, for boundary-level input/output details
-5. Selected Dumplink task group and sequence, for task-group scope and build order
+5. Selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
 6. Selected breadboard
 7. Selected shaping direction
-8. Framing doc
-9. Raw notes and transcripts
-10. Rejected alternatives and brainstorming
+8. Kickoff doc, for builder orientation only
+9. Framing doc
+10. Raw notes and transcripts
+11. Rejected alternatives and brainstorming
 
-A statechart is derived from the selected breadboard and never outranks it. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
+A statechart is derived from the selected breadboard and never outranks it. The selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
 
 ## Must preserve
 

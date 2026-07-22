@@ -2,7 +2,7 @@
 planning: true
 artifact_type: breadboard-reflection
 status: draft
-source_of_truth: true
+source_of_truth: false
 feeds:
   - planning-update
   - implementation-followup
@@ -13,24 +13,28 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent is comparing implementation reality against the intended breadboard and deciding what planning artifacts or implementation follow-ups need repair.
+An agent is comparing implementation reality against accepted intent and preparing an explicit decision about what should change.
 
 ## Must preserve
-- distinction between synced reality and design critique
+- accepted intent and current implementation reality as separate records
 - observed drift
 - missing behavior
 - accidental behavior
 - proposed fixes
+- the authorized or still-needed drift decision
 
 ## Ignore unless asked
-- speculative redesigns not grounded in the synced implementation
+- speculative redesigns not grounded in inspected implementation evidence
 
 ## Inputs
 - Breadboard artifact:
 - Implementation files or system notes:
 - Selected slice:
 
-## What was synced
+## Current implementation reality
+
+Record what the system does now and cite the inspected evidence. Do not rewrite the accepted breadboard in this phase.
+
 - ...
 
 ## Matches
@@ -79,8 +83,15 @@ Options:
 Recommended move:
 - ...
 
+Decision status:
+- Pending / authorized by current user instruction / decided by [name or record]
+
+Artifacts or implementation allowed to change after this decision:
+- ...
+
 ## Self-check
 - [ ] Implementation reality was inspected before critique.
-- [ ] Sync findings are separate from design critique.
+- [ ] Accepted intent and current reality remain separate.
 - [ ] Proposed fixes are grounded in concrete drift or smells.
 - [ ] Planning updates and implementation follow-ups are separated.
+- [ ] No accepted artifact was rewritten before an explicit decision.

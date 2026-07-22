@@ -19,6 +19,8 @@ If the source is a kickoff transcript, clarify:
 
 The transcript is the source material. The document is not a summary of the call. It is a map of the shaped territory.
 
+When selected planning artifacts already exist, they outrank the kickoff transcript and this derived document. Cite them, preserve their IDs, and never let kickoff prose create build scope or sequence.
+
 ## Core principle
 
 A kickoff transcript is chronological. A useful kickoff document is structural.
@@ -77,6 +79,7 @@ Do not:
 - Keep decisions next to the area they affect.
 - Do not create a generic dump section called `Design Decisions`.
 - Do not turn the kickoff doc into an implementation sequence.
+- Do not treat the kickoff doc as authority over a selected slice, contract, executable breadboard, Dumplink plan, breadboard, or selected shape.
 - Preserve the team’s real language where it helps recognition.
 - Synthesize repeated discussion into one clean statement.
 
@@ -97,7 +100,7 @@ planning: true
 shaping: true
 artifact_type: kickoff
 status: draft
-source_of_truth: true
+source_of_truth: false
 feeds:
   - implementation-packet
   - context-packet
@@ -111,6 +114,7 @@ feeds:
 An agent needs the builder-facing reference after the team has already converged.
 
 ## Must preserve
+- source artifact references and stable IDs
 - frame constraints
 - shaped territory sections
 - decisions attached to the system area they affect
@@ -156,5 +160,6 @@ If a builder would need to reread the original transcript to understand one part
 - Every area explains what it is, what belongs there, how it behaves, and how it connects to neighboring areas.
 - Decisions sit next to the area they affect rather than in a generic dump section.
 - Build sequence, slice order, and implementation tasks are not mixed into the reference doc unless clearly marked as handoff context.
+- The document points back to the selected artifacts that govern scope, behavior, contracts, and sequence.
 - Claims are supported by the source or clearly marked as open questions.
 - The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.

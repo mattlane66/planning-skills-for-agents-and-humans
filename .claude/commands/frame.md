@@ -16,6 +16,7 @@ Produce or update a framing artifact that keeps source evidence separate from in
 
 - Source
 - Pre-work / option landscape
+- Current situation, including trigger, current approach, and current result
 - Problem
 - Outcome
 - Boundaries

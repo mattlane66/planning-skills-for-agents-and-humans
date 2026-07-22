@@ -98,7 +98,7 @@ What to notice:
 
 Use the `breadboard-reflection` skill after code exists and you want to compare the breadboard to reality.
 
-Always sync the breadboard to implementation first, then critique the design.
+Always record implementation reality separately first, then compare and critique. Do not rewrite the accepted breadboard until a correction decision authorizes it.
 
 Example prompt:
 

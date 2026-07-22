@@ -10,7 +10,7 @@ Run the workflow from the product repository you are planning or building. Keep 
 
 | Current state | Use | Output |
 |---|---|---|
-| You have messy notes, a transcript, or a fuzzy request | `/frame` or `framing-doc/SKILL.md` | A frame with source, problem, outcome, and boundaries |
+| You have messy notes, a transcript, or a fuzzy request | `/frame` or `framing-doc/SKILL.md` | A frame with source, current approach/result, problem, outcome, and boundaries |
 | You need criteria before solution ideas | `/criteria` or `shaping/SKILL.md` | Requirements / criteria separated from mechanisms |
 | Your criteria are accepted but the bet has no budget or cut line | `/appetite`, `shaping/SKILL.md`, or `templates/appetite-card.md` | A fixed time or scope budget, cut line, accepted uncertainty, and spike threshold |
 | You know the problem but not the right solution | `/sketch-shapes`, `/fit-check`, `/select-shape`, `/shape`, or `shaping/SKILL.md` | Alternative shapes, fit check, selected direction |
@@ -23,7 +23,7 @@ Run the workflow from the product repository you are planning or building. Keep 
 | You have too much planning context for an implementation agent | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution contract, and verification target |
 | Implementation is underway and may be drifting | `/check-drift`, `.claude/loop.md`, or `templates/drift-check.md` | No drift found, or a planning drift note with recommended move |
 | A meaningful agent run changed code or decisions | `templates/agent-run-log.md` | A concise run record with files, decisions, drift checks, verification, and handoff notes |
-| You have code and need to compare it to the plan | `/reflect-breadboard` or `breadboard-reflection/SKILL.md` | Drift, synced reality, design smells, and follow-ups |
+| You have code and need to compare it to the plan | `/reflect-breadboard` or `breadboard-reflection/SKILL.md` | Separate intent/reality records, drift evidence, design smells, and a correction decision |
 | You need a builder-facing handoff reference | `/kickoff` or `kickoff-doc/SKILL.md` | A kickoff doc organized by shaped territory |
 | You are wiring a harness or external agent runtime | `.agent-orchestration.yaml` | Machine-readable modes, gates, artifacts, forbidden moves, and hooks |
 

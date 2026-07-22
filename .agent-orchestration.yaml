@@ -17,12 +17,13 @@ principles:
 
 authority_order:
   - latest_user_instruction
-  - selected_slice_or_kickoff_doc
+  - selected_slice
   - executable_breadboard
   - selected_interface_contract
   - selected_dumplink_task_group
   - selected_breadboard
   - selected_shaping_direction
+  - kickoff_doc_for_orientation_only
   - framing_doc
   - raw_notes_and_transcripts
   - rejected_alternatives_and_brainstorming
@@ -36,8 +37,8 @@ modes:
 
   frame:
     skill: framing-doc
-    purpose: Name the problem, outcome, forces, and boundaries.
-    allowed_outputs: [frame, problem, outcome, boundaries, criteria_candidates]
+    purpose: Name the current situation, problem, outcome, forces, and boundaries.
+    allowed_outputs: [frame, current_situation, current_approach, current_result, problem, outcome, boundaries, criteria_candidates]
     forbidden: [production_code, selected_shape]
     exit_gate: frame_accepted
 
@@ -139,16 +140,16 @@ modes:
     skill: dumplink
     command_aliases: { claude: /dumplink, gemini: /dumplink }
     purpose: Turn selected shaped work into vertical task groups, risk states, dependency sequence, scope cuts, and bounded agent handoff packets.
-    requires: [selected_direction]
+    requires: [selected_direction, appetite]
     allowed_outputs: [project_boundary, task_dump, task_groups, risk_states, dependency_map, build_sequence, scope_cuts, acceptance_checks, agent_handoff_packet]
-    forbidden: [horizontal_ticket_backlog, production_code, scope_expansion_without_appetite_change]
+    forbidden: [horizontal_ticket_backlog, production_code, selected_slice_expansion, scope_expansion_without_appetite_change]
     exit_gate: task_group_selected_or_sequence_accepted
 
   kickoff:
     skill: kickoff-doc
     command_aliases: { claude: /kickoff }
-    purpose: Create a durable builder-facing reference organized by shaped product territory.
-    requires: [selected_direction]
+    purpose: Create a derived builder-orientation reference organized by shaped product territory.
+    requires: [selected_direction, selected_slice]
     allowed_outputs: [territory, selected_direction, boundaries, system_areas, first_slice, verification_target]
     forbidden: [invented_human_decision, production_code, rejected_alternative_as_active_scope]
     exit_gate: kickoff_reference_ready_or_skipped
@@ -164,7 +165,7 @@ modes:
   build:
     purpose: Implement only the selected slice or Dumplink task group from the compact context packet.
     requires: [selected_slice, context_packet, execution_contract]
-    allowed_outputs: [implementation, tests, verification_results, planning_updates_if_reality_changed, agent_run_log]
+    allowed_outputs: [implementation, tests, verification_results, planning_update_proposals_if_reality_changed, agent_run_log]
     forbidden: [scope_expansion_without_planning_update, discarded_alternative_as_active_scope, silent_plan_change]
     recurring_checks: [drift_check, selected_slice_boundary, active_task_group_boundary, non_goals, verification_target]
     exit_gate: selected_slice_verified
@@ -180,11 +181,11 @@ modes:
 
   reflect:
     skill: breadboard-reflection
-    purpose: Compare implementation reality to the breadboard and repair drift.
+    purpose: Compare implementation reality to accepted breadboard intent and prepare or apply the explicit human drift decision.
     requires: [implementation_exists, selected_breadboard]
-    allowed_outputs: [synced_reality, drift, missing_behavior, accidental_behavior, planning_updates, implementation_followups]
-    forbidden: [critique_before_syncing_reality, silent_breadboard_rewrite]
-    exit_gate: reflection_recorded
+    allowed_outputs: [implementation_reality_record, matches, drift, missing_behavior, accidental_behavior, design_smells, correction_options, drift_decision_status, authorized_planning_updates, authorized_implementation_followups]
+    forbidden: [critique_before_recording_reality, silent_breadboard_rewrite, accepted_intent_replaced_without_decision]
+    exit_gate: reflection_recorded_and_drift_decided_or_pending
 
 artifacts:
   frame: templates/frame.md

@@ -9,8 +9,9 @@ Use this skill when people have talked about a problem but the team still needs 
 
 ## Goal
 
-Create a framing document with four main parts:
+Create a framing document with five main parts:
 - source
+- current situation
 - problem
 - outcome
 - boundaries
@@ -45,6 +46,16 @@ When the conversations surfaced multiple possible directions, summarize the opti
 - why the others are not the priority right now
 
 Do not invent a roadmap for the others.
+
+### Current situation
+
+Describe the real moment before describing what should change:
+- the trigger or context in which the struggle appears
+- the current approach, workaround, or nonconsumption
+- the current result, including breakdowns or compromises
+- who experiences the struggle and what evidence supports it
+
+Keep the current approach separate from the proposed future solution. If the source does not establish part of the current situation, mark it as unknown rather than filling the gap.
 
 ### Problem
 
@@ -113,6 +124,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## Must preserve
 - source-separated evidence
+- current approach and current result
 - problem/outcome distinction
 - explicit boundaries and non-goals
 
@@ -125,6 +137,13 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 ## Pre-work
 - option landscape
 - why this one now
+
+## Current situation
+- Trigger or context: ...
+- Current approach, workaround, or nonconsumption: ...
+- Current result: ...
+- Struggle or compromise: ...
+- Evidence and confidence: ...
 
 ## Problem
 - ...
@@ -148,6 +167,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 ## Rules
 
 - Keep source separate from interpretation.
+- Keep the current approach/result separate from the desired future state.
 - Keep outcome focused on the result, not the mechanism.
 - Make each problem and outcome line traceable to the source.
 - Use boundaries only when they help prevent a likely wrong direction.
@@ -157,6 +177,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 ## Self-check before finishing
 
 - Source material is separate from interpretation.
+- The trigger, current approach, and current result are explicit or marked unknown.
 - Every problem and outcome claim is traceable to source material or explicitly marked as an inference.
 - Outcome lines describe effects, not mechanisms.
 - Boundaries prevent likely wrong directions without over-constraining the solution space.

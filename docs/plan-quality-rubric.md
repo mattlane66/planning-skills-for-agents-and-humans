@@ -12,7 +12,7 @@ Score each line as:
 
 | Dimension | 0 | 1 | 2 |
 |---|---|---|---|
-| Frame preserved | No clear problem/outcome | Problem or outcome is vague | Problem, outcome, and boundaries are explicit |
+| Frame preserved | No clear current situation or problem/outcome | Current approach, current result, problem, or outcome is vague | Current approach/result, problem, outcome, and boundaries are explicit |
 | Source traceability | Claims are unsupported | Some claims trace to source | Important claims are traceable or marked as inference |
 | Requirements vs mechanisms | Mixed together | Mostly separated with some leakage | Requirements describe needs; mechanisms live in shapes |
 | Appetite and cut line | Missing or derived from a preferred shape | Budget exists but cuts or uncertainty are vague | Appetite, cut line, accepted uncertainty, and revisit conditions are explicit before selection |

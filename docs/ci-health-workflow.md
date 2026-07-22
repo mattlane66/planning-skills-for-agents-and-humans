@@ -7,6 +7,7 @@ The workflow first builds and validates the uploadable Claude skill ZIPs, then r
 The workflow checks:
 
 - Claude upload descriptions match the canonical skill inventory, remain within the metadata limit, and clearly state what each skill does and when to use it
+- packager safety tests cover hidden orchestration files, protected output targets, and preservation of unrelated files
 - every Claude upload ZIP has the correct root folder, canonical skill name, optimized description, bundled supporting resources, and no Claude Code-only or explicit cross-skill file references
 - plugin manifests and the repository license
 - strict skill frontmatter
@@ -24,6 +25,7 @@ The workflow checks:
 - the generated Claude Code plugin bundle, including canonical skills, non-duplicate commands, license, and bundle-local supporting references
 - reproducible visual-viewer installation and hot-reload server tests using the pinned Mermaid package
 - reproducible MCP installation, TypeScript compilation, recommendation tests, and stdio tool smoke tests using `npm ci`
+- moderate-or-higher dependency audit findings in either Node package
 
 Run the same checks locally from the repository root:
 

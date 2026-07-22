@@ -22,7 +22,10 @@ jobs:
             visualizer/package-lock.json
 
       - name: Build and validate Claude upload skills
-        run: python3 scripts/build_claude_skills.py 2>&1 | tee claude-skill-build.log
+        shell: bash
+        run: |
+          set -o pipefail
+          python3 scripts/build_claude_skills.py 2>&1 | tee claude-skill-build.log
 
       - name: Upload Claude skill diagnostics
         if: failure()
