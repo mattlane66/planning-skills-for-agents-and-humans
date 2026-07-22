@@ -44,6 +44,8 @@ A practical workflow is:
 
 For example, you might begin in Claude Design by generating and revising screens. Once something feels promising, bring the useful outputs—screens, notes, decisions, unanswered questions, and transcript—into framing, shaping, and breadboarding before asking Codex to build a selected slice.
 
+If you are using Claude Design together with the Planning Skills repository, see **[Using Claude Design with the Planning Skills Repository](./docs/claude-design-workflow.md)** for a step-by-step workflow describing when to use Claude Design, when to use Claude Code, and how they work together.
+
 You can also begin directly in Codex. For a small, obvious task, just make the change. For a larger or ambiguous task, tell Codex to use the relevant planning skill and stop before implementation or selection unless you explicitly authorize the next gate.
 
 Do not add planning ceremony where it provides no value. A small copy change, contained bug fix, disposable experiment, low-risk script, or already-clear change may not need the full workflow.
@@ -199,6 +201,8 @@ The method is tool-agnostic. Invocation differs by environment:
 | Cursor and other agents | `AGENTS.md`, canonical `SKILL.md` files, and templates |
 
 See the [invocation matrix](./docs/agent-invocation-matrix.md) for exact mappings.
+
+For a complete workflow that combines Claude Code and Claude Design, see **[Using Claude Design with the Planning Skills Repository](./docs/claude-design-workflow.md)**.
 
 ### Claude Code
 
