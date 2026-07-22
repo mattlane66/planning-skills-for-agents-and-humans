@@ -1,6 +1,6 @@
 ---
 name: interface-contracts
-description: Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
+description: Define plain-language inputs, outputs, branches, errors, and open decisions when a selected slice crosses a meaningful data, service, or system boundary.
 ---
 
 # Plain-Language Interface Contracts

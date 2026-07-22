@@ -13,6 +13,7 @@
 
 - Preserved dot-prefixed support-file references in generated Claude skill packages and made piped CI failures propagate correctly.
 - Reconciled frame, appetite, shape-selection, kickoff-authority, context-feeding, and breadboard-reflection rules across canonical artifacts and adapters.
+- Removed task grouping and slicing from shaping, separated descriptive and normative breadboarding, and prevented Dumplink build handoffs before human slice selection.
 - Removed moderate-or-higher MCP dependency vulnerabilities and made the visualizer return a bounded `400` response for malformed encoded paths.
 
 ### Improved
@@ -21,6 +22,7 @@
 - Clarified when Claude Design should invoke a skill directly and when repository-aware work must return to Claude Code.
 - Made custom package-output cleanup non-recursive and fail closed around protected paths, unrelated content, directories, and symlinks.
 - Expanded repository health checks to run packager tests and dependency audits.
+- Unified root, Claude upload, and MCP skill descriptions behind `skill-metadata.json`, with parity and boundary regression checks.
 
 ## v1.2.0 - Planning gates, visual reconciliation, and live planning views
 

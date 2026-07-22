@@ -43,7 +43,7 @@ Interface contract = what crosses a boundary.
 
 Executable breadboard = structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
 
-Dumplink = vertical task grouping, risk/dependency sequence, and scope cuts for selected shaped work.
+Dumplink = vertical task grouping, risk/dependency sequence, and scope cuts inside a selected slice; pre-slice groups are candidates only.
 
 Context packet = the exact subset handed to the build agent.
 

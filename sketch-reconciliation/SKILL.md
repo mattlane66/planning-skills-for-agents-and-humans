@@ -1,6 +1,6 @@
 ---
 name: sketch-reconciliation
-description: Reconcile an attached image, screenshot, wireframe, mockup, whiteboard, or hand-drawn sketch with existing frame, shaping, and breadboard artifacts. Use when a user drops in a visual, says "see this sketch" or "we are missing something," asks what the visual changes, or wants visual evidence incorporated without silently changing requirements, scope, or the selected shape.
+description: Reconcile a screenshot, wireframe, mockup, whiteboard, or sketch with existing planning artifacts when visual evidence may change the frame, criteria, scope, or shape.
 ---
 
 # Sketch Reconciliation

@@ -34,7 +34,13 @@ Expected: mapped observations and proposed deltas, not automatic acceptance of t
 Use my breadboarding skill on the selected shape. Model places, user affordances, system affordances, stores, consequences, and wiring. Keep the tables authoritative and identify candidate vertical slices.
 ```
 
-Expected: a behavioral model rather than a set of polished screens.
+Expected: a `selected-design` behavioral model rather than a set of polished screens, with the selected shape, appetite, and cut line cited.
+
+```text
+Use my breadboarding skill in current-state mode. Map how this existing workflow behaves from the supplied code, tests, screenshots, and logs. Cite evidence, mark unresolved observations, and do not turn current behavior into selected future intent or slice it for implementation.
+```
+
+Expected: a descriptive `current-state` map that does not require or invent a selected direction.
 
 ## `statechart`
 
@@ -63,10 +69,16 @@ Expected: a buildable behavioral test contract, not an expanded feature set.
 ## `dumplink`
 
 ```text
-Use my dumplink skill. Group this selected work into vertical tasks, sequence dependencies, mark risk states, and identify appetite-based cuts. Preserve the selected slice and non-goals.
+Use my dumplink skill. Inside this selected slice, group work into vertical tasks, sequence dependencies, mark risk states, and identify appetite-based cuts. Preserve the slice boundary, exclusions, and non-goals.
 ```
 
 Expected: bounded task groups and cuts rather than a generic backlog.
+
+```text
+Use my dumplink skill, but no slice has been selected yet. Show candidate groups, risks, dependencies, and slice-selection questions only. Do not create a build sequence, active task group, acceptance plan, or agent handoff.
+```
+
+Expected: pre-slice exploration that stops at candidates and returns the decision to breadboarding and the human.
 
 ## `kickoff-doc`
 

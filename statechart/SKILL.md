@@ -1,6 +1,6 @@
 ---
 name: statechart
-description: Turn a selected stateful portion of a breadboard into a transition table and Mermaid statechart without changing the breadboard's authority.
+description: Derive states and transitions from an accepted breadboard when retries, timeouts, approvals, lifecycle stages, or multiple valid actions make behavior difficult to review.
 ---
 
 # Statechart

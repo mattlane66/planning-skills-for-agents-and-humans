@@ -25,7 +25,7 @@ This repo includes Gemini-native command wrappers for shaping gates, sketch reco
 | `/select-shape` | Record or prepare a human shape-selection decision after alternatives and fit checks are visible. |
 | `/reconcile-sketch` | Map a dropped visual to planning IDs, surface proposed deltas, and apply only accepted changes. |
 | `/statechart` | Derive a transition table and Mermaid projection for a selected stateful portion of an accepted breadboard. |
-| `/dumplink` | Turn selected shaped work into vertical task groups, dependency order, risk states, and scope cuts. |
+| `/dumplink` | Organize work inside a selected slice into vertical task groups, dependency order, risk states, and scope cuts. |
 | `/check-drift` | Check implementation direction against selected planning artifacts and stop if drift is found. |
 
 These commands use Gemini's TOML command format and inject the files named by their `@{...}` includes. In this repository those paths are already correct; in a product repository, verify or adapt them before use.
@@ -65,7 +65,7 @@ You can instead attach or paste the image in the same command prompt when Gemini
 ```
 
 ```text
-/dumplink planning/shaping.md planning/breadboard.md
+/dumplink planning/shaping.md planning/breadboard.md planning/slices.md
 ```
 
 ```text

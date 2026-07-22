@@ -83,14 +83,14 @@ Resolve changes through the reconciliation human gate, update every affected aut
 |---|---|
 | What is the shaped product territory builders need to understand? | Kickoff document |
 | Exactly how should this selected slice behave and be verified? | Executable breadboard |
-| How should the work be grouped, sequenced, de-risked, and cut to fit the appetite? | Dumplink plan |
+| How should work inside the selected slice be grouped, sequenced, de-risked, and cut to fit the appetite? | Dumplink plan |
 | What exact subset should this implementation agent receive now? | Context packet |
 
 A project may use more than one. Their jobs are different:
 
 - the kickoff document is a durable human reference, not a task sequence
 - the executable breadboard is the behavioral and test contract for a selected slice
-- Dumplink organizes vertical task groups, dependencies, risk, sequence, and cuts
+- Dumplink organizes vertical task groups, dependencies, risk, sequence, and cuts inside the selected slice; pre-slice groups are candidates only
 - the context packet packages only the material needed for the active build pass
 
 ## Typical handoff sequence

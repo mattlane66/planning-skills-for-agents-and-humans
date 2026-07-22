@@ -15,6 +15,14 @@ SPEC.loader.exec_module(packager)
 
 
 class ClaudeSkillPackagingTests(unittest.TestCase):
+    def test_canonical_metadata_matches_root_skill_frontmatter(self) -> None:
+        metadata = packager.load_skill_metadata()
+        self.assertEqual(set(metadata), set(packager.load_inventory()))
+        for skill, entry in metadata.items():
+            fields, _ = packager.parse_frontmatter(packager.ROOT / skill / "SKILL.md")
+            self.assertEqual(fields["name"], skill)
+            self.assertEqual(fields["description"], entry["description"])
+
     def test_all_packages_build_with_hidden_support_files(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             output = Path(temporary) / "packages"
@@ -23,6 +31,7 @@ class ClaudeSkillPackagingTests(unittest.TestCase):
             self.assertEqual(len(packages), 11)
             with zipfile.ZipFile(output / "framing-doc.zip") as archive:
                 self.assertIn("framing-doc/.agent-orchestration.yaml", archive.namelist())
+                self.assertIn("framing-doc/skill-metadata.json", archive.namelist())
 
     def test_repo_root_is_never_a_valid_output_directory(self) -> None:
         with self.assertRaisesRegex(packager.PackagingError, "unsafe"):

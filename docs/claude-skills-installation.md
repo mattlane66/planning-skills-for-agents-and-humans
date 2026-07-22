@@ -97,4 +97,4 @@ Use the prompts in [Claude Design skill test prompts](./claude-design-skill-test
 - does not invent implementation scope;
 - falls back cleanly to Claude Code when repository access is required.
 
-If Claude does not load a skill, first confirm that it is enabled, then make the request more explicit. If it still fails, refine the upload description in `claude-skill-descriptions.tsv` and rebuild the ZIP.
+If Claude does not load a skill, first confirm that it is enabled, then make the request more explicit. If it still fails, refine the canonical description in `skill-metadata.json` and rebuild the ZIP. The same metadata also governs root skill frontmatter and MCP discovery, so the repo health check will catch consumer-surface drift.

@@ -1,6 +1,6 @@
 ---
 name: executable-breadboards
-description: Convert a selected breadboard slice into a buildable, testable handoff artifact with examples, fixtures, expected outputs, edge cases, and acceptance tests.
+description: Turn a selected slice into fixtures, example runs, expected outputs, edge cases, and acceptance tests when it is ready for a buildable behavioral handoff.
 ---
 
 # Executable Breadboards

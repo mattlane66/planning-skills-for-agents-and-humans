@@ -17,11 +17,28 @@ require_text() {
   fi
 }
 
+forbid_text() {
+  local file="$1"
+  local text="$2"
+  if grep -Fq "$text" "$file"; then
+    echo "✗ $file unexpectedly contains $text" >&2
+    missing=$((missing + 1))
+  else
+    echo "✓ $file excludes $text"
+  fi
+}
+
 require_text templates/context-packet.md "## Execution contract"
 require_text templates/context-packet.md "Goal condition"
 require_text templates/context-packet.md "Kickoff doc, for builder orientation only"
 require_text templates/frame.md "## Current situation"
 require_text framing-doc/SKILL.md "current approach, workaround"
+require_text shaping/SKILL.md "Do not dump or cluster implementation tasks, select slices, or create a build sequence inside shaping."
+forbid_text shaping/SKILL.md "These can happen in any order as the shaping evolves"
+forbid_text shaping/SKILL.md "## Kick-off: From selected shape to slices"
+require_text breadboarding/SKILL.md "### Current-state mapping (descriptive)"
+require_text breadboarding/SKILL.md "### Selected-design mapping (normative)"
+require_text breadboarding/SKILL.md "Only an accepted selected-design breadboard can feed slice selection"
 require_text templates/dumplink.md "## Task groups"
 require_text templates/dumplink.md "## Scope cuts"
 require_text templates/statechart.md "## Transition table"
@@ -30,6 +47,10 @@ require_text mcp-server/src/index.ts "templates/context-packet.md"
 require_text mcp-server/src/index.ts "templates/dumplink.md"
 require_text dumplink/SKILL.md "Task groups"
 require_text dumplink/SKILL.md "Scope cuts"
+require_text dumplink/SKILL.md "### Standard mode: organize a selected slice"
+require_text dumplink/SKILL.md "### Pre-slice exploration: candidates only"
+require_text dumplink/SKILL.md "It must not produce a committed build sequence"
+require_text kickoff-doc/SKILL.md "Start with the accepted frame, selected shape, accepted breadboard, selected slice"
 require_text statechart/SKILL.md "breadboard tables remain the source of truth"
 require_text sketch-reconciliation/SKILL.md "observations before interpretations"
 require_text sketch-reconciliation/SKILL.md "Stop at the reconciliation gate"
@@ -39,6 +60,8 @@ require_text docs/claude-design-workflow.md "## 4. Set the appetite"
 require_text docs/claude-design-workflow.md "they are not accepted breadboards"
 require_text .github/workflows/repo-health.yml "set -o pipefail"
 require_text scripts/build_claude_skills.py "removeprefix"
+require_text scripts/build_claude_skills.py "skill-metadata.json"
+require_text mcp-server/src/index.ts "skill-metadata.json"
 require_text tests/test_build_claude_skills.py "test_repo_root_is_never_a_valid_output_directory"
 require_text visualizer/test/viewer.test.mjs "malformedVendorPath.status, 400"
 require_text .claude/commands/check-drift.md "selected Dumplink task group"

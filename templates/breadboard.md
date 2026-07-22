@@ -16,8 +16,17 @@ feeds:
 
 # Context Card
 
+## Mode and authority
+
+- Mode: `current-state` or `selected-design`
+- Authority: descriptive current-state evidence or accepted selected intent
+- Evidence references: required for non-obvious current-state claims
+- Selected shape and appetite: required for selected-design mode
+
+Current-state mode cannot define selected future intent or feed slice selection. Only an accepted selected-design breadboard can produce buildable slice candidates.
+
 ## Use this when
-An agent is shaping, slicing, creating interface contracts, preparing an executable breadboard, or checking whether code still matches the planned interaction.
+An agent is mapping current behavior, detailing a selected design, slicing an accepted selected-design breadboard, preparing downstream contracts, or checking whether code still matches selected intent.
 
 ## Must preserve
 - stable place IDs
@@ -35,6 +44,7 @@ An agent is shaping, slicing, creating interface contracts, preparing an executa
 - Shaping artifact:
 - Selected shape:
 - Appetite:
+- Cut line:
 
 ## Places
 

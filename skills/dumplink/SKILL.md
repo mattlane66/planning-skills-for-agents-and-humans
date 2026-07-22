@@ -1,24 +1,46 @@
 ---
 name: dumplink
-description: Turn a shaped project into vertical task groups, dependency-aware sequence, risk state, and variable-scope build plan.
+description: Plan work inside a selected slice as vertical task groups with dependencies, risks, sequence, and appetite-based cuts; before selection, produce candidates only.
 ---
 
 # Dumplink
 
-Use this skill after a project has been framed, shaped, and selected for a fixed time budget. The job is to help a Small Launch Team decompose the shaped project without shredding its intent into disconnected tickets.
+Use this skill after a project has been framed, shaped, given a fixed appetite, and narrowed to a selected slice. The job is to help a Small Launch Team organize work inside that slice without shredding its intent into disconnected tickets.
 
-Dumplink is for deliberate build-cycle work, not reactive ticket intake. It keeps the project whole while helping the team discover vertical slices of work that can be finished, judged, and shipped within an appetite.
+Dumplink is for deliberate build-cycle work, not reactive ticket intake. In its standard mode it keeps the selected slice whole while organizing smaller vertical task groups that can be finished and judged within the appetite.
+
+If a direction is selected but no slice has been selected, Dumplink may be used only in pre-slice exploration mode. That mode can expose candidate groups and risks, but it must stop before build sequence or agent handoff so breadboarding and a human decision can establish the build boundary.
 
 ## Goal
 
 Produce a Dumplink plan that shows:
 
-- the raw task dump from the shaped project
-- clustered task groups that form vertical slices of shippable behavior
+- the selected slice as the hard outer boundary
+- the raw task dump inside that boundary
+- clustered task groups that produce vertical, judgeable progress within the selected slice
 - unknowns, knowns, and done states at the task-group level
 - causal dependencies between task groups
 - a build sequence that starts with risky and dependency-unlocking work
 - possible cuts if the appetite runs out
+
+## Operating modes
+
+Declare the mode at the top of the artifact.
+
+### Standard mode: organize a selected slice
+
+Use standard mode only when a human-selected slice is explicit. It may produce the full Dumplink plan, including dependency-aware build sequence, acceptance checks, and one bounded agent handoff packet.
+
+### Pre-slice exploration: candidates only
+
+Use this limited mode when a direction and appetite are accepted but the slice boundary is still undecided. It may produce:
+
+- a project boundary and rough task dump
+- candidate vertical groups
+- risks, dependencies, and questions that affect slice selection
+- possible appetite cuts for the human to consider
+
+It must not produce a committed build sequence, acceptance plan, active task group, or agent handoff packet. Label every group as a candidate and return to breadboarding for slice selection.
 
 ## Source concept
 
@@ -36,15 +58,17 @@ Use this when:
 
 - a shaped project has been bet on
 - the team has an appetite, usually 2–6 weeks
+- a selected slice exists for standard mode
 - work is meaningful enough that horizontal task planning would lose the plot
 - the team needs to preserve intent while still making implementation concrete
-- the next best step is to create vertical slices, not a giant ticket backlog
+- the next best step is to organize vertical task groups inside the slice, not create a giant ticket backlog
 
 Do not use this when:
 
 - the work is reactive support, bugs, or interrupt-driven operations
 - the problem is still unframed
 - no direction has been selected
+- a build sequence or agent handoff is requested before a slice has been selected
 - the team needs a full technical implementation plan with exact files and code paths
 
 ## Inputs
@@ -54,14 +78,15 @@ Ask for or infer from available artifacts:
 - shaped project pitch or shaping doc
 - appetite / time budget
 - selected approach and non-goals
+- selected slice and its explicit exclusions, required for standard mode
 - known risks, rabbit holes, and constraints
 - breadboard, if available
 - existing codebase or implementation context, if available
 - acceptance checks or demo target
 
-If the source material is weak, still proceed, but label assumptions.
+If supporting detail is weak, proceed only within the declared slice and label assumptions. If the slice itself is missing, switch to pre-slice exploration mode or stop for breadboarding and human selection.
 
-When a selected slice already exists, it is the hard outer boundary: task groups, dependencies, sequence, and cuts must stay inside it. When no slice has been selected, treat Dumplink groups as planning candidates and stop for a human slice or task-group decision before any build handoff.
+The selected slice is the hard outer boundary: task groups, dependencies, sequence, and cuts must stay inside it. A task group may divide work within that slice; it may not redefine or enlarge the slice.
 
 ## Output
 
@@ -77,20 +102,24 @@ Create these sections:
 8. Acceptance checks
 9. Agent handoff packet
 
+This full output applies only to standard mode. Pre-slice exploration stops after candidate groups, risk/dependency observations, cut options, and the human slice-selection question.
+
 ## Method
 
 ### 1. Preserve the shaped intent
 
 Start by restating the shaped project in compact form:
 
+- mode: `standard` or `pre-slice-exploration`
 - appetite
 - target user / operator
 - desired outcome
 - selected approach
 - non-goals
 - what must remain true
+- selected slice boundary and exclusions
 
-Do not immediately turn everything into implementation tickets. First preserve the whole.
+Do not immediately turn everything into implementation tickets. First preserve the slice's intent and exclusions.
 
 ### 2. Dump tasks
 
@@ -168,6 +197,8 @@ flowchart LR
 
 ### 6. Sequence the build
 
+Do not run this step without a selected slice.
+
 Prefer this order:
 
 1. risk-unlocking task groups
@@ -194,6 +225,8 @@ For each possible cut, state:
 - what user/business value remains
 - what follow-up decision is needed later
 
+A cut may remove optional work while preserving the selected slice's promised behavior. If it changes the slice's demo, `Produces:` line, or verification target, present it as a proposed slice update and stop for human approval; Dumplink cannot silently narrow the selected slice.
+
 Scope cut table:
 
 | Cut option | Remove/defer | Preserved behavior | Cost of cutting | Later decision |
@@ -202,7 +235,9 @@ Scope cut table:
 
 ### 8. Write acceptance checks
 
-Acceptance checks should judge behavior at the task-group and project level.
+Do not turn exploratory candidate groups into acceptance commitments before a slice is selected.
+
+Acceptance checks should judge behavior at the task-group and selected-slice level.
 
 Use checks like:
 
@@ -212,6 +247,8 @@ Use checks like:
 - The project can ship some version without the cut items.
 
 ### 9. Prepare agent handoff
+
+Prepare this packet only in standard mode, after the selected slice is explicit. If no slice is selected, stop with candidate groups and the decision needed from the human.
 
 End with a compact handoff packet:
 
@@ -231,14 +268,15 @@ Stop condition:
 
 A good Dumplink output:
 
-- keeps the shaped project whole
+- names the selected slice and keeps every task group inside it
 - avoids horizontal task silos
-- makes vertical slices independently judgeable
+- makes vertical task groups independently judgeable
 - reveals unknowns early
 - sequences by risk and dependency, not convenience
 - names cuts explicitly
 - gives an implementation agent one bounded task group at a time
-- never expands an existing selected slice
+- never expands the selected slice
+- never emits a build sequence or agent handoff from pre-slice exploration
 
 ## Common failure modes
 
@@ -251,3 +289,4 @@ A good Dumplink output:
 - Treating scope cuts as failure instead of appetite discipline
 - Feeding an agent the whole project instead of the active task group
 - Letting a task group quietly expand an existing selected slice
+- Treating pre-slice candidate groups as an approved build sequence

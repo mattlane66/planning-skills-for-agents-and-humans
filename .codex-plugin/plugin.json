@@ -39,7 +39,7 @@
       "Use the statechart skill only when a selected stateful portion of an accepted breadboard needs a transition table and behavioral projection.",
       "Use the interface-contracts skill to define plain-language contracts for the selected slice boundaries.",
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
-      "Use the dumplink skill when selected work needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.",
+      "Use the dumplink skill when work inside a selected slice needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.",
       "Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.",
       "Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts."
     ]

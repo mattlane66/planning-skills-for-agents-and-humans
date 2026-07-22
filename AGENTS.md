@@ -50,12 +50,14 @@ If `AGENTS.md` and `.agent-orchestration.yaml` disagree, prefer the more specifi
 9. Slice into demoable increments.
 10. Add plain-language interface contracts when the selected slice crosses meaningful boundaries.
 11. Create an executable breadboard when the selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests.
-12. Use Dumplink when the selected work needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
+12. Use Dumplink inside the selected slice when it needs vertical task groups, risk states, dependencies, sequencing, or appetite-based cuts.
 13. Feed only the relevant planning context to the implementation agent.
 14. Check for drift during implementation.
 15. Reflect against implementation, preserve intent and reality separately, and apply only an explicit drift decision.
 
 The statechart step is optional. It is a derived view of the accepted breadboard, not a new source of truth or a prerequisite for slicing.
+
+Breadboarding also has a descriptive current-state mode that may be used during Explore without a selected direction. Keep that evidence map separate from the normative selected-design breadboard; only the latter can feed slice selection.
 
 ## Shaping gates
 
@@ -79,13 +81,13 @@ Do not one-shot from fuzzy request to selected shape when the user asks for a fi
 Use the repo skills as reusable instructions:
 
 - `framing-doc/` — turn raw material into a frame with context, current approach/result, desired outcome, boundaries, and criteria.
-- `shaping/` — define requirements/criteria, compare alternative shapes, run fit checks, and detail the selected direction.
+- `shaping/` — define requirements/criteria and appetite, compare alternative shapes, run fit checks, and record the human-selected direction.
 - `sketch-reconciliation/` — map attached visuals to stable planning IDs, surface gaps and conflicts, and apply only accepted deltas across affected artifacts.
-- `breadboarding/` — map places, affordances, stores, wiring, diagrams, and demoable slices.
+- `breadboarding/` — map current-state evidence or a selected design into places, affordances, stores, and wiring; only selected-design mode produces demoable slice candidates.
 - `statechart/` — turn a selected stateful portion of an accepted breadboard into a transition table and Mermaid statechart while surfacing missing behavior.
 - `interface-contracts/` — turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.
 - `executable-breadboards/` — turn a selected slice into a buildable, testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.
-- `dumplink/` — turn a shaped project into vertical task groups, risk states, dependencies, scope cuts, acceptance checks, and a bounded agent handoff.
+- `dumplink/` — organize work inside a selected slice into vertical task groups, risk states, dependencies, scope cuts, acceptance checks, and a bounded agent handoff.
 - `kickoff-doc/` — create a builder-facing reference after the team has converged.
 - `breadboard-reflection/` — compare implementation reality with accepted intent, surface drift and design smells, and prepare an explicit correction decision.
 - `feed-planning-context/` — package planning artifacts into a compact context packet for implementation work.
@@ -104,7 +106,7 @@ Interface contract = what crosses a boundary.
 
 Executable breadboard = breadboard + interface contracts + fixtures + example runs + expected outputs + tests.
 
-Dumplink = vertical task grouping + risk/dependency sequencing + scope cuts for a selected shaped project.
+Dumplink = vertical task grouping + risk/dependency sequencing + scope cuts inside a selected slice. Before slice selection it may expose candidates only, never a build sequence or handoff.
 
 Context packet = the exact subset handed to the build agent.
 
@@ -291,6 +293,8 @@ When an interface contract is present, preserve:
 Do not invent missing field names, nullability, enum values, or error cases. Flag them before coding.
 
 ## Dumplink plans
+
+The selected slice is required before a Dumplink plan can govern build sequence or agent handoff. Pre-slice candidate groups are exploratory and non-authoritative.
 
 When a Dumplink plan is present, preserve:
 
