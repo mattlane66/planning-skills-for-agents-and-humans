@@ -21,5 +21,8 @@ jobs:
             mcp-server/package-lock.json
             visualizer/package-lock.json
 
+      - name: Build and validate Claude upload skills
+        run: python3 scripts/build_claude_skills.py
+
       - name: Check repository health
         run: bash scripts/check-repo-health.sh
