@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "skill-inventory.txt"
-DESCRIPTIONS = ROOT / "claude-skill-descriptions.tsv"
+METADATA = ROOT / "skill-metadata.json"
 SUPPORT_DIRS = ("docs", "templates", "hooks")
 SUPPORT_FILES = (
     "AGENTS.md",
@@ -22,6 +22,7 @@ SUPPORT_FILES = (
     "CHANGELOG.md",
     "LICENSE",
     "skill-inventory.txt",
+    "skill-metadata.json",
 )
 ACTION_WORDS = re.compile(
     r"\b(create|produce|map|shape|compare|reconcile|model|define|plan|prepare|feed|inspect|reflect|turn|derive)\b",
@@ -50,23 +51,34 @@ def load_inventory() -> list[str]:
     return skills
 
 
+def load_skill_metadata() -> dict[str, dict[str, str]]:
+    if not METADATA.is_file():
+        raise PackagingError("missing skill-metadata.json")
+    try:
+        raw = json.loads(METADATA.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        raise PackagingError(f"invalid skill-metadata.json: {exc}") from exc
+    if not isinstance(raw, dict):
+        raise PackagingError("skill-metadata.json must contain an object")
+
+    metadata: dict[str, dict[str, str]] = {}
+    for skill, entry in raw.items():
+        if not isinstance(skill, str) or not isinstance(entry, dict):
+            raise PackagingError("every skill metadata entry must be a named object")
+        if set(entry) != {"title", "description"}:
+            raise PackagingError(f"{skill} metadata must contain exactly title and description")
+        title = entry["title"]
+        description = entry["description"]
+        if not isinstance(title, str) or not title.strip():
+            raise PackagingError(f"{skill} metadata title must be a non-empty string")
+        if not isinstance(description, str) or not description.strip():
+            raise PackagingError(f"{skill} metadata description must be a non-empty string")
+        metadata[skill] = {"title": title.strip(), "description": description.strip()}
+    return metadata
+
+
 def load_descriptions() -> dict[str, str]:
-    if not DESCRIPTIONS.is_file():
-        raise PackagingError("missing claude-skill-descriptions.tsv")
-    descriptions: dict[str, str] = {}
-    for line_number, line in enumerate(DESCRIPTIONS.read_text(encoding="utf-8").splitlines(), start=1):
-        if not line.strip():
-            continue
-        parts = line.split("\t")
-        if len(parts) != 2:
-            raise PackagingError(f"description line {line_number} must contain exactly one tab")
-        skill, description = (part.strip() for part in parts)
-        if not skill or not description:
-            raise PackagingError(f"description line {line_number} has an empty field")
-        if skill in descriptions:
-            raise PackagingError(f"duplicate Claude description for {skill}")
-        descriptions[skill] = description
-    return descriptions
+    return {skill: entry["description"] for skill, entry in load_skill_metadata().items()}
 
 
 def parse_frontmatter(path: Path) -> tuple[dict[str, str], list[str]]:

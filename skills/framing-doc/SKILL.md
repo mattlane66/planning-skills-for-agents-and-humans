@@ -1,6 +1,6 @@
 ---
 name: framing-doc
-description: Create a framing document from notes, messages, or conversation transcripts.
+description: Create a frame from research, notes, requests, or transcripts when the current problem, desired outcome, boundaries, and evidence need to become explicit.
 ---
 
 # Framing Document

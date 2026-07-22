@@ -1,6 +1,6 @@
 ---
 name: feed-planning-context
-description: Prepare relevant planning artifacts, including optional statechart and Dumplink context, for agent implementation work without overloading context.
+description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice.
 ---
 
 # Feed Planning Context

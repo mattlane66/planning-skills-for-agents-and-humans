@@ -25,7 +25,7 @@ The unqualified names below apply when Claude Code is running in this repository
 | `/breadboard` | `breadboarding/SKILL.md` | Map places, affordances, stores, wiring, and demoable slices. |
 | `/statechart` | `statechart/SKILL.md` | Derive a transition table and Mermaid statechart for a selected stateful scope. |
 | `/dumplink` | `dumplink/SKILL.md` | Create vertical task groups, dependency-aware sequence, risk states, scope cuts, and a bounded handoff. |
-| `/kickoff` | `kickoff-doc/SKILL.md` | Turn kickoff notes or transcripts into a builder-facing reference document. |
+| `/kickoff` | `kickoff-doc/SKILL.md` | Create a builder-facing orientation reference from accepted planning artifacts. |
 | `/feed-context` | `feed-planning-context/SKILL.md` | Package planning artifacts into a compact context packet for implementation work. |
 | `/check-drift` | `AGENTS.md` + `docs/loop-prompting.md` | Check implementation direction against selected planning artifacts and stop if drift is found. |
 | `/reflect-breadboard` | `breadboard-reflection/SKILL.md` | Compare accepted intent with implementation reality and prepare an explicit drift decision. |
@@ -115,11 +115,11 @@ You can instead attach or paste the image in the same command prompt when the cl
 ```
 
 ```text
-/dumplink planning/shaping.md planning/breadboard.md
+/dumplink planning/shaping.md planning/breadboard.md planning/slices.md
 ```
 
 ```text
-/kickoff transcripts/kickoff-call.md
+/kickoff planning/frame.md planning/shaping.md planning/breadboard.md planning/slices.md
 ```
 
 ```text

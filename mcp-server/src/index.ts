@@ -6,69 +6,53 @@ import { z } from 'zod';
 import { readFile } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { recommendPlanningWorkflow, type SkillName } from './recommend.js';
+import { recommendPlanningWorkflow, skillNames, type SkillName } from './recommend.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const repoRoot = resolve(__dirname, '..', '..');
 
-const skills: Record<SkillName, { title: string; description: string; path: string }> = {
-  'framing-doc': {
-    title: 'Framing Doc',
-    description: 'Turn messy source material into a frame with current reality, boundaries, current approach/result, and desired outcome.',
-    path: 'framing-doc/SKILL.md',
-  },
-  shaping: {
-    title: 'Shaping',
-    description: 'Define requirements and criteria, compare alternative approaches, and detail the selected direction before implementation.',
-    path: 'shaping/SKILL.md',
-  },
-  'sketch-reconciliation': {
-    title: 'Sketch Reconciliation',
-    description: 'Reconcile a sketch, screenshot, wireframe, mockup, or whiteboard with planning artifacts without silently changing scope.',
-    path: 'sketch-reconciliation/SKILL.md',
-  },
-  breadboarding: {
-    title: 'Breadboarding',
-    description: 'Map places, affordances, stores, state, and wiring so behavior is concrete before implementation.',
-    path: 'breadboarding/SKILL.md',
-  },
-  statechart: {
-    title: 'Statechart',
-    description: 'Derive a transition table and Mermaid statechart for a selected stateful portion of an accepted breadboard.',
-    path: 'statechart/SKILL.md',
-  },
-  'interface-contracts': {
-    title: 'Interface Contracts',
-    description: 'Turn selected breadboard wires or slices into plain-language contracts for boundary-crossing data exchanges.',
-    path: 'interface-contracts/SKILL.md',
-  },
-  'executable-breadboards': {
-    title: 'Executable Breadboards',
-    description: 'Turn a selected slice into a testable handoff with examples, fixtures, expected outputs, edge cases, and acceptance tests.',
-    path: 'executable-breadboards/SKILL.md',
-  },
-  dumplink: {
-    title: 'Dumplink',
-    description: 'Turn selected shaped work into vertical task groups, dependency-aware sequence, risk states, scope cuts, and a bounded handoff.',
-    path: 'dumplink/SKILL.md',
-  },
-  'kickoff-doc': {
-    title: 'Kickoff Doc',
-    description: 'Turn a kickoff conversation into a builder-facing reference organized around the territory being built.',
-    path: 'kickoff-doc/SKILL.md',
-  },
-  'feed-planning-context': {
-    title: 'Feed Planning Context',
-    description: 'Package planning artifacts into compact context for agent implementation without overloading context.',
-    path: 'feed-planning-context/SKILL.md',
-  },
-  'breadboard-reflection': {
-    title: 'Breadboard Reflection',
-    description: 'Compare accepted breadboard intent with implementation reality, surface drift and design smells, and prepare an explicit correction decision.',
-    path: 'breadboard-reflection/SKILL.md',
-  },
-};
+type SkillMetadataEntry = { title: string; description: string };
+
+function parseSkillMetadata(value: unknown): Record<SkillName, SkillMetadataEntry> {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error('skill-metadata.json must contain an object');
+  }
+
+  const raw = value as Record<string, unknown>;
+  const unexpected = Object.keys(raw).filter((name) => !skillNames.includes(name as SkillName));
+  if (unexpected.length > 0) {
+    throw new Error(`skill-metadata.json contains unknown skills: ${unexpected.join(', ')}`);
+  }
+
+  const parsed = {} as Record<SkillName, SkillMetadataEntry>;
+  for (const name of skillNames) {
+    const entry = raw[name];
+    if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
+      throw new Error(`skill-metadata.json is missing metadata for ${name}`);
+    }
+    const fields = entry as Record<string, unknown>;
+    if (
+      Object.keys(fields).length !== 2
+      || typeof fields.title !== 'string'
+      || fields.title.trim() === ''
+      || typeof fields.description !== 'string'
+      || fields.description.trim() === ''
+    ) {
+      throw new Error(`skill-metadata.json has invalid metadata for ${name}`);
+    }
+    parsed[name] = { title: fields.title.trim(), description: fields.description.trim() };
+  }
+  return parsed;
+}
+
+const skillMetadata = parseSkillMetadata(
+  JSON.parse(await readFile(join(repoRoot, 'skill-metadata.json'), 'utf8')) as unknown,
+);
+
+const skills = Object.fromEntries(
+  skillNames.map((name) => [name, { ...skillMetadata[name], path: `${name}/SKILL.md` }]),
+) as Record<SkillName, SkillMetadataEntry & { path: string }>;
 
 const artifactTemplates = {
   frame: 'templates/frame.md',

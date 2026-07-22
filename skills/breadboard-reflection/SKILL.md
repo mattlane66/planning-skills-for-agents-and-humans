@@ -1,6 +1,6 @@
 ---
 name: breadboard-reflection
-description: Compare accepted breadboard intent with implementation reality, surface drift and design smells, and prepare an explicit correction decision.
+description: Compare accepted intent with implementation reality when code or a prototype exists, preserve both separately, surface drift and design smells, and prepare an explicit correction decision.
 ---
 
 # Breadboard Reflection

@@ -78,7 +78,7 @@ It is a way to stop intent from getting lost.
 | A selected stateful scope needs a precise transition model | [`statechart`](./statechart/SKILL.md) |
 | A selected slice crosses a meaningful data or system boundary | [`interface-contracts`](./interface-contracts/SKILL.md) |
 | A selected slice needs fixtures, examples, edge cases, and acceptance checks | [`executable-breadboards`](./executable-breadboards/SKILL.md) |
-| Selected work needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | [`dumplink`](./dumplink/SKILL.md) |
+| Work inside a selected slice needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | [`dumplink`](./dumplink/SKILL.md) |
 | Builders need a durable orientation reference after the selected artifacts have converged | [`kickoff-doc`](./kickoff-doc/SKILL.md) |
 | An implementation agent needs the authoritative subset for one selected slice | [`feed-planning-context`](./feed-planning-context/SKILL.md) |
 | Implementation reality needs to be compared with accepted intent | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) |

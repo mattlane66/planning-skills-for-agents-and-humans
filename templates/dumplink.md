@@ -2,12 +2,14 @@
 
 ## Project boundary
 
+- Mode: `standard` or `pre-slice-exploration`
 - Selected shape:
 - Appetite:
 - Non-goals:
-- Selected slice, when present:
+- Selected slice:
+- Slice exclusions:
 
-If a selected slice is present, all task groups and sequence below stay within it. If it is absent, this plan stops at candidate groups until a human selects the build boundary.
+The selected slice is required for a committed build sequence or agent handoff. All task groups, dependencies, cuts, and sequence stay within it. If it is absent, label every group as a candidate and stop before the Build sequence, Acceptance checks, and Agent handoff packet sections become commitments.
 
 ## Task dump
 

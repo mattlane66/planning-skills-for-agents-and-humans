@@ -1,6 +1,6 @@
 ---
 name: shaping
-description: Collaboratively shape a problem and compare solution directions before implementation.
+description: Shape ambiguous product work before implementation by defining criteria and appetite, comparing solution directions, and recording the selected shape and cut line.
 ---
 
 # Shaping
@@ -196,7 +196,7 @@ This keeps the shape cleaner and makes later fit checks, detailing, and slicing 
 2. Shape parts state mechanisms, not wishes.
 3. Keep the notation stable as the conversation evolves.
 4. When a fit check fails, either improve the shape or add the missing requirement.
-5. When a shape is selected, detail it rather than inventing a new sibling shape unless it is truly an alternative.
+5. When downstream detail is needed for a selected shape, preserve its notation; do not invent a new sibling shape unless it is truly an alternative.
 6. If a requirement names a mechanism, rewrite it as a need or move it into the shape.
 7. Avoid tautologies where the shape merely repeats the requirement in different words.
 8. Prefer vertical mechanisms over horizontal buckets where possible.
@@ -206,19 +206,21 @@ This keeps the shape cleaner and makes later fit checks, detailing, and slicing 
 
 ## Possible actions
 
-These can happen in any order as the shaping evolves:
+Requirements and candidate mechanisms can inform each other, but the decision gates do not happen in arbitrary order. Work within shaping may include:
+
 - populate requirements
-- set or revise the appetite and cut line
+- set the appetite and cut line after requirements are accepted
 - sketch a shape at a high level
-- detail a shape into parts or affordances
+- detail a shape into parts and mechanisms
 - explore alternatives for a part
 - test a shape with a fit check
 - extract new requirements revealed by the fit check
 - spike an unknown
 - reconcile a sketch, screenshot, wireframe, mockup, or whiteboard through the `sketch-reconciliation` skill when visual evidence may change the active artifacts
-- decide among alternatives
-- breadboard the selected shape
-- slice the breadboarded shape
+- prepare a decision-ready comparison
+- record the human-selected direction
+
+Once a direction is selected, stop shaping and hand the selected mechanisms to breadboarding. Do not dump or cluster implementation tasks, select slices, or create a build sequence inside shaping.
 
 ## Recommended document structure
 
@@ -432,20 +434,11 @@ Examples:
 - ❌ `We can decide whether to proceed.`
 - ❌ `We can answer whether this is a blocker.`
 
-## Detailing a selected shape
+## After selection: hand off without reopening the decision
 
-When a shape is chosen, detail it rather than turning it into a new sibling shape.
+When a shape is chosen, preserve its stable IDs and hand its selected mechanisms, appetite, cut line, requirements, and remaining unknowns to breadboarding. Do not turn downstream detail into a new sibling shape unless it is genuinely a new alternative that requires another fit and selection decision.
 
-Use `Detail B` to show that the work is a deeper breakdown of shape `B`, not a new alternative.
-
-Detailing usually produces:
-- places
-- UI affordances
-- non-UI affordances
-- stores
-- wiring
-
-At that point, use the breadboarding skill.
+If breadboarding reveals a missing mechanism or a fit problem, bring that proposed change back to the shaping artifact through the planning ripple. Do not silently extend the selected shape from inside shaping or breadboarding.
 
 ## Visual evidence
 
@@ -453,52 +446,11 @@ When the user drops in a sketch or screenshot and asks what is missing or what s
 
 The reconciliation must separate visible observations from interpretations, map observations to existing IDs, show proposed deltas, and apply accepted changes across every affected layer. Rerun fit checks when requirements or shape parts change.
 
-## Kick-off: From selected shape to slices
-
-Use this as an optional exercise before handing work off to breadboarding or slice planning.
-
-The purpose is to make the full implied scope visible and externalize the grouping and sequencing work that strong builders often do in their heads.
-
-### Step 1 — Dump
-List every task implied by the selected shape.
-
-Do not organize yet. Prioritize completeness over structure.
-
-### Step 2 — Affinitize
-Group tasks by asking: which tasks can be completed together, in isolation from the rest?
-
-Use unnamed groups first. Do not name them until they are filled.
-
-This helps the grouping emerge from the actual work rather than from pre-conceived categories.
-
-Constraints:
-- maximum 10 groups
-- groups remain unnamed until populated
-- a task belongs in a group when it can be completed in isolation alongside the others in that group
-
-### Step 3 — Name
-Once groups are filled, give each one a name.
-
-Names should reflect what the group does. These names become scope handles — shorthand for the mechanisms being built.
-
-### Step 4 — Flag unknowns
-Look across the named groups and ask: which are more unknown than the others?
-
-Start by identifying what is routine and familiar. What remains are the unknowns.
-
-Flag unknown groups explicitly before sequencing.
-
-Output from this exercise:
-- named groups
-- unknown groups flagged
-
-This output feeds naturally into breadboarding and then into slice sequencing.
-
 ## Phases and document lifecycle
 
-Shaping moves through two main phases:
-- shaping
-- slicing
+Shaping has one decision lifecycle: accepted criteria → appetite → candidate directions → fit check → human selection.
+
+Breadboarding and slicing are downstream. They may reveal a problem that requires revisiting shaping, but they are not phases inside the shaping skill.
 
 Typical document stack:
 - frame

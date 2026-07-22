@@ -20,7 +20,7 @@ Codex should honor this workflow while also following the active product reposit
 10. Slice into demoable increments.
 11. Add interface contracts when the selected slice crosses meaningful boundaries.
 12. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
-13. Use Dumplink when selected work needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+13. Use Dumplink when work inside the selected slice needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
 14. Feed only the relevant planning context to implementation.
 15. Check drift during implementation.
 16. Reflect against implementation, preserve accepted intent separately, and apply only an explicit drift decision.
@@ -136,8 +136,8 @@ Do not implement yet.
 
 ```text
 Use the installed `dumplink` skill and follow this product repository's instructions.
-Create a Dumplink plan for [selected shaped work] only if it needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.
-Preserve the selected shape, appetite, and non-goals. Do not create a horizontal discipline backlog or implement code.
+Create a Dumplink plan inside [selected slice] only if it needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.
+Preserve the selected shape, appetite, slice boundary, exclusions, and non-goals. Do not create a horizontal discipline backlog, expand the slice, or implement code. If no slice is selected, produce candidates only and stop before build sequence or handoff.
 ```
 
 ## Context packet before implementation

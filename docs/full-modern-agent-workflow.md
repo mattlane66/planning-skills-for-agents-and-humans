@@ -19,12 +19,12 @@ Messy notes → frame → criteria → appetite → sketch shapes → fit check 
 | Fit check | Compare shapes against criteria and reverse-check mechanisms. | fit check + reverse fit check |
 | Sketch reconciliation, as needed | Map visual evidence to planning IDs, expose gaps or conflicts, and apply only accepted deltas. | `planning/sketch-reconciliation.md` plus synchronized source artifacts |
 | Select shape | Record the human-selected direction. | selected direction + rejected alternatives |
-| Breadboard | Map places, affordances, stores, wiring, and slice candidates. | `planning/breadboard.md` |
+| Breadboard | Declare current-state or selected-design mode, then map places, affordances, stores, and wiring; only selected-design mode yields slice candidates. | `planning/breadboard.md` |
 | Statechart, optional | Derive a precise behavioral view when a selected stateful scope is hard to reason about from wiring alone. | `planning/statechart.md` |
 | Select slice | Choose a demoable increment with explicit exclusions and a verification target. | `planning/slices.md` |
 | Interface contracts | Define boundary-crossing data exchanges before agents guess field-level details. | `planning/interface-contracts.md` |
 | Executable breadboard | Add fixtures, examples, expected outputs, edge cases, and acceptance tests. | `planning/executable-breadboard.md` |
-| Dumplink | Create vertical task groups, dependency sequence, risk states, scope cuts, and an agent handoff packet. | `planning/dumplink.md` |
+| Dumplink | Inside the selected slice, create vertical task groups, dependency sequence, risk states, scope cuts, and an agent handoff packet. | `planning/dumplink.md` |
 | Kickoff, optional | Create a durable human-readable orientation map after selected artifacts converge; do not use it as build scope or sequence. | `planning/kickoff.md` |
 | Context packet | Feed only the relevant context to the implementation agent. | `planning/context-packet.md` |
 | Drift check | Keep implementation inside the selected slice and active task group. | strict drift-check output |

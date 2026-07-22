@@ -95,12 +95,20 @@ modes:
     forbidden: [invented_hidden_behavior, silent_scope_change, visual_as_automatic_source_of_truth, production_code]
     exit_gate: deltas_accepted_rejected_or_deferred
 
+  map_current_state:
+    skill: breadboarding
+    purpose: Describe how an existing system behaves without turning observed behavior into selected future intent.
+    requires: [existing_system_scope]
+    allowed_outputs: [current_state_breadboard, places, ui_affordances, non_ui_affordances, stores, wiring, evidence_references, unresolved_observations]
+    forbidden: [selected_future_behavior, slice_selection, build_handoff, production_code]
+    exit_gate: current_state_breadboard_reviewed
+
   breadboard:
     skill: breadboarding
-    purpose: Make the selected shape concrete as places, affordances, stores, and wiring.
-    requires: [selected_direction]
-    allowed_outputs: [places, ui_affordances, non_ui_affordances, stores, wiring, branches, slice_candidates]
-    forbidden: [production_code]
+    purpose: Make the human-selected shape concrete as a normative selected-design map.
+    requires: [selected_direction, appetite]
+    allowed_outputs: [selected_design_breadboard, places, ui_affordances, non_ui_affordances, stores, wiring, branches, slice_candidates]
+    forbidden: [current_state_as_selected_future_behavior, production_code]
     exit_gate: breadboard_accepted
 
   statechart:
@@ -136,13 +144,21 @@ modes:
     forbidden: [production_code_unless_explicitly_requested]
     exit_gate: build_handoff_ready
 
+  dumplink_explore:
+    skill: dumplink
+    purpose: Expose candidate task groups, risks, dependencies, and appetite cuts before a slice is selected, without creating a build commitment.
+    requires: [selected_direction, appetite]
+    allowed_outputs: [project_boundary, task_dump, candidate_task_groups, risk_notes, dependency_observations, candidate_scope_cuts, slice_selection_questions]
+    forbidden: [committed_build_sequence, acceptance_plan, active_task_group, agent_handoff_packet, production_code]
+    exit_gate: selected_slice_or_dumplink_skipped
+
   dumplink:
     skill: dumplink
     command_aliases: { claude: /dumplink, gemini: /dumplink }
-    purpose: Turn selected shaped work into vertical task groups, risk states, dependency sequence, scope cuts, and bounded agent handoff packets.
-    requires: [selected_direction, appetite]
+    purpose: Organize work inside a selected slice into vertical task groups, risk states, dependency sequence, scope cuts, and bounded agent handoff packets.
+    requires: [selected_direction, appetite, selected_slice]
     allowed_outputs: [project_boundary, task_dump, task_groups, risk_states, dependency_map, build_sequence, scope_cuts, acceptance_checks, agent_handoff_packet]
-    forbidden: [horizontal_ticket_backlog, production_code, selected_slice_expansion, scope_expansion_without_appetite_change]
+    forbidden: [horizontal_ticket_backlog, production_code, selected_slice_expansion, scope_expansion_without_appetite_change, build_sequence_without_selected_slice, agent_handoff_without_selected_slice]
     exit_gate: task_group_selected_or_sequence_accepted
 
   kickoff:

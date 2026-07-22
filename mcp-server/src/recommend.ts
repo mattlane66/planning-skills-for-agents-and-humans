@@ -183,6 +183,7 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:is\s+not|isn't)\s+ready\b/,
     /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:has\s+not|hasn't)\s+been\s+selected\b/,
     /\b(?:do\s+not|don't|dont|without)\s+(?:have\s+)?(?:a\s+)?selected\s+slice\b/,
+    /\bno\s+(?:selected\s+)?slice\s+(?:has\s+been|is)\s+selected\b/,
     /\b(?:do\s+not|don't|dont)\s+have\s+(?:a\s+)?context\s+packet\b/,
     /\bwithout\s+(?:a\s+)?context\s+packet\b/,
     /\bno\s+(?:selected\s+slice|context\s+packet)\b/,
@@ -196,10 +197,11 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'handoff to the agent',
   ]));
 
-  const genericBuildRequest = matches(normalized, [
+  const planningBuildLanguage = includesAny(normalized, ['build sequence', 'build plan', 'build handoff']);
+  const genericBuildRequest = (!planningBuildLanguage && matches(normalized, [
     /\b(?:build|implement)\b/,
     /\b(?:create|make)\s+(?:(?:an?|the|this|my)\s+)?(?:\w+\s+){0,3}(?:app|application|dashboard|feature|website|site|service|tool|product|prototype)\b/,
-  ])
+  ]))
     || includesAny(normalized, ['coding agent', 'implementation agent']);
 
   if (genericBuildRequest && !explicitBuildHandoff) {
@@ -231,6 +233,13 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
   }
 
   const selectedDirection = includesAny(normalized, ['selected shape', 'chosen shape', 'selected direction', 'chosen direction']);
+  const currentStateBreadboard = includesAny(normalized, [
+    'current-state breadboard',
+    'current state breadboard',
+    'map current behavior',
+    'map the existing system',
+    'existing system behavior',
+  ]);
   const acceptedBreadboard = includesAny(normalized, [
     'accepted breadboard',
     'approved breadboard',
@@ -241,7 +250,7 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     recommendations.push('shaping');
   }
 
-  if (!acceptedBreadboard && (selectedDirection || includesAny(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring']))) {
+  if (!acceptedBreadboard && (currentStateBreadboard || selectedDirection || includesAny(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring']))) {
     recommendations.push('breadboarding');
   }
 
@@ -261,11 +270,18 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     recommendations.push('executable-breadboards');
   }
 
-  if (includesAny(normalized, ['task group', 'dependency sequence', 'risk state', 'scope cut', 'dumplink'])) {
-    recommendations.push('dumplink');
+  const dumplinkRequested = includesAny(normalized, ['task group', 'dependency sequence', 'risk state', 'scope cut', 'dumplink']);
+  const preSliceCandidatesOnly = includesAny(normalized, ['candidate groups', 'candidates only', 'pre-slice exploration']);
+  const committedDumplinkOutput = includesAny(normalized, ['build sequence', 'agent handoff', 'active task group', 'acceptance plan']);
+  if (dumplinkRequested) {
+    if (negatedBuildHandoff && committedDumplinkOutput && !preSliceCandidatesOnly) {
+      if (!recommendations.includes('breadboarding')) recommendations.push('breadboarding');
+    } else {
+      recommendations.push('dumplink');
+    }
   }
 
-  if (explicitBuildHandoff || includesAny(normalized, ['feed context', 'package context', 'execution contract'])) {
+  if ((explicitBuildHandoff && !dumplinkRequested) || includesAny(normalized, ['feed context', 'package context', 'execution contract'])) {
     recommendations.push('feed-planning-context');
   }
 

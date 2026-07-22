@@ -128,7 +128,10 @@ Do not let the visual silently override selected behavior or scope. Do not infer
 
 ## 9. Breadboard
 
-Use this mode when the selected shape needs to become concrete enough to slice.
+Breadboarding has two explicit modes:
+
+- `current-state` is descriptive and may be used during Explore to map evidence from an existing system. It does not require a selected direction and cannot define accepted future intent or a buildable slice.
+- `selected-design` is normative and is used after a human selects a shape and appetite. Only this mode can feed slice selection.
 
 Outputs:
 - places
@@ -136,9 +139,12 @@ Outputs:
 - non-UI affordances
 - stores
 - wiring
-- demoable slices
+- evidence references and unresolved observations in current-state mode
+- product-relevant branches and demoable slice candidates in selected-design mode
 
 Use the `breadboarding` skill.
+
+Declare the mode and keep current behavior separate from selected future behavior.
 
 ## 10. Statechart, optional
 
@@ -201,7 +207,7 @@ Do not invent missing expected outputs or edge cases. Flag them before build wor
 
 ## 14. Dumplink, optional
 
-Use this mode when selected work needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
+Use this mode when work inside the selected slice needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts.
 
 Outputs:
 - task dump and vertical task groups
@@ -211,7 +217,9 @@ Outputs:
 - acceptance checks
 - bounded agent handoff packet
 
-Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog.
+Use the `dumplink` skill. Do not turn the output into a horizontal discipline backlog or let a task group enlarge the selected slice.
+
+If no slice has been selected, Dumplink is exploratory only: it may produce candidate groups, risks, and slice-selection questions, but not a committed build sequence, acceptance plan, active task group, or agent handoff.
 
 ## 15. Kickoff reference, optional
 

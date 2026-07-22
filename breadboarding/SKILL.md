@@ -1,61 +1,71 @@
 ---
 name: breadboarding
-description: Map a chosen solution into places, affordances, consequences, stores, and wiring.
+description: Map current-state behavior or a selected design into places, affordances, stores, consequences, and wiring when concrete behavior or candidate slices need clarification.
 ---
 
 # Breadboarding
 
-Use this skill when the team needs to understand how a chosen solution behaves, where the user is, what they can do there, and what hidden system consequences matter.
+Use this skill when the team needs to understand how an existing system behaves or make a human-selected design concrete enough to review and slice.
 
 ## Goal
 
 Produce a legible system map that shows:
-- the places a person or operator can be in
+- the places a person, operator, or system caller interacts through
 - the affordances available in those places
 - the important hidden system consequences
 - the stores or state that matter
 - the wiring between all of them
 
-The tables are the source of truth. Mermaid diagrams are optional visualizations for humans.
+Every breadboard must declare whether it is a descriptive `current-state` map or a normative `selected-design` map. The tables are the source of truth within that declared authority. Mermaid diagrams are optional visualizations for humans.
 
-## Use cases
+## Operating modes
 
-Breadboarding serves three common functions:
+Choose one mode before mapping. Do not let evidence about current behavior silently become accepted future behavior.
 
-### 1. Mapping an existing system
+### Current-state mapping (descriptive)
 
 Use this when you do not yet understand how an existing system works in concrete detail.
 
 Input:
 - codebase or systems to analyze
 - a workflow description from the perspective of someone trying to make an effect happen
+- direct evidence such as code paths, tests, logs, screenshots, or observed behavior
 
 Output:
+- `mode: current-state`
 - Places table
 - UI affordances table
 - Non-UI affordances table
 - Stores table
+- evidence references and unresolved observations
 - optional Mermaid diagram
 
-### 2. Designing from shaped parts
+This mode does not require a selected direction. It records what exists; it cannot select a future direction, define accepted product intent, or produce a buildable slice by itself. If the current-state map suggests a change, send that proposal back through shaping and the human selection gate.
+
+### Selected-design mapping (normative)
 
 Use this when shaping has already produced mechanisms and you need to detail them into concrete affordances and wiring.
 
 Input:
-- chosen shape and parts
+- human-selected shape and parts
+- accepted appetite and cut line
 - the requirements or outcomes those parts must satisfy
 - optionally the existing system they need to connect to
 
 Output:
+- `mode: selected-design`
 - Places table
 - UI affordances table
 - Non-UI affordances table
 - Stores table
+- product-relevant branches and candidate vertical slices
 - optional Mermaid diagram
 
-### 3. Mixtures of existing and new
+Only an accepted selected-design breadboard can feed slice selection and downstream build artifacts.
 
-Often you need both: existing affordances that remain, plus new affordances from the chosen shape. Breadboard them together so the full story is visible.
+### Combining current and proposed behavior
+
+Often you need both existing affordances that remain and new affordances from the selected shape. Keep their authority legible: use separate artifacts or clearly label current and proposed rows, cite the selected shape for every proposed mechanism, and do not treat an observed current behavior as selected future intent unless the human explicitly accepts it.
 
 ## Reading a whiteboard breadboard
 
@@ -83,9 +93,9 @@ How to read one:
 
 ## What breadboarding is
 
-Breadboarding is a lightweight UI shorthand.
+Breadboarding is a lightweight behavioral mapping notation for interactive products, operator workflows, APIs, CLIs, and background processes.
 
-It separates what users can interact with in the interface from what happens in the code or design system underneath.
+It separates observable entry points and effects from the hidden system behavior that makes them happen.
 
 The places act like interface endpoints or bounded states. The affordances show what the user can do there. The wiring explains what happens between what the user sees.
 
@@ -275,9 +285,9 @@ Examples:
 
 ## Procedures
 
-### Mapping an existing system
+### Current-state mapping
 
-1. Identify the workflow or effect to explain.
+1. Declare `mode: current-state` and identify the workflow or effect to explain.
 2. List the places involved.
 3. Trace the code or system to find all components touched by that flow.
 4. Identify the concrete affordances in each place.
@@ -286,20 +296,26 @@ Examples:
 7. Add the stores that shape the behavior.
 8. Fill in control flow with **Wires Out**.
 9. Fill in data flow and visible consequence with **Returns To**.
-10. Verify that every visible effect can be explained by the wiring.
+10. Cite the evidence for non-obvious behavior and mark unresolved observations.
+11. Verify that every visible effect can be explained by the wiring.
+12. Stop before treating this map as selected future behavior or slicing it for implementation.
 
-### Designing from shaped parts
+### Selected-design mapping
 
-1. List the mechanisms from the chosen shape.
-2. Translate each mechanism into UI and non-UI affordances.
-3. Identify whether each affordance lives in an existing place or a new place.
-4. Add the stores and hidden consequences those affordances need.
-5. Wire the affordances together.
-6. If there is an existing system, add the existing affordances the new ones must connect to.
-7. Check that every displayed effect has a source and every important mechanism is represented.
+1. Confirm the human-selected shape, accepted appetite, and cut line; declare `mode: selected-design`.
+2. List the mechanisms from the selected shape.
+3. Translate each mechanism into UI and non-UI affordances.
+4. Identify whether each affordance lives in an existing place or a new place.
+5. Add the stores and hidden consequences those affordances need.
+6. Wire the affordances together.
+7. If there is an existing system, add the existing affordances the new ones must connect to and label current versus proposed behavior.
+8. Check that every displayed effect has a source and every important selected mechanism is represented.
 
 ## Quality checks
 
+- The breadboard declares `current-state` or `selected-design` mode.
+- Current-state evidence is not presented as selected future intent.
+- A selected-design breadboard cites the selected shape, appetite, and cut line.
 - Every displayed UI element that depends on data should have an incoming source.
 - Every code affordance should either trigger something, return something, or both.
 - Avoid vague affordance names like `database`, `logic`, or `handler stuff`.
@@ -388,6 +404,12 @@ shaping: true
 
 # [Project] — Breadboard
 
+## Mode and authority
+- Mode: current-state | selected-design
+- Authority: descriptive current-state evidence | accepted selected intent
+- Selected shape and appetite: required for selected-design only
+- Evidence: required for non-obvious current-state claims
+
 ## Places
 [table]
 
@@ -432,11 +454,13 @@ For teaching or walkthrough diagrams, you may add numbered workflow step annotat
 
 ## Transition to slicing
 
+This section applies only to an accepted `selected-design` breadboard. A `current-state` breadboard stops at descriptive mapping and must return proposed changes through shaping before any slice is selected.
+
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
 
 Before proposing slices, optionally run an affinity-grouping pass over the selected shape:
 
-1. Dump all elements implied by the selected shape.
+1. Inventory the breadboard elements implied by the selected shape.
 2. Affinitize them into groups that can be completed together.
 3. Name each group as a stable scope handle.
 4. Flag the biggest unknown per group.

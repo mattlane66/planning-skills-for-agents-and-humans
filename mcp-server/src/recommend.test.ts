@@ -68,6 +68,17 @@ test('routes a selected direction to breadboarding', () => {
   assert.deepEqual(recommendPlanningWorkflow("let's breadboard A"), ['breadboarding']);
 });
 
+test('routes explicit current-state mapping to descriptive breadboarding', () => {
+  assert.deepEqual(
+    recommendPlanningWorkflow('Map the existing system behavior from code and tests before proposing changes'),
+    ['breadboarding'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Create a current-state breadboard and cite the observed behavior'),
+    ['breadboarding'],
+  );
+});
+
 test('routes conversational slicing shorthand to breadboarding', () => {
   assert.deepEqual(recommendPlanningWorkflow("Let's slice it"), ['breadboarding']);
   assert.deepEqual(recommendPlanningWorkflow('Create vertical slices from this'), ['breadboarding']);
@@ -174,6 +185,18 @@ test('routes a selected slice to context feeding', () => {
 
 test('uses Dumplink only when task grouping signals are present', () => {
   assert.deepEqual(recommendPlanningWorkflow('Create vertical task groups with dependency sequence and scope cuts'), ['dumplink']);
+  assert.deepEqual(
+    recommendPlanningWorkflow('Inside the selected slice, use Dumplink to create task groups, risk states, and scope cuts'),
+    ['dumplink'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('No selected slice exists. Use Dumplink pre-slice exploration for candidate groups only'),
+    ['dumplink'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('The selected shape is accepted but no slice is selected. Create a Dumplink build sequence and agent handoff'),
+    ['breadboarding'],
+  );
   assert.equal(recommendPlanningWorkflow('What should I do next?').includes('dumplink'), false);
 });
 

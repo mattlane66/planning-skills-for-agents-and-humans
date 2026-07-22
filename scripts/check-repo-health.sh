@@ -178,7 +178,7 @@ DOCS=(
   docs/claude-design-workflow.md docs/claude-skills-installation.md
   docs/executable-breadboards.md docs/interface-contracts.md docs/loop-prompting.md
   integrations/gemini/README.md
-  implementation-context.md skill-inventory.txt
+  implementation-context.md skill-inventory.txt skill-metadata.json
   examples/existing-codebase-drift/02-implementation-reality.md
   examples/existing-codebase-drift/03-breadboard-reflection.md
   examples/statechart-retry-workflow/01-accepted-breadboard.md
@@ -200,6 +200,7 @@ check_json .claude-plugin/plugin.json
 check_json .codex-plugin/plugin.json
 check_json .agents/plugins/marketplace.json
 check_json visualizer/package.json
+check_json skill-metadata.json
 check_file_exists .agent-orchestration.yaml
 check_file_exists LICENSE
 check_file_exists visualizer/package-lock.json
@@ -247,6 +248,51 @@ for skill in "${SKILLS[@]}"; do
   check_skill_frontmatter "$skill/SKILL.md"
   check_skill_frontmatter "skills/$skill/SKILL.md"
 done
+if python3 - <<'PY'
+import json
+import pathlib
+
+root = pathlib.Path.cwd()
+inventory = [line.strip() for line in (root / "skill-inventory.txt").read_text(encoding="utf-8").splitlines() if line.strip()]
+metadata = json.loads((root / "skill-metadata.json").read_text(encoding="utf-8"))
+if set(metadata) != set(inventory):
+    raise SystemExit(
+        f"Skill metadata inventory mismatch; missing={sorted(set(inventory) - set(metadata))}, "
+        f"extra={sorted(set(metadata) - set(inventory))}"
+    )
+
+for skill in inventory:
+    entry = metadata[skill]
+    if set(entry) != {"title", "description"} or not all(isinstance(entry[key], str) and entry[key].strip() for key in entry):
+        raise SystemExit(f"Invalid canonical metadata for {skill}")
+    lines = (root / skill / "SKILL.md").read_text(encoding="utf-8").splitlines()
+    try:
+        end = lines[1:].index("---") + 1
+    except ValueError as exc:
+        raise SystemExit(f"Missing frontmatter for {skill}") from exc
+    fields = {}
+    for line in lines[1:end]:
+        if ":" not in line or line[0].isspace():
+            continue
+        key, value = line.split(":", 1)
+        value = value.strip()
+        if value.startswith('"') and value.endswith('"'):
+            value = json.loads(value)
+        fields[key.strip()] = value
+    if fields.get("name") != skill:
+        raise SystemExit(f"Frontmatter name mismatch for {skill}")
+    if fields.get("description") != entry["description"]:
+        raise SystemExit(f"Frontmatter description drift for {skill}")
+
+mcp_source = (root / "mcp-server/src/index.ts").read_text(encoding="utf-8")
+if "skill-metadata.json" not in mcp_source:
+    raise SystemExit("MCP server does not load canonical skill metadata")
+PY
+then
+  pass "Canonical skill metadata matches root frontmatter and feeds MCP"
+else
+  fail "Canonical skill metadata drifted across consumer surfaces"
+fi
 if bash scripts/sync-packaged-skills.sh --check; then
   pass "All packaged skills match their canonical root skills"
 else

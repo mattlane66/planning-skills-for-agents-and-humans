@@ -1,11 +1,11 @@
 ---
 name: kickoff-doc
-description: Turn kickoff notes or transcripts into a builder-facing reference document organized by system area.
+description: Create a builder-facing kickoff document from accepted planning artifacts when a team needs a durable reference organized by shaped product territory.
 ---
 
 # Kickoff Document
 
-Use this skill when a project has already been discussed and shaped enough that builders need a durable reference doc.
+Use this skill when accepted planning artifacts have converged enough that builders need a durable orientation reference. Kickoff notes or transcripts may supplement those artifacts, but they do not establish build scope or sequence.
 
 ## Goal
 
@@ -13,17 +13,19 @@ Create a kickoff document that is organized by the product or system being built
 
 ## Before you start
 
-If the source is a kickoff transcript, clarify:
+Start with the accepted frame, selected shape, accepted breadboard, selected slice, and any applicable contracts or executable breadboard. Preserve their stable IDs and cite them.
+
+If the source also includes a kickoff transcript, clarify:
 1. who the primary audience is
 2. what other inputs exist, such as screenshots, breadboards, mockups, or notes
 
-The transcript is the source material. The document is not a summary of the call. It is a map of the shaped territory.
+The document is not a summary of the call. It is a map of the accepted shaped territory. Use the transcript for supported context and team language only.
 
-When selected planning artifacts already exist, they outrank the kickoff transcript and this derived document. Cite them, preserve their IDs, and never let kickoff prose create build scope or sequence.
+Accepted planning artifacts outrank the kickoff transcript and this derived document. If only a transcript exists and it contains unresolved direction or scope choices, stop and route those decisions through framing, shaping, breadboarding, and slice selection instead of inventing them here.
 
 ## Core principle
 
-A kickoff transcript is chronological. A useful kickoff document is structural.
+Planning sources may be chronological or split across artifacts. A useful kickoff document is structural and derived.
 
 The reader should be able to jump to one part of the system and understand:
 - what it is
@@ -85,12 +87,13 @@ Do not:
 
 ## Process
 
-1. Read the full transcript or full set of notes.
-2. Identify the major areas of the system that were discussed.
-3. Draft the Frame section from the framing and outcome discussion.
-4. Write each Shape section by pulling together all the relevant discussion for that area, even if it was scattered across the conversation.
-5. Place design decisions inline in the area they affect.
-6. Review against the source and remove anything you cannot support.
+1. Read the accepted planning artifacts and record their IDs and authority.
+2. Read any supplemental transcript or notes.
+3. Identify the major areas of the selected system territory.
+4. Draft the Frame section from the accepted frame and outcome.
+5. Write each Shape section by combining accepted details for that area, using supplemental discussion only when it does not conflict.
+6. Place accepted decisions inline in the area they affect.
+7. Review against the cited sources and remove anything you cannot support.
 
 ## Recommended template
 
@@ -159,7 +162,7 @@ If a builder would need to reread the original transcript to understand one part
 - The document is organized by shaped territory, not transcript order.
 - Every area explains what it is, what belongs there, how it behaves, and how it connects to neighboring areas.
 - Decisions sit next to the area they affect rather than in a generic dump section.
-- Build sequence, slice order, and implementation tasks are not mixed into the reference doc unless clearly marked as handoff context.
+- Build sequence, slice order, and implementation tasks are omitted. When orientation needs to name the active slice, cite the selected artifact without turning the reference into a plan.
 - The document points back to the selected artifacts that govern scope, behavior, contracts, and sequence.
 - Claims are supported by the source or clearly marked as open questions.
 - The artifact has planning frontmatter and a Context Card when it will feed downstream agent work.
