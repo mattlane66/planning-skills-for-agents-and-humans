@@ -136,9 +136,18 @@ jobs:
             visualizer/package-lock.json
 
       - name: Validate repository
+        shell: bash
         run: |
+          set -o pipefail
           chmod +x scripts/*.sh hooks/*.sh scripts/*.py
-          bash scripts/check-repo-health.sh
+          bash scripts/check-repo-health.sh 2>&1 | tee repo-health.log
+
+      - name: Upload repository health diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: repo-health-log
+          path: repo-health.log
 
       - name: Commit completed patch
         run: |
