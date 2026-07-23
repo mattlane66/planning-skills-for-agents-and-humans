@@ -72,7 +72,6 @@ jobs:
           if __name__ == "__main__":
               unittest.main()
           PYFILE
-          sed -i 's/^          //' tests/test_codex_plugin.py
 
           python - <<'PY'
           from pathlib import Path
@@ -150,7 +149,6 @@ jobs:
                 - name: Check repository health
                   run: bash scripts/check-repo-health.sh
           EOF
-          sed -i 's/^          //' .github/workflows/repo-health.yml
 
           rm -f \
             .trigger-operational-adapters \
