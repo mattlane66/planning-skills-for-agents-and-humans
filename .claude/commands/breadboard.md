@@ -1,7 +1,18 @@
 ---
 description: Map current-state behavior or a selected design into places, affordances, stores, consequences, and wiring.
-argument-hint: [existing-system evidence, selected shape, requirements, notes, or target breadboard file]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- existing-system evidence
+- selected shape
+- requirements
+- notes
+- or target breadboard file
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `breadboarding/SKILL.md` first and follow it as the primary instruction for this command.

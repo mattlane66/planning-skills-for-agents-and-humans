@@ -41,3 +41,7 @@ bash scripts/sync-packaged-skills.sh
 ```
 
 CI runs the sync script in check mode and fails if a packaged copy has drifted.
+
+## Validation dependency
+
+The health workflow installs `requirements-dev.txt` so canonical and Claude-specific frontmatter are parsed as YAML rather than with an ad hoc line parser. Run `python3 -m pip install -r requirements-dev.txt` before `bash scripts/check-repo-health.sh` locally.

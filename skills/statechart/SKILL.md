@@ -1,6 +1,7 @@
 ---
 name: statechart
 description: Derive states and transitions from an accepted breadboard when retries, timeouts, approvals, lifecycle stages, or multiple valid actions make behavior difficult to review.
+license: MIT
 ---
 
 # Statechart

@@ -1,7 +1,19 @@
 ---
 description: Create a builder-facing reference from accepted planning artifacts, organized by shaped product territory.
-argument-hint: [accepted frame, shape, breadboard, slice, supplemental notes, and output path]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- accepted frame
+- shape
+- breadboard
+- slice
+- supplemental notes
+- and output path
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `kickoff-doc/SKILL.md` first and follow it as the primary instruction for this command.

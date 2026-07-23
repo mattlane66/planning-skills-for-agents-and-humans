@@ -1,7 +1,15 @@
 ---
 description: Check implementation direction against selected planning artifacts and stop if drift is found.
-argument-hint: [context packet, planning artifacts, implementation path, or notes]
-allowed-tools: Read, Glob, Grep, Bash
+argument-hint:
+- context packet
+- planning artifacts
+- implementation path
+- or notes
+allowed-tools:
+- Read
+- Glob
+- Grep
+- Bash
 ---
 
 Read `AGENTS.md`, `docs/loop-prompting.md`, and `templates/drift-check.md` first.

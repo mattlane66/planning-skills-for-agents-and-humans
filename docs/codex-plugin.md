@@ -27,6 +27,10 @@ The repo also includes tool-neutral orchestration and harnessing docs:
 - `docs/agent-run-records.md`
 - `docs/lifecycle-hooks.md`
 
+## Operational boundary
+
+This is intentionally a skill-only plugin. It guides Codex's existing repository tools but does not grant access to external systems. Add required or optional apps only when the workflow must reach a separate repository service, document store, issue tracker, design system, or other connected source. App permissions and source-system permissions remain authoritative. The optional MCP server in this repository is a separate adapter and is not silently activated by installing the Codex plugin.
+
 ## Repo-local marketplace
 
 The repo includes a local marketplace file at:

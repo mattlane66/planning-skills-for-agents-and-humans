@@ -24,7 +24,7 @@ The top-level skill folders are the source of truth. If a plugin bundle needs a 
 
 Run `bash scripts/sync-packaged-skills.sh` after editing a canonical skill. CI uses the same script in check mode and fails when packaged content differs.
 
-Slash commands in `.claude/commands/`, `.claude/loop.md`, lifecycle hooks, and orchestration docs are invocation surfaces around the skills. They should stay thin and should not become a second copy of the method.
+Slash commands in `.claude/commands/`, `.claude/loop.md`, lifecycle hooks, and orchestration docs are invocation surfaces around the skills. Human-facing aliases are manual-only, while generated canonical skills remain model-discoverable. Alias-backed canonical skills are hidden from the slash menu to avoid duplicate entries; direct-only skills receive Claude-specific argument hints and conservative file tools during packaging. They should stay thin and should not become a second copy of the method.
 
 ## Plugin manifest
 

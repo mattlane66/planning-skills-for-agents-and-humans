@@ -1,7 +1,18 @@
 ---
 description: Set the bounded time or scope budget and cut line before selecting a solution shape.
-argument-hint: [accepted criteria, shaping file, budget, team shape, or review point]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- accepted criteria
+- shaping file
+- budget
+- team shape
+- or review point
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.

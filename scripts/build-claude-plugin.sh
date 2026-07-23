@@ -18,7 +18,8 @@ mkdir -p \
   "$DIST_DIR/commands" \
   "$DIST_DIR/docs" \
   "$DIST_DIR/templates" \
-  "$DIST_DIR/hooks"
+  "$DIST_DIR/hooks" \
+  "$DIST_DIR/examples"
 
 cp "$ROOT_DIR/.claude-plugin/plugin.json" "$DIST_DIR/.claude-plugin/plugin.json"
 cp "$ROOT_DIR/LICENSE" "$DIST_DIR/LICENSE"
@@ -30,6 +31,7 @@ cp "$ROOT_DIR/docs/lifecycle-hooks.md" "$DIST_DIR/docs/lifecycle-hooks.md"
 cp "$ROOT_DIR/docs/loop-prompting.md" "$DIST_DIR/docs/loop-prompting.md"
 cp "$ROOT_DIR/templates/"*.md "$DIST_DIR/templates/"
 cp "$ROOT_DIR/hooks/"*.sh "$DIST_DIR/hooks/"
+cp -R "$ROOT_DIR/examples/." "$DIST_DIR/examples/"
 
 rewrite_args=(
   -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
@@ -60,7 +62,9 @@ for skill in "${SKILLS[@]}"; do
   fi
 
   mkdir -p "$target_dir"
+  cp -R "$ROOT_DIR/$skill/." "$target_dir/"
   sed "${rewrite_args[@]}" "$source_file" > "$target_dir/SKILL.md"
+  python3 "$ROOT_DIR/scripts/annotate-claude-skill.py" "$target_dir/SKILL.md" "$skill"
 done
 
 for command_file in "$ROOT_DIR"/.claude/commands/*.md; do

@@ -1,7 +1,17 @@
 ---
 description: Sketch alternative solution shapes against accepted criteria without selecting one.
-argument-hint: [accepted criteria, frame, notes, or existing shaping file]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- accepted criteria
+- frame
+- notes
+- or existing shaping file
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.

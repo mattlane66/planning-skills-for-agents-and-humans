@@ -1,6 +1,7 @@
 ---
 name: feed-planning-context
 description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice.
+license: MIT
 ---
 
 # Feed Planning Context

@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Improved
+
+- Declared the MIT license in every canonical skill and split breadboarding's detailed notation and slicing material into an on-demand reference.
+- Separated portable Agent Skills metadata from Claude Code, Codex, Gemini CLI, Claude Design, and MCP adapter behavior.
+- Made Claude human-gate aliases manual-only, hid alias-backed generated skills from duplicate slash-menu discovery, and added operational metadata to direct-only Claude skills.
+- Added native Gemini skill installation guidance, Codex skill-only boundary checks, Claude Design example packaging, and shared activation fixtures across all skills.
+- Replaced ad hoc frontmatter parsing with YAML validation and added runtime adapter regression tests.
+
+
 ### Added
 
 - Added a Claude and Claude Design workflow that separates canonical skills from Claude Code command wrappers.

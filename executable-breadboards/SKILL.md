@@ -1,6 +1,7 @@
 ---
 name: executable-breadboards
 description: Turn a selected slice into fixtures, example runs, expected outputs, edge cases, and acceptance tests when it is ready for a buildable behavioral handoff.
+license: MIT
 ---
 
 # Executable Breadboards

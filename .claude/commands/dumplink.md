@@ -1,7 +1,18 @@
 ---
 description: Organize work inside a selected slice into vertical task groups, dependency-aware sequence, risk states, cuts, and a bounded handoff.
-argument-hint: [shaping doc, breadboard, selected slice, appetite, or notes]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- shaping doc
+- breadboard
+- selected slice
+- appetite
+- or notes
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `AGENTS.md` and `dumplink/SKILL.md` first.

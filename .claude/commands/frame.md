@@ -1,7 +1,14 @@
 ---
 description: Create a framing document from notes, messages, transcripts, or source files.
-argument-hint: [source notes/files and desired output path]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- source notes/files and desired output path
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `framing-doc/SKILL.md` first and follow it as the primary instruction for this command.

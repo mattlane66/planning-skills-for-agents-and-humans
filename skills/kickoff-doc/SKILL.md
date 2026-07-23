@@ -1,6 +1,7 @@
 ---
 name: kickoff-doc
 description: Create a builder-facing kickoff document from accepted planning artifacts when a team needs a durable reference organized by shaped product territory.
+license: MIT
 ---
 
 # Kickoff Document
