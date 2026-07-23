@@ -1,7 +1,14 @@
 ---
 description: Compare accepted breadboard intent with implementation reality and prepare an explicit drift decision.
-argument-hint: [breadboard path and implementation paths]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- breadboard path and implementation paths
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `breadboard-reflection/SKILL.md` first and follow it as the primary instruction for this command.

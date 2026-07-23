@@ -1,6 +1,7 @@
 ---
 name: shaping
 description: Shape ambiguous product work before implementation by defining criteria and appetite, comparing solution directions, and recording the selected shape and cut line.
+license: MIT
 ---
 
 # Shaping

@@ -17,23 +17,25 @@ if [[ "$mode" != "sync" && "$mode" != "--check" ]]; then
 fi
 
 for skill in "${SKILLS[@]}"; do
-  source_file="$skill/SKILL.md"
-  packaged_file="skills/$skill/SKILL.md"
+  source_dir="$skill"
+  packaged_dir="skills/$skill"
 
-  if [[ ! -f "$source_file" ]]; then
-    echo "Missing canonical skill: $source_file" >&2
+  if [[ ! -f "$source_dir/SKILL.md" ]]; then
+    echo "Missing canonical skill: $source_dir/SKILL.md" >&2
     exit 1
   fi
 
   if [[ "$mode" == "--check" ]]; then
-    if [[ ! -f "$packaged_file" ]] || ! cmp -s "$source_file" "$packaged_file"; then
-      echo "Packaged skill is out of sync: $packaged_file" >&2
+    if [[ ! -d "$packaged_dir" ]] || ! diff -qr "$source_dir" "$packaged_dir" >/dev/null; then
+      echo "Packaged skill directory is out of sync: $packaged_dir" >&2
+      diff -qr "$source_dir" "$packaged_dir" || true
       exit 1
     fi
-    echo "✓ $packaged_file matches $source_file"
+    echo "✓ $packaged_dir matches $source_dir"
   else
-    mkdir -p "$(dirname "$packaged_file")"
-    cp "$source_file" "$packaged_file"
-    echo "Synced $packaged_file"
+    rm -rf "$packaged_dir"
+    mkdir -p "$(dirname "$packaged_dir")"
+    cp -R "$source_dir" "$packaged_dir"
+    echo "Synced $packaged_dir"
   fi
 done

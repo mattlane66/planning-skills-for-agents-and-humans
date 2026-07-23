@@ -1,6 +1,7 @@
 ---
 name: dumplink
 description: Plan work inside a selected slice as vertical task groups with dependencies, risks, sequence, and appetite-based cuts; before selection, produce candidates only.
+license: MIT
 ---
 
 # Dumplink

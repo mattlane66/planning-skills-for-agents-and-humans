@@ -1,7 +1,16 @@
 ---
 description: Derive a transition table and Mermaid statechart for a selected stateful portion of an accepted breadboard.
-argument-hint: [accepted breadboard, selected scope or slice, and optional target statechart file]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- accepted breadboard
+- selected scope or slice
+- and optional target statechart file
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `AGENTS.md` and `statechart/SKILL.md` first.

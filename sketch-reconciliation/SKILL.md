@@ -1,6 +1,7 @@
 ---
 name: sketch-reconciliation
 description: Reconcile a screenshot, wireframe, mockup, whiteboard, or sketch with existing planning artifacts when visual evidence may change the frame, criteria, scope, or shape.
+license: MIT
 ---
 
 # Sketch Reconciliation

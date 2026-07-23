@@ -145,3 +145,7 @@ Use the most relevant Planning Skill for this request. If you cannot read or mod
 ```
 
 Expected: Claude does not pretend the canvas has repository authority or access it lacks.
+
+## Shared activation corpus
+
+Run the positive and negative cases in `evals/skill-activation-cases.json` after changing descriptions or upload packaging. Claude Design should select the same canonical skill as Claude and should fall back to Claude Code when repository access is required.

@@ -1,7 +1,17 @@
 ---
 description: Record or prepare a human shape-selection decision after alternatives and fit checks are visible.
-argument-hint: [shaping file, fit check, human choice, or decision note]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- shaping file
+- fit check
+- human choice
+- or decision note
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.

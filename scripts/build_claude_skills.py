@@ -9,12 +9,14 @@ import re
 import shutil
 import tempfile
 import zipfile
+
+import yaml
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 INVENTORY = ROOT / "skill-inventory.txt"
 METADATA = ROOT / "skill-metadata.json"
-SUPPORT_DIRS = ("docs", "templates", "hooks")
+SUPPORT_DIRS = ("docs", "templates", "hooks", "examples")
 SUPPORT_FILES = (
     "AGENTS.md",
     ".agent-orchestration.yaml",
@@ -81,7 +83,7 @@ def load_descriptions() -> dict[str, str]:
     return {skill: entry["description"] for skill, entry in load_skill_metadata().items()}
 
 
-def parse_frontmatter(path: Path) -> tuple[dict[str, str], list[str]]:
+def parse_frontmatter(path: Path) -> tuple[dict[str, object], list[str]]:
     lines = path.read_text(encoding="utf-8").splitlines()
     if not lines or lines[0].strip() != "---":
         raise PackagingError(f"missing opening frontmatter marker: {path}")
@@ -89,17 +91,12 @@ def parse_frontmatter(path: Path) -> tuple[dict[str, str], list[str]]:
         end = lines[1:].index("---") + 1
     except ValueError as exc:
         raise PackagingError(f"missing closing frontmatter marker: {path}") from exc
-    fields: dict[str, str] = {}
-    for line in lines[1:end]:
-        if not line.strip() or line.lstrip().startswith("#") or line[0].isspace():
-            continue
-        if ":" not in line:
-            raise PackagingError(f"invalid frontmatter line in {path}: {line!r}")
-        key, value = line.split(":", 1)
-        value = value.strip()
-        if value.startswith('"') and value.endswith('"'):
-            value = json.loads(value)
-        fields[key.strip()] = value
+    try:
+        fields = yaml.safe_load("\n".join(lines[1:end])) or {}
+    except yaml.YAMLError as exc:
+        raise PackagingError(f"invalid YAML frontmatter in {path}: {exc}") from exc
+    if not isinstance(fields, dict):
+        raise PackagingError(f"frontmatter must be a mapping: {path}")
     return fields, lines
 
 

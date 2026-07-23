@@ -56,40 +56,7 @@ PY
 check_skill_frontmatter() {
   local file="$1"
   check_file_exists "$file" || return
-  if python3 - "$file" <<'PY'
-import pathlib
-import sys
-
-path = pathlib.Path(sys.argv[1])
-lines = path.read_text(encoding="utf-8").splitlines()
-if not lines or lines[0].strip() != "---":
-    raise SystemExit(f"missing opening frontmatter marker: {path}")
-try:
-    end = lines[1:].index("---") + 1
-except ValueError as exc:
-    raise SystemExit(f"missing closing frontmatter marker: {path}") from exc
-
-keys = {}
-for line in lines[1:end]:
-    if not line.strip() or line.lstrip().startswith("#"):
-        continue
-    if line[0].isspace():
-        continue
-    if ":" not in line:
-        raise SystemExit(f"invalid frontmatter line in {path}: {line!r}")
-    key, value = line.split(":", 1)
-    keys[key.strip()] = value.strip()
-
-for required in ("name", "description"):
-    if not keys.get(required):
-        raise SystemExit(f"missing required frontmatter key {required!r}: {path}")
-
-allowed = {"name", "description", "allowed-tools", "license", "metadata"}
-unexpected = sorted(set(keys) - allowed)
-if unexpected:
-    raise SystemExit(f"unexpected frontmatter keys in {path}: {', '.join(unexpected)}")
-PY
-  then
+  if python3 scripts/validate-frontmatter.py --kind skill "$file"; then
     pass "Valid skill frontmatter: $file"
   else
     fail "Invalid skill frontmatter: $file"
@@ -99,43 +66,7 @@ PY
 check_claude_command_frontmatter() {
   local file="$1"
   check_file_exists "$file" || return
-  if python3 - "$file" <<'PY'
-import pathlib
-import sys
-
-path = pathlib.Path(sys.argv[1])
-lines = path.read_text(encoding="utf-8").splitlines()
-if not lines or lines[0].strip() != "---":
-    raise SystemExit(f"missing opening frontmatter marker: {path}")
-try:
-    end = lines[1:].index("---") + 1
-except ValueError as exc:
-    raise SystemExit(f"missing closing frontmatter marker: {path}") from exc
-
-keys = {}
-for line in lines[1:end]:
-    if not line.strip() or line.lstrip().startswith("#"):
-        continue
-    if line[0].isspace() or ":" not in line:
-        raise SystemExit(f"invalid frontmatter line in {path}: {line!r}")
-    key, value = line.split(":", 1)
-    keys[key.strip()] = value.strip()
-
-if not keys.get("description"):
-    raise SystemExit(f"missing command description: {path}")
-
-allowed_keys = {"description", "argument-hint", "allowed-tools"}
-unexpected = sorted(set(keys) - allowed_keys)
-if unexpected:
-    raise SystemExit(f"unexpected command frontmatter keys in {path}: {', '.join(unexpected)}")
-
-known_tools = {"Read", "Write", "Edit", "Glob", "Grep", "Bash"}
-tools = {item.strip() for item in keys.get("allowed-tools", "").split(",") if item.strip()}
-unknown = sorted(tools - known_tools)
-if unknown:
-    raise SystemExit(f"unknown or retired Claude tools in {path}: {', '.join(unknown)}")
-PY
-  then
+  if python3 scripts/validate-frontmatter.py --kind command "$file"; then
     pass "Valid Claude command frontmatter: $file"
   else
     fail "Invalid Claude command frontmatter: $file"
@@ -177,6 +108,7 @@ DOCS=(
   docs/canvas-export.md docs/ci-health-workflow.md docs/claude-design-skill-tests.md
   docs/claude-design-workflow.md docs/claude-skills-installation.md
   docs/executable-breadboards.md docs/interface-contracts.md docs/loop-prompting.md
+  docs/runtime-adapters.md docs/skill-activation-testing.md
   integrations/gemini/README.md
   implementation-context.md skill-inventory.txt skill-metadata.json
   examples/existing-codebase-drift/02-implementation-reality.md
@@ -187,6 +119,8 @@ DOCS=(
   examples/sketch-reconciliation/02-availability-sketch.svg
   examples/sketch-reconciliation/03-reconciliation.md
 )
+
+check_file_exists requirements-dev.txt
 
 echo "Checking uploadable Claude skills..."
 if python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/build_claude_skills.py; then
@@ -481,6 +415,8 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/hooks/planning-ripple.sh
   check_file_exists dist/claude-code-plugin/hooks/pre-build-context-check.sh
   check_file_exists dist/claude-code-plugin/hooks/planning-drift-check.sh
+  check_file_exists dist/claude-code-plugin/skills/breadboarding/references/notation-rendering-and-slicing.md
+  check_file_exists dist/claude-code-plugin/examples/sketch-reconciliation/README.md
   if python3 - <<'PY'
 import pathlib
 import re

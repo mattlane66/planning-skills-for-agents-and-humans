@@ -12,9 +12,10 @@ If those controls are unavailable, ask your Team or Enterprise administrator to 
 
 ## Build the upload packages
 
-From the repository root, run:
+From the repository root, install the validation dependency and build:
 
 ```bash
+python3 -m pip install -r requirements-dev.txt
 python3 scripts/build_claude_skills.py
 ```
 
@@ -23,7 +24,7 @@ This command:
 - validates that every canonical skill has exactly one upload description;
 - checks the description length and trigger language;
 - builds one ZIP per skill;
-- includes shared templates, documentation, hooks, and orchestration references used by the skill;
+- includes shared templates, documentation, examples, hooks, and orchestration references used by the skill;
 - removes Claude Code-only cross-skill file references from the uploaded copy;
 - validates the ZIP root, metadata, and referenced files.
 

@@ -1,0 +1,144 @@
+{
+  "confusion_pairs": [
+    [
+      "framing-doc",
+      "shaping"
+    ],
+    [
+      "shaping",
+      "breadboarding"
+    ],
+    [
+      "breadboarding",
+      "statechart"
+    ],
+    [
+      "interface-contracts",
+      "executable-breadboards"
+    ],
+    [
+      "kickoff-doc",
+      "feed-planning-context"
+    ],
+    [
+      "breadboard-reflection",
+      "feed-planning-context"
+    ],
+    [
+      "dumplink",
+      "breadboarding"
+    ]
+  ],
+  "skills": {
+    "framing-doc": {
+      "positive": [
+        "Turn these interview notes into a clear problem, outcome, and boundaries before we discuss solutions.",
+        "We have messy stakeholder requests and need a source-grounded frame."
+      ],
+      "negative": [
+        "Compare three solution approaches against accepted requirements and appetite.",
+        "Map the selected design into places, affordances, stores, and wiring."
+      ]
+    },
+    "shaping": {
+      "positive": [
+        "Define criteria and appetite, compare alternative shapes, and stop for my selection.",
+        "We have a framed problem but several plausible solution directions."
+      ],
+      "negative": [
+        "Extract the current problem and desired outcome from these raw interviews.",
+        "Turn the accepted shape into concrete user and system behavior."
+      ]
+    },
+    "sketch-reconciliation": {
+      "positive": [
+        "Compare this screenshot with the active requirements and propose explicit deltas.",
+        "Reconcile this whiteboard with the selected shape without silently changing scope."
+      ],
+      "negative": [
+        "Generate three alternative solution shapes from the accepted criteria.",
+        "Create fixtures and acceptance tests for the selected slice."
+      ]
+    },
+    "breadboarding": {
+      "positive": [
+        "Map how the current product actually behaves from code and screenshots.",
+        "Make the selected design concrete as places, affordances, stores, branches, and wiring."
+      ],
+      "negative": [
+        "Derive a transition table for the retry lifecycle in this accepted breadboard.",
+        "Sequence implementation task groups inside the selected slice."
+      ]
+    },
+    "statechart": {
+      "positive": [
+        "Derive states and transitions for retries, timeouts, cancellation, and failure from this accepted breadboard.",
+        "This selected slice has several valid actions from the same state; make the state model reviewable."
+      ],
+      "negative": [
+        "Map the overall product into places and affordances.",
+        "Define the request and response fields crossing this API boundary."
+      ]
+    },
+    "interface-contracts": {
+      "positive": [
+        "Define the plain-language input, output, branches, and errors for this UI-to-API boundary.",
+        "The selected slice crosses an agent-to-tool boundary and field-level ambiguity could cause rework."
+      ],
+      "negative": [
+        "Add fixtures, example runs, edge cases, and acceptance tests for the entire slice.",
+        "Create a builder-facing overview of the shaped territory."
+      ]
+    },
+    "executable-breadboards": {
+      "positive": [
+        "Turn this selected slice into fixtures, example runs, expected outputs, edge cases, and acceptance tests.",
+        "Prepare a buildable behavioral handoff without implementing code."
+      ],
+      "negative": [
+        "Define only the fields and errors at this service boundary.",
+        "Compare three alternative solution shapes against accepted requirements before choosing one."
+      ]
+    },
+    "dumplink": {
+      "positive": [
+        "Organize work inside this selected slice into vertical task groups, risks, dependencies, sequence, and cuts.",
+        "We need a bounded agent handoff for one task group inside the accepted slice."
+      ],
+      "negative": [
+        "No slice is selected; decide the build sequence anyway.",
+        "Map the selected product behavior before choosing a vertical slice."
+      ]
+    },
+    "kickoff-doc": {
+      "positive": [
+        "Create a durable builder-facing reference organized by the accepted product territory.",
+        "Turn the accepted frame, shape, breadboard, and slice into an orientation document."
+      ],
+      "negative": [
+        "Package only the exact context needed by the implementation agent for its next task.",
+        "Create a dependency-aware implementation sequence for the selected slice."
+      ]
+    },
+    "feed-planning-context": {
+      "positive": [
+        "Package the authoritative planning subset, execution contract, non-goals, and verification target for this implementation task.",
+        "Give the build agent only the context needed for the selected slice and active task group."
+      ],
+      "negative": [
+        "Create a broad human-readable kickoff reference for the whole shaped territory.",
+        "Compare implementation reality with the accepted breadboard and diagnose drift."
+      ]
+    },
+    "breadboard-reflection": {
+      "positive": [
+        "Compare the implemented prototype with the accepted breadboard and surface drift before changing either truth.",
+        "Record implementation reality, design smells, and correction options for a human decision."
+      ],
+      "negative": [
+        "Package a compact context packet before implementation begins.",
+        "Derive a statechart from an accepted breadboard that has not been implemented."
+      ]
+    }
+  }
+}

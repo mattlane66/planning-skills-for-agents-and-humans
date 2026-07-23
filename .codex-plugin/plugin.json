@@ -28,10 +28,13 @@
     "longDescription": "A set of reusable planning workflows that help humans and agents turn fuzzy requests, messy notes, sketches, screenshots, partial product ideas, selected breadboards, optional statecharts, selected slices, interface contracts, executable breadboards, and implementation discoveries into clear builder-facing artifacts.",
     "developerName": "Matt Lane",
     "category": "Productivity",
-    "capabilities": ["Read", "Write"],
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
     "websiteURL": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
     "defaultPrompt": [
-      "Use Planning Skills for Agents and Humans to frame this product idea before implementation.",
+      "Use the framing-doc skill to frame this product idea before implementation.",
       "Use the shaping skill to compare possible approaches before choosing one.",
       "Use the shaping skill to set a bounded appetite and cut line before selecting an approach.",
       "Use the sketch-reconciliation skill to map an attached sketch or screenshot to planning IDs and propose explicit deltas without silently changing scope.",
@@ -41,7 +44,9 @@
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
       "Use the dumplink skill when work inside a selected slice needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.",
       "Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.",
-      "Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts."
+      "Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts.",
+      "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision.",
+      "Use the kickoff-doc skill to create a builder-facing orientation reference from accepted planning artifacts."
     ]
   }
 }

@@ -4,7 +4,11 @@ When maintaining this repository, Gemini CLI should use `GEMINI.md` as its proje
 
 This repo includes a root `GEMINI.md` that imports `AGENTS.md`, so Gemini gets the same tool-neutral planning instructions as Claude Code, Codex, and other agents.
 
-For product work, copy or symlink the needed skill folders into the product repository, or use the MCP adapter. Preserve that product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files. The TOML commands in this repo contain repo-local `@{...}` includes; treat them as adapter examples and update those includes if the skills or supporting docs live at different paths in the product repository.
+For product work, prefer Gemini CLI's native skill management. Install from Git with `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, or link a local checkout with `gemini skills link /path/to/planning-skills-for-agents-and-humans`. Use `gemini skills list`, `enable`, `disable`, and `/skills reload` to inspect or refresh discovery. Copying folders or using the MCP adapter remains a fallback. Preserve that product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files. The TOML commands in this repo contain repo-local `@{...}` includes; treat them as adapter examples and update those includes if the skills or supporting docs live at different paths in the product repository.
+
+## Native skill installation
+
+Gemini Agent Skills load the canonical `SKILL.md` instructions and bundled resources on demand. The `.gemini/commands/` files remain focused aliases for explicit gates; they do not replace native skill discovery. Package the repository as a Gemini extension only when you also need Gemini-specific hooks, commands, or MCP configuration.
 
 ## Project commands
 

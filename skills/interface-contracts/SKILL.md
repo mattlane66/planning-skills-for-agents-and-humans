@@ -1,6 +1,7 @@
 ---
 name: interface-contracts
 description: Define plain-language inputs, outputs, branches, errors, and open decisions when a selected slice crosses a meaningful data, service, or system boundary.
+license: MIT
 ---
 
 # Plain-Language Interface Contracts

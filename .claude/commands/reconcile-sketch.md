@@ -1,7 +1,17 @@
 ---
 description: Reconcile an attached sketch, screenshot, mockup, wireframe, or whiteboard with existing planning artifacts without silently changing scope.
-argument-hint: [visual plus frame, shaping, breadboard, or slice artifact paths]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- visual plus frame
+- shaping
+- breadboard
+- or slice artifact paths
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `sketch-reconciliation/SKILL.md` first and follow it as the primary instruction for this command.

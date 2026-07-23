@@ -1,7 +1,17 @@
 ---
 description: Shape a fuzzy request into requirements, solution directions, fit checks, and a selected direction.
-argument-hint: [problem, notes, constraints, or existing shaping file]
-allowed-tools: Read, Write, Edit, Glob, Grep
+argument-hint:
+- problem
+- notes
+- constraints
+- or existing shaping file
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+disable-model-invocation: true
 ---
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.
