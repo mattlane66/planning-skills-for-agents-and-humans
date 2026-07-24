@@ -34,7 +34,7 @@ require_text templates/context-packet.md "Kickoff doc, for builder orientation o
 require_text templates/frame.md "## Current situation"
 require_text framing-doc/SKILL.md "current approach, workaround"
 require_text shaping/SKILL.md "Do not dump or cluster implementation tasks, select committed slices, create a build sequence, or write production code inside shaping."
-require_text shaping/SKILL.md "candidate breadboard does not automatically become authoritative"
+require_text shaping/SKILL.md "A candidate breadboard does not automatically become authoritative"
 forbid_text shaping/SKILL.md "These can happen in any order as the shaping evolves"
 forbid_text shaping/SKILL.md "## Kick-off: From selected shape to slices"
 require_text breadboarding/SKILL.md "### Current-state mapping (descriptive)"
