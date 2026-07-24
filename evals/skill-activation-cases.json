@@ -1,41 +1,14 @@
 {
   "confusion_pairs": [
-    [
-      "planning-router",
-      "framing-doc"
-    ],
-    [
-      "planning-router",
-      "shaping"
-    ],
-    [
-      "framing-doc",
-      "shaping"
-    ],
-    [
-      "shaping",
-      "breadboarding"
-    ],
-    [
-      "breadboarding",
-      "statechart"
-    ],
-    [
-      "interface-contracts",
-      "executable-breadboards"
-    ],
-    [
-      "kickoff-doc",
-      "feed-planning-context"
-    ],
-    [
-      "breadboard-reflection",
-      "feed-planning-context"
-    ],
-    [
-      "dumplink",
-      "breadboarding"
-    ]
+    ["planning-router", "framing-doc"],
+    ["planning-router", "shaping"],
+    ["framing-doc", "shaping"],
+    ["shaping", "breadboarding"],
+    ["breadboarding", "statechart"],
+    ["interface-contracts", "executable-breadboards"],
+    ["kickoff-doc", "feed-planning-context"],
+    ["breadboard-reflection", "feed-planning-context"],
+    ["dumplink", "breadboarding"]
   ],
   "skills": {
     "planning-router": {
@@ -61,11 +34,12 @@
     "shaping": {
       "positive": [
         "Define criteria and appetite, compare alternative shapes, and stop for my selection.",
-        "We have a framed problem but several plausible solution directions."
+        "We have a framed problem but several plausible solution directions.",
+        "Compare Shapes A and B and decide which behavioral uncertainties deserve candidate breadboards before selection."
       ],
       "negative": [
         "Extract the current problem and desired outcome from these raw interviews.",
-        "Turn the accepted shape into concrete user and system behavior."
+        "Shape A is already named; breadboard only its checkout flow to determine whether the candidate is coherent."
       ]
     },
     "sketch-reconciliation": {
@@ -81,7 +55,8 @@
     "breadboarding": {
       "positive": [
         "Map how the current product actually behaves from code and screenshots.",
-        "Make the selected design concrete as places, affordances, stores, branches, and wiring."
+        "Make the selected design concrete as places, affordances, stores, branches, and wiring.",
+        "Use candidate-shape mode to test whether Shape A's handoff works before any direction is selected."
       ],
       "negative": [
         "Derive a transition table for the retry lifecycle in this accepted breadboard.",
