@@ -6,495 +6,244 @@ license: MIT
 
 # Shaping
 
-Use this skill when a request is still ambiguous, multiple solution directions are possible, or the team needs a durable planning artifact before building.
+Use this skill when the problem is clear enough to compare solution directions, but the requirements, appetite, tradeoffs, or selected path are not yet explicit.
 
 ## Goal
 
-Turn a fuzzy request into a concrete shaping document that keeps four things separate but connected:
-- the requirements
-- the appetite and cut line
-- the solution directions
-- the evidence that a chosen direction actually fits
+Produce a durable shaping document that keeps four things separate but connected:
 
-## Document hierarchy
+- requirements: what must be true
+- appetite: the fixed budget and cut line
+- shapes: materially different ways to satisfy the requirements
+- selection evidence: why a human chose one direction
 
-Planning artifacts live at different levels of abstraction. Truth has to stay consistent across those levels.
+Shaping ends when a direction is explicitly selected or the work stops at a decision-ready comparison. It does not create implementation tasks or begin coding.
+
+## Inputs
+
+Use whichever sources are available:
+
+- an accepted frame
+- research, interviews, notes, or requests
+- current product behavior or constraints
+- existing sketches or proposed mechanisms
+- an existing shaping document
+
+When working in an existing product repository, first inspect the applicable project language and durable decisions. Look for `AGENTS.md`, `CONTEXT.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, ADR or decision folders, existing tests, and public interfaces. Reuse established terms and identify existing seams rather than creating parallel vocabulary. Do not create or change a glossary or ADR without authorization.
+
+## Authority and document hierarchy
 
 From high to low:
-1. **Frame** — the why: source, problem, outcome, boundaries
-2. **Shaping doc** — the what and candidate how: requirements, appetite, shapes, fit checks, selected direction
-3. **Breadboard or slices doc** — the concrete behavior and increments: places, affordances, stores, wiring, slice boundaries
-4. **Slice plans** — the per-slice implementation detail
 
-Each lower level adds detail. Each higher level is a designed view into the levels below.
+1. frame — why this problem matters
+2. shaping document — requirements, appetite, alternatives, fit, and selection
+3. breadboard or slices — concrete behavior and increments
+4. implementation plans — build detail
 
-Changes ripple both ways:
-- change at a higher level may require downstream updates
-- a discovery at a lower level may require updates upstream
+A lower-level discovery may require an upstream planning update. Do not silently rewrite a higher-authority artifact.
 
-Whenever making a change:
-1. identify which level you are touching
-2. ask whether it affects artifacts above or below
-3. update affected layers in the same operation when possible
+Read [artifact consistency](references/artifact-consistency.md) when changing an existing planning stack or reconciling discoveries across levels.
 
-## Core idea
+## Required sequence
 
-Shaping is iterative. Requirements sharpen the shape. Shapes reveal missing requirements. The work is to keep both visible at the same time without collapsing them into each other.
+The formal decision sequence is fixed even when exploration moves back and forth:
 
-## Starting points
+1. confirm the frame
+2. define and accept criteria
+3. set appetite and cut line
+4. make materially different shapes visible
+5. run fit and reverse-fit checks
+6. stop for human selection
+7. record the selected direction and hand it to breadboarding
 
-Exploration can start from either side:
-- **Start from requirements** — describe the problem, constraints, or pain points first, then let shapes emerge
-- **Start from a shape** — capture a solution already in mind in a mechanism parking lot, then extract or revise requirements before comparing it with alternatives
+An early mechanism may be preserved in a parking lot, but it does not bypass criteria, appetite, comparison, or selection.
 
-Requirements and shapes inform each other throughout, but the formal decision sequence is fixed: accept criteria, set the appetite, compare candidate shapes, run the fit check, and then record the human selection. An idea captured early does not bypass those gates.
+## Step 1: Confirm the frame
 
-## Working with an existing shaping doc
+Confirm that the work can state:
 
-When a shaping doc already has a selected shape:
-1. show the fit check for the selected shape only
-2. show how the selected shape fits the accepted appetite and where the cut line sits
-3. summarize what is still unsolved
-4. call out any requirement rows that are still undecided or currently fail for the selected shape
+- the real situation or struggling moment
+- the current approach and current result
+- the desired outcome
+- the relevant boundary
+- the evidence level
 
-When summarizing what remains unsolved, explicitly list:
-- undecided requirements
-- failed requirement rows
-- flagged unknown shape parts
-- spikes needed before the shape can be treated as understood
+If these are not clear enough to judge candidate solutions, return to framing instead of manufacturing certainty.
 
-This gives the user immediate context on where the shaping stands and what still needs work.
+**Complete when:** the shaping document names the accepted frame source and any unresolved framing gaps.
 
-## Main artifacts
+## Step 2: Define and accept requirements
 
-### Requirements
-Requirements describe what must be true of the solution. They should be stated independently of any one implementation approach.
+Requirements describe needs, outcomes, or constraints independently of one implementation approach.
 
-Use identifiers like `R0`, `R1`, `R2`.
+Use stable IDs such as `R0`, `R1`, and `R2`. Prefer no more than nine top-level requirements; use sub-requirements when needed.
 
 Recommended statuses:
+
 - Core goal
 - Must-have
 - Nice-to-have
 - Undecided
 - Out
 
-Keep the top level scannable. Prefer no more than 9 top-level requirements. If requirements proliferate, group related ones into chunks and use sub-requirements such as `R3.1`, `R3.2` rather than letting the top level grow without structure.
+Before keeping a requirement, ask whether it would still need to be true if the interface, vendor, runtime, storage method, or architecture changed completely. If not, it is probably a mechanism and belongs in a shape.
 
-### Appetite
+Read [requirements and shapes](references/requirements-and-shapes.md) for smell tests, notation, examples, current-system baselines, and flagged unknowns.
 
-Appetite is the fixed time or scope budget the team is willing to spend on the bet. It constrains the shapes; it is not an estimate produced after a shape has already won.
+**Complete when:** every accepted requirement is independently stated, traceable to the frame or an explicit human decision, and assigned a status.
 
-Set the appetite after the requirements are accepted and before selecting a shape. Record:
+## Step 3: Set appetite and cut line
 
-- time budget or other fixed scope budget
+Appetite is the fixed time or scope budget the team is willing to spend on the bet. It constrains the candidate shapes; it is not an estimate produced after a preferred solution has already won.
+
+Record:
+
+- time or fixed scope budget
 - team shape and review point
 - explicit cut line
 - uncertainty the team accepts
-- unknowns that must be resolved by a spike before selection or build
+- unknowns that require a spike before selection or build
+- conditions that would cause the appetite to be revisited
 
-Use the `Appetite` section in `templates/shaping.md` for a compact decision. Use `templates/appetite-card.md` when the appetite needs its own durable owner, rationale, or revisit conditions.
+Use the Appetite section in `templates/shaping.md` for a compact record or `templates/appetite-card.md` when ownership, rationale, and revisit conditions need a separate durable artifact.
 
-If appetite is still undecided, preserve existing ideas in the mechanism parking lot but do not run the comparative shape-sketch gate or record a selection. Mark the work as blocked on appetite rather than allowing an open-ended specification.
+If appetite is undecided, preserve ideas in the mechanism parking lot but stop before comparative selection.
 
-### Requirement smell test
+**Complete when:** the budget, cut line, accepted uncertainty, and must-resolve unknowns are explicit and human-accepted.
 
-Before keeping a line in `R`, ask:
+## Step 4: Make materially different shapes visible
 
-1. Would this still need to be true if we built the solution in a completely different way?
-2. Does it name a specific UI, runtime, vendor, protocol, storage method, or architecture?
-3. Is this describing an underlying need or constraint, or just one proposed way to satisfy it?
-4. Can this be rewritten as a capability, outcome, or constraint instead of an implementation choice?
+Shapes are competing or composable solution directions. Use `CURRENT` as the baseline for an existing product, then letters such as `A`, `B`, and `C` for alternatives. Use numbered parts such as `B1`, `B2`, and `B3` for mechanisms inside a direction.
 
-If a line names a mechanism, it probably belongs in the shape, not the requirements.
+Each serious shape should:
 
-Common signs that an `R` is really a solution choice:
-- names a specific interface like TUI, modal, web app, or input field
-- names a specific implementation like local LLM, cron job, REST API, SQLite, or queue
-- names a specific provider or dependency
-- describes how the system should work internally rather than what must be true
+- have a short title that characterizes the approach
+- name concrete mechanisms rather than wishes
+- expose meaningful tradeoffs
+- fit or declare conflict with the appetite
+- flag mechanisms that are still only understood in outline
 
-Examples:
-- ❌ `Use a TUI`
-- ✅ `User can inspect and change the current state from one interaction surface`
+Do not create nominal variations that differ only in cosmetic detail.
 
-- ❌ `Fetch timezone data from the internet on every load`
-- ✅ `Timezone data must be accurate at runtime for the requested locale`
+**Complete when:** the current baseline is legible when relevant, materially different options are visible, and every unknown mechanism is flagged.
 
-- ❌ `Use a local LLM to change locales and dates`
-- ✅ `User can change locales and time window through natural-language input`
+## Step 5: Run fit and reverse-fit checks
 
-### Shapes
-Shapes are competing or composable solution directions.
+Run three checks:
 
-Use letters for alternative directions:
-- `A`, `B`, `C`
-- `CURRENT` should be used as the standard baseline when describing the existing system before proposing alternatives
+1. requirements against shapes
+2. selected shape parts against requirements
+3. each viable shape against appetite
 
-Use numbered parts for mechanisms inside a chosen direction:
-- `B1`, `B2`, `B3`
+Use binary `✅` or `❌` values for requirement fit. Unknown is not a pass. Put explanations below the table rather than weakening the cells with prose.
 
-If a part has internal alternatives, use nested notation:
-- `B3-A`, `B3-B`
+The reverse-fit check asks whether every mechanism is justified by at least one accepted requirement. Remove, cut, or explicitly justify mechanisms that have no requirement.
 
-Give each serious shape a short title that characterizes the approach.
+Read [fit checks](references/fit-checks.md) for tables, local component comparisons, failure handling, and decision-ready summaries.
 
-Good titles capture the essence of the approach in a few words.
+**Complete when:** every candidate has visible requirement fit, appetite fit, cuts, and unresolved spikes; every selected mechanism is justified.
 
-Examples:
-- ✅ `B: Single-list model with visibility filter`
-- ✅ `CURRENT: Existing list page with inline add flow`
-- ✅ `C: URL-driven state restoration`
-- ❌ `B: The solution`
-- ❌ `C: Add a search input with some debounce and a whole bunch of browser-state handling`
+## Step 6: Stop for human selection
 
-### CURRENT as baseline
+Present the comparison and ask the human to:
 
-When the work touches an existing system, model that existing behavior as `CURRENT` first. Treat it as the standard baseline shape, not an optional flourish.
+- select one direction
+- request another iteration
+- change criteria or appetite
+- run a focused spike
+- stop the bet
 
-Use `CURRENT` to:
-- show what exists today
-- anchor proposed changes against reality
-- make deltas legible before introducing `A`, `B`, or `C`
+Do not infer selection from enthusiasm, recency, visual polish, or the fact that one shape was explored in more detail.
 
-Then compare alternatives against `CURRENT` rather than shaping in a vacuum.
+**Complete when:** the human has made an explicit decision or the artifact clearly states that selection is pending.
 
-### Notation persistence
+## Step 7: Record the decision and hand off
 
-Keep notation stable throughout the conversation as an audit trail.
+When a direction is selected, record:
 
-When refining or composing later directions, reference earlier parts rather than silently renaming everything. Stable notation helps the user track what changed and why.
+- chosen direction and relevant parts
+- rationale tied to requirements and appetite
+- explicit cuts and non-goals
+- accepted uncertainty
+- spikes or decisions still required
+- any established project terms, ADRs, interfaces, or seams that the selected direction must preserve or intentionally change
 
-## Shape parts and flagged unknowns
+Then stop shaping and hand the selected mechanisms to breadboarding. Do not dump or cluster implementation tasks, select slices, or create a build sequence inside shaping. Do not write production code inside this skill.
 
-Shape parts should describe mechanisms, not intentions.
+**Complete when:** another person can understand what was selected, what was rejected, why it fits, and what remains unresolved without replaying the conversation.
 
-- ✅ `Persist filter state in the URL and restore it on load`
-- ❌ `State should work better`
-
-Use a flag when a mechanism is described at a high level but is not yet concretely understood.
-
-| Part | Mechanism | Flag |
-|------|-----------|:----:|
-| B1 | Save state in URL | |
-| B2 | Integrate local LLM command parser | ⚠️ |
-
-Meaning:
-- empty flag = mechanism is concretely understood enough to count as known
-- `⚠️` = described in outline, but the how is still unresolved
-
-A flagged unknown should not be treated as confidently solved in a fit check. Resolve it or spike it.
-
-### Extract shared logic
-
-When the same logic appears in multiple parts, extract it into a standalone part rather than duplicating it.
-
-This keeps the shape cleaner and makes later fit checks, detailing, and slicing easier to reason about.
-
-## Working rules
-
-1. Requirements state needs, not mechanisms.
-2. Shape parts state mechanisms, not wishes.
-3. Keep the notation stable as the conversation evolves.
-4. When a fit check fails, either improve the shape or add the missing requirement.
-5. When downstream detail is needed for a selected shape, preserve its notation; do not invent a new sibling shape unless it is truly an alternative.
-6. If a requirement names a mechanism, rewrite it as a need or move it into the shape.
-7. Avoid tautologies where the shape merely repeats the requirement in different words.
-8. Prefer vertical mechanisms over horizontal buckets where possible.
-9. If a shape passes visible checks but still feels wrong, there is probably a missing requirement.
-10. Model the existing system as `CURRENT` when the change is not greenfield.
-11. Treat appetite as a constraint on selection: prefer cuts or a smaller shape over silently expanding the budget.
-
-## Possible actions
-
-Requirements and candidate mechanisms can inform each other, but the decision gates do not happen in arbitrary order. Work within shaping may include:
-
-- populate requirements
-- set the appetite and cut line after requirements are accepted
-- sketch a shape at a high level
-- detail a shape into parts and mechanisms
-- explore alternatives for a part
-- test a shape with a fit check
-- extract new requirements revealed by the fit check
-- spike an unknown
-- reconcile a sketch, screenshot, wireframe, mockup, or whiteboard through the `sketch-reconciliation` skill when visual evidence may change the active artifacts
-- prepare a decision-ready comparison
-- record the human-selected direction
-
-Once a direction is selected, stop shaping and hand the selected mechanisms to breadboarding. Do not dump or cluster implementation tasks, select slices, or create a build sequence inside shaping.
-
-## Recommended document structure
+## Minimal shaping document
 
 ```md
----
-planning: true
-shaping: true
----
-
 # [Project] — Shaping
 
-## Requirements
+## Frame source
+- ...
 
+## Project language and decisions
+- Canonical terms:
+- Relevant ADRs or decisions:
+- Existing interfaces or seams:
+- Terms or decisions this work may introduce:
+
+## Requirements
 | ID | Requirement | Status |
-|----|-------------|--------|
+|---|---|---|
 | R0 | ... | Core goal |
 
 ## Appetite
-
-- Time budget:
-- Team shape:
-- Review point:
+- Budget:
+- Team / review point:
 - Cut line:
 - Accepted uncertainty:
 - Must-resolve unknowns:
+- Revisit conditions:
+
+## Mechanism parking lot
+- ...
 
 ## Shapes
-
-### CURRENT: [Existing system baseline]
-
+### CURRENT: [baseline, when relevant]
 | Part | Mechanism | Flag |
-|------|-----------|:----:|
+|---|---|:---:|
 | CURRENT1 | ... | |
 
-### A: [Short title]
-
+### A: [short title]
 | Part | Mechanism | Flag |
-|------|-----------|:----:|
+|---|---|:---:|
 | A1 | ... | |
 
-### B: [Short title]
+## Fit check
+| Req | Requirement | Status | CURRENT | A |
+|---|---|---|:---:|:---:|
+| R0 | ... | Core goal | ✅ | ✅ |
 
-| Part | Mechanism | Flag |
-|------|-----------|:----:|
-| B1 | ... | |
+## Reverse fit check
+| Shape part | Mechanism | Requirement(s) served | Justified? |
+|---|---|---|:---:|
+| A1 | ... | R0 | ✅ |
 
-## Fit Check
-
-| Req | Requirement | Status | CURRENT | A | B |
-|-----|-------------|--------|---------|---|---|
-| R0 | ... | Core goal | ✅ | ✅ | ❌ |
-
-## Reverse Fit Check
-
-| Shape Part | Mechanism | Requirement(s) Served | Justified? |
-|------------|-----------|------------------------|:----------:|
-| B1 | ... | R2, R4 | ✅ |
-
-## Appetite Fit
-
-| Shape | Fits appetite? | Required cuts | Uncertainty / spike |
-|-------|:---------------:|---------------|---------------------|
+## Appetite fit
+| Shape | Fits? | Required cuts | Uncertainty / spike |
+|---|:---:|---|---|
 | A | ✅ | ... | ... |
-| B | ❌ | ... | ... |
 
 ## Decision
-
-Chosen direction: B
-
-## Detail B
-
-[Optional deeper breakdown or breadboard handoff]
+- Status: pending | selected | stopped
+- Chosen direction:
+- Rationale:
+- Cuts / non-goals:
+- Remaining unknowns:
 ```
 
-## Fit checks
-
-Use one table to compare requirements against the available shapes.
-
-Rules:
-- Use full requirement text in the table
-- Use binary values only: `✅` or `❌`
-- Put explanations below the table, not inside shape cells
-- If something is still unknown, it is not yet a pass
-- After the requirements matrix, check whether each viable shape fits the accepted appetite and name the cuts or spikes needed to make it fit
-
-If something passes every visible check but still feels wrong, there is probably a missing requirement. Articulate it, add it, and re-run the fit check.
-
-### Reverse fit check: shape parts against requirements
-
-After checking requirements against shapes, also check whether every selected shape part is justified by at least one requirement.
-
-Use this to catch unjustified mechanisms, accidental scope creep, or parts that exist because they sounded useful rather than because they satisfy the shaped problem.
-
-| Shape Part | Mechanism | Requirement(s) Served | Justified? |
-|------------|-----------|------------------------|:----------:|
-| B1 | Persist filter state in the URL | R2, R4 | ✅ |
-| B2 | Add export-to-CSV action | — | ❌ |
-
-Rules:
-- Use binary values only: `✅` or `❌`
-- If a part is not justified, remove it, mark it Cut, or add the missing requirement and rerun the fit check.
-- Do not let implementation convenience create untracked scope.
-- A flagged unknown can be justified by a requirement but still not understood enough to pass the main fit check.
-
-### Component-scoped fit checks
-
-When comparing alternatives inside one part, run a local fit check instead of forcing every choice into the top-level matrix.
-
-Example:
-
-```md
-## B3: State persistence alternative
-
-| Req | Requirement | Status | B3-A | B3-B |
-|-----|-------------|--------|------|------|
-| R1 | State survives refresh | Must-have | ✅ | ❌ |
-| R2 | Back button restores state | Must-have | ✅ | ✅ |
-```
-
-Use this when:
-- one part contains real alternatives
-- the decision can be made locally
-- the rest of the selected shape stays unchanged
-
-Keep the top-level fit check for comparing whole directions. Use component-scoped fit checks to resolve alternatives within a direction.
-
-### Macro fit check
-
-Use a macro fit check when working at a higher level and many mechanisms are still unresolved.
-
-Instead of asking only whether the shape passes, ask two things:
-- is the requirement addressed at a high level?
-- is it actually answered concretely yet?
-
-This is useful when early shapes feel directionally right but are still full of flagged unknowns.
-
-## Communication
-
-### Show full tables
-
-When displaying requirements, shapes, or fit checks, show the full table rather than a summary whenever practical. Shaping is collaborative negotiation. Partial views hide what matters.
-
-### Mark changes with 🟡
-
-When re-rendering a requirements table, shape table, or fit check after making changes, mark changed or added lines with `🟡` so the user can instantly spot what changed.
-
-### Keep changes visible
-
-The user should not have to mentally diff a whole table to understand what moved.
-
-## Spikes
-
-A spike is an investigation task used when a part is still uncertain and you need objective information about how something works or what concrete steps would be required.
-
-### Purpose
-
-Use a spike to:
-- learn how the current system works in the relevant area
-- identify what would need to change to achieve the mechanism
-- surface constraints that affect the solution
-- reduce uncertainty before pretending a flagged part is understood
-
-Investigate before proposing when confidence in the mechanism is low. A spike should discover how the existing system works and what concrete changes would be needed before the shape claims the part is understood.
-
-### File management
-
-Create spikes in their own file when the investigation is substantial.
-
-Examples:
-- `spike-llm-runtime.md`
-- `spike-search-index.md`
-
-### Good spike questions
-
-Ask questions about mechanics, for example:
-- Where is the current logic?
-- How does this behavior actually happen today?
-- What would need to change to support the proposed mechanism?
-- What constraints or dependencies affect this part?
-
-Avoid vague yes/no questions and avoid using the spike only to guess effort.
-
-### Minimal spike structure
-
-```md
-## [Part] Spike: [Title]
-
-### Context
-Why this needs investigation.
-
-### Goal
-What we are trying to learn.
-
-### Questions
-| # | Question |
-|---|----------|
-| Q1 | ... |
-| Q2 | ... |
-
-### Acceptance
-Spike is complete when all questions are answered and the mechanism can be described concretely.
-```
-
-### Acceptance guidance
-
-Acceptance should describe the understanding the spike will produce, not the decision you will make afterward.
-
-Examples:
-- ✅ `We can describe how state is restored today and what would need to change.`
-- ✅ `We can describe the concrete steps needed to support the proposed mechanism.`
-- ❌ `We can decide whether to proceed.`
-- ❌ `We can answer whether this is a blocker.`
-
-## After selection: hand off without reopening the decision
-
-When a shape is chosen, preserve its stable IDs and hand its selected mechanisms, appetite, cut line, requirements, and remaining unknowns to breadboarding. Do not turn downstream detail into a new sibling shape unless it is genuinely a new alternative that requires another fit and selection decision.
-
-If breadboarding reveals a missing mechanism or a fit problem, bring that proposed change back to the shaping artifact through the planning ripple. Do not silently extend the selected shape from inside shaping or breadboarding.
-
-## Visual evidence
-
-When the user drops in a sketch or screenshot and asks what is missing or what should change, use the `sketch-reconciliation` skill. Do not treat the image as an automatic shape update.
-
-The reconciliation must separate visible observations from interpretations, map observations to existing IDs, show proposed deltas, and apply accepted changes across every affected layer. Rerun fit checks when requirements or shape parts change.
-
-## Phases and document lifecycle
-
-Shaping has one decision lifecycle: accepted criteria → appetite → candidate directions → fit check → human selection.
-
-Breadboarding and slicing are downstream. They may reveal a problem that requires revisiting shaping, but they are not phases inside the shaping skill.
-
-Typical document stack:
-- frame
-- shaping doc
-- breadboard or slices doc
-- slice plans
-
-The frame captures the why.
-The shaping doc captures requirements, appetite, shapes, fit checks, and the selected direction.
-The breadboard or slices doc captures how the chosen direction becomes concrete and incremental.
-Slice plans capture implementation detail for individual slices.
-
-## Documents and ripple consistency
-
-Truth has to stay consistent across levels. If a mechanism changes in the shaping doc, downstream artifacts may need updates. If implementation planning reveals a new mechanism, the shaping doc may need to reflect it.
-
-Whenever making a change:
-1. identify which artifact level you are touching
-2. ask whether it affects artifacts above or below
-3. update affected layers in the same operation when possible
-
-## Good prompts for the shaping conversation
-
-- What problem is worth solving here?
-- What constraints are actually non-negotiable?
-- What appetite does this bet deserve, and where is the cut line?
-- What solution directions are meaningfully different?
-- What requirement is this part satisfying?
-- What requirement is still not accounted for?
-- Are we missing a requirement because the current options all feel wrong?
-- Is this requirement actually a solution choice in disguise?
-- If we changed the interface or implementation completely, would this still need to be true?
-- Which parts are still flagged unknowns?
-- What should we spike next?
-
-## Transition to breadboarding
-
-Move from shaping to breadboarding when:
-- one direction is chosen
-- its fit with the accepted appetite and cut line is explicit
-- its mechanisms are concrete enough to map
-- you need to show places, affordances, stores, and wiring
-
-## Output standard
-
-Always leave behind a document that someone else could read later and understand without replaying the entire conversation.
+## Guardrails
+
+- Keep requirements separate from mechanisms.
+- Set appetite before selection.
+- Compare more than one serious path when alternatives genuinely exist.
+- Treat `CURRENT` as evidence, not automatically as future intent.
+- Preserve stable IDs and rejected alternatives as an audit trail.
+- Use a focused spike only for an unknown that blocks a decision.
+- Reconcile consequential sketches through `sketch-reconciliation` before silently changing accepted artifacts.
+- Stop at the human selection gate.
+- Do not create implementation tasks or code.

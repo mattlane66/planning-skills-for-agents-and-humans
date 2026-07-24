@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "router-selects-no-planning-for-contained-copy-change",
+      "prompt": "Change the button label from Save item to Save. The component and expected text are already identified and no behavior changes.",
+      "expected_skill": null,
+      "expected_artifact_type": "direct-change",
+      "expected_gate": null,
+      "implementation_allowed": true,
+      "required_evidence": ["contained", "clear scope"],
+      "forbidden_evidence": ["full planning workflow"]
+    },
+    {
+      "id": "planning-router-recommends-one-next-move",
+      "prompt": "Inspect this product request, repository context, and planning artifacts, then recommend exactly one next planning move without running it.",
+      "expected_skill": "planning-router",
+      "expected_artifact_type": "routing-recommendation",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": ["exactly one next move", "current uncertainty"],
+      "forbidden_evidence": ["full planning workflow", "production code"]
+    },
+    {
+      "id": "router-selects-framing-for-unclear-request",
+      "prompt": "We have interview notes, support complaints, and three stakeholder requests but no agreed statement of the problem. Choose the next planning move.",
+      "expected_skill": "framing-doc",
+      "expected_artifact_type": "frame",
+      "expected_gate": "frame-acceptance",
+      "implementation_allowed": false,
+      "required_evidence": ["raw evidence", "unclear problem"],
+      "forbidden_evidence": ["selected shape", "production code"]
+    },
+    {
+      "id": "framing-preserves-evidence-and-stops",
+      "prompt": "Turn these source-grounded interview notes into a frame. Do not propose solutions or code.",
+      "expected_skill": "framing-doc",
+      "expected_artifact_type": "frame",
+      "expected_gate": "frame-acceptance",
+      "implementation_allowed": false,
+      "required_evidence": ["source", "current approach", "desired outcome", "boundaries"],
+      "forbidden_evidence": ["selected mechanism", "production code"]
+    },
+    {
+      "id": "shaping-stops-before-selection",
+      "prompt": "We have an accepted frame. Define criteria and appetite, compare multiple solution shapes, and stop before choosing one for me.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": ["accepted criteria", "appetite", "multiple shapes", "fit check"],
+      "forbidden_evidence": ["selected direction without authorization", "production code"]
+    },
+    {
+      "id": "sketch-reconciliation-does-not-promote-visuals",
+      "prompt": "Compare this screenshot with the accepted shape and breadboard, show proposed deltas, and stop before changing scope.",
+      "expected_skill": "sketch-reconciliation",
+      "expected_artifact_type": "sketch-reconciliation",
+      "expected_gate": "visual-delta-decision",
+      "implementation_allowed": false,
+      "required_evidence": ["observations", "mapped IDs", "proposed deltas"],
+      "forbidden_evidence": ["silent scope change", "production code"]
+    },
+    {
+      "id": "breadboarding-maps-selected-behavior",
+      "prompt": "Turn the selected shape into places, affordances, stores, visible consequences, branches, and wiring. Do not implement.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "slice-selection",
+      "implementation_allowed": false,
+      "required_evidence": ["selected-design", "places", "affordances", "stores", "wiring"],
+      "forbidden_evidence": ["production code"]
+    },
+    {
+      "id": "statechart-remains-derived",
+      "prompt": "Derive a transition table for retries, timeout, cancellation, and failure from this accepted breadboard.",
+      "expected_skill": "statechart",
+      "expected_artifact_type": "statechart",
+      "expected_gate": "state-model-review",
+      "implementation_allowed": false,
+      "required_evidence": ["source breadboard IDs", "states", "transitions", "explicit gaps"],
+      "forbidden_evidence": ["invented behavior", "production code"]
+    },
+    {
+      "id": "interface-contract-defines-boundary-only",
+      "prompt": "Define the plain-language request, response, branches, and errors for this selected UI-to-API boundary.",
+      "expected_skill": "interface-contracts",
+      "expected_artifact_type": "interface-contract",
+      "expected_gate": "contract-decision",
+      "implementation_allowed": false,
+      "required_evidence": ["boundary", "inputs", "outputs", "branches", "errors"],
+      "forbidden_evidence": ["full slice fixtures", "production code"]
+    },
+    {
+      "id": "executable-breadboard-provides-testable-evidence",
+      "prompt": "Turn the selected slice into fixtures, example runs, expected outputs, edge cases, and acceptance tests without coding it.",
+      "expected_skill": "executable-breadboards",
+      "expected_artifact_type": "executable-breadboard",
+      "expected_gate": "build-handoff",
+      "implementation_allowed": false,
+      "required_evidence": ["fixtures", "example runs", "expected outputs", "edge cases", "acceptance tests"],
+      "forbidden_evidence": ["production code"]
+    },
+    {
+      "id": "dumplink-stays-inside-selected-slice",
+      "prompt": "Organize this selected slice into vertical task groups with dependencies, risk states, sequence, and appetite cuts.",
+      "expected_skill": "dumplink",
+      "expected_artifact_type": "dumplink",
+      "expected_gate": "task-group-approval",
+      "implementation_allowed": false,
+      "required_evidence": ["selected slice", "vertical task groups", "dependencies", "cuts"],
+      "forbidden_evidence": ["expanded slice", "horizontal backlog", "production code"]
+    },
+    {
+      "id": "context-packet-preserves-project-language",
+      "prompt": "Package only the authoritative context needed to implement the selected slice, including established project terms and relevant ADRs.",
+      "expected_skill": "feed-planning-context",
+      "expected_artifact_type": "context-packet",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": ["authority order", "project language", "architectural decisions", "execution contract", "verification target"],
+      "forbidden_evidence": ["entire transcript", "production code"]
+    },
+    {
+      "id": "kickoff-is-orientation-not-scope",
+      "prompt": "Create a durable builder-facing orientation reference from the accepted frame, shape, breadboard, and slice.",
+      "expected_skill": "kickoff-doc",
+      "expected_artifact_type": "kickoff",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": ["accepted territory", "orientation"],
+      "forbidden_evidence": ["new build scope", "production code"]
+    },
+    {
+      "id": "reflection-preserves-intent-and-reality",
+      "prompt": "Compare the implemented prototype with the accepted breadboard, preserve both truths, and prepare correction options.",
+      "expected_skill": "breadboard-reflection",
+      "expected_artifact_type": "breadboard-reflection",
+      "expected_gate": "drift-decision",
+      "implementation_allowed": false,
+      "required_evidence": ["accepted intent", "implementation reality", "drift", "options"],
+      "forbidden_evidence": ["silent artifact rewrite", "silent code change"]
+    }
+  ]
+}

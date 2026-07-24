@@ -1,4 +1,8 @@
 {
+  "planning-router": {
+    "title": "Planning Router",
+    "description": "Inspect product-planning context and choose the smallest next planning move when no specific skill is selected or planning may not be needed."
+  },
   "framing-doc": {
     "title": "Framing Doc",
     "description": "Create a frame from research, notes, requests, or transcripts when the current problem, desired outcome, boundaries, and evidence need to become explicit."

@@ -28,7 +28,7 @@ class ClaudeSkillPackagingTests(unittest.TestCase):
             output = Path(temporary) / "packages"
             packages = packager.build_packages(output)
 
-            self.assertEqual(len(packages), 11)
+            self.assertEqual(len(packages), len(packager.load_inventory()))
             with zipfile.ZipFile(output / "framing-doc.zip") as archive:
                 self.assertIn("framing-doc/.agent-orchestration.yaml", archive.namelist())
                 self.assertIn("framing-doc/skill-metadata.json", archive.namelist())
