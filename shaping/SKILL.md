@@ -168,7 +168,7 @@ When a direction is selected, record:
 - spikes or decisions still required
 - any established project terms, ADRs, interfaces, or seams that the selected direction must preserve or intentionally change
 
-Then stop shaping and hand the selected mechanisms to breadboarding. Do not create task groups, select implementation sequence, or write production code inside this skill.
+Then stop shaping and hand the selected mechanisms to breadboarding. Do not dump or cluster implementation tasks, select slices, or create a build sequence inside shaping. Do not write production code inside this skill.
 
 **Complete when:** another person can understand what was selected, what was rejected, why it fits, and what remains unresolved without replaying the conversation.
 
