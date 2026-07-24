@@ -1,6 +1,14 @@
 {
   "confusion_pairs": [
     [
+      "planning-router",
+      "framing-doc"
+    ],
+    [
+      "planning-router",
+      "shaping"
+    ],
+    [
       "framing-doc",
       "shaping"
     ],
@@ -30,6 +38,16 @@
     ]
   ],
   "skills": {
+    "planning-router": {
+      "positive": [
+        "I have a product request and several artifacts but do not know which planning skill should come next.",
+        "Decide whether this small change needs planning at all and recommend only the smallest useful move."
+      ],
+      "negative": [
+        "Turn these interview notes into a clear problem, outcome, and boundaries before we discuss solutions.",
+        "Define criteria and appetite, compare alternative shapes, and stop for my selection."
+      ]
+    },
     "framing-doc": {
       "positive": [
         "Turn these interview notes into a clear problem, outcome, and boundaries before we discuss solutions.",
