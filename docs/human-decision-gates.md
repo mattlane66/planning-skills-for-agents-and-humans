@@ -1,6 +1,6 @@
 # Human decision gates
 
-Agents can help create planning artifacts, compare options, and preserve context. Humans still own the decisions that commit scope, appetite, and trade-offs.
+Agents can help create planning artifacts, compare options, and preserve context. Humans still own the decisions that commit scope, Appetite, and trade-offs.
 
 Use these gates to keep collaboration explicit.
 
@@ -36,22 +36,39 @@ Human confirms:
 - team shape and review point
 - explicit cut line
 - how much uncertainty is acceptable
-- which unknowns require a spike before selection or build
+- which unknowns require a candidate breadboard or focused spike before selection or build
 
-Do not let an agent choose an attractive shape first and turn its implied scope into the budget. Premature mechanism ideas may be parked while appetite is undecided, but comparative shape sketching and selection wait until the appetite is explicit.
+Do not let an agent choose an attractive shape first and turn its implied scope into the budget. Premature mechanism ideas may be parked while Appetite is undecided, but comparative shape work and selection wait until Appetite is explicit.
+
+## Gate 2B — Candidate evidence ready, when needed
+
+Use this gate only when a named candidate cannot be judged from its mechanism list or sketch alone.
+
+Human or team confirms:
+
+- the candidate and question being tested are explicit
+- the breadboard is declared `candidate-shape`
+- only decision-relevant detail was added
+- current-state evidence remains separate from proposed behavior
+- fit, reverse-fit, and Appetite implications are returned to shaping
+- the candidate breadboard has not selected itself, produced slices, or become build scope
+
+This is an evidence-readiness gate, not a commitment gate. Not every candidate needs a breadboard, and candidates do not need equal detail.
 
 ## Gate 3 — Shape selected
 
-Human chooses a direction after seeing alternatives and fit checks.
+Human chooses a direction after seeing alternatives, fit checks, and any necessary candidate evidence.
 
 Human confirms:
 
 - the selected shape is explicit
 - rejected shapes remain marked as rejected
 - unknown mechanisms are flagged
+- unequal exploratory depth did not substitute for judgment
+- candidate evidence to retain, revise, or discard is named
 - the selected shape is worth detailing
 
-Do not breadboard every option unless the human asks for more exploration.
+Do not automatically promote a candidate breadboard merely because its shape was selected.
 
 ## Gate 3A — Visual deltas accepted, when needed
 
@@ -67,20 +84,24 @@ Human confirms:
 
 Do not let visual recency silently override the selected shape or breadboard.
 
-## Gate 4 — Breadboard accepted
+## Gate 4 — Selected-design breadboard accepted
 
 Human confirms the intended behavior before slicing.
 
 Human checks:
 
-- places match the actual user/operator experience
+- the mode is `selected-design`
+- accepted shape parts, Appetite, and cuts are cited
+- any candidate rows were explicitly reconciled rather than automatically promoted
+- places match the intended user/operator experience
 - affordances are concrete
 - hidden system consequences are visible
 - stores and wiring explain the behavior
 - product-relevant branches are explicit
+- consequential conflicts were returned to shaping and decided
 - any derived statechart remains traceable to the breadboard and exposes rather than invents missing behavior
 
-Do not slice from a vague or partially understood breadboard.
+Do not slice from a current-state, candidate-shape, vague, or partially understood breadboard.
 
 ## Gate 5 — Slice selected
 
@@ -111,4 +132,4 @@ Agents should surface drift; humans decide which truth changes.
 
 ## Rule of thumb
 
-If a decision changes scope, appetite, selected direction, or source-of-truth artifacts, pause for a human gate.
+If a decision changes scope, Appetite, selected direction, candidate-to-selected authority, or source-of-truth artifacts, pause for a human gate.
