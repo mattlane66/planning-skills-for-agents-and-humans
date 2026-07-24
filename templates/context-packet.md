@@ -13,6 +13,7 @@ What the next planning or implementation move should do.
 - @planning/executable-breadboard.md, when the selected slice is ready for build handoff
 - @planning/interface-contracts.md, when boundary detail is split out separately
 - @planning/dumplink.md, when task groups, risk states, dependencies, or sequence matter
+- applicable product-repository instructions, glossary, architecture notes, ADRs, tests, and public interfaces
 
 ## Authority order
 1. User's latest explicit instruction
@@ -46,6 +47,8 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - store IDs
 - accepted appetite and cut line
 - selected slice boundary
+- canonical project terms and relevant architectural decisions
+- existing interfaces or seams the selected work preserves or intentionally changes
 - executable breadboard fixtures, example runs, expected outputs, and acceptance tests, when present
 - contract IDs and boundary names, when present
 - field names, required/optional distinctions, enum values, nullability, and error cases, when specified
@@ -54,6 +57,13 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - explicit non-goals
 - demo path
 - accepted visual changes as written into the authoritative artifacts; do not promote pending reconciliation proposals
+
+## Project language and decisions
+- Canonical terms:
+- Relevant architectural decisions:
+- Existing interfaces or seams:
+- Terms or decisions this work may introduce:
+- Documentation updates proposed but not yet authorized:
 
 ## Selected requirements
 - ...
@@ -114,12 +124,12 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - ...
 
 ## Build-handoff behavior
-1. Restate the relevant constraints.
-2. Identify implementation implications.
+1. Restate the relevant constraints and project language.
+2. Identify implementation implications and existing seams.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
 5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, or acceptance tests instead of inventing them.
+6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
 7. Work toward the goal condition, run the required checks, and report incomplete verification directly.
 
 ## Verification target
