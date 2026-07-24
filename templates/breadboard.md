@@ -3,13 +3,8 @@ planning: true
 shaping: true
 artifact_type: breadboard
 status: draft
-source_of_truth: true
-feeds:
-  - slices
-  - interface-contracts
-  - executable-breadboard
-  - context-packet
-  - implementation
+source_of_truth: false
+feeds: []
 ---
 
 # [Project] — Breadboard
@@ -18,92 +13,145 @@ feeds:
 
 ## Mode and authority
 
-- Mode: `current-state` or `selected-design`
-- Authority: descriptive current-state evidence or accepted selected intent
+- Mode: `current-state`, `candidate-shape`, or `selected-design`
+- Authority:
+  - `current-state`: descriptive evidence only
+  - `candidate-shape`: exploratory evidence subordinate to one unselected candidate and the shaping artifact
+  - `selected-design`: accepted normative intent after human selection and reconciliation
 - Evidence references: required for non-obvious current-state claims
-- Selected shape and appetite: required for selected-design mode
+- Candidate shape and uncertainty: required for candidate-shape mode
+- Selected shape and Appetite: required for selected-design mode
 
-Current-state mode cannot define selected future intent or feed slice selection. Only an accepted selected-design breadboard can produce buildable slice candidates.
+Set frontmatter `source_of_truth: true` and downstream `feeds` only after the artifact is accepted in `selected-design` mode.
+
+Current-state mode cannot define selected future intent. Candidate-shape mode cannot select itself, feed slices, or become build scope. Only an accepted selected-design breadboard can produce buildable slice candidates.
 
 ## Use this when
-An agent is mapping current behavior, detailing a selected design, slicing an accepted selected-design breadboard, preparing downstream contracts, or checking whether code still matches selected intent.
+
+An agent is mapping current behavior, clarifying one unselected candidate during shaping, reconciling a selected design, slicing an accepted selected-design breadboard, preparing downstream contracts, or checking whether code still matches selected intent.
 
 ## Must preserve
+
+- declared mode and authority
 - stable place IDs
 - stable affordance IDs
 - store IDs
 - wiring and visible consequences
-- selected demo path
+- source shape-part IDs for proposed elements
+- selected demo path in selected-design mode
 - interface contract candidate IDs when present
 
 ## Ignore unless asked
-- rejected shapes
-- raw brainstorms
 
-## Selected shape reference
+- rejected shapes unrelated to the named candidate
+- raw brainstorms
+- candidate breadboards when preparing selected build context unless they explain an unresolved shaping decision
+
+## Shape reference
+
 - Shaping artifact:
-- Selected shape:
+- Candidate or selected shape:
+- Shape-part IDs:
 - Appetite:
 - Cut line:
+- Decision-relevant uncertainty for candidate-shape mode:
+- Reconciliation status for selected-design mode:
 
 ## Places
 
-| ID | Place | Description |
-|---|---|---|
-| P1 | ... | ... |
+| ID | Authority | Shape part | Place | Description |
+|---|---|---|---|---|
+| P1 | current | — | ... | ... |
 
 ## UI affordances
 
-| ID | Place | Component | Affordance | Control | Wires Out | Returns To |
-|---|---|---|---|---|---|---|
-| U1 | P1 | ... | ... | ... | -> N1 | — |
+| ID | Place | Authority | Shape part | Component | Affordance | Control | Wires Out | Returns To |
+|---|---|---|---|---|---|---|---|---|
+| U1 | P1 | candidate | A1 | ... | ... | ... | -> N1 | — |
 
 ## Non-UI affordances
 
-| ID | Place | Component | Affordance | Control | Wires Out | Returns To |
-|---|---|---|---|---|---|---|
-| N1 | P1 | ... | ... | call | -> S1 | -> U1 |
+| ID | Place | Authority | Shape part | Component | Affordance | Control | Wires Out | Returns To |
+|---|---|---|---|---|---|---|---|---|
+| N1 | P1 | candidate | A1 | ... | ... | call | -> S1 | -> U1 |
 
 ## Stores
 
-| ID | Place | Store | Description |
-|---|---|---|---|
-| S1 | P1 | ... | ... |
+| ID | Place | Authority | Shape part | Store | Description |
+|---|---|---|---|---|---|
+| S1 | P1 | current | — | ... | ... |
 
 ## Product-relevant branches
 
-| Branch | Trigger | User-visible consequence |
-|---|---|---|
-| ... | ... | ... |
+| Branch | Trigger | User-visible consequence | Shape part | Status |
+|---|---|---|---|---|
+| ... | ... | ... | A1 | supported / gap / conflict |
 
-## Interface contract candidates (optional)
+## Candidate-shape findings
 
-Use this section when a wire crosses a meaningful boundary: UI -> backend, frontend -> API, service -> store, agent -> tool, import -> parser, or external integration.
+Use only in `candidate-shape` mode.
 
-These candidates may later be split into a separate interface-contract artifact or embedded inside an executable breadboard.
+- Question resolved:
+- Supported mechanisms:
+- Missing or contradictory mechanisms:
+- Rabbit holes / Appetite risks:
+- Focused spike candidates:
+- Requirement-fit implication:
+- Reverse-fit implication:
+- Appetite-fit implication:
+- Remaining uncertainty:
+
+## Selected-design reconciliation
+
+Use when promoting or rebuilding from candidate evidence after human selection.
+
+| Candidate row / finding | Selected action | Resulting selected-design ID | Rationale |
+|---|---|---|---|
+| ... | keep / revise / remove / defer | ... | ... |
+
+A candidate row is never promoted merely because its candidate was selected. Reconcile it against the accepted shape, cuts, and remaining unknowns.
+
+## Interface contract candidates (selected-design only)
+
+Use this section when an accepted wire crosses a meaningful boundary: UI -> backend, frontend -> API, service -> store, agent -> tool, import -> parser, or external integration.
 
 | ID | Trigger / Wire | From | To | Request / Input Shape | Response / Output Shape | Branches / Errors | Open Decisions |
 |---|---|---|---|---|---|---|---|
-| C1 | U1 -> N1 | UI | API | user_id: string; items: array | order_id: string; status: pending | missing item, invalid quantity | Should promo codes be nullable or omitted? |
+| C1 | U1 -> N1 | UI | API | user_id: string | status: string | invalid user | nullable or omitted? |
 
-## Slice candidates
+## Slice candidates (accepted selected-design only)
 
 | Slice | Affordances / stores included | Demo | Produces | Unknowns |
 |---|---|---|---|---|
 | V1 | ... | ... | ... | ... |
 
+## Shaping conflict
+
+When detailed selected-design breadboarding exposes a consequential conflict, stop and return:
+
+- Selected shape says:
+- Concrete behavioral implication:
+- Conflict or Appetite risk:
+- Evidence:
+- Options: revise shape / cut behavior / focused spike / reopen selection / stop bet
+
 ## Build handoff note
 
-Once a slice is selected and ready for implementation, convert the relevant part of this breadboard into an executable breadboard with examples, expected results, edge cases, and acceptance tests.
+Once a selected-design breadboard is accepted and a slice is selected, convert the relevant part into an executable breadboard with examples, expected results, edge cases, and acceptance tests.
 
 ## Notes
+
 - ...
 
 ## Self-check
+
+- [ ] The mode and authority are explicit.
+- [ ] Candidate-shape mode names one candidate and one decision-relevant uncertainty.
+- [ ] Candidate evidence has not selected itself or produced build scope.
+- [ ] Candidate rows were reconciled before becoming selected-design rows.
 - [ ] Every displayed UI element that depends on data has a source.
 - [ ] Every non-UI affordance connects by Wires Out or Returns To.
 - [ ] Stores exist for meaningful side effects.
 - [ ] Product-relevant branches are explicit.
-- [ ] Meaningful boundary crossings have interface contract candidates when field-level detail would reduce agent guessing.
-- [ ] Slices are vertical and demoable.
-- [ ] The selected slice can be converted into an executable breadboard before build handoff.
+- [ ] Only accepted selected-design behavior produces interface contracts or slice candidates.
+- [ ] Any shaping conflict is surfaced rather than silently absorbed.
