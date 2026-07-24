@@ -6,8 +6,8 @@ What the next planning or implementation move should do.
 ## Source artifacts
 - @planning/frame.md
 - @planning/shaping.md
-- @planning/appetite.md, when appetite is recorded separately from shaping
-- @planning/breadboard.md
+- @planning/appetite.md, when Appetite is recorded separately from shaping
+- @planning/breadboard.md, accepted in `selected-design` mode
 - @planning/statechart.md, when a selected stateful scope needs it
 - @planning/slices.md
 - @planning/executable-breadboard.md, when the selected slice is ready for build handoff
@@ -15,26 +15,29 @@ What the next planning or implementation move should do.
 - @planning/dumplink.md, when task groups, risk states, dependencies, or sequence matter
 - applicable product-repository instructions, glossary, architecture notes, ADRs, tests, and public interfaces
 
+Candidate-shape breadboards are not governing source artifacts for implementation. Restate only an implication that was explicitly accepted into shaping or the selected-design breadboard.
+
 ## Authority order
 1. User's latest explicit instruction
 2. Selected slice
 3. Executable breadboard, when present
 4. Selected interface contract, for boundary-level input/output details
 5. Selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
-6. Selected breadboard
+6. Accepted selected-design breadboard
 7. Selected shaping direction
 8. Kickoff doc, for builder orientation only
 9. Framing doc
 10. Raw notes and transcripts
-11. Rejected alternatives and brainstorming
+11. Candidate-shape breadboards, rejected alternatives, and brainstorming
 
-A statechart is derived from the selected breadboard and never outranks it.
-The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence.
+A statechart is derived from the selected-design breadboard and never outranks it.
+The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence. A candidate breadboard is exploratory evidence, not selected behavior.
 
 ## Use these sections first
 - ...
 
 ## Do not use unless needed
+- candidate-shape breadboards
 - raw interview notes
 - old discarded alternatives
 - brainstorming notes
@@ -43,9 +46,9 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 
 ## Must preserve
 - stable requirement IDs
-- stable place and affordance IDs
+- stable place and affordance IDs from the accepted selected-design breadboard
 - store IDs
-- accepted appetite and cut line
+- accepted Appetite and cut line
 - selected slice boundary
 - canonical project terms and relevant architectural decisions
 - existing interfaces or seams the selected work preserves or intentionally changes
@@ -53,10 +56,11 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - contract IDs and boundary names, when present
 - field names, required/optional distinctions, enum values, nullability, and error cases, when specified
 - Dumplink task group IDs, dependency order, risk states, and cuts, when present
-- statechart state and transition IDs with their source breadboard IDs, when present
+- statechart state and transition IDs with their source selected-design breadboard IDs, when present
 - explicit non-goals
 - demo path
-- accepted visual changes as written into the authoritative artifacts; do not promote pending reconciliation proposals
+- accepted visual changes as written into authoritative artifacts; do not promote pending reconciliation proposals
+- accepted candidate findings only as incorporated into shaping or selected-design intent
 
 ## Project language and decisions
 - Canonical terms:
@@ -68,13 +72,13 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 ## Selected requirements
 - ...
 
-## Relevant places / affordances / stores
+## Relevant selected-design places / affordances / stores
 - ...
 
 ## Relevant statechart
 - Selected scope:
 - States and transitions:
-- Source breadboard IDs:
+- Source selected-design breadboard IDs:
 - Explicit gaps:
 
 ## Relevant executable breadboard
@@ -124,13 +128,14 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - ...
 
 ## Build-handoff behavior
-1. Restate the relevant constraints and project language.
-2. Identify implementation implications and existing seams.
-3. Ask at most 3 blocking questions.
-4. Propose a plan before editing code.
-5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
-7. Work toward the goal condition, run the required checks, and report incomplete verification directly.
+1. Restate the relevant constraints, selected-design behavior, and project language.
+2. Confirm that no candidate-shape breadboard is being treated as build scope.
+3. Identify implementation implications and existing seams.
+4. Ask at most 3 blocking questions.
+5. Propose a plan before editing code.
+6. If implementation reality changes the plan, propose a planning update instead of silently drifting.
+7. Flag missing authority decisions, field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
+8. Work toward the goal condition, run the required checks, and report incomplete verification directly.
 
 ## Verification target
 - ...
