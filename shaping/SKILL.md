@@ -105,6 +105,8 @@ Record:
 - unknowns that require a spike before selection or build
 - conditions that would cause the appetite to be revisited
 
+Use the Appetite section in `templates/shaping.md` for a compact record or `templates/appetite-card.md` when ownership, rationale, and revisit conditions need a separate durable artifact.
+
 If appetite is undecided, preserve ideas in the mechanism parking lot but stop before comparative selection.
 
 **Complete when:** the budget, cut line, accepted uncertainty, and must-resolve unknowns are explicit and human-accepted.
