@@ -1,4 +1,8 @@
 {
+  "planning-router": {
+    "title": "Planning Router",
+    "description": "Choose the smallest planning move that resolves the current uncertainty when a user has not selected a specific planning skill or may not need planning at all."
+  },
   "framing-doc": {
     "title": "Framing Doc",
     "description": "Create a frame from research, notes, requests, or transcripts when the current problem, desired outcome, boundaries, and evidence need to become explicit."
