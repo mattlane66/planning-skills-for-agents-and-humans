@@ -28,6 +28,7 @@ CLAUDE_KEYS = {
 }
 KNOWN_TOOLS = {"Read", "Write", "Edit", "Glob", "Grep", "Bash", "Skill"}
 MANUAL_COMMANDS = {
+    "plan",
     "frame",
     "shape",
     "criteria",
