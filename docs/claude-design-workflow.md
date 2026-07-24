@@ -12,6 +12,7 @@ When a skill is available in Claude Design, invoke it by its canonical skill nam
 
 The uploadable canonical skills are:
 
+- `planning-router`
 - `framing-doc`
 - `shaping`
 - `sketch-reconciliation`
@@ -24,9 +25,9 @@ The uploadable canonical skills are:
 - `feed-planning-context`
 - `breadboard-reflection`
 
-Claude Code also provides shorter command wrappers such as `/frame`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/select-shape`, `/breadboard`, and `/check-drift`. These wrappers expose gates or focused operations within the canonical skills; they are not separate uploaded Claude skills.
+Claude Code also provides shorter command wrappers such as `/plan`, `/frame`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/select-shape`, `/breadboard`, and `/check-drift`. These wrappers expose gates or focused operations within the canonical skills; they are not separate uploaded Claude skills.
 
-Command names in this guide are Claude Code shorthand. A plugin installation may namespace them, for example `/planning-skills:criteria`. In Claude Design, request the corresponding canonical skill and gate in plain language—for example, “Use the shaping skill to define criteria only.”
+Command names in this guide are Claude Code shorthand. A plugin installation may namespace them. In Claude Design, request the corresponding canonical skill and mode in plain language.
 
 ## 1. Load context → `framing-doc` (`/frame` in Claude Code)
 
@@ -40,9 +41,9 @@ Research notes, screenshots, stakeholder requests, an existing product, a rough 
 
 **How to use it:**
 
-Use Claude Code to invoke the framing skill, read the source material, and create the authoritative framing document in the product repository.
+Use Claude Code to invoke framing, read the source material, and create the authoritative framing document in the product repository.
 
-Use Claude Design when screenshots, journeys, environments, or relationships would benefit from visual inspection. Upload the relevant material and use its chat to correct Claude’s interpretation before generating interfaces.
+Use Claude Design when screenshots, journeys, environments, or relationships benefit from visual inspection. Correct Claude’s interpretation before generating interfaces.
 
 **Result:**
 
@@ -52,13 +53,16 @@ A shared account of the current situation and why it is worth investigating.
 
 ## 2. Model the territory → refine the framing canvas
 
-**What you likely have:**  
+**What you likely have:**
+
 The framing document, but the situation may still be difficult to understand as a whole.
 
-**Use:**  
+**Use:**
+
 **Claude Design, with Claude Code preserving the source of truth.**
 
-**How to use it:**  
+**How to use it:**
+
 Ask Claude Design to turn the frame into a low-fidelity territory map showing:
 
 - the trigger and desired outcome
@@ -67,33 +71,32 @@ Ask Claude Design to turn the frame into a low-fidelity territory map showing:
 - major activities and transitions
 - breakdowns, compromises, and unresolved questions
 
-Use chat for structural changes, inline comments for factual corrections, and direct canvas editing for spatial clarity.
+Do not design the future product yet. Write accepted discoveries back into the framing document through Claude Code.
 
-Do not design the future product yet.
+**Result:**
 
-Use Claude Code to write accepted discoveries or corrections back into the framing document.
-
-**Result:**  
 A visible model of the living context into which any new design must fit.
 
 ---
 
 ## 3. Define success → `shaping` criteria gate (`/criteria`)
 
-**What you likely have:**  
+**What you likely have:**
+
 A broad sense of what should improve, plus stakeholder expectations, technical limitations, business needs, and user concerns.
 
-**Use:**  
-**Claude Code for defining and maintaining criteria; Claude Design for keeping them visible during exploration.**
+**Use:**
 
-**How to use it:**  
-Use the shaping skill’s criteria gate to convert that material into explicit criteria. Give each requirement, constraint, non-goal, and unknown a stable ID.
+**Claude Code for criteria; Claude Design for keeping them visible.**
 
-Keep the resulting criteria visible beside the territory map in Claude Design. Remove proposed features disguised as requirements and restate them as observable outcomes or necessary conditions.
+**How to use it:**
 
-Write all accepted changes back into the authoritative shaping artifact through Claude Code.
+Use shaping’s criteria gate to convert the material into explicit requirements, constraints, non-goals, and unknowns with stable IDs.
 
-**Result:**  
+Keep the criteria visible beside the territory map. Remove proposed features disguised as requirements and restate them as outcomes or necessary conditions.
+
+**Result:**
+
 A stable basis for judging proposed designs rather than relying on preference or polish.
 
 ---
@@ -106,13 +109,13 @@ Accepted criteria, but no explicit decision about how much time, scope, or uncer
 
 **Use:**
 
-**Claude Code for the authoritative appetite decision; Claude Design for keeping the cut line visible.**
+**Claude Code for the authoritative Appetite decision; Claude Design for keeping the cut line visible.**
 
 **How to use it:**
 
-Use the shaping skill's appetite gate to record the fixed budget, team shape, review point, cut line, accepted uncertainty, and any unknown that requires a spike before selection.
+Record the fixed budget, team shape, review point, cut line, accepted uncertainty, and any unknown requiring a spike before selection.
 
-Keep the appetite beside the criteria on the Claude Design canvas. Existing ideas may stay in a parking lot, but do not comparatively sketch or select shapes until the appetite is explicit.
+Keep Appetite beside the criteria. Existing ideas may stay in a parking lot, but do not select a shape until Appetite is explicit.
 
 **Result:**
 
@@ -120,134 +123,164 @@ A bounded bet that candidate shapes must fit rather than an estimate derived fro
 
 ---
 
-## 5. Explore alternatives → `shaping` shape-sketch gate and candidate behavior sketches
+## 5. Explore alternatives → `shaping` plus candidate-shape breadboarding as needed
 
-**What you likely have:**  
-One obvious solution in mind, an existing interface that people expect you to improve, or several loosely formed ideas.
+**What you likely have:**
 
-**Use:**  
-**Both. Claude Code structures the alternatives; Claude Design makes them visible and interactive.**
+One obvious solution, an existing interface people expect you to improve, or several loosely formed ideas.
 
-**How to use it:**  
-Use the shaping skill’s shape-sketch gate (`/sketch-shapes` in Claude Code) to generate three structurally different approaches—not three visual treatments of the same interface.
+**Use:**
 
-For each shape, create a candidate behavior sketch that shows only enough structure to compare it fairly:
+**Both. Claude Code structures and preserves alternatives; Claude Design makes them visible and interactive.**
+
+**How to use it:**
+
+Use shaping’s shape-sketch gate to generate structurally different approaches—not visual treatments of the same mechanism.
+
+Begin with the cheapest representation that makes each candidate understandable. For a straightforward candidate, a mechanism table or rough sketch may be enough.
+
+When one named candidate cannot be judged without understanding its behavior, invoke `breadboarding` in `candidate-shape` mode. Name the candidate, accepted requirements, Appetite, cut line, and the single uncertainty to resolve. Map only enough to show:
 
 - places the user can be
 - actions available to the user
-- actions performed by the system
-- important stored objects
-- major state changes
+- important system actions
+- stored objects and state
+- major branches
 - how actions lead to consequences
+- rabbit holes and Appetite risks
+- implications for the shaping fit check
 
-Place all three on the Claude Design canvas and run the same representative scenario through each. Keep these sketches inside the candidate shapes; they are not accepted breadboards and do not pass the breadboard gate.
+Place candidates side by side and run representative scenarios through them. Candidate breadboards may differ in depth because they exist to resolve uncertainty, not to create symmetrical documentation.
 
-Use Claude Code to preserve the shape definitions, IDs, and behavioral differences in version-controlled planning files.
+They are candidate-shape breadboards; **they are not accepted breadboards** for selected-design authority, slicing, or implementation. They remain subordinate to shaping and cannot select themselves.
 
-**Result:**  
-Three comparable models of how the product could work before committing to one.
+Use Claude Code to preserve the candidate shape IDs, breadboard mode, source shape parts, and fit implications in version-controlled planning files.
+
+**Result:**
+
+Comparable models of how the product could work before committing to one.
 
 ---
 
 ## 6. Evaluate and select → `shaping` fit and selection gates
 
-**What you likely have:**  
-Several plausible shapes, each solving some parts of the problem while introducing different tradeoffs.
+**What you likely have:**
 
-**Use:**  
-**Both. Claude Code performs the structured comparison; Claude Design supports visual inspection and discussion.**
+Several plausible shapes, with candidate evidence only where needed.
 
-**How to use it:**  
-Use the shaping skill’s fit-check gate (`/fit-check` in Claude Code) to compare each shape against the approved requirements, appetite, and constraints.
+**Use:**
 
-Use Claude Design to make the comparison inspectable. Each judgment should point to something visible in the candidate behavior sketch.
+**Both. Claude Code performs the structured comparison; Claude Design supports inspection and discussion.**
+
+**How to use it:**
+
+Use shaping’s fit-check gate to compare each shape against requirements and Appetite. Candidate breadboards and spikes may support a judgment, but they do not choose a winner.
 
 Identify:
 
 - strong fits
-- partial fits
-- fatal or correctable misfits
-- tradeoffs
+- failed or correctable misfits
+- unjustified mechanisms
+- required cuts
 - unresolved risks
 - evidence that could reverse the decision
 
-Select the shape yourself. Preserve the rationale on the canvas, then record the final decision in the planning repository through Claude Code. Use `/select-shape` only after the human decision is explicit.
+Do not allow visual polish or greater exploratory detail to imply selection. Select the shape yourself, preserve the rationale, and record the decision through Claude Code.
 
-**Result:**  
-A traceable choice based on contextual fit rather than aesthetic preference.
+**Result:**
 
----
-
-## 7. Develop and slice the selected shape → `breadboarding` and `executable-breadboards`
-
-**What you likely have:**  
-A selected product shape whose overall logic appears promising but whose detailed behavior remains unresolved.
-
-**Use:**  
-**Claude Code for the behavioral specification and implementation-ready artifact; Claude Design for prototyping and interaction testing.**
-
-**How to use it:**  
-Use `breadboarding` (`/breadboard` in Claude Code) to fully model the selected shape:
-
-- places
-- user and system affordances
-- stores
-- state
-- permissions
-- inputs and outputs
-- wiring between actions and consequences
-
-Have a human accept the intended breadboard, then use the breadboarding skill to select the smallest vertical slice that can produce an observable result and test the most consequential uncertainty. Record the slice boundary, demo path, exclusions, `Produces` line, and verification target.
-
-Use `executable-breadboards` in Claude Code only after that slice is selected. Add realistic data and include a normal case, a difficult case, and an ambiguous case without expanding the slice.
-
-Build or render that slice in Claude Design and interact with it rather than judging it only as a static composition.
-
-Use Claude Code when the slice needs real code, data behavior, tests, or integration with the existing product.
-
-**Result:**  
-A coherent behavioral model, an accepted slice, and a focused prototype that tests the design’s most important uncertainty.
+A traceable human choice based on contextual fit rather than aesthetic preference.
 
 ---
 
-## 8. Validate and reconcile → executable tests and drift review
+## 7. Reconcile and develop the selected shape → `breadboarding`
 
-**What you likely have:**  
-An interactive prototype that has accumulated design decisions, discoveries, shortcuts, and behavior not present in the original plan.
+**What you likely have:**
 
-**Use:**  
-**Both. Claude Design exposes visual and interaction discrepancies; Claude Code compares and reconciles authoritative artifacts and implementation.**
+A selected product shape, perhaps with a candidate breadboard whose exploratory rows need review.
 
-**How to use it:**  
-Use the executable breadboard to test important states, failures, interruptions, recovery paths, and acceptance scenarios.
+**Use:**
 
-Then run `/check-drift` in Claude Code, or use `breadboard-reflection` when implementation exists and a fuller comparison is needed. Compare the prototype with:
+**Claude Code for authoritative behavioral specification; Claude Design for prototyping and interaction testing.**
 
-- the original frame
-- the requirements and appetite
-- the selected shape
-- the breadboard
-- the intended slice
+**How to use it:**
 
-Use Claude Design to make discrepancies visible:
+Invoke `breadboarding` in `selected-design` mode.
 
-- preserved intent
-- deliberate changes
-- accidental drift
-- missing behavior
-- invented behavior
-- discoveries that should update the plan
+Do not automatically promote the candidate breadboard. Instead:
 
-Decide whether to correct the prototype, update the implementation, or revise the planning artifacts. Use Claude Code to make and preserve the accepted changes.
+1. confirm the selected shape parts, Appetite, cuts, and remaining unknowns
+2. remove candidate mechanisms that were not selected
+3. reconcile surviving places, affordances, stores, branches, and wires against accepted intent
+4. revise or replace rows whose meaning changed
+5. preserve unresolved gaps explicitly
+6. obtain human acceptance
 
-**Result:**  
-A reconciled prototype whose behavior, requirements, implementation, and underlying rationale remain aligned.
+If detailed behavior exposes a consequential conflict with a requirement, the cut line, or the selected shape, stop and return to shaping. Decide whether to revise the shape, cut behavior, run a focused spike, reopen selection, or stop the bet.
+
+Only after acceptance should the selected-design breadboard produce candidate slices.
+
+**Result:**
+
+A coherent normative behavioral model tied explicitly to the selected direction.
+
+---
+
+## 8. Select and exercise a vertical slice → `breadboarding` and `executable-breadboards`
+
+**What you likely have:**
+
+An accepted selected-design breadboard.
+
+**Use:**
+
+**Claude Code for the selected slice and test contract; Claude Design for interactive exercise.**
+
+**How to use it:**
+
+Select the smallest vertical slice that produces an observable result and tests consequential uncertainty. Record its boundary, demo path, exclusions, `Produces` line, and verification target.
+
+Use `executable-breadboards` only after the slice is selected. Add realistic data, normal cases, difficult cases, ambiguous cases, expected outputs, and acceptance tests without expanding scope.
+
+Build or render that slice in Claude Design and interact with it rather than judging it as a static composition. Use Claude Code when the slice needs real code, data behavior, tests, or integration.
+
+**Result:**
+
+An accepted slice and focused prototype grounded in selected-design intent.
+
+---
+
+## 9. Validate and reconcile → executable tests and drift review
+
+**What you likely have:**
+
+An interactive prototype that has accumulated discoveries, shortcuts, or behavior not present in the plan.
+
+**Use:**
+
+**Both. Claude Design exposes discrepancies; Claude Code compares authoritative artifacts and implementation.**
+
+**How to use it:**
+
+Use the executable breadboard to test states, failures, interruptions, recovery paths, and acceptance scenarios.
+
+Then run `/check-drift`, or use `breadboard-reflection` for a fuller comparison against:
+
+- the frame
+- requirements and Appetite
+- selected shape
+- accepted selected-design breadboard
+- intended slice
+
+Make preserved intent, deliberate changes, accidental drift, missing behavior, invented behavior, and discoveries visible. Decide whether to correct implementation or revise planning; use Claude Code to preserve the accepted decision.
+
+**Result:**
+
+A reconciled prototype whose behavior, requirements, implementation, and rationale remain aligned.
 
 ---
 
 ## The roles of Claude Design and Claude Code
-
-The repository supplies the planning methods and artifact structures.
 
 ### Claude Code is the primary environment for
 
@@ -255,6 +288,7 @@ The repository supplies the planning methods and artifact structures.
 - reading the product repository
 - creating authoritative planning artifacts
 - maintaining stable IDs and traceability
+- recording candidate versus selected-design authority
 - comparing plans with implementation
 - writing accepted discoveries back into version control
 - moving from planning into working code
@@ -263,11 +297,11 @@ The repository supplies the planning methods and artifact structures.
 
 - bring visual source material together
 - visualize the territory
-- place alternatives side by side
-- inspect behavioral breadboards
+- place candidate shapes side by side
+- inspect candidate and selected-design breadboards
 - annotate specific misfits
 - interact with risky slices
 - expose states and failures
-- compare the prototype with the original intent
+- compare the prototype with accepted intent
 
 The skills structure the reasoning. Claude Code preserves and executes it. Claude Design makes it visible, editable, and testable.
