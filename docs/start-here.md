@@ -1,90 +1,107 @@
 # Start here: 10-minute path
 
-Use this guide when you are new to the repo and want to know which planning move to make first.
+Use this guide when you are new to the repository and want the smallest planning move that will help.
 
-> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a subset; Codex users should use the equivalent natural-language prompts.
+> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a subset; Codex users can use the equivalent natural-language prompts.
 
 Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
 
-## Pick the current state
+## Start with `/plan`
 
-| Current state | Use | Output |
+Most people should start with `/plan` or `planning-router/SKILL.md`.
+
+The router inspects the current evidence and recommends exactly one next move. It may also recommend **No planning skill** for a small, obvious, low-risk change with clear behavior and scope.
+
+It does not run the entire workflow, select a solution, or begin implementation.
+
+## The three core moves
+
+```text
+frame → shape → breadboard
+```
+
+| Move | Use it when | Output |
 |---|---|---|
-| You have messy notes, a transcript, or a fuzzy request | `/frame` or `framing-doc/SKILL.md` | A frame with source, current approach/result, problem, outcome, and boundaries |
-| You need criteria before solution ideas | `/criteria` or `shaping/SKILL.md` | Requirements / criteria separated from mechanisms |
-| Your criteria are accepted but the bet has no budget or cut line | `/appetite`, `shaping/SKILL.md`, or `templates/appetite-card.md` | A fixed time or scope budget, cut line, accepted uncertainty, and spike threshold |
-| You know the problem but not the right solution | `/sketch-shapes`, `/fit-check`, `/select-shape`, `/shape`, or `shaping/SKILL.md` | Alternative shapes, fit check, selected direction |
-| You dropped in a sketch, screenshot, wireframe, mockup, or whiteboard and need to know what it changes | `/reconcile-sketch`, `sketch-reconciliation/SKILL.md`, or the [sketch reconciliation guide](./sketch-reconciliation.md) | Observable visual evidence mapped to planning IDs, proposed deltas, a decision gate, and synchronized accepted updates |
-| You need to understand how an existing system behaves before proposing changes | `/breadboard` or `breadboarding/SKILL.md` in `current-state` mode | A descriptive evidence map that cannot become selected future intent without shaping and human selection |
-| You selected a direction and need to make it concrete | `/breadboard` or `breadboarding/SKILL.md` | Places, affordances, stores, wiring, and slice candidates |
-| A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | A derived state inventory, transition table, Mermaid projection, and explicit gaps |
-| Your selected slice crosses a meaningful boundary and field-level guessing would cause rework | `interface-contracts/SKILL.md` | Plain-language contracts for inputs, outputs, branches, errors, and open decisions |
-| Your selected slice is ready for build handoff and needs examples, fixtures, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable executable breadboard for the selected slice |
-| Work inside the selected slice needs vertical task groups, dependency-aware sequence, risk states, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A bounded Dumplink plan; without a selected slice, candidate groups only and no build handoff |
-| You have too much planning context for an implementation agent | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution contract, and verification target |
-| Implementation is underway and may be drifting | `/check-drift`, `.claude/loop.md`, or `templates/drift-check.md` | No drift found, or a planning drift note with recommended move |
-| A meaningful agent run changed code or decisions | `templates/agent-run-log.md` | A concise run record with files, decisions, drift checks, verification, and handoff notes |
-| You have code and need to compare it to the plan | `/reflect-breadboard` or `breadboard-reflection/SKILL.md` | Separate intent/reality records, drift evidence, design smells, and a correction decision |
-| You need a builder-facing handoff reference | `/kickoff` or `kickoff-doc/SKILL.md` | A kickoff doc organized by shaped territory |
-| You are wiring a harness or external agent runtime | `.agent-orchestration.yaml` | Machine-readable modes, gates, artifacts, forbidden moves, and hooks |
+| `/frame` or `framing-doc/SKILL.md` | You have raw notes, research, requests, or an unclear problem. | A source-grounded frame with current approach/result, problem, outcome, and boundaries. |
+| `/shape` or `shaping/SKILL.md` | The problem is clear enough to define criteria and Appetite, compare paths, and make a human selection. | Accepted requirements, Appetite and cut line, alternative shapes, fit checks, and a selected direction or decision-ready stop. |
+| `/breadboard` or `breadboarding/SKILL.md` | You need to understand current behavior or make a selected design concrete. | Places, affordances, stores, consequences, wiring, and—only for selected design—slice candidates. |
+
+Start there. Add advanced moves only when the triggering complexity exists.
+
+## Conditional moves
+
+| Current condition | Use | Output |
+|---|---|---|
+| A sketch, screenshot, wireframe, mockup, or whiteboard may change accepted intent | `/reconcile-sketch` or `sketch-reconciliation/SKILL.md` | Observations mapped to stable IDs, proposed deltas, a human decision gate, and accepted updates. |
+| A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | Transition table, Mermaid projection, and explicit gaps derived from the breadboard. |
+| A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
+| A selected slice needs fixtures, example runs, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable behavioral handoff. |
+| Work inside a selected slice needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A bounded task-group plan; before slice selection, candidates only. |
+| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with project language, authority order, execution contract, and verification target. |
+| Implementation may have drifted from accepted intent | `/check-drift` or `/reflect-breadboard` | A no-drift result or an explicit comparison and correction decision. |
+| Builders need a durable orientation reference | `/kickoff` or `kickoff-doc/SKILL.md` | A human-readable map of accepted product territory, not build scope or sequence. |
+
+## Minimal route
+
+```text
+messy evidence
+  → frame
+  → accept criteria and Appetite
+  → compare shapes
+  → human selection
+  → breadboard
+  → select a demoable slice
+  → add only the supporting detail that slice requires
+  → feed bounded context
+  → build with drift checks
+```
+
+Not every project needs every artifact.
 
 ## Recommended artifact home
 
-Keep project-specific outputs in the product repository, usually under `planning/`. A typical starting set is `frame.md`, `shaping.md`, `breadboard.md`, `slices.md`, and `context-packet.md`; add reconciliation records and other advanced artifacts only when their triggering complexity exists.
+Keep project-specific outputs in the product repository, usually under `planning/`.
 
-## Minimal flow
+A typical starting set is:
 
 ```text
-messy notes
-  -> frame
-  -> criteria
-  -> set appetite and cut line
-  -> sketch shapes
-  -> fit check
-  -> reconcile visual evidence whenever a sketch or screenshot changes the understanding
-  -> select shape
-  -> breadboard
-  -> statechart, only when state complexity warrants it
-  -> select slice
-  -> add interface contracts, when boundary detail matters
-  -> create executable breadboard, when ready for build handoff
-  -> Dumplink, when task grouping / risk / sequence matters
-  -> feed context with execution contract
-  -> build with drift checks
-  -> record meaningful run log
-  -> reflect
+planning/
+  frame.md
+  shaping.md
+  breadboard.md
+  slices.md
+  context-packet.md
 ```
+
+Add an Appetite card, reconciliation record, statechart, interface contract, executable breadboard, Dumplink plan, kickoff document, or reflection only when its triggering complexity exists.
 
 ## Before asking an agent to build
 
 Check that you have:
 
-- a selected shape, not just brainstorming
-- requirements separated from mechanisms
-- an accepted appetite and cut line set before shape selection
-- every consequential sketch or screenshot reconciled explicitly, with accepted deltas written back to the authoritative artifacts
+- an explicitly selected direction
+- accepted requirements separated from mechanisms
+- an accepted Appetite and cut line
 - explicit non-goals
-- a breadboard or slice boundary
-- a statechart only when the selected scope's state behavior is difficult to understand from breadboard wiring alone
-- plain-language interface contracts for meaningful boundary crossings, when field-level detail matters
-- an executable breadboard when the slice needs examples, fixtures, expected outputs, edge cases, or tests
-- a Dumplink plan when the work needs task groups, dependency order, risk states, or scope cuts
+- a selected slice or equally clear implementation boundary
+- consequential visuals reconciled with accepted artifacts
+- only the advanced detail the selected slice actually requires
+- canonical project terms and relevant architectural decisions
 - a compact context packet
-- an execution contract
-- a verification target
-- a human decision on what is in scope now
+- an execution contract and verification target
+- a human decision on current scope
 
 ## During build
 
-Use drift checks when the agent may have moved away from the selected plan.
+Use drift checks when implementation may have moved away from the selected plan.
 
-Expected output is only one of:
+Expected output is only:
 
 ```text
 No planning drift found.
 ```
 
-or
+or:
 
 ```text
 Planning drift found:
@@ -94,10 +111,8 @@ Planning drift found:
 - Recommended move:
 ```
 
-## If you are stuck
-
-Use this default prompt:
+## Default prompt
 
 ```text
-Use this repo's planning workflow. First decide whether we should frame, define criteria, set appetite, sketch shapes, fit-check, reconcile a visual, select a shape, breadboard, optionally derive a statechart, create an interface contract, create an executable breadboard, create a Dumplink plan, feed context, check drift, build, record a run log, or reflect. Do not implement code until the appetite and slice are selected and the verification target is clear.
+Use this repository's planning router. Recommend exactly one next move—or no planning skill—based on the current uncertainty. Do not run the entire workflow, select a solution, or implement code unless I explicitly authorize that move.
 ```
