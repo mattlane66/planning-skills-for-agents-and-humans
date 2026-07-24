@@ -119,7 +119,7 @@ Before implementation, provide a compact context packet containing only what the
 - execution contract
 - verification target
 
-Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction.
+Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
 
 ## Drift
 
@@ -177,7 +177,7 @@ Read `docs/stable-ids.md` for the complete reference and import rules.
 
 `.agent-orchestration.yaml` is the machine-readable workflow and harness contract. It defines modes, gates, allowed outputs, forbidden moves, artifacts, and hooks.
 
-Runtime wrappers are adapters to the canonical skills. Keep the product repository's own instructions authoritative. Use lifecycle hooks as visible reminders and guardrails, not as a hidden planning method.
+Runtime wrappers are adapters to the canonical skills. Keep the product repository's own instructions authoritative. Optional lifecycle hooks live in `hooks/`; use them as visible reminders and guardrails, not as a hidden planning method. See `docs/lifecycle-hooks.md` for their contract.
 
 ## Artifact roles
 
