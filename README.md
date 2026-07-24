@@ -38,9 +38,10 @@ A practical workflow is:
 1. Play with the idea in whichever tool helps you think.
 2. Stop when the work becomes consequential or ambiguous.
 3. Use the smallest skill that resolves the current uncertainty.
-4. Make the human decision about direction and scope.
-5. Give the coding agent a bounded slice and compact context packet.
-6. Check drift as implementation evolves.
+4. Use candidate breadboards or focused spikes only when a possible shape cannot yet be judged.
+5. Make the human decisions about direction and scope.
+6. Give the coding agent a bounded slice and compact context packet.
+7. Check drift as implementation evolves.
 
 For example, you might begin in Claude Design by generating and revising screens. Once something feels promising, bring the useful outputs—screens, notes, decisions, unanswered questions, and transcript—into framing, shaping, and breadboarding before asking Codex to build a selected slice.
 
@@ -69,7 +70,8 @@ planning/
   frame.md
   shaping.md
   appetite.md          # optional when the appetite needs its own decision record
-  breadboard.md
+  candidate-A-breadboard.md  # optional exploratory evidence during shaping
+  breadboard.md        # accepted selected-design intent
   sketch-reconciliation.md
   statechart.md
   slices.md
@@ -82,19 +84,21 @@ planning/
   runs/
 ```
 
-This is a convention, not a requirement. Keep one clearly active artifact for each planning level unless the project intentionally versions them. Preserve rejected alternatives in the shaping artifact, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
+This is a convention, not a requirement. Keep one clearly active artifact for each authoritative planning level unless the project intentionally versions them. Candidate breadboards remain subordinate to their named candidate and shaping artifact. Preserve rejected alternatives in shaping, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
 
 ### Choose the handoff artifact by its job
 
 | Artifact | Use it for |
 | --- | --- |
 | **Appetite card** | The fixed time or scope budget, cut line, accepted uncertainty, and revisit conditions that shapes must fit. |
+| **Candidate-shape breadboard** | Exploratory evidence about one unselected shape when its behavior must be clarified before comparison. It is not build scope. |
+| **Selected-design breadboard** | Accepted normative behavior after human selection and explicit reconciliation. |
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
 | **Dumplink plan** | Vertical task groups, risk, dependency order, sequence, and appetite-based cuts inside one selected slice. |
-| **Context packet** | The exact subset of planning material handed to the active implementation agent. |
+| **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent. |
 
-A common path is: accepted criteria and appetite → selected shape and breadboard → selected slice → interface contracts and executable breadboard when needed → optional Dumplink → optional kickoff reference → context packet → implementation. Not every project needs every artifact.
+A common path is: accepted criteria and appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape → accepted selected-design breadboard → selected slice → interface contracts and executable breadboard when needed → optional Dumplink → optional kickoff reference → context packet → implementation. Not every candidate or project needs every artifact.
 
 Set appetite before selecting a shape. Use the `Appetite` section in the [shaping template](./templates/shaping.md) for a compact decision or the standalone [appetite card](./templates/appetite-card.md) when ownership, rationale, and revisit conditions need their own record.
 
@@ -109,22 +113,31 @@ messy evidence
   -> frame the problem
   -> define criteria and set appetite
   -> compare solution shapes
-  -> reconcile sketches or screenshots when they reveal missing detail
-  -> select a direction
-  -> breadboard the behavior
+  <-> candidate breadboards or focused spikes when a shape is not yet judgeable
+  -> run fit checks and make a human selection
+  -> reconcile the selected direction into a selected-design breadboard
+  <-> return to shaping if detailed behavior exposes a consequential conflict
   -> optionally model complex state
   -> select a demoable slice
   -> give the build agent bounded context
   -> check drift while building
 ```
 
+Shaping and breadboarding are distinct but composable. Shaping owns requirements, appetite, comparison, and human selection. Breadboarding maps behavior in one of three modes:
+
+- `current-state` — descriptive evidence about what exists
+- `candidate-shape` — exploratory evidence about one unselected shape during shaping
+- `selected-design` — accepted normative intent after selection and reconciliation
+
+A candidate breadboard cannot select itself, produce build scope, or automatically become selected-design intent.
+
 The three core moves are:
 
 | Move | Use it when | Output |
 | --- | --- | --- |
 | [`framing-doc`](./framing-doc/SKILL.md) | You have notes, transcripts, requests, or an unclear problem. | Source, current approach/result, problem, desired outcome, boundaries, and criteria candidates. |
-| [`shaping`](./shaping/SKILL.md) | You need requirements, appetite, alternative approaches, fit checks, and a selected direction. | A bounded shape with a cut line, tradeoffs, non-goals, and remaining unknowns. |
-| [`breadboarding`](./breadboarding/SKILL.md) | Existing behavior needs an evidence map, or a selected direction needs to become concrete. | A declared current-state or selected-design map; only selected-design mode produces slice candidates. |
+| [`shaping`](./shaping/SKILL.md) | You need requirements, appetite, alternative approaches, candidate evidence where needed, fit checks, and a human-selected direction. | A bounded shape with a cut line, tradeoffs, non-goals, candidate-evidence implications, and remaining unknowns. |
+| [`breadboarding`](./breadboarding/SKILL.md) | Existing behavior needs an evidence map, one candidate needs behavioral clarification, or a selected direction needs to become concrete. | A declared current-state, candidate-shape, or selected-design map; only accepted selected-design mode produces slice candidates. |
 
 Start there. Add the advanced moves only when the work needs them.
 
@@ -133,12 +146,12 @@ Start there. Add the advanced moves only when the work needs them.
 | Skill | Add it when | Output |
 | --- | --- | --- |
 | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) | A sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active plan. | Visual observations mapped to stable IDs, explicit deltas, a human decision gate, and synchronized accepted updates. |
-| [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
+| [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted selected-design breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
 | [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | [`executable-breadboards`](./executable-breadboards/SKILL.md) | A slice needs fixtures, example runs, edge cases, and acceptance tests before build handoff. | A buildable, testable slice contract. |
 | [`dumplink`](./dumplink/SKILL.md) | Work inside a selected slice needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts. | A bounded task-group plan and agent handoff packet; pre-slice use stops at candidates. |
 | [`kickoff-doc`](./kickoff-doc/SKILL.md) | Builders need a durable orientation reference after selected artifacts converge. | A builder-facing map that does not replace build scope or sequence. |
-| [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the planning stack. | A compact context packet with an execution contract and verification target. |
+| [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the authoritative planning stack. | A compact context packet with an execution contract and verification target; candidate breadboards are excluded as build scope. |
 | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) | Implementation exists and may differ from accepted intent. | Separate intent/reality records, drift evidence, design smells, and an explicit correction decision. |
 
 See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the visual-to-plan procedure and command examples.
@@ -149,9 +162,11 @@ See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the v
 Use this repository's planning workflow.
 
 First determine whether this work needs framing, shaping, sketch reconciliation, or breadboarding.
-Do not implement code until an appetite, direction, and demoable slice are selected.
+During shaping, use a candidate-shape breadboard only when a named candidate cannot be judged without clarifying its behavior.
+Do not treat candidate evidence as selected intent or build scope.
+Do not implement code until an appetite, direction, accepted selected-design breadboard or equally clear behavior boundary, and demoable slice are selected.
 Keep requirements separate from mechanisms, preserve the cut line and explicit non-goals,
-and stop at human decisions about scope, appetite, or direction.
+and stop at human decisions about scope, appetite, direction, candidate-to-selected authority, or drift.
 
 Source material:
 [paste notes, transcript, request, or links here]
@@ -168,7 +183,8 @@ This repository makes the planning stack explicit enough for humans and agents t
 - what problem is being solved
 - which requirements judge fitness
 - which shape was selected and which were rejected
-- how the behavior and state fit together
+- which breadboards are descriptive, exploratory, or selected intent
+- how the accepted behavior and state fit together
 - what the current slice includes and excludes
 - what the implementation agent must preserve
 - what proves the slice is complete
@@ -274,7 +290,7 @@ bash scripts/check-repo-health.sh
 
 The health check verifies packaged-skill parity, manifest and artifact references, version parity, command wrappers, generated plugin output, the visual hot-reload viewer, and the MCP build and tests. See [CI health](./docs/ci-health-workflow.md).
 
-The fixtures under `evals/` are structural contract checks, not behavioral model benchmarks.
+The fixtures under `evals/` include structural contracts and deterministic behavior-runner checks; real model runs remain runtime-specific evaluations rather than universal benchmarks.
 
 ## License
 
