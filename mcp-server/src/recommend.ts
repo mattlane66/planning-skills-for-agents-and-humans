@@ -54,6 +54,36 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     return ['breadboard-reflection'];
   }
 
+  const multipleCandidateBreadboarding = includesAny(normalized, [
+    'alternatives',
+    'multiple candidates',
+    'candidate shapes',
+    'shapes a and b',
+    'each shape',
+    'each candidate',
+  ]) && includesAny(normalized, ['breadboard', 'behavior map']);
+  if (multipleCandidateBreadboarding) {
+    return ['shaping'];
+  }
+
+  const namedCandidateBreadboarding = (
+    includesAny(normalized, ['candidate-shape', 'candidate shape', 'candidate breadboard'])
+    || matches(normalized, [/\bbreadboard\s+(?:shape\s+)?[a-z]\d*\b/])
+  ) && includesAny(normalized, [
+    'before selection',
+    'before choosing',
+    'before any direction is selected',
+    'clarify',
+    'judge',
+    'coherent',
+    'uncertainty',
+    'fit implication',
+    'test whether',
+  ]);
+  if (namedCandidateBreadboarding) {
+    return ['breadboarding'];
+  }
+
   const explicitVisualReference = includesAny(normalized, [
     'this sketch',
     'this screenshot',
@@ -245,6 +275,7 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'accepted breadboard',
     'approved breadboard',
     'selected breadboard',
+    'selected-design breadboard',
     'from the breadboard',
   ]);
   if (!selectedDirection && includesAny(normalized, ['criteria', 'requirement', 'compare options', 'alternative', 'shape', 'tradeoff', 'direction'])) {

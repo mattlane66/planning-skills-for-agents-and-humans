@@ -1,9 +1,10 @@
 ---
-description: Map current-state behavior or a selected design into places, affordances, stores, consequences, and wiring.
+description: Map current behavior, one candidate shape, or a selected design into places, affordances, stores, consequences, and wiring.
 argument-hint:
 - existing-system evidence
-- selected shape
-- requirements
+- candidate or selected shape
+- requirements and appetite
+- decision-relevant uncertainty
 - notes
 - or target breadboard file
 allowed-tools:
@@ -17,13 +18,17 @@ disable-model-invocation: true
 
 Read `breadboarding/SKILL.md` first and follow it as the primary instruction for this command.
 
-Choose and declare one mode: descriptive `current-state` mapping from evidence, or normative `selected-design` mapping after a human has chosen a direction and appetite.
+Choose and declare one mode:
+
+- descriptive `current-state` mapping from evidence
+- exploratory `candidate-shape` mapping for one named unselected shape and one decision-relevant uncertainty
+- normative `selected-design` mapping after a human has chosen a direction and appetite
 
 User request and source context:
 
 $ARGUMENTS
 
-Produce or update a breadboard artifact with:
+Produce or update a breadboard artifact with only the detail appropriate to the mode:
 
 - Places
 - UI affordances
@@ -32,8 +37,9 @@ Produce or update a breadboard artifact with:
 - Wiring / Returns To
 - Product-relevant branches
 - Optional Mermaid diagram
-- Slice candidates when the breadboard is concrete enough
+- Fit implications in candidate-shape mode
+- Slice candidates only in accepted selected-design mode
 
 Keep tables as the source of truth. Do not turn the breadboard into a service graph unless backend behavior is product-relevant.
 
-Current-state mode must cite evidence and stop before future-design slicing. Selected-design mode must cite the selected shape, appetite, and cut line before proposing slice candidates.
+Current-state mode must cite evidence and stop before future-design slicing. Candidate-shape mode must name the candidate and uncertainty, remain subordinate to shaping, and stop before selection or slicing. Selected-design mode must cite the selected shape, appetite, and cut line, reconcile any candidate evidence explicitly, and stop for a shaping decision if detailed behavior exposes a consequential conflict.

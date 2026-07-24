@@ -24,9 +24,11 @@ Use available files, repository evidence, conversation context, and attached art
 |---|---|
 | Small, obvious, low-risk change with clear behavior and scope | No planning skill |
 | Raw notes, research, requests, or an unclear problem | `framing-doc` |
-| Clear problem but unclear criteria, appetite, alternatives, or selected direction | `shaping` |
+| Clear problem but unclear criteria, appetite, alternatives, comparison, or selected direction | `shaping` |
+| One named unselected candidate cannot be judged until its places, affordances, stores, consequences, or wiring are clarified | `breadboarding` in `candidate-shape` mode |
 | A sketch, screenshot, wireframe, mockup, or whiteboard may change accepted intent | `sketch-reconciliation` |
-| Current behavior or a selected design needs concrete places, affordances, stores, and wiring | `breadboarding` |
+| Existing behavior needs descriptive mapping | `breadboarding` in `current-state` mode |
+| A human-selected direction needs concrete accepted behavior or reconciliation from candidate evidence | `breadboarding` in `selected-design` mode |
 | An accepted stateful scope has retries, timeouts, approvals, lifecycle stages, or multiple valid actions per state | `statechart` |
 | A selected slice crosses a meaningful boundary whose inputs, outputs, branches, or errors are ambiguous | `interface-contracts` |
 | A selected slice needs fixtures, example runs, expected results, edge cases, and acceptance tests | `executable-breadboards` |
@@ -40,17 +42,20 @@ Use available files, repository evidence, conversation context, and attached art
 1. Prefer no planning skill for a contained copy edit, obvious bug fix, disposable experiment, or already-clear low-risk change.
 2. Route to the earliest unresolved decision, not the most advanced artifact that could eventually be useful.
 3. Choose one move only. Do not prescribe the entire downstream chain.
-4. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
-5. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
-6. Do not let current-state breadboarding become selected future intent.
-7. Do not begin implementation or make a human scope, appetite, or direction decision.
+4. Route broad alternative generation, criteria work, comparison, and selection to `shaping`, even when shaping may later invoke candidate breadboarding.
+5. Route directly to `breadboarding` in `candidate-shape` mode only when a named candidate and decision-relevant behavioral uncertainty already exist.
+6. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
+7. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
+8. Do not let current-state or candidate-shape breadboarding become selected future intent.
+9. Do not let a candidate breadboard feed slicing, context packaging, or implementation.
+10. Do not begin implementation or make a human scope, appetite, or direction decision.
 
 ## Output
 
 Return:
 
 ```md
-Recommended next move: [skill name | No planning skill]
+Recommended next move: [skill name and mode | No planning skill]
 
 Why: [one or two sentences naming the current uncertainty]
 
@@ -63,4 +68,4 @@ When a skill is selected and the runtime supports skill invocation, hand off to 
 
 ## Completion criterion
 
-The route is complete when one next move is named, its trigger is evidenced, unnecessary planning is rejected, and no downstream decision has been made prematurely.
+The route is complete when one next move is named, its trigger and mode are evidenced, unnecessary planning is rejected, and no downstream decision has been made prematurely.
