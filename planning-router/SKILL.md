@@ -1,6 +1,6 @@
 ---
 name: planning-router
-description: Choose the smallest planning move that resolves the current uncertainty when a user has not selected a specific planning skill or may not need planning at all.
+description: Inspect product-planning context and choose the smallest next planning move when no specific skill is selected or planning may not be needed.
 license: MIT
 ---
 
