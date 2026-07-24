@@ -42,7 +42,7 @@ require_text breadboarding/SKILL.md "### Candidate-shape mapping (exploratory)"
 require_text breadboarding/SKILL.md "### Selected-design mapping (normative)"
 require_text breadboarding/SKILL.md "Only an accepted selected-design breadboard can feed slice selection"
 require_text breadboarding/SKILL.md "Candidate-shape breadboarding is a shaping technique"
-require_text templates/breadboard.md "Mode: `current-state`, `candidate-shape`, or `selected-design`"
+require_text templates/breadboard.md 'Mode: `current-state`, `candidate-shape`, or `selected-design`'
 require_text templates/dumplink.md "## Task groups"
 require_text templates/dumplink.md "## Scope cuts"
 require_text templates/statechart.md "## Transition table"
