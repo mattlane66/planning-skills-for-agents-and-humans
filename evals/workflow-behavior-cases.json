@@ -12,6 +12,16 @@
       "forbidden_evidence": ["full planning workflow"]
     },
     {
+      "id": "planning-router-recommends-one-next-move",
+      "prompt": "Inspect this product request, repository context, and planning artifacts, then recommend exactly one next planning move without running it.",
+      "expected_skill": "planning-router",
+      "expected_artifact_type": "routing-recommendation",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": ["exactly one next move", "current uncertainty"],
+      "forbidden_evidence": ["full planning workflow", "production code"]
+    },
+    {
       "id": "router-selects-framing-for-unclear-request",
       "prompt": "We have interview notes, support complaints, and three stakeholder requests but no agreed statement of the problem. Choose the next planning move.",
       "expected_skill": "framing-doc",
