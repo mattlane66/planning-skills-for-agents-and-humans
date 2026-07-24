@@ -6,67 +6,87 @@ license: MIT
 
 # Feed Planning Context
 
-Use this skill when the user wants to give an agent a planning artifact and have it act on the artifact without losing the shaped intent.
+Use this skill when an implementation agent needs the exact authoritative context for one selected slice or active task group.
 
-This skill prepares context only. It does not implement code.
+This skill packages context only. It does not implement code, change scope, or resolve missing product decisions.
 
 ## Goal
 
-Create a compact context packet from the provided planning artifacts so an agent can understand the current task, artifact authority, selected direction, slice boundary, relevant statechart rows, executable examples, interface contracts, Dumplink task group, execution contract, and verification target when each is present.
+Create a compact context packet that tells the next agent:
+
+- what task is active
+- which artifacts govern it
+- which project terms and decisions to preserve
+- what behavior and boundaries matter
+- what is out of scope
+- when to return to planning
+- what proves the task is complete
 
 ## Inputs
 
-Use whichever artifacts the user provides or points to:
+Use whichever authoritative sources exist:
 
-- framing doc
-- shaping doc
-- appetite card, when appetite is recorded separately
-- selected shape
-- fit check
-- reverse fit check
-- breadboard
-- statechart for the selected scope, when present
-- executable breadboard
-- interface contract sketch or plain-language interface contract
-- Dumplink plan, when present
-- slice plan
-- kickoff doc
-- breadboard reflection
-- raw notes or transcripts, only when needed
+- frame and shaping document
+- Appetite card, when separate
+- selected breadboard and slice
+- relevant statechart rows
+- interface contracts
+- executable breadboard examples
+- selected Dumplink task group
+- kickoff document, for orientation only
+- implementation evidence when the task is a correction
 
-## Default behavior
+When working in an existing product repository, inspect applicable project instructions, `CONTEXT.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, ADR or decision directories, existing tests, and public interfaces. Include only the terms and decisions relevant to the active task. Do not create or modify durable documentation without authorization.
 
-1. Identify the current task.
-2. Identify the source artifacts and their authority.
-3. Extract only the context needed for the next move.
-4. Preserve stable IDs for requirements, places, affordances, stores, contracts, example runs, edge cases, and slices.
-5. Preserve executable breadboard fixtures, example runs, expected outputs, state changes, side effects, edge cases, and acceptance tests when present.
-6. When a sketch-reconciliation record exists, include accepted changes only after they have been applied to the authoritative artifacts. Exclude pending, rejected, and ambiguous visual deltas from build instructions.
-7. Preserve field names, required/optional distinctions, enum values, nullability, and error cases when interface contracts are present.
-8. Preserve relevant statechart states and transitions with their source breadboard IDs when present; the breadboard remains authoritative.
-9. Preserve the active Dumplink task group, dependencies, risk state, cuts, and acceptance checks when present.
-10. Keep rejected alternatives and raw notes out of the active packet unless the user asks for discovery or reconstruction.
-11. Preserve the accepted appetite and cut line.
-12. Name explicit non-goals and exclusions.
-13. Add an execution contract.
-14. Add a verification target.
-15. Stop after preparing the context packet.
+## Authority order
 
-## Output format
+Unless the user specifies otherwise:
+
+1. user's latest explicit instruction
+2. selected slice
+3. executable breadboard, for expected examples and results within that slice
+4. selected interface contract, for its named boundary
+5. selected Dumplink task group, for grouping and sequence inside the slice
+6. selected breadboard
+7. selected shaping direction
+8. kickoff document, for orientation only
+9. frame
+10. raw notes
+11. rejected alternatives and brainstorming
+
+A statechart is derived from the selected breadboard and never outranks it. No lower artifact may expand the selected slice.
+
+## Procedure
+
+1. Name the current task and selected slice.
+2. List source artifacts and their concern-specific authority.
+3. Extract only the sections required for the next move.
+4. Preserve stable IDs and accepted Appetite, cut line, and non-goals.
+5. Preserve canonical project language, relevant ADRs, and existing interfaces or seams.
+6. Include relevant statechart rows, contracts, examples, edge cases, acceptance tests, or task-group details only when present and needed.
+7. Exclude rejected alternatives, raw transcripts, pending visual deltas, and unrelated planning history.
+8. Flag missing field-level, example-level, or terminology decisions instead of inventing them.
+9. Add an execution contract.
+10. Add a verification target.
+11. Stop after writing the context packet.
+
+## Output
+
+Use `templates/context-packet.md`.
+
+At minimum include:
 
 ```md
 # Context Packet
 
 ## Task
-...
+- ...
 
 ## Source artifacts
 - ...
 
 ## Authority order
 1. ...
-2. ...
-3. ...
 
 ## Use these sections first
 - ...
@@ -75,54 +95,23 @@ Use whichever artifacts the user provides or points to:
 - ...
 
 ## Must preserve
-- ...
-- Accepted appetite and cut line: ...
-
-## Selected requirements
-- ...
-
-## Relevant places / affordances / stores
-- ...
-
-## Relevant statechart
-- Selected scope:
-- States and transitions:
-- Source breadboard IDs:
-- Explicit gaps:
-
-## Relevant executable breadboard
+- Accepted requirements:
+- Appetite and cut line:
 - Selected slice:
-- Example starting data / fixtures:
-- Example runs:
-- Expected user-visible results:
-- Expected state changes:
-- Expected side effects:
-- Edge cases:
-- Acceptance tests:
-- Open decisions:
+- Non-goals:
 
-## Relevant interface contracts
-- Contract:
-- Boundary:
-- Input shape:
-- Output shape:
-- Branches / errors:
-- Open decisions:
+## Project language and decisions
+- Canonical terms:
+- Relevant architectural decisions:
+- Existing interfaces or seams:
+- Terms or decisions this work may introduce:
 
-## Relevant Dumplink plan
-- Active task group:
-- Relevant tasks:
-- Risk state:
-- Dependencies:
-- Cuttable scope:
-- Acceptance checks:
-- Stop condition:
-
-## Current slice
-- Slice: ...
-- Demo: ...
-- Produces: ...
-- Exclusions: ...
+## Relevant behavior
+- Places / affordances / stores:
+- Statechart rows, when present:
+- Contracts, when present:
+- Fixtures, runs, edge cases, and acceptance tests, when present:
+- Active task group and dependencies, when present:
 
 ## Execution contract
 - Goal condition:
@@ -136,143 +125,50 @@ Use whichever artifacts the user provides or points to:
 ## Open questions
 - ...
 
-## Build-handoff behavior
-1. Restate the relevant constraints.
-2. Identify implementation implications.
-3. Ask at most 3 blocking questions.
-4. Propose a plan before editing code.
-5. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-6. Flag missing field names, nullability, enum values, error cases, fixtures, expected outputs, or acceptance tests instead of inventing them.
-7. Work toward the goal condition, run the required checks, and report incomplete verification directly.
-
 ## Verification target
 - ...
 ```
 
-## Authority order
+## Project language rules
 
-When artifacts disagree, use this default authority order unless the user says otherwise:
+- Reuse terms already established by the product repository.
+- Prefer existing public interfaces and test seams to newly invented ones.
+- State when selected work intentionally changes an architectural seam.
+- Keep proposed glossary or ADR changes separate from authorized changes.
+- Do not let a compact summary rename concepts in ways that break traceability.
 
-1. the user's latest explicit instruction
-2. selected slice
-3. executable breadboard, when present
-4. selected interface contract, for boundary-level input/output details
-5. selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
-6. selected breadboard
-7. selected shaping direction
-8. kickoff doc, for builder orientation only
-9. framing doc
-10. raw notes and transcripts
-11. rejected alternatives and brainstorming
+## Advanced artifact rules
 
-A statechart is derived from the selected breadboard and never outranks it.
+When present, preserve only the relevant subset:
 
-Apply authority to the concern each artifact owns. The selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, an interface contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is a derived orientation reference, not build scope or sequence.
+- statechart: source breadboard IDs, states, transitions, guards, effects, and explicit gaps
+- interface contract: boundary, fields, optionality, enum values, nullability, units, branches, and errors
+- executable breadboard: fixtures, example runs, expected visible results, state changes, side effects, edge cases, and tests
+- Dumplink: active task group, dependencies, risk, cuts, acceptance checks, and stop condition
 
-## Chunking rules
+Do not activate deferred groups or fill missing details with guesses.
 
-When artifacts are large:
+## Execution contract
 
-1. Start with the Context Card or top summary.
-2. Include only the artifact needed for the current phase.
-3. Prefer selected sections over whole documents.
-4. Keep raw notes out unless the task is discovery or reconstruction.
-5. Use stable IDs so the agent can request missing sections by name.
-6. If the artifact is long, summarize it into an implementation packet before coding.
-7. Keep rejected alternatives available, but clearly mark them as rejected.
-8. Keep non-goals close to the task so the agent does not expand scope.
+The execution contract must name:
 
-## Stable ID handling
+- the concrete goal condition
+- checks required before completion
+- files or areas the agent may touch
+- out-of-scope changes
+- conditions that return work to planning
+- checkpoint expectations for multi-step work
+- verification caveats that must be reported
 
-For new artifacts, use the compact conventions in `AGENTS.md`: `R0`, `P1`, `U1`, `N1`, `S1`, `ST1`, `TR1`, `C1`, `RUN1`, `E1`, `TG1`, and `V1`.
+## Return to planning when
 
-Preserve any established legacy IDs such as `REQ-01` or `SLICE-01` rather than renaming them for style.
+- implementation would expand the selected slice
+- required behavior is absent from accepted artifacts
+- a field, enum, nullability, unit, error case, fixture, expected result, or acceptance test is missing
+- project terminology or an architectural decision is materially ambiguous
+- implementation evidence disproves a planning assumption
+- the work no longer fits the accepted Appetite
 
-Do not rename IDs for style. If meaning changes, mark it as a planning update.
+## Completion criterion
 
-## Executable breadboard handling
-
-When an executable breadboard is present, preserve:
-
-- selected slice ID and boundary
-- relevant places, affordances, stores, and wires
-- fixtures or example starting data
-- example runs
-- expected user-visible results
-- expected state changes
-- expected side effects
-- edge cases
-- acceptance tests
-- open decisions
-
-The executable breadboard is the build-handoff artifact for a selected slice. It is more authoritative than the ordinary breadboard for the examples and expected results of that slice.
-
-## Interface contract handling
-
-When interface contracts are present, preserve:
-
-- contract IDs
-- boundary names
-- field names
-- required vs optional distinctions
-- enum values
-- nullability
-- units, such as cents instead of dollars
-- branches and error cases
-- open decisions
-
-If a field-level decision is missing, flag it. Do not invent it during context packaging.
-
-## Statechart handling
-
-When a statechart is present, include only the states and transitions relevant to the selected slice. Preserve their source breadboard IDs and explicit gaps. If the statechart and breadboard disagree, use the breadboard and request that the statechart be regenerated.
-
-## Dumplink handling
-
-When a Dumplink plan is present, preserve the active task group, vertical boundary, risk state, dependency order, cuttable scope, acceptance checks, and stop condition. Do not activate deferred groups or flatten the plan into a horizontal backlog.
-
-## Execution contract handling
-
-The execution contract turns the context packet into a loop-ready handoff. It should name:
-
-- the concrete goal condition that would make the work complete
-- the checks that should be run before completion
-- the files, folders, or areas the agent may touch
-- the changes that are outside the selected slice
-- the conditions that should return work to planning
-- the checkpoint cadence for multi-step work
-- the caveats to report when verification is incomplete
-
-## Drift handling
-
-If implementation reality conflicts with a planning artifact, return:
-
-```md
-## Planning drift found
-
-The selected artifact says:
-- ...
-
-The implementation reality is:
-- ...
-
-Options:
-1. Update the code to match the artifact.
-2. Update the artifact because the original assumption was wrong.
-3. Split the slice and defer the conflicting part.
-
-Recommended move:
-- ...
-```
-
-## Do not
-
-- implement code
-- turn rejected alternatives into active requirements
-- paste entire transcripts into the active context unless needed
-- silently drop non-goals
-- silently change the selected slice boundary
-- silently change specified executable breadboard examples or interface contracts
-- invent missing field names, enum values, nullability, error cases, fixtures, expected outputs, or acceptance tests
-- rename stable IDs during packaging
-- treat raw notes as more authoritative than selected artifacts
+The packet is complete when the next agent can act without loading the entire planning stack, can identify every governing source, can preserve the product repository's language and seams, and knows exactly when to stop and return to planning.
