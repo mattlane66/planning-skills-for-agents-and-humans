@@ -36,7 +36,7 @@ Use whichever authoritative sources exist:
 - kickoff document, for orientation only
 - implementation evidence when the task is a correction
 
-When working in an existing product repository, inspect applicable project instructions, `CONTEXT.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, ADR or decision directories, existing tests, and public interfaces. Include only the terms and decisions relevant to the active task. Do not create or modify durable documentation without authorization.
+When working in an existing product repository, inspect the applicable `AGENTS.md`, `CONTEXT.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, ADR or decision directories, existing tests, and public interfaces. Include only the terms and decisions relevant to the active task. Do not create or modify durable documentation without authorization.
 
 ## Authority order
 
