@@ -1,4 +1,5 @@
 export const skillNames = [
+  'planning-router',
   'framing-doc',
   'shaping',
   'sketch-reconciliation',
