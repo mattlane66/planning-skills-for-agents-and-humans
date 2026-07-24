@@ -17,7 +17,7 @@
   },
   "breadboarding": {
     "title": "Breadboarding",
-    "description": "Map current-state behavior or a selected design into places, affordances, stores, consequences, and wiring when concrete behavior or candidate slices need clarification."
+    "description": "Map current behavior, candidate shapes, or a selected design into places, affordances, stores, consequences, and wiring when concrete behavior needs clarification."
   },
   "statechart": {
     "title": "Statechart",
