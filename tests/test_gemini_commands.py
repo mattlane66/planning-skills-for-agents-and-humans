@@ -5,6 +5,7 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXPECTED = {
+    "plan",
     "criteria",
     "appetite",
     "sketch-shapes",
@@ -34,6 +35,7 @@ class GeminiCommandTests(unittest.TestCase):
             path.stem: tomllib.loads(path.read_text(encoding="utf-8"))["prompt"].lower()
             for path in (ROOT / ".gemini/commands").glob("*.toml")
         }
+        self.assertIn("exactly one next move", prompts["plan"])
         self.assertIn("human", prompts["select-shape"])
         self.assertIn("selected slice", prompts["dumplink"])
         self.assertIn("do not implement", prompts["statechart"])
