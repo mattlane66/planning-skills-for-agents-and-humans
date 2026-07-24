@@ -42,14 +42,24 @@
       "forbidden_evidence": ["selected mechanism", "production code"]
     },
     {
-      "id": "shaping-stops-before-selection",
-      "prompt": "We have an accepted frame. Define criteria and appetite, compare multiple solution shapes, and stop before choosing one for me.",
+      "id": "shaping-uses-candidate-evidence-without-selection",
+      "prompt": "We have accepted criteria and appetite plus Shapes A and B. Identify whether either candidate needs a lightweight breadboard or focused spike, use only the evidence needed for comparison, and stop before choosing for me.",
       "expected_skill": "shaping",
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["accepted criteria", "appetite", "multiple shapes", "fit check"],
-      "forbidden_evidence": ["selected direction without authorization", "production code"]
+      "required_evidence": ["multiple shapes", "candidate evidence", "fit check", "human selection"],
+      "forbidden_evidence": ["automatic candidate promotion", "production code"]
+    },
+    {
+      "id": "candidate-breadboard-remains-exploratory",
+      "prompt": "Shape A is already named, but its checkout handoff cannot be judged from the mechanism list. Use candidate-shape breadboarding only to resolve that uncertainty and return the fit implications to shaping.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "candidate-clear-enough-to-compare",
+      "implementation_allowed": false,
+      "required_evidence": ["candidate-shape", "named candidate", "decision-relevant uncertainty", "fit implications"],
+      "forbidden_evidence": ["selected direction", "slice selection", "build handoff", "production code"]
     },
     {
       "id": "sketch-reconciliation-does-not-promote-visuals",
@@ -62,14 +72,14 @@
       "forbidden_evidence": ["silent scope change", "production code"]
     },
     {
-      "id": "breadboarding-maps-selected-behavior",
-      "prompt": "Turn the selected shape into places, affordances, stores, visible consequences, branches, and wiring. Do not implement.",
+      "id": "selected-design-breadboarding-reconciles-candidate-evidence",
+      "prompt": "Shape A has been explicitly selected and has an earlier candidate breadboard. Reconcile only the selected mechanisms into accepted selected-design behavior, surface any shaping conflict, and stop before slicing.",
       "expected_skill": "breadboarding",
       "expected_artifact_type": "breadboard",
-      "expected_gate": "slice-selection",
+      "expected_gate": "breadboard-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["selected-design", "places", "affordances", "stores", "wiring"],
-      "forbidden_evidence": ["production code"]
+      "required_evidence": ["selected-design", "selected shape", "candidate reconciliation", "shaping conflict"],
+      "forbidden_evidence": ["automatic promotion", "silent shape change", "production code"]
     },
     {
       "id": "statechart-remains-derived",
@@ -112,14 +122,14 @@
       "forbidden_evidence": ["expanded slice", "horizontal backlog", "production code"]
     },
     {
-      "id": "context-packet-preserves-project-language",
-      "prompt": "Package only the authoritative context needed to implement the selected slice, including established project terms and relevant ADRs.",
+      "id": "context-packet-excludes-candidate-build-scope",
+      "prompt": "Package only the authoritative context needed to implement the selected slice. Preserve established project terms and relevant ADRs, but do not treat earlier candidate breadboards as active build scope.",
       "expected_skill": "feed-planning-context",
       "expected_artifact_type": "context-packet",
       "expected_gate": null,
       "implementation_allowed": false,
-      "required_evidence": ["authority order", "project language", "architectural decisions", "execution contract", "verification target"],
-      "forbidden_evidence": ["entire transcript", "production code"]
+      "required_evidence": ["authority order", "project language", "selected-design behavior", "execution contract", "verification target"],
+      "forbidden_evidence": ["candidate breadboard as build scope", "entire transcript", "production code"]
     },
     {
       "id": "kickoff-is-orientation-not-scope",
