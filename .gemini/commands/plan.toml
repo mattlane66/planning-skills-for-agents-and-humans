@@ -1,0 +1,23 @@
+description = "Choose the smallest planning move that resolves the current uncertainty, including no planning skill when the work is already clear."
+
+prompt = """
+Use this repository's planning router.
+
+Primary instructions:
+@{planning-router/SKILL.md}
+@{AGENTS.md}
+
+Command arguments / source context:
+{{args}}
+
+Recommend exactly one next move or `No planning skill`.
+
+Return:
+
+- Recommended next move
+- Why
+- What it should produce
+- Human gate
+
+Do not run the full workflow, make a human scope or direction decision, or begin implementation.
+"""
