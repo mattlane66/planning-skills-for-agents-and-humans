@@ -16,19 +16,24 @@ Do not write production code unless the user asks for implementation and a selec
 
 ```text
 frame
-→ shape
-→ breadboard
+→ criteria and Appetite
+→ candidate shapes
+↔ candidate breadboards or focused spikes when needed
+→ fit and human selection
+→ selected-design breadboard
 → select a demoable slice
 → add only the supporting detail that slice requires
 → feed bounded context
 → build and check drift
 ```
 
+The route is iterative, not a conveyor belt. Candidate breadboarding may occur during shaping when a shape cannot be judged from mechanisms or sketches alone. After selection, selected-design breadboarding reconciles the accepted direction into normative behavior.
+
 The three core planning moves are:
 
 - `framing-doc` — clarify the real problem, desired outcome, evidence, and boundary
-- `shaping` — define criteria and Appetite, compare solution directions, and stop for human selection
-- `breadboarding` — make current or selected behavior concrete as places, affordances, stores, and wiring
+- `shaping` — define criteria and Appetite, compare solution directions, use candidate evidence when needed, and stop for human selection
+- `breadboarding` — map current behavior, test an unselected candidate, or make a selected design concrete as places, affordances, stores, and wiring
 
 Advanced moves are conditional, not a checklist:
 
@@ -49,6 +54,7 @@ Agents may gather facts, expose alternatives, and prepare decision-ready materia
 - which criteria are accepted
 - what Appetite and cut line the bet deserves
 - which shape is selected
+- whether a candidate breadboard is reconciled into selected-design intent
 - which slice is active
 - whether drift changes the code, the plan, or the scope
 
@@ -62,11 +68,11 @@ Keep these distinctions intact:
 - current approach versus desired future state
 - problem versus solution
 - requirements versus mechanisms
-- current-state behavior versus selected-design intent
+- current-state behavior versus candidate-shape evidence versus selected-design intent
 - accepted scope versus rejected or deferred ideas
 - planning truth versus implementation reality
 
-Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. A selected slice governs active scope.
+Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. Candidate breadboards are subordinate evidence about one possible shape. A selected-design breadboard is normative only after explicit selection and reconciliation. A selected slice governs active scope.
 
 ## Project language and decisions
 
@@ -91,16 +97,17 @@ Use this default order when artifacts disagree:
 3. executable breadboard, for expected examples and results within that slice
 4. selected interface contract, for its named boundary
 5. selected Dumplink task group, for grouping and sequence inside the slice
-6. selected breadboard
+6. accepted selected-design breadboard
 7. selected shaping direction
-8. kickoff document, for orientation only
-9. framing document
-10. raw notes and transcripts
-11. rejected alternatives and brainstorming
+8. candidate-shape breadboard, for evidence about its named candidate only
+9. kickoff document, for orientation only
+10. framing document
+11. raw notes and transcripts
+12. rejected alternatives and brainstorming
 
-Authority is concern-specific. No lower artifact may expand the selected slice.
+Authority is concern-specific. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank the shaping artifact. No lower artifact may expand the selected slice.
 
-A statechart is derived from the selected breadboard and never outranks it. A sketch-reconciliation record becomes authoritative only after accepted deltas are applied to the relevant source artifact. Run logs are audit records, not product truth.
+A statechart is derived from the selected-design breadboard and never outranks it. A sketch-reconciliation record becomes authoritative only after accepted deltas are applied to the relevant source artifact. Run logs are audit records, not product truth.
 
 Read `docs/agent-operating-reference.md` when resolving a complex authority conflict or preserving advanced artifact detail.
 
@@ -113,13 +120,13 @@ Before implementation, provide a compact context packet containing only what the
 - current task and selected slice
 - source artifacts and authority order
 - accepted requirements, Appetite, cut line, and non-goals
-- relevant places, affordances, stores, and wires
+- relevant selected-design places, affordances, stores, and wires
 - relevant statechart rows, contracts, examples, or task group when present
 - canonical project terms and relevant architectural decisions
 - execution contract
 - verification target
 
-Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
+Do not include candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
 
 ## Drift
 
@@ -182,9 +189,11 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 ## Artifact roles
 
 - Frame — why the problem matters
-- Shaping document — criteria, Appetite, alternatives, fit, and selection
+- Shaping document — criteria, Appetite, alternatives, candidate evidence, fit, and selection
 - Appetite card — fixed budget, cut line, accepted uncertainty, and revisit conditions when those need a separate record
-- Breadboard — structure and observable behavior
+- Current-state breadboard — descriptive evidence about existing behavior
+- Candidate-shape breadboard — exploratory evidence about one unselected shape; never build scope
+- Selected-design breadboard — accepted structure and observable behavior after selection and reconciliation
 - Statechart — optional derived view of selected stateful behavior
 - Interface contract — what crosses a meaningful boundary
 - Executable breadboard — selected behavior plus fixtures, examples, expected results, and tests
@@ -198,6 +207,7 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 Planning is complete enough for the next move when:
 
 - the active uncertainty has been resolved or made decision-ready
+- exploratory candidate evidence is clearly separated from accepted intent
 - the authoritative artifact is clear
 - human gates have not been crossed implicitly
 - advanced artifacts exist only when their triggering complexity is present
