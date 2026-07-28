@@ -90,7 +90,7 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 
 | Artifact | Use it for |
 | --- | --- |
-| **Appetite card** | The fixed time or scope budget, cut line, accepted uncertainty, and revisit conditions that shapes must fit. |
+| **Appetite card** | The fixed time budget, cut line, accepted uncertainty, and revisit conditions that shapes must fit. |
 | **Candidate-shape breadboard** | Exploratory evidence about one unselected shape when its behavior must be clarified before comparison. It is not build scope. |
 | **Selected-design breadboard** | Accepted normative behavior after human selection and explicit reconciliation. |
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
