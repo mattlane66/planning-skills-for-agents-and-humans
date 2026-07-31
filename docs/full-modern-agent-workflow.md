@@ -10,10 +10,13 @@ Messy notes → frame → criteria → Appetite → sketch shapes ↔ candidate-
 
 This is iterative, not a conveyor belt. Candidate breadboarding may support shaping before selection. Only an accepted selected-design breadboard can feed slicing and implementation.
 
+When the bounded planning route itself spans multiple sessions, Wayfinding wraps the relevant planning stages as a coordination layer. Its map and tickets index work; accepted decisions still live in the stage artifacts below.
+
 ## Stages
 
 | Stage | Purpose | Output |
 | --- | --- | --- |
+| Wayfinding, optional outer loop | Coordinate dependent planning decisions, evidence, prototypes, and prerequisites across sessions without creating a second source of truth. | `planning/wayfinding/<map>/map.md` and tickets |
 | Frame | Name the current situation, problem, outcome, forces, and boundaries. | `planning/frame.md` |
 | Criteria | Define the standards for judging fit before mechanisms take over. | requirements / criteria table |
 | Appetite | Set the fixed time or scope budget, cut line, accepted uncertainty, and spike threshold before selection. | shaping Appetite section or `planning/appetite.md` |
@@ -70,6 +73,7 @@ or:
 
 A modern agent workflow is complete when:
 
+- any Wayfinding resolution is reflected in its canonical artifact and no map is treated as product truth
 - requirements stayed separate from mechanisms
 - Appetite and the cut line were explicit before shape selection
 - candidate breadboards were used only where decision-relevant uncertainty justified them

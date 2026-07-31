@@ -23,6 +23,7 @@ Use available files, repository evidence, conversation context, and attached art
 | Current condition | Next move |
 |---|---|
 | Small, obvious, low-risk change with clear behavior and scope | No planning skill |
+| The destination is bounded, but reaching it requires multiple dependent planning decisions or investigations across sessions | `wayfinding` |
 | Raw notes, research, requests, or an unclear problem | `framing-doc` |
 | Clear problem but unclear criteria, appetite, alternatives, comparison, or selected direction | `shaping` |
 | One named unselected candidate cannot be judged until its places, affordances, stores, consequences, or wiring are clarified | `breadboarding` in `candidate-shape` mode |
@@ -42,13 +43,15 @@ Use available files, repository evidence, conversation context, and attached art
 1. Prefer no planning skill for a contained copy edit, obvious bug fix, disposable experiment, or already-clear low-risk change.
 2. Route to the earliest unresolved decision, not the most advanced artifact that could eventually be useful.
 3. Choose one move only. Do not prescribe the entire downstream chain.
-4. Route broad alternative generation, criteria work, comparison, and selection to `shaping`, even when shaping may later invoke candidate breadboarding.
-5. Route directly to `breadboarding` in `candidate-shape` mode only when a named candidate and decision-relevant behavioral uncertainty already exist.
-6. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
-7. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
-8. Do not let current-state or candidate-shape breadboarding become selected future intent.
-9. Do not let a candidate breadboard feed slicing, context packaging, or implementation.
-10. Do not begin implementation or make a human scope, appetite, or direction decision.
+4. Route to `wayfinding` only when planning itself spans sessions and needs a persistent dependency map. A long implementation or an ordinary shaping pass is not enough.
+5. When resolving an active Wayfinding ticket, route from that ticket's precise question to a leaf skill. Never route it back to `wayfinding`.
+6. Route broad alternative generation, criteria work, comparison, and selection to `shaping`, even when shaping may later invoke candidate breadboarding.
+7. Route directly to `breadboarding` in `candidate-shape` mode only when a named candidate and decision-relevant behavioral uncertainty already exist.
+8. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
+9. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
+10. Do not let current-state or candidate-shape breadboarding become selected future intent.
+11. Do not let a candidate breadboard feed slicing, context packaging, or implementation.
+12. Do not begin implementation or make a human scope, appetite, or direction decision.
 
 ## Output
 

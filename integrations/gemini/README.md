@@ -15,6 +15,8 @@ Example workspace layout:
 ```text
 .gemini/
   skills/
+    wayfinding/
+      SKILL.md
     framing-doc/
       SKILL.md
     shaping/
@@ -41,7 +43,7 @@ Example workspace layout:
 
 When applying the method to a real product, create this layout in the product repository rather than opening the Planning Skills repository as the work target. Preserve the product's existing `GEMINI.md` and `AGENTS.md`; add only the skill and command adapters you need.
 
-The TOML files under `.gemini/commands/` are repository-local adapter examples, not path-independent packages. To reuse one in a product repository, copy or symlink it into that repository's `.gemini/commands/` directory and update every `@{...}` include to the installed skill and support-file paths. Do not replace the product's `AGENTS.md`. The available wrappers include `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/select-shape`, `/reconcile-sketch`, `/statechart`, `/dumplink`, and `/check-drift`.
+The TOML files under `.gemini/commands/` are repository-local adapter examples, not path-independent packages. To reuse one in a product repository, copy or symlink it into that repository's `.gemini/commands/` directory and update every `@{...}` include to the installed skill and support-file paths. Do not replace the product's `AGENTS.md`. The available wrappers include `/wayfind`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/select-shape`, `/reconcile-sketch`, `/statechart`, `/dumplink`, and `/check-drift`.
 
 Example prompt:
 

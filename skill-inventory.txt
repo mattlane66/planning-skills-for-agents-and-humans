@@ -1,4 +1,5 @@
 planning-router
+wayfinding
 framing-doc
 shaping
 sketch-reconciliation

@@ -71,6 +71,7 @@ It is a way to stop intent from getting lost.
 
 | Moment | Use |
 |---|---|
+| A bounded planning route needs dependent decisions coordinated across sessions | [`wayfinding`](./wayfinding/SKILL.md) |
 | Raw notes, transcript, interview, or request need to become a clear problem | [`framing-doc`](./framing-doc/SKILL.md) |
 | A framed problem needs criteria, appetite, alternatives, fit checks, and a selected direction | [`shaping`](./shaping/SKILL.md) |
 | A visual introduces missing or conflicting evidence | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) |

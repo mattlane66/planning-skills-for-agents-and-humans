@@ -36,6 +36,15 @@ The important behavior is the gate discipline:
 
 Codex does not need Claude's `.claude/commands/` files to use the method. Use these prompt forms instead.
 
+### Wayfinding
+
+```text
+Use the installed `wayfinding` skill and follow this product repository's instructions.
+Chart this bounded planning effort toward [destination artifact or gate].
+Create a shared map of precise decision, evidence, prototype, and prerequisite tickets with blockers, fog, out-of-scope work, and an exit check.
+Use local Markdown unless I explicitly select an available issue tracker. Do not resolve tickets while charting, treat the map as product truth, create implementation tasks, or write production code.
+```
+
 ### Criteria
 
 ```text

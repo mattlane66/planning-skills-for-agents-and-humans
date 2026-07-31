@@ -13,6 +13,8 @@
 
 ### Added
 
+- Added the `wayfinding` skill and `/wayfind` wrappers for coordinating dependent planning decisions across sessions without creating a second source of product truth.
+- Added portable local-Markdown and optional issue-tracker adapters, Wayfinding map and ticket templates, MCP routing, and cross-runtime activation coverage.
 - Added a Claude and Claude Design workflow that separates canonical skills from Claude Code command wrappers.
 - Added uploadable Claude skill ZIP generation with optimized trigger metadata and bundled supporting resources.
 - Added positive, automatic-selection, near-neighbor, negative-trigger, command-wrapper, and cross-surface fallback tests for Claude skill invocation.

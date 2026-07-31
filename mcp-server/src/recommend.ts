@@ -1,5 +1,6 @@
 export const skillNames = [
   'planning-router',
+  'wayfinding',
   'framing-doc',
   'shaping',
   'sketch-reconciliation',
@@ -52,6 +53,36 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
 
   if (includesAny(normalized, ['planning drift', 'implementation reality', 'compare to implementation', 'reflect on the breadboard'])) {
     return ['breadboard-reflection'];
+  }
+
+  const activeWayfindingTicket = includesAny(normalized, [
+    'active wayfinding ticket:',
+    'inside the active wayfinding ticket',
+    'route this wayfinding ticket',
+  ]);
+  const explicitWayfinding = !activeWayfindingTicket && includesAny(normalized, [
+    'wayfinding',
+    'wayfinder',
+    'wayfind this',
+    'shared decision map',
+    'multi-session planning map',
+  ]);
+  const multiSessionDecisionRoute = !activeWayfindingTicket
+    && includesAny(normalized, [
+      'multiple agent sessions',
+      'multiple planning sessions',
+      'across planning sessions',
+      'too large for one planning session',
+    ])
+    && includesAny(normalized, [
+      'dependent decision',
+      'dependent decisions',
+      'decision dependencies',
+      'investigation threads',
+      'planning frontier',
+    ]);
+  if (explicitWayfinding || multiSessionDecisionRoute) {
+    return ['wayfinding'];
   }
 
   const multipleCandidateBreadboarding = includesAny(normalized, [

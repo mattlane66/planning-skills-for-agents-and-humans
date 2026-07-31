@@ -79,19 +79,19 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
+  wayfind frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard
+  wayfind frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
 )
 
-GEMINI_COMMANDS=(criteria appetite sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
+GEMINI_COMMANDS=(wayfind criteria appetite sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
 
 TEMPLATES=(
-  frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
+  wayfinding-map wayfinding-ticket frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
   slices context-packet kickoff breadboard-reflection drift-check agent-run-log
   orchestration-plan spike decision-log appetite-card
 )
@@ -303,6 +303,16 @@ if grep -q "sketch-reconciliation" AGENTS.md \
   pass "Sketch reconciliation is discoverable across canonical consumer surfaces"
 else
   fail "Sketch reconciliation is missing from one or more canonical consumer surfaces"
+fi
+if grep -q "wayfinding" AGENTS.md \
+  && grep -q "skill: wayfinding" .agent-orchestration.yaml \
+  && grep -q "templates/wayfinding-map.md" mcp-server/src/index.ts \
+  && grep -q "wayfinding" .codex-plugin/plugin.json \
+  && grep -q "wayfinding" skill-inventory.txt \
+  && grep -q "/wayfind" docs/claude-slash-commands.md; then
+  pass "Wayfinding is discoverable across canonical consumer surfaces"
+else
+  fail "Wayfinding is missing from one or more canonical consumer surfaces"
 fi
 if grep -q "Appetite card" AGENTS.md \
   && grep -q "^  appetite:" .agent-orchestration.yaml \

@@ -6,6 +6,7 @@ Use the shared repo-level agent instructions below as the primary context for Ge
 
 Gemini CLI users can also use project-local custom commands in `.gemini/commands/` for planning gates, optional state modeling, task grouping, and drift checks:
 
+- `/wayfind`
 - `/criteria`
 - `/appetite`
 - `/sketch-shapes`

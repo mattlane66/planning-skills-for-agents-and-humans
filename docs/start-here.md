@@ -44,6 +44,7 @@ A candidate breadboard does not automatically become selected-design. After sele
 
 | Current condition | Use | Output |
 |---|---|---|
+| A bounded planning destination requires multiple dependent decisions or investigations across sessions | `/wayfind` or `wayfinding/SKILL.md` | A shared coordination map with precise tickets, blockers, fog, and an exit check. |
 | A sketch, screenshot, wireframe, mockup, or whiteboard may change accepted intent | `/reconcile-sketch` or `sketch-reconciliation/SKILL.md` | Observations mapped to stable IDs, proposed deltas, a human decision gate, and accepted updates. |
 | A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | Transition table, Mermaid projection, and explicit gaps derived from the selected-design breadboard. |
 | A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
@@ -72,6 +73,8 @@ messy evidence
 
 Not every candidate needs a breadboard. Not every project needs every artifact.
 
+Wayfinding is an optional outer loop around this route. Use it only when planning itself must persist across sessions; ordinary shaping remains the smaller move when the current decision fits one session.
+
 ## Recommended artifact home
 
 Keep project-specific outputs in the product repository, usually under `planning/`.
@@ -80,6 +83,7 @@ A typical starting set is:
 
 ```text
 planning/
+  wayfinding/          # optional maps and tickets for multi-session planning
   frame.md
   shaping.md
   breadboard.md

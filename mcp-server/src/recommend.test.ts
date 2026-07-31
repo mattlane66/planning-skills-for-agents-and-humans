@@ -6,6 +6,31 @@ test('routes fuzzy source material to framing', () => {
   assert.deepEqual(recommendPlanningWorkflow('I have a messy transcript and an unclear problem'), ['framing-doc']);
 });
 
+test('uses Wayfinding only for explicit multi-session decision coordination', () => {
+  assert.deepEqual(
+    recommendPlanningWorkflow('Use Wayfinding to chart this migration as a shared decision map'),
+    ['wayfinding'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow(
+      'This planning route has dependent decisions across multiple agent sessions and needs a planning frontier',
+    ),
+    ['wayfinding'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Active Wayfinding ticket: define criteria and appetite before comparing shapes'),
+    ['shaping'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('The implementation will take six weeks; compare shapes and tradeoffs'),
+    ['shaping'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Inside the selected slice, create task groups across several sessions'),
+    ['dumplink'],
+  );
+});
+
 test('routes option comparison to shaping', () => {
   assert.deepEqual(recommendPlanningWorkflow('Compare options and tradeoffs before choosing a direction'), ['shaping']);
 });

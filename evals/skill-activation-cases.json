@@ -2,6 +2,9 @@
   "confusion_pairs": [
     ["planning-router", "framing-doc"],
     ["planning-router", "shaping"],
+    ["planning-router", "wayfinding"],
+    ["wayfinding", "shaping"],
+    ["wayfinding", "dumplink"],
     ["framing-doc", "shaping"],
     ["shaping", "breadboarding"],
     ["breadboarding", "statechart"],
@@ -19,6 +22,16 @@
       "negative": [
         "The planning move is already chosen: create a source-grounded frame from these interview notes.",
         "The planning move is already chosen: compare solution shapes against accepted criteria and appetite."
+      ]
+    },
+    "wayfinding": {
+      "positive": [
+        "Chart this bounded migration as a shared map of dependent planning decisions that several agent sessions can resolve safely.",
+        "Use Wayfinding to preserve the frontier, blockers, and unresolved fog while we work toward an accepted selected-design breadboard."
+      ],
+      "negative": [
+        "The problem is framed; compare three shapes against accepted criteria and appetite in this session.",
+        "A selected slice exists; organize its implementation into vertical task groups and dependency order."
       ]
     },
     "framing-doc": {

@@ -2,6 +2,7 @@
 
 This repo already contains Claude-compatible `SKILL.md` files as the canonical source of truth:
 
+- `wayfinding/SKILL.md`
 - `framing-doc/SKILL.md`
 - `shaping/SKILL.md`
 - `sketch-reconciliation/SKILL.md`
@@ -60,6 +61,7 @@ dist/claude-code-plugin/
   docs/lifecycle-hooks.md
   docs/loop-prompting.md
   templates/*.md
+  skills/wayfinding/SKILL.md
   skills/framing-doc/SKILL.md
   skills/shaping/SKILL.md
   skills/sketch-reconciliation/SKILL.md
@@ -81,7 +83,7 @@ claude --plugin-dir dist/claude-code-plugin
 
 Building first ensures that both canonical skills and command wrappers use Claude's plugin directory layout.
 
-Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:framing-doc` for the canonical skill or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
+Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:wayfind` for the manual Wayfinding command, `/planning-skills:framing-doc` for the canonical Framing skill, or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
 
 The build rewrites support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. It includes the orchestration manifest, reusable docs, templates, and hooks those instructions reference, so the plugin does not depend on same-named files in the target project.
 

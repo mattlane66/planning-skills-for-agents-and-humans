@@ -6,6 +6,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXPECTED = {
     "plan",
+    "wayfind",
     "criteria",
     "appetite",
     "sketch-shapes",
@@ -36,6 +37,8 @@ class GeminiCommandTests(unittest.TestCase):
             for path in (ROOT / ".gemini/commands").glob("*.toml")
         }
         self.assertIn("exactly one next move", prompts["plan"])
+        self.assertIn("multi-session", prompts["wayfind"])
+        self.assertIn("do not create production code", prompts["wayfind"])
         self.assertIn("human", prompts["select-shape"])
         self.assertIn("selected slice", prompts["dumplink"])
         self.assertIn("do not implement", prompts["statechart"])

@@ -29,6 +29,12 @@ forbid_text() {
 }
 
 require_text templates/context-packet.md "## Execution contract"
+require_text templates/wayfinding-map.md "## Not yet specified"
+require_text templates/wayfinding-map.md "source_of_truth: false"
+require_text templates/wayfinding-ticket.md "blocked_by"
+require_text wayfinding/SKILL.md "coordination artifacts, never product truth"
+require_text wayfinding/SKILL.md "never back to Wayfinding"
+require_text wayfinding/SKILL.md "Dumplink sequences what has been selected for building"
 require_text templates/context-packet.md "Goal condition"
 require_text templates/context-packet.md "Kickoff doc, for builder orientation only"
 require_text templates/frame.md "## Current situation"

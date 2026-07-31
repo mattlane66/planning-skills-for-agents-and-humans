@@ -4,6 +4,8 @@ Agents can help create planning artifacts, compare options, and preserve context
 
 Use these gates to keep collaboration explicit.
 
+Wayfinding coordinates decision work across sessions but creates no additional authority. Claiming, resolving, or closing a Wayfinding ticket never substitutes for the applicable gate below; record the accepted result in its canonical planning artifact before treating the ticket as complete.
+
 ## Gate 1 — Frame accepted
 
 Human confirms:
