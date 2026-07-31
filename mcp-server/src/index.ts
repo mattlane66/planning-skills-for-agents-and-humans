@@ -55,6 +55,8 @@ const skills = Object.fromEntries(
 ) as Record<SkillName, SkillMetadataEntry & { path: string }>;
 
 const artifactTemplates = {
+  'wayfinding-map': 'templates/wayfinding-map.md',
+  'wayfinding-ticket': 'templates/wayfinding-ticket.md',
   frame: 'templates/frame.md',
   shaping: 'templates/shaping.md',
   breadboard: 'templates/breadboard.md',
@@ -79,7 +81,7 @@ type ArtifactName = keyof typeof artifactTemplates;
 
 const server = new McpServer({
   name: 'planning-skills-for-agents-and-humans',
-  version: '1.2.0',
+  version: '1.3.0',
 });
 
 server.tool('list_planning_skills', 'List the available planning skills and their intended uses.', {}, async () => {

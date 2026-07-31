@@ -1,8 +1,8 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "planning-skills",
-  "description": "Turn fuzzy requests, messy transcripts, sketches, and partial designs into bounded planning artifacts that humans and agents can build from. Includes framing, appetite-aware shaping, explicit visual reconciliation, breadboarding, optional derived statecharts, interface contracts, executable breadboards, vertical task grouping, context packets, drift checks, and reflection.",
-  "version": "1.2.0",
+  "description": "Turn fuzzy requests and multi-session planning efforts into bounded artifacts that humans and agents can build from. Includes Wayfinding, framing, appetite-aware shaping, visual reconciliation, breadboarding, statecharts, contracts, executable handoffs, task grouping, context packets, drift checks, and reflection.",
+  "version": "1.3.0",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"

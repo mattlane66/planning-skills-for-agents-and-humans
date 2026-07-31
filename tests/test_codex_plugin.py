@@ -19,6 +19,7 @@ class CodexPluginTests(unittest.TestCase):
     def test_default_prompts_cover_every_canonical_skill(self):
         prompt_text = chr(10).join(self.manifest["interface"]["defaultPrompt"]).lower()
         for skill in (
+            "wayfinding",
             "framing-doc",
             "shaping",
             "sketch-reconciliation",

@@ -31,7 +31,7 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
     args: [resolve('dist/index.js')],
     stderr: 'pipe',
   });
-  const client = new Client({ name: 'planning-skills-test', version: '1.2.0' });
+  const client = new Client({ name: 'planning-skills-test', version: '1.3.0' });
 
   try {
     await client.connect(transport);
@@ -86,6 +86,18 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
       arguments: { artifact: 'sketch-reconciliation' },
     });
     assert.match(textContent(sketchTemplate), /## Observation-to-plan mapping/);
+
+    const wayfindingSkill = await client.callTool({
+      name: 'get_planning_skill',
+      arguments: { skill: 'wayfinding' },
+    });
+    assert.match(textContent(wayfindingSkill), /coordination artifacts, never product truth/i);
+
+    const wayfindingTemplate = await client.callTool({
+      name: 'get_artifact_template',
+      arguments: { artifact: 'wayfinding-map' },
+    });
+    assert.match(textContent(wayfindingTemplate), /## Not yet specified/);
 
     const recommendation = await client.callTool({
       name: 'recommend_planning_workflow',

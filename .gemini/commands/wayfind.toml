@@ -1,0 +1,18 @@
+description = "Chart or advance a bounded multi-session planning effort as a shared map of dependent planning tickets."
+
+prompt = """
+Use this repository's Wayfinding skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{wayfinding/SKILL.md}
+
+Command arguments / source context:
+{{args}}
+
+If the source names an existing Wayfinding map, work through that map and resolve at most one non-evidence frontier ticket. Otherwise chart a new map only when the destination is bounded and the planning route is genuinely multi-session.
+
+Use local Markdown unless the user or product repository explicitly selects an available external tracker. Route every active ticket to exactly one canonical local planning skill or evidence move. Never invoke another skills repository.
+
+Keep the map and tickets as coordination records. Write accepted decisions into their canonical planning artifacts, preserve all human gates, and do not create production code or an implementation backlog.
+"""

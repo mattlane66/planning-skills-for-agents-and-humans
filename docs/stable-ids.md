@@ -6,6 +6,7 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 
 | Prefix | Meaning | Example |
 |---|---|---|
+| `WF` | local Wayfinding ticket within one map | `WF-003` |
 | `R` | requirement or criterion | `R2` |
 | `P` | place | `P1` |
 | `U` | user-facing affordance | `U4` |

@@ -18,10 +18,11 @@ Gemini CLI discovers project-local custom commands from:
 .gemini/commands/
 ```
 
-This repo includes Gemini-native command wrappers for shaping gates, sketch reconciliation, optional statecharts, vertical task grouping, and drift checks:
+This repo includes Gemini-native command wrappers for Wayfinding, shaping gates, sketch reconciliation, optional statecharts, vertical task grouping, and drift checks:
 
 | Command | Purpose |
 |---|---|
+| `/wayfind` | Chart or advance a bounded multi-session planning effort through one shared map and frontier. |
 | `/criteria` | Create or update only the requirements / criteria table before sketching shapes. |
 | `/appetite` | Set the fixed time or scope budget and cut line before selecting a shape. |
 | `/sketch-shapes` | Sketch alternative shapes against accepted criteria without selecting one. |
@@ -37,6 +38,10 @@ These commands use Gemini's TOML command format and inject the files named by th
 ## Usage
 
 From a Gemini CLI session in that active repository, run:
+
+```text
+/wayfind planning/frame.md "Destination: accepted selected-design breadboard"
+```
 
 ```text
 /criteria planning/frame.md

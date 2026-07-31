@@ -37,6 +37,7 @@ The three core planning moves are:
 
 Advanced moves are conditional, not a checklist:
 
+- `wayfinding` when a bounded planning destination requires multiple dependent decisions or investigations across sessions
 - `sketch-reconciliation` when visual evidence may change accepted intent
 - `statechart` when selected stateful behavior is hard to reason about from wiring alone
 - `interface-contracts` when a meaningful boundary remains ambiguous
@@ -109,6 +110,8 @@ Authority is concern-specific. A candidate breadboard cannot define accepted fut
 
 A statechart is derived from the selected-design breadboard and never outranks it. A sketch-reconciliation record becomes authoritative only after accepted deltas are applied to the relevant source artifact. Run logs are audit records, not product truth.
 
+Wayfinding maps and tickets are coordination records, not another authority level. A closed ticket becomes accepted intent only when its decision passes the applicable human gate and is written into the canonical owning artifact.
+
 Read `docs/agent-operating-reference.md` when resolving a complex authority conflict or preserving advanced artifact detail.
 
 ## Context feeding
@@ -167,6 +170,7 @@ Preserve established IDs. Do not rename them for style. When meaning changes mat
 
 Common defaults:
 
+- `WF-001` local Wayfinding tickets within one map
 - `R0` requirements
 - `P1` places
 - `U1` and `N1` UI and non-UI affordances
@@ -188,6 +192,8 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 
 ## Artifact roles
 
+- Wayfinding map — low-resolution index of dependent planning questions across sessions; never product truth or an implementation backlog
+- Wayfinding ticket — one precise decision, evidence, prototype, or prerequisite question linked to its canonical target
 - Frame — why the problem matters
 - Shaping document — criteria, Appetite, alternatives, candidate evidence, fit, and selection
 - Appetite card — fixed budget, cut line, accepted uncertainty, and revisit conditions when those need a separate record
@@ -209,6 +215,7 @@ Planning is complete enough for the next move when:
 - the active uncertainty has been resolved or made decision-ready
 - exploratory candidate evidence is clearly separated from accepted intent
 - the authoritative artifact is clear
+- any Wayfinding resolution is reflected in its canonical artifact rather than living only in the tracker
 - human gates have not been crossed implicitly
 - advanced artifacts exist only when their triggering complexity is present
 - the next agent receives bounded context and a verification target

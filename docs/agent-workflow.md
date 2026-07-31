@@ -8,6 +8,20 @@ For machine-readable orchestration, use `.agent-orchestration.yaml`.
 
 This is not a conveyor belt. Shaping can invoke candidate-shape breadboarding or focused spikes before selection. Selected-design breadboarding can return consequential discoveries to shaping after selection.
 
+## 0. Wayfinding, optional outer loop
+
+Use when a bounded planning destination requires multiple dependent decisions, investigations, or prototypes across sessions.
+
+Outputs:
+
+- one low-resolution Wayfinding map
+- precise decision, evidence, prototype, and prerequisite tickets
+- blockers and a queryable frontier
+- in-scope fog and explicit out-of-scope work
+- an exit check tied to a canonical artifact or human gate
+
+Use `wayfinding` or `/wayfind`. Keep the map and tickets as coordination records. Route each active ticket to one leaf planning skill, write accepted results into canonical artifacts, and preserve every human gate. Do not use Wayfinding for ordinary shaping or implementation sequencing.
+
 ## 1. Explore
 
 Use when the problem, source material, or existing system is not yet understood.

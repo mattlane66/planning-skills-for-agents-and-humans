@@ -6,6 +6,7 @@ This repository can be installed as a Codex plugin. The plugin packages the exis
 
 The Codex plugin includes these skills:
 
+- `wayfinding`
 - `framing-doc`
 - `shaping`
 - `sketch-reconciliation`
@@ -69,6 +70,10 @@ Open the product repository where the planning artifacts and implementation live
 Example prompts:
 
 ```text
+Use the wayfinding skill to chart this bounded multi-session planning effort as dependent decision tickets. Keep accepted results in canonical planning artifacts.
+```
+
+```text
 Use Planning Skills for Agents and Humans to frame this feature before implementation.
 ```
 
@@ -113,6 +118,7 @@ Use docs/loop-prompting.md and templates/drift-check.md to check whether impleme
 Keep the root skill folders and the `skills/` copies aligned:
 
 ```text
+wayfinding/                   -> skills/wayfinding/
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
 sketch-reconciliation/        -> skills/sketch-reconciliation/

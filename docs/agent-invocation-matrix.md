@@ -17,6 +17,7 @@ The planning method is shared across tools. Invocation surfaces differ.
 
 | Planning move | Canonical skill or artifact | Claude | Gemini | Codex and plain prompt |
 | --- | --- | --- | --- | --- |
+| Coordinate multi-session planning | `wayfinding/SKILL.md` | `/wayfind` | `/wayfind` | “Use Wayfinding to chart this bounded planning destination…” |
 | Frame | `framing-doc/SKILL.md` | `/frame` | Prompt the skill directly | “Use the framing-doc skill…” |
 | Define criteria | `shaping/SKILL.md` | `/criteria` | `/criteria` | “Run the criteria gate only…” |
 | Set appetite | `shaping/SKILL.md` + `templates/appetite-card.md` | `/appetite` | `/appetite` | “Set the bounded appetite and cut line…” |

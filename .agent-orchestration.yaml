@@ -6,6 +6,7 @@ purpose: >-
 
 principles:
   - planning_before_implementation
+  - multi_session_planning_uses_coordination_maps_not_parallel_sources_of_truth
   - visual_evidence_requires_explicit_reconciliation
   - bounded_appetite_before_shape_selection
   - candidate_breadboarding_may_support_shaping
@@ -32,6 +33,23 @@ authority_order:
   - rejected_alternatives_and_brainstorming
 
 modes:
+  wayfind_chart:
+    skill: wayfinding
+    command_aliases: { claude: /wayfind, gemini: /wayfind }
+    purpose: Chart a bounded multi-session planning destination as precise tickets, blockers, fog, and out-of-scope work.
+    requires: [bounded_destination_or_frame_ready_to_confirm]
+    allowed_outputs: [wayfinding_map, destination, frame_source, decision_tickets, evidence_tickets, prototype_tickets, prerequisite_tickets, blockers, frontier, not_yet_specified, out_of_scope, exit_check]
+    forbidden: [production_code, ticket_resolution_while_charting, implementation_backlog, map_as_product_truth, implicit_human_decision]
+    exit_gate: wayfinding_map_charted_or_smaller_move_selected
+
+  wayfind_ticket:
+    skill: wayfinding
+    purpose: Resolve one open, unblocked, claimed ticket through one leaf planning skill or evidence move.
+    requires: [active_wayfinding_map, frontier_ticket]
+    allowed_outputs: [ticket_claim, decision_ready_material, evidence, prototype, canonical_artifact_update, resolution_summary, updated_frontier, graduated_fog, out_of_scope_update]
+    forbidden: [recursive_wayfinding, multiple_non_research_ticket_resolutions, ticket_as_only_decision_record, human_gate_bypass, production_code, implementation_backlog]
+    exit_gate: ticket_resolved_or_human_decision_pending
+
   explore:
     purpose: Understand the source material, current system, and unknowns.
     allowed_outputs: [source_notes, current_state_summary, open_questions, relevant_files_or_artifacts, risks_and_unknowns]
@@ -215,6 +233,8 @@ modes:
     exit_gate: reflection_recorded_and_drift_decided_or_pending
 
 artifacts:
+  wayfinding_map: templates/wayfinding-map.md
+  wayfinding_ticket: templates/wayfinding-ticket.md
   frame: templates/frame.md
   shaping: templates/shaping.md
   sketch_reconciliation: templates/sketch-reconciliation.md

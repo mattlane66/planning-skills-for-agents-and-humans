@@ -67,6 +67,7 @@ A simple default is:
 
 ```text
 planning/
+  wayfinding/          # optional multi-session coordination maps and tickets
   frame.md
   shaping.md
   appetite.md          # optional when the appetite needs its own decision record
@@ -90,6 +91,7 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 
 | Artifact | Use it for |
 | --- | --- |
+| **Wayfinding map** | A low-resolution index of dependent planning questions across sessions. It coordinates work but never becomes product truth or an implementation backlog. |
 | **Appetite card** | The fixed time budget, cut line, accepted uncertainty, and revisit conditions that shapes must fit. |
 | **Candidate-shape breadboard** | Exploratory evidence about one unselected shape when its behavior must be clarified before comparison. It is not build scope. |
 | **Selected-design breadboard** | Accepted normative behavior after human selection and explicit reconciliation. |
@@ -131,6 +133,8 @@ Shaping and breadboarding are distinct but composable. Shaping owns requirements
 
 A candidate breadboard cannot select itself, produce build scope, or automatically become selected-design intent.
 
+When the bounded planning route itself is too large for one session, use Wayfinding as an outer loop around these moves. It keeps a shared frontier of decision, evidence, prototype, and prerequisite tickets while every accepted result still lands in the ordinary canonical artifact.
+
 The three core moves are:
 
 | Move | Use it when | Output |
@@ -145,6 +149,7 @@ Start there. Add the advanced moves only when the work needs them.
 
 | Skill | Add it when | Output |
 | --- | --- | --- |
+| [`wayfinding`](./wayfinding/SKILL.md) | A bounded planning destination requires multiple dependent decisions or investigations across sessions. | A shared map, queryable frontier, precise tickets, fog, and exit check; never a second source of product truth. |
 | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) | A sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active plan. | Visual observations mapped to stable IDs, explicit deltas, a human decision gate, and synchronized accepted updates. |
 | [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted selected-design breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
 | [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |
@@ -161,7 +166,7 @@ See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the v
 ```text
 Use this repository's planning workflow.
 
-First determine whether this work needs framing, shaping, sketch reconciliation, or breadboarding.
+First determine whether this work needs Wayfinding, framing, shaping, sketch reconciliation, or breadboarding.
 During shaping, use a candidate-shape breadboard only when a named candidate cannot be judged without clarifying its behavior.
 Do not treat candidate evidence as selected intent or build scope.
 Do not implement code until an appetite, direction, accepted selected-design breadboard or equally clear behavior boundary, and demoable slice are selected.
@@ -181,6 +186,7 @@ AI coding tools can one-shot simple applications. Larger bets fail differently: 
 This repository makes the planning stack explicit enough for humans and agents to share:
 
 - what problem is being solved
+- which dependent planning questions remain open across sessions
 - which requirements judge fitness
 - which shape was selected and which were rejected
 - which breadboards are descriptive, exploratory, or selected intent

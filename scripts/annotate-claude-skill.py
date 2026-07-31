@@ -11,6 +11,7 @@ import yaml
 from frontmatter import parse_frontmatter
 
 ALIASED = {
+    "wayfinding",
     "framing-doc",
     "shaping",
     "sketch-reconciliation",

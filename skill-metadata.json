@@ -3,6 +3,10 @@
     "title": "Planning Router",
     "description": "Inspect product-planning context and choose the smallest next planning move when no specific skill is selected or planning may not be needed."
   },
+  "wayfinding": {
+    "title": "Wayfinding",
+    "description": "Coordinate planning across multiple agent sessions as a shared map of dependent decision, evidence, prototype, and prerequisite tickets when one bounded route cannot fit in a single session."
+  },
   "framing-doc": {
     "title": "Framing Doc",
     "description": "Create a frame from research, notes, requests, or transcripts when the current problem, desired outcome, boundaries, and evidence need to become explicit."

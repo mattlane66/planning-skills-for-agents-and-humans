@@ -13,6 +13,8 @@ Use this document when an active skill needs detailed authority, preservation, o
 
 A lower level may reveal that a higher-level assumption was wrong, but it does not silently rewrite that higher-level truth.
 
+Wayfinding sits outside these authority levels. Its maps and tickets coordinate questions across sessions and link to the applicable level; they never replace the artifact that owns a decision.
+
 ## Concern-specific authority
 
 - problem and outcome: frame
@@ -29,6 +31,17 @@ A lower level may reveal that a higher-level assumption was wrong, but it does n
 When two artifacts disagree, first identify which concern is in conflict. Then preserve both claims and prepare an explicit decision.
 
 ## Advanced artifact preservation
+
+### Wayfinding
+
+Preserve:
+
+- one bounded destination and exit check
+- ticket names, blockers, claims, and canonical targets
+- the distinction between precise tickets, in-scope fog, and out-of-scope work
+- one linked gist per resolved route decision
+
+Do not treat ticket closure as acceptance, duplicate full decisions into the map, or convert unresolved planning questions into an implementation backlog.
 
 ### Statechart
 

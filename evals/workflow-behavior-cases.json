@@ -22,6 +22,16 @@
       "forbidden_evidence": ["full planning workflow", "production code"]
     },
     {
+      "id": "wayfinding-coordinates-multi-session-decisions-without-becoming-truth",
+      "prompt": "Chart this bounded product migration as a Wayfinding map. The planning route contains dependent decisions that will span multiple sessions. Create precise tickets, blockers, fog, and an exit check without resolving the tickets or creating implementation work.",
+      "expected_skill": "wayfinding",
+      "expected_artifact_type": "wayfinding-map",
+      "expected_gate": "destination-confirmation",
+      "implementation_allowed": false,
+      "required_evidence": ["bounded destination", "dependent planning decisions", "frontier", "fog", "canonical artifacts"],
+      "forbidden_evidence": ["map as product truth", "implicit human decision", "implementation backlog", "production code"]
+    },
+    {
       "id": "router-selects-framing-for-unclear-request",
       "prompt": "We have interview notes, support complaints, and three stakeholder requests but no agreed statement of the problem. Choose the next planning move.",
       "expected_skill": "framing-doc",

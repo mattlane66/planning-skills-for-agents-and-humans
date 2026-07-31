@@ -27,6 +27,7 @@ Do not copy this repository's root `AGENTS.md` over a product repository's exist
 
 ```text
 planning/
+  wayfinding/          # optional maps and tickets for multi-session planning
   frame.md
   shaping.md
   appetite.md          # optional when appetite is recorded separately
@@ -81,6 +82,7 @@ Resolve changes through the reconciliation human gate, update every affected aut
 
 | Question | Artifact |
 |---|---|
+| Which dependent planning questions remain open across sessions, and what is currently unblocked? | Wayfinding map and tickets |
 | What is the shaped product territory builders need to understand? | Kickoff document |
 | Exactly how should this selected slice behave and be verified? | Executable breadboard |
 | How should work inside the selected slice be grouped, sequenced, de-risked, and cut to fit the appetite? | Dumplink plan |

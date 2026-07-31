@@ -14,6 +14,7 @@ The unqualified names below apply when Claude Code is running in this repository
 
 | Command | Uses skill | Purpose |
 |---|---|---|
+| `/wayfind` | `wayfinding/SKILL.md` | Chart or advance a bounded multi-session planning effort through one shared map and frontier. |
 | `/frame` | `framing-doc/SKILL.md` | Create a framing document from notes, messages, or transcripts. |
 | `/shape` | `shaping/SKILL.md` | Separate requirements from mechanisms, compare directions, fit-check alternatives, and select a bounded direction. |
 | `/criteria` | `shaping/SKILL.md` | Create or update only the requirements / criteria table before sketching shapes. |
@@ -71,6 +72,10 @@ Claude Code can also use `.claude/loop.md` as the default `/loop` prompt for rec
 ## Usage
 
 From a Claude Code session in the repository, run commands with arguments:
+
+```text
+/wayfind planning/frame.md "Destination: accepted selected-design breadboard"
+```
 
 ```text
 /frame notes/product-discovery.md
@@ -141,6 +146,7 @@ The slash commands are thin invocation wrappers. They should not become a second
 Keep the canonical workflow details in the skill files:
 
 ```text
+wayfinding/SKILL.md
 framing-doc/SKILL.md
 shaping/SKILL.md
 sketch-reconciliation/SKILL.md
