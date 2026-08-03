@@ -51,7 +51,7 @@ Dumplink uses three core moves:
 2. **CLUSTER** — group tasks into isolated vertical task groups that can produce judgeable behavior.
 3. **SEQUENCE** — connect task groups by dependency/risk so the team knows what to solve first.
 
-The source tool and concept are from Dumplink: https://github.com/klausbreyer/dump.link and https://dump.link.
+The source tool and concept are from Dumplink: https://github.com/klausbreyer/dump.link.
 
 ## When to use
 
