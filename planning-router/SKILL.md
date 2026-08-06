@@ -33,7 +33,7 @@ Use available files, repository evidence, conversation context, and attached art
 | An accepted stateful scope has retries, timeouts, approvals, lifecycle stages, or multiple valid actions per state | `statechart` |
 | A selected slice crosses a meaningful boundary whose inputs, outputs, branches, or errors are ambiguous | `interface-contracts` |
 | A selected slice needs fixtures, example runs, expected results, edge cases, and acceptance tests | `executable-breadboards` |
-| Work inside a selected slice needs vertical task groups, dependencies, risk states, sequence, or appetite cuts | `dumplink` |
+| A selected project needs to be decomposed into vertical task groups, dependencies, risk states, sequence, or appetite cuts | `dumplink` |
 | An implementation agent needs only the authoritative subset for one active slice or task group | `feed-planning-context` |
 | Implementation exists and may differ from accepted intent | `breadboard-reflection` |
 | Builders need a durable human-readable orientation reference after accepted artifacts converge | `kickoff-doc` |
@@ -50,7 +50,7 @@ Use available files, repository evidence, conversation context, and attached art
 8. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
 9. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
 10. Do not let current-state or candidate-shape breadboarding become selected future intent.
-11. Do not let a candidate breadboard feed slicing, context packaging, or implementation.
+11. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
 12. Do not begin implementation or make a human scope, appetite, or direction decision.
 
 ## Output

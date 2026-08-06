@@ -24,7 +24,7 @@ DIRECT = {
     "statechart": "[accepted breadboard, selected scope or slice, and optional target statechart file]",
     "interface-contracts": "[selected breadboard or slice, boundary, and optional target contract file]",
     "executable-breadboards": "[selected breadboard, slice, contracts, examples, and optional target file]",
-    "dumplink": "[shaping doc, breadboard, selected slice, appetite, or notes]",
+    "dumplink": "[selected project, shaping doc, breadboard, appetite, boundary, or notes]",
 }
 TOOLS = ["Read", "Write", "Edit", "Glob", "Grep"]
 

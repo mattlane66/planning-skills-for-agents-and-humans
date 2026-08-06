@@ -37,7 +37,7 @@
   },
   "dumplink": {
     "title": "Dumplink",
-    "description": "Plan work inside a selected project as vertical task groups with dependencies, risks, sequence, and appetite-based cuts; before selection, produce candidates only."
+    "description": "Turn a selected, bounded project into sequenced vertical task groups with dependencies, risks, appetite-based cuts, acceptance checks, and a bounded handoff."
   },
   "kickoff-doc": {
     "title": "Kickoff Doc",
@@ -45,7 +45,7 @@
   },
   "feed-planning-context": {
     "title": "Feed Planning Context",
-    "description": "Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice."
+    "description": "Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one active task group or slice."
   },
   "breadboard-reflection": {
     "title": "Breadboard Reflection",

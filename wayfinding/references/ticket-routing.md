@@ -30,7 +30,7 @@ Load this reference when charting a ticket or selecting the leaf move that resol
 5. Preserve the selected product repository's instructions and terminology.
 6. Do not use an evidence move to make a product decision. Return findings to the owning planning skill or human gate.
 7. Do not use a prototype as selected intent. Reconcile accepted implications through shaping or selected-design breadboarding.
-8. Do not put implementation task sequencing in a Wayfinding ticket when a selected slice already makes Dumplink the appropriate owner.
+8. Do not put implementation task sequencing in a Wayfinding ticket when a selected project already makes Dumplink the appropriate owner.
 
 ## Human gates
 

@@ -125,11 +125,11 @@ Complete the map only when:
 
 Then mark the map complete and route to the next ordinary move:
 
-- `dumplink` for vertical implementation grouping inside a selected slice
+- `dumplink` for decomposing a selected project into vertical implementation task groups
 - `feed-planning-context` for a bounded implementation context packet
 - another explicitly selected planning move when the destination intentionally ends earlier
 
-Never convert unresolved Wayfinding tickets directly into an implementation backlog. Wayfinding resolves what must be decided; Dumplink sequences what has been selected for building.
+Never convert unresolved Wayfinding tickets directly into an implementation backlog. Wayfinding resolves what must be decided; Dumplink decomposes a selected project into sequenced vertical task groups.
 
 ## Quality bar
 

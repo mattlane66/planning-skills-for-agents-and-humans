@@ -6,9 +6,9 @@ Use this document when an active skill needs detailed authority, preservation, o
 
 1. Frame — source, current situation, problem, desired outcome, boundary
 2. Shaping — accepted requirements, Appetite, candidate mechanisms, fit, human selection
-3. Breadboard and slices — concrete behavior and active scope
-4. Statechart, contracts, and executable evidence — selected detail for complex behavior or boundaries
-5. Dumplink — task grouping and sequence inside a selected slice
+3. Selected project — the bounded discrete unit of work
+4. Dumplink and slices — project decomposition into vertical task groups and human-selected active scope
+5. Statechart, contracts, and executable evidence — selected detail for complex behavior or boundaries
 6. Implementation reality — code, tests, logs, and observed behavior
 
 A lower level may reveal that a higher-level assumption was wrong, but it does not silently rewrite that higher-level truth.
@@ -21,7 +21,8 @@ Wayfinding sits outside these authority levels. Its maps and tickets coordinate 
 - fitness: accepted requirements
 - budget and cut line: Appetite
 - mechanisms: selected shape
-- active scope: selected slice
+- outer scope: selected project boundary
+- active scope: selected Dumplink task group or other selected slice
 - state semantics: selected breadboard, with statechart as a derived view
 - boundary fields and errors: selected interface contract
 - expected examples and results: executable breadboard
@@ -87,13 +88,15 @@ Examples are authoritative for their named slice but may not expand it.
 
 Preserve:
 
+- selected project outcome, boundary, exclusions, and Appetite
+- all proposed vertical task groups and their included task IDs
 - active task group and vertical boundary
 - dependencies and risk states
 - build sequence
 - appetite-based cuts
 - acceptance checks and stop condition
 
-Do not flatten vertical groups into a generic horizontal backlog. Deferred groups remain out of scope until a human changes the slice or Appetite.
+Do not ask for a pre-existing slice, flatten vertical groups into a generic horizontal backlog, or let a group expand the selected project. Deferred groups remain out of active scope until a human selects them or changes the project or Appetite.
 
 ### Kickoff document
 

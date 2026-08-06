@@ -44,7 +44,7 @@ class WayfindingSurfaceTests(unittest.TestCase):
         self.assertIn("coordination artifacts, never product truth", text)
         self.assertIn("Never depend on another skills repository at runtime", text)
         self.assertIn("never back to Wayfinding", text)
-        self.assertIn("Dumplink sequences what has been selected for building", text)
+        self.assertIn("Dumplink decomposes a selected project into sequenced vertical task groups", text)
         for external_dependency in (
             "/grilling",
             "/domain-modeling",

@@ -102,7 +102,7 @@ Use the executable-breadboards skill to create examples, fixtures, expected outp
 ```
 
 ```text
-Use the dumplink skill to create vertical task groups, dependency-aware sequence, risk states, and scope cuts inside this selected slice. Without a selected slice, stop at candidate groups and do not create a build handoff.
+Use the dumplink skill to turn this selected, bounded project into vertical task groups with dependency-aware sequence, risk states, and scope cuts. Treat each task group as a judgeable implementation slice. Stop for approval and active task-group selection before creating a build handoff.
 ```
 
 ```text

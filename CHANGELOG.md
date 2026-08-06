@@ -24,7 +24,8 @@
 
 - Preserved dot-prefixed support-file references in generated Claude skill packages and made piped CI failures propagate correctly.
 - Reconciled frame, appetite, shape-selection, kickoff-authority, context-feeding, and breadboard-reflection rules across canonical artifacts and adapters.
-- Removed task grouping and slicing from shaping, separated descriptive and normative breadboarding, and prevented Dumplink build handoffs before human slice selection.
+- Removed task grouping and slicing from shaping, separated descriptive and normative breadboarding, and made Dumplink ingest one selected project, create its vertical task-group slices, then stop for human plan approval and active-group selection.
+- Upgraded repository-health Actions to their Node 24-based major versions and added manual workflow dispatch for explicit CI verification.
 - Removed moderate-or-higher MCP dependency vulnerabilities and made the visualizer return a bounded `400` response for malformed encoded paths.
 
 ### Improved

@@ -40,7 +40,8 @@ class GeminiCommandTests(unittest.TestCase):
         self.assertIn("multi-session", prompts["wayfind"])
         self.assertIn("do not create production code", prompts["wayfind"])
         self.assertIn("human", prompts["select-shape"])
-        self.assertIn("selected slice", prompts["dumplink"])
+        self.assertIn("selected project", prompts["dumplink"])
+        self.assertIn("vertical implementation slices", prompts["dumplink"])
         self.assertIn("do not implement", prompts["statechart"])
         self.assertIn("do not implement", prompts["check-drift"])
 

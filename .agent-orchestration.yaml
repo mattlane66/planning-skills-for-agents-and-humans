@@ -20,10 +20,11 @@ principles:
 
 authority_order:
   - latest_user_instruction
+  - selected_project
   - selected_slice
+  - selected_dumplink_task_group
   - executable_breadboard
   - selected_interface_contract
-  - selected_dumplink_task_group
   - selected_breadboard
   - selected_shaping_direction
   - candidate_breadboards_for_evidence_only
@@ -173,22 +174,14 @@ modes:
     forbidden: [production_code_unless_explicitly_requested]
     exit_gate: build_handoff_ready
 
-  dumplink_explore:
-    skill: dumplink
-    purpose: Expose candidate task groups, risks, dependencies, and appetite cuts before a slice is selected, without creating a build commitment.
-    requires: [selected_direction, appetite]
-    allowed_outputs: [project_boundary, task_dump, candidate_task_groups, risk_notes, dependency_observations, candidate_scope_cuts, slice_selection_questions]
-    forbidden: [committed_build_sequence, acceptance_plan, active_task_group, agent_handoff_packet, production_code]
-    exit_gate: selected_slice_or_dumplink_skipped
-
   dumplink:
     skill: dumplink
     command_aliases: { claude: /dumplink, gemini: /dumplink }
-    purpose: Organize work inside a selected slice into vertical task groups, risk states, dependency sequence, scope cuts, and bounded agent handoff packets.
-    requires: [selected_direction, appetite, selected_slice]
-    allowed_outputs: [project_boundary, task_dump, task_groups, risk_states, dependency_map, build_sequence, scope_cuts, acceptance_checks, agent_handoff_packet]
-    forbidden: [horizontal_ticket_backlog, production_code, selected_slice_expansion, scope_expansion_without_appetite_change, build_sequence_without_selected_slice, agent_handoff_without_selected_slice]
-    exit_gate: task_group_selected_or_sequence_accepted
+    purpose: Turn a selected project into vertical task groups, risk states, dependency sequence, scope cuts, and a bounded handoff for one human-selected active group.
+    requires: [selected_project, appetite, selected_direction]
+    allowed_outputs: [project_boundary, task_dump, vertical_task_groups, risk_states, dependency_map, build_sequence, scope_cuts, acceptance_checks, task_group_approval_gate, active_task_group_handoff_after_selection]
+    forbidden: [horizontal_ticket_backlog, production_code, selected_project_expansion, scope_expansion_without_appetite_change, task_groups_without_selected_project, active_task_group_without_human_selection]
+    exit_gate: task_group_plan_approved_and_active_group_selected
 
   kickoff:
     skill: kickoff-doc

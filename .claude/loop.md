@@ -1,6 +1,6 @@
 Check planning alignment.
 
-Use the active context packet, selected slice, shaping doc, breadboard, relevant statechart rows, interface contracts, executable breadboard, active Dumplink task group, non-goals, and verification target.
+Use the active context packet, selected project, active Dumplink task group or other selected slice, shaping doc, breadboard, relevant statechart rows, interface contracts, executable breadboard, non-goals, and verification target.
 
 Return only one of:
 

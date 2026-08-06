@@ -260,7 +260,7 @@ Use `executable-breadboards`. Do not invent missing expected behavior.
 
 ## 15. Dumplink, optional
 
-Use when work inside the selected slice needs vertical task groups, dependency-aware sequencing, risk states, or Appetite-based cuts.
+Use when a selected, bounded project needs vertical task groups, dependency-aware sequencing, risk states, or Appetite-based cuts. Dumplink creates those implementation slices; it does not take one as a prerequisite.
 
 Outputs:
 
@@ -269,9 +269,10 @@ Outputs:
 - dependency map and build sequence
 - scope cuts
 - acceptance checks
-- bounded agent handoff packet
+- task-group approval gate
+- bounded handoff packet for the human-selected active group
 
-Use `dumplink`. Without a selected slice, Dumplink remains exploratory and cannot create a committed build sequence or handoff.
+Use `dumplink`. Without a selected project boundary, stop and return to framing, shaping, or the project-selection gate. After the plan is approved, the selected task group becomes the active slice for downstream detail and implementation.
 
 ## 16. Kickoff reference, optional
 

@@ -120,7 +120,7 @@ You can instead attach or paste the image in the same command prompt when the cl
 ```
 
 ```text
-/dumplink planning/shaping.md planning/breadboard.md planning/slices.md
+/dumplink planning/shaping.md planning/breadboard.md "Selected project: onboarding; Appetite: 4 weeks"
 ```
 
 ```text

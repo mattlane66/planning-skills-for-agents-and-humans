@@ -26,7 +26,7 @@ test('uses Wayfinding only for explicit multi-session decision coordination', ()
     ['shaping'],
   );
   assert.deepEqual(
-    recommendPlanningWorkflow('Inside the selected slice, create task groups across several sessions'),
+    recommendPlanningWorkflow('For the selected project, create vertical task groups across several sessions'),
     ['dumplink'],
   );
 });
@@ -211,16 +211,12 @@ test('routes a selected slice to context feeding', () => {
 test('uses Dumplink only when task grouping signals are present', () => {
   assert.deepEqual(recommendPlanningWorkflow('Create vertical task groups with dependency sequence and scope cuts'), ['dumplink']);
   assert.deepEqual(
-    recommendPlanningWorkflow('Inside the selected slice, use Dumplink to create task groups, risk states, and scope cuts'),
+    recommendPlanningWorkflow('Turn the selected project into vertical task groups with risk states, dependencies, and scope cuts'),
     ['dumplink'],
   );
   assert.deepEqual(
-    recommendPlanningWorkflow('No selected slice exists. Use Dumplink pre-slice exploration for candidate groups only'),
-    ['dumplink'],
-  );
-  assert.deepEqual(
-    recommendPlanningWorkflow('The selected shape is accepted but no slice is selected. Create a Dumplink build sequence and agent handoff'),
-    ['breadboarding'],
+    recommendPlanningWorkflow('No selected project exists. Use Dumplink to create a build sequence and agent handoff anyway'),
+    ['shaping'],
   );
   assert.equal(recommendPlanningWorkflow('What should I do next?').includes('dumplink'), false);
 });

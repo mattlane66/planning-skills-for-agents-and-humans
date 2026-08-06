@@ -2,23 +2,25 @@
 
 ## Project boundary
 
-- Mode: `standard` or `pre-slice-exploration`
+- Selected project:
+- Desired outcome:
 - Selected shape:
 - Appetite:
+- Project boundary:
+- Exclusions:
 - Non-goals:
-- Selected slice:
-- Slice exclusions:
+- Demo target:
 
-The selected slice is required for a committed build sequence or agent handoff. All task groups, dependencies, cuts, and sequence stay within it. If it is absent, label every group as a candidate and stop before the Build sequence, Acceptance checks, and Agent handoff packet sections become commitments.
+The selected project is the hard outer boundary. Dumplink derives the implementation slices from it as vertical task groups; no pre-existing slice is required.
 
 ## Task dump
 
 | ID | Task | Type | Known / unknown | Notes |
 | --- | --- | --- | --- | --- |
 
-## Task groups
+## Vertical task groups
 
-| ID | Name | Included tasks | Judgeable behavior produced | Risk state | Cuttable? | Notes |
+| ID | Name | Included tasks | Vertical slice / behavior produced | Risk state | Cuttable? | Notes |
 | --- | --- | --- | --- | --- | --- | --- |
 
 ## Dependency map
@@ -38,17 +40,26 @@ The selected slice is required for a committed build sequence or agent handoff. 
 
 ## Acceptance checks
 
-| Check ID | Proves | How to verify |
-| --- | --- | --- |
+| Check ID | Project or task group | Proves | How to verify |
+| --- | --- | --- | --- |
 
-## Agent handoff packet
+## Task-group approval gate
 
-- Active slice:
+- Recommended first task group:
+- Decision required: approve or revise the plan and select the active task group.
+- Human decision:
+
+## Active task-group handoff
+
+Complete only after the active task group is selected.
+
+- Selected project:
+- Active task group (vertical slice):
 - Source artifacts:
 - Must preserve:
 - Do not build:
-- Task group to implement:
-- Relevant tasks:
+- Included tasks:
+- Dependencies already satisfied:
 - Known unknowns:
 - Acceptance check:
 - Stop condition:

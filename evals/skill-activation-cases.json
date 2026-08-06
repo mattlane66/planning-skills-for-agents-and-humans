@@ -31,7 +31,7 @@
       ],
       "negative": [
         "The problem is framed; compare three shapes against accepted criteria and appetite in this session.",
-        "A selected slice exists; organize its implementation into vertical task groups and dependency order."
+        "A selected project exists; decompose it into vertical task groups and dependency order."
       ]
     },
     "framing-doc": {
@@ -73,7 +73,7 @@
       ],
       "negative": [
         "Derive a transition table for the retry lifecycle in this accepted breadboard.",
-        "Sequence implementation task groups inside the selected slice."
+        "Decompose the selected project into sequenced vertical task groups."
       ]
     },
     "statechart": {
@@ -108,12 +108,12 @@
     },
     "dumplink": {
       "positive": [
-        "Organize work inside this selected slice into vertical task groups, risks, dependencies, sequence, and cuts.",
-        "We need a bounded agent handoff for one task group inside the accepted slice."
+        "Turn this selected, bounded project into vertical task groups with risks, dependencies, sequence, and cuts.",
+        "Dump this project's work, derive judgeable vertical task groups, and stop for approval before one becomes active."
       ],
       "negative": [
-        "No slice is selected; decide the build sequence anyway.",
-        "Map the selected product behavior before choosing a vertical slice."
+        "No project is selected or bounded; decide the build sequence anyway.",
+        "Map the selected product behavior into places, affordances, stores, and wiring."
       ]
     },
     "kickoff-doc": {
@@ -123,7 +123,7 @@
       ],
       "negative": [
         "Package only the exact context needed by the implementation agent for its next task.",
-        "Create a dependency-aware implementation sequence for the selected slice."
+        "Create a dependency-aware task-group sequence for the selected project."
       ]
     },
     "feed-planning-context": {

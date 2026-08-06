@@ -1,55 +1,50 @@
 ---
 name: dumplink
-description: Plan work inside a selected project as vertical task groups with dependencies, risks, sequence, and appetite-based cuts; before selection, produce candidates only.
+description: Turn a selected, bounded project into sequenced vertical task groups with dependencies, risks, appetite-based cuts, acceptance checks, and a bounded handoff.
 license: MIT
 ---
 
 # Dumplink
 
-Use this skill after a project has been framed, shaped, given a fixed appetite, and narrowed to a selected slice. The job is to help a Small Launch Team organize work inside that slice without shredding its intent into disconnected tickets.
+Use this skill after a project has been framed, shaped, selected, and given a fixed appetite. The project is the discrete unit of work Dumplink ingests. Dumplink discovers the implementation slices by turning that project into vertical task groups; it does not require a slice to be selected first.
 
-Dumplink is for deliberate build-cycle work, not reactive ticket intake. In its standard mode it keeps the selected slice whole while organizing smaller vertical task groups that can be finished and judged within the appetite.
-
-If a direction is selected but no slice has been selected, Dumplink may be used only in pre-slice exploration mode. That mode can expose candidate groups and risks, but it must stop before build sequence or agent handoff so breadboarding and a human decision can establish the build boundary.
+The selected project is the hard outer boundary. Each task group is a vertical slice of that project: a judgeable increment that cuts through the necessary disciplines and produces observable behavior or a meaningful project state. A task group may divide the project, but it may not redefine or enlarge it.
 
 ## Goal
 
 Produce a Dumplink plan that shows:
 
-- the selected slice as the hard outer boundary
-- the raw task dump inside that boundary
-- clustered task groups that produce vertical, judgeable progress within the selected slice
+- the selected project and its explicit boundary
+- the raw task dump inside that project
+- vertical task groups that Dumplink derived from the project
 - unknowns, knowns, and done states at the task-group level
 - causal dependencies between task groups
 - a build sequence that starts with risky and dependency-unlocking work
 - possible cuts if the appetite runs out
+- acceptance checks for the project and each task group
+- the human decision required before one task group becomes the active implementation slice
 
-## Operating modes
+## Required input and gate
 
-Declare the mode at the top of the artifact.
+Full Dumplink planning requires an explicit selected project with:
 
-### Standard mode: organize a selected slice
+- a desired outcome
+- a fixed appetite or time budget
+- a selected approach
+- non-goals and boundary exclusions
+- enough accepted behavior or design evidence to identify judgeable increments
 
-Use standard mode only when a human-selected slice is explicit. It may produce the full Dumplink plan, including dependency-aware build sequence, acceptance checks, and one bounded agent handoff packet.
+If the project is not selected or its boundary is missing, do not invent task groups, a build sequence, or a handoff. State what project decision is missing and return to framing, shaping, or the appropriate human gate.
 
-### Pre-slice exploration: candidates only
-
-Use this limited mode when a direction and appetite are accepted but the slice boundary is still undecided. It may produce:
-
-- a project boundary and rough task dump
-- candidate vertical groups
-- risks, dependencies, and questions that affect slice selection
-- possible appetite cuts for the human to consider
-
-It must not produce a committed build sequence, acceptance plan, active task group, or agent handoff packet. Label every group as a candidate and return to breadboarding for slice selection.
+After the plan is created, stop for approval of the task-group plan and selection of the first active task group. That selected task group becomes the active implementation slice for downstream contracts, executable examples, context packaging, and build work.
 
 ## Source concept
 
 Dumplink uses three core moves:
 
-1. **DUMP** — list everything the team thinks must happen to build the shaped project.
+1. **DUMP** — list everything the team thinks must happen to build the selected project.
 2. **CLUSTER** — group tasks into isolated vertical task groups that can produce judgeable behavior.
-3. **SEQUENCE** — connect task groups by dependency/risk so the team knows what to solve first.
+3. **SEQUENCE** — connect task groups by dependency and risk so the team knows what to solve first.
 
 The source tool and concept are from Dumplink: https://github.com/klausbreyer/dump.link.
 
@@ -57,37 +52,34 @@ The source tool and concept are from Dumplink: https://github.com/klausbreyer/du
 
 Use this when:
 
-- a shaped project has been bet on
+- a selected, bounded project has been bet on
 - the team has an appetite, usually 2–6 weeks
-- a selected slice exists for standard mode
-- work is meaningful enough that horizontal task planning would lose the plot
-- the team needs to preserve intent while still making implementation concrete
-- the next best step is to organize vertical task groups inside the slice, not create a giant ticket backlog
+- the project needs more than one judgeable implementation increment
+- horizontal task planning would lose the project's intent
+- the team needs vertical task groups, risk states, dependencies, sequence, or appetite-based cuts
 
 Do not use this when:
 
 - the work is reactive support, bugs, or interrupt-driven operations
-- the problem is still unframed
-- no direction has been selected
-- a build sequence or agent handoff is requested before a slice has been selected
-- the team needs a full technical implementation plan with exact files and code paths
+- the problem or project boundary is still unframed
+- no project has been selected
+- the team already has one small, obvious implementation slice and no grouping decision remains
+- the team needs an exact file-by-file coding plan rather than project decomposition
 
 ## Inputs
 
 Ask for or infer from available artifacts:
 
-- shaped project pitch or shaping doc
+- selected project pitch or shaping document
 - appetite / time budget
+- desired outcome and demo target
 - selected approach and non-goals
-- selected slice and its explicit exclusions, required for standard mode
-- known risks, rabbit holes, and constraints
-- breadboard, if available
-- existing codebase or implementation context, if available
-- acceptance checks or demo target
+- explicit project boundary and exclusions
+- accepted breadboard or other behavioral evidence, when available
+- known risks, rabbit holes, constraints, and dependencies
+- existing codebase or implementation context, when available
 
-If supporting detail is weak, proceed only within the declared slice and label assumptions. If the slice itself is missing, switch to pre-slice exploration mode or stop for breadboarding and human selection.
-
-The selected slice is the hard outer boundary: task groups, dependencies, sequence, and cuts must stay inside it. A task group may divide work within that slice; it may not redefine or enlarge the slice.
+Proceed within the declared project boundary and label assumptions. If that boundary is missing or contested, stop at the project-selection gate.
 
 ## Output
 
@@ -95,36 +87,35 @@ Create these sections:
 
 1. Project boundary
 2. Task dump
-3. Task groups
+3. Vertical task groups
 4. Unknowns / knowns / done states
 5. Dependency map
 6. Build sequence
 7. Scope cuts
 8. Acceptance checks
-9. Agent handoff packet
-
-This full output applies only to standard mode. Pre-slice exploration stops after candidate groups, risk/dependency observations, cut options, and the human slice-selection question.
+9. Task-group approval gate
+10. Active task-group handoff, only after human selection
 
 ## Method
 
-### 1. Preserve the shaped intent
+### 1. Preserve the project intent
 
-Start by restating the shaped project in compact form:
+Restate the selected project in compact form:
 
-- mode: `standard` or `pre-slice-exploration`
+- desired outcome
 - appetite
 - target user / operator
-- desired outcome
 - selected approach
+- project boundary and exclusions
 - non-goals
 - what must remain true
-- selected slice boundary and exclusions
+- demo target
 
-Do not immediately turn everything into implementation tickets. First preserve the slice's intent and exclusions.
+Do not immediately turn everything into implementation tickets. First preserve the project's intent and hard boundary.
 
 ### 2. Dump tasks
 
-Create an unordered list of likely tasks. Include design, product, data, content, migration, technical, QA, and launch tasks when relevant.
+Create an unordered list of likely tasks. Include design, product, data, content, migration, technical, QA, and launch work when relevant.
 
 Rules:
 
@@ -136,29 +127,26 @@ Rules:
 
 Use IDs such as `T1`, `T2`, `T3`.
 
-Task table:
-
 | ID | Task | Type | Known/Unknown | Notes |
 |---|---|---|---|---|
 | T1 |  | product / design / code / data / QA / launch | unknown |  |
 
-### 3. Cluster into task groups
+### 3. Cluster tasks into vertical task groups
 
-Group tasks by what can be completed together and judged in isolation from the rest.
+Derive task groups from the project by grouping tasks that can be completed together and judged as one vertical slice.
 
 A good task group:
 
-- produces one judgeable behavior or project state
-- cuts vertically through the system when possible
+- produces one judgeable behavior or meaningful project state
+- cuts through every discipline needed for that behavior
 - has clear inputs and outputs
-- can be demoed or inspected
-- avoids arbitrary categories like frontend/backend/design unless the work truly cannot be sliced vertically
+- can be demoed or inspected independently
+- stays inside the selected project
+- avoids categories such as frontend, backend, design, or QA unless the work truly cannot be sliced vertically
 
-Use IDs such as `TG1`, `TG2`, `TG3`.
+Use IDs such as `TG1`, `TG2`, `TG3`. Preserve stable IDs once assigned.
 
-Task group table:
-
-| ID | Name | Included tasks | User/system behavior produced | Risk state | Cuttable? | Notes |
+| ID | Name | Included tasks | Vertical slice / behavior produced | Risk state | Cuttable? | Notes |
 |---|---|---|---|---|---|---|
 | TG1 |  | T1, T4 |  | unknown / known / done | no |  |
 
@@ -167,10 +155,10 @@ Task group table:
 Track state at the task-group level:
 
 - `not-started` — no meaningful learning or execution yet
-- `figuring-it-out` — unknowns remain
+- `figuring-it-out` — important unknowns remain
 - `executing-down` — key unknowns are solved; work is being completed
-- `done` — produces the intended behavior and passes acceptance checks
-- `cut` — intentionally removed to protect the appetite
+- `done` — the group produces its intended behavior and passes its checks
+- `cut` — the group was intentionally removed to protect the appetite
 
 The state of a task group is the state of its riskiest important task. Do not let a pile of easy completed tasks hide one unresolved unknown.
 
@@ -181,35 +169,24 @@ Draw causal links between task groups. Ask:
 - what input does this group need before it can be completed?
 - what does this group unlock?
 - what unknown could cause rework if found late?
-- what group has more outgoing than incoming dependencies?
-
-Dependency table:
+- which group has more outgoing than incoming dependencies?
 
 | From | To | Why this dependency exists | Risk if delayed |
 |---|---|---|---|
 | TG1 | TG3 |  |  |
 
-Optional Mermaid:
-
-```mermaid
-flowchart LR
-  TG1["TG1: Name"] --> TG2["TG2: Name"]
-```
+Use a compact Mermaid diagram when it makes the dependency order easier to judge.
 
 ### 6. Sequence the build
-
-Do not run this step without a selected slice.
 
 Prefer this order:
 
 1. risk-unlocking task groups
 2. dependency-unlocking task groups
 3. core user-visible behavior
-4. finishing / polish / launch items
+4. finishing, polish, and launch groups
 
 Do not start with easy polish if a hidden unknown can sink the project later.
-
-Build sequence table:
 
 | Order | Task group | Why now | Demo/checkpoint | Exit condition |
 |---|---|---|---|---|
@@ -217,18 +194,16 @@ Build sequence table:
 
 ### 7. Identify scope cuts
 
-Variable scope is the point. If the appetite is fixed, define cuts before panic.
+Variable scope protects a fixed appetite. Define cuts before panic.
 
 For each possible cut, state:
 
-- what is removed
+- which task group or optional behavior is removed or deferred
 - what still works
-- what user/business value remains
+- what user or business value remains
 - what follow-up decision is needed later
 
-A cut may remove optional work while preserving the selected slice's promised behavior. If it changes the slice's demo, `Produces:` line, or verification target, present it as a proposed slice update and stop for human approval; Dumplink cannot silently narrow the selected slice.
-
-Scope cut table:
+A cut may remove optional work while preserving the selected project's promised outcome. If it changes the project outcome, boundary, demo target, or fixed non-goal, present it as a proposed project update and stop for human approval.
 
 | Cut option | Remove/defer | Preserved behavior | Cost of cutting | Later decision |
 |---|---|---|---|---|
@@ -236,58 +211,65 @@ Scope cut table:
 
 ### 8. Write acceptance checks
 
-Do not turn exploratory candidate groups into acceptance commitments before a slice is selected.
+Write checks at two levels:
 
-Acceptance checks should judge behavior at the task-group and selected-slice level.
+- project checks prove the selected project's promised outcome remains achievable
+- task-group checks prove each vertical slice is independently judgeable
 
-Use checks like:
+Use checks such as:
 
 - A user can complete X end-to-end.
 - The system preserves Y state after Z.
 - The operator can see whether W is unknown, known, done, or cut.
-- The project can ship some version without the cut items.
+- The project can ship a coherent version without the cut groups.
 
-### 9. Prepare agent handoff
+### 9. Stop for task-group approval
 
-Prepare this packet only in standard mode, after the selected slice is explicit. If no slice is selected, stop with candidate groups and the decision needed from the human.
+Present the proposed task groups, dependency map, sequence, cuts, and a recommended first group. Ask the human to approve or revise the plan and select the active task group. Do not infer selection from ordering alone.
 
-End with a compact handoff packet:
+### 10. Prepare the active task-group handoff
+
+Prepare this packet only after a human selects the active task group:
 
 ```text
-Active slice:
+Selected project:
+Active task group (vertical slice):
 Source artifacts:
 Must preserve:
 Do not build:
-Task group to implement:
-Relevant tasks:
+Included tasks:
+Dependencies already satisfied:
 Known unknowns:
 Acceptance check:
 Stop condition:
 ```
 
+Feed one active task group to an implementation agent at a time. The Dumplink plan retains project-wide sequence; the handoff carries only the active slice and its necessary context.
+
 ## Quality bar
 
 A good Dumplink output:
 
-- names the selected slice and keeps every task group inside it
+- names one selected project as its input and keeps every task group inside it
+- creates the implementation slices instead of asking for one as input
 - avoids horizontal task silos
-- makes vertical task groups independently judgeable
+- makes every task group independently judgeable
 - reveals unknowns early
 - sequences by risk and dependency, not convenience
 - names cuts explicitly
-- gives an implementation agent one bounded task group at a time
-- never expands the selected slice
-- never emits a build sequence or agent handoff from pre-slice exploration
+- stops for plan approval and active task-group selection
+- gives an implementation agent one bounded vertical slice at a time
 
 ## Common failure modes
 
-- Turning the shaped project into a flat ticket backlog
-- Clustering by discipline instead of shippable behavior
+- Asking for a preselected implementation slice before decomposing the project
+- Turning the selected project into a flat ticket backlog
+- Clustering by discipline instead of judgeable behavior
 - Treating task count as progress
 - Hiding unknowns inside vague engineering tasks
 - Sequencing by ease instead of risk
 - Deferring dependency-unlocking work too late
 - Treating scope cuts as failure instead of appetite discipline
 - Feeding an agent the whole project instead of the active task group
-- Letting a task group quietly expand an existing selected slice
-- Treating pre-slice candidate groups as an approved build sequence
+- Letting a task group quietly expand the selected project
+- Treating sequence order as human approval of the active task group

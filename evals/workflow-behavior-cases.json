@@ -122,14 +122,14 @@
       "forbidden_evidence": ["production code"]
     },
     {
-      "id": "dumplink-stays-inside-selected-slice",
-      "prompt": "Organize this selected slice into vertical task groups with dependencies, risk states, sequence, and appetite cuts.",
+      "id": "dumplink-decomposes-selected-project",
+      "prompt": "Turn this selected, bounded project into vertical task groups with dependencies, risk states, sequence, and appetite cuts. Treat every task group as a judgeable implementation slice and stop for approval before selecting the active group.",
       "expected_skill": "dumplink",
       "expected_artifact_type": "dumplink",
       "expected_gate": "task-group-approval",
       "implementation_allowed": false,
-      "required_evidence": ["selected slice", "vertical task groups", "dependencies", "cuts"],
-      "forbidden_evidence": ["expanded slice", "horizontal backlog", "production code"]
+      "required_evidence": ["selected project", "vertical task groups", "dependencies", "cuts", "task-group approval"],
+      "forbidden_evidence": ["preselected slice required", "expanded project", "horizontal backlog", "production code"]
     },
     {
       "id": "context-packet-excludes-candidate-build-scope",
