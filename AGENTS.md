@@ -21,8 +21,10 @@ frame
 ↔ candidate breadboards or focused spikes when needed
 → fit and human selection
 → selected-design breadboard
-→ select a demoable slice
-→ add only the supporting detail that slice requires
+→ confirm the selected project boundary
+→ use Dumplink when the project needs sequenced vertical task groups
+→ select an active task group or other demoable slice
+→ add only the supporting detail that active slice requires
 → feed bounded context
 → build and check drift
 ```
@@ -42,7 +44,7 @@ Advanced moves are conditional, not a checklist:
 - `statechart` when selected stateful behavior is hard to reason about from wiring alone
 - `interface-contracts` when a meaningful boundary remains ambiguous
 - `executable-breadboards` when a selected slice needs fixtures, examples, edge cases, or acceptance tests
-- `dumplink` when work inside a selected slice needs vertical task groups, dependencies, risk, sequence, or cuts
+- `dumplink` when a selected project needs to be decomposed into vertical task groups with dependencies, risk, sequence, or cuts
 - `kickoff-doc` when builders need a durable orientation reference
 - `feed-planning-context` when an implementation agent needs only the authoritative subset
 - `breadboard-reflection` when implementation reality may have drifted from accepted intent
@@ -56,7 +58,8 @@ Agents may gather facts, expose alternatives, and prepare decision-ready materia
 - what Appetite and cut line the bet deserves
 - which shape is selected
 - whether a candidate breadboard is reconciled into selected-design intent
-- which slice is active
+- which project is selected and bounded
+- which Dumplink task-group plan is approved and which task group or other slice is active
 - whether drift changes the code, the plan, or the scope
 
 Do not infer a decision from enthusiasm, recency, visual polish, or the fact that one option has more detail.
@@ -73,7 +76,7 @@ Keep these distinctions intact:
 - accepted scope versus rejected or deferred ideas
 - planning truth versus implementation reality
 
-Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. Candidate breadboards are subordinate evidence about one possible shape. A selected-design breadboard is normative only after explicit selection and reconciliation. A selected slice governs active scope.
+Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. Candidate breadboards are subordinate evidence about one possible shape. A selected-design breadboard is normative only after explicit selection and reconciliation. The selected project governs the outer scope. A selected Dumplink task group or other selected slice governs the active implementation scope.
 
 ## Project language and decisions
 
@@ -94,10 +97,10 @@ Existing product-specific instructions remain authoritative unless the team expl
 Use this default order when artifacts disagree:
 
 1. user's latest explicit instruction
-2. selected slice
-3. executable breadboard, for expected examples and results within that slice
-4. selected interface contract, for its named boundary
-5. selected Dumplink task group, for grouping and sequence inside the slice
+2. selected project boundary, for the discrete unit of work Dumplink may decompose
+3. selected Dumplink task group or other selected slice, for active implementation scope
+4. executable breadboard, for expected examples and results within that active scope
+5. selected interface contract, for its named boundary
 6. accepted selected-design breadboard
 7. selected shaping direction
 8. candidate-shape breadboard, for evidence about its named candidate only
@@ -106,7 +109,7 @@ Use this default order when artifacts disagree:
 11. raw notes and transcripts
 12. rejected alternatives and brainstorming
 
-Authority is concern-specific. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank the shaping artifact. No lower artifact may expand the selected slice.
+Authority is concern-specific. The project boundary governs outer scope; the active task group or other selected slice governs the current implementation scope; executable examples govern expected behavior; and a contract governs its named exchange. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank the shaping artifact. No lower artifact may expand the selected project or active slice.
 
 A statechart is derived from the selected-design breadboard and never outranks it. A sketch-reconciliation record becomes authoritative only after accepted deltas are applied to the relevant source artifact. Run logs are audit records, not product truth.
 
@@ -120,7 +123,7 @@ Do not paste or load the whole planning stack by default.
 
 Before implementation, provide a compact context packet containing only what the active task requires:
 
-- current task and selected slice
+- current task, selected project, and active task group or other selected slice
 - source artifacts and authority order
 - accepted requirements, Appetite, cut line, and non-goals
 - relevant selected-design places, affordances, stores, and wires
@@ -203,7 +206,7 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Statechart — optional derived view of selected stateful behavior
 - Interface contract — what crosses a meaningful boundary
 - Executable breadboard — selected behavior plus fixtures, examples, expected results, and tests
-- Dumplink — vertical task grouping and dependency-aware sequence inside a selected slice
+- Dumplink — decomposition of one selected project into sequenced vertical task groups that become implementation slices
 - Kickoff document — human-readable orientation, not build scope
 - Context packet — exact subset handed to the implementation agent
 - Breadboard reflection — explicit comparison of accepted intent and implementation reality

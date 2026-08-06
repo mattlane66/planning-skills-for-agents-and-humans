@@ -49,7 +49,7 @@ A candidate breadboard does not automatically become selected-design. After sele
 | A selected stateful scope has retries, timeouts, approvals, lifecycle stages, or several valid actions per state | `/statechart` or `statechart/SKILL.md` | Transition table, Mermaid projection, and explicit gaps derived from the selected-design breadboard. |
 | A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | A selected slice needs fixtures, example runs, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable behavioral handoff. |
-| Work inside a selected slice needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A bounded task-group plan; before slice selection, candidates only. |
+| A selected project needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A project-wide plan whose task groups are judgeable vertical slices; one becomes active after human selection. |
 | An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with project language, authority order, execution contract, and verification target. |
 | Implementation may have drifted from accepted intent | `/check-drift` or `/reflect-breadboard` | A no-drift result or an explicit comparison and correction decision. |
 | Builders need a durable orientation reference | `/kickoff` or `kickoff-doc/SKILL.md` | A human-readable map of accepted product territory, not build scope or sequence. |
@@ -65,8 +65,10 @@ messy evidence
   → fit check and human selection
   → selected-design breadboard
   ↔ return to shaping if concrete behavior exposes a consequential conflict
-  → select a demoable slice
-  → add only the supporting detail that slice requires
+  → confirm the selected project boundary
+  → use Dumplink when the project needs sequenced vertical task groups
+  → select an active task group or other demoable slice
+  → add only the supporting detail that active slice requires
   → feed bounded context
   → build with drift checks
 ```
@@ -104,10 +106,10 @@ Check that you have:
 - an accepted Appetite and cut line
 - explicit non-goals
 - an accepted selected-design breadboard or equally clear implementation boundary
-- a selected slice or equally clear implementation boundary
+- a selected project boundary and an active task group, selected slice, or equally clear implementation boundary
 - no candidate breadboard being treated as build scope
 - consequential visuals reconciled with accepted artifacts
-- only the advanced detail the selected slice actually requires
+- only the advanced detail the active implementation slice actually requires
 - canonical project terms and relevant architectural decisions
 - a compact context packet
 - an execution contract and verification target

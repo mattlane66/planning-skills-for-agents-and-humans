@@ -1,12 +1,12 @@
 ---
 name: feed-planning-context
-description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one slice.
+description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one active task group or slice.
 license: MIT
 ---
 
 # Feed Planning Context
 
-Use this skill when an implementation agent needs the exact authoritative context for one selected slice or active task group.
+Use this skill when an implementation agent needs the exact authoritative context for one selected Dumplink task group or other selected slice.
 
 This skill packages context only. It does not implement code, change scope, or resolve missing product decisions.
 
@@ -28,7 +28,8 @@ Use whichever authoritative sources exist:
 
 - frame and shaping document
 - Appetite card, when separate
-- accepted selected-design breadboard and selected slice
+- selected project boundary
+- accepted selected-design breadboard and active task group or selected slice
 - relevant statechart rows
 - interface contracts
 - executable breadboard examples
@@ -45,10 +46,10 @@ When working in an existing product repository, inspect the applicable `AGENTS.m
 Unless the user specifies otherwise:
 
 1. user's latest explicit instruction
-2. selected slice
-3. executable breadboard, for expected examples and results within that slice
-4. selected interface contract, for its named boundary
-5. selected Dumplink task group, for grouping and sequence inside the slice
+2. selected project boundary
+3. selected Dumplink task group or other selected slice, for active implementation scope
+4. executable breadboard, for expected examples and results within that scope
+5. selected interface contract, for its named boundary
 6. accepted selected-design breadboard
 7. selected shaping direction
 8. kickoff document, for orientation only
@@ -56,11 +57,11 @@ Unless the user specifies otherwise:
 10. raw notes
 11. rejected alternatives, candidate breadboards, and brainstorming
 
-A statechart is derived from the selected-design breadboard and never outranks it. Candidate-shape breadboards never become implementation authority without explicit reconciliation into accepted shaping or selected-design artifacts. No lower artifact may expand the selected slice.
+A statechart is derived from the selected-design breadboard and never outranks it. Candidate-shape breadboards never become implementation authority without explicit reconciliation into accepted shaping or selected-design artifacts. No lower artifact may expand the selected project or active slice.
 
 ## Procedure
 
-1. Name the current task and selected slice.
+1. Name the selected project, current task, and active task group or other selected slice.
 2. List source artifacts and their concern-specific authority.
 3. Confirm that the behavior source is accepted selected-design intent, not current-state or candidate-shape evidence.
 4. Extract only the sections required for the next move.
@@ -103,7 +104,8 @@ At minimum include:
 - Accepted requirements:
 - Appetite and cut line:
 - Accepted selected-design breadboard:
-- Selected slice:
+- Selected project boundary:
+- Active task group or selected slice:
 - Non-goals:
 
 ## Project language and decisions
@@ -176,7 +178,7 @@ The execution contract must name:
 ## Return to planning when
 
 - the context packet would need to treat a candidate breadboard as selected intent
-- implementation would expand the selected slice
+- implementation would expand the selected project or active slice
 - required behavior is absent from accepted artifacts
 - a field, enum, nullability, unit, error case, fixture, expected result, or acceptance test is missing
 - project terminology or an architectural decision is materially ambiguous

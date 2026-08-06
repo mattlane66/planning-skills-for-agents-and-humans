@@ -82,7 +82,7 @@ Do not:
 - Keep decisions next to the area they affect.
 - Do not create a generic dump section called `Design Decisions`.
 - Do not turn the kickoff doc into an implementation sequence.
-- Do not treat the kickoff doc as authority over a selected slice, contract, executable breadboard, Dumplink plan, breadboard, or selected shape.
+- Do not treat the kickoff doc as authority over a selected project, active task group or slice, contract, executable breadboard, Dumplink plan, breadboard, or selected shape.
 - Preserve the team’s real language where it helps recognition.
 - Synthesize repeated discussion into one clean statement.
 

@@ -1,41 +1,44 @@
 # Dumplink usage
 
-Dumplink organizes work inside a selected slice into vertical task groups, dependency-aware sequence, risk states, scope cuts, acceptance checks, and a bounded agent handoff packet.
+Dumplink ingests one selected, bounded project and creates the vertical task groups needed to build it. It dumps the work, clusters tasks into judgeable vertical slices, maps dependencies and risk, sequences the groups, defines appetite-based cuts, and stops for approval before one group becomes the active implementation slice.
 
-Use its full mode after framing, shaping, breadboarding, and human slice selection. Do not use it to replace framing, shaping, or slice selection.
+Do not select a slice before running Dumplink. Creating those slices is Dumplink's job.
 
 ## When to use it
 
 Use Dumplink when:
 
-- a shaped project has been selected
+- a shaped project has been selected as a discrete unit of work
+- the project boundary, exclusions, outcome, and non-goals are explicit
 - there is a fixed appetite or bounded build pass
-- a selected slice and its exclusions are explicit
-- the work is too large for a single implementation move
+- the project needs more than one judgeable implementation increment
 - horizontal tickets would lose the intended behavior
 - risk, dependency order, or scope cuts need to be visible before coding
+
+If no project is selected or its boundary is missing, return to framing, shaping, or the human project-selection gate. Do not invent task groups or a sequence.
 
 ## Command forms
 
 Claude Code:
 
 ```text
-/dumplink planning/shaping.md planning/breadboard.md planning/slices.md "Appetite: 4 weeks"
+/dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
 ```
 
 Gemini CLI:
 
 ```text
-/dumplink planning/shaping.md planning/breadboard.md planning/slices.md "Appetite: 4 weeks"
+/dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
 ```
 
 Codex prompt:
 
 ```text
 Use AGENTS.md and dumplink/SKILL.md.
-Create a Dumplink plan inside the selected slice.
-Cluster tasks into vertical task groups, mark risk states, map dependencies, sequence the build, define scope cuts, write acceptance checks, and end with one bounded agent handoff packet.
-Preserve the slice boundary and exclusions. If no slice is selected, produce candidate groups and slice-selection questions only; do not create a build sequence or handoff.
+Turn this selected project into a Dumplink plan.
+Dump the work, create vertical task groups, mark risk states, map dependencies, sequence the build, define appetite-based cuts, and write acceptance checks.
+Preserve the project boundary, exclusions, outcome, and non-goals. Treat every task group as a judgeable vertical slice of the project.
+Stop for approval of the task-group plan and selection of the first active group. Create a bounded handoff only for the group I select.
 Do not implement code.
 ```
 
@@ -45,18 +48,17 @@ A Dumplink plan should include:
 
 1. Project boundary
 2. Task dump
-3. Task groups
+3. Vertical task groups
 4. Unknowns / knowns / done states
 5. Dependency map
 6. Build sequence
 7. Scope cuts
 8. Acceptance checks
-9. Agent handoff packet
-
-The full output requires a selected slice. Before slice selection, exploration may include only a rough dump, candidate groups, risks, dependencies, cut options, and the decision question needed to select a slice.
+9. Task-group approval gate
+10. Active task-group handoff, only after human selection
 
 ## Core rule
 
-Dumplink should preserve the selected slice whole while making implementation sequence clear.
+The selected project is the input and hard outer boundary. Dumplink creates its implementation slices as task groups. After the human approves the plan and selects a group, that group becomes the active slice for contracts, executable examples, context packaging, and implementation.
 
-It should not flatten the work into a generic ticket backlog, enlarge the selected slice, or turn exploratory candidates into a build commitment.
+Dumplink must not flatten the project into a generic ticket backlog, enlarge the selected project, or treat sequence order as approval of the active task group.

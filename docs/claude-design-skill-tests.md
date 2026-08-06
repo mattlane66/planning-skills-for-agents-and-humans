@@ -69,16 +69,16 @@ Expected: a buildable behavioral test contract, not an expanded feature set.
 ## `dumplink`
 
 ```text
-Use my dumplink skill. Inside this selected slice, group work into vertical tasks, sequence dependencies, mark risk states, and identify appetite-based cuts. Preserve the slice boundary, exclusions, and non-goals.
+Use my dumplink skill. Turn this selected, bounded project into vertical task groups, sequence dependencies, mark risk states, and identify appetite-based cuts. Preserve the project outcome, boundary, exclusions, and non-goals. Stop for approval before selecting the active group.
 ```
 
-Expected: bounded task groups and cuts rather than a generic backlog.
+Expected: the project is decomposed into bounded, judgeable vertical slices and cuts rather than a generic backlog.
 
 ```text
-Use my dumplink skill, but no slice has been selected yet. Show candidate groups, risks, dependencies, and slice-selection questions only. Do not create a build sequence, active task group, acceptance plan, or agent handoff.
+Use my dumplink skill, but no project has been selected or bounded yet. Create the task groups and build sequence anyway.
 ```
 
-Expected: pre-slice exploration that stops at candidates and returns the decision to breadboarding and the human.
+Expected: Dumplink stops without inventing task groups and returns the missing project decision to framing, shaping, or the human gate.
 
 ## `kickoff-doc`
 

@@ -6,7 +6,7 @@ Use it when work is large enough that a coding agent should not jump directly fr
 
 ## Flow
 
-Messy notes → frame → criteria → Appetite → sketch shapes ↔ candidate-shape breadboards or focused spikes when needed → fit check → reconcile visual evidence when present → human selects shape → reconcile selected-design breadboard ↔ return to shaping if detailed behavior exposes a consequential conflict → optional statechart → select a slice → selected-slice contracts and executable examples as needed → optional Dumplink → optional kickoff reference → context packet with execution contract → build with drift checks → run log → reflection.
+Messy notes → frame → criteria → Appetite → sketch shapes ↔ candidate-shape breadboards or focused spikes when needed → fit check → reconcile visual evidence when present → human selects a bounded project and shape → reconcile selected-design breadboard ↔ return to shaping if detailed behavior exposes a consequential conflict → optional statechart → optional Dumplink creates sequenced vertical task groups → human selects the active task group or another demoable slice → contracts and executable examples as needed → optional kickoff reference → context packet with execution contract → build with drift checks → run log → reflection.
 
 This is iterative, not a conveyor belt. Candidate breadboarding may support shaping before selection. Only an accepted selected-design breadboard can feed slicing and implementation.
 
@@ -27,10 +27,11 @@ When the bounded planning route itself spans multiple sessions, Wayfinding wraps
 | Select shape | Record the human-selected direction and the candidate evidence to retain, revise, or discard. | selected direction + rejected alternatives + reconciliation plan |
 | Selected-design breadboard | Reconcile the selected shape into accepted normative places, affordances, stores, consequences, branches, and wiring. Return consequential conflicts to shaping. | accepted `planning/breadboard.md` |
 | Statechart, optional | Derive a precise behavioral view when a selected stateful scope is hard to reason about from wiring alone. | `planning/statechart.md` |
-| Select slice | Choose a demoable increment from the accepted selected-design breadboard with explicit exclusions and a verification target. | `planning/slices.md` |
+| Select project | Confirm the selected project as the discrete outer unit of work, with explicit outcome, boundary, exclusions, and Appetite. | `planning/shaping.md` |
+| Dumplink, optional | Decompose the selected project into vertical task groups, dependency sequence, risk states, scope cuts, and a task-group approval gate. | `planning/dumplink.md` |
+| Select active slice | Approve the Dumplink plan and choose an active task group, or choose another demoable slice when Dumplink is unnecessary. | `planning/slices.md` |
 | Interface contracts | Define boundary-crossing data exchanges before agents guess field-level details. | `planning/interface-contracts.md` |
 | Executable breadboard | Add fixtures, examples, expected outputs, edge cases, and acceptance tests. | `planning/executable-breadboard.md` |
-| Dumplink | Inside the selected slice, create vertical task groups, dependency sequence, risk states, scope cuts, and an agent handoff packet. | `planning/dumplink.md` |
 | Kickoff, optional | Create a durable human-readable orientation map after selected artifacts converge; do not use it as build scope or sequence. | `planning/kickoff.md` |
 | Context packet | Feed only the authoritative context relevant to the implementation agent; exclude candidate breadboards as active build scope. | `planning/context-packet.md` |
 | Drift check | Keep implementation inside the selected slice and active task group. | strict drift-check output |

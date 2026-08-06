@@ -1,6 +1,6 @@
 # CI health workflow
 
-The repository runs `.github/workflows/repo-health.yml` on pull requests and pushes to `main`.
+The repository runs `.github/workflows/repo-health.yml` on pull requests, pushes to `main`, and manual dispatches from the Actions tab.
 
 The workflow first builds and validates the uploadable Claude skill ZIPs, then runs the full repository health check.
 
@@ -33,6 +33,8 @@ Run the same checks locally from the repository root:
 python3 scripts/build_claude_skills.py
 bash scripts/check-repo-health.sh
 ```
+
+Use the workflow's **Run workflow** control when an explicit GitHub-hosted verification is needed without a new code change.
 
 When editing a canonical root skill, update its packaged copy with:
 

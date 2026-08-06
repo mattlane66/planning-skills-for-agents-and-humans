@@ -97,10 +97,10 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 | **Selected-design breadboard** | Accepted normative behavior after human selection and explicit reconciliation. |
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
-| **Dumplink plan** | Vertical task groups, risk, dependency order, sequence, and appetite-based cuts inside one selected slice. |
+| **Dumplink plan** | A selected project decomposed into sequenced vertical task groups, with risk, dependencies, and appetite-based cuts. |
 | **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent. |
 
-A common path is: accepted criteria and appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape → accepted selected-design breadboard → selected slice → interface contracts and executable breadboard when needed → optional Dumplink → optional kickoff reference → context packet → implementation. Not every candidate or project needs every artifact.
+A common path is: accepted criteria and appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape and project boundary → accepted selected-design breadboard → optional Dumplink to create sequenced vertical task groups → human-selected active task group or other demoable slice → interface contracts and executable breadboard when needed → optional kickoff reference → context packet → implementation. Not every candidate or project needs every artifact.
 
 Set appetite before selecting a shape. Use the `Appetite` section in the [shaping template](./templates/shaping.md) for a compact decision or the standalone [appetite card](./templates/appetite-card.md) when ownership, rationale, and revisit conditions need their own record.
 
@@ -154,7 +154,7 @@ Start there. Add the advanced moves only when the work needs them.
 | [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted selected-design breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
 | [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | [`executable-breadboards`](./executable-breadboards/SKILL.md) | A slice needs fixtures, example runs, edge cases, and acceptance tests before build handoff. | A buildable, testable slice contract. |
-| [`dumplink`](./dumplink/SKILL.md) | Work inside a selected slice needs vertical task groups, dependency-aware sequencing, risk states, or appetite-based cuts. | A bounded task-group plan and agent handoff packet; pre-slice use stops at candidates. |
+| [`dumplink`](./dumplink/SKILL.md) | A selected project needs to be decomposed into vertical task groups with dependency-aware sequencing, risk states, or appetite-based cuts. | A project-wide task-group plan; after human selection, one active group becomes the bounded implementation slice. |
 | [`kickoff-doc`](./kickoff-doc/SKILL.md) | Builders need a durable orientation reference after selected artifacts converge. | A builder-facing map that does not replace build scope or sequence. |
 | [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the authoritative planning stack. | A compact context packet with an execution contract and verification target; candidate breadboards are excluded as build scope. |
 | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) | Implementation exists and may differ from accepted intent. | Separate intent/reality records, drift evidence, design smells, and an explicit correction decision. |

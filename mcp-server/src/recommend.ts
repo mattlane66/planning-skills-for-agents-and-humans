@@ -334,11 +334,15 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
   }
 
   const dumplinkRequested = includesAny(normalized, ['task group', 'dependency sequence', 'risk state', 'scope cut', 'dumplink']);
-  const preSliceCandidatesOnly = includesAny(normalized, ['candidate groups', 'candidates only', 'pre-slice exploration']);
-  const committedDumplinkOutput = includesAny(normalized, ['build sequence', 'agent handoff', 'active task group', 'acceptance plan']);
+  const projectUnavailable = matches(normalized, [
+    /\bno\s+(?:selected\s+)?project\b/,
+    /\bwithout\s+(?:a\s+)?(?:selected\s+)?project\b/,
+    /\bproject\s+(?:has\s+not|hasn't|is\s+not|isn't)\s+(?:been\s+)?(?:selected|bounded)\b/,
+    /\bno\s+project\s+boundary\b/,
+  ]);
   if (dumplinkRequested) {
-    if (negatedBuildHandoff && committedDumplinkOutput && !preSliceCandidatesOnly) {
-      if (!recommendations.includes('breadboarding')) recommendations.push('breadboarding');
+    if (projectUnavailable) {
+      if (!recommendations.includes('shaping')) recommendations.push('shaping');
     } else {
       recommendations.push('dumplink');
     }

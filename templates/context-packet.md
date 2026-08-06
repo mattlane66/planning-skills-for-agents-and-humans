@@ -19,10 +19,10 @@ Candidate-shape breadboards are not governing source artifacts for implementatio
 
 ## Authority order
 1. User's latest explicit instruction
-2. Selected slice
-3. Executable breadboard, when present
-4. Selected interface contract, for boundary-level input/output details
-5. Selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
+2. Selected project boundary
+3. Selected Dumplink task group or other selected slice, for active implementation scope
+4. Executable breadboard, when present
+5. Selected interface contract, for boundary-level input/output details
 6. Accepted selected-design breadboard
 7. Selected shaping direction
 8. Kickoff doc, for builder orientation only
@@ -31,7 +31,7 @@ Candidate-shape breadboards are not governing source artifacts for implementatio
 11. Candidate-shape breadboards, rejected alternatives, and brainstorming
 
 A statechart is derived from the selected-design breadboard and never outranks it.
-The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence. A candidate breadboard is exploratory evidence, not selected behavior.
+The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. A candidate breadboard is exploratory evidence, not selected behavior.
 
 ## Use these sections first
 - ...
@@ -49,7 +49,7 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - stable place and affordance IDs from the accepted selected-design breadboard
 - store IDs
 - accepted Appetite and cut line
-- selected slice boundary
+- selected project boundary and active task-group or slice boundary
 - canonical project terms and relevant architectural decisions
 - existing interfaces or seams the selected work preserves or intentionally changes
 - executable breadboard fixtures, example runs, expected outputs, and acceptance tests, when present

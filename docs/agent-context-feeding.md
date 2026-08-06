@@ -43,7 +43,7 @@ Interface contract = what crosses a boundary.
 
 Executable breadboard = structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
 
-Dumplink = vertical task grouping, risk/dependency sequence, and scope cuts inside a selected slice; pre-slice groups are candidates only.
+Dumplink = decomposition of a selected project into vertical task groups with risk/dependency sequence and scope cuts; a human-selected group becomes the active implementation slice.
 
 Context packet = the exact subset handed to the build agent.
 
@@ -64,10 +64,10 @@ What the next planning or implementation move should do.
 
 ## Authority order
 1. User's latest explicit instruction
-2. Selected slice
-3. Executable breadboard, when present
-4. Selected interface contract, for boundary-level details
-5. Selected Dumplink task group and sequence, within the selected slice
+2. Selected project boundary
+3. Selected Dumplink task group or other selected slice, for active implementation scope
+4. Executable breadboard, when present
+5. Selected interface contract, for boundary-level details
 6. Selected breadboard
 7. Selected shaping direction
 8. Kickoff doc, for builder orientation only
@@ -75,7 +75,7 @@ What the next planning or implementation move should do.
 10. Raw notes and transcripts
 11. Rejected alternatives and brainstorming
 
-The selected slice governs scope. Within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence.
+The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence.
 
 ## Use these sections first
 - ...
@@ -84,7 +84,7 @@ The selected slice governs scope. Within it, the executable breadboard governs e
 - raw notes, rejected shapes, and unaccepted reconciliation deltas
 
 ## Must preserve
-- stable IDs, accepted appetite and cut line, explicit non-goals, selected slice boundary, demo path, and any relevant contracts, examples, statechart rows, or Dumplink boundaries
+- stable IDs, accepted appetite and cut line, explicit non-goals, selected project boundary, active task-group or slice boundary, demo path, and any relevant contracts, examples, or statechart rows
 
 ## Selected requirements
 - ...
@@ -296,10 +296,10 @@ When feeding large planning material to an agent:
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
 1. the user's latest explicit instruction
-2. selected slice
-3. executable breadboard, when present
-4. selected interface contract, for boundary-level input/output details
-5. selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
+2. selected project boundary
+3. selected Dumplink task group or other selected slice, for active implementation scope
+4. executable breadboard, when present
+5. selected interface contract, for boundary-level input/output details
 6. selected breadboard
 7. selected shaping direction
 8. kickoff doc, for builder orientation only
@@ -309,7 +309,7 @@ When artifacts disagree, use this default authority order unless the user says o
 
 A statechart is derived from the selected breadboard and never outranks it.
 
-Authority is concern-specific: the selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, an interface contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is a derived reference, not build scope or sequence.
+Authority is concern-specific: the selected project governs outer scope; the selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and an interface contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is a derived reference, not build scope or sequence.
 
 ## Drift protocol
 

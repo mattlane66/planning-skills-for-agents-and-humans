@@ -17,10 +17,10 @@ Codex should honor this workflow while also following the active product reposit
 7. Reconcile sketches or screenshots explicitly whenever they reveal missing or conflicting detail.
 8. Breadboard the selected shape.
 9. Optionally derive a statechart when a selected stateful scope is hard to reason about from wiring alone.
-10. Slice into demoable increments.
-11. Add interface contracts when the selected slice crosses meaningful boundaries.
-12. Add an executable breadboard when the build handoff needs examples, fixtures, expected outputs, edge cases, or tests.
-13. Use Dumplink when work inside the selected slice needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+10. Confirm the selected project boundary.
+11. Use Dumplink when that project needs vertical task groups, dependency-aware sequence, risk states, or appetite-based cuts.
+12. Select an active task group or, when Dumplink is unnecessary, another demoable slice.
+13. Add interface contracts and an executable breadboard when that active slice needs boundary detail, examples, fixtures, expected outputs, edge cases, or tests.
 14. Feed only the relevant planning context to implementation.
 15. Check drift during implementation.
 16. Reflect against implementation, preserve accepted intent separately, and apply only an explicit drift decision.
@@ -145,8 +145,8 @@ Do not implement yet.
 
 ```text
 Use the installed `dumplink` skill and follow this product repository's instructions.
-Create a Dumplink plan inside [selected slice] only if it needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.
-Preserve the selected shape, appetite, slice boundary, exclusions, and non-goals. Do not create a horizontal discipline backlog, expand the slice, or implement code. If no slice is selected, produce candidates only and stop before build sequence or handoff.
+Turn [selected project] into a Dumplink plan when it needs vertical task groups, dependency-aware sequence, risk states, or scope cuts.
+Preserve the project's outcome, selected shape, appetite, boundary, exclusions, and non-goals. Treat every task group as a judgeable vertical slice. Do not create a horizontal discipline backlog, expand the project, or implement code. Stop for approval and active task-group selection before creating its handoff.
 ```
 
 ## Context packet before implementation

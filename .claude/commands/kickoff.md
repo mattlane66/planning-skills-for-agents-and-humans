@@ -35,4 +35,4 @@ Produce or update a kickoff artifact organized by the product or system territor
 - Explicit exclusions
 - Self-check
 
-Do not turn the kickoff doc into an implementation task list. If the user needs grouping or build sequence, use the selected slice and Dumplink instead.
+Do not turn the kickoff doc into an implementation task list. If the user needs grouping or build sequence, use the selected project and Dumplink instead.

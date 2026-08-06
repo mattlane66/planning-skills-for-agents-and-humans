@@ -1,6 +1,6 @@
 # Implementation Context
 
-Compatibility template for handing one selected slice to an implementation agent.
+Compatibility template for handing one selected Dumplink task group or other selected slice to an implementation agent.
 
 Prefer [`templates/context-packet.md`](./templates/context-packet.md) for new work. This file uses the same authority order and execution-contract rules so older links do not create a competing source of truth.
 
@@ -41,10 +41,10 @@ The smallest user-visible path that proves the slice works.
 ## Authority order
 
 1. User's latest explicit instruction
-2. Selected slice
-3. Executable breadboard, when present
-4. Selected interface contract, for boundary-level input/output details
-5. Selected Dumplink task group and sequence, for task-group scope and build order within the selected slice
+2. Selected project boundary
+3. Selected Dumplink task group or other selected slice, for active implementation scope
+4. Executable breadboard, when present
+5. Selected interface contract, for boundary-level input/output details
 6. Selected breadboard
 7. Selected shaping direction
 8. Kickoff doc, for builder orientation only
@@ -52,13 +52,13 @@ The smallest user-visible path that proves the slice works.
 10. Raw notes and transcripts
 11. Rejected alternatives and brainstorming
 
-A statechart is derived from the selected breadboard and never outranks it. The selected slice governs scope; within it, the executable breadboard governs expected behavior and examples, a contract governs its named exchange, and a Dumplink plan governs grouping and order. None may expand the selected slice. A kickoff doc is not build scope or sequence. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
+A statechart is derived from the selected breadboard and never outranks it. The selected project governs outer scope; the selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
 
 ## Must preserve
 
 - selected requirement IDs
 - relevant place, affordance, and store IDs
-- selected slice ID and boundary
+- selected project boundary and active task-group or slice ID and boundary
 - relevant statechart and transition IDs, when present
 - relevant contract IDs and field-level decisions, when present
 - executable examples, fixtures, expected outputs, and acceptance tests, when present
