@@ -27,6 +27,7 @@ jobs:
         working-directory: visualizer
         run: |
           npm install mermaid@11.16.1 --save-exact
+          npm audit fix
           npm audit
       - name: Commit regenerated lockfile
         run: |
