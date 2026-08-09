@@ -246,6 +246,18 @@ Stop condition:
 
 Feed one active task group to an implementation agent at a time. The Dumplink plan retains project-wide sequence; the handoff carries only the active slice and its necessary context.
 
+## Optional execution graph handoff
+
+After the task-group plan is approved, an implementation harness may compile it into the runtime-neutral execution graph described in `docs/execution-graph.md` and `templates/execution-graph.yaml`.
+
+The execution graph is derived from Dumplink; it is not another planning source of truth. It must preserve the approved task-group IDs, dependency edges, cuts, acceptance checks, project boundary, and human activation requirements.
+
+Do not use the graph to invent a task group, change a dependency, expand the project, or silently change an acceptance condition. If runtime reality implies one of those changes, return to the owning planning artifact and pass the applicable human gate before regenerating the graph.
+
+Keep one active task group as the default. Independent graph branches may be executed in parallel only when parallel activation is explicitly authorized.
+
+Do not generate an execution graph as part of ordinary Dumplink output unless it is explicitly requested or an implementation harness requires it. Use the `compile_execution_graph` orchestration mode for that derived step.
+
 ## Quality bar
 
 A good Dumplink output:

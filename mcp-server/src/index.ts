@@ -65,6 +65,7 @@ const artifactTemplates = {
   'interface-contract': 'templates/interface-contracts.md',
   'executable-breadboard': 'templates/executable-breadboard.md',
   dumplink: 'templates/dumplink.md',
+  'execution-graph': 'templates/execution-graph.yaml',
   kickoff: 'templates/kickoff.md',
   'context-packet': 'templates/context-packet.md',
   reflection: 'templates/breadboard-reflection.md',
@@ -118,7 +119,7 @@ server.tool(
 
 server.tool(
   'get_artifact_template',
-  'Return a canonical starter Markdown template for a planning, orchestration, or reflection artifact.',
+  'Return a canonical starter template for a planning, orchestration, or reflection artifact.',
   { artifact: z.enum(Object.keys(artifactTemplates) as [ArtifactName, ...ArtifactName[]]) },
   async ({ artifact }) => {
     const content = await readFile(join(repoRoot, artifactTemplates[artifact]), 'utf8');

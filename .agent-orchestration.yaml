@@ -15,6 +15,7 @@ principles:
   - vertical_grouping_before_task_backlog
   - compact_context_before_build
   - execution_contract_before_loop
+  - derived_execution_graph_never_becomes_product_truth
   - drift_checks_during_build
   - reflection_after_implementation
 
@@ -183,6 +184,13 @@ modes:
     forbidden: [horizontal_ticket_backlog, production_code, selected_project_expansion, scope_expansion_without_appetite_change, task_groups_without_selected_project, active_task_group_without_human_selection]
     exit_gate: task_group_plan_approved_and_active_group_selected
 
+  compile_execution_graph:
+    purpose: Compile an approved Dumplink plan or other explicitly approved slice dependency structure into a runtime-neutral execution graph without changing planning intent.
+    requires: [approved_task_group_plan_or_slice_dependency_structure]
+    allowed_outputs: [execution_graph, nodes, dependency_edges, readiness_state, verification_bindings, return_to_planning_edges]
+    forbidden: [new_task_groups, changed_dependencies_without_planning_update, scope_expansion, implicit_human_activation, execution_graph_as_product_truth, automatic_parallel_execution]
+    exit_gate: execution_graph_compiled
+
   kickoff:
     skill: kickoff-doc
     command_aliases: { claude: /kickoff }
@@ -237,6 +245,7 @@ artifacts:
   interface_contracts: templates/interface-contracts.md
   executable_breadboard: templates/executable-breadboard.md
   dumplink: templates/dumplink.md
+  execution_graph: templates/execution-graph.yaml
   kickoff: templates/kickoff.md
   context_packet: templates/context-packet.md
   drift_check: templates/drift-check.md
