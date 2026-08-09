@@ -1,0 +1,62 @@
+version: 1
+
+project:
+  id:
+  source: planning/dumplink.md
+  outcome:
+  appetite:
+
+authority:
+  planning_source: planning/dumplink.md
+  graph_is_derived: true
+  graph_may_not_change_scope: true
+  graph_may_not_create_product_truth: true
+
+execution_policy:
+  max_active_groups: 1
+  require_human_activation: true
+  parallel_execution: explicit_only
+
+nodes:
+  TG1:
+    source: planning/dumplink.md#TG1
+    state: planned
+    depends_on: []
+    goal_condition:
+    context_packet:
+    execution_contract:
+    verification:
+      required_checks: []
+    outcomes:
+      success: done
+      verification_failure: retry_or_block
+      planning_conflict: return_to_planning
+      scope_conflict: human_gate
+
+  TG2:
+    source: planning/dumplink.md#TG2
+    state: planned
+    depends_on:
+      - TG1
+    goal_condition:
+    context_packet:
+    execution_contract:
+    verification:
+      required_checks: []
+    outcomes:
+      success: done
+      verification_failure: retry_or_block
+      planning_conflict: return_to_planning
+      scope_conflict: human_gate
+
+edges:
+  - from: TG1
+    to: TG2
+    reason:
+
+runtime_state:
+  active: []
+  ready: []
+  blocked: []
+  done: []
+  cut: []
