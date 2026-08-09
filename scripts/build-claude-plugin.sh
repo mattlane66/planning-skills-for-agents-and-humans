@@ -27,11 +27,13 @@ cp "$ROOT_DIR/.agent-orchestration.yaml" "$DIST_DIR/.agent-orchestration.yaml"
 cp "$ROOT_DIR/docs/agent-context-feeding.md" "$DIST_DIR/docs/agent-context-feeding.md"
 cp "$ROOT_DIR/docs/agent-operating-reference.md" "$DIST_DIR/docs/agent-operating-reference.md"
 cp "$ROOT_DIR/docs/agent-run-records.md" "$DIST_DIR/docs/agent-run-records.md"
+cp "$ROOT_DIR/docs/execution-graph.md" "$DIST_DIR/docs/execution-graph.md"
 cp "$ROOT_DIR/docs/human-decision-gates.md" "$DIST_DIR/docs/human-decision-gates.md"
 cp "$ROOT_DIR/docs/lifecycle-hooks.md" "$DIST_DIR/docs/lifecycle-hooks.md"
 cp "$ROOT_DIR/docs/loop-prompting.md" "$DIST_DIR/docs/loop-prompting.md"
 cp "$ROOT_DIR/docs/stable-ids.md" "$DIST_DIR/docs/stable-ids.md"
 cp "$ROOT_DIR/templates/"*.md "$DIST_DIR/templates/"
+cp "$ROOT_DIR/templates/"*.yaml "$DIST_DIR/templates/"
 cp "$ROOT_DIR/hooks/"*.sh "$DIST_DIR/hooks/"
 cp -R "$ROOT_DIR/examples/." "$DIST_DIR/examples/"
 
@@ -41,6 +43,7 @@ rewrite_args=(
   -e 's#docs/agent-context-feeding\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md#g'
   -e 's#docs/agent-operating-reference\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-operating-reference.md#g'
   -e 's#docs/agent-run-records\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-run-records.md#g'
+  -e 's#docs/execution-graph\.md#${CLAUDE_PLUGIN_ROOT}/docs/execution-graph.md#g'
   -e 's#docs/human-decision-gates\.md#${CLAUDE_PLUGIN_ROOT}/docs/human-decision-gates.md#g'
   -e 's#docs/lifecycle-hooks\.md#${CLAUDE_PLUGIN_ROOT}/docs/lifecycle-hooks.md#g'
   -e 's#docs/loop-prompting\.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
