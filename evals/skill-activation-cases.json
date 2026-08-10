@@ -17,11 +17,12 @@
     "planning-router": {
       "positive": [
         "I have a product request and several artifacts but do not know which planning skill should come next.",
-        "Decide whether this small change needs planning at all and recommend only the smallest useful move."
+        "Decide whether this small change needs planning at all and recommend only the smallest useful move.",
+        "I already have a rough solution but no requirements yet; tell me the smallest planning move without forcing me back to the beginning."
       ],
       "negative": [
         "The planning move is already chosen: create a source-grounded frame from these interview notes.",
-        "The planning move is already chosen: compare solution shapes against accepted criteria and appetite."
+        "The planning move is already chosen: start from my solution as Shape A and extract provisional requirements from it."
       ]
     },
     "wayfinding": {
@@ -40,7 +41,7 @@
         "We have messy stakeholder requests and need a source-grounded frame."
       ],
       "negative": [
-        "Compare three solution approaches against accepted requirements and appetite.",
+        "I already have a concrete Shape A and want to tease out the provisional requirements it implies.",
         "Map the selected design into places, affordances, stores, and wiring."
       ]
     },
@@ -48,11 +49,14 @@
       "positive": [
         "Define criteria and appetite, compare alternative shapes, and stop for my selection.",
         "We have a framed problem but several plausible solution directions.",
-        "Compare Shapes A and B and decide which behavioral uncertainties deserve candidate breadboards before selection."
+        "Compare Shapes A and B and decide which behavioral uncertainties deserve candidate breadboards before selection.",
+        "I already have the solution in my head. Capture it as Shape A first, extract Working requirements from it, and refine R and S together without selecting for me.",
+        "Run a Working fit check now even though Appetite is not accepted yet, and use it to expose missing requirements or unjustified mechanisms.",
+        "Spike this one persistence unknown and return explicit implications for R, S, fit, and Appetite without making the product decision."
       ],
       "negative": [
-        "Extract the current problem and desired outcome from these raw interviews.",
-        "Shape A is already named; breadboard only its checkout flow to determine whether the candidate is coherent."
+        "Extract the current problem and desired outcome from these raw interviews; there is no useful solution or judging structure yet.",
+        "Shape A is already named and the current task is specifically to breadboard only its checkout flow to determine whether the candidate is coherent."
       ]
     },
     "sketch-reconciliation": {
@@ -69,7 +73,8 @@
       "positive": [
         "Map how the current product actually behaves from code and screenshots.",
         "Make the selected design concrete as places, affordances, stores, branches, and wiring.",
-        "Use candidate-shape mode to test whether Shape A's handoff works before any direction is selected."
+        "Use candidate-shape mode to test whether Shape A's handoff works before any direction is selected.",
+        "Shape A is named, requirements are still Working, and Appetite is unset. In collaborative mode breadboard only the restore flow and return provisional R/S/fit implications."
       ],
       "negative": [
         "Derive a transition table for the retry lifecycle in this accepted breadboard.",
