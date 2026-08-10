@@ -1,66 +1,71 @@
 # Agent Context Feeding
 
-Planning artifacts are most useful to agents when they are fed at the right fidelity. Do not paste the whole planning stack by default. Package the small amount of context the agent needs for the current phase, name the source artifacts, and preserve stable IDs so the agent can trace implementation work back to the plan.
+Planning artifacts are most useful to agents when they are fed at the right fidelity. Do not paste the whole planning stack by default. Package the small amount of **accepted** context the agent needs for the current implementation phase, name the source artifacts, and preserve stable IDs so work can be traced back to planning.
 
-When a sketch-reconciliation record exists, feed accepted changes only after they have been written into the authoritative frame, shaping, breadboard, or slice artifacts. Keep pending, rejected, and ambiguous visual deltas out of the build contract.
+Collaborative shaping deliberately creates Working R/S/fit/Appetite, spikes, candidate breadboards, sketches, and prototypes. Those are useful during shaping but are not active build scope unless an accepted decision explicitly promotes their implications.
+
+When a sketch-reconciliation record exists, feed accepted changes only after they have been written into the authoritative frame, shaping, breadboard, or slice artifacts. Keep pending, rejected, ambiguous, and Working deltas out of the build contract.
 
 ## Why this exists
 
-The skills in this repo produce human-readable planning artifacts. Agent context feeding turns those artifacts into machine-usable working context without flattening them into generic instructions.
+The skills in this repo produce human-readable planning artifacts. Agent context feeding turns accepted portions of those artifacts into machine-usable working context without flattening them into generic instructions.
 
 The goal is to prevent common agent failures:
 
-- treating old brainstorms as selected direction
+- treating Working brainstorms or candidate shapes as selected direction
+- treating candidate breadboards as build scope
 - losing non-goals and constraints
-- implementing mechanisms that no longer fit the frame
+- implementing mechanisms that no longer fit accepted requirements or Appetite
 - changing the breadboard silently when code reality pushes back
-- treating raw notes, selected requirements, and build instructions as equal authority
+- treating raw notes, Working R, selected requirements, and build instructions as equal authority
 - inventing interface details such as field names, nullability, enum values, or error cases
 - coding from an ordinary breadboard when an executable breadboard is needed
 
 ## Core rule
 
-Feed the agent the smallest context packet that can support the next move.
+Feed the agent the smallest **authoritative** context packet that can support the next move.
 
 A good context packet tells the agent:
 
 1. what task it is doing now
-2. which planning artifacts are source material and how conflicts are resolved
-3. which sections matter first
-4. which sections should be ignored unless needed
-5. what constraints, IDs, accepted appetite, cut line, and non-goals must be preserved
+2. which accepted artifacts govern the work and how conflicts are resolved
+3. which selected sections matter first
+4. which Working/exploratory sections must be ignored unless needed for a named unresolved decision
+5. what constraints, IDs, Accepted Appetite, cut line, and non-goals must be preserved
 6. which slice is current and which executable breadboard or interface contracts must be preserved, when present
 7. what execution contract governs the build loop
 8. what verification target proves the work stayed aligned
 
 ## Artifact roles
 
-Breadboard = structure of the solution.
+Working shaping material = provisional R/S/Appetite/fit and exploratory evidence used to make decisions. It is not build scope.
 
-Statechart = optional derived behavioral view of a selected stateful portion of the breadboard.
+Candidate-shape breadboard = exploratory behavioral evidence about one unselected candidate. It is not build scope even when its candidate is later selected; surviving rows must be reconciled into selected-design intent.
 
-Interface contract = what crosses a boundary.
+Selected-design breadboard = accepted structure and behavior after explicit selection and reconciliation.
 
-Executable breadboard = structure plus interface contracts, fixtures, example runs, expected outputs, edge cases, and tests.
+Statechart = optional derived behavioral view of a selected stateful portion of the selected-design breadboard.
+
+Interface contract = what crosses a selected boundary.
+
+Executable breadboard = selected structure plus fixtures, example runs, expected outputs, edge cases, and tests.
 
 Dumplink = decomposition of a selected project into vertical task groups with risk/dependency sequence and scope cuts; a human-selected group becomes the active implementation slice.
 
-Context packet = the exact subset handed to the build agent.
-
-Use ordinary breadboards while shaping. Use executable breadboards when a selected slice is ready for implementation preparation.
+Context packet = the exact accepted subset handed to the build agent.
 
 ## Context packet template
 
-Use [`templates/context-packet.md`](../templates/context-packet.md) as the canonical copyable template. Its required structure is summarized here so the guide and template cannot imply different handoff contracts:
+Use [`templates/context-packet.md`](../templates/context-packet.md) as the canonical copyable template. Its required structure is summarized here:
 
 ```md
 # Context Packet
 
 ## Task
-What the next planning or implementation move should do.
+What the next implementation move should do.
 
 ## Source artifacts
-- Only the relevant frame, shaping, breadboard, slice, contract, executable-breadboard, Dumplink, kickoff, or reconciliation artifacts.
+- Only the relevant accepted shaping decision, selected-design breadboard, slice, contract, executable-breadboard, Dumplink, kickoff, or accepted reconciliation artifacts.
 
 ## Authority order
 1. User's latest explicit instruction
@@ -68,28 +73,37 @@ What the next planning or implementation move should do.
 3. Selected Dumplink task group or other selected slice, for active implementation scope
 4. Executable breadboard, when present
 5. Selected interface contract, for boundary-level details
-6. Selected breadboard
-7. Selected shaping direction
+6. Accepted selected-design breadboard
+7. Accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite, cuts
 8. Kickoff doc, for builder orientation only
-9. Framing doc
-10. Raw notes and transcripts
-11. Rejected alternatives and brainstorming
-
-The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence.
+9. Accepted frame / problem boundary
+10. Working shaping material, candidate evidence, raw notes, transcripts, rejected alternatives — discovery context only, never active build scope
 
 ## Use these sections first
 - ...
 
-## Do not use unless needed
-- raw notes, rejected shapes, and unaccepted reconciliation deltas
+## Do not use as build scope
+- Working requirements or Appetite
+- candidate shapes or Working fit checks
+- candidate-shape breadboards and exploratory prototypes
+- rejected shapes
+- raw notes
+- unaccepted reconciliation deltas
 
 ## Must preserve
-- stable IDs, accepted appetite and cut line, explicit non-goals, selected project boundary, active task-group or slice boundary, demo path, and any relevant contracts, examples, or statechart rows
+- stable IDs
+- Accepted requirements
+- Accepted Appetite and cut line
+- explicit non-goals
+- selected project boundary
+- active task-group or slice boundary
+- demo path
+- relevant contracts, examples, or statechart rows
 
 ## Selected requirements
 - ...
 
-## Relevant places / affordances / stores
+## Relevant selected-design places / affordances / stores
 - ...
 
 ## Relevant statechart
@@ -123,7 +137,7 @@ The selected project governs outer scope. The selected Dumplink task group or ot
 - ...
 
 ## Build-handoff behavior
-1. Restate the relevant constraints.
+1. Restate accepted constraints.
 2. Identify implementation implications.
 3. Ask at most 3 blocking questions.
 4. Propose a plan before editing code.
@@ -139,6 +153,7 @@ The selected project governs outer scope. The selected Dumplink task group or ot
 
 Add a short context card near the top of important planning artifacts. This lets the artifact explain how it should be read.
 
+```yaml
 ---
 artifact_type: executable-breadboard
 project: example-project
@@ -149,13 +164,10 @@ feeds:
   - tests
   - reflection
 ---
+```
 
-# Context Card
+### Must preserve
 
-## Use this when
-The agent is implementing or testing the selected slice.
-
-## Must preserve
 - selected slice boundary
 - demo path
 - place and affordance IDs
@@ -165,7 +177,10 @@ The agent is implementing or testing the selected slice.
 - explicit non-goals
 - contract IDs and boundary details, when present
 
-## Ignore unless asked
+### Ignore unless asked
+
+- Working R/S/Appetite/fit
+- candidate breadboards and exploratory prototypes
 - rejected shapes
 - early brainstorming
 - unresolved nice-to-haves
@@ -185,9 +200,7 @@ For new artifacts, use the compact conventions from `AGENTS.md`:
 - RUN1: Happy path for resuming a slice.
 - E1: Missing saved slice state.
 
-Preserve established legacy IDs rather than translating them only for style.
-
-Avoid renaming IDs just to improve wording. If the meaning changes, create a new ID or add a short change note.
+Preserve established legacy IDs rather than translating them only for style. Avoid renaming IDs merely to improve wording. If the meaning changes materially, create a new ID or explicit planning delta.
 
 ## Executable breadboards in context packets
 
@@ -228,95 +241,74 @@ Examples:
 - MCP server -> client
 - app -> external integration
 
-When present, an interface contract should be treated as the source of truth for boundary-level input/output details unless the user's latest instruction, selected slice, or executable breadboard says otherwise.
-
-Preserve:
-
-- contract IDs
-- boundary names
-- field names
-- required vs optional distinctions
-- enum values
-- nullability
-- units, such as cents instead of dollars
-- branches and error cases
-- open decisions
-
-Do not invent missing details. If a field-level decision is missing, surface it as an open decision before coding.
+Preserve contract IDs, boundary names, field names, required/optional distinctions, enum values, nullability, units, branches/errors, and open decisions. Do not invent missing details.
 
 ## Artifact-specific feeding prompts
 
-### Framing doc to agent
-
-Use @planning/frame.md. First extract desired outcome, current struggle, constraints, non-goals, and open questions. Then tell me whether the requested implementation fits the frame. Do not edit code yet.
-
 ### Shaping doc to agent
 
-Use @planning/shaping.md. Treat the selected shape as the current direction. Use rejected shapes only to understand tradeoffs, not as implementation instructions. Before coding, produce selected requirements, shape parts that must be preserved, known unknowns or spikes, build risks implied by the shape, and any mismatch between the requested task and the selected direction.
+Use `@planning/shaping.md`. Extract only **Accepted** requirements, Accepted Appetite/cut line, the explicitly selected shape, cuts, non-goals, and accepted remaining uncertainty. Treat Working R/S/fit and candidate evidence as historical/discovery context unless a named unresolved decision requires them. Do not implement from a candidate shape merely because it appears first or is more detailed.
 
-### Breadboard to agent
+### Selected-design breadboard to agent
 
-Use @planning/breadboard.md. Treat Places, Affordances, Stores, Wiring, and Interface contract candidates as the source of truth for structure. Before coding, identify files likely affected, code responsibilities implied by each affordance, risks where the existing code may not support the breadboard, first slice to implement, and boundary crossings where an interface contract would reduce guessing. Do not change the breadboard silently.
+Use `@planning/breadboard.md`. Confirm `mode: selected-design` and acceptance. Treat Places, Affordances, Stores, Wiring, and selected boundary candidates as the source of truth for structure. Do not substitute an earlier `candidate-shape` artifact.
 
 ### Executable breadboard to agent
 
-Use @planning/executable-breadboard.md. Treat it as the build handoff for the selected slice. Before coding, restate the slice boundary, list fixtures and example runs, identify interface contracts to preserve, list expected user-visible results, state changes, side effects, and acceptance tests, and flag missing decisions. Implement only the selected slice.
+Use `@planning/executable-breadboard.md`. Treat it as the build handoff for the selected slice. Before coding, restate the slice boundary, list fixtures and example runs, identify interface contracts to preserve, list expected results/state changes/side effects, and flag missing decisions. Implement only the selected slice.
 
 ### Interface contract to agent
 
-Use @planning/interface-contracts.md. Before coding, extract contract IDs, boundaries, input fields, output fields, required vs optional fields, enum values, nullable fields, branches and error cases, and open decisions. Then report which decisions are fully specified, which are missing, and which tests should prove the contract is satisfied. Do not invent missing field names, nullability, enum values, or error cases.
+Use `@planning/interface-contracts.md`. Extract contract IDs, boundaries, fields, required/optional distinctions, enum values, nullability, branches/errors, and open decisions. Do not invent missing details.
 
 ### Slice plan to agent
 
-Use @planning/slices.md. Focus only on the selected slice. Before coding, restate slice boundary, demo path, Produces line, explicit exclusions, and verification target. Implement only this slice unless the user explicitly expands scope.
+Use `@planning/slices.md`. Focus only on the human-selected slice. Restate boundary, demo path, Produces line, exclusions, and verification target before coding.
 
 ### Kickoff doc to agent
 
-Use @planning/kickoff.md for builder orientation. Resolve scope and sequence against the selected slice and higher-authority build artifacts. Summarize the build appetite, selected slice, demo path, exclusions, and verification target, then produce an implementation plan without promoting kickoff prose over those artifacts.
+Use `@planning/kickoff.md` for builder orientation. Resolve scope and sequence against higher-authority accepted build artifacts. A kickoff document is not build scope or task order.
 
 ### Breadboard reflection to agent
 
-Use @planning/breadboard-reflection.md plus the selected breadboard and executable breadboard if present. Record current implementation reality without overwriting accepted intent. Compare it with the intended places, affordances, stores, wiring, interface contracts, example runs, acceptance tests, and slices. Return matches, drift, missing behavior, accidental behavior, correction options, and the explicit decision needed before either truth changes.
+Use `@planning/breadboard-reflection.md` plus the accepted selected-design/executable breadboard. Record current implementation reality without overwriting accepted intent. Return matches, drift, missing behavior, accidental behavior, correction options, and the explicit decision needed before either truth changes.
 
 ## Chunking rules
 
 When feeding large planning material to an agent:
 
 1. Start with the Context Card.
-2. Include only the artifact needed for the current phase.
+2. Include only the accepted artifact sections needed for the current phase.
 3. Prefer selected sections over whole documents.
-4. Keep raw notes out unless the task is discovery or reconstruction.
+4. Keep raw notes and Working shaping material out unless the task is discovery or reconstruction.
 5. Use stable IDs so the agent can request missing sections by name.
 6. If the artifact is long, ask the agent to summarize it into an implementation packet before coding.
-7. Keep rejected alternatives available, but clearly mark them as rejected.
+7. Keep rejected/candidate alternatives available only when needed for rationale, clearly labeled as non-authoritative.
 8. Keep non-goals close to the task so the agent does not expand scope.
 
 ## Authority order
 
 When artifacts disagree, use this default authority order unless the user says otherwise:
 
-1. the user's latest explicit instruction
+1. user's latest explicit instruction
 2. selected project boundary
-3. selected Dumplink task group or other selected slice, for active implementation scope
-4. executable breadboard, when present
-5. selected interface contract, for boundary-level input/output details
-6. selected breadboard
-7. selected shaping direction
-8. kickoff doc, for builder orientation only
-9. framing doc
-10. raw notes and transcripts
-11. rejected alternatives and brainstorming
+3. selected Dumplink task group or other selected slice
+4. executable breadboard
+5. selected interface contract for its named boundary
+6. accepted selected-design breadboard
+7. accepted shaping decisions: selected direction, Accepted R, Accepted Appetite, cuts
+8. kickoff document for orientation only
+9. accepted frame / problem boundary
+10. Working shaping material and candidate evidence for discovery only
+11. raw notes, transcripts, rejected alternatives, brainstorming
 
-A statechart is derived from the selected breadboard and never outranks it.
-
-Authority is concern-specific: the selected project governs outer scope; the selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and an interface contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is a derived reference, not build scope or sequence.
+A statechart is derived from the selected-design breadboard and never outranks it.
 
 ## Drift protocol
 
-If implementation reality conflicts with the planning artifact, the agent should not silently patch around the plan.
+If implementation reality conflicts with accepted planning, the agent should not silently patch around the plan.
 
-Use this structure:
-
+```md
 ## Planning drift found
 
 The selected artifact says:
@@ -328,21 +320,23 @@ The implementation reality is:
 Options:
 1. Update the code to match the artifact.
 2. Update the artifact because the original assumption was wrong.
-3. Split the slice and defer the conflicting part.
+3. Split/cut the slice.
+4. Create a new bet.
 
 Recommended move:
 - ...
+```
 
 ## Anti-patterns
 
 Avoid:
 
 - pasting the full transcript and asking the agent to infer the plan
-- mixing rejected alternatives with selected direction without labels
-- asking for code before the agent has restated the slice boundary
+- feeding Working R/S/fit/Appetite as selected truth
+- mixing candidate/rejected alternatives with selected direction without authority labels
+- treating a candidate breadboard as selected-design intent or build scope
+- asking for code before the agent has restated the selected slice boundary
 - letting the agent rename IDs during implementation
-- treating raw notes as more authoritative than selected artifacts
-- coding from an ordinary breadboard when fixtures, example runs, expected outputs, or acceptance tests are needed
-- inventing missing field names, enum values, nullability, fixtures, expected outputs, edge cases, or error cases
-- treating plain-language interface contracts as permission to create production schemas during planning
-- using `CLAUDE.md` as a dumping ground for project-specific details that should live in planning artifacts
+- coding from an ordinary breadboard when fixtures/examples/tests are needed
+- inventing missing fields, enum values, nullability, fixtures, expected outputs, edge cases, or error cases
+- allowing implementation reality to silently rewrite accepted intent
