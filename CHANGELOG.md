@@ -4,15 +4,23 @@
 
 ### Improved
 
+- Made collaborative shaping fluid by default: teams can start R-first, S-first, evidence-first, or uncertainty-first and move among requirements, shapes, fit checks, focused spikes, sketches, and candidate breadboards while material remains Working.
+- Reframed human gates as promotion/commitment gates rather than navigation locks; Accepted requirements and Appetite still constrain selection, candidate evidence still requires reconciliation, and selected behavior/scope still gate implementation.
+- Added explicit `collaborative` and `gated` orchestration profiles so interactive human shaping can stay flexible while automation and policy-controlled workflows retain deterministic prerequisites.
+- Allowed collaborative candidate-shape breadboarding to use Working requirements or Unset/Working Appetite while keeping final fit/Appetite claims provisional and build scope forbidden.
+- Updated Claude Code, Codex, Gemini CLI, Claude Design, MCP integration guidance, runtime adapters, README/start-here/workflow docs, quality rubric, eval corpora, and health checks to describe the same profile behavior.
 - Declared the MIT license in every canonical skill and split breadboarding's detailed notation and slicing material into an on-demand reference.
 - Separated portable Agent Skills metadata from Claude Code, Codex, Gemini CLI, Claude Design, and MCP adapter behavior.
 - Made Claude human-gate aliases manual-only, hid alias-backed generated skills from duplicate slash-menu discovery, and added operational metadata to direct-only Claude skills.
 - Added native Gemini skill installation guidance, Codex skill-only boundary checks, Claude Design example packaging, and shared activation fixtures across all skills.
 - Replaced ad hoc frontmatter parsing with YAML validation and added runtime adapter regression tests.
 
-
 ### Added
 
+- Added `/spike` focused shaping wrappers for Claude Code and Gemini CLI; spikes can originate from R, S, fit, sketches, candidate breadboards, or implementation reality and return explicit R/S/fit/Appetite implications without deciding the product direction.
+- Added Gemini `/shape` and `/breadboard` wrappers for parity with the collaborative Claude shaping surface.
+- Added a solution-first shaping walkthrough showing rough Shape A → Working R → Working fit → spike/candidate breadboard → Accepted judging inputs → explicit human selection → selected-design reconciliation.
+- Added workflow and activation eval cases for S-first shaping, Working fit checks, provisional candidate breadboarding, focused spikes, gated-profile prerequisites, and hard selection gates.
 - Added the `wayfinding` skill and `/wayfind` wrappers for coordinating dependent planning decisions across sessions without creating a second source of product truth.
 - Added portable local-Markdown and optional issue-tracker adapters, Wayfinding map and ticket templates, MCP routing, and cross-runtime activation coverage.
 - Added a Claude and Claude Design workflow that separates canonical skills from Claude Code command wrappers.
@@ -22,6 +30,7 @@
 
 ### Fixed
 
+- Removed the implicit requirement that ordinary interactive shaping must proceed through criteria → Appetite → shapes before useful solution exploration can occur, while preserving the same strict selection and build gates.
 - Preserved dot-prefixed support-file references in generated Claude skill packages and made piped CI failures propagate correctly.
 - Reconciled frame, appetite, shape-selection, kickoff-authority, context-feeding, and breadboard-reflection rules across canonical artifacts and adapters.
 - Removed task grouping and slicing from shaping, separated descriptive and normative breadboarding, and made Dumplink ingest one selected project, create its vertical task-group slices, then stop for human plan approval and active-group selection.
