@@ -79,16 +79,18 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  wayfind frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard statechart dumplink
+  wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  wayfind frame shape criteria appetite sketch-shapes fit-check select-shape reconcile-sketch breadboard
+  wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
 )
 
-GEMINI_COMMANDS=(wayfind criteria appetite sketch-shapes fit-check select-shape reconcile-sketch statechart dumplink check-drift)
+GEMINI_COMMANDS=(
+  plan wayfind shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink check-drift
+)
 
 TEMPLATES=(
   wayfinding-map wayfinding-ticket frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
@@ -118,6 +120,7 @@ DOCS=(
   examples/sketch-reconciliation/README.md
   examples/sketch-reconciliation/02-availability-sketch.svg
   examples/sketch-reconciliation/03-reconciliation.md
+  examples/solution-first-shaping/README.md
 )
 
 check_file_exists requirements-dev.txt
@@ -325,6 +328,17 @@ if grep -q "Appetite card" AGENTS.md \
 else
   fail "Appetite is missing from one or more canonical consumer surfaces"
 fi
+if grep -q "Exploration is fluid" AGENTS.md \
+  && grep -q "collaborative:" .agent-orchestration.yaml \
+  && grep -q "gated:" .agent-orchestration.yaml \
+  && grep -q "Start from S" shaping/SKILL.md \
+  && grep -q "/spike" docs/claude-slash-commands.md \
+  && grep -q "/spike" docs/gemini-usage.md \
+  && grep -q "S-first" docs/codex-usage.md; then
+  pass "Fluid shaping and gated promotion are discoverable across runtime surfaces"
+else
+  fail "Fluid shaping or gated promotion is missing from one or more runtime surfaces"
+fi
 if grep -q "watch-planning-diagrams.sh" README.md \
   && grep -q "watch-planning-diagrams.sh" docs/visual-hot-reload.md \
   && [[ -f visualizer/src/server.mjs ]] \
@@ -427,6 +441,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/hooks/planning-drift-check.sh
   check_file_exists dist/claude-code-plugin/skills/breadboarding/references/notation-rendering-and-slicing.md
   check_file_exists dist/claude-code-plugin/examples/sketch-reconciliation/README.md
+  check_file_exists dist/claude-code-plugin/examples/solution-first-shaping/README.md
   if python3 - <<'PY'
 import pathlib
 import re
