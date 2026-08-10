@@ -35,14 +35,27 @@ test('routes option comparison to shaping', () => {
   assert.deepEqual(recommendPlanningWorkflow('Compare options and tradeoffs before choosing a direction'), ['shaping']);
 });
 
+test('routes solution-first shaping without forcing framing', () => {
+  assert.deepEqual(
+    recommendPlanningWorkflow('I already have a rough solution in my head; capture it as Shape A and extract the requirements it implies'),
+    ['shaping'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Start from the proposed solution and tease out Working requirements before we commit'),
+    ['shaping'],
+  );
+});
+
 test('routes fit-check shorthand from the shaping conversation', () => {
   assert.deepEqual(recommendPlanningWorkflow('show me R x A'), ['shaping']);
   assert.deepEqual(recommendPlanningWorkflow('can you show me A × R — rotate the fit check'), ['shaping']);
+  assert.deepEqual(recommendPlanningWorkflow('run a Working fit check before Appetite is accepted'), ['shaping']);
 });
 
 test('routes spike and shape-update shorthand to shaping', () => {
   assert.deepEqual(recommendPlanningWorkflow('Please spike A2'), ['shaping']);
   assert.deepEqual(recommendPlanningWorkflow('Can you spike the local LLM piece?'), ['shaping']);
+  assert.deepEqual(recommendPlanningWorkflow('Run a focused spike on the persistence unknown'), ['shaping']);
   assert.deepEqual(recommendPlanningWorkflow("Let's update A with Approach 1"), ['shaping']);
   assert.deepEqual(recommendPlanningWorkflow('Add R that date and locale can change independently'), ['shaping']);
   for (const prompt of ['Update A', 'Revise B', 'update A2', 'revise A2', 'put parser into A2']) {
@@ -88,9 +101,16 @@ test('routes a dropped visual to dedicated sketch reconciliation', () => {
   assert.notDeepEqual(recommendPlanningWorkflow('Do not reconcile this sketch'), ['sketch-reconciliation']);
 });
 
+test('routes a named candidate behavioral uncertainty to breadboarding even with provisional judging inputs', () => {
+  assert.deepEqual(recommendPlanningWorkflow("let's breadboard A"), ['breadboarding']);
+  assert.deepEqual(
+    recommendPlanningWorkflow('Candidate Shape A has Working requirements and Appetite is unset; breadboard it to clarify the restore uncertainty'),
+    ['breadboarding'],
+  );
+});
+
 test('routes a selected direction to breadboarding', () => {
   assert.deepEqual(recommendPlanningWorkflow('We have a selected direction and need a behavior map'), ['breadboarding']);
-  assert.deepEqual(recommendPlanningWorkflow("let's breadboard A"), ['breadboarding']);
 });
 
 test('routes explicit current-state mapping to descriptive breadboarding', () => {
@@ -170,10 +190,10 @@ test('routes slice planning and execution verification without restarting the wo
     recommendPlanningWorkflow('Add an acceptance test to verify it works'),
     ['executable-breadboards'],
   );
-  const core = ['framing-doc', 'shaping', 'breadboarding', 'feed-planning-context'];
-  assert.deepEqual(recommendPlanningWorkflow('Build me an onboarding dashboard and run the app yourself'), core);
-  assert.deepEqual(recommendPlanningWorkflow('Implement user authentication and verify it works'), core);
-  assert.deepEqual(recommendPlanningWorkflow('Build this feature, test the app yourself'), core);
+  const routeFirst = ['planning-router'];
+  assert.deepEqual(recommendPlanningWorkflow('Build me an onboarding dashboard and run the app yourself'), routeFirst);
+  assert.deepEqual(recommendPlanningWorkflow('Implement user authentication and verify it works'), routeFirst);
+  assert.deepEqual(recommendPlanningWorkflow('Build this feature, test the app yourself'), routeFirst);
   assert.deepEqual(
     recommendPlanningWorkflow('Implement the selected slice and run it yourself'),
     ['feed-planning-context'],
@@ -189,19 +209,15 @@ test('routes slice planning and execution verification without restarting the wo
     'Without a context packet, implement it',
     "The selected slice isn't ready; implement it",
   ]) {
-    assert.deepEqual(recommendPlanningWorkflow(prompt), core);
+    assert.deepEqual(recommendPlanningWorkflow(prompt), routeFirst);
   }
-  assert.deepEqual(recommendPlanningWorkflow('Create an onboarding dashboard and run it yourself'), core);
-  assert.deepEqual(recommendPlanningWorkflow('Make the app and test it yourself'), core);
+  assert.deepEqual(recommendPlanningWorkflow('Create an onboarding dashboard and run it yourself'), routeFirst);
+  assert.deepEqual(recommendPlanningWorkflow('Make the app and test it yourself'), routeFirst);
 });
 
-test('does not treat an unshaped build request as ready for context feeding', () => {
-  assert.deepEqual(recommendPlanningWorkflow('Build me an onboarding dashboard'), [
-    'framing-doc',
-    'shaping',
-    'breadboarding',
-    'feed-planning-context',
-  ]);
+test('routes an unshaped build request to the planning router instead of prescribing a full pipeline', () => {
+  assert.deepEqual(recommendPlanningWorkflow('Build me an onboarding dashboard'), ['planning-router']);
+  assert.deepEqual(recommendPlanningWorkflow('What should I do next?'), ['planning-router']);
 });
 
 test('routes a selected slice to context feeding', () => {
