@@ -1,4 +1,4 @@
-description = "Create or update only the requirements / criteria table before sketching solution shapes."
+description = "Create, extract, or revise requirements / criteria without requiring solution exploration to stop."
 
 prompt = """
 Use this repository's planning instructions and shaping skill.
@@ -11,32 +11,17 @@ Primary instructions:
 Command arguments / source context:
 {{args}}
 
-Task: produce or update only the requirements / criteria portion of a shaping artifact.
+Task: work on the requirements / criteria portion of the shaping artifact for the current move.
 
-Include:
+Requirements may come from a problem statement, research, an existing solution shape, a prototype, a fit failure, or a spike. When extracting R from S, restate the underlying need or constraint independently of the mechanism.
 
-- requirement IDs such as `R0`, `R1`, `R2`
-- requirement text stated as needs, outcomes, constraints, or quality bars
-- status values such as Core goal, Must-have, Nice-to-have, Undecided, or Out
-- source notes or assumptions when useful
-- rejected or out-of-scope criteria when they clarify boundaries
+Include stable requirement IDs, status, Working/Accepted authority when known, and useful source notes.
 
-Apply the requirement smell test from `shaping/SKILL.md`:
+Do not delete or suppress existing shapes merely because this move focuses on R. Do not silently change accepted requirements; propose the delta and stop for the human decision.
 
-- requirements must not name a specific UI, runtime, vendor, protocol, storage method, or architecture unless that mechanism is truly a constraint
-- rewrite mechanisms as needs when possible
-- move mechanism-like ideas into a parking lot for later shape work
+This command is a focused move inside a fluid shaping loop, not proof that criteria had to come before S.
 
-Stop at Gate 2: Requirements accepted.
+Do not select a direction, promote candidate evidence, or write production code.
 
-Do not propose solution shapes.
-Do not run a fit check.
-Do not select a direction.
-Do not breadboard.
-Do not write production code.
-
-End with a short Gate 2 readiness note:
-
-- `Ready for /appetite` when the criteria are good enough to bound the bet
-- `Needs human decision` when criteria are still missing, conflicting, or mechanism-heavy
+End by naming the smallest next useful move: revise S, fit-check, spike, candidate breadboard, Appetite, or accept/revise R.
 """
