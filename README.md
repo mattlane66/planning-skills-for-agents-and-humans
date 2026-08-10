@@ -210,6 +210,8 @@ These tools address different layers:
 
 Planning Skills is the upstream planning and alignment layer, not a replacement for either downstream category.
 
+![Human–Agent Software Factory](./docs/assets/human-agent-software-factory.svg)
+
 ## Use across agent tools
 
 The method is tool-agnostic. Invocation differs by environment:
