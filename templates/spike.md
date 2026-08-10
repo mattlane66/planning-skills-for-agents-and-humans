@@ -8,10 +8,10 @@ feeds:
   - breadboard
 ---
 
-# [Part / Question] Spike: [Title]
+# [Part] Spike: [Title]
 
 ## Context
-Why this needs investigation and which shaping move exposed it.
+Why this needs investigation and which shaping move exposed it. `Part` may be a requirement, shape part, fit row, breadboard question, or other focused shaping uncertainty; a selected shape is not required.
 
 ## Trigger
 - Requirements (R):
