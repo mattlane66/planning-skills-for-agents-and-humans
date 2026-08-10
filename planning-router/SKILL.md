@@ -1,6 +1,6 @@
 ---
 name: planning-router
-description: Inspect product-planning context and choose the smallest next planning move when no specific skill is selected or planning may not be needed.
+description: Inspect product-planning context and choose the smallest next planning move while preserving fluid collaborative entry points and explicit commitment gates.
 license: MIT
 ---
 
@@ -10,9 +10,15 @@ Use this skill when the user wants help planning product work but has not select
 
 ## Goal
 
-Recommend exactly one next move—the smallest move that prevents an important misunderstanding—or recommend no planning skill.
+Recommend exactly one next move—the smallest move that resolves the current uncertainty—or recommend no planning skill.
 
 The router does not run the full workflow, combine multiple artifacts, select a solution, or begin implementation.
+
+The router follows one central rule:
+
+> **Respect the user's useful entry point. Do not confuse a recommended sequence with a required exploration order.**
+
+A user may begin from requirements, a rough solution, an existing prototype, a fit question, a spike question, or a candidate breadboard. Commitment gates still apply before selection, promotion, slicing, or implementation.
 
 ## Inspect before asking
 
@@ -24,9 +30,12 @@ Use available files, repository evidence, conversation context, and attached art
 |---|---|
 | Small, obvious, low-risk change with clear behavior and scope | No planning skill |
 | The destination is bounded, but reaching it requires multiple dependent planning decisions or investigations across sessions | `wayfinding` |
-| Raw notes, research, requests, or an unclear problem | `framing-doc` |
-| Clear problem but unclear criteria, appetite, alternatives, comparison, or selected direction | `shaping` |
+| Raw notes, research, requests, or an unclear problem where no useful solution or judging structure exists yet | `framing-doc` |
+| The user has requirements, a rough solution, a prototype, or mixed material and wants to shape the problem/solution space | `shaping` |
+| The user explicitly wants to start from a proposed solution and tease out requirements or alternatives | `shaping` in S-first collaborative mode |
+| The user explicitly wants to start from requirements and let solutions emerge | `shaping` in R-first collaborative mode |
 | One named unselected candidate cannot be judged until its places, affordances, stores, consequences, or wiring are clarified | `breadboarding` in `candidate-shape` mode |
+| A focused technical or empirical unknown blocks useful shaping | `shaping` focused spike using `templates/spike.md` |
 | A sketch, screenshot, wireframe, mockup, or whiteboard may change accepted intent | `sketch-reconciliation` |
 | Existing behavior needs descriptive mapping | `breadboarding` in `current-state` mode |
 | A human-selected direction needs concrete accepted behavior or reconciliation from candidate evidence | `breadboarding` in `selected-design` mode |
@@ -41,17 +50,19 @@ Use available files, repository evidence, conversation context, and attached art
 ## Routing rules
 
 1. Prefer no planning skill for a contained copy edit, obvious bug fix, disposable experiment, or already-clear low-risk change.
-2. Route to the earliest unresolved decision, not the most advanced artifact that could eventually be useful.
+2. Route to the **smallest useful move that matches the current uncertainty and the user's chosen entry point**. Do not automatically force the work back to the earliest missing artifact.
 3. Choose one move only. Do not prescribe the entire downstream chain.
 4. Route to `wayfinding` only when planning itself spans sessions and needs a persistent dependency map. A long implementation or an ordinary shaping pass is not enough.
 5. When resolving an active Wayfinding ticket, route from that ticket's precise question to a leaf skill. Never route it back to `wayfinding`.
-6. Route broad alternative generation, criteria work, comparison, and selection to `shaping`, even when shaping may later invoke candidate breadboarding.
-7. Route directly to `breadboarding` in `candidate-shape` mode only when a named candidate and decision-relevant behavioral uncertainty already exist.
-8. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
-9. Do not let an existing sketch bypass shaping and human selection when it introduces a solution that has not been accepted.
-10. Do not let current-state or candidate-shape breadboarding become selected future intent.
-11. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
-12. Do not begin implementation or make a human scope, appetite, or direction decision.
+6. Route R work, S work, fit checks, appetite work, shape comparison, and focused spikes to `shaping`. These are moves inside one shaping loop, not mandatory stages.
+7. If the user brings a concrete solution first, preserve it as a candidate shape and let shaping extract provisional requirements. Do not require a completed frame merely because R was not written first.
+8. Route directly to `breadboarding` in `candidate-shape` mode when a named candidate and decision-relevant behavioral uncertainty already exist. In collaborative mode, provisional R or appetite does not block exploration; the breadboard must label those inputs as provisional and cannot claim final fit.
+9. Use the active gated/orchestrated profile when the user or automation explicitly asks for strict prerequisites. Do not silently impose that profile on an ordinary collaborative session.
+10. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
+11. Do not let an existing sketch, prototype, or candidate breadboard bypass human selection when it introduces a solution that has not been accepted.
+12. Do not let current-state or candidate-shape breadboarding become selected future intent.
+13. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
+14. Do not begin implementation or make a human scope, appetite, direction, promotion, or slice decision.
 
 ## Output
 
@@ -60,9 +71,11 @@ Return:
 ```md
 Recommended next move: [skill name and mode | No planning skill]
 
-Why: [one or two sentences naming the current uncertainty]
+Why: [one or two sentences naming the current uncertainty and entry point]
 
 What it should produce: [artifact or direct change]
+
+Profile: collaborative | gated/orchestrated | not applicable
 
 Human gate: [decision required, or none]
 ```
@@ -71,4 +84,4 @@ When a skill is selected and the runtime supports skill invocation, hand off to 
 
 ## Completion criterion
 
-The route is complete when one next move is named, its trigger and mode are evidenced, unnecessary planning is rejected, and no downstream decision has been made prematurely.
+The route is complete when one next move is named, its trigger and entry point are evidenced, unnecessary ceremony is rejected, the active profile is clear when relevant, and no downstream commitment has been made prematurely.
