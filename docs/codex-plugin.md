@@ -6,6 +6,7 @@ This repository can be installed as a Codex plugin. The plugin packages the exis
 
 The Codex plugin includes these skills:
 
+- `planning-router`
 - `wayfinding`
 - `framing-doc`
 - `shaping`
@@ -27,6 +28,16 @@ The repo also includes tool-neutral orchestration and harnessing docs:
 - `docs/loop-prompting.md`
 - `docs/agent-run-records.md`
 - `docs/lifecycle-hooks.md`
+
+## Planning profiles
+
+For interactive work, Codex should default to **collaborative shaping**:
+
+> Start from R, S, evidence, or a focused uncertainty. Let Working R/S/fit/spikes/candidate breadboards inform one another. Gate what becomes Accepted and what gets built.
+
+Use the **gated/orchestrated profile** only when the user, team policy, or automation explicitly requests deterministic prerequisites. Both profiles preserve the same hard promotion gates before selection, selected-design authority, slice selection, and build.
+
+See `docs/codex-usage.md` for prompt recipes.
 
 ## Operational boundary
 
@@ -67,26 +78,44 @@ Open the product repository where the planning artifacts and implementation live
 
 ## Use
 
-Example prompts:
+### Collaborative solution-first shaping
+
+```text
+Use the shaping skill in collaborative mode. I already have a rough solution. Capture it as Shape A, extract the provisional requirements it implies, and move among R, S, fit checks, focused spikes, and candidate breadboarding as useful. Keep Working material separate from Accepted intent and do not select for me.
+```
+
+### Collaborative requirements-first shaping
+
+```text
+Use the shaping skill in collaborative mode. Start from these requirements and constraints, let shapes emerge, and return to R whenever fit, spikes, or candidate evidence reveal something missing.
+```
+
+### Focused spike
+
+```text
+Use the shaping skill to run a focused spike on this one unknown. Return explicit implications for R, S, fit, and Appetite. Do not make the product decision.
+```
+
+### Candidate breadboard
+
+```text
+Use the breadboarding skill in candidate-shape mode for Shape A. Requirements are Working and Appetite is unset. Clarify only this named behavioral uncertainty, label all dependent fit claims provisional, and return the implications to shaping.
+```
+
+### Gated / orchestrated planning
+
+```text
+Use the gated/orchestrated profile from .agent-orchestration.yaml. Enforce the strict prerequisites and stop at every human promotion gate.
+```
+
+### Other capabilities
 
 ```text
 Use the wayfinding skill to chart this bounded multi-session planning effort as dependent decision tickets. Keep accepted results in canonical planning artifacts.
 ```
 
 ```text
-Use Planning Skills for Agents and Humans to frame this feature before implementation.
-```
-
-```text
-Use the shaping skill to compare possible solution directions before choosing one.
-```
-
-```text
-Use the shaping skill to set a bounded appetite and cut line before selecting a direction.
-```
-
-```text
-Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.
+Use the framing-doc skill because the problem, outcome, and boundary are genuinely unclear.
 ```
 
 ```text
@@ -106,7 +135,7 @@ Use the dumplink skill to turn this selected, bounded project into vertical task
 ```
 
 ```text
-Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.
+Use the feed-planning-context skill to package only the accepted planning material relevant to the active implementation slice. Exclude Working alternatives and candidate breadboards as build scope.
 ```
 
 ```text
@@ -118,6 +147,7 @@ Use docs/loop-prompting.md and templates/drift-check.md to check whether impleme
 Keep the root skill folders and the `skills/` copies aligned:
 
 ```text
+planning-router/              -> skills/planning-router/
 wayfinding/                   -> skills/wayfinding/
 framing-doc/                  -> skills/framing-doc/
 shaping/                      -> skills/shaping/
