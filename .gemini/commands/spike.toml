@@ -1,0 +1,22 @@
+description = "Investigate one focused shaping unknown and return explicit implications to R, S, fit, or Appetite."
+
+prompt = """
+Use this repository's planning instructions and shaping skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{shaping/SKILL.md}
+@{templates/spike.md}
+@{docs/human-decision-gates.md}
+
+Command arguments / source context:
+{{args}}
+
+A spike may be triggered from R, S, fit, a sketch, a candidate breadboard, or implementation reality. It does not require a selected shape.
+
+Investigate only the smallest unknown that could materially change the current shaping judgment.
+
+Return the questions answered, evidence and constraints, mechanism understanding, explicit R implications, explicit S implications, fit rows to rerun, Appetite implications when known, remaining uncertainty, and the smallest next useful move.
+
+Do not silently rewrite accepted planning material. The spike gathers evidence; it does not select a product direction or write production code unless the user explicitly requests a disposable technical experiment as the evidence-gathering method.
+"""
