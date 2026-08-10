@@ -1,7 +1,8 @@
 # Claude Code Plugin Packaging
 
-This repo already contains Claude-compatible `SKILL.md` files as the canonical source of truth:
+This repo contains Claude-compatible `SKILL.md` files as the canonical source of truth, including:
 
+- `planning-router/SKILL.md`
 - `wayfinding/SKILL.md`
 - `framing-doc/SKILL.md`
 - `shaping/SKILL.md`
@@ -17,7 +18,7 @@ This repo already contains Claude-compatible `SKILL.md` files as the canonical s
 
 Use this file when preparing the repo for Claude Code plugin submission or when creating a distributable plugin bundle.
 
-## Important principle
+## Important principles
 
 Do not maintain a second hand-edited copy of the skills under `skills/`.
 
@@ -25,7 +26,15 @@ The top-level skill folders are the source of truth. If a plugin bundle needs a 
 
 Run `bash scripts/sync-packaged-skills.sh` after editing a canonical skill. CI uses the same script in check mode and fails when packaged content differs.
 
-Slash commands in `.claude/commands/`, `.claude/loop.md`, lifecycle hooks, and orchestration docs are invocation surfaces around the skills. Human-facing aliases are manual-only, while generated canonical skills remain model-discoverable. Alias-backed canonical skills are hidden from the slash menu to avoid duplicate entries; direct-only skills receive Claude-specific argument hints and conservative file tools during packaging. They should stay thin and should not become a second copy of the method.
+The runtime must also preserve the planning profile contract:
+
+- **collaborative** is the default interactive profile: `/shape` can start from R, S, evidence, or a focused uncertainty and move among R/S/fit/spikes/candidate breadboards as useful
+- **gated/orchestrated** is explicit: deterministic prerequisites come from `.agent-orchestration.yaml`
+- both profiles preserve the same hard human promotion gates before selection, selected-design authority, slicing, and build
+
+Slash commands in `.claude/commands/`, `.claude/loop.md`, lifecycle hooks, and orchestration docs are invocation surfaces around the skills. Human-facing aliases are manual-only, while generated canonical skills remain model-discoverable. Alias-backed canonical skills are hidden from the slash menu to avoid duplicate entries; direct-only skills receive Claude-specific argument hints and conservative file tools during packaging. Wrappers should stay thin and should not become a second copy of the method.
+
+Focused shaping wrappers such as `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/spike`, and `/breadboard` constrain the current move. They are not a mandatory sequence. `/select-shape` remains a hard promotion gate.
 
 ## Plugin manifest
 
@@ -45,7 +54,7 @@ Run:
 ./scripts/build-claude-plugin.sh
 ```
 
-This creates:
+This creates a self-contained bundle with:
 
 ```text
 dist/claude-code-plugin/
@@ -55,24 +64,11 @@ dist/claude-code-plugin/
   LICENSE
   commands/*.md
   hooks/*.sh
-  docs/agent-context-feeding.md
-  docs/agent-run-records.md
-  docs/human-decision-gates.md
-  docs/lifecycle-hooks.md
-  docs/loop-prompting.md
-  templates/*.md
-  skills/wayfinding/SKILL.md
-  skills/framing-doc/SKILL.md
-  skills/shaping/SKILL.md
-  skills/sketch-reconciliation/SKILL.md
-  skills/breadboarding/SKILL.md
-  skills/statechart/SKILL.md
-  skills/interface-contracts/SKILL.md
-  skills/executable-breadboards/SKILL.md
-  skills/dumplink/SKILL.md
-  skills/kickoff-doc/SKILL.md
-  skills/feed-planning-context/SKILL.md
-  skills/breadboard-reflection/SKILL.md
+  docs/*.md
+  templates/*
+  examples/*
+  skills/*/SKILL.md
+  skills/*/references/*
 ```
 
 Test the generated bundle locally:
@@ -83,9 +79,9 @@ claude --plugin-dir dist/claude-code-plugin
 
 Building first ensures that both canonical skills and command wrappers use Claude's plugin directory layout.
 
-Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:wayfind` for the manual Wayfinding command, `/planning-skills:framing-doc` for the canonical Framing skill, or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
+Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:shape` for the collaborative shaping wrapper, `/planning-skills:spike` for a focused spike, `/planning-skills:framing-doc` for the canonical Framing skill, or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
 
-The build rewrites support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. It includes the orchestration manifest, reusable docs, templates, and hooks those instructions reference, so the plugin does not depend on same-named files in the target project.
+The build rewrites support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. It includes the orchestration manifest, reusable docs, templates, hooks, and examples those instructions reference, so the plugin does not depend on same-named files in the target project.
 
 ## Marketplace publication
 
@@ -100,14 +96,14 @@ Use the public repository URL for submission fields that request the source or h
 
 ## Maintenance checklist
 
-When adding or renaming a skill:
+When changing a skill, profile, command, or runtime behavior:
 
-1. Add or update the canonical top-level skill folder.
-2. Add its folder name to `skill-inventory.txt`.
-3. Ensure the skill has a valid `SKILL.md` with frontmatter.
-4. Run `scripts/sync-packaged-skills.sh`.
-5. Update `.claude-plugin/plugin.json` if the packaged capability set changed.
-6. Add or update thin command wrappers only when needed.
+1. Update the canonical top-level skill first when method behavior changes.
+2. Keep `skill-inventory.txt` and `skill-metadata.json` aligned with canonical skills.
+3. Run `scripts/sync-packaged-skills.sh` so packaged skills match canonical sources.
+4. Update `.agent-orchestration.yaml` when profile prerequisites, hard gates, or machine-readable behavior changes.
+5. Update thin command wrappers only when invocation behavior or stopping points change.
+6. Update cross-runtime docs/adapters so Claude, Codex, Gemini, Claude Design, and MCP describe the same method.
 7. Run the build and repository health scripts.
 8. Inspect `dist/claude-code-plugin` before packaging or submission.
 9. Keep marketplace copy aligned with the README and plugin manifest.
