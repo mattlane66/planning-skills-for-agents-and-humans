@@ -16,12 +16,7 @@ export const skillNames = [
 
 export type SkillName = (typeof skillNames)[number];
 
-const coreWorkflow: SkillName[] = [
-  'framing-doc',
-  'shaping',
-  'breadboarding',
-  'feed-planning-context',
-];
+const defaultNextMove: SkillName[] = ['planning-router'];
 
 function includesAny(value: string, terms: string[]): boolean {
   return terms.some((term) => value.includes(term));
@@ -85,6 +80,29 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     return ['wayfinding'];
   }
 
+  const solutionFirstShaping = includesAny(normalized, [
+    'solution in my head',
+    'solution already in my head',
+    'already have a solution',
+    'rough solution',
+    'proposed solution',
+    'start from the solution',
+    'start from shape',
+    's-first',
+  ]) && includesAny(normalized, [
+    'requirement',
+    'criteria',
+    'tease out',
+    'extract',
+    'shape',
+    'refine',
+    'fit',
+    'capture',
+  ]);
+  if (solutionFirstShaping) {
+    return ['shaping'];
+  }
+
   const multipleCandidateBreadboarding = includesAny(normalized, [
     'alternatives',
     'multiple candidates',
@@ -105,11 +123,15 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'before choosing',
     'before any direction is selected',
     'clarify',
+    'unclear',
     'judge',
     'coherent',
     'uncertainty',
     'fit implication',
     'test whether',
+    'working requirements',
+    'appetite is unset',
+    'appetite unset',
   ]);
   if (namedCandidateBreadboarding) {
     return ['breadboarding'];
@@ -177,11 +199,11 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     return ['sketch-reconciliation'];
   }
 
-  const fitCheckShorthand = includesAny(normalized, ['fit check', 'reverse fit', 'rotate the fit'])
+  const fitCheckShorthand = includesAny(normalized, ['fit check', 'reverse fit', 'rotate the fit', 'working fit'])
     || matches(normalized, [/\b[ra]\s*(?:x|×)\s*[ra]\b/]);
   const spikeShorthand = matches(normalized, [
     /^(?:(?:please|can you|could you|would you|let's|lets|we should|we need to)\s+){0,2}spike\b(?!\s+(?:in|was|traffic|occurred)\b)/,
-  ]);
+  ]) || includesAny(normalized, ['focused spike', 'spike this one', 'run a spike']);
   const negatedShapeUpdate = matches(normalized, [
     /^(?:(?:please|we|you)\s+)?(?:do\s+not|don't|dont|should\s+not|shouldn't|no\s+need\s+to)\s+(?:add|update|revise|put)\b/,
   ]);
@@ -267,7 +289,7 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     || includesAny(normalized, ['coding agent', 'implementation agent']);
 
   if (genericBuildRequest && !explicitBuildHandoff) {
-    return coreWorkflow;
+    return defaultNextMove;
   }
 
   const executionVerification = (
@@ -309,7 +331,19 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'selected-design breadboard',
     'from the breadboard',
   ]);
-  if (!selectedDirection && includesAny(normalized, ['criteria', 'requirement', 'compare options', 'alternative', 'shape', 'tradeoff', 'direction'])) {
+  if (!selectedDirection && includesAny(normalized, [
+    'criteria',
+    'requirement',
+    'compare options',
+    'alternative',
+    'shape',
+    'tradeoff',
+    'direction',
+    'solution idea',
+    'proposed solution',
+    'working fit',
+    'appetite',
+  ])) {
     recommendations.push('shaping');
   }
 
@@ -356,5 +390,5 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     recommendations.push('kickoff-doc');
   }
 
-  return recommendations.length > 0 ? unique(recommendations) : coreWorkflow;
+  return recommendations.length > 0 ? unique(recommendations) : defaultNextMove;
 }
