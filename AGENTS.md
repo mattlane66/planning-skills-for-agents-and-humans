@@ -2,7 +2,7 @@
 
 Use this repository to preserve product intent from unclear evidence through bounded implementation.
 
-These instructions are tool-neutral and apply across Claude Code, Codex, Gemini CLI, Cursor, and other agent environments. Load the active skill for detailed procedure instead of loading the whole planning stack.
+These instructions are tool-neutral and apply across Claude Code, Codex, Gemini CLI, Cursor, Claude Design when the skills are available, and other agent environments. Load the active skill for detailed procedure instead of loading the whole planning stack.
 
 ## Default behavior
 
@@ -10,13 +10,53 @@ Use the smallest planning move that prevents an important misunderstanding.
 
 For a small, obvious, low-risk change with clear behavior and scope, make the change directly. For ambiguous or consequential work, start with `planning-router/SKILL.md` or the runtime's `/plan` equivalent.
 
-Do not write production code unless the user asks for implementation and a selected slice or equally clear boundary exists.
+For interactive planning, default to **collaborative shaping**:
 
-## Minimal route
+> **Start where the useful thinking already is. Exploration is fluid. Commitment is gated.**
+
+A user may begin from requirements, a rough solution, a prototype, a fit question, a spike question, or a breadboard. Requirements, shapes, fit checks, spikes, sketches, and candidate breadboards may iterate in any useful order while they remain working material.
+
+Use the **gated/orchestrated profile** only when the user, team policy, or automation explicitly needs strict prerequisites and deterministic stopping points.
+
+Do not write production code unless the user asks for implementation and a selected slice or equally clear accepted boundary exists.
+
+## Shaping loop
 
 ```text
-frame
-→ criteria and Appetite
+requirements (R) ↔ shapes (S) ↔ fit checks
+      ↑                ↕             │
+      └── discoveries ← spikes / candidate breadboards / sketches
+```
+
+Valid entry points include:
+
+- R-first: problem, needs, constraints, criteria
+- S-first: a rough solution already in someone's head
+- evidence-first: a prototype, sketch, current workflow, or code path
+- uncertainty-first: a fit question, spike, or candidate breadboard
+
+The loop is not a conveyor belt. Working R and S may change as evidence appears. Appetite may be explored provisionally. A candidate breadboard may clarify a candidate before requirements or appetite are accepted in collaborative mode, but it must label those judging inputs as provisional and cannot claim final fit.
+
+## Promotion / commitment gates
+
+Fluid exploration does **not** weaken these gates.
+
+Before selecting a shape, require accepted requirements, accepted Appetite and cut line, decision-ready alternatives/evidence, visible fit implications, and an explicit human decision.
+
+Before treating candidate behavior as selected-design intent, require explicit selection and reconciliation.
+
+Before slicing or implementation, require accepted selected-design behavior or an equally clear accepted behavior boundary plus a human-selected slice.
+
+These are promotion gates, not navigation locks.
+
+## Recommended controlled route
+
+Use this when a team or automation wants a formal default:
+
+```text
+accepted frame
+→ accepted requirements
+→ accepted Appetite
 → candidate shapes
 ↔ candidate breadboards or focused spikes when needed
 → fit and human selection
@@ -29,12 +69,12 @@ frame
 → build and check drift
 ```
 
-The route is iterative, not a conveyor belt. Candidate breadboarding may occur during shaping when a shape cannot be judged from mechanisms or sketches alone. After selection, selected-design breadboarding reconciles the accepted direction into normative behavior.
+The controlled route is a safe default, not the only legal order for exploration.
 
-The three core planning moves are:
+## Core planning moves
 
-- `framing-doc` — clarify the real problem, desired outcome, evidence, and boundary
-- `shaping` — define criteria and Appetite, compare solution directions, use candidate evidence when needed, and stop for human selection
+- `framing-doc` — clarify the real problem, desired outcome, evidence, and boundary when those are genuinely unclear
+- `shaping` — iterate among R, S, Appetite, fit, focused spikes, candidate evidence, and human selection
 - `breadboarding` — map current behavior, test an unselected candidate, or make a selected design concrete as places, affordances, stores, and wiring
 
 Advanced moves are conditional, not a checklist:
@@ -51,18 +91,20 @@ Advanced moves are conditional, not a checklist:
 
 ## Human decision gates
 
-Agents may gather facts, expose alternatives, and prepare decision-ready material. Humans decide:
+Agents may gather facts, expose alternatives, update working material, and prepare decision-ready evidence. Humans decide or explicitly authorize:
 
-- which problem or opportunity becomes the active frame
-- which criteria are accepted
+- which problem or opportunity becomes accepted scope
+- which requirements become accepted judging criteria
 - what Appetite and cut line the bet deserves
 - which shape is selected
-- whether a candidate breadboard is reconciled into selected-design intent
+- whether candidate evidence is reconciled into selected-design intent
 - which project is selected and bounded
 - which Dumplink task-group plan is approved and which task group or other slice is active
 - whether drift changes the code, the plan, or the scope
 
 Do not infer a decision from enthusiasm, recency, visual polish, or the fact that one option has more detail.
+
+Working material may change without a gate when the user has not accepted it yet. Consequential changes to accepted material require a proposed delta and explicit decision.
 
 ## Core discipline
 
@@ -72,11 +114,14 @@ Keep these distinctions intact:
 - current approach versus desired future state
 - problem versus solution
 - requirements versus mechanisms
+- working versus accepted planning material
 - current-state behavior versus candidate-shape evidence versus selected-design intent
 - accepted scope versus rejected or deferred ideas
 - planning truth versus implementation reality
 
-Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. Candidate breadboards are subordinate evidence about one possible shape. A selected-design breadboard is normative only after explicit selection and reconciliation. The selected project governs the outer scope. A selected Dumplink task group or other selected slice governs the active implementation scope.
+Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. A rough solution can be captured first and used to extract provisional requirements; that does not make its mechanisms requirements or make the shape selected.
+
+Candidate breadboards are subordinate evidence about one possible shape. In collaborative mode they may use provisional R or Appetite; in all modes they cannot define accepted future behavior, feed implementation, or select themselves. A selected-design breadboard is normative only after explicit selection and reconciliation.
 
 ## Project language and decisions
 
@@ -102,14 +147,14 @@ Use this default order when artifacts disagree:
 4. executable breadboard, for expected examples and results within that active scope
 5. selected interface contract, for its named boundary
 6. accepted selected-design breadboard
-7. selected shaping direction
-8. candidate-shape breadboard, for evidence about its named candidate only
-9. kickoff document, for orientation only
-10. framing document
-11. raw notes and transcripts
-12. rejected alternatives and brainstorming
+7. accepted shaping decisions: selected direction, accepted requirements, Appetite, and cuts
+8. working shaping material: provisional R, S, fit checks, and Appetite
+9. candidate-shape breadboards and focused spikes, for evidence about their named question only
+10. kickoff document, for orientation only
+11. framing document
+12. raw notes, transcripts, rejected alternatives, and brainstorming
 
-Authority is concern-specific. The project boundary governs outer scope; the active task group or other selected slice governs the current implementation scope; executable examples govern expected behavior; and a contract governs its named exchange. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank the shaping artifact. No lower artifact may expand the selected project or active slice.
+Authority is concern-specific. Working material may be revised during exploration; accepted material cannot be silently rewritten. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank accepted shaping decisions. No lower artifact may expand the selected project or active slice.
 
 A statechart is derived from the selected-design breadboard and never outranks it. A sketch-reconciliation record becomes authoritative only after accepted deltas are applied to the relevant source artifact. Run logs are audit records, not product truth.
 
@@ -132,7 +177,7 @@ Before implementation, provide a compact context packet containing only what the
 - execution contract
 - verification target
 
-Do not include candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
+Do not include working alternatives or candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
 
 ## Drift
 
@@ -189,7 +234,7 @@ Read `docs/stable-ids.md` for the complete reference and import rules.
 
 ## Orchestration and runtime adapters
 
-`.agent-orchestration.yaml` is the machine-readable workflow and harness contract. It defines modes, gates, allowed outputs, forbidden moves, artifacts, and hooks.
+`.agent-orchestration.yaml` is the machine-readable workflow and harness contract. It defines collaborative and gated profiles, modes, hard promotion gates, allowed outputs, forbidden moves, artifacts, and hooks.
 
 Runtime wrappers are adapters to the canonical skills. Keep the product repository's own instructions authoritative. Optional lifecycle hooks live in `hooks/`; use them as visible reminders and guardrails, not as a hidden planning method. See `docs/lifecycle-hooks.md` for their contract.
 
@@ -198,10 +243,10 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Wayfinding map — low-resolution index of dependent planning questions across sessions; never product truth or an implementation backlog
 - Wayfinding ticket — one precise decision, evidence, prototype, or prerequisite question linked to its canonical target
 - Frame — why the problem matters
-- Shaping document — criteria, Appetite, alternatives, candidate evidence, fit, and selection
+- Shaping document — working and accepted R/S, Appetite, fit, alternatives, candidate evidence, and selection
 - Appetite card — fixed budget, cut line, accepted uncertainty, and revisit conditions when those need a separate record
 - Current-state breadboard — descriptive evidence about existing behavior
-- Candidate-shape breadboard — exploratory evidence about one unselected shape; never build scope
+- Candidate-shape breadboard — exploratory evidence about one unselected shape; may use provisional judging inputs in collaborative mode; never build scope
 - Selected-design breadboard — accepted structure and observable behavior after selection and reconciliation
 - Statechart — optional derived view of selected stateful behavior
 - Interface contract — what crosses a meaningful boundary
@@ -216,9 +261,10 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 Planning is complete enough for the next move when:
 
 - the active uncertainty has been resolved or made decision-ready
+- working material and accepted intent are clearly distinguished
 - exploratory candidate evidence is clearly separated from accepted intent
 - the authoritative artifact is clear
 - any Wayfinding resolution is reflected in its canonical artifact rather than living only in the tracker
-- human gates have not been crossed implicitly
+- human promotion gates have not been crossed implicitly
 - advanced artifacts exist only when their triggering complexity is present
 - the next agent receives bounded context and a verification target
