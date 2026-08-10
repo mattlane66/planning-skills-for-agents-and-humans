@@ -1,6 +1,6 @@
 ---
 name: planning-router
-description: Inspect product-planning context and choose the smallest next planning move while preserving fluid collaborative entry points and explicit commitment gates.
+description: Inspect product-planning context and choose the smallest next move when no specific move is selected, while preserving fluid entry points and explicit commitment gates.
 license: MIT
 ---
 
