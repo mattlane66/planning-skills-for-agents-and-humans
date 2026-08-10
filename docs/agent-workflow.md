@@ -2,11 +2,64 @@
 
 Use this workflow when an agent is helping turn unclear product work into buildable planning artifacts and implementation handoffs.
 
-The workflow is tool-neutral. It works with Claude Code, Cursor, Codex, Gemini CLI, and other agentic environments. The exact invocation differs by tool; the planning discipline should stay the same.
+The workflow is tool-neutral. It works with Claude Code, Cursor, Codex, Gemini CLI, Claude/Claude Design when the skills are available, and other agentic environments. The exact invocation differs by tool; the planning discipline should stay the same.
 
 For machine-readable orchestration, use `.agent-orchestration.yaml`.
 
-This is not a conveyor belt. Shaping can invoke candidate-shape breadboarding or focused spikes before selection. Selected-design breadboarding can return consequential discoveries to shaping after selection.
+## Governing model
+
+> **Exploration is fluid. Commitment is gated.**
+
+Interactive shaping does not have to proceed through a fixed sequence. A user can enter with:
+
+- requirements or constraints (**R-first**)
+- a proposed solution (**S-first**)
+- a prototype, sketch, workflow, or current-system evidence
+- a fit question or focused technical unknown
+
+Within collaborative shaping, these moves may repeat in any useful order:
+
+```text
+requirements (R) ↔ shapes (S) ↔ fit checks
+      ↑                ↕             │
+      └── discoveries ← spikes / candidate breadboards / sketches
+```
+
+The sequence becomes strict only when working material is promoted to accepted intent or build scope.
+
+## Profiles
+
+### Collaborative — default for human-guided work
+
+- provisional inputs are allowed
+- exploration order is flexible
+- a shape can come before requirements
+- fit checks can be Working before they are decision-ready
+- candidate breadboards can use Working R or Unset/Working Appetite
+- accepted material cannot be silently changed
+- human selection, selected-design promotion, slicing, and build remain gated
+
+### Gated / orchestrated
+
+Use when a team, CI harness, multi-agent planner, or user explicitly wants deterministic prerequisites.
+
+Controlled default:
+
+```text
+accepted frame
+→ accepted requirements
+→ accepted Appetite
+→ candidate shapes
+↔ candidate breadboards / focused spikes
+→ decision-ready fit
+→ explicit human selection
+→ selected-design breadboard
+→ selected slice
+→ bounded context
+→ build
+```
+
+The gated profile may restrict exploratory moves that collaborative mode allows provisionally. It never weakens the hard human promotion gates.
 
 ## 0. Wayfinding, optional outer loop
 
@@ -22,130 +75,176 @@ Outputs:
 
 Use `wayfinding` or `/wayfind`. Keep the map and tickets as coordination records. Route each active ticket to one leaf planning skill, write accepted results into canonical artifacts, and preserve every human gate. Do not use Wayfinding for ordinary shaping or implementation sequencing.
 
-## 1. Explore
+## 1. Explore — optional
 
-Use when the problem, source material, or existing system is not yet understood.
+Use when source material, a proposed solution, the current system, or an unknown needs investigation before the next shaping move is obvious.
 
-Outputs:
+Outputs may include:
 
 - source notes
 - current-state summary
+- provisional R or S
 - open questions
 - relevant files or artifacts
 - risks and unknowns
 
-Do not implement code in Explore mode.
+Do not implement production code in Explore mode.
 
-## 2. Frame
+## 2. Frame — when needed
 
-Use when the team needs to name the current situation, problem, outcome, and boundaries.
+Use when the team cannot yet name the situation, problem, outcome, evidence, or boundary well enough to judge proposed solutions.
 
 Outputs:
 
 - source
 - trigger or context
-- current approach, workaround, or nonconsumption
-- current result and struggle
+- current approach and result
 - problem
 - outcome
-- less-about / more-about boundaries
+- boundaries and non-goals
 - criteria candidates
 
 Use `framing-doc`.
 
-## 3. Criteria
+A concrete solution idea may be explored before a formal frame in collaborative mode. Do not select it until the problem boundary is clear enough for honest judgment.
 
-Use when the team needs standards for judging fit before proposing mechanisms.
+## 3. Collaborative shaping loop
+
+Use `shaping` or `/shape` as the main working surface.
+
+### R move — requirements / criteria
+
+Create or revise requirements when that is the current useful move.
 
 Outputs:
 
 - requirements / criteria table
+- Working or Accepted authority
 - must-have / nice-to-have / out / undecided statuses
 - mechanism parking lot
-- open criteria questions
+- requirements extracted from existing shapes when useful
 
-Use `shaping` or `/criteria` where supported. Do not propose shapes or breadboards yet.
+Use `/criteria` when you want to constrain the current move to R.
 
-## 4. Set Appetite
+### S move — shapes
 
-Use after requirements are accepted and before shape selection.
-
-Outputs:
-
-- fixed time or scope budget
-- team shape and review point
-- explicit cut line
-- accepted uncertainty
-- must-resolve unknowns or spike threshold
-
-Use `shaping`, `/appetite`, and `templates/appetite-card.md` when the decision needs its own artifact.
-
-Do not derive Appetite from a preferred shape.
-
-## 5. Sketch shapes
-
-Use when multiple solution directions are possible.
+Capture or revise solution directions when that is the current useful move.
 
 Outputs:
 
 - CURRENT baseline when applicable
-- 2–4 alternative shapes
-- shape parts
-- flagged unknowns
-- candidate-breadboard requests
-- focused spike candidates
+- user's existing proposed shape when present
+- materially useful alternatives
+- shape parts and flagged unknowns
+- provisional requirements revealed by mechanisms
+- candidate breadboard or spike opportunities
 
-Use `shaping` or `/sketch-shapes`.
+Use `/sketch-shapes` when you want to constrain the current move to S.
 
-Use the cheapest representation that makes each candidate judgeable: mechanism tables, rough sketches, candidate breadboards, or focused spikes. Do not select a direction in this mode.
+S may be the first shaping move.
 
-## 6. Candidate-shape breadboard, as needed
+### Appetite move
+
+Set, revise, or accept the fixed time/scope budget and cut line.
+
+Outputs:
+
+- Appetite authority: Unset | Working | Accepted
+- fixed budget
+- team shape and review point
+- cut line
+- accepted uncertainty
+- must-resolve unknowns
+
+Use `/appetite` when the current question is the size of the bet.
+
+Collaborative shaping may explore S before Appetite is accepted. Shape selection may not.
+
+### Fit move
+
+Run fit and reverse-fit checks whenever they would clarify the work.
+
+Outputs:
+
+- Working or Decision-ready fit check
+- reverse fit check
+- Appetite fit when Appetite exists
+- failed requirements
+- unjustified mechanisms
+- missing R exposed by the comparison
+- next uncertainty to resolve
+
+Use `/fit-check`.
+
+A Working fit check is useful evidence but cannot support final selection until the judging inputs are accepted.
+
+### Spike move
+
+Use when one technical or empirical unknown blocks honest judgment.
+
+Outputs:
+
+- focused questions and evidence
+- mechanism understanding
+- explicit R implications
+- explicit S implications
+- fit rows to rerun
+- Appetite implications when known
+- remaining uncertainty
+
+Use `/spike` or `templates/spike.md`.
+
+A spike may begin from R, S, fit, a sketch, candidate breadboard, or implementation reality. It does not select the product direction.
+
+### Candidate-shape breadboard move
 
 Use when one named unselected candidate cannot be judged from its mechanism list or sketch alone.
 
-Inputs:
+Inputs in collaborative mode:
 
-- accepted requirements
-- accepted Appetite and cut line
-- one named candidate and shape-part IDs
-- one decision-relevant behavioral or structural uncertainty
+- named candidate and shape-part IDs
+- decision-relevant uncertainty
+- current R authority: Working or Accepted
+- current Appetite authority: Unset, Working, or Accepted
 
 Outputs:
 
 - `mode: candidate-shape`
 - only the places, affordances, stores, consequences, branches, and wiring needed to resolve the question
-- supported, missing, or contradictory mechanisms
-- rabbit holes and Appetite risks
+- unsupported mechanisms and rabbit holes
+- R/S/fit implications
+- Appetite implications when supportable
 - spike candidates
-- implications for fit, reverse fit, and Appetite fit
 
-Use `breadboarding` and `breadboarding/references/candidate-shape-mode.md`.
+Use `breadboarding` or `/breadboard` in `candidate-shape` mode.
 
-This mode is exploratory evidence subordinate to shaping. It cannot select itself, feed slicing, produce build scope, or become accepted future intent.
+If R or Appetite is provisional, final fit claims remain provisional. Candidate evidence cannot select itself, feed slicing, produce build scope, or become accepted future intent.
 
-Not every candidate needs a breadboard. Candidates do not need equal detail.
+### Return loops
 
-## 7. Fit check
+Any of the above moves may return to another:
 
-Use when the team needs to compare alternatives before choosing.
+- fit exposes a missing R
+- a spike invalidates an S part
+- a candidate breadboard exposes a new constraint
+- a shape reveals the real requirement
+- Appetite forces a cut and reshaping
+- a sketch clarifies or contradicts R/S
 
-Outputs:
+Update Working material visibly. If the discovery would change Accepted material, propose the delta and stop for the human gate.
 
-- fit check
-- reverse fit check
-- Appetite fit and required cuts
-- failed or undecided requirement rows
-- unjustified mechanisms
-- candidate-evidence summary
-- decision-readiness note
+## 4. Shape selection — hard gate
 
-Use `shaping` or `/fit-check`.
+Use only when the work is decision-ready.
 
-Candidate breadboards and spikes support the judgment but do not decide which shape wins.
+Require:
 
-## 8. Select shape
-
-Use when the human is ready to choose a direction.
+- accepted frame or intentionally lightweight clear boundary
+- accepted requirements
+- accepted Appetite and cut line
+- decision-ready candidates and evidence
+- visible fit, reverse-fit, and Appetite implications
+- explicit human choice
 
 Outputs:
 
@@ -153,38 +252,36 @@ Outputs:
 - rejected alternatives
 - trade-offs
 - remaining unknowns
-- candidate-breadboard reconciliation plan
+- candidate-evidence reconciliation plan
 - next handoff
 
-Use `shaping` or `/select-shape`. Do not invent a human decision or automatically promote candidate evidence.
+Use `shaping` or `/select-shape`. Do not invent a human decision.
 
-## 9. Reconcile visual evidence, as needed
+## 5. Reconcile visual evidence, as needed
 
-Use whenever a sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict the active frame, candidate, selected shape, breadboard, or slices.
+Use whenever a sketch, screenshot, wireframe, mockup, prototype, or whiteboard may clarify or contradict accepted planning.
 
 Outputs:
 
 - visible observations separated from interpretations
 - observation-to-plan mapping with stable IDs
-- missing, conflicting, clarifying, covered, and ambiguous items
 - proposed deltas with fit and scope impact
 - human accept, revise, reject, or defer decision
 - synchronized accepted updates and ripple status
 
 Use `sketch-reconciliation` or `/reconcile-sketch`.
 
-Do not let a visual silently override selected behavior or scope.
+## 6. Selected-design breadboard
 
-## 10. Selected-design breadboard
-
-Use after a human selects a shape and Appetite.
+Use after a human selects a shape and the judging inputs are accepted.
 
 Inputs:
 
 - selected shape and parts
-- accepted requirements, Appetite, and cut line
+- accepted requirements
+- accepted Appetite and cut line
 - existing system behavior that must remain or connect
-- any candidate breadboard that needs reconciliation
+- candidate evidence that needs reconciliation
 
 Outputs:
 
@@ -197,13 +294,11 @@ Outputs:
 - shaping conflicts
 - candidate slice boundaries after acceptance
 
-Use `breadboarding`.
+A candidate breadboard does not automatically become selected-design. Remove unselected mechanisms, reconcile surviving rows against accepted intent, preserve unresolved gaps explicitly, and obtain acceptance.
 
-A candidate breadboard does not automatically become selected-design. Remove unselected mechanisms, reconcile surviving rows against the accepted shape and cuts, preserve unresolved gaps explicitly, and obtain acceptance.
+When detailed behavior exposes a conflict with requirements, Appetite, or the selected shape, return the issue to shaping for an explicit decision.
 
-When detailed behavior exposes a conflict with requirements, Appetite, or the selected shape, stop and return the issue to shaping. The human may revise the shape, cut behavior, run a focused spike, reopen selection, or stop the bet.
-
-## 11. Statechart, optional
+## 7. Statechart, optional
 
 Use only when a selected stateful portion of an accepted selected-design breadboard is difficult to reason about from wiring alone.
 
@@ -216,9 +311,9 @@ Outputs:
 
 Use `statechart`. The selected-design breadboard remains authoritative.
 
-## 12. Select slice
+## 8. Select slice
 
-Use after the selected-design breadboard is accepted and a demoable increment must be chosen.
+Use after selected-design behavior is accepted and a demoable increment must be chosen.
 
 Outputs:
 
@@ -227,9 +322,9 @@ Outputs:
 - exclusions and dependencies
 - verification target
 
-Use `breadboarding`. Never slice a current-state or candidate-shape breadboard for implementation.
+Never slice a current-state or candidate-shape breadboard for implementation.
 
-## 13. Interface contracts
+## 9. Interface contracts, optional
 
 Use when the selected slice crosses meaningful boundaries.
 
@@ -241,9 +336,9 @@ Outputs:
 - branches and errors
 - open decisions
 
-Use `interface-contracts`. Keep it in plain language unless production schema is explicitly requested.
+Use `interface-contracts`.
 
-## 14. Executable breadboard
+## 10. Executable breadboard, optional
 
 Use when the selected slice needs examples, fixtures, expected outputs, edge cases, or tests before build handoff.
 
@@ -252,15 +347,15 @@ Outputs:
 - fixtures / starting data
 - example runs
 - expected visible results and state changes
-- expected side effects
+- side effects
 - edge cases
 - acceptance tests
 
 Use `executable-breadboards`. Do not invent missing expected behavior.
 
-## 15. Dumplink, optional
+## 11. Dumplink, optional
 
-Use when a selected, bounded project needs vertical task groups, dependency-aware sequencing, risk states, or Appetite-based cuts. Dumplink creates those implementation slices; it does not take one as a prerequisite.
+Use when a selected, bounded project needs vertical task groups, dependency-aware sequencing, risk states, or Appetite-based cuts.
 
 Outputs:
 
@@ -270,11 +365,11 @@ Outputs:
 - scope cuts
 - acceptance checks
 - task-group approval gate
-- bounded handoff packet for the human-selected active group
+- bounded handoff for the human-selected active group
 
-Use `dumplink`. Without a selected project boundary, stop and return to framing, shaping, or the project-selection gate. After the plan is approved, the selected task group becomes the active slice for downstream detail and implementation.
+Use `dumplink`. It cannot expand the selected project or substitute for selection.
 
-## 16. Kickoff reference, optional
+## 12. Kickoff reference, optional
 
 Use when builders need a durable human-readable map after selected artifacts converge.
 
@@ -286,44 +381,38 @@ Outputs:
 
 Use `kickoff-doc` or `/kickoff`. It is orientation, not build scope.
 
-## 17. Feed context
+## 13. Feed context
 
-Use before implementation, especially when planning artifacts are long or numerous.
+Before implementation, package only the authoritative subset relevant to the active slice.
 
 Outputs:
 
 - compact context packet
 - authority order
-- must-preserve constraints
-- accepted Appetite and cut line
+- accepted requirements, Appetite, cut line, and non-goals
 - selected slice
-- relevant selected-design rows, statechart, contracts, examples, and task group
-- non-goals
+- relevant selected-design rows and supporting contracts/examples
 - execution contract
 - verification target
 
-Use `feed-planning-context`.
+Exclude Working alternatives and candidate breadboards as active build scope.
 
-Exclude candidate breadboards as active build scope. Include a candidate finding only when it explains an explicit unresolved or accepted shaping decision.
-
-## 18. Build
-
-Use only after a slice is selected and bounded context exists.
+## 14. Build
 
 Rules:
 
 - implement only the selected slice
-- preserve selected-design intent
+- preserve accepted selected-design intent
 - keep stable IDs intact
 - map work back to accepted artifacts
 - propose a planning update if implementation reality conflicts with the plan
 - create an agent run log for meaningful runs
 
-## 19. Check drift
+## 15. Check drift
 
 Use during or after implementation when the agent may have drifted.
 
-Output exactly one of:
+Return only:
 
 ```text
 No planning drift found.
@@ -341,7 +430,7 @@ Planning drift found:
 
 Do not implement in Check Drift mode.
 
-## 20. Reflect
+## 16. Reflect
 
 Use after implementation exists.
 
@@ -356,35 +445,36 @@ Use `breadboard-reflection`.
 
 ## Mode transition checklist
 
-Before moving forward, ask:
+Before a **promotion** step, ask:
 
-- Is the current mode clear?
-- Is there a source artifact for the next step?
+- Is the current material Working or Accepted?
 - Are requirements separate from mechanisms?
-- Is Appetite explicit before selection?
+- Is Appetite accepted before selection?
 - Is candidate evidence labeled and subordinate to shaping?
-- Has unequal candidate detail been prevented from implying preference?
+- Have provisional fit claims been revalidated against accepted judging inputs?
 - Was the shape selected explicitly?
 - Was candidate evidence reconciled rather than automatically promoted?
-- Is the active breadboard accepted in selected-design mode before slicing?
+- Is selected-design behavior accepted before slicing?
+- Is the active slice selected before build?
 - Are rejected alternatives and non-goals visible?
 - Are stable IDs preserved?
 - Were consequential visuals reconciled explicitly?
-- Does a build step have a selected slice and compact context packet?
-- Are optional statechart and Dumplink artifacts used only when triggered?
-- Does meaningful implementation need a drift check or run log?
+- Does the build step have bounded context and a verification target?
+
+Do not use this checklist to prevent ordinary movement among R, S, fit, spikes, or candidate breadboards during collaborative exploration.
 
 ## Common failure modes
 
 Avoid:
 
-- jumping from notes directly to implementation
-- treating a rejected shape as selected
-- selecting before criteria, Appetite, and alternatives are visible
-- forbidding all breadboarding before selection even when a candidate is not judgeable
+- forcing an S-first idea back through ceremony when the solution itself is useful shaping material
+- treating a rough solution as accepted strategy
+- treating provisional R as final judging criteria
+- selecting before requirements and Appetite are accepted
+- treating a Working fit check as decision-ready
 - treating a candidate breadboard as accepted intent or build scope
 - automatically promoting candidate rows after selection
-- silently changing a selected shape when detailed breadboarding exposes a conflict
+- silently changing accepted R, Appetite, or selected shape when evidence changes
 - treating a newer-looking sketch as authority
 - pasting all raw context instead of feeding a compact packet
 - using build mode before a slice exists
