@@ -18,13 +18,15 @@ feeds: []
   - `current-state`: descriptive evidence only
   - `candidate-shape`: exploratory evidence subordinate to one unselected candidate and the shaping artifact
   - `selected-design`: accepted normative intent after human selection and reconciliation
+- Requirements authority: `Working` | `Accepted` | `Not applicable`
+- Appetite authority: `Unset` | `Working` | `Accepted` | `Not applicable`
 - Evidence references: required for non-obvious current-state claims
 - Candidate shape and uncertainty: required for candidate-shape mode
-- Selected shape and Appetite: required for selected-design mode
+- Selected shape, Accepted requirements, and Accepted Appetite/cut line: required for selected-design mode
 
 Set frontmatter `source_of_truth: true` and downstream `feeds` only after the artifact is accepted in `selected-design` mode.
 
-Current-state mode cannot define selected future intent. Candidate-shape mode cannot select itself, feed slices, or become build scope. Only an accepted selected-design breadboard can produce buildable slice candidates.
+Current-state mode cannot define selected future intent. Candidate-shape mode cannot select itself, feed slices, or become build scope. In collaborative shaping, candidate mode may use Working requirements or Unset/Working Appetite; any fit or Appetite implications must remain provisional until revalidated against Accepted judging inputs. Only an accepted selected-design breadboard can produce buildable slice candidates.
 
 ## Use this when
 
@@ -33,6 +35,7 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 ## Must preserve
 
 - declared mode and authority
+- Requirements/Appetite authority when they affect candidate judgments
 - stable place IDs
 - stable affordance IDs
 - store IDs
@@ -52,6 +55,8 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 - Shaping artifact:
 - Candidate or selected shape:
 - Shape-part IDs:
+- Requirements authority:
+- Appetite authority:
 - Appetite:
 - Cut line:
 - Decision-relevant uncertainty for candidate-shape mode:
@@ -61,7 +66,7 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 
 | ID | Authority | Shape part | Place | Description |
 |---|---|---|---|---|
-| P1 | current | — | ... | ... |
+| P1 | current / candidate / selected | — | ... | ... |
 
 ## UI affordances
 
@@ -92,14 +97,19 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 Use only in `candidate-shape` mode.
 
 - Question resolved:
+- Judging-input authority: Requirements = Working/Accepted; Appetite = Unset/Working/Accepted
 - Supported mechanisms:
 - Missing or contradictory mechanisms:
-- Rabbit holes / Appetite risks:
+- Rabbit holes / Appetite risks when Appetite is known:
 - Focused spike candidates:
-- Requirement-fit implication:
+- Proposed requirement changes:
+- Proposed shape changes:
+- Requirement-fit implication: Working / decision-ready / not yet supportable
 - Reverse-fit implication:
-- Appetite-fit implication:
+- Appetite-fit implication: provisional / decision-ready / not yet supportable
 - Remaining uncertainty:
+
+If Requirements or Appetite are not Accepted, label dependent conclusions provisional. Return useful R/S changes to shaping. Do not silently rewrite Accepted material.
 
 ## Selected-design reconciliation
 
@@ -109,7 +119,7 @@ Use when promoting or rebuilding from candidate evidence after human selection.
 |---|---|---|---|
 | ... | keep / revise / remove / defer | ... | ... |
 
-A candidate row is never promoted merely because its candidate was selected. Reconcile it against the accepted shape, cuts, and remaining unknowns.
+A candidate row is never promoted merely because its candidate was selected. Reconcile it against the Accepted requirements, selected shape, Accepted Appetite/cuts, and remaining unknowns.
 
 ## Interface contract candidates (selected-design only)
 
@@ -147,8 +157,11 @@ Once a selected-design breadboard is accepted and a slice is selected, convert t
 
 - [ ] The mode and authority are explicit.
 - [ ] Candidate-shape mode names one candidate and one decision-relevant uncertainty.
+- [ ] Candidate-shape mode states Requirements/Appetite authority.
+- [ ] Provisional inputs do not produce final fit/Appetite claims.
 - [ ] Candidate evidence has not selected itself or produced build scope.
 - [ ] Candidate rows were reconciled before becoming selected-design rows.
+- [ ] Selected-design mode cites Accepted requirements, selected shape, Accepted Appetite, and cuts.
 - [ ] Every displayed UI element that depends on data has a source.
 - [ ] Every non-UI affordance connects by Wires Out or Returns To.
 - [ ] Stores exist for meaningful side effects.
