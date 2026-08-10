@@ -2,40 +2,149 @@
 
 Use this guide when you are new to the repository and want the smallest planning move that will help.
 
-> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a subset; Codex users can use the equivalent natural-language prompts.
+> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a focused subset; Codex users can use the equivalent natural-language prompts.
 
 Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
 
-## Start with `/plan`
+## Start with what you actually have
 
-Most people should start with `/plan` or `planning-router/SKILL.md`.
+You do **not** need to begin with a completed frame or requirements list.
+
+Valid entry points include:
+
+- **R-first** — you have needs, constraints, pain points, or requirements
+- **S-first** — you already have a solution in your head
+- **evidence-first** — you have a prototype, sketch, current workflow, or code behavior
+- **uncertainty-first** — one fit question, spike, or candidate breadboard is the smallest useful move
+
+The default interactive model is:
+
+> **Exploration is fluid. Commitment is gated.**
+
+During shaping, R, S, fit checks, focused spikes, sketches, and candidate breadboards may iterate in any useful order while they remain working material.
+
+```text
+requirements (R) ↔ shapes (S) ↔ fit checks
+      ↑                ↕             │
+      └── discoveries ← spikes / candidate breadboards / sketches
+```
+
+What stays strict is what becomes accepted truth or build scope.
+
+## Start with `/plan` when you do not know the move
+
+Most people can start with `/plan` or `planning-router/SKILL.md`.
 
 The router inspects the current evidence and recommends exactly one next move. It may also recommend **No planning skill** for a small, obvious, low-risk change with clear behavior and scope.
 
+It respects the user's useful entry point. It should not force S-first work back through framing or criteria merely because those artifacts are not yet finalized.
+
 It does not run the entire workflow, select a solution, or begin implementation.
 
-## The three core moves
+## Start with `/shape` when you want one collaborative surface
+
+Use `/shape` or `shaping/SKILL.md` when the user wants to work fluidly across the problem and solution.
+
+Examples:
 
 ```text
-frame → shape ↔ breadboard → selected-design breadboard
+/shape "I have a rough idea for a timezone app. Capture it as Shape A, tease out the requirements it implies, and help me test/refine both."
 ```
 
-The arrows are not a conveyor belt. Breadboarding can support shaping before selection when a candidate needs behavioral clarification. After selection, breadboarding reconciles the accepted direction into normative selected-design intent.
+```text
+/shape planning/notes.md "Start from these requirements, but move into shapes, fit checks, spikes, or candidate breadboarding whenever useful. Do not select for me."
+```
 
-| Move | Use it when | Output |
+The broad shaping surface may move among R, S, fit, Appetite, spikes, and candidate evidence without pretending those moves are mandatory stages.
+
+## Focused shaping moves
+
+Use the smaller commands when you want to constrain the **current move**, not the whole process:
+
+| Move | Use it when | What it means |
 |---|---|---|
-| `/frame` or `framing-doc/SKILL.md` | You have raw notes, research, requests, or an unclear problem. | A source-grounded frame with current approach/result, problem, outcome, and boundaries. |
-| `/shape` or `shaping/SKILL.md` | The problem is clear enough to define criteria and Appetite, compare paths, use candidate evidence where needed, and make a human selection. | Accepted requirements, Appetite and cut line, alternative shapes, candidate evidence, fit checks, and a selected direction or decision-ready stop. |
-| `/breadboard` or `breadboarding/SKILL.md` | You need to understand current behavior, test one candidate shape during shaping, or make a selected design concrete. | A `current-state`, `candidate-shape`, or `selected-design` map with places, affordances, stores, consequences, and wiring. Only an accepted selected-design breadboard can produce slice candidates. |
+| `/criteria` | Work on requirements now | R may be first, or may have been extracted from an existing S. |
+| `/appetite` | Work on budget/cut line now | Appetite may be Working before it is Accepted; selection waits for acceptance. |
+| `/sketch-shapes` | Work on solution shapes now | Can be an S-first entry point. |
+| `/fit-check` | Compare what is currently visible | May be a Working fit check if R or Appetite is provisional. |
+| `/spike` | Resolve one technical or empirical unknown | May be triggered from R, S, fit, a sketch, or a breadboard. |
+| `/breadboard` | Map current, candidate, or selected behavior | Candidate mode may use provisional R/Appetite in collaborative shaping. |
+| `/select-shape` | Record the human decision | Requires the hard selection gate. |
 
-Start there. Add advanced moves only when the triggering complexity exists.
+These moves can repeat and move backward or sideways.
+
+## The hard promotion gates
+
+### Before selecting a shape
+
+Require:
+
+- a clear-enough frame or intentionally lightweight problem boundary
+- **Accepted** requirements good enough to judge fit
+- **Accepted** Appetite and cut line
+- decision-ready alternatives and evidence
+- fit, reverse-fit, and Appetite implications
+- explicit human selection
+
+### Before selected-design breadboarding
+
+Require:
+
+- selected shape
+- accepted requirements
+- accepted Appetite and cuts
+- explicit reconciliation of any candidate evidence
+
+### Before slicing or implementation
+
+Require:
+
+- accepted selected-design behavior or an equally clear accepted behavior boundary
+- explicit human slice selection
+- bounded context and verification target before build
+
+These are promotion gates, not navigation locks.
+
+## Collaborative versus gated/orchestrated profile
+
+### Collaborative — default for interactive human shaping
+
+Use when a person is actively guiding the work.
+
+- provisional inputs are allowed
+- exploration order is flexible
+- R and S may revise each other
+- working fit checks are allowed
+- candidate breadboards may run before R/Appetite are accepted
+- final selection and build gates remain strict
+
+### Gated/orchestrated — for stronger automation or policy control
+
+Use when a team, CI harness, or multi-agent planner wants deterministic prerequisites.
+
+The controlled default is:
+
+```text
+accepted frame
+→ accepted requirements
+→ accepted Appetite
+→ candidate shapes
+↔ focused spikes / candidate breadboards
+→ decision-ready fit
+→ human selection
+→ selected-design breadboard
+→ selected slice
+→ bounded build
+```
+
+The machine-readable contract is `.agent-orchestration.yaml`.
 
 ## Three breadboarding modes
 
 | Mode | Purpose | Authority |
 |---|---|---|
 | `current-state` | Describe how an existing system behaves. | Descriptive evidence only; cannot define future intent. |
-| `candidate-shape` | Resolve a specific behavioral uncertainty about one unselected shape. | Exploratory evidence subordinate to shaping; cannot select itself, feed slices, or become build scope. |
+| `candidate-shape` | Resolve a specific behavioral uncertainty about one unselected shape. | Exploratory evidence subordinate to shaping; may use provisional judging inputs in collaborative mode; cannot select itself, feed slices, or become build scope. |
 | `selected-design` | Reconcile the human-selected direction into concrete accepted behavior. | Normative after acceptance; may feed slicing and downstream build artifacts. |
 
 A candidate breadboard does not automatically become selected-design. After selection, remove unselected mechanisms, reconcile surviving rows against the accepted shape and cuts, preserve unresolved gaps explicitly, and obtain acceptance.
@@ -50,50 +159,25 @@ A candidate breadboard does not automatically become selected-design. After sele
 | A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | A selected slice needs fixtures, example runs, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable behavioral handoff. |
 | A selected project needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A project-wide plan whose task groups are judgeable vertical slices; one becomes active after human selection. |
-| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with project language, authority order, execution contract, and verification target. |
+| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution contract, and verification target. |
 | Implementation may have drifted from accepted intent | `/check-drift` or `/reflect-breadboard` | A no-drift result or an explicit comparison and correction decision. |
 | Builders need a durable orientation reference | `/kickoff` or `kickoff-doc/SKILL.md` | A human-readable map of accepted product territory, not build scope or sequence. |
-
-## Minimal route
-
-```text
-messy evidence
-  → frame
-  → accept criteria and Appetite
-  → compare shapes
-  ↔ candidate breadboards or focused spikes when a candidate is not judgeable
-  → fit check and human selection
-  → selected-design breadboard
-  ↔ return to shaping if concrete behavior exposes a consequential conflict
-  → confirm the selected project boundary
-  → use Dumplink when the project needs sequenced vertical task groups
-  → select an active task group or other demoable slice
-  → add only the supporting detail that active slice requires
-  → feed bounded context
-  → build with drift checks
-```
-
-Not every candidate needs a breadboard. Not every project needs every artifact.
-
-Wayfinding is an optional outer loop around this route. Use it only when planning itself must persist across sessions; ordinary shaping remains the smaller move when the current decision fits one session.
 
 ## Recommended artifact home
 
 Keep project-specific outputs in the product repository, usually under `planning/`.
-
-A typical starting set is:
 
 ```text
 planning/
   wayfinding/          # optional maps and tickets for multi-session planning
   frame.md
   shaping.md
-  breadboard.md
+  candidate-A-breadboard.md  # optional exploratory evidence
+  breadboard.md        # accepted selected-design intent
   slices.md
   context-packet.md
+  spikes/
 ```
-
-Candidate breadboards may live beside `shaping.md` and should be named by candidate, for example `candidate-A-breadboard.md`. Keep them clearly non-authoritative unless and until they are reconciled into an accepted selected-design breadboard.
 
 Add an Appetite card, reconciliation record, statechart, interface contract, executable breadboard, Dumplink plan, kickoff document, or reflection only when its triggering complexity exists.
 
@@ -101,42 +185,37 @@ Add an Appetite card, reconciliation record, statechart, interface contract, exe
 
 Check that you have:
 
-- an explicitly selected direction
+- explicitly selected direction
 - accepted requirements separated from mechanisms
-- an accepted Appetite and cut line
+- accepted Appetite and cut line
 - explicit non-goals
-- an accepted selected-design breadboard or equally clear implementation boundary
-- a selected project boundary and an active task group, selected slice, or equally clear implementation boundary
-- no candidate breadboard being treated as build scope
+- accepted selected-design breadboard or equally clear implementation boundary
+- selected project boundary and active task group, selected slice, or equally clear implementation boundary
+- no working shape or candidate breadboard being treated as build scope
 - consequential visuals reconciled with accepted artifacts
 - only the advanced detail the active implementation slice actually requires
 - canonical project terms and relevant architectural decisions
-- a compact context packet
-- an execution contract and verification target
-- a human decision on current scope
+- compact context packet
+- execution contract and verification target
+- human decision on current scope
 
-## During build
-
-Use drift checks when implementation may have moved away from the selected plan.
-
-Expected output is only:
+## Default collaborative prompt
 
 ```text
-No planning drift found.
+Use this repository's planning workflow in collaborative mode.
+Start from whatever is already concrete in my material: requirements, a proposed solution, a prototype, current-system evidence, or a specific unknown.
+Move among R, S, fit checks, focused spikes, sketches, and candidate-shape breadboards whenever that is the smallest useful move.
+Keep Working material separate from Accepted intent.
+Do not force a fixed exploration sequence.
+Do not select a shape until requirements and Appetite are accepted and the comparison is decision-ready.
+Do not treat candidate evidence as selected intent or build scope.
+Do not implement until a selected-design boundary and demoable slice are explicitly selected.
 ```
 
-or:
+## Default gated prompt
 
 ```text
-Planning drift found:
-- Selected artifact says:
-- Current implementation direction is:
-- Risk:
-- Recommended move:
-```
-
-## Default prompt
-
-```text
-Use this repository's planning router. Recommend exactly one next move—or no planning skill—based on the current uncertainty. Treat candidate breadboards as exploratory shaping evidence and selected-design breadboards as accepted intent. Do not run the entire workflow, select a solution, or implement code unless I explicitly authorize that move.
+Use this repository's gated/orchestrated planning profile.
+Enforce the prerequisites in .agent-orchestration.yaml and stop at every human promotion gate.
+Do not relax the sequence unless I explicitly switch back to collaborative mode.
 ```
