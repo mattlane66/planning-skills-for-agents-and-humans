@@ -1,4 +1,4 @@
-description = "Set the bounded time or scope budget and cut line before selecting a solution shape."
+description = "Set, revise, or accept the bounded time or scope budget and cut line without forcing a fixed shaping sequence."
 
 prompt = """
 Use this repository's planning instructions and shaping skill.
@@ -12,25 +12,15 @@ Primary instructions:
 Command arguments / source context:
 {{args}}
 
-Task: apply Gate 2A and record the appetite in the shaping document or a separate appetite card.
+Task: work on Appetite for the current shaping move.
 
-Record:
+In collaborative mode, Appetite may be `Working` before it becomes `Accepted`, and candidate shapes may already exist. In gated/orchestrated mode, enforce `.agent-orchestration.yaml` prerequisites.
 
-- the time budget or other fixed scope budget
-- team shape and review point
-- explicit cut line
-- uncertainty the team accepts
-- unknowns that require a spike before selection or build
-- decision owner and revisit condition when known
+Record authority, budget, team shape and review point, cut line, accepted uncertainty, must-resolve unknowns, and revisit conditions.
 
-Treat appetite as a constraint on candidate shapes, not as an estimate derived from a preferred shape.
+Treat Appetite as a constraint on selection, not as an estimate reverse-engineered from a preferred shape. Existing candidates may expose what a tentative budget would force you to cut, but they do not determine the budget automatically.
 
-Do not select a direction.
-Do not breadboard.
-Do not write production code.
+Do not select a direction, promote candidate evidence, or write production code.
 
-End with a Gate 2A status:
-
-- `Appetite set — ready for /sketch-shapes` when the budget and cut line are explicit
-- `Needs human appetite decision` when the budget, cut line, or accepted uncertainty remains open
+End by naming the smallest next useful shaping move: revise R, revise S, fit-check, spike, candidate breadboard, accept/revisit Appetite, or prepare selection.
 """
