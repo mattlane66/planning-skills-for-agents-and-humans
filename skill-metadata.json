@@ -1,7 +1,7 @@
 {
   "planning-router": {
     "title": "Planning Router",
-    "description": "Inspect product-planning context and choose the smallest next planning move when no specific skill is selected or planning may not be needed."
+    "description": "Inspect product-planning context and choose the smallest next planning move while preserving fluid collaborative entry points and explicit commitment gates."
   },
   "wayfinding": {
     "title": "Wayfinding",
@@ -13,7 +13,7 @@
   },
   "shaping": {
     "title": "Shaping",
-    "description": "Shape ambiguous product work before implementation by defining criteria and appetite, comparing solution directions, and recording the selected shape and cut line."
+    "description": "Shape ambiguous product work before implementation by iterating among requirements, solution shapes, fit checks, spikes, and candidate evidence while keeping commitment gates explicit."
   },
   "sketch-reconciliation": {
     "title": "Sketch Reconciliation",
