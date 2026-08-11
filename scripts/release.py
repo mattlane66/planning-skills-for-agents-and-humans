@@ -75,6 +75,13 @@ def validate_release(tag: str, root: Path = ROOT) -> str:
     return extract_release_notes((root / "CHANGELOG.md").read_text(encoding="utf-8"), tag)
 
 
+def coordinated_tag(root: Path = ROOT) -> str:
+    versions = set(load_versions(root).values())
+    if len(versions) != 1:
+        raise ReleaseError("coordinated versions do not match")
+    return f"v{versions.pop()}"
+
+
 def prepare_release_dir(output: Path, expected_files: set[str]) -> Path:
     requested = output.expanduser()
     if requested.is_symlink():
@@ -150,14 +157,18 @@ def main() -> None:
     assets = subparsers.add_parser("assets")
     assets.add_argument("--output", type=Path, default=ROOT / "dist" / "release")
 
+    subparsers.add_parser("version")
+
     args = parser.parse_args()
     if args.command == "preflight":
         notes = validate_release(args.tag)
         args.notes_output.write_text(notes, encoding="utf-8")
         print(f"Validated {args.tag} and wrote {args.notes_output}")
-    else:
+    elif args.command == "assets":
         built = build_release_assets(args.output)
         print(f"Built {len(built)} release assets in {args.output.resolve()}")
+    else:
+        print(coordinated_tag())
 
 
 if __name__ == "__main__":

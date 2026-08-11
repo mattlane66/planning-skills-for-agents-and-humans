@@ -505,7 +505,13 @@ fi
 echo
 echo "Checking visual hot-reload viewer..."
 if command -v npm >/dev/null 2>&1; then
-  if (cd visualizer && npm ci --ignore-scripts && npm run check && npm audit --audit-level=moderate); then
+  if (
+    export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
+    cd visualizer
+    npm ci --ignore-scripts
+    npm run check
+    npm audit --audit-level=moderate
+  ); then
     pass "Visual viewer installs, passes tests, and passes dependency audit"
   else
     fail "Visual viewer verification failed"
@@ -517,7 +523,13 @@ fi
 echo
 echo "Checking MCP server..."
 if command -v npm >/dev/null 2>&1; then
-  if (cd mcp-server && npm ci --ignore-scripts && npm run check && npm audit --audit-level=moderate); then
+  if (
+    export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
+    cd mcp-server
+    npm ci --ignore-scripts
+    npm run check
+    npm audit --audit-level=moderate
+  ); then
     pass "MCP server installs, builds, passes tests, and passes dependency audit"
   else
     fail "MCP server verification failed"
