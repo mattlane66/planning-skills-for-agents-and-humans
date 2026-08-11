@@ -11,9 +11,6 @@ import shutil
 import subprocess
 from pathlib import Path
 
-import build_claude_skills as claude_packager
-
-
 ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "CHANGELOG.md"
 STABLE_TAG = re.compile(r"^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
@@ -111,6 +108,8 @@ def prepare_release_dir(output: Path, expected_files: set[str]) -> Path:
 
 
 def build_release_assets(output: Path = ROOT / "dist" / "release") -> list[Path]:
+    import build_claude_skills as claude_packager
+
     versions = load_versions()
     version_set = set(versions.values())
     if len(version_set) != 1:

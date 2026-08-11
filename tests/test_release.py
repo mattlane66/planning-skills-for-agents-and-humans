@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import subprocess
 import sys
 import tempfile
 import unittest
@@ -17,6 +18,33 @@ SPEC.loader.exec_module(release)
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_metadata_commands_need_only_the_standard_library(self) -> None:
+        version = subprocess.run(
+            [sys.executable, "-S", str(SCRIPT), "version"],
+            check=True,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual("v1.3.1", version.stdout.strip())
+        with tempfile.TemporaryDirectory() as temporary:
+            notes = Path(temporary) / "notes.md"
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-S",
+                    str(SCRIPT),
+                    "preflight",
+                    "--tag",
+                    "v1.3.1",
+                    "--notes-output",
+                    str(notes),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            self.assertIn("### Fixed", notes.read_text(encoding="utf-8"))
+
     def test_coordinated_tag_requires_one_version(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
