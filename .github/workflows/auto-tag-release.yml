@@ -1,0 +1,87 @@
+name: Auto-tag release
+
+on:
+  workflow_run:
+    workflows: ["Repo health"]
+    types: [completed]
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: auto-tag-release
+  cancel-in-progress: false
+
+jobs:
+  tag:
+    name: Create coordinated release tag
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    outputs:
+      created: ${{ steps.create.outputs.created }}
+      release_tag: ${{ steps.release.outputs.tag }}
+    steps:
+      - name: Check out validated main commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Validate coordinated release metadata
+        id: release
+        run: |
+          set -euo pipefail
+          release_tag="$(python3 scripts/release.py version)"
+          python3 scripts/release.py preflight \
+            --tag "$release_tag" \
+            --notes-output /tmp/planning-skills-release-notes.md
+          printf 'tag=%s\n' "$release_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Create missing release tag
+        id: create
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ github.event.workflow_run.head_sha }}
+          RELEASE_TAG: ${{ steps.release.outputs.tag }}
+        run: |
+          set -euo pipefail
+          git fetch origin main --tags
+          git merge-base --is-ancestor "$RELEASE_SHA" origin/main
+
+          existing_sha="$(git ls-remote origin "refs/tags/$RELEASE_TAG" | cut -f1)"
+          if [[ -n "$existing_sha" ]]; then
+            echo "$RELEASE_TAG already exists; no tag was created."
+            echo "created=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          gh api --method POST \
+            "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/tags/$RELEASE_TAG" \
+            -f sha="$RELEASE_SHA"
+          echo "created=true" >> "$GITHUB_OUTPUT"
+
+  release:
+    name: Publish newly tagged release
+    needs: tag
+    if: needs.tag.outputs.created == 'true'
+    permissions:
+      contents: write
+    uses: ./.github/workflows/release.yml
+    with:
+      release_tag: ${{ needs.tag.outputs.release_tag }}
+      release_sha: ${{ github.event.workflow_run.head_sha }}

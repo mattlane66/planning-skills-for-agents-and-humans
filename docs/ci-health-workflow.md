@@ -37,7 +37,7 @@ bash scripts/check-repo-health.sh
 
 Use the workflow's **Run workflow** control when an explicit GitHub-hosted verification is needed without a new code change.
 
-Tag releases run the same health suite before publication. The release workflow accepts only exact stable SemVer tags whose commit is on `main`, requires version parity and an exact changelog section, builds deterministic Claude skill and plugin ZIPs, writes `SHA256SUMS`, and publishes only the validated payload.
+After a successful push-triggered Repo health run on `main`, the auto-tag workflow validates the coordinated package version and matching changelog section and creates that version tag only when it does not already exist. It then calls the reusable release workflow directly; manually pushed tags invoke the same workflow. The release path reruns the full health suite before publication, accepts only exact stable SemVer tags whose commit is on `main`, requires version parity and an exact changelog section, builds deterministic Claude skill and plugin ZIPs, writes `SHA256SUMS`, and publishes only the validated payload.
 
 Preview a release payload without publishing it:
 

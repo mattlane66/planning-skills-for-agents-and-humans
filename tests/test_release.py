@@ -17,6 +17,25 @@ SPEC.loader.exec_module(release)
 
 
 class ReleaseTests(unittest.TestCase):
+    def test_coordinated_tag_requires_one_version(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for relative in release.VERSION_FILES:
+                path = root / relative
+                path.parent.mkdir(parents=True, exist_ok=True)
+                payload = {"version": "1.3.1"}
+                if relative.name == "package-lock.json":
+                    payload["packages"] = {"": {"version": "1.3.1"}}
+                path.write_text(json.dumps(payload), encoding="utf-8")
+
+            self.assertEqual("v1.3.1", release.coordinated_tag(root))
+
+            (root / release.VERSION_FILES[0]).write_text(
+                json.dumps({"version": "1.3.0"}), encoding="utf-8"
+            )
+            with self.assertRaisesRegex(release.ReleaseError, "do not match"):
+                release.coordinated_tag(root)
+
     def test_extract_release_notes_matches_an_exact_tag_section(self) -> None:
         changelog = """# Changelog
 

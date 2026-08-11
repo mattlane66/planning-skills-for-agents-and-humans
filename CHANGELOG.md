@@ -16,6 +16,7 @@ _No changes yet._
 ### Added
 
 - Added deterministic release tooling for all Claude upload ZIPs, the Claude Code plugin bundle, and a `SHA256SUMS` manifest.
+- Added success-gated automatic version tagging after Repo health passes on `main`; existing tags are never moved or recreated.
 - Added CodeQL analysis, weekly Dependabot updates, Python dependency auditing, and an opt-in blind real-runtime behavior-evaluation workflow.
 - Added contribution, security, conduct, issue, and pull-request guidance plus Dumplink source attribution.
 
@@ -28,6 +29,7 @@ _No changes yet._
 ### Changed
 
 - Hardened tag releases to require exact stable SemVer, coordinated versions, an exact changelog section, ancestry on `main`, a passing full health suite, and prebuilt checksummed assets before publication.
+- Isolated npm verification in a task-scoped cache so health checks do not depend on a writable user-level npm cache.
 - Updated the MCP SDK and `tsx` within their existing major-version compatibility boundaries.
 
 ## v1.3.0 — Fluid shaping, Wayfinding, and verifiable breadboards — 2026-08-11
