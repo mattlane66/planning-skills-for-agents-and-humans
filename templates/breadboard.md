@@ -102,6 +102,14 @@ Trace each representative scenario from an entry to an observable consequence us
 
 Candidate-shape mode may trace only the scenarios needed to resolve its named uncertainty. Current-state and selected-design modes must cover every representative scenario in their declared scope.
 
+## Reverse-trace audit
+
+Scan every table row for incoming `Wires Out` and `Returns To` references to each observable consequence, then repeat for every predecessor.
+
+| Observable consequence | Direct incoming sources | Upstream entries / writers | Unresolved predecessors | Status |
+|---|---|---|---|---|
+| U3 | S1, N4 | U1 via N1; restore event via N3 | N4 has no traced entry | supported / gap / conflict |
+
 ## Candidate-shape findings
 
 Use only in `candidate-shape` mode.
@@ -173,6 +181,7 @@ Once a selected-design breadboard is accepted and a slice is selected, convert t
 - [ ] Candidate rows were reconciled before becoming selected-design rows.
 - [ ] Selected-design mode cites Accepted requirements, selected shape, Accepted Appetite, and cuts.
 - [ ] Every representative scenario has an entry and observable consequence.
+- [ ] Every observable consequence was reverse-traced by scanning all incoming wires, not only the remembered path.
 - [ ] Every ID referenced by a wire, branch, or behavior trace exists in the tables.
 - [ ] Every displayed UI element that depends on data has a source.
 - [ ] Every non-UI affordance connects by Wires Out or Returns To.

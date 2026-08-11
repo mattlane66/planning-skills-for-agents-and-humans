@@ -5,10 +5,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import pathlib
 import shlex
+import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from typing import Any
@@ -16,6 +19,30 @@ from typing import Any
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "evals" / "workflow-behavior-cases.json"
 
+PUBLIC_WORKSPACE_ENTRIES = (
+    ".agent-orchestration.yaml",
+    ".agents",
+    ".claude",
+    ".claude-plugin",
+    ".codex-plugin",
+    ".gemini",
+    "AGENTS.md",
+    "GEMINI.md",
+    "LICENSE",
+    "docs/agent-context-feeding.md",
+    "docs/agent-operating-reference.md",
+    "docs/agent-run-records.md",
+    "docs/execution-graph.md",
+    "docs/human-decision-gates.md",
+    "docs/lifecycle-hooks.md",
+    "docs/loop-prompting.md",
+    "docs/stable-ids.md",
+    "hooks",
+    "skill-inventory.txt",
+    "skill-metadata.json",
+    "skills",
+    "templates",
+)
 REQUIRED_CASE_KEYS = {
     "id",
     "prompt",
@@ -32,6 +59,7 @@ REQUIRED_RESULT_KEYS = {
     "stopped_at_gate",
     "implementation_attempted",
     "evidence",
+    "model_output",
 }
 
 
@@ -82,17 +110,78 @@ def fake_result(case: dict[str, Any]) -> dict[str, Any]:
         "stopped_at_gate": case["expected_gate"],
         "implementation_attempted": False,
         "evidence": list(case["required_evidence"]),
+        "model_output": "[fixture adapter: no model was invoked]",
     }
 
 
-def external_result(command: str, case: dict[str, Any]) -> dict[str, Any]:
-    completed = subprocess.run(
-        shlex.split(command),
-        input=json.dumps(case),
-        text=True,
-        capture_output=True,
-        check=False,
-    )
+def select_cases(cases: list[dict[str, Any]], case_ids: list[str]) -> list[dict[str, Any]]:
+    if not case_ids:
+        return cases
+    requested = set(case_ids)
+    known = {case["id"] for case in cases}
+    unknown = requested - known
+    if unknown:
+        raise ValueError(f"unknown case id(s): {sorted(unknown)}")
+    return [case for case in cases if case["id"] in requested]
+
+
+def resolve_command(command: str, base_dir: pathlib.Path) -> list[str]:
+    args = shlex.split(command)
+    if not args:
+        raise ValueError("adapter command must not be empty")
+    resolved = []
+    for arg in args:
+        candidate = base_dir / arg
+        if not arg.startswith("-") and candidate.exists():
+            resolved.append(str(candidate.resolve()))
+        else:
+            resolved.append(arg)
+    return resolved
+
+
+def stage_public_workspace(destination: pathlib.Path) -> None:
+    for relative in PUBLIC_WORKSPACE_ENTRIES:
+        source = ROOT / relative
+        if not source.exists():
+            raise RuntimeError(f"public evaluation input is missing: {relative}")
+        target = destination / relative
+        if source.is_dir():
+            shutil.copytree(source, target)
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+
+
+def external_result(
+    command: str,
+    case: dict[str, Any],
+    command_base_dir: pathlib.Path,
+) -> dict[str, Any]:
+    public_case = {
+        "schema_version": 1,
+        "id": case["id"],
+        "prompt": case["prompt"],
+    }
+    command_args = resolve_command(command, command_base_dir)
+    safe_case_id = "".join(char if char.isalnum() or char in "-_" else "-" for char in case["id"])
+
+    with tempfile.TemporaryDirectory(prefix=f"planning-skill-eval-{safe_case_id}-") as tmp:
+        workspace = pathlib.Path(tmp)
+        stage_public_workspace(workspace)
+        environment = os.environ.copy()
+        environment["PWD"] = str(workspace)
+        environment["PLANNING_SKILLS_EVAL_WORKSPACE"] = str(workspace)
+        environment["PLANNING_SKILLS_EVAL_CASE_ID"] = case["id"]
+        environment.pop("OLDPWD", None)
+        completed = subprocess.run(
+            command_args,
+            cwd=workspace,
+            env=environment,
+            input=json.dumps(public_case),
+            text=True,
+            capture_output=True,
+            check=False,
+        )
     if completed.returncode != 0:
         raise RuntimeError(
             f"adapter command failed for {case['id']} with exit {completed.returncode}: "
@@ -107,6 +196,8 @@ def external_result(command: str, case: dict[str, Any]) -> dict[str, Any]:
     missing = REQUIRED_RESULT_KEYS - set(result)
     if missing:
         raise RuntimeError(f"adapter result missing keys for {case['id']}: {sorted(missing)}")
+    if not isinstance(result["model_output"], str) or not result["model_output"].strip():
+        raise RuntimeError(f"adapter result model_output must be non-empty for {case['id']}")
     return result
 
 
@@ -160,6 +251,7 @@ def build_report(
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "cases_file": str(cases_path),
         "adapter": adapter,
+        "protocol": "fixture-v1" if adapter == "fake" else "blind-command-v1",
         "runtime": runtime,
         "runtime_version": runtime_version,
         "model": model,
@@ -184,6 +276,12 @@ def build_report(
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cases", type=pathlib.Path, default=DEFAULT_CASES)
+    parser.add_argument(
+        "--case-id",
+        action="append",
+        default=[],
+        help="run only this case id; repeat to select multiple cases",
+    )
     parser.add_argument("--adapter", choices=("fake", "command"), default="fake")
     parser.add_argument("--adapter-command")
     parser.add_argument("--runtime", default="fixture")
@@ -197,13 +295,14 @@ def main() -> int:
         parser.error("--adapter-command is required when --adapter command")
 
     try:
-        cases = load_cases(args.cases)
+        cases = select_cases(load_cases(args.cases), args.case_id)
+        command_base_dir = pathlib.Path.cwd()
         scores = []
         for case in cases:
             if args.adapter == "fake":
                 result = fake_result(case)
             else:
-                result = external_result(args.adapter_command, case)
+                result = external_result(args.adapter_command, case, command_base_dir)
             scores.append(score_case(case, result))
     except (OSError, ValueError, RuntimeError) as exc:
         print(str(exc), file=sys.stderr)

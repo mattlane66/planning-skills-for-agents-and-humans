@@ -16,11 +16,25 @@ This evaluation layer tests those behaviors separately.
 - required evidence
 - forbidden evidence
 
-The corpus must cover every canonical skill and at least one no-planning case.
+The corpus must cover every canonical skill and at least one no-planning case. Expected skill, artifact, gate, and evidence fields are private scorer inputs. A real runtime must not receive them.
 
-## Adapter contract
+## Blind command protocol
 
-A runtime adapter receives one case as JSON on standard input and returns one JSON object on standard output:
+The command adapter receives only this public task envelope on standard input:
+
+```json
+{
+  "schema_version": 1,
+  "id": "breadboard-reverse-reachability",
+  "prompt": "Review whether this current-state breadboard fully explains U3..."
+}
+```
+
+The runner creates a fresh temporary workspace for every case. It stages the runtime-facing plugin, skills, references, templates, and supporting documentation, but excludes `evals/`, `tests/`, repository history, and the scorer. The adapter runs from that workspace.
+
+This prevents accidental answer leakage through standard input or the runtime's working directory. Runtime-specific adapters must pass only the public prompt and staged materials to the model; they must not recover expectations from the runner source path.
+
+The adapter returns one JSON object on standard output:
 
 ```json
 {
@@ -33,11 +47,12 @@ A runtime adapter receives one case as JSON on standard input and returns one JS
     "appetite",
     "multiple shapes",
     "fit check"
-  ]
+  ],
+  "model_output": "The complete unmodified response returned by the model"
 }
 ```
 
-The adapter may invoke Claude, Codex, Gemini, an MCP client, or another harness. Keep runtime-specific authentication and execution outside the shared scorer.
+The adapter may invoke Claude, Codex, Gemini, an MCP client, or another harness. Preserve the complete response in `model_output` and build `evidence` from that response, not from the hidden case corpus. Keep runtime-specific authentication and execution outside the shared scorer.
 
 ## Deterministic CI check
 
@@ -54,6 +69,8 @@ python scripts/run-skill-behavior-evals.py \
 
 This validates corpus loading, scoring, report generation, and test coverage without credentials.
 
+The fake adapter intentionally uses expected values to test scorer plumbing. A passing fake run is not model-behavior evidence.
+
 ## Real runtime check
 
 Provide a command that implements the adapter contract:
@@ -62,6 +79,7 @@ Provide a command that implements the adapter contract:
 python scripts/run-skill-behavior-evals.py \
   --adapter command \
   --adapter-command "python adapters/run-claude-case.py" \
+  --case-id breadboard-reverse-reachability \
   --runtime claude-code \
   --runtime-version "<version>" \
   --model "<model>" \
@@ -69,7 +87,7 @@ python scripts/run-skill-behavior-evals.py \
   --report evals/reports/claude-code.json
 ```
 
-The runner executes the command once per case, passing the case JSON through standard input.
+Repeat `--case-id` to run a focused set, or omit it to run the whole corpus. The runner executes the adapter once per case in a newly staged workspace and keeps expectations in the parent scorer process.
 
 ## Failure categories
 
@@ -92,6 +110,8 @@ Reports include:
 - adapter type
 - pass or fail by case
 - returned evidence and specific failures
+- the unmodified model output for audit
+- `protocol: blind-command-v1` for isolated prompt-only runs
 
 Do not treat one client or model result as universal. Re-run after changing:
 
@@ -105,3 +125,5 @@ Do not treat one client or model result as universal. Re-run after changing:
 ## Merge discipline
 
 Credential-free schema and scorer tests belong in ordinary CI. Real runtime runs may be manual or scheduled because credentials, model availability, and client versions vary. A runtime regression should be recorded with the failing case and environment rather than hidden by weakening the shared case.
+
+Before calling a command-adapter report blind, confirm its protocol is `blind-command-v1`. Reports from `fixture-v1` validate only the corpus and scorer.

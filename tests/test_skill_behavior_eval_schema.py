@@ -30,6 +30,13 @@ class SkillBehaviorEvalSchemaTests(unittest.TestCase):
     def test_corpus_includes_no_planning_case(self):
         self.assertTrue(any(case["expected_skill"] is None for case in self.cases))
 
+    def test_breadboarding_corpus_includes_reverse_reachability(self):
+        cases_by_id = {case["id"]: case for case in self.cases}
+        case = cases_by_id["breadboard-reverse-reachability"]
+        self.assertEqual("breadboarding", case["expected_skill"])
+        self.assertIn("reverse reachability", case["required_evidence"])
+        self.assertIn("N3 unresolved entry", case["required_evidence"])
+
     def test_every_human_gate_case_forbids_implementation(self):
         for case in self.cases:
             if case["expected_gate"] is not None:
