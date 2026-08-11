@@ -172,6 +172,16 @@
       "forbidden_evidence": ["invented target", "silent branch removal", "accepted despite defects", "production code"]
     },
     {
+      "id": "breadboard-reverse-reachability",
+      "prompt": "Review whether this current-state breadboard fully explains U3. Its rows say U1 wires to N1, U2 wires to N2, N1 and N2 each wire to S1, S1 returns to U3, and N3 also returns to U3 but has no incoming wire. Verify every route to U3 from the tables, report unsupported predecessors, and do not invent missing behavior.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "breadboard-verification",
+      "implementation_allowed": false,
+      "required_evidence": ["reverse reachability", "U3 incoming sources S1 and N3", "S1 writers N1 and N2", "N3 unresolved entry", "all table rows scanned"],
+      "forbidden_evidence": ["only remembered U1 path", "invented N3 entry", "selected future intent", "production code"]
+    },
+    {
       "id": "selected-design-granularity",
       "prompt": "Breadboard the accepted checkout path across UI, API, and persistence. Include product-relevant decisions, state changes, external effects, and their observable consequences, but omit wrappers and forwarding functions that do not change the causal story.",
       "expected_skill": "breadboarding",

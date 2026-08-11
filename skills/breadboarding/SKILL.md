@@ -34,6 +34,8 @@ A breadboard must explain how every required in-scope behavior proceeds from an 
 
 Choose the representative behavior or scenarios before mapping. Trace each one through table IDs, and record a gap instead of inventing a missing link. A behavior is not explained if any link is absent.
 
+Trace forward while mapping. Before acceptance, reverse-trace each observable consequence by scanning every table row that points to it; do not rely on the path you remember.
+
 For a nontrivial existing flow, a cross-place or cross-system design, branching behavior, or final selected-design verification, read [behavior tracing and verification](references/behavior-tracing-and-verification.md).
 
 ## Operating modes
@@ -259,7 +261,7 @@ Examples:
 6. Fill control flow with **Wires Out** and data or visible consequence with **Returns To**.
 7. Record the causal trace by ID, including meaningful branches and state effects.
 8. Cite evidence for non-obvious claims and mark unresolved links instead of guessing.
-9. Run graph-integrity checks and confirm that every visible effect has an explained source.
+9. Run forward and reverse graph-integrity checks and confirm that every visible effect reaches all of its actual sources.
 10. Stop before treating the map as selected future behavior or slicing it.
 
 ### Candidate-shape mapping
@@ -287,7 +289,7 @@ Examples:
 7. Wire the affordances together and trace every required behavior from entry to observable consequence.
 8. Add existing affordances the new ones must connect to, labeling current versus selected behavior.
 9. Make success, meaningful alternatives, failure, recovery, and persistence behavior explicit when relevant.
-10. Run graph-integrity checks and confirm that every selected mechanism is represented.
+10. Run forward and reverse graph-integrity checks and confirm that every selected mechanism is represented.
 11. Surface any shaping conflict and stop for an explicit decision.
 12. Obtain acceptance before slicing.
 
@@ -302,6 +304,7 @@ Examples:
 - A selected-design breadboard cites the selected shape, accepted requirements, appetite, and cut line.
 - Candidate rows are explicitly reconciled before becoming selected-design rows.
 - Every required behavior has a trace from an entry to an observable consequence.
+- Every observable consequence reverse-traces through all incoming wires to valid entries or explicit gaps.
 - Every ID referenced by a wire or trace exists in the tables.
 - Every displayed UI element that depends on data has an incoming source.
 - Every code affordance triggers something, returns something, or both.

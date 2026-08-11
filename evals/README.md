@@ -16,6 +16,7 @@ bash scripts/check-golden-evals.sh
 - promotion gates remain explicit even when exploration is fluid
 - candidate breadboards stay exploratory and selected-design authority stays gated
 - breadboards preserve causal integrity from entry through observable consequence
+- observable consequences are reverse-traced through every incoming wire
 - current-state maps stay grounded in concrete evidence and selected designs omit low-value plumbing
 - context packets include execution contracts
 - Dumplink clusters vertically instead of by discipline
@@ -38,9 +39,16 @@ bash scripts/check-golden-evals.sh
 - collaborative candidate breadboarding may use provisional judging inputs while keeping final claims provisional
 - current-state breadboards cite actual code evidence instead of inventing generic architecture
 - breadboards detect dangling wires, source-less displays, and branches without consequences
+- breadboards discover alternate writers and unresolved predecessors by reverse reachability
 - selected-design breadboards include product-relevant seams while omitting wrappers and forwarding-only calls
 - focused spikes return explicit R/S/fit/Appetite implications without deciding the product direction
 - the gated/orchestrated profile still enforces deterministic prerequisites
 - final shape selection still requires Accepted R, Accepted Appetite, decision-ready evidence, and explicit human choice
 
 When changing canonical descriptions, profile behavior, command wrappers, or packaging, update these corpora in the same change and rerun the relevant runtime-specific activation tests.
+
+## Blind model-output checks
+
+Use `scripts/run-skill-behavior-evals.py` with a command adapter to exercise a real runtime. The runner sends only the case ID and prompt, stages a fresh runtime-facing workspace without `evals/` for every case, and scores the adapter result against expectations kept in the parent process.
+
+The fake adapter validates schema and scorer plumbing only. See [Skill Behavior Evaluations](../docs/skill-behavior-evals.md) for the blind command protocol and focused `--case-id` runs.

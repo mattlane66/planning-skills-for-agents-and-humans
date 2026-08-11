@@ -6,6 +6,7 @@ Load this reference when a breadboard maps a nontrivial existing code path, span
 
 - [Start from scenarios](#start-from-scenarios)
 - [Build a causal trace](#build-a-causal-trace)
+- [Reverse-trace observable consequences](#reverse-trace-observable-consequences)
 - [Choose useful affordances and seams](#choose-useful-affordances-and-seams)
 - [Cover state and branches](#cover-state-and-branches)
 - [Verify graph integrity](#verify-graph-integrity)
@@ -50,6 +51,26 @@ If a link cannot be supported:
 - mark it `gap` or `unresolved`
 - identify the evidence needed
 - do not bridge it with a generic service or assumed mechanism
+
+## Reverse-trace observable consequences
+
+A forward trace can miss an alternate writer, entry, or branch. Verify completeness by starting from each observable consequence and discovering its predecessors from the tables.
+
+For each consequence:
+
+1. Start at its UI affordance, returned value, external effect, or destination place.
+2. Scan every row's `Wires Out` and `Returns To` cells for direct references to the current ID. Do not stop at the first match or follow only the path you remember.
+3. Repeat the scan for every predecessor, including every writer of a store, until each path reaches an entry or an explicit gap.
+4. Record alternate entries, writers, branches, cycles, and predecessors that no forward trace covered.
+5. Compare the discovered paths with the behavior traces. Add a missing scenario or mark a contradiction; never silently fold it into the remembered path.
+
+Record the audit compactly:
+
+| Observable consequence | Direct incoming sources | Upstream entries / writers | Unresolved predecessors | Status |
+|---|---|---|---|---|
+| U3 updated list | S1, N4 | U1 via N1; restore event via N3 | N4 has no traced entry | gap |
+
+The reverse pass is a table scan, not a prose review. Check all rows even when the forward trace already looks plausible.
 
 ## Choose useful affordances and seams
 
@@ -102,6 +123,7 @@ Run these checks against the canonical tables and behavior traces:
 6. **Mechanism integrity** — every selected mechanism and explicit cut is represented or called out as a conflict.
 7. **Rendering integrity** — every Mermaid node and relationship is represented in the tables; the diagram contains no extra behavior.
 8. **Authority integrity** — current, candidate, and selected claims remain labeled according to the declared mode.
+9. **Reverse-reachability integrity** — every observable consequence has been scanned backward through all incoming wires to valid entries or explicit gaps.
 
 An isolated `N` row, dangling wire, source-less display, branch without a consequence, or diagram-only edge is a defect.
 
@@ -136,6 +158,7 @@ Do not present an inference as an observed fact.
 | store with no behavioral role | add its relevant writer and reader or omit it |
 | invented current-state abstraction | replace it with actual code/domain language and evidence |
 | diagram disagrees with tables | correct the tables first, then regenerate the rendering |
+| remembered path hides another source | reverse-scan every incoming wire and add the missing entry, writer, branch, or explicit gap |
 
 ## Completion criteria
 
@@ -143,6 +166,7 @@ The breadboard is structurally complete for its declared scope when:
 
 - every representative scenario has an entry and observable consequence
 - the causal link between them is expressed with valid IDs
+- every observable consequence reverse-traces through all incoming wires to valid entries or explicit gaps
 - meaningful decisions, state effects, and branches are visible
 - every unresolved link is explicit
 - current-state claims have evidence at the right confidence level

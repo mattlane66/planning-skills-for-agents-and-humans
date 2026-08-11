@@ -110,7 +110,7 @@ DOCS=(
   docs/canvas-export.md docs/ci-health-workflow.md docs/claude-design-skill-tests.md
   docs/claude-design-workflow.md docs/claude-skills-installation.md
   docs/executable-breadboards.md docs/interface-contracts.md docs/loop-prompting.md
-  docs/runtime-adapters.md docs/skill-activation-testing.md
+  docs/runtime-adapters.md docs/skill-activation-testing.md docs/skill-behavior-evals.md
   integrations/gemini/README.md
   implementation-context.md skill-inventory.txt skill-metadata.json
   examples/existing-codebase-drift/02-implementation-reality.md
