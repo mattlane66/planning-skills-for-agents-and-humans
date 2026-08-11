@@ -308,24 +308,23 @@ A statechart is derived from the selected-design breadboard and never outranks i
 
 If implementation reality conflicts with accepted planning, the agent should not silently patch around the plan.
 
-```md
-## Planning drift found
+Return only one of the strict drift-check forms:
 
-The selected artifact says:
-- ...
-
-The implementation reality is:
-- ...
-
-Options:
-1. Update the code to match the artifact.
-2. Update the artifact because the original assumption was wrong.
-3. Split/cut the slice.
-4. Create a new bet.
-
-Recommended move:
-- ...
+```text
+No planning drift found.
 ```
+
+or:
+
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
+```
+
+Use `breadboard-reflection` when the conflict needs correction options and an explicit human decision.
 
 ## Anti-patterns
 

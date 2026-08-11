@@ -79,12 +79,12 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
 )
 

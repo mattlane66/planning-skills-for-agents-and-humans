@@ -38,6 +38,7 @@
     "defaultPrompt": [
       "Use the shaping skill in collaborative mode. Start from whatever is already most concrete—requirements, a proposed solution, a prototype, current-system evidence, or a focused unknown—and move among R, S, fit checks, spikes, sketches, and candidate breadboards as useful. Keep Working material separate from Accepted intent and do not select for me.",
       "Use the planning-router skill to choose the smallest next move without forcing a fixed exploration order.",
+      "Use the framing-doc skill when raw evidence, notes, or requests need a clear problem, desired outcome, and boundary before shaping.",
       "Use the shaping skill in S-first mode to capture my solution idea as a candidate shape, extract provisional requirements from it, and refine both without selecting automatically.",
       "Use the shaping skill to run a focused spike and return explicit implications to R, S, fit, and Appetite.",
       "Use the breadboarding skill in candidate-shape mode to clarify one named candidate uncertainty; provisional requirements or Appetite are allowed in collaborative mode but must be labeled and cannot support final selection by themselves.",
@@ -50,7 +51,8 @@
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
       "Use the dumplink skill when a selected project needs vertical task groups with dependency-aware sequence, risk states, or scope cuts.",
       "Use the feed-planning-context skill to package only accepted authoritative context for an implementation agent.",
-      "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision."
+      "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision.",
+      "Use the kickoff-doc skill when builders need a durable orientation reference derived from accepted planning artifacts."
     ]
   }
 }

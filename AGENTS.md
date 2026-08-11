@@ -191,26 +191,15 @@ No planning drift found.
 
 or:
 
-```md
-## Planning drift found
-
-The selected artifact says:
-- ...
-
-The implementation reality is:
-- ...
-
-Options:
-1. Update the code to match the artifact.
-2. Update the artifact because the assumption was wrong.
-3. Cut or split the slice.
-4. Create a new bet.
-
-Recommended move:
-- ...
+```text
+Planning drift found:
+- Selected artifact says:
+- Current implementation direction is:
+- Risk:
+- Recommended move:
 ```
 
-Do not implement inside a drift check. Apply only an explicit human decision.
+Do not implement inside a drift check. Use `breadboard-reflection` when the conflict needs correction options and an explicit human decision.
 
 ## Stable IDs
 
