@@ -355,6 +355,8 @@ The health check verifies packaged-skill parity, manifest and artifact reference
 
 The fixtures under `evals/` include structural contracts and deterministic behavior-runner checks; real model runs remain runtime-specific evaluations rather than universal benchmarks.
 
+See [Contributing](./CONTRIBUTING.md) for the development and review workflow. Report vulnerabilities through the private process in the [Security Policy](./SECURITY.md), not through a public issue.
+
 ## License
 
 Released under the [MIT License](./LICENSE).

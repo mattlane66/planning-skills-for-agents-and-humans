@@ -99,7 +99,7 @@ TEMPLATES=(
 )
 
 DOCS=(
-  README.md AGENTS.md GEMINI.md CHANGELOG.md LICENSE
+  README.md AGENTS.md GEMINI.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
@@ -124,6 +124,11 @@ DOCS=(
 )
 
 check_file_exists requirements-dev.txt
+check_file_exists scripts/release.py
+check_file_exists .github/dependabot.yml
+check_file_exists .github/pull_request_template.md
+check_file_exists .github/ISSUE_TEMPLATE/bug.yml
+check_file_exists .github/ISSUE_TEMPLATE/improvement.yml
 
 echo "Checking uploadable Claude skills..."
 if python3 -m unittest discover -s tests -p 'test_*.py' && python3 scripts/build_claude_skills.py; then
@@ -364,8 +369,15 @@ with open(".codex-plugin/plugin.json", encoding="utf-8") as f:
     codex = json.load(f)["version"]
 with open("mcp-server/package.json", encoding="utf-8") as f:
     mcp = json.load(f)["version"]
-if len({claude, codex, mcp}) != 1:
-    raise SystemExit(f"Version mismatch: Claude={claude}, Codex={codex}, MCP={mcp}")
+with open("mcp-server/package-lock.json", encoding="utf-8") as f:
+    mcp_lock_payload = json.load(f)
+mcp_lock = mcp_lock_payload["version"]
+mcp_lock_root = mcp_lock_payload["packages"][""]["version"]
+if len({claude, codex, mcp, mcp_lock, mcp_lock_root}) != 1:
+    raise SystemExit(
+        f"Version mismatch: Claude={claude}, Codex={codex}, MCP={mcp}, "
+        f"MCP lock={mcp_lock}, MCP lock root={mcp_lock_root}"
+    )
 PY
 then
   pass "Claude, Codex, and MCP versions match"
@@ -441,6 +453,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/hooks/planning-drift-check.sh
   check_file_exists dist/claude-code-plugin/skills/breadboarding/references/behavior-tracing-and-verification.md
   check_file_exists dist/claude-code-plugin/skills/breadboarding/references/notation-rendering-and-slicing.md
+  check_file_exists dist/claude-code-plugin/skills/dumplink/NOTICE.md
   check_file_exists dist/claude-code-plugin/examples/sketch-reconciliation/README.md
   check_file_exists dist/claude-code-plugin/examples/solution-first-shaping/README.md
   if python3 - <<'PY'
@@ -479,6 +492,14 @@ PY
   check_json dist/claude-code-plugin/.claude-plugin/plugin.json
 else
   fail "Claude plugin bundle failed to build"
+fi
+
+echo
+echo "Checking Python dependencies..."
+if python3 -m pip_audit --strict --cache-dir "${TMPDIR:-/tmp}/planning-skills-pip-audit-cache" -r requirements-dev.txt; then
+  pass "Python validation dependencies pass vulnerability audit"
+else
+  fail "Python validation dependency audit failed"
 fi
 
 echo

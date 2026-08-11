@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import hashlib
 import tempfile
 import unittest
 import zipfile
@@ -32,6 +33,39 @@ class ClaudeSkillPackagingTests(unittest.TestCase):
             with zipfile.ZipFile(output / "framing-doc.zip") as archive:
                 self.assertIn("framing-doc/.agent-orchestration.yaml", archive.namelist())
                 self.assertIn("framing-doc/skill-metadata.json", archive.namelist())
+            with zipfile.ZipFile(output / "dumplink.zip") as archive:
+                self.assertIn("dumplink/NOTICE.md", archive.namelist())
+
+    def test_packages_are_byte_reproducible_with_normalized_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            first = packager.build_packages(root / "first")
+            second = packager.build_packages(root / "second")
+
+            first_hashes = {
+                path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in first
+            }
+            second_hashes = {
+                path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in second
+            }
+            self.assertEqual(first_hashes, second_hashes)
+
+            with zipfile.ZipFile(first[0]) as archive:
+                for info in archive.infolist():
+                    self.assertEqual(packager.ZIP_TIMESTAMP, info.date_time)
+                    self.assertIn((info.external_attr >> 16) & 0o777, {0o644, 0o755})
+
+    def test_source_symlinks_are_rejected(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "source"
+            source.mkdir()
+            target = root / "outside.txt"
+            target.write_text("outside\n", encoding="utf-8")
+            (source / "linked.txt").symlink_to(target)
+
+            with self.assertRaisesRegex(packager.PackagingError, "symlinked package source"):
+                packager.reject_source_symlinks(source)
 
     def test_repo_root_is_never_a_valid_output_directory(self) -> None:
         with self.assertRaisesRegex(packager.PackagingError, "unsafe"):

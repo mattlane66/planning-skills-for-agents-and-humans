@@ -1,1 +1,2 @@
-PyYAML>=6.0.2,<7
+PyYAML==6.0.3
+pip-audit==2.10.1

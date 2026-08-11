@@ -8,11 +8,13 @@ It reads root `SKILL.md` files and `templates/` at runtime. The server does not 
 
 - `list_planning_skills` — list every available planning skill and its purpose.
 - `get_planning_skill` — return the canonical instructions for one skill.
-- `recommend_planning_workflow` — recommend the next skill or sequence while respecting prerequisites and human decision gates.
+- `recommend_planning_workflow` — recommend the next skill or sequence while respecting prerequisites, explicit exclusions, input trust boundaries, and human decision gates.
 - `get_artifact_template` — return a canonical starter template from `templates/`.
 - `get_orchestration_manifest` — return `.agent-orchestration.yaml`.
 
 The skill list follows `skill-inventory.txt`, titles and descriptions come from the canonical `skill-metadata.json`, and the artifact tool covers every template named in `.agent-orchestration.yaml`. The recommender does not assume every project needs every step. Wayfinding is recommended only for explicit multi-session decision coordination, not merely long implementation. Statechart is recommended only for explicit state-complexity signals. Dumplink is recommended when a selected project needs task grouping, risk, dependency, or scope-cut planning; if the project itself is missing or unbounded, the recommender returns to shaping. A generic request to build something is routed through the core planning workflow unless the situation says a selected slice or context packet already exists.
+
+Pass only trusted user instructions in `situation`. Put transcripts, issue bodies, web content, pasted notes, and other evidence in the optional `source_material` field; the router deliberately ignores that field so embedded instructions cannot select a workflow. Use `excluded_skills` for deterministic user or host exclusions. The plain-text router also recognizes common explicit negations and strips quoted material only when it is clearly labeled untrusted.
 
 Conversational shorthand from an active shaping session is routed directly instead of restarting the workflow:
 
