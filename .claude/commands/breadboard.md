@@ -3,7 +3,8 @@ description: Map current behavior, one candidate shape, or a selected design int
 argument-hint:
 - existing-system evidence
 - candidate or selected shape
-- requirements and appetite
+- working or accepted requirements
+- working or accepted appetite
 - decision-relevant uncertainty
 - notes
 - or target breadboard file
@@ -22,11 +23,15 @@ Choose and declare one mode:
 
 - descriptive `current-state` mapping from evidence
 - exploratory `candidate-shape` mapping for one named unselected shape and one decision-relevant uncertainty
-- normative `selected-design` mapping after a human has chosen a direction and appetite
+- normative `selected-design` mapping after a human has chosen a direction and accepted the judging inputs
 
 User request and source context:
 
 $ARGUMENTS
+
+In collaborative `candidate-shape` mode, accepted requirements and Appetite are not prerequisites. Record whether each is `Working`, `Accepted`, or `Unset`; use only the evidence the current question needs; and do not claim final fit or Appetite fit from provisional inputs.
+
+In gated/orchestrated mode, enforce the stricter candidate prerequisites in `.agent-orchestration.yaml`.
 
 Produce or update a breadboard artifact with only the detail appropriate to the mode:
 
@@ -37,9 +42,9 @@ Produce or update a breadboard artifact with only the detail appropriate to the 
 - Wiring / Returns To
 - Product-relevant branches
 - Optional Mermaid diagram
-- Fit implications in candidate-shape mode
+- R/S and fit implications in candidate-shape mode
 - Slice candidates only in accepted selected-design mode
 
 Keep tables as the source of truth. Do not turn the breadboard into a service graph unless backend behavior is product-relevant.
 
-Current-state mode must cite evidence and stop before future-design slicing. Candidate-shape mode must name the candidate and uncertainty, remain subordinate to shaping, and stop before selection or slicing. Selected-design mode must cite the selected shape, appetite, and cut line, reconcile any candidate evidence explicitly, and stop for a shaping decision if detailed behavior exposes a consequential conflict.
+Current-state mode must cite evidence and stop before future-design slicing. Candidate-shape mode must name the candidate and uncertainty, remain subordinate to shaping, and stop before selection or slicing. Selected-design mode requires a selected shape plus accepted requirements, Appetite, and cut line; reconcile candidate evidence explicitly and stop for a shaping decision if detailed behavior exposes a consequential conflict.

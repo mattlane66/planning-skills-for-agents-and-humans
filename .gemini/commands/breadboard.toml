@@ -1,0 +1,23 @@
+description = "Map current behavior, one candidate shape, or a selected design into places, affordances, stores, consequences, and wiring."
+
+prompt = """
+Use this repository's planning instructions and breadboarding skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{breadboarding/SKILL.md}
+@{docs/human-decision-gates.md}
+
+Command arguments / source context:
+{{args}}
+
+Choose and declare one mode: `current-state`, `candidate-shape`, or `selected-design`.
+
+In collaborative candidate-shape mode, accepted requirements and Appetite are not prerequisites. Record whether each is Working, Accepted, or Unset. Map only enough behavior to resolve the named uncertainty and return R/S/fit implications to shaping. Do not claim final fit or Appetite fit from provisional inputs.
+
+In gated/orchestrated mode, enforce `.agent-orchestration.yaml` prerequisites.
+
+Selected-design mode requires a human-selected shape plus accepted requirements, Appetite, and cut line. Candidate evidence must be reconciled explicitly.
+
+Do not select a direction, slice a candidate breadboard, or write production code.
+"""

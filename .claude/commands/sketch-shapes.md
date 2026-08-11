@@ -1,9 +1,11 @@
 ---
-description: Sketch alternative solution shapes against accepted criteria without selecting one.
+description: Capture or revise solution shapes, including a solution-first idea, without selecting one.
 argument-hint:
-- accepted criteria
+- solution idea
+- accepted or working criteria
 - frame
 - notes
+- prototype
 - or existing shaping file
 allowed-tools:
 - Read
@@ -16,9 +18,9 @@ disable-model-invocation: true
 
 Read `shaping/SKILL.md` first and follow it as the primary instruction for this command.
 
-Use this slash command when the user wants multiple possible directions made visible before committing to one.
+Use this focused command when the current useful move is S: capturing, comparing, or revising solution shapes. It may be the **first shaping move** when the user already has a solution in mind.
 
-Also read `docs/human-decision-gates.md`. Confirm Gate 2A: Appetite set before sketching, and stop before Gate 3: Shape selected. If appetite is missing, stop and recommend `/appetite`.
+Also read `docs/human-decision-gates.md`.
 
 User request and source context:
 
@@ -26,30 +28,24 @@ $ARGUMENTS
 
 Produce or update the Shapes section of a shaping artifact.
 
+In collaborative mode:
+
+- accepted requirements are not required merely to capture or refine a candidate shape
+- Appetite may be Unset or Working while exploring
+- extract any needs or constraints exposed by the shape into a `Possible requirements discovered` section
+- label Appetite-dependent judgments provisional until Appetite is accepted
+
+In gated/orchestrated mode, enforce the stricter prerequisites in `.agent-orchestration.yaml`.
+
 Include:
 
 - `CURRENT` when the work touches an existing system
-- 2-4 serious alternative shapes such as `A`, `B`, and `C`
-- short titles that characterize each approach
-- numbered shape parts such as `A1`, `A2`, `B1`, `B2`
-- flagged unknowns with `⚠️` where a mechanism is still not concretely understood
-- spike candidates for unresolved mechanics when needed
-- a short note on how each shape could fit the appetite or where it already exceeds the cut line
+- the user's proposed shape when one already exists; preserve its intent rather than replacing it with invented alternatives
+- additional serious alternatives only when they materially help the decision
+- short titles and numbered shape parts such as `A1`, `A2`, `B1`
+- flagged unknowns with `⚠️`
+- candidate-breadboard or spike opportunities when needed
 
-Keep requirements and mechanisms separate:
+Do not silently turn one option into the selected direction. Do not promote candidate evidence or write production code.
 
-- do not rewrite criteria into UI choices
-- do not treat a vague intention as a shape part
-- do not silently turn one option into the selected direction
-
-If sketching reveals missing or changed criteria, add a short `Possible criteria discovered` section instead of silently changing accepted requirements.
-
-Do not run the full fit check unless the user explicitly asks.
-Do not select a direction.
-Do not breadboard.
-Do not write production code.
-
-End with a short Gate 3 readiness note:
-
-- `Ready for /fit-check` when the alternatives are concrete enough to compare
-- `Needs spike or more sketching` when one or more important shape parts remain too vague
+End by naming the smallest next useful move: revise R, revise S, fit-check, spike, candidate breadboard, set/revisit Appetite, or prepare selection.

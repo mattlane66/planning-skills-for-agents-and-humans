@@ -18,20 +18,12 @@ class CodexPluginTests(unittest.TestCase):
 
     def test_default_prompts_cover_every_canonical_skill(self):
         prompt_text = chr(10).join(self.manifest["interface"]["defaultPrompt"]).lower()
-        for skill in (
-            "wayfinding",
-            "framing-doc",
-            "shaping",
-            "sketch-reconciliation",
-            "breadboarding",
-            "statechart",
-            "interface-contracts",
-            "executable-breadboards",
-            "dumplink",
-            "feed-planning-context",
-            "breadboard-reflection",
-            "kickoff-doc",
-        ):
+        skills = [
+            line.strip()
+            for line in (ROOT / "skill-inventory.txt").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        for skill in skills:
             self.assertIn(skill, prompt_text)
 
 

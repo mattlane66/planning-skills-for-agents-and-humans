@@ -1,7 +1,7 @@
 {
   "name": "planning-skills-for-agents-and-humans",
   "version": "1.3.0",
-  "description": "Planning workflows for multi-session Wayfinding, framing, appetite-aware shaping, sketch reconciliation, breadboarding, statecharts, contracts, executable handoffs, task grouping, context, and reflection.",
+  "description": "Planning workflows with fluid collaborative shaping, explicit promotion gates, multi-session Wayfinding, visual reconciliation, breadboarding, statecharts, contracts, executable handoffs, task grouping, context, and reflection.",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"
@@ -12,8 +12,9 @@
     "planning",
     "wayfinding",
     "shaping",
-    "sketch-reconciliation",
     "breadboarding",
+    "spikes",
+    "sketch-reconciliation",
     "statecharts",
     "interface-contracts",
     "executable-breadboards",
@@ -25,8 +26,8 @@
   "skills": "./skills/",
   "interface": {
     "displayName": "Planning Skills for Agents and Humans",
-    "shortDescription": "Wayfind, frame, shape, reconcile, breadboard, package context, and check drift.",
-    "longDescription": "Reusable workflows that help humans and agents coordinate multi-session planning, frame fuzzy requests, shape alternatives, reconcile visuals, make selected behavior concrete, and hand bounded context to implementation.",
+    "shortDescription": "Start from R, S, or evidence; shape fluidly, gate commitment, and build bounded slices.",
+    "longDescription": "Reusable workflows that help humans and agents start from requirements, a solution idea, evidence, or a focused uncertainty; iterate among requirements, shapes, fit checks, spikes, and candidate breadboards; preserve explicit human promotion gates; and hand bounded accepted context to implementation.",
     "developerName": "Matt Lane",
     "category": "Productivity",
     "capabilities": [
@@ -35,20 +36,23 @@
     ],
     "websiteURL": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
     "defaultPrompt": [
+      "Use the shaping skill in collaborative mode. Start from whatever is already most concrete—requirements, a proposed solution, a prototype, current-system evidence, or a focused unknown—and move among R, S, fit checks, spikes, sketches, and candidate breadboards as useful. Keep Working material separate from Accepted intent and do not select for me.",
+      "Use the planning-router skill to choose the smallest next move without forcing a fixed exploration order.",
+      "Use the framing-doc skill when raw evidence, notes, or requests need a clear problem, desired outcome, and boundary before shaping.",
+      "Use the shaping skill in S-first mode to capture my solution idea as a candidate shape, extract provisional requirements from it, and refine both without selecting automatically.",
+      "Use the shaping skill to run a focused spike and return explicit implications to R, S, fit, and Appetite.",
+      "Use the breadboarding skill in candidate-shape mode to clarify one named candidate uncertainty; provisional requirements or Appetite are allowed in collaborative mode but must be labeled and cannot support final selection by themselves.",
+      "Use the gated/orchestrated profile when I explicitly ask for strict prerequisites and stop at every human promotion gate.",
       "Use the wayfinding skill to coordinate this bounded multi-session planning effort as dependent decision, evidence, prototype, and prerequisite tickets.",
-      "Use the framing-doc skill to frame this product idea before implementation.",
-      "Use the shaping skill to compare possible approaches before choosing one.",
-      "Use the shaping skill to set a bounded appetite and cut line before selecting an approach.",
-      "Use the sketch-reconciliation skill to map an attached sketch or screenshot to planning IDs and propose explicit deltas without silently changing scope.",
-      "Use the breadboarding skill to map places, affordances, stores, state, and wiring for this feature.",
+      "Use the sketch-reconciliation skill to map an attached sketch or screenshot to planning IDs and propose explicit deltas without silently changing accepted scope.",
+      "Use the breadboarding skill in selected-design mode only after a shape is explicitly selected and the judging inputs are accepted.",
       "Use the statechart skill only when a selected stateful portion of an accepted breadboard needs a transition table and behavioral projection.",
       "Use the interface-contracts skill to define plain-language contracts for the selected slice boundaries.",
       "Use the executable-breadboards skill to add examples, fixtures, expected outputs, edge cases, and acceptance tests before implementation.",
-      "Use the dumplink skill when a selected project needs to be decomposed into vertical task groups with dependency-aware sequence, risk states, or scope cuts.",
-      "Use the feed-planning-context skill to package the active planning artifacts for an implementation agent.",
-      "Use docs/loop-prompting.md and templates/drift-check.md to check whether implementation has drifted from the selected planning artifacts.",
+      "Use the dumplink skill when a selected project needs vertical task groups with dependency-aware sequence, risk states, or scope cuts.",
+      "Use the feed-planning-context skill to package only accepted authoritative context for an implementation agent.",
       "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision.",
-      "Use the kickoff-doc skill to create a builder-facing orientation reference from accepted planning artifacts."
+      "Use the kickoff-doc skill when builders need a durable orientation reference derived from accepted planning artifacts."
     ]
   }
 }

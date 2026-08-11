@@ -56,21 +56,29 @@ This mode does not require a selected direction. It records what exists; it cann
 
 Use this during shaping when a named candidate cannot be judged honestly from a mechanism list or sketch alone.
 
-Input:
+Candidate-shape mode supports both collaborative and gated shaping.
 
-- accepted requirements
-- accepted appetite and cut line
+Minimum input:
+
 - one named candidate shape and its shape-part IDs
 - the specific behavioral or structural uncertainty to resolve
+- whatever requirements currently exist, clearly marked `Working` or `Accepted`
+- appetite and cut line when they exist, clearly marked `Unset`, `Working`, or `Accepted`
 - relevant current-state evidence when the candidate must connect to an existing system
+
+In collaborative shaping, accepted requirements or appetite are **not prerequisites for exploratory candidate breadboarding**. If either is provisional or missing, say so explicitly and do not claim final requirement fit, appetite fit, or decision readiness from that evidence.
+
+In a gated/orchestrated profile, the active orchestration policy may require accepted requirements and appetite before candidate breadboarding. Follow the stricter profile when it has been explicitly selected.
 
 Output:
 
 - `mode: candidate-shape`
+- input authority status for requirements and appetite
 - only the places, affordances, stores, consequences, branches, and wiring needed to resolve the named uncertainty
 - supported, missing, or contradictory mechanisms
-- rabbit holes, appetite risks, and focused spike candidates
-- implications for requirement fit, reverse fit, and appetite fit
+- rabbit holes, appetite risks when appetite is known, and focused spike candidates
+- implications for requirement fit, reverse fit, and appetite fit where those judgments are supportable
+- proposed R/S changes revealed by the mapping
 - unresolved questions
 
 Candidate-shape breadboarding is a shaping technique. It is subordinate to the shaping artifact and its named candidate. It may be partial and candidates do not need equal detail.
@@ -81,7 +89,9 @@ It cannot:
 - become accepted future intent
 - feed slice selection or implementation
 - produce committed contracts, task groups, or build handoffs
-- silently change requirements, appetite, or the candidate shape
+- silently change accepted requirements, appetite, or the candidate shape
+
+When candidate breadboarding reveals a useful change to working R or S, return that change to shaping. When it would change accepted R, appetite, or a selected direction, propose the delta and stop for the applicable human gate.
 
 Read [candidate-shape mode](references/candidate-shape-mode.md) for its complete authority, output, and promotion contract.
 
@@ -93,7 +103,7 @@ Input:
 
 - human-selected shape and parts
 - accepted appetite and cut line
-- the requirements or outcomes those parts must satisfy
+- the accepted requirements or outcomes those parts must satisfy
 - optionally an existing or candidate-shape breadboard to reconcile
 - optionally the existing system the selected design must connect to
 
@@ -117,12 +127,12 @@ Often you need existing affordances that remain and new affordances from a candi
 
 ## Relationship to shaping
 
-Breadboarding is a distinct capability that shaping may invoke.
+Breadboarding is a distinct capability that shaping may invoke at any useful point in the exploratory loop.
 
 - Shaping owns requirements, appetite, candidate comparison, and human selection.
-- Candidate-shape breadboarding supplies exploratory evidence to shaping.
+- Candidate-shape breadboarding supplies exploratory evidence to shaping and may reveal changes to working R or S.
 - Selected-design breadboarding makes the accepted direction concrete after selection.
-- Breadboarding never selects a shape or silently changes one.
+- Breadboarding never selects a shape or silently changes accepted planning truth.
 
 A detailed selected-design breadboard may expose a conflict with the selected shape, requirements, or appetite. When that happens, stop and return:
 
@@ -323,18 +333,20 @@ Examples:
 
 ### Candidate-shape mapping
 
-1. Confirm accepted requirements, appetite, cut line, named candidate, and the question to resolve.
-2. Declare `mode: candidate-shape`.
-3. Map only enough places, affordances, stores, branches, and wiring to answer that question.
-4. Label every proposed element with its candidate shape-part source.
-5. Add current-state elements only when needed and keep them visibly descriptive.
-6. Identify unsupported mechanisms, rabbit holes, appetite risks, and spike candidates.
-7. Return implications to the shaping fit and reverse-fit checks.
-8. Stop when the question is decision-ready; do not slice or prepare implementation.
+1. Confirm the named candidate and the single decision-relevant question to resolve.
+2. Record whether requirements are Working or Accepted and whether appetite is Unset, Working, or Accepted.
+3. If the active profile is gated/orchestrated, enforce any additional prerequisites before continuing.
+4. Declare `mode: candidate-shape`.
+5. Map only enough places, affordances, stores, branches, and wiring to answer that question.
+6. Label every proposed element with its candidate shape-part source.
+7. Add current-state elements only when needed and keep them visibly descriptive.
+8. Identify unsupported mechanisms, rabbit holes, appetite risks when appetite is known, and spike candidates.
+9. Return proposed R/S changes plus fit and reverse-fit implications to shaping; state when an implication is provisional because R or appetite is not accepted.
+10. Stop when the question is clear enough for the next shaping move; do not slice or prepare implementation.
 
 ### Selected-design mapping
 
-1. Confirm the human-selected shape, accepted appetite, and cut line; declare `mode: selected-design`.
+1. Confirm the human-selected shape, accepted requirements, accepted appetite, and cut line; declare `mode: selected-design`.
 2. If a candidate breadboard exists, reconcile it rather than promoting it automatically.
 3. List the selected mechanisms and explicit cuts.
 4. Translate each selected mechanism into UI and non-UI affordances.
@@ -351,8 +363,10 @@ Examples:
 - The breadboard declares `current-state`, `candidate-shape`, or `selected-design` mode.
 - Current-state evidence is not presented as selected future intent.
 - A candidate-shape breadboard names the candidate and question it resolves.
+- A candidate-shape breadboard states the authority status of its requirements and appetite inputs.
+- Provisional candidate evidence is not presented as final fit or appetite evidence.
 - Candidate evidence does not select a shape, feed slicing, or become build scope.
-- A selected-design breadboard cites the selected shape, appetite, and cut line.
+- A selected-design breadboard cites the selected shape, accepted requirements, appetite, and cut line.
 - Candidate rows are explicitly reconciled before becoming selected-design rows.
 - Every displayed UI element that depends on data has an incoming source.
 - Every code affordance triggers something, returns something, or both.

@@ -5,10 +5,13 @@ purpose: >-
   and harness layer around agentic implementation work.
 
 principles:
+  - exploration_is_fluid_commitment_is_gated
+  - start_from_requirements_solution_or_evidence
+  - working_material_may_iterate_before_acceptance
   - planning_before_implementation
   - multi_session_planning_uses_coordination_maps_not_parallel_sources_of_truth
   - visual_evidence_requires_explicit_reconciliation
-  - bounded_appetite_before_shape_selection
+  - accepted_appetite_before_shape_selection
   - candidate_breadboarding_may_support_shaping
   - candidate_evidence_never_selects_itself
   - human_decision_gates_before_scope_expansion
@@ -19,6 +22,38 @@ principles:
   - drift_checks_during_build
   - reflection_after_implementation
 
+profiles:
+  collaborative:
+    default: true
+    purpose: Human-guided shaping where R, S, fit, spikes, sketches, and candidate breadboards may iterate in the order that best resolves uncertainty.
+    allow_provisional_inputs: true
+    exploration_order: flexible
+    enforce_promotion_gates: true
+    rules:
+      - provisional_requirements_may_be_extracted_from_solution_shapes
+      - shapes_may_be_explored_before_appetite_is_accepted
+      - candidate_breadboards_may_use_working_requirements_or_unset_appetite
+      - provisional_evidence_must_not_claim_final_fit_or_appetite_fit
+      - accepted_material_changes_require_explicit_delta_and_human_decision
+  gated:
+    default: false
+    purpose: Deterministic planning for automation, policy-controlled teams, CI harnesses, or users who explicitly want strict prerequisites.
+    allow_provisional_inputs: false
+    exploration_order: controlled
+    enforce_gated_requires: true
+    enforce_promotion_gates: true
+    rules:
+      - accepted_requirements_before_appetite
+      - accepted_requirements_and_appetite_before_comparative_shape_work
+      - accepted_requirements_and_appetite_before_candidate_breadboarding
+      - decision_ready_fit_before_selection
+
+hard_promotion_gates:
+  select_shape: [accepted_requirements, accepted_appetite, decision_ready_fit, explicit_human_selection]
+  promote_selected_design: [selected_direction, explicit_candidate_reconciliation]
+  select_slice: [accepted_selected_design_breadboard_or_equally_clear_behavior_boundary, explicit_human_slice_selection]
+  build: [selected_slice, context_packet, execution_contract]
+
 authority_order:
   - latest_user_instruction
   - selected_project
@@ -27,8 +62,9 @@ authority_order:
   - executable_breadboard
   - selected_interface_contract
   - selected_breadboard
-  - selected_shaping_direction
-  - candidate_breadboards_for_evidence_only
+  - accepted_shaping_decisions
+  - working_shaping_material
+  - candidate_breadboards_and_spikes_for_evidence_only
   - kickoff_doc_for_orientation_only
   - framing_doc
   - raw_notes_and_transcripts
@@ -53,66 +89,78 @@ modes:
     exit_gate: ticket_resolved_or_human_decision_pending
 
   explore:
-    purpose: Understand the source material, current system, and unknowns.
-    allowed_outputs: [source_notes, current_state_summary, open_questions, relevant_files_or_artifacts, risks_and_unknowns]
+    purpose: Understand source material, a proposed solution, the current system, and unknowns without committing direction.
+    allowed_outputs: [source_notes, current_state_summary, provisional_requirements, provisional_shapes, open_questions, relevant_files_or_artifacts, risks_and_unknowns]
     forbidden: [production_code, selected_direction, implementation_plan]
-    exit_gate: source_material_understood
+    exit_gate: source_material_understood_or_next_shaping_move_clear
 
   frame:
     skill: framing-doc
-    purpose: Name the current situation, problem, outcome, forces, and boundaries.
+    purpose: Name the current situation, problem, outcome, forces, and boundaries when those are genuinely unclear.
     allowed_outputs: [frame, current_situation, current_approach, current_result, problem, outcome, boundaries, criteria_candidates]
     forbidden: [production_code, selected_shape]
-    exit_gate: frame_accepted
+    exit_gate: frame_accepted_or_intentionally_left_provisional
 
   criteria:
     skill: shaping
     command_aliases: { claude: /criteria, gemini: /criteria }
-    purpose: Define requirements / criteria before proposing mechanisms.
-    allowed_outputs: [requirements_table, criteria_status, mechanism_parking_lot, open_criteria_questions]
-    forbidden: [solution_shapes, candidate_breadboard, selected_direction, selected_design_breadboard, production_code]
-    exit_gate: requirements_accepted
+    purpose: Create or revise requirements / criteria without requiring solution exploration to stop.
+    allowed_outputs: [requirements_table, criteria_status, requirement_authority, mechanism_parking_lot, open_criteria_questions, requirements_extracted_from_shapes]
+    forbidden: [selected_direction, selected_design_breadboard, production_code]
+    exit_gate: requirements_working_or_accepted
 
   appetite:
     skill: shaping
     command_aliases: { claude: /appetite, gemini: /appetite }
-    purpose: Set the fixed time or scope budget and cut line that candidate shapes must fit.
-    requires: [accepted_requirements]
-    allowed_outputs: [appetite, team_shape, review_point, cut_line, accepted_unknowns, spike_threshold]
+    purpose: Set or refine the fixed time or scope budget and cut line that selection must fit.
+    gated_requires: [accepted_requirements]
+    allowed_outputs: [appetite, appetite_authority, team_shape, review_point, cut_line, accepted_unknowns, spike_threshold]
     forbidden: [unbounded_scope, selected_direction_without_human_choice, production_code]
-    exit_gate: appetite_set
+    exit_gate: appetite_working_or_accepted
 
   sketch_shapes:
     skill: shaping
     command_aliases: { claude: /sketch-shapes, gemini: /sketch-shapes }
-    purpose: Make multiple possible directions visible and identify which candidates need breadboarding or spikes before comparison.
-    requires: [accepted_requirements, appetite]
-    allowed_outputs: [current_baseline, alternative_shapes, shape_parts, appetite_fit_notes, flagged_unknowns, candidate_breadboard_requests, spike_candidates]
+    purpose: Capture or revise solution directions, including an S-first idea, and identify what R, breadboarding, or spikes they reveal.
+    gated_requires: [accepted_requirements, accepted_appetite]
+    allowed_outputs: [current_baseline, alternative_shapes, shape_parts, provisional_requirements_discovered, appetite_fit_notes_when_known, flagged_unknowns, candidate_breadboard_requests, spike_candidates]
     forbidden: [selected_direction_without_human_choice, selected_design_breadboard, candidate_breadboard_as_authoritative_intent, slice_selection, production_code]
-    exit_gate: alternatives_visible
+    exit_gate: shapes_visible_or_next_uncertainty_clear
+
+  spike:
+    skill: shaping
+    command_aliases: { claude: /spike, gemini: /spike }
+    purpose: Resolve one focused technical or empirical unknown and return explicit implications to R, S, fit, or Appetite.
+    requires: [focused_unknown]
+    allowed_outputs: [spike, questions, evidence, mechanism_findings, requirements_implications, shape_implications, fit_implications, appetite_implications, remaining_unknowns]
+    forbidden: [selected_direction_without_human_choice, product_decision_as_spike_result, production_code_unless_explicit_experiment_requested]
+    exit_gate: unknown_resolved_or_bounded
 
   candidate_breadboard:
     skill: breadboarding
+    command_aliases: { claude: /breadboard, gemini: /breadboard }
     purpose: Test or clarify one unselected candidate shape during shaping without promoting it to accepted future intent.
-    requires: [accepted_requirements, appetite, candidate_shape, decision_relevant_uncertainty]
-    allowed_outputs: [candidate_breadboard, candidate_shape_reference, places, ui_affordances, non_ui_affordances, stores, wiring, branches, rabbit_holes, appetite_risks, spike_candidates, fit_check_implications, unresolved_questions]
-    forbidden: [selected_direction_without_human_choice, candidate_as_authoritative_future_intent, slice_selection, committed_contracts, build_handoff, production_code]
-    exit_gate: candidate_clear_enough_to_compare
+    requires: [candidate_shape, decision_relevant_uncertainty]
+    gated_requires: [accepted_requirements, accepted_appetite]
+    allowed_outputs: [candidate_breadboard, candidate_shape_reference, requirement_authority, appetite_authority, places, ui_affordances, non_ui_affordances, stores, wiring, branches, rabbit_holes, appetite_risks_when_known, spike_candidates, fit_check_implications, proposed_requirement_changes, proposed_shape_changes, unresolved_questions]
+    forbidden: [selected_direction_without_human_choice, candidate_as_authoritative_future_intent, final_fit_claim_from_provisional_inputs, slice_selection, committed_contracts, build_handoff, production_code]
+    exit_gate: candidate_clear_enough_for_next_shaping_move
 
   fit_check:
     skill: shaping
     command_aliases: { claude: /fit-check, gemini: /fit-check }
-    purpose: Compare candidate shapes against requirements and appetite, using candidate breadboards or spikes as subordinate evidence when needed.
-    requires: [candidate_shapes, appetite]
-    allowed_outputs: [fit_check, reverse_fit_check, appetite_fit, cut_options, failed_requirements, unjustified_mechanisms, candidate_evidence_summary, decision_readiness_note]
+    purpose: Run working or decision-ready fit checks across available shapes, using candidate breadboards or spikes as subordinate evidence.
+    requires: [candidate_shapes]
+    gated_requires: [accepted_requirements, accepted_appetite]
+    allowed_outputs: [working_fit_check, decision_ready_fit_check, reverse_fit_check, appetite_fit_when_known, cut_options, failed_requirements, unjustified_mechanisms, provisional_requirements_discovered, candidate_evidence_summary, decision_readiness_note]
     forbidden: [selected_direction_without_human_choice, candidate_breadboard_as_authoritative_intent, selected_design_breadboard, slice_selection, production_code]
-    exit_gate: decision_ready
+    exit_gate: next_shaping_move_clear_or_decision_ready
 
   select_shape:
     skill: shaping
     command_aliases: { claude: /select-shape, gemini: /select-shape }
     purpose: Record the human-selected direction or stop with a decision-ready summary.
-    requires: [fit_check, appetite]
+    requires: [accepted_requirements, accepted_appetite, decision_ready_fit, explicit_human_selection]
     allowed_outputs: [selected_direction, appetite_fit, rejected_alternatives, tradeoffs, remaining_unknowns, candidate_breadboard_promotion_plan, next_handoff]
     forbidden: [invented_human_decision, automatic_candidate_breadboard_promotion, production_code]
     exit_gate: shape_selected
@@ -120,7 +168,7 @@ modes:
   reconcile_sketch:
     skill: sketch-reconciliation
     command_aliases: { claude: /reconcile-sketch, gemini: /reconcile-sketch }
-    purpose: Reconcile a visual with planning artifacts without silently changing selected behavior or scope.
+    purpose: Reconcile a visual with planning artifacts without silently changing accepted behavior or scope.
     requires: [visual, planning_artifact]
     allowed_outputs: [visual_observations, observation_to_plan_mapping, ambiguities, conflicts, proposed_deltas, accepted_updates, fit_check_impact, ripple_status]
     forbidden: [invented_hidden_behavior, silent_scope_change, visual_as_automatic_source_of_truth, production_code]
@@ -137,7 +185,7 @@ modes:
   breadboard:
     skill: breadboarding
     purpose: Reconcile the human-selected shape into a normative selected-design map.
-    requires: [selected_direction, appetite]
+    requires: [selected_direction, accepted_requirements, accepted_appetite]
     allowed_outputs: [selected_design_breadboard, reconciled_candidate_rows, places, ui_affordances, non_ui_affordances, stores, wiring, branches, slice_candidates, shaping_conflicts]
     forbidden: [current_state_as_selected_future_behavior, automatic_candidate_breadboard_promotion, silent_selected_shape_change, production_code]
     exit_gate: breadboard_accepted
@@ -154,7 +202,7 @@ modes:
   slice:
     skill: breadboarding
     purpose: Split an accepted selected-design breadboard into demoable increments.
-    requires: [accepted_selected_design_breadboard]
+    requires: [accepted_selected_design_breadboard, explicit_human_slice_selection]
     allowed_outputs: [slice_ids, slice_boundaries, exclusions, dependencies, verification_targets]
     forbidden: [candidate_breadboard_as_build_scope, production_code]
     exit_gate: slice_selected
@@ -179,7 +227,7 @@ modes:
     skill: dumplink
     command_aliases: { claude: /dumplink, gemini: /dumplink }
     purpose: Turn a selected project into vertical task groups, risk states, dependency sequence, scope cuts, and a bounded handoff for one human-selected active group.
-    requires: [selected_project, appetite, selected_direction]
+    requires: [selected_project, accepted_appetite, selected_direction]
     allowed_outputs: [project_boundary, task_dump, vertical_task_groups, risk_states, dependency_map, build_sequence, scope_cuts, acceptance_checks, task_group_approval_gate, active_task_group_handoff_after_selection]
     forbidden: [horizontal_ticket_backlog, production_code, selected_project_expansion, scope_expansion_without_appetite_change, task_groups_without_selected_project, active_task_group_without_human_selection]
     exit_gate: task_group_plan_approved_and_active_group_selected
@@ -205,14 +253,14 @@ modes:
     purpose: Create the compact context packet for implementation.
     requires: [selected_slice]
     allowed_outputs: [context_packet, authority_order, must_preserve_constraints, accepted_appetite, cut_line, non_goals, execution_contract, verification_target]
-    forbidden: [whole_planning_stack_dump_by_default, candidate_breadboard_as_build_scope, production_code]
+    forbidden: [whole_planning_stack_dump_by_default, working_shape_as_build_scope, candidate_breadboard_as_build_scope, production_code]
     exit_gate: context_packet_ready
 
   build:
     purpose: Implement only the selected slice or Dumplink task group from the compact context packet.
     requires: [selected_slice, context_packet, execution_contract]
     allowed_outputs: [implementation, tests, verification_results, planning_update_proposals_if_reality_changed, agent_run_log]
-    forbidden: [scope_expansion_without_planning_update, discarded_alternative_as_active_scope, candidate_breadboard_as_active_scope, silent_plan_change]
+    forbidden: [scope_expansion_without_planning_update, discarded_alternative_as_active_scope, working_shape_as_active_scope, candidate_breadboard_as_active_scope, silent_plan_change]
     recurring_checks: [drift_check, selected_slice_boundary, active_task_group_boundary, non_goals, verification_target]
     exit_gate: selected_slice_verified
 

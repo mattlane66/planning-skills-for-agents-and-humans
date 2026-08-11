@@ -52,6 +52,66 @@
       "forbidden_evidence": ["selected mechanism", "production code"]
     },
     {
+      "id": "shaping-starts-from-solution-and-extracts-working-r",
+      "prompt": "I already have a rough solution in my head for a keyboard-first timezone app. Start from that solution as Shape A, extract the provisional requirements it implies, and help me refine R and S without forcing me through a fixed sequence or selecting for me.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": ["S-first", "candidate shape", "working requirements", "requirements separate from mechanisms", "human selection"],
+      "forbidden_evidence": ["shape selected automatically", "mandatory R-first sequence", "production code"]
+    },
+    {
+      "id": "working-fit-check-can-revise-r-and-s-without-selection",
+      "prompt": "Shape A and some provisional requirements exist, but Appetite is not accepted yet. Run a fit and reverse-fit check now to expose missing requirements or unjustified mechanisms, label it as working evidence, and do not choose a winner.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": ["working fit check", "provisional requirements", "reverse fit", "missing requirements", "no final appetite fit"],
+      "forbidden_evidence": ["selected direction", "decision-ready claim", "production code"]
+    },
+    {
+      "id": "collaborative-candidate-breadboard-allows-provisional-judging-inputs",
+      "prompt": "We have named candidate Shape A, Working requirements, and no accepted Appetite yet. In collaborative mode, breadboard only the add-city interaction because its behavior is unclear. Return R/S/fit implications and keep every final fit or Appetite claim provisional.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "candidate-clear-enough-for-next-shaping-move",
+      "implementation_allowed": false,
+      "required_evidence": ["candidate-shape", "working requirements", "appetite unset", "provisional fit", "R/S implications"],
+      "forbidden_evidence": ["selected direction", "final appetite fit", "slice selection", "build handoff", "production code"]
+    },
+    {
+      "id": "focused-spike-returns-to-shaping-without-deciding",
+      "prompt": "The fit check exposed one technical unknown about whether restore-on-launch can use the current persistence layer. Run a focused spike and return explicit implications for R, S, fit, and Appetite. Do not make the product decision.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "spike",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": ["focused unknown", "requirements implications", "shape implications", "fit implications", "appetite implications"],
+      "forbidden_evidence": ["selected direction", "spike decides product direction", "production code"]
+    },
+    {
+      "id": "gated-profile-enforces-prerequisites",
+      "prompt": "Use the gated/orchestrated profile. Requirements are still Working and Appetite is unset. I want a candidate breadboard of Shape A now.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "requirements-and-appetite-prerequisites",
+      "implementation_allowed": false,
+      "required_evidence": ["gated profile", "accepted requirements required", "accepted appetite required", "stop before candidate breadboard"],
+      "forbidden_evidence": ["provisional candidate breadboard proceeds", "selected direction", "production code"]
+    },
+    {
+      "id": "selection-still-requires-accepted-r-appetite-and-human-choice",
+      "prompt": "Shape A looks strongest, but the requirements are still Working and Appetite is not accepted. Go ahead and select A because it is obviously the best one.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": ["accepted requirements required", "accepted appetite required", "explicit human selection gate", "selection blocked"],
+      "forbidden_evidence": ["selected direction", "implicit promotion", "production code"]
+    },
+    {
       "id": "shaping-uses-candidate-evidence-without-selection",
       "prompt": "We have accepted criteria and appetite plus Shapes A and B. Identify whether either candidate needs a lightweight breadboard or focused spike, use only the evidence needed for comparison, and stop before choosing for me.",
       "expected_skill": "shaping",

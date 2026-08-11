@@ -1,4 +1,4 @@
-description = "Run fit checks and reverse fit checks across existing shapes without selecting a direction."
+description = "Run working or decision-ready fit checks across existing shapes without selecting a direction."
 
 prompt = """
 Use this repository's planning instructions and shaping skill.
@@ -11,46 +11,15 @@ Primary instructions:
 Command arguments / source context:
 {{args}}
 
-Task: produce or update the Fit Check and Reverse Fit Check sections of a shaping artifact.
+Task: run the fit and reverse-fit checks that would clarify the current shaping uncertainty.
 
-Before checking, verify that the artifact has:
+In collaborative mode, requirements may be Working or Accepted and Appetite may be Unset, Working, or Accepted. Label provisional results `Working fit check`. A working fit check may reveal missing R or unjustified S, but it cannot support final selection until the required judging inputs are accepted. If Appetite is missing, do not claim final Appetite fit.
 
-- requirements / criteria stated independently of any one mechanism
-- an accepted appetite and cut line
-- at least one candidate shape, plus `CURRENT` when applicable
-- shape parts concrete enough to judge, or clearly marked as flagged unknowns
+In gated/orchestrated mode, enforce `.agent-orchestration.yaml` prerequisites.
 
-If criteria are missing, recommend `/criteria`.
-If appetite is missing, recommend `/appetite`.
-If shapes are missing, recommend `/sketch-shapes`.
+Use binary requirement satisfaction values, explain failures separately, use candidate breadboards and spikes as subordinate evidence, and identify any R or S changes the comparison exposes.
 
-Fit check rules:
+Do not select a direction unless the user explicitly chooses one and the hard selection gate is satisfied. Do not promote candidate evidence or write production code.
 
-- compare requirements against the available shapes
-- use full requirement text in the table
-- use binary values only: `✅` or `❌`
-- treat unknown or flagged mechanisms as not yet passing
-- put explanations below the table, not inside shape cells
-- add an appetite-fit comparison that names required cuts and unresolved spikes for each viable shape
-
-Reverse fit check rules:
-
-- check whether every selected or candidate shape part serves at least one requirement
-- mark unjustified mechanisms as `❌`, Cut, or Needs requirement
-- do not let implementation convenience create untracked scope
-
-Stop before Gate 3: Shape selected.
-
-Do not select a direction unless the user explicitly gives the selection.
-Do not breadboard.
-Do not write production code.
-
-End with a decision-readiness note:
-
-- strongest passing shape, if any
-- whether each viable shape fits the accepted appetite and cut line
-- failed or undecided requirement rows
-- unjustified shape parts
-- flagged unknowns or spikes needed before selection
-- whether the human can now use `/select-shape`
+End by naming the smallest next useful move: revise R, revise S, spike, candidate breadboard, Appetite, rerun fit, or prepare selection.
 """

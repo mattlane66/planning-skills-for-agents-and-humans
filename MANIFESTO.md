@@ -4,24 +4,35 @@ A practical manifesto for teams using AI to build useful software.
 
 This repo exists to help teams move from unclear intent to useful shipped work without losing the thread.
 
-Do not go straight from idea to tickets.
+The work should get clearer as it moves from evidence and ideas into accepted intent, buildable behavior, working slices, and shipped learning.
 
-Move from real struggle → clear frame → shaped path → visible behavior → working slices → shipped learning.
+That does **not** mean thinking has to happen in a fixed order.
 
-The work should get clearer at every step.
+> **Start where the useful thinking already is. Exploration is fluid. Commitment is gated.**
+
+A team may begin from a real struggle, a set of requirements, a proposed solution, a sketch, a prototype, or a technical unknown. Good shaping lets those things inform one another without confusing any of them for accepted truth too early.
 
 ---
 
 ## Values
 
-**Understanding the struggle before accepting the request.**  
-A request is often a clue, not the real problem.
+**Understanding the struggle without forbidding solution-first thinking.**  
+A request or solution idea may be a clue to the real problem. Capture it, inspect it, and extract what it teaches you. Do not treat it as automatically correct.
 
-**Framing the problem before writing the plan.**  
-A team needs to know the trigger, current situation, current approach, current result, desired outcome, evidence, and boundary.
+**Keeping requirements and mechanisms separate.**  
+Requirements state what must be true. Shapes state how it might be achieved. A mechanism can reveal a missing requirement, but it does not become a requirement merely because someone thought of it first.
 
-**Mapping the behavior before polishing the screen.**  
-Rough flows, sketches, and fit checks reveal how the thing works faster than finished-looking mockups.
+**Letting R and S sharpen each other.**  
+Requirements reveal bad shapes. Shapes reveal missing requirements. Fit checks, spikes, sketches, and breadboards make the relationship visible.
+
+**Using process to support judgment, not replace it.**  
+The process exists to help people think, decide, and collaborate. If it becomes theater or blocks useful inquiry, loosen it.
+
+**Gating commitment, not curiosity.**  
+Working ideas should be easy to explore. Accepted requirements, Appetite, selected direction, selected-design behavior, and build scope should be hard to change accidentally.
+
+**Mapping behavior before polishing the screen.**  
+Rough flows, sketches, fit checks, and breadboards reveal how the thing works faster than finished-looking mockups.
 
 **Checking system reality before trusting the idea.**  
 The data, code, permissions, edge cases, and legacy constraints are part of the design.
@@ -29,41 +40,217 @@ The data, code, permissions, edge cases, and legacy constraints are part of the 
 **Building end-to-end slices before handing work across functions.**  
 “Backend done” or “design done” is not progress until useful behavior can be observed, tested, and demonstrated through the appropriate surface.
 
-**Using process to support judgment, not replace it.**  
-The process exists to help people think, decide, and collaborate.
-
 **Letting reality update the plan.**  
 Plans are guesses. Real use teaches the team what the plan could not know.
 
 **Using AI to preserve intent and execute bounded work.**  
-AI should help carry context, assist in shaping options, spiking unknowns, and structuring clear demoable slices. It should not invent the strategy.
+AI should help carry context, structure working material, expose contradictions, spike unknowns, and execute selected slices. It should not silently invent strategy or promote exploration into commitment.
 
 ---
 
-## The operating loop
+## The shaping loop
+
+Collaborative shaping is not a conveyor belt.
 
 ```text
-Observe the current situation
-→ Frame
-→ Criteria
-→ Appetite
-→ Candidate shapes
-→ Fit Check
-→ Select
-→ Reconcile visual evidence when needed
-→ Breadboard
-→ Optional statechart
-→ Select an end-to-end slice
-→ Add contracts, executable evidence, task grouping, and kickoff reference when needed
-→ Feed a compact context packet
-→ Build with drift checks
-→ Reflect and decide how to resolve drift
-→ Launch
-→ Learn
+requirements (R) ↔ shapes (S) ↔ fit checks
+      ↑                ↕             │
+      └── discoveries ← spikes / candidate breadboards / sketches
 ```
 
-The loop is not a ceremony.  
-It is a way to stop intent from getting lost.
+You can enter the loop from any useful point:
+
+- **R-first** — needs, constraints, outcomes, criteria
+- **S-first** — a solution already in someone's head
+- **evidence-first** — a prototype, sketch, workflow, or existing product behavior
+- **uncertainty-first** — one question worth spiking or breadboarding
+
+Working R and S may change as evidence appears.
+
+The point of the loop is not to complete artifacts. It is to improve judgment.
+
+---
+
+## The commitment path
+
+When the team is ready to promote exploration into accepted intent, the order becomes stricter:
+
+```text
+clear-enough problem boundary
+→ accepted requirements
+→ accepted Appetite + cut line
+→ decision-ready candidate evidence
+→ fit + reverse fit + Appetite implications
+→ explicit human selection
+→ selected-design reconciliation
+→ accepted behavior
+→ human-selected slice
+→ bounded implementation
+```
+
+These are **promotion gates, not navigation locks**.
+
+A team can explore Shape A before Appetite exists. It cannot honestly claim Shape A fits the bet until Appetite exists.
+
+A candidate breadboard can reveal behavior before requirements are accepted. It cannot become selected-design intent until a human selects the direction and reconciles the evidence.
+
+---
+
+## Collaborative and gated modes
+
+### Collaborative shaping
+
+Use when humans are actively steering the work.
+
+- provisional inputs are allowed
+- R and S can arrive in either order
+- working fit checks are useful
+- focused spikes can happen whenever an unknown matters
+- candidate breadboards can use Working R or Unset/Working Appetite
+- accepted material changes only through an explicit decision
+
+### Gated / orchestrated shaping
+
+Use when a team, CI harness, policy, or multi-agent system needs deterministic prerequisites.
+
+The controlled route may require accepted R and Appetite before comparative shape work or candidate breadboarding.
+
+That is a valid operating profile. It is not the definition of shaping itself.
+
+The machine-readable profile lives in `.agent-orchestration.yaml`.
+
+---
+
+## Principles
+
+### 1. Start with the real material, not the ideal artifact.
+
+If the user has research, start there.
+
+If the user has requirements, start there.
+
+If the user has a solution in their head, capture it as a candidate shape.
+
+If the user has a prototype, inspect what it implies.
+
+Do not make people translate useful thinking into the “correct” starting document before the work can begin.
+
+### 2. A solution is valid evidence, not automatic strategy.
+
+An S-first idea can be extremely useful because it exposes assumptions quickly.
+
+Ask:
+
+- What outcome is this mechanism trying to create?
+- What constraint makes it seem necessary?
+- Which part is a preference rather than a need?
+- What would still need to be true if this mechanism disappeared?
+
+Extract those answers into Working R.
+
+### 3. Keep working and accepted material visibly different.
+
+Use explicit authority when it matters:
+
+- Requirements: Working | Accepted
+- Appetite: Unset | Working | Accepted
+- Shape: Candidate | Selected
+- Fit check: Working | Decision-ready
+- Breadboard: current-state | candidate-shape | selected-design
+
+Visual polish, detail, or recency does not grant authority.
+
+### 4. Use fit checks early, not only at the end.
+
+A working fit check can expose:
+
+- missing requirements
+- bad mechanisms
+- unjustified scope
+- the next spike
+- the next candidate breadboard
+
+If the judging inputs are provisional, the result is provisional too.
+
+### 5. Use spikes to learn, not decide.
+
+A focused spike answers a technical or empirical question.
+
+It should return explicit implications to R, S, fit, and Appetite where relevant.
+
+The spike does not choose the product direction.
+
+### 6. Breadboard the unknown, not everything.
+
+Candidate-shape breadboarding exists to clarify one decision-relevant uncertainty.
+
+In collaborative mode, it may use provisional judging inputs. It must say so.
+
+Candidate evidence cannot select itself, create build scope, or automatically become accepted future behavior.
+
+### 7. Set Appetite before selection.
+
+You may explore solutions before Appetite is accepted.
+
+You may not select a shape and then reverse-engineer the budget from the solution you already want.
+
+Appetite is what the opportunity is worth, not an estimate that ratifies a favorite shape.
+
+### 8. Compare paths before committing when real alternatives exist.
+
+Do not manufacture alternatives for ceremony.
+
+But when there are materially different ways to solve the problem, make the trade-offs visible before selection.
+
+### 9. Human selection is a real gate.
+
+Agents can summarize, compare, test, and recommend.
+
+They do not infer commitment from enthusiasm, recency, visual polish, or exploratory depth.
+
+### 10. Candidate evidence must be reconciled before promotion.
+
+A selected candidate breadboard is still a candidate breadboard.
+
+After selection:
+
+- remove unselected mechanisms
+- reconcile surviving behavior against accepted R, Appetite, cuts, and direction
+- preserve unresolved gaps
+- obtain acceptance
+
+Only then does selected-design behavior become normative.
+
+### 11. Shape a path, not a full spec.
+
+A good shape gives firm boundaries and leaves room for local judgment.
+
+It shows where the walls, pipes, and wires probably go. It does not choose every fixture.
+
+### 12. Build small end-to-end slices.
+
+A slice should produce an observable, testable, demonstrable result through the appropriate UI, API, CLI, job, event, or product surface.
+
+Before asking an agent to build, feed only the authoritative context for the selected slice.
+
+### 13. Protect the selected boundary.
+
+New ideas are welcome.
+
+They are not automatically part of the current version.
+
+Keep clear buckets for blocker, fix, enhancement, later bet, and discard.
+
+### 14. Treat drift as information.
+
+When implementation no longer matches accepted intent, choose explicitly:
+
+- update the code
+- update the plan
+- cut or split scope
+- create a new bet
+
+Silent drift is failure.
 
 ---
 
@@ -71,424 +258,82 @@ It is a way to stop intent from getting lost.
 
 | Moment | Use |
 |---|---|
+| You do not know the smallest useful planning move | [`planning-router`](./planning-router/SKILL.md) |
 | A bounded planning route needs dependent decisions coordinated across sessions | [`wayfinding`](./wayfinding/SKILL.md) |
-| Raw notes, transcript, interview, or request need to become a clear problem | [`framing-doc`](./framing-doc/SKILL.md) |
-| A framed problem needs criteria, appetite, alternatives, fit checks, and a selected direction | [`shaping`](./shaping/SKILL.md) |
-| A visual introduces missing or conflicting evidence | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) |
-| A selected path needs observable behavior, state, affordances, and wiring | [`breadboarding`](./breadboarding/SKILL.md) |
-| A selected stateful scope needs a precise transition model | [`statechart`](./statechart/SKILL.md) |
-| A selected slice crosses a meaningful data or system boundary | [`interface-contracts`](./interface-contracts/SKILL.md) |
+| The problem, outcome, evidence, or boundary is genuinely unclear | [`framing-doc`](./framing-doc/SKILL.md) |
+| R, S, Appetite, fit, focused spikes, or human selection need collaborative shaping | [`shaping`](./shaping/SKILL.md) |
+| Current behavior, one candidate, or selected behavior needs a concrete map | [`breadboarding`](./breadboarding/SKILL.md) |
+| A visual may change accepted intent | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) |
+| Selected stateful behavior needs a precise transition model | [`statechart`](./statechart/SKILL.md) |
+| A selected slice crosses a meaningful boundary | [`interface-contracts`](./interface-contracts/SKILL.md) |
 | A selected slice needs fixtures, examples, edge cases, and acceptance checks | [`executable-breadboards`](./executable-breadboards/SKILL.md) |
-| A selected project needs vertical task groups, risk-aware sequence, dependencies, or scope cuts | [`dumplink`](./dumplink/SKILL.md) |
-| Builders need a durable orientation reference after the selected artifacts have converged | [`kickoff-doc`](./kickoff-doc/SKILL.md) |
+| A selected project needs vertical task groups, sequence, risk, or scope cuts | [`dumplink`](./dumplink/SKILL.md) |
+| Builders need a durable orientation reference | [`kickoff-doc`](./kickoff-doc/SKILL.md) |
 | An implementation agent needs the authoritative subset for one selected slice | [`feed-planning-context`](./feed-planning-context/SKILL.md) |
 | Implementation reality needs to be compared with accepted intent | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) |
 
-Use these skills when the work changes modes and intent could get lost.
+Use the smallest skill that resolves the current uncertainty.
 
-Do not use them to add ceremony.
-
----
-
-## Principles
-
-### 1. Do not go from idea to tickets.
-
-A request is only a starting point.
-
-Before assigning or prototyping, ask:
-
-- Who is struggling?
-- What are they trying to do?
-- Why does it matter now?
-- Is this worth shaping into real work?
-
-Use `framing-doc` when messy notes, interviews, transcripts, or stakeholder requests need to become a clear problem frame.
+Do not use skills to add ceremony.
 
 ---
 
-### 2. Start with the real moment.
+## Go / No-Go checks
 
-Good framing starts with a specific situation.
+### Selection Go
 
-Ask:
+Can we clearly say:
 
-- What was happening?
-- What did people try?
-- What failed?
-- What did they want to be better?
+- What problem boundary are we actually solving inside?
+- Which requirements are Accepted?
+- What Appetite and cut line are Accepted?
+- What candidates are genuinely viable?
+- What do the fit and reverse-fit checks say?
+- What important unknowns remain?
+- Which direction did the human explicitly select?
 
-A good frame names:
+If not, keep shaping.
 
-- the situation
-- what people do now
-- what happens now
-- the better result they want
-- what is inside and outside the work
-- how much evidence we have
+### Selected-design Go
 
----
+Can we clearly say:
 
-### 3. Watch the work before solving it.
-
-When the problem is very unclear, study the real workflow (contextual inquiry).
-
-Write down the steps, workarounds, tool-switching, waiting, rework, and extra effort.
-
-The workaround often points toward a better solution.
-
----
-
-### 4. Treat doing nothing as evidence.
-
-If people do nothing, it may not mean they do not care.
-
-It may mean every available option feels too costly, risky, confusing, unfamiliar, or hard to start.
-
----
-
-### 5. Set the appetite before scope grows.
-
-Do not ask only, “How long will this take?”
-
-Ask, “How much time and talent is this problem worth?”
-
-Appetite forces useful tradeoffs before the solution gets too big.
-
-Define the requirements or criteria first. Set the appetite and cut line before comparative shape sketching or selection; preserve premature mechanism ideas in a parking lot until the budget is explicit.
-
----
-
-### 6. Shape only when the problem is clear.
-
-The team is ready to shape when it can explain:
-
-- the struggle
-- the current approach
-- the current result
-- the desired outcome
-- the boundary
-
-If it cannot, the mandate to shape is not wise.
-
-Use `shaping` when the problem is clear enough to compare paths, make tradeoffs, expose risks, and choose a direction.
-
----
-
-### 7. Shape with the people who know the truth.
-
-Bring in the people who can remove doubt:
-
-- product
-- design
-- engineering
-
-Also include:
-
-- support
-- sales
-- data
-- operations
-- legal
-- security
-- subject experts
-
-Do not pass hard questions through layers of translation.
-
----
-
-### 8. Shaping is work, not talk.
-
-A shaping session should change the material.
-
-The team should leave with clearer paths, sketches, system notes, tradeoffs, risks, and cuts.
-
-If nothing changes on the board, it was only a meeting.
-
----
-
-### 9. A button is never just a button.
-
-A small interface choice can require models, routes, components, permissions, flags, data reads, data writes, performance work, missing infrastructure, or legacy-code changes.
-
-Put that system reality into the shape.
-
----
-
-### 10. Show behavior before making it beautiful.
-
-Use affordance maps, breadboards, tables, sketches, or quick prototypes.
-
-Show:
-
-- where users go
-- what they can do
-- how the system responds
-- what changes state
-- where the flow branches
-- what can fail
-
-Do this before polished screens.
-
-Use `breadboarding` when the chosen path needs to become observable behavior, state, affordances, and wiring.
-
----
-
-### 11. Compare paths before committing.
-
-Do not fall in love with the first idea.
-
-Compare possible paths against:
-
-- the problem frame
-- the accepted criteria
-- the appetite and cut line
-- technical limits
-- cost
-- risk
-- complexity
-- user value
-
-Add the project-specific fitness criteria that matter—such as reliability, accessibility, compatibility, customer forces, cost, and effort—without disguising mechanisms as requirements.
-
----
-
-### 12. Test only the unknowns that block a decision.
-
-When the team cannot answer a hard question, run a focused test (e.g., a spike).
-
-Come back with evidence that resolves or sharpens the decision, not an unbounded report.
-
----
-
-### 13. Shape a path, not a full spec.
-
-A good shape gives firm boundaries and leaves room for judgment.
-
-It shows where the walls, pipes, and wires probably go.
-
-It does not choose every fixture.
-
----
-
-### 14. Start with product territory, not tasks.
-
-Before tickets, name the product areas that will change.
-
-Ask:
-
-- Where does the feature appear?
-- Where do users enter?
-- What changes?
-- What can wait?
-
-Then define small end-to-end slices.
-
-Use `kickoff-doc` after the selected artifacts have converged when builders need a durable map of the shaped territory. Treat it as orientation, not as build scope or sequence.
-
----
-
-### 15. Build small end-to-end slices.
-
-A slice should produce an observable, testable, demonstrable end-to-end result through the appropriate UI, API, CLI, job, event, or other product surface.
-
-Progress means useful behavior works from end to end.
-
-Before asking an AI agent to build, use `feed-planning-context` to give it only the authoritative context for the selected slice:
-
-- the frame
-- the selected shape
-- the relevant breadboard behavior
-- the constraints
-- the non-goals
-- the current slice
-- relevant contracts, executable examples, or Dumplink task group, when present
-- the execution contract
-- the verification target
-
----
-
-### 16. Wire first, polish later.
-
-Ugly working software tells the truth.
-
-Prove the flow, data, state, permissions, and edge cases before finishing the surface.
-
----
-
-### 17. Track uncertainty, not activity.
-
-A task list can lie.
-
-Show:
-
-- what is still unknown
-- what is wired
-- what can be demoed
-- what has been tested
-- what is finished enough
-- what changed
-- what is blocked
-
----
-
-### 18. Protect the appetite without dismissing good ideas.
-
-New ideas need clear buckets:
-
-- blocker
-- fix
-- non-blocker
-- enhancement
-- later bet
-- discard
-
-Good ideas are welcome.
-
-They are not automatically part of this version.
-
----
-
-### 19. Use QA and accessibility to find reality.
-
-Bring QA and accessibility in early enough to change the behavior.
-
-They reveal what the happy path hides:
-
-- missing data
-- moved items
-- deletion
-- replies
-- permissions
-- mobile issues
-- screen reader problems
-- odd states
-- support confusion
-
----
-
-### 20. Meet when judgment is needed.
-
-Use live sessions for hard, unclear decisions.
-
-Use longer async time for building.
-
-Do not use meetings to cover for unclear work.
-
----
-
-### 21. Use cooldown for launch prep, not hidden build work.
-
-Cooldown is for beta testing, staff rollout, cross-platform testing, support prep, launch notes, feedback monitoring, and deciding what not to change.
-
-If the core feature is still being built during cooldown, the scope was too large.
-
----
-
-### 22. Treat drift as information.
-
-Plans are guesses. Reality teaches.
-
-When the build no longer matches the plan, choose one:
-
-- update the plan
-- update the code
-- cut scope
-- create a new bet
-
-Silent drift is the failure.
-
-Use `breadboard-reflection` to preserve accepted intent and current implementation reality separately, compare them, and prepare an explicit decision: update the code, update the plan, or split/cut the slice. Do not silently rewrite either truth.
-
----
-
-### 23. Use AI to preserve intent, not invent it.
-
-Humans frame and shape.
-
-Tools help us get unstuck and preserve context.
-
-Agents execute bounded work.
-
-Reality informs proposed artifact updates. A human decision, or an already explicit user instruction, authorizes which truth changes.
-
-Do not give AI a blurry task and call the result strategy.
-
----
-
-## Go / No-Go Checks
-
-### [Frame](./templates/frame.md) Go
-
-Can we clearly say and answer:
-
-- What is the real struggling moment?
-- What do people do now?
-- What happens now?
-- What better result do they want?
-- What will we change, and what will we leave alone?
-- Do we have evidence, or only a strong hunch?
-- What goes wrong if we do nothing?
-
-### Criteria and Appetite Go
-
-Can we clearly say and answer:
-
-- Which needs and constraints will judge every candidate shape?
-- Which are must-haves, nice-to-haves, or explicitly out of scope?
-- What fixed time or scope budget does the bet deserve?
-- What is the cut line?
-- Which unknowns require a spike or revisit?
-
-### [Shape](./templates/shaping.md) Go
-
-Can we clearly say and answer:
-
-- What path did we choose?
-- Does this improve an existing feature, get more people to use it, get people to use it more, or support a new workflow?
-- Which parts need to be obvious, used often, or available only for rare cases?
-- What are the main parts?
-- How does the system behave under the interface?
-- Where are the risky logic, data, permissions, or dependencies?
+- Which mechanisms survived selection?
+- Which candidate evidence was reconciled rather than promoted automatically?
+- What are the accepted places, affordances, stores, consequences, and branches?
 - What did we cut?
-- What still needs a focused test?
-- Why does this fit within the appetite?
-- Where do builders still have room to decide?
+- What remains unresolved?
+
+If not, do not slice.
 
 ### Build Go
 
-Can we clearly say and answer:
+Can we clearly say:
 
-- Where does the feature start?
-- What product areas change?
-- What are the end-to-end slices?
-- What should work first, second, and third?
-- What counts as done enough?
-- What is not part of launch?
+- What slice is selected?
+- What is inside and outside it?
+- What accepted behavior must be preserved?
+- What counts as done?
+- What verification target proves it?
+
+If not, do not hand the work to an implementation agent as if the boundary were clear.
 
 ---
 
-## Anti-Patterns to Refuse
+## Anti-patterns to refuse
 
-Do not build from blur.  
-Do not ask for solutions before understanding the struggle.  
-Do not confuse a feature request with a framed opportunity.  
-Do not skip shaping because the work sounds simple.  
-Do not shape without technical truth.  
-Do not shape without subject-matter truth.  
-Do not let polished artifacts fake certainty.  
-Do not start with tickets.  
-Do not split work only by function.  
-Do not polish before wiring.  
-Do not track activity while uncertainty stays hidden.  
-Do not let every good idea into the current version.  
-Do not use meetings to cover for unclear work.  
-Do not bring QA in only at the end.  
-Do not use cooldown as hidden build time.  
-Do not let AI invent missing intent.  
+Do not force R-first when S-first is the useful entry point.  
+Do not treat S-first as permission to skip judging criteria before selection.  
+Do not confuse a solution idea with an accepted strategy.  
+Do not confuse Working R with Accepted R.  
+Do not treat a Working fit check as decision-ready.  
+Do not derive Appetite from a favorite shape.  
+Do not let candidate breadboards select themselves.  
+Do not let polished prototypes fake authority.  
+Do not silently rewrite Accepted material when new evidence appears.  
+Do not start implementation from candidate evidence.  
+Do not let AI invent missing commitment.  
 Do not let drift run silent.
-
-Treat **silent drift** as failure.
 
 ---
 
@@ -499,26 +344,21 @@ This is not a machine for controlling people.
 It is a way to help people do better work together.
 
 Leave room for judgment.  
-Let builders make local decisions.  
+Let people start from the material that helps them think.  
 Let designers explore.  
 Let engineers push back.  
-Let QA reveal reality.  
-Let subject experts change the frame.  
+Let product people change the requirements when a shape reveals the real need.  
+Let a spike kill a favorite mechanism.  
+Let a prototype expose a missing constraint.  
 Let good ideas wait.  
 Let imperfect first versions ship when they solve the real problem.
 
 If the process becomes theater, stop.  
 If it becomes bureaucracy, cut it down.  
 If it removes judgment, loosen it.  
+If it hides authority, clarify it.  
 If it hides reality, change it.
 
 The right amount of process is the amount that helps the work get clearer.
 
 No more.
-
----
-
-Do not go from idea to tickets. Move from real struggle to clear opportunity, from clear opportunity to shaped path, from shaped path to visible behavior, from visible behavior to working slices, and from shipped reality back into learning.
-
-<img width="2172" height="724" alt="Opportunity-Solution_Model" src="https://github.com/user-attachments/assets/543154e4-7640-4627-8263-693257235b02" />
-This opportunity-solution system is a high-level boundary-location fit model. It identifies what is required to produce a design (the elements within “The Field”) and defines what a successful design must achieve—namely, outperform the current baseline outcome.

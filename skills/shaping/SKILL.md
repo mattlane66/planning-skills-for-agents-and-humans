@@ -1,12 +1,23 @@
 ---
 name: shaping
-description: Shape ambiguous product work before implementation by defining criteria and appetite, comparing solution directions, and recording the selected shape and cut line.
+description: Shape ambiguous product work before implementation by iterating among requirements, solution shapes, fit checks, spikes, and candidate evidence while keeping commitment gates explicit.
 license: MIT
 ---
 
 # Shaping
 
-Use this skill when the problem is clear enough to compare solution directions, but the requirements, appetite, tradeoffs, or selected path are not yet explicit.
+Use this skill when the team needs to make ambiguous product work concrete enough to judge before implementation.
+
+Shaping supports two legitimate ways of working:
+
+- **collaborative shaping** — start from whatever is already known and move fluidly among requirements, shapes, fit checks, spikes, sketches, and candidate breadboards
+- **gated shaping** — use an explicit ordered sequence when a team or automation needs stronger procedural control
+
+The governing rule is:
+
+> **Exploration is fluid. Commitment is gated.**
+
+A rough solution is a valid place to start thinking. It is not automatically an accepted requirement, selected direction, or build instruction.
 
 ## Goal
 
@@ -17,7 +28,7 @@ Produce a durable shaping document that keeps four things separate but connected
 - shapes: materially different ways to satisfy the requirements
 - selection evidence: why a human chose one direction
 
-Shaping may use prose, sketches, candidate breadboards, and focused spikes to make a possible solution clear enough to judge. Those are shaping techniques, not automatic sources of accepted future intent.
+Shaping may use prose, sketches, candidate breadboards, fit checks, and focused spikes to make the work clearer. These moves may repeat in any useful order during exploration. None of them automatically promotes exploratory material into accepted intent.
 
 Shaping ends when a direction is explicitly selected or the work stops at a decision-ready comparison. It does not create implementation tasks or begin coding.
 
@@ -25,11 +36,14 @@ Shaping ends when a direction is explicitly selected or the work stops at a deci
 
 Use whichever sources are available:
 
-- an accepted frame
+- an accepted or provisional frame
 - research, interviews, notes, or requests
+- a rough solution already in someone's head
+- an existing prototype, sketch, or interface
 - current product behavior or constraints
-- existing sketches or proposed mechanisms
+- existing requirements or proposed mechanisms
 - current-state or candidate-shape breadboards
+- focused spike results
 - an existing shaping document
 
 When working in an existing product repository, first inspect the applicable project language and durable decisions. Look for `AGENTS.md`, `CONTEXT.md`, `GLOSSARY.md`, `ARCHITECTURE.md`, ADR or decision folders, existing tests, and public interfaces. Reuse established terms and identify existing seams rather than creating parallel vocabulary. Do not create or change a glossary or ADR without authorization.
@@ -38,46 +52,109 @@ When working in an existing product repository, first inspect the applicable pro
 
 From high to low:
 
-1. frame — why this problem matters
-2. shaping document — requirements, appetite, alternatives, fit, and selection
-3. candidate-shape breadboards and focused spikes — exploratory evidence subordinate to one candidate
-4. accepted selected-design breadboard or slices — concrete selected behavior and increments
-5. implementation plans — build detail
+1. latest explicit human instruction
+2. accepted frame and selected project boundary
+3. accepted shaping decisions — requirements, appetite, selected direction, cuts
+4. candidate-shape breadboards and focused spikes — exploratory evidence subordinate to their named question or candidate
+5. accepted selected-design breadboard or slices — concrete selected behavior and increments
+6. implementation plans — build detail
 
-A lower-level discovery may require an upstream planning update. Do not silently rewrite a higher-authority artifact.
+A lower-level discovery may require an upstream planning update. Do not silently rewrite a higher-authority accepted artifact.
 
 Read [artifact consistency](references/artifact-consistency.md) when changing an existing planning stack or reconciling discoveries across levels.
 
-## Required sequence
+## Working state versus accepted state
 
-The formal decision sequence is fixed even when exploration moves back and forth:
+Shaping becomes easier to navigate when working material and committed material are visibly different.
 
-1. confirm the frame
-2. define and accept criteria
-3. set appetite and cut line
-4. make materially different shapes visible
-5. resolve only the uncertainties needed to compare them, using candidate breadboards or focused spikes when useful
-6. run fit and reverse-fit checks
-7. stop for human selection
-8. record the selected direction and reconcile it into a selected-design breadboard
+Use these concepts even if the artifact does not add a literal status column:
 
-An early mechanism may be preserved in a parking lot, but it does not bypass criteria, appetite, comparison, or selection.
+- **working requirement** — useful enough to test, but still open to revision
+- **accepted requirement** — explicitly good enough to judge selection against
+- **working appetite** — a tentative budget or cut line used to explore consequences
+- **accepted appetite** — the human-approved budget that constrains selection
+- **candidate shape** — an unselected solution direction
+- **decision-ready shape** — concrete enough for honest comparison
+- **selected shape** — explicitly chosen by a human
 
-## Step 1: Confirm the frame
+During collaborative exploration, the agent may revise working material directly and show what changed. Once material is accepted, consequential changes require an explicit proposed delta and human decision.
 
-Confirm that the work can state:
+## Entry points and working loop
 
-- the real situation or struggling moment
-- the current approach and current result
-- the desired outcome
-- the relevant boundary
-- the evidence level
+There is no required order for exploration.
 
-If these are not clear enough to judge candidate solutions, return to framing instead of manufacturing certainty.
+### Start from R — requirements first
 
-**Complete when:** the shaping document names the accepted frame source and any unresolved framing gaps.
+Use this when the problem, needs, or constraints are easier to express than the solution.
 
-## Step 2: Define and accept requirements
+1. capture provisional requirements
+2. sketch one or more shapes
+3. fit-check them
+4. use spikes, sketches, or candidate breadboards where needed
+5. revise R and S as discoveries emerge
+
+### Start from S — shape first
+
+Use this when someone already has a solution in mind.
+
+1. capture the proposed solution as a named candidate such as `A`
+2. extract the needs, constraints, and desired outcomes it appears to serve into provisional requirements
+3. separate mechanism from requirement
+4. run fit and reverse-fit checks as soon as they are useful
+5. revise both R and S as contradictions or missing needs appear
+
+Do not force an S-first conversation back through framing ceremony unless the missing frame prevents honest judgment.
+
+### Start from evidence or a prototype
+
+Treat an existing screen, prototype, code path, or workflow as evidence. Extract provisional R and S, map current behavior when needed, and continue through the same loop.
+
+### The collaborative shaping loop
+
+These moves may happen in any useful order:
+
+```text
+requirements (R) ↔ shapes (S) ↔ fit checks
+      ↑                ↕             │
+      └── discoveries ← spikes / candidate breadboards / sketches
+```
+
+Typical actions:
+
+- populate or revise R
+- capture or revise S
+- compare whole shapes or alternatives within one part
+- run fit or reverse-fit checks
+- extract a missing R exposed by a failed fit
+- remove an unjustified shape part exposed by reverse fit
+- run a focused spike
+- breadboard one candidate enough to answer a decision-relevant question
+- set, revise, or accept appetite
+- return to framing if the problem itself turns out to be wrong
+
+Do not add ceremony merely to make the loop look complete.
+
+## Commitment sequence
+
+Exploration can be fluid. Promotion cannot.
+
+Before **selecting a shape**, require:
+
+1. the frame is accepted or intentionally waived because the problem boundary is already clear
+2. requirements are accepted enough to judge fit
+3. appetite and cut line are accepted
+4. viable shapes are concrete enough to compare
+5. decision-relevant unknowns are resolved, accepted, or visible
+6. fit, reverse-fit, and appetite implications are visible
+7. the human explicitly selects, revises, or stops
+
+Before **promoting candidate behavior to selected-design intent**, require explicit shape selection and reconciliation.
+
+Before **slicing or implementation**, require accepted selected-design behavior or an equally clear accepted behavior boundary plus a human-selected slice.
+
+These are promotion gates, not navigation locks.
+
+## Requirements
 
 Requirements describe needs, outcomes, or constraints independently of one implementation approach.
 
@@ -91,15 +168,17 @@ Recommended statuses:
 - Undecided
 - Out
 
+If useful, add an authority marker such as `Working` or `Accepted` without replacing the requirement status above.
+
 Before keeping a requirement, ask whether it would still need to be true if the interface, vendor, runtime, storage method, or architecture changed completely. If not, it is probably a mechanism and belongs in a shape.
+
+A mechanism can reveal a requirement. When starting S-first, ask: "What need or constraint makes this mechanism seem necessary?" Record the answer as provisional R, not as retroactive proof that the mechanism is correct.
 
 Read [requirements and shapes](references/requirements-and-shapes.md) for smell tests, notation, examples, current-system baselines, and flagged unknowns.
 
-**Complete when:** every accepted requirement is independently stated, traceable to the frame or an explicit human decision, and assigned a status.
+## Appetite and cut line
 
-## Step 3: Set appetite and cut line
-
-Appetite is the fixed time or scope budget the team is willing to spend on the bet. It constrains the candidate shapes; it is not an estimate produced after a preferred solution has already won.
+Appetite is the fixed time or scope budget the team is willing to spend on the bet. It constrains selection; it is not an estimate produced after a preferred solution has already won.
 
 Record:
 
@@ -112,11 +191,15 @@ Record:
 
 Use the Appetite section in `templates/shaping.md` for a compact record or `templates/appetite-card.md` when ownership, rationale, and revisit conditions need a separate durable artifact.
 
-If appetite is undecided, preserve ideas in the mechanism parking lot but stop before comparative selection.
+In collaborative shaping, you may explore shapes before appetite is accepted. When appetite is missing or provisional:
 
-**Complete when:** the budget, cut line, accepted uncertainty, and must-resolve unknowns are explicit and human-accepted.
+- label appetite-dependent judgments as provisional
+- do not claim that a shape fits the bet
+- do not select a direction
 
-## Step 4: Make materially different shapes visible
+In gated shaping, set and accept appetite before comparative shape sketching if that is the chosen procedural policy.
+
+## Shapes
 
 Shapes are competing or composable solution directions. Use `CURRENT` as the baseline for an existing product, then letters such as `A`, `B`, and `C` for alternatives. Use numbered parts such as `B1`, `B2`, and `B3` for mechanisms inside a direction.
 
@@ -125,59 +208,81 @@ Each serious shape should:
 - have a short title that characterizes the approach
 - name concrete mechanisms rather than wishes
 - expose meaningful tradeoffs
-- fit or declare conflict with the appetite
 - flag mechanisms that are still only understood in outline
+- state appetite implications when appetite is known
 
 Use the cheapest representation that makes the shape judgeable:
 
 - mechanism tables for a straightforward candidate
 - fat-marker or rough sketches when spatial arrangement matters
 - a `candidate-shape` breadboard when places, affordances, consequences, stores, or wiring must be understood before comparison
-- a focused spike when a technical unknown blocks an honest fit judgment
+- a focused spike when a technical or empirical unknown blocks honest judgment
 
 Candidate breadboards may be partial and may differ in depth. Do not add detail merely to make alternatives look symmetrical. Read `breadboarding/references/candidate-shape-mode.md` and invoke the breadboarding skill in candidate-shape mode when that technique is needed.
 
 Do not create nominal variations that differ only in cosmetic detail.
 
-**Complete when:** the current baseline is legible when relevant, materially different options are visible, and every unknown mechanism is either flagged or resolved enough for comparison.
+## Candidate evidence without selection
 
-## Step 5: Resolve candidate uncertainty without selecting
+For each candidate, identify the smallest unanswered question that could change its fit, viability, or appetite implications.
 
-For each candidate, identify the smallest unanswered question that could change its fit, appetite, or viability.
+Use candidate breadboarding when the uncertainty is behavioral or structural. Use a focused spike when the uncertainty is technical or empirical.
 
-Use candidate breadboarding when the uncertainty is behavioral or structural. Use a focused spike when the uncertainty is technical or empirical. Return the result to the shaping artifact as evidence about:
+In collaborative shaping, candidate breadboarding may use provisional requirements and an unset or provisional appetite. The output must state which judging inputs were provisional and must not claim final requirement fit or appetite fit that cannot yet be known.
+
+Return candidate evidence to shaping as implications about:
 
 - requirement fit
 - reverse fit
-- appetite fit
+- appetite fit, when appetite exists
 - cuts or rabbit holes
 - assumptions that remain unresolved
+- requirements or mechanisms that should be revised
 
 A candidate breadboard is subordinate to its named shape. It cannot select itself, feed slice selection, define build scope, or become accepted future intent.
 
-**Complete when:** every decision-relevant uncertainty is resolved, explicitly accepted, or visible as a reason not to select the candidate.
+## Fit and reverse-fit checks
 
-## Step 6: Run fit and reverse-fit checks
-
-Run three checks:
+Run these checks whenever they would clarify the work; they are not reserved for the end of shaping.
 
 1. requirements against shapes
 2. shape parts against requirements
-3. each viable shape against appetite
+3. each viable shape against appetite, when appetite exists
 
 Use binary `✅` or `❌` values for requirement fit. Unknown is not a pass. Put explanations below the table rather than weakening the cells with prose.
 
-The reverse-fit check asks whether every mechanism is justified by at least one accepted requirement. Remove, cut, or explicitly justify mechanisms that have no requirement.
+When requirements are still provisional, label the table **working fit check**. A working fit check may reveal missing requirements or bad mechanisms; it is not sufficient evidence for selection until the relevant requirements and appetite are accepted.
+
+The reverse-fit check asks whether every mechanism is justified by at least one requirement. Remove, cut, or explicitly justify mechanisms that have no requirement. When reverse fit reveals a genuine missing need, add it as a provisional R and rerun the check.
 
 Candidate breadboards and spike results may support the judgment, but they do not outrank the shaping document or decide which shape wins.
 
 Read [fit checks](references/fit-checks.md) for tables, local component comparisons, failure handling, and decision-ready summaries.
 
-**Complete when:** every candidate has visible requirement fit, appetite fit, cuts, and unresolved spikes; every mechanism under consideration is justified or explicitly cut.
+## Focused spikes
 
-## Step 7: Stop for human selection
+A spike gathers information needed to shape honestly. It does not make the product decision.
 
-Present the comparison and ask the human to:
+Use a spike to:
+
+- understand how the current system works
+- determine what concrete changes a proposed mechanism would require
+- test feasibility or a technical assumption
+- surface a constraint that may alter R, S, fit, or appetite
+
+A spike may be triggered from R, S, fit, a sketch, a breadboard, or implementation reality. It does not require a selected shape.
+
+When substantial, record it with `templates/spike.md` and return the result to the shaping artifact with explicit implications:
+
+- R to add, revise, remove, or leave unchanged
+- S parts to add, revise, remove, or leave unchanged
+- fit rows to rerun
+- appetite implications, if known
+- remaining uncertainty
+
+## Human selection
+
+When the work is decision-ready, present the comparison and ask the human to:
 
 - select one direction
 - request another iteration
@@ -187,14 +292,12 @@ Present the comparison and ask the human to:
 
 Do not infer selection from enthusiasm, recency, visual polish, or the fact that one shape was explored in more detail.
 
-**Complete when:** the human has made an explicit decision or the artifact clearly states that selection is pending.
-
-## Step 8: Record the decision and hand off
+## Record the decision and hand off
 
 When a direction is selected, record:
 
 - chosen direction and relevant parts
-- rationale tied to requirements and appetite
+- rationale tied to accepted requirements and appetite
 - explicit cuts and non-goals
 - accepted uncertainty
 - spikes or decisions still required
@@ -206,12 +309,35 @@ Detailed selected-design breadboarding may expose a shaping conflict. When it do
 
 Do not dump or cluster implementation tasks, select committed slices, create a build sequence, or write production code inside shaping.
 
-**Complete when:** another person can understand what was selected, what was rejected, why it fits, how any candidate evidence was reconciled, and what remains unresolved without replaying the conversation.
+## Gated / orchestrated profile
+
+Use the gated profile when a team, CI harness, multi-agent planner, or automation needs deterministic prerequisites and stopping points.
+
+Default controlled sequence:
+
+```text
+accepted frame
+→ accepted requirements
+→ accepted appetite
+→ candidate shapes
+↔ candidate breadboards / focused spikes as needed
+→ fit + reverse fit + appetite fit
+→ explicit human selection
+→ selected-design reconciliation
+```
+
+The gated profile may forbid moves that collaborative shaping allows provisionally. It must never weaken the universal human gates around selection, promotion to selected-design, slicing, or scope expansion.
+
+The machine-readable contract is in `.agent-orchestration.yaml`.
 
 ## Minimal shaping document
 
 ```md
 # [Project] — Shaping
+
+## Working mode
+- Profile: collaborative | gated
+- Current move: R | S | fit | spike | candidate breadboard | appetite | selection
 
 ## Frame source
 - ...
@@ -220,23 +346,20 @@ Do not dump or cluster implementation tasks, select committed slices, create a b
 - Canonical terms:
 - Relevant ADRs or decisions:
 - Existing interfaces or seams:
-- Terms or decisions this work may introduce:
 
 ## Requirements
-| ID | Requirement | Status |
-|---|---|---|
-| R0 | ... | Core goal |
+| ID | Requirement | Status | Authority |
+|---|---|---|---|
+| R0 | ... | Core goal | Working |
 
 ## Appetite
+- Authority: Unset | Working | Accepted
 - Budget:
 - Team / review point:
 - Cut line:
 - Accepted uncertainty:
 - Must-resolve unknowns:
 - Revisit conditions:
-
-## Mechanism parking lot
-- ...
 
 ## Shapes
 ### CURRENT: [baseline, when relevant]
@@ -250,11 +373,13 @@ Do not dump or cluster implementation tasks, select committed slices, create a b
 | A1 | ... | |
 
 ## Candidate evidence
-| Candidate | Evidence | Question resolved | Fit implication | Remaining uncertainty |
-|---|---|---|---|---|
-| A | candidate breadboard or spike | ... | ... | ... |
+| Candidate | Evidence | Question resolved | R/S implication | Appetite implication | Remaining uncertainty |
+|---|---|---|---|---|---|
+| A | candidate breadboard or spike | ... | ... | ... | ... |
 
 ## Fit check
+- Authority: Working | Decision-ready
+
 | Req | Requirement | Status | CURRENT | A |
 |---|---|---|:---:|:---:|
 | R0 | ... | Core goal | ✅ | ✅ |
@@ -267,28 +392,34 @@ Do not dump or cluster implementation tasks, select committed slices, create a b
 ## Appetite fit
 | Shape | Fits? | Required cuts | Uncertainty / spike |
 |---|:---:|---|---|
-| A | ✅ | ... | ... |
+| A | ... | ... | ... |
 
 ## Decision
-- Status: pending | selected | stopped
+- Status: exploring | decision-ready | selected | stopped
 - Chosen direction:
 - Rationale:
 - Cuts / non-goals:
 - Remaining unknowns:
-- Candidate breadboard promotion/reconciliation:
+- Candidate breadboard reconciliation:
+
+## Next useful move
+- revise R | revise S | fit-check | spike | candidate-breadboard | set/revisit appetite | select | stop
 ```
 
 ## Guardrails
 
-- Keep requirements separate from mechanisms.
-- Set appetite before selection.
-- Compare more than one serious path when alternatives genuinely exist.
+- Start where the useful thinking already is: R, S, evidence, or prototype.
+- Keep requirements separate from mechanisms even when extracting R from S.
+- Let R, S, fit, spikes, sketches, and candidate breadboards iterate freely while material is working.
+- Make accepted-versus-working state legible.
+- Set and accept appetite before selection, even if shape exploration began earlier.
+- Compare more than one serious path when alternatives genuinely exist; do not manufacture alternatives when they do not.
 - Use candidate breadboards only to resolve decision-relevant uncertainty.
 - Keep candidate breadboards subordinate to the shaping artifact and named candidate.
 - Do not let unequal exploratory depth imply selection.
 - Treat `CURRENT` as evidence, not automatically as future intent.
 - Preserve stable IDs and rejected alternatives as an audit trail.
-- Use a focused spike only for an unknown that blocks a decision.
+- Use a focused spike only for an unknown that matters to the decision.
 - Reconcile consequential sketches through `sketch-reconciliation` before silently changing accepted artifacts.
 - Stop at the human selection gate.
 - Promote or reconcile a candidate breadboard only after explicit selection.

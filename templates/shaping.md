@@ -14,37 +14,49 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent needs the selected direction, active requirements, fit checks, unknowns, and scope boundaries before detailing or implementation.
+An agent and human need a shared shaping surface for requirements, solution shapes, fit checks, unknowns, Appetite, and selection before implementation.
+
+## Governing rule
+**Exploration is fluid. Commitment is gated.** Start from R, S, evidence, or an uncertainty. Keep working material visibly distinct from accepted material.
 
 ## Must preserve
-- stable requirement IDs
-- selected shape and rejected alternatives
+- stable requirement and shape IDs
+- working versus accepted authority
+- selected shape and rejected alternatives once selection occurs
 - unknown flags
-- non-goals and appetite
+- non-goals and Appetite
 
 ## Ignore unless asked
 - rejected shapes as implementation instructions
-- raw brainstorms
+- raw brainstorms as accepted intent
+
+## Working mode
+- Profile: collaborative | gated
+- Current move: R | S | fit | appetite | spike | candidate breadboard | selection
+- Entry point: requirements | solution | evidence/prototype | existing artifact | other
 
 ## Frame reference
 - Frame artifact:
+- Frame authority: Working | Accepted | Intentionally lightweight
 - Outcome:
 - Non-goals:
 
 ## Requirements
 
-| ID | Requirement | Status | Notes |
-|---|---|---|---|
-| R0 | ... | Core goal | ... |
-| R1 | ... | Must-have | ... |
+| ID | Requirement | Status | Authority | Notes |
+|---|---|---|---|---|
+| R0 | ... | Core goal | Working | ... |
+| R1 | ... | Must-have | Working | ... |
 
 ## Appetite
+- Authority: Unset | Working | Accepted
 - Time budget:
 - Team shape:
 - Review point:
 - Cut line:
 - Accepted uncertainty:
 - Must-resolve unknowns:
+- Revisit conditions:
 
 ## Shapes
 
@@ -66,7 +78,14 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 |---|---|:---:|
 | B1 | ... | |
 
+## Candidate evidence
+
+| Candidate / part | Evidence | Question resolved | R implication | S implication | Appetite implication | Remaining uncertainty |
+|---|---|---|---|---|---|---|
+| A | spike / candidate breadboard / sketch | ... | ... | ... | ... | ... |
+
 ## Fit check
+- Authority: Working | Decision-ready
 
 | Req | Requirement | Status | CURRENT | A | B |
 |---|---|---|:---:|:---:|:---:|
@@ -81,26 +100,36 @@ An agent needs the selected direction, active requirements, fit checks, unknowns
 
 ## Appetite fit
 
-| Shape | Fits appetite? | Required cuts | Uncertainty / spike |
-|---|:---:|---|---|
-| A | ... | ... | ... |
-| B | ... | ... | ... |
+| Shape | Evidence quality | Fits Appetite? | Required cuts | Uncertainty / spike |
+|---|---|:---:|---|---|
+| A | provisional | ... | ... | ... |
+| B | decision-ready | ... | ... | ... |
 
 ## Decision
-
-Chosen direction:
-
-Why:
-
-Rejected directions:
+- Status: exploring | decision-ready | selected | stopped
+- Chosen direction:
+- Why:
+- Rejected directions:
+- Cuts / non-goals:
+- Remaining unknowns:
+- Candidate evidence to reconcile:
 
 ## Unknowns / spikes
 
-| ID | Question | Why it matters | Acceptance |
-|---|---|---|---|
-| SP1 | ... | ... | ... |
+| ID | Question | Triggered by | Why it matters | Acceptance |
+|---|---|---|---|---|
+| SP1 | ... | R / S / fit / breadboard | ... | ... |
 
-## Next move
-- [ ] Breadboard selected shape
-- [ ] Run spike
-- [ ] Revise frame or requirements
+## Next useful move
+Choose the move that resolves the current uncertainty; this is not a checklist.
+
+- [ ] Revise requirements (R)
+- [ ] Revise or sketch a shape (S)
+- [ ] Run or rerun fit / reverse-fit
+- [ ] Set, revise, or accept Appetite
+- [ ] Run focused spike
+- [ ] Breadboard one candidate question
+- [ ] Reconcile visual evidence
+- [ ] Prepare for human selection
+- [ ] Reopen framing
+- [ ] Stop

@@ -106,14 +106,14 @@ server.tool(
 
 server.tool(
   'recommend_planning_workflow',
-  'Recommend the next planning skills while respecting the method\'s prerequisites and human decision gates.',
-  { situation: z.string().min(1).describe('The planning situation, available artifacts, and desired next move.') },
+  'Recommend the smallest next planning move or tightly coupled handoff moves while respecting collaborative entry points, gated-profile prerequisites, and human promotion gates.',
+  { situation: z.string().min(1).describe('The planning situation, active profile if known, available artifacts, and desired next move.') },
   async ({ situation }) => {
     const workflow = recommendPlanningWorkflow(situation);
     const text = workflow
       .map((name, index) => `${index + 1}. ${name} — ${skills[name].description}`)
       .join('\n');
-    return { content: [{ type: 'text', text: `Recommended workflow:\n\n${text}` }] };
+    return { content: [{ type: 'text', text: `Recommended next move(s):\n\n${text}` }] };
   },
 );
 
@@ -129,7 +129,7 @@ server.tool(
 
 server.tool(
   'get_orchestration_manifest',
-  'Return the tool-neutral orchestration manifest for planning harnesses.',
+  'Return the tool-neutral orchestration manifest, including collaborative/gated profiles and hard promotion gates, for planning harnesses.',
   {},
   async () => {
     const content = await readFile(join(repoRoot, '.agent-orchestration.yaml'), 'utf8');

@@ -7,10 +7,13 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXPECTED = {
     "plan",
     "wayfind",
+    "shape",
     "criteria",
     "appetite",
     "sketch-shapes",
     "fit-check",
+    "spike",
+    "breadboard",
     "select-shape",
     "reconcile-sketch",
     "statechart",

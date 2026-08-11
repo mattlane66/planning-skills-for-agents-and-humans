@@ -1,0 +1,23 @@
+description = "Shape collaboratively from requirements, a solution idea, evidence, or an existing shaping artifact."
+
+prompt = """
+Use this repository's planning instructions and shaping skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{shaping/SKILL.md}
+@{docs/human-decision-gates.md}
+
+Command arguments / source context:
+{{args}}
+
+Default to collaborative shaping unless the user explicitly asks for gated/orchestrated planning.
+
+Start from whatever is already most concrete: R-first, S-first, evidence-first, or uncertainty-first. Allow R, S, fit checks, focused spikes, sketches, and candidate breadboards to iterate in any useful order while they remain Working.
+
+Keep requirements separate from mechanisms and make Working versus Accepted authority visible.
+
+Do not force a fixed `/criteria` → `/appetite` → `/sketch-shapes` exploration sequence.
+
+Before selection, require accepted requirements, accepted Appetite and cut line, decision-ready fit evidence, and an explicit human choice. Do not automatically promote candidate evidence or write production code.
+"""

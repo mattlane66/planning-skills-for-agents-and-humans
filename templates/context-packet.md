@@ -1,12 +1,12 @@
 # Context Packet
 
 ## Task
-What the next planning or implementation move should do.
+What the next implementation move should do.
 
 ## Source artifacts
-- @planning/frame.md
-- @planning/shaping.md
-- @planning/appetite.md, when Appetite is recorded separately from shaping
+- @planning/shaping.md — only Accepted requirements, Accepted Appetite/cut line, selected direction, cuts, and accepted remaining uncertainty
+- @planning/frame.md, when the accepted problem boundary is still needed for implementation context
+- @planning/appetite.md, when Accepted Appetite is recorded separately from shaping
 - @planning/breadboard.md, accepted in `selected-design` mode
 - @planning/statechart.md, when a selected stateful scope needs it
 - @planning/slices.md
@@ -15,7 +15,7 @@ What the next planning or implementation move should do.
 - @planning/dumplink.md, when task groups, risk states, dependencies, or sequence matter
 - applicable product-repository instructions, glossary, architecture notes, ADRs, tests, and public interfaces
 
-Candidate-shape breadboards are not governing source artifacts for implementation. Restate only an implication that was explicitly accepted into shaping or the selected-design breadboard.
+Working shaping material and candidate-shape breadboards are not governing source artifacts for implementation. Restate only an implication that was explicitly accepted into shaping or the selected-design breadboard.
 
 ## Authority order
 1. User's latest explicit instruction
@@ -24,20 +24,22 @@ Candidate-shape breadboards are not governing source artifacts for implementatio
 4. Executable breadboard, when present
 5. Selected interface contract, for boundary-level input/output details
 6. Accepted selected-design breadboard
-7. Selected shaping direction
+7. Accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite/cut line, and cuts
 8. Kickoff doc, for builder orientation only
-9. Framing doc
-10. Raw notes and transcripts
-11. Candidate-shape breadboards, rejected alternatives, and brainstorming
+9. Accepted frame / problem boundary
+10. Working shaping material, candidate-shape breadboards, raw notes, rejected alternatives, and brainstorming — discovery context only, never active build scope
 
 A statechart is derived from the selected-design breadboard and never outranks it.
-The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. A candidate breadboard is exploratory evidence, not selected behavior.
+The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. Working R/S/fit/Appetite and candidate breadboards are exploratory, not selected behavior.
 
 ## Use these sections first
 - ...
 
-## Do not use unless needed
-- candidate-shape breadboards
+## Do not use as build scope
+- Working requirements or Working/Unset Appetite
+- Working fit checks
+- candidate shapes that were not selected
+- candidate-shape breadboards and exploratory prototypes
 - raw interview notes
 - old discarded alternatives
 - brainstorming notes
@@ -45,10 +47,10 @@ The selected project governs outer scope. The selected Dumplink task group or ot
 - unaccepted sketch-reconciliation deltas
 
 ## Must preserve
-- stable requirement IDs
+- stable Accepted requirement IDs
 - stable place and affordance IDs from the accepted selected-design breadboard
 - store IDs
-- accepted Appetite and cut line
+- Accepted Appetite and cut line
 - selected project boundary and active task-group or slice boundary
 - canonical project terms and relevant architectural decisions
 - existing interfaces or seams the selected work preserves or intentionally changes
@@ -128,8 +130,8 @@ The selected project governs outer scope. The selected Dumplink task group or ot
 - ...
 
 ## Build-handoff behavior
-1. Restate the relevant constraints, selected-design behavior, and project language.
-2. Confirm that no candidate-shape breadboard is being treated as build scope.
+1. Restate the relevant Accepted constraints, selected-design behavior, and project language.
+2. Confirm that no Working shaping material or candidate-shape breadboard is being treated as build scope.
 3. Identify implementation implications and existing seams.
 4. Ask at most 3 blocking questions.
 5. Propose a plan before editing code.

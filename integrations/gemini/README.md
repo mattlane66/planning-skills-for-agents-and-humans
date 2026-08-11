@@ -2,7 +2,9 @@
 
 This directory describes a conservative way to use the planning skills from Gemini-style or MCP-capable environments.
 
-The `SKILL.md` files remain the source of truth. Gemini-specific files are adapters around those skills, not a replacement for the planning method.
+The canonical `SKILL.md` files remain the source of truth. Gemini-specific files are adapters around those skills, not a replacement for the planning method.
+
+The default interactive behavior is **collaborative shaping**: start from R, S, evidence, or a focused unknown and move among R/S/fit/spikes/candidate breadboards as useful. The **gated/orchestrated profile** remains available when strict prerequisites are explicitly required.
 
 ## Usage modes
 
@@ -15,6 +17,8 @@ Example workspace layout:
 ```text
 .gemini/
   skills/
+    planning-router/
+      SKILL.md
     wayfinding/
       SKILL.md
     framing-doc/
@@ -43,20 +47,47 @@ Example workspace layout:
 
 When applying the method to a real product, create this layout in the product repository rather than opening the Planning Skills repository as the work target. Preserve the product's existing `GEMINI.md` and `AGENTS.md`; add only the skill and command adapters you need.
 
-The TOML files under `.gemini/commands/` are repository-local adapter examples, not path-independent packages. To reuse one in a product repository, copy or symlink it into that repository's `.gemini/commands/` directory and update every `@{...}` include to the installed skill and support-file paths. Do not replace the product's `AGENTS.md`. The available wrappers include `/wayfind`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/select-shape`, `/reconcile-sketch`, `/statechart`, `/dumplink`, and `/check-drift`.
+The TOML files under `.gemini/commands/` are repository-local adapter examples, not path-independent packages. To reuse one in a product repository, copy or symlink it into that repository's `.gemini/commands/` directory and update every `@{...}` include to the installed skill and support-file paths. Do not replace the product's `AGENTS.md`.
 
-Example prompt:
+Available wrappers include:
+
+- `/plan`
+- `/wayfind`
+- `/shape`
+- `/criteria`
+- `/appetite`
+- `/sketch-shapes`
+- `/fit-check`
+- `/spike`
+- `/breadboard`
+- `/select-shape`
+- `/reconcile-sketch`
+- `/statechart`
+- `/dumplink`
+- `/check-drift`
+
+The shaping wrappers constrain the **current move**, not a mandatory exploration sequence. `/shape` is the broad collaborative front door. `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/spike`, and `/breadboard` can be used in the order that best resolves uncertainty while material remains Working.
+
+Example collaborative prompt:
 
 ```text
-Use the shaping skill from .gemini/skills/shaping/SKILL.md.
-Help me compare directions, preserve requirements separately from mechanisms, and produce a shaping artifact.
+Use the shaping skill from .gemini/skills/shaping/SKILL.md in collaborative mode.
+I already have a rough solution. Capture it as Shape A, extract the provisional requirements it implies, and move among R, S, fit checks, spikes, and candidate breadboarding as useful.
+Keep Working material separate from Accepted intent and do not select for me.
+```
+
+Example gated prompt:
+
+```text
+Use the gated/orchestrated profile from .agent-orchestration.yaml.
+Enforce accepted requirements and accepted Appetite before comparative shape work or candidate breadboarding, and stop at every human promotion gate.
 ```
 
 ### 2. MCP tool usage
 
 For clients that support MCP servers, use the optional server in `mcp-server/`.
 
-The MCP server exposes the planning skills as callable tools:
+The MCP server exposes the planning skills and orchestration metadata as callable tools:
 
 - `list_planning_skills`
 - `get_planning_skill`
@@ -64,7 +95,7 @@ The MCP server exposes the planning skills as callable tools:
 - `get_artifact_template`
 - `get_orchestration_manifest`
 
-This lets an agent retrieve the right planning instructions on demand instead of requiring the whole repo to be pasted into context.
+This lets an agent retrieve the right planning instructions on demand instead of requiring the whole repo to be pasted into context. The orchestration manifest exposes both collaborative and gated profiles; clients should not silently choose the gated profile for an ordinary human-guided shaping session.
 
 ## Example client config
 
