@@ -92,6 +92,16 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 |---|---|---|---|---|
 | ... | ... | ... | A1 | supported / gap / conflict |
 
+## Behavior traces
+
+Trace each representative scenario from an entry to an observable consequence using IDs from the canonical tables.
+
+| Scenario | Entry | Control path | Decision / branch | State / data effect | Observable consequence | Evidence or status |
+|---|---|---|---|---|---|---|
+| ... | U1 | U1 -> N1 -> N2 | accepted / rejected / — | N2 -> S1 | S1 -> U3 | source reference / supported / gap |
+
+Candidate-shape mode may trace only the scenarios needed to resolve its named uncertainty. Current-state and selected-design modes must cover every representative scenario in their declared scope.
+
 ## Candidate-shape findings
 
 Use only in `candidate-shape` mode.
@@ -162,9 +172,13 @@ Once a selected-design breadboard is accepted and a slice is selected, convert t
 - [ ] Candidate evidence has not selected itself or produced build scope.
 - [ ] Candidate rows were reconciled before becoming selected-design rows.
 - [ ] Selected-design mode cites Accepted requirements, selected shape, Accepted Appetite, and cuts.
+- [ ] Every representative scenario has an entry and observable consequence.
+- [ ] Every ID referenced by a wire, branch, or behavior trace exists in the tables.
 - [ ] Every displayed UI element that depends on data has a source.
 - [ ] Every non-UI affordance connects by Wires Out or Returns To.
 - [ ] Stores exist for meaningful side effects.
-- [ ] Product-relevant branches are explicit.
+- [ ] Product-relevant branches are explicit and each has an observable consequence.
+- [ ] Every selected mechanism is represented; current-state claims cite evidence or remain unresolved.
+- [ ] Any Mermaid diagram is a faithful rendering of the tables, with no diagram-only behavior.
 - [ ] Only accepted selected-design behavior produces interface contracts or slice candidates.
 - [ ] Any shaping conflict is surfaced rather than silently absorbed.

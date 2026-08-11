@@ -15,6 +15,8 @@ bash scripts/check-golden-evals.sh
 - collaborative shaping is allowed to start from S as well as R
 - promotion gates remain explicit even when exploration is fluid
 - candidate breadboards stay exploratory and selected-design authority stays gated
+- breadboards preserve causal integrity from entry through observable consequence
+- current-state maps stay grounded in concrete evidence and selected designs omit low-value plumbing
 - context packets include execution contracts
 - Dumplink clusters vertically instead of by discipline
 - Statechart output stays traceable to and subordinate to the accepted breadboard
@@ -34,6 +36,9 @@ bash scripts/check-golden-evals.sh
 - S-first shaping extracts Working R without selecting the shape
 - Working fit checks can improve R/S before Appetite is accepted
 - collaborative candidate breadboarding may use provisional judging inputs while keeping final claims provisional
+- current-state breadboards cite actual code evidence instead of inventing generic architecture
+- breadboards detect dangling wires, source-less displays, and branches without consequences
+- selected-design breadboards include product-relevant seams while omitting wrappers and forwarding-only calls
 - focused spikes return explicit R/S/fit/Appetite implications without deciding the product direction
 - the gated/orchestrated profile still enforces deterministic prerequisites
 - final shape selection still requires Accepted R, Accepted Appetite, decision-ready evidence, and explicit human choice

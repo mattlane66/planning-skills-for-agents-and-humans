@@ -152,6 +152,36 @@
       "forbidden_evidence": ["automatic promotion", "silent shape change", "production code"]
     },
     {
+      "id": "current-state-code-fidelity",
+      "prompt": "Map how the existing restore-on-launch behavior actually works. Trace representative entry-to-result paths through concrete code symbols and tests, cite evidence for non-obvious claims, and leave unsupported links unresolved instead of inventing generic services.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "current-state-explanation-complete",
+      "implementation_allowed": false,
+      "required_evidence": ["current-state", "causal trace", "concrete code symbols", "evidence references", "unresolved claims"],
+      "forbidden_evidence": ["invented generic service", "selected future intent", "slice selection", "production code"]
+    },
+    {
+      "id": "breadboard-causal-integrity",
+      "prompt": "Verify this breadboard before acceptance. It contains a wire to missing N9, a displayed result with no source, and a rejected branch with no observable consequence. Identify each structural defect and stop rather than filling the gaps by assumption.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "breadboard-verification",
+      "implementation_allowed": false,
+      "required_evidence": ["dangling wire", "source-less display", "branch consequence", "graph integrity", "explicit gaps"],
+      "forbidden_evidence": ["invented target", "silent branch removal", "accepted despite defects", "production code"]
+    },
+    {
+      "id": "selected-design-granularity",
+      "prompt": "Breadboard the accepted checkout path across UI, API, and persistence. Include product-relevant decisions, state changes, external effects, and their observable consequences, but omit wrappers and forwarding functions that do not change the causal story.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "breadboard-acceptance",
+      "implementation_allowed": false,
+      "required_evidence": ["selected-design", "meaningful boundary", "product-relevant decision", "state effect", "observable consequence"],
+      "forbidden_evidence": ["wrapper inventory", "service-call graph", "unselected mechanism", "production code"]
+    },
+    {
       "id": "statechart-remains-derived",
       "prompt": "Derive a transition table for retries, timeout, cancellation, and failure from this accepted breadboard.",
       "expected_skill": "statechart",
