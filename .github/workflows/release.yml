@@ -16,9 +16,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Extract release notes
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          awk -v tag="$RELEASE_TAG" '
+            index($0, "## " tag) == 1 { found = 1; next }
+            found && /^## / { exit }
+            found { print }
+            END { if (!found) exit 1 }
+          ' CHANGELOG.md > release-notes.md
+          test -s release-notes.md
+
       - name: Publish release
         uses: softprops/action-gh-release@v3
         with:
-          body_path: CHANGELOG.md
+          body_path: release-notes.md
           generate_release_notes: true
           make_latest: true

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+_No changes yet._
+
+## v1.3.0 — Fluid shaping, Wayfinding, and verifiable breadboards — 2026-08-11
+
 ### Improved
 
 - Made collaborative shaping fluid by default: teams can start R-first, S-first, evidence-first, or uncertainty-first and move among requirements, shapes, fit checks, focused spikes, sketches, and candidate breadboards while material remains Working.
@@ -14,6 +18,11 @@
 - Made Claude human-gate aliases manual-only, hid alias-backed generated skills from duplicate slash-menu discovery, and added operational metadata to direct-only Claude skills.
 - Added native Gemini skill installation guidance, Codex skill-only boundary checks, Claude Design example packaging, and shared activation fixtures across all skills.
 - Replaced ad hoc frontmatter parsing with YAML validation and added runtime adapter regression tests.
+- Added CI validation for every generated Claude upload package, including ZIP roots, metadata, cross-skill references, and required local resources.
+- Clarified when Claude Design should invoke a skill directly and when repository-aware work must return to Claude Code.
+- Made custom package-output cleanup non-recursive and fail closed around protected paths, unrelated content, directories, and symlinks.
+- Expanded repository health checks to run packager tests and dependency audits.
+- Unified root, Claude upload, and MCP skill descriptions behind `skill-metadata.json`, with parity and boundary regression checks.
 
 ### Added
 
@@ -36,14 +45,6 @@
 - Removed task grouping and slicing from shaping, separated descriptive and normative breadboarding, and made Dumplink ingest one selected project, create its vertical task-group slices, then stop for human plan approval and active-group selection.
 - Upgraded repository-health Actions to their Node 24-based major versions and added manual workflow dispatch for explicit CI verification.
 - Removed moderate-or-higher MCP dependency vulnerabilities and made the visualizer return a bounded `400` response for malformed encoded paths.
-
-### Improved
-
-- Added CI validation for every generated Claude upload package, including ZIP roots, metadata, cross-skill references, and required local resources.
-- Clarified when Claude Design should invoke a skill directly and when repository-aware work must return to Claude Code.
-- Made custom package-output cleanup non-recursive and fail closed around protected paths, unrelated content, directories, and symlinks.
-- Expanded repository health checks to run packager tests and dependency audits.
-- Unified root, Claude upload, and MCP skill descriptions behind `skill-metadata.json`, with parity and boundary regression checks.
 
 ## v1.2.0 - Planning gates, visual reconciliation, and live planning views
 
