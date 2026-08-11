@@ -26,6 +26,16 @@ Every breadboard must declare one mode:
 
 The tables are the source of truth within the authority of the declared mode. Mermaid diagrams are optional visualizations for humans.
 
+## Causal story
+
+A breadboard must explain how every required in-scope behavior proceeds from an entry to an observable consequence:
+
+`entry → control path → decision or branch → state/data effect → observable consequence`
+
+Choose the representative behavior or scenarios before mapping. Trace each one through table IDs, and record a gap instead of inventing a missing link. A behavior is not explained if any link is absent.
+
+For a nontrivial existing flow, a cross-place or cross-system design, branching behavior, or final selected-design verification, read [behavior tracing and verification](references/behavior-tracing-and-verification.md).
+
 ## Operating modes
 
 Choose one mode before mapping. Do not let current evidence or an exploratory candidate silently become accepted future behavior.
@@ -34,21 +44,7 @@ Choose one mode before mapping. Do not let current evidence or an exploratory ca
 
 Use this when you do not yet understand how an existing system works in concrete detail.
 
-Input:
-
-- codebase or systems to analyze
-- a workflow description from the perspective of someone trying to make an effect happen
-- direct evidence such as code paths, tests, logs, screenshots, or observed behavior
-
-Output:
-
-- `mode: current-state`
-- Places table
-- UI affordances table
-- Non-UI affordances table
-- Stores table
-- evidence references and unresolved observations
-- optional Mermaid diagram
+Start from a workflow or effect to explain and direct evidence such as code paths, tests, logs, screenshots, or observed behavior. Record `mode: current-state`, the core tables, behavior traces, evidence references, and unresolved observations.
 
 This mode does not require a selected direction. It records what exists; it cannot select a future direction, define accepted product intent, or produce a buildable slice by itself. If the map suggests a change, send that proposal through shaping and the human selection gate.
 
@@ -56,40 +52,15 @@ This mode does not require a selected direction. It records what exists; it cann
 
 Use this during shaping when a named candidate cannot be judged honestly from a mechanism list or sketch alone.
 
-Candidate-shape mode supports both collaborative and gated shaping.
-
-Minimum input:
-
-- one named candidate shape and its shape-part IDs
-- the specific behavioral or structural uncertainty to resolve
-- whatever requirements currently exist, clearly marked `Working` or `Accepted`
-- appetite and cut line when they exist, clearly marked `Unset`, `Working`, or `Accepted`
-- relevant current-state evidence when the candidate must connect to an existing system
+Candidate-shape mode supports both collaborative and gated shaping. Name one candidate, its shape-part IDs, and the specific behavioral or structural uncertainty to resolve. Record the authority of requirements and Appetite, plus relevant current-state evidence when the candidate must connect to an existing system.
 
 In collaborative shaping, accepted requirements or appetite are **not prerequisites for exploratory candidate breadboarding**. If either is provisional or missing, say so explicitly and do not claim final requirement fit, appetite fit, or decision readiness from that evidence.
 
 In a gated/orchestrated profile, the active orchestration policy may require accepted requirements and appetite before candidate breadboarding. Follow the stricter profile when it has been explicitly selected.
 
-Output:
+Record `mode: candidate-shape` and only the causal structure needed to resolve the named uncertainty. Include supported, missing, or contradictory mechanisms; relevant risks or spikes; supportable fit implications; proposed R/S changes; and unresolved questions.
 
-- `mode: candidate-shape`
-- input authority status for requirements and appetite
-- only the places, affordances, stores, consequences, branches, and wiring needed to resolve the named uncertainty
-- supported, missing, or contradictory mechanisms
-- rabbit holes, appetite risks when appetite is known, and focused spike candidates
-- implications for requirement fit, reverse fit, and appetite fit where those judgments are supportable
-- proposed R/S changes revealed by the mapping
-- unresolved questions
-
-Candidate-shape breadboarding is a shaping technique. It is subordinate to the shaping artifact and its named candidate. It may be partial and candidates do not need equal detail.
-
-It cannot:
-
-- select its own candidate
-- become accepted future intent
-- feed slice selection or implementation
-- produce committed contracts, task groups, or build handoffs
-- silently change accepted requirements, appetite, or the candidate shape
+Candidate-shape breadboarding is a shaping technique. It is subordinate to the shaping artifact and its named candidate. It may be partial, and candidates do not need equal detail. It cannot select itself, become accepted future intent, feed slicing or implementation, produce committed downstream artifacts, or silently change accepted planning material.
 
 When candidate breadboarding reveals a useful change to working R or S, return that change to shaping. When it would change accepted R, appetite, or a selected direction, propose the delta and stop for the applicable human gate.
 
@@ -99,23 +70,7 @@ Read [candidate-shape mode](references/candidate-shape-mode.md) for its complete
 
 Use this when shaping has produced a human-selected direction and you need to detail it into concrete affordances and wiring.
 
-Input:
-
-- human-selected shape and parts
-- accepted appetite and cut line
-- the accepted requirements or outcomes those parts must satisfy
-- optionally an existing or candidate-shape breadboard to reconcile
-- optionally the existing system the selected design must connect to
-
-Output:
-
-- `mode: selected-design`
-- Places table
-- UI affordances table
-- Non-UI affordances table
-- Stores table
-- product-relevant branches and candidate vertical slices
-- optional Mermaid diagram
+Require the human-selected shape and parts, accepted requirements, accepted Appetite and cut line, plus any current-state or candidate breadboard that must be reconciled. Record `mode: selected-design`, the core tables, behavior traces for required in-scope scenarios, product-relevant branches, and only then candidate vertical slices.
 
 A candidate breadboard does not automatically become selected-design. Remove unselected mechanisms, reconcile surviving rows against the accepted shape and cuts, preserve unresolved gaps explicitly, and obtain acceptance.
 
@@ -155,29 +110,7 @@ Apply only an explicit human decision before continuing.
 
 ## Reading a whiteboard breadboard
 
-Hand-drawn or whiteboard breadboards use a visual stacking format rather than tables. The same concepts still apply: places, affordances, wiring, and hidden system consequences.
-
-If the visual is being compared with an existing selected shape or breadboard and may change behavior or scope, use the `sketch-reconciliation` skill first. Translate only accepted deltas into canonical tables.
-
-Common visual conventions:
-
-- place block at the top of a stack
-- affordances stacked under the place they belong to
-- code affordances often floating between place stacks
-- solid arrows for control flow
-- dashed arrows for returns or data flow
-- indented or colored blocks for conditional branches
-- containing boxes for larger system boundaries
-- notes for open questions and rationale
-
-How to read one:
-
-1. identify the places first
-2. read each place stack top to bottom
-3. trace solid arrows for what triggers what
-4. trace dashed arrows for where output or data flows
-5. note conditionals and boundaries
-6. translate the stacks into standard tables
+Translate hand-drawn or whiteboard stacks into the same canonical tables. If a visual may change an accepted shape or breadboard, use `sketch-reconciliation` first and translate only accepted deltas. Read the notation reference for visual conventions and the compact reading procedure.
 
 ## What breadboarding is
 
@@ -319,17 +252,15 @@ Examples:
 ### Current-state mapping
 
 1. Declare `mode: current-state` and identify the workflow or effect to explain.
-2. List the places involved.
-3. Trace the code or system to find all components touched by that flow.
-4. Identify concrete affordances in each place.
-5. Name real things that exist in code or design, not abstractions.
-6. Add hidden system consequences that matter to product behavior.
-7. Add stores that shape behavior.
-8. Fill in control flow with **Wires Out**.
-9. Fill in data flow and visible consequence with **Returns To**.
-10. Cite evidence for non-obvious behavior and mark unresolved observations.
-11. Verify that every visible effect can be explained by the wiring.
-12. Stop before treating the map as selected future behavior or slicing it.
+2. Choose representative scenarios from the perspective of someone trying to produce an effect.
+3. Trace the actual code or system path for each scenario before naming affordances.
+4. List the places, concrete affordances, product-relevant consequences, and stores the trace reaches.
+5. Use existing code or domain names where they clarify evidence; do not replace them with invented generic services.
+6. Fill control flow with **Wires Out** and data or visible consequence with **Returns To**.
+7. Record the causal trace by ID, including meaningful branches and state effects.
+8. Cite evidence for non-obvious claims and mark unresolved links instead of guessing.
+9. Run graph-integrity checks and confirm that every visible effect has an explained source.
+10. Stop before treating the map as selected future behavior or slicing it.
 
 ### Candidate-shape mapping
 
@@ -337,12 +268,13 @@ Examples:
 2. Record whether requirements are Working or Accepted and whether appetite is Unset, Working, or Accepted.
 3. If the active profile is gated/orchestrated, enforce any additional prerequisites before continuing.
 4. Declare `mode: candidate-shape`.
-5. Map only enough places, affordances, stores, branches, and wiring to answer that question.
+5. Map only enough places, affordances, stores, branches, and causal traces to answer that question.
 6. Label every proposed element with its candidate shape-part source.
 7. Add current-state elements only when needed and keep them visibly descriptive.
 8. Identify unsupported mechanisms, rabbit holes, appetite risks when appetite is known, and spike candidates.
-9. Return proposed R/S changes plus fit and reverse-fit implications to shaping; state when an implication is provisional because R or appetite is not accepted.
-10. Stop when the question is clear enough for the next shaping move; do not slice or prepare implementation.
+9. Verify the mapped paths without expanding into unrelated design detail.
+10. Return proposed R/S changes plus fit and reverse-fit implications to shaping; state when an implication is provisional because R or appetite is not accepted.
+11. Stop when the question is clear enough for the next shaping move; do not slice or prepare implementation.
 
 ### Selected-design mapping
 
@@ -352,11 +284,12 @@ Examples:
 4. Translate each selected mechanism into UI and non-UI affordances.
 5. Identify whether each affordance belongs in an existing or new place.
 6. Add the stores and hidden consequences those affordances need.
-7. Wire the affordances together and make product-relevant branches explicit.
+7. Wire the affordances together and trace every required behavior from entry to observable consequence.
 8. Add existing affordances the new ones must connect to, labeling current versus selected behavior.
-9. Check that every displayed effect has a source and every selected mechanism is represented.
-10. Surface any shaping conflict and stop for an explicit decision.
-11. Obtain acceptance before slicing.
+9. Make success, meaningful alternatives, failure, recovery, and persistence behavior explicit when relevant.
+10. Run graph-integrity checks and confirm that every selected mechanism is represented.
+11. Surface any shaping conflict and stop for an explicit decision.
+12. Obtain acceptance before slicing.
 
 ## Quality checks
 
@@ -368,36 +301,36 @@ Examples:
 - Candidate evidence does not select a shape, feed slicing, or become build scope.
 - A selected-design breadboard cites the selected shape, accepted requirements, appetite, and cut line.
 - Candidate rows are explicitly reconciled before becoming selected-design rows.
+- Every required behavior has a trace from an entry to an observable consequence.
+- Every ID referenced by a wire or trace exists in the tables.
 - Every displayed UI element that depends on data has an incoming source.
 - Every code affordance triggers something, returns something, or both.
+- Every meaningful branch has a modeled consequence, and state that affects later behavior has a writer and reader.
+- Every selected mechanism is represented; every current-state claim is supported by evidence or marked unresolved.
 - Important user-visible consequences and branches are first-class.
 - Product-facing hidden behavior is preferred over abstract service decomposition.
 
-## Rules for real affordances
+## Affordance and seam test
 
-### Not every mechanism is an affordance
+Include a non-UI affordance when it does at least one of these:
 
-Omit wrappers, invisible transforms, and low-level plumbing unless they materially affect product behavior.
+- crosses a meaningful boundary
+- makes a product-relevant decision
+- changes state that affects later behavior
+- produces an external side effect
+- transforms data visible downstream
+- coordinates steps whose order matters
 
-### Every displayed UI needs a source
+Omit a row when it only forwards, wraps, renames, or exposes plumbing without changing the causal story. For current-state mapping, cite the actual code symbol or evidence even when the affordance uses product-facing wording.
 
-If a UI affordance displays data, show where that data comes from.
+## Structural invariants
 
-### Every `N` must connect
-
-If a non-UI affordance has no **Wires Out** and no **Returns To**, something is missing or the row may not deserve to exist.
-
-### Side effects need stores
-
-Represent external state such as browser URL, local storage, clipboard, or browser history when it matters to behavior.
-
-### Place stores where they enable behavior
-
-A store belongs where its data enables behavior, not merely where it gets written.
-
-### Backend is a place when it matters
-
-Resolvers, APIs, and database behavior are not floating infrastructure. When they are part of the product story, model them as a place with their own affordances and stores.
+- Give every displayed value an incoming source.
+- Give every `N` a **Wires Out**, **Returns To**, or both.
+- Represent behaviorally meaningful external state such as a URL, local storage, clipboard, browser history, queue, or database.
+- Place a store where its data enables behavior, not merely where it is written.
+- Model a backend, API, resolver, or external system as a place when it is part of the product story.
+- Keep diagrams faithful to the tables; diagram-only nodes, wires, or branches are defects.
 
 ## Detailed notation, rendering, and slicing
 

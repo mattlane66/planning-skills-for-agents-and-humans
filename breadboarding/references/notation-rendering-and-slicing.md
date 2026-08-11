@@ -2,6 +2,19 @@
 
 Load this reference only when the work needs the complete element catalog, chunking rules, output template, Mermaid conventions, or selected-design slicing procedure.
 
+## Contents
+
+- [Catalog of elements and relationships](#catalog-of-elements-and-relationships)
+- [Chunking](#chunking)
+- [Recommended output structure](#recommended-output-structure)
+- [Reading a whiteboard breadboard](#reading-a-whiteboard-breadboard)
+- [Mermaid diagrams](#mermaid-diagrams)
+- [Transition to slicing](#transition-to-slicing)
+- [Slicing](#slicing)
+- [Sequencing slices](#sequencing-slices-two-passes)
+- [Exit conditions](#exit-conditions-are-defined-right-to-left)
+- [Cutting](#cutting)
+
 ## Catalog of elements and relationships
 
 ### Elements
@@ -46,9 +59,11 @@ shaping: true
 # [Project] — Breadboard
 
 ## Mode and authority
-- Mode: current-state | selected-design
-- Authority: descriptive current-state evidence | accepted selected intent
-- Selected shape and appetite: required for selected-design only
+- Mode: current-state | candidate-shape | selected-design
+- Authority: descriptive current-state evidence | exploratory candidate evidence | accepted selected intent
+- Requirements and Appetite authority: required for candidate-shape and selected-design
+- Candidate shape and decision-relevant uncertainty: required for candidate-shape
+- Selected shape and accepted Appetite/cut line: required for selected-design
 - Evidence: required for non-obvious current-state claims
 
 ## Places
@@ -63,9 +78,38 @@ shaping: true
 ## Stores
 [table]
 
+## Behavior traces
+[table]
+
 ## Notes
 - [important constraints, open questions, or assumptions]
 ```
+
+## Reading a whiteboard breadboard
+
+Hand-drawn breadboards use visual stacks rather than tables, but the same places, affordances, stores, causal traces, and authority rules apply.
+
+Common conventions:
+
+- place block at the top of a stack
+- affordances beneath the place they belong to
+- non-UI affordances between place stacks
+- solid arrows for control flow
+- dashed arrows for data flow, returns, or visible consequences
+- indented or colored groups for conditional branches
+- containing boxes for larger system boundaries
+- notes for open questions and rationale
+
+Read one by:
+
+1. identifying the places and boundaries
+2. reading each stack top to bottom
+3. tracing control arrows from an entry
+4. tracing data or return arrows to the observable consequence
+5. recording decisions, branches, stores, and unresolved links
+6. translating the result into canonical tables and behavior traces
+
+If the visual may change accepted behavior or scope, use `sketch-reconciliation` first and translate only accepted deltas.
 
 ## Mermaid diagrams
 
@@ -79,6 +123,8 @@ If you add a diagram:
 - keep IDs consistent with the tables
 - show product consequences, not only internal calls
 - treat the diagram as a rendering of the tables, not the other way around
+- represent every diagram node and relationship in the tables
+- treat diagram-only behavior, wires, or branches as defects
 
 ### Visualization conventions
 
@@ -95,7 +141,7 @@ For teaching or walkthrough diagrams, you may add numbered workflow step annotat
 
 ## Transition to slicing
 
-This section applies only to an accepted `selected-design` breadboard. A `current-state` breadboard stops at descriptive mapping and must return proposed changes through shaping before any slice is selected.
+This section applies only to an accepted `selected-design` breadboard. A `current-state` or `candidate-shape` breadboard stops before slicing and must return proposed changes or evidence through shaping.
 
 Slice only after the breadboard is concrete enough that you can group affordances into demoable vertical increments.
 

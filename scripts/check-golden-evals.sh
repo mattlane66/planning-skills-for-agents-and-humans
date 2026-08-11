@@ -51,7 +51,15 @@ require_text breadboarding/SKILL.md "### Selected-design mapping (normative)"
 require_text breadboarding/SKILL.md "accepted requirements or appetite are **not prerequisites for exploratory candidate breadboarding**"
 require_text breadboarding/SKILL.md "Only an accepted selected-design breadboard can feed slice selection"
 require_text breadboarding/SKILL.md "Candidate-shape breadboarding is a shaping technique"
+require_text breadboarding/SKILL.md "entry → control path → decision or branch → state/data effect → observable consequence"
+require_text breadboarding/SKILL.md "## Affordance and seam test"
+require_text breadboarding/references/behavior-tracing-and-verification.md "## Verify graph integrity"
+require_text breadboarding/references/notation-rendering-and-slicing.md "Mode: current-state | candidate-shape | selected-design"
 require_text templates/breadboard.md 'Mode: `current-state`, `candidate-shape`, or `selected-design`'
+require_text templates/breadboard.md "## Behavior traces"
+require_text evals/workflow-behavior-cases.json '"id": "current-state-code-fidelity"'
+require_text evals/workflow-behavior-cases.json '"id": "breadboard-causal-integrity"'
+require_text evals/workflow-behavior-cases.json '"id": "selected-design-granularity"'
 require_text templates/dumplink.md "## Vertical task groups"
 require_text templates/dumplink.md "## Scope cuts"
 require_text templates/statechart.md "## Transition table"

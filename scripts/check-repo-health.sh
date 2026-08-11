@@ -439,6 +439,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/hooks/planning-ripple.sh
   check_file_exists dist/claude-code-plugin/hooks/pre-build-context-check.sh
   check_file_exists dist/claude-code-plugin/hooks/planning-drift-check.sh
+  check_file_exists dist/claude-code-plugin/skills/breadboarding/references/behavior-tracing-and-verification.md
   check_file_exists dist/claude-code-plugin/skills/breadboarding/references/notation-rendering-and-slicing.md
   check_file_exists dist/claude-code-plugin/examples/sketch-reconciliation/README.md
   check_file_exists dist/claude-code-plugin/examples/solution-first-shaping/README.md
