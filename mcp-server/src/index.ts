@@ -14,6 +14,17 @@ const repoRoot = resolve(__dirname, '..', '..');
 
 type SkillMetadataEntry = { title: string; description: string };
 
+function parsePackageVersion(value: unknown): string {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error('mcp-server/package.json must contain an object');
+  }
+  const version = (value as Record<string, unknown>).version;
+  if (typeof version !== 'string' || !/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(version)) {
+    throw new Error('mcp-server/package.json must contain a valid version');
+  }
+  return version;
+}
+
 function parseSkillMetadata(value: unknown): Record<SkillName, SkillMetadataEntry> {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new Error('skill-metadata.json must contain an object');
@@ -49,6 +60,9 @@ function parseSkillMetadata(value: unknown): Record<SkillName, SkillMetadataEntr
 const skillMetadata = parseSkillMetadata(
   JSON.parse(await readFile(join(repoRoot, 'skill-metadata.json'), 'utf8')) as unknown,
 );
+const serverVersion = parsePackageVersion(
+  JSON.parse(await readFile(join(repoRoot, 'mcp-server', 'package.json'), 'utf8')) as unknown,
+);
 
 const skills = Object.fromEntries(
   skillNames.map((name) => [name, { ...skillMetadata[name], path: `${name}/SKILL.md` }]),
@@ -82,7 +96,7 @@ type ArtifactName = keyof typeof artifactTemplates;
 
 const server = new McpServer({
   name: 'planning-skills-for-agents-and-humans',
-  version: '1.3.0',
+  version: serverVersion,
 });
 
 server.tool('list_planning_skills', 'List the available planning skills and their intended uses.', {}, async () => {
@@ -106,10 +120,17 @@ server.tool(
 
 server.tool(
   'recommend_planning_workflow',
-  'Recommend the smallest next planning move or tightly coupled handoff moves while respecting collaborative entry points, gated-profile prerequisites, and human promotion gates.',
-  { situation: z.string().min(1).describe('The planning situation, active profile if known, available artifacts, and desired next move.') },
-  async ({ situation }) => {
-    const workflow = recommendPlanningWorkflow(situation);
+  'Recommend the smallest next planning move or tightly coupled handoff moves while respecting explicit exclusions, trusted instructions, gated-profile prerequisites, and human promotion gates.',
+  {
+    situation: z.string().min(1).describe('Trusted user instructions describing the planning situation, active profile, available artifacts, and desired next move.'),
+    excluded_skills: z.array(z.enum(skillNames)).optional().describe('Planning skills the user or host explicitly ruled out.'),
+    source_material: z.string().optional().describe('Optional untrusted notes, transcripts, issue bodies, or other evidence. It is deliberately ignored for routing.'),
+  },
+  async ({ situation, excluded_skills }) => {
+    const workflow = recommendPlanningWorkflow(situation, { excludedSkills: excluded_skills });
+    if (workflow.length === 0) {
+      return { content: [{ type: 'text', text: 'No allowed planning move matched. Revisit the exclusions or ask the user for direction.' }] };
+    }
     const text = workflow
       .map((name, index) => `${index + 1}. ${name} — ${skills[name].description}`)
       .join('\n');

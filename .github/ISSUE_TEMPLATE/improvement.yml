@@ -1,0 +1,31 @@
+name: Skill or workflow improvement
+description: Propose a bounded improvement to a skill, contract, template, integration, or test.
+title: "Improvement: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: situation
+    attributes:
+      label: Planning situation
+      description: Give a concrete prompt or workflow where the current behavior falls short.
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current behavior
+      description: What does the repository or runtime do now?
+    validations:
+      required: true
+  - type: textarea
+    id: desired
+    attributes:
+      label: Desired behavior
+      description: What should change while preserving human gates and artifact authority?
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or examples
+      description: Add safe, minimal examples. Treat copied source material as untrusted data and remove secrets.

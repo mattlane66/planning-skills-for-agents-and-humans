@@ -7,6 +7,7 @@ import argparse
 import json
 import re
 import shutil
+import stat
 import tempfile
 import zipfile
 
@@ -38,6 +39,7 @@ LOCAL_PATH = re.compile(
     r"(?:AGENTS\.md|\.agent-orchestration\.yaml|(?:docs|templates|hooks)/[A-Za-z0-9._/-]+)"
 )
 MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)
 
 
 class PackagingError(RuntimeError):
@@ -158,6 +160,35 @@ def copy_support(package_root: Path) -> None:
             shutil.copy2(source, package_root / filename)
 
 
+def reject_source_symlinks(source: Path) -> None:
+    """Reject symlinks before copying so packages cannot escape canonical roots."""
+    if source.is_symlink():
+        raise PackagingError(f"refusing symlinked package source: {source}")
+    if source.is_dir():
+        symlinks = sorted(path for path in source.rglob("*") if path.is_symlink())
+        if symlinks:
+            raise PackagingError(f"refusing symlinked package source: {symlinks[0]}")
+
+
+def write_reproducible_zip(package: Path, package_root: Path, stage: Path) -> None:
+    """Write a stable archive with normalized order, timestamps, and modes."""
+    with zipfile.ZipFile(package, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
+        for path in sorted(package_root.rglob("*")):
+            if not path.is_file() or any(part in {".git", "__pycache__"} for part in path.parts):
+                continue
+            if path.is_symlink():
+                raise PackagingError(f"refusing symlinked staged package source: {path}")
+            mode = 0o755 if path.stat().st_mode & 0o111 else 0o644
+            info = zipfile.ZipInfo(path.relative_to(stage).as_posix(), date_time=ZIP_TIMESTAMP)
+            info.create_system = 3
+            info.create_version = 20
+            info.extract_version = 20
+            info.external_attr = (stat.S_IFREG | mode) << 16
+            info.compress_type = zipfile.ZIP_DEFLATED
+            info.flag_bits |= 0x800
+            archive.writestr(info, path.read_bytes(), compress_type=zipfile.ZIP_DEFLATED, compresslevel=9)
+
+
 def prepare_output_dir(output_dir: Path, expected_packages: set[str]) -> Path:
     """Prepare a package directory without recursively deleting arbitrary paths."""
     requested_output = output_dir.expanduser()
@@ -200,6 +231,13 @@ def build_packages(output_dir: Path) -> list[Path]:
     skills = load_inventory()
     descriptions = load_descriptions()
     validate_metadata(skills, descriptions)
+    for source in [
+        *(ROOT / skill for skill in skills),
+        *(ROOT / directory for directory in SUPPORT_DIRS),
+        *(ROOT / filename for filename in SUPPORT_FILES),
+    ]:
+        if source.exists() or source.is_symlink():
+            reject_source_symlinks(source)
     output_dir = prepare_output_dir(output_dir, {f"{skill}.zip" for skill in skills})
     packages: list[Path] = []
     with tempfile.TemporaryDirectory(prefix="claude-skills-") as temporary:
@@ -213,10 +251,7 @@ def build_packages(output_dir: Path) -> list[Path]:
             if agents.is_file():
                 rewrite_upload_file(agents, None, skills)
             package = output_dir / f"{skill}.zip"
-            with zipfile.ZipFile(package, "w", compression=zipfile.ZIP_DEFLATED) as archive:
-                for path in sorted(package_root.rglob("*")):
-                    if path.is_file() and not any(part in {".git", "__pycache__"} for part in path.parts):
-                        archive.write(path, path.relative_to(stage))
+            write_reproducible_zip(package, package_root, stage)
             packages.append(package)
     validate_packages(output_dir, skills, descriptions)
     return packages

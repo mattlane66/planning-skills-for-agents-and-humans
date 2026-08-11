@@ -2,6 +2,18 @@
 __MACOSX/
 ._*
 
+.env
+.env.*
+!.env.example
+*.log
+*.py[cod]
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
 dist/
 mcp-server/dist/
 mcp-server/node_modules/

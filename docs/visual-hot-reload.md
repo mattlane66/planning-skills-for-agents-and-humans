@@ -40,6 +40,10 @@ Replace the example path with any Markdown planning artifact that contains fence
 
 The Markdown tables remain authoritative. The viewer is a live visual projection for inspection and collaboration.
 
+## Network safety
+
+The viewer has no authentication or authorization layer. Keep the default loopback binding for ordinary use. Use `--host` with a non-loopback address only on a trusted network, and only for planning files that are safe for everyone on that network to read. Stop the viewer when the review is finished.
+
 ## Direct package commands
 
 ```bash

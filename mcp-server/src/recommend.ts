@@ -18,17 +18,48 @@ export type SkillName = (typeof skillNames)[number];
 
 const defaultNextMove: SkillName[] = ['planning-router'];
 
+export type RecommendationOptions = {
+  /** Skills the caller has explicitly ruled out for this recommendation. */
+  excludedSkills?: readonly SkillName[];
+};
+
+const skillExclusionAliases: Record<SkillName, string[]> = {
+  'planning-router': ['planning router', 'planning-router'],
+  wayfinding: ['wayfinding', 'wayfinder', 'shared decision map'],
+  'framing-doc': ['framing doc', 'framing document', 'framing-doc'],
+  shaping: ['shaping', 'shape comparison'],
+  'sketch-reconciliation': ['sketch reconciliation', 'reconcile (?:this |the )?(?:sketch|image|screenshot|wireframe|mockup)'],
+  breadboarding: ['breadboarding', 'breadboard', 'behavior map'],
+  statechart: ['statechart', 'state machine'],
+  'interface-contracts': ['interface contract', 'api contract', 'boundary contract', 'interface-contracts'],
+  'executable-breadboards': ['executable breadboard', 'executable-breadboards'],
+  dumplink: ['dumplink', 'task group', 'task groups'],
+  'kickoff-doc': ['kickoff doc', 'kickoff document', 'kickoff-doc'],
+  'feed-planning-context': ['feed planning context', 'context packet', 'feed-planning-context'],
+  'breadboard-reflection': ['breadboard reflection', 'breadboard-reflection', 'reflect on (?:this |the )?breadboard'],
+};
+
 function includesAny(value: string, terms: string[]): boolean {
   return terms.some((term) => value.includes(term));
 }
 
-function includesAnyUnnegated(value: string, terms: string[]): boolean {
+function termIsNegated(value: string, index: number, term: string): boolean {
+  const prefix = value.slice(Math.max(0, index - 90), index);
+  const suffix = value.slice(index + term.length, index + term.length + 55);
+  return matches(prefix, [
+    /\b(?:no|without)\s+(?:(?:an?|the|any|accepted|approved|selected|chosen|active|current)\s+){0,4}$/,
+    /\b(?:do\s+not|don't|dont|should\s+not|shouldn't|no\s+need\s+to|avoid|skip|exclude)\s+(?:(?:use|run|invoke|create|make|derive|document|perform|apply|reflect\s+on|route\s+to|have)\s+)?(?:(?:an?|the|this|that|any)\s+){0,2}$/,
+  ]) || matches(suffix, [
+    /^\s+(?:is|are|was|were|has|have)\s+(?:not|never)\b/,
+    /^\s+(?:isn't|aren't|wasn't|weren't|hasn't|haven't|doesn't|doesnt)\b/,
+  ]);
+}
+
+function includesAnyAffirmed(value: string, terms: string[]): boolean {
   return terms.some((term) => {
     let index = value.indexOf(term);
     while (index >= 0) {
-      const prefix = value.slice(Math.max(0, index - 60), index);
-      const negated = /\b(?:do\s+not|don't|dont|should\s+not|shouldn't|no\s+need\s+to|without)\s+(?:\w+\s+){0,3}$/.test(prefix);
-      if (!negated) return true;
+      if (!termIsNegated(value, index, term)) return true;
       index = value.indexOf(term, index + term.length);
     }
     return false;
@@ -43,11 +74,61 @@ function matches(value: string, patterns: RegExp[]): boolean {
   return patterns.some((pattern) => pattern.test(value));
 }
 
-export function recommendPlanningWorkflow(situation: string): SkillName[] {
-  const normalized = situation.toLowerCase();
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
 
-  if (includesAny(normalized, ['planning drift', 'implementation reality', 'compare to implementation', 'reflect on the breadboard'])) {
-    return ['breadboard-reflection'];
+function explicitSkillExclusions(value: string): Set<SkillName> {
+  const exclusions = new Set<SkillName>();
+  const lead = String.raw`(?:do\s+not|don't|dont|should\s+not|shouldn't|no\s+need\s+(?:to|for)|avoid|skip|exclude)`;
+  const action = String.raw`(?:\s+(?:use|run|invoke|create|make|derive|document|do|perform|apply|route\s+to))?`;
+
+  for (const skill of skillNames) {
+    const aliases = skillExclusionAliases[skill]
+      .map((alias) => alias.includes('(?:') ? alias : escapeRegExp(alias))
+      .join('|');
+    const pattern = new RegExp(String.raw`\b${lead}${action}\s+(?:(?:an?|the|this|that)\s+)?(?:${aliases})\b`);
+    if (pattern.test(value)) exclusions.add(skill);
+  }
+  return exclusions;
+}
+
+function stripExplicitlyUntrustedQuotedMaterial(value: string): string {
+  if (!matches(value.toLowerCase(), [
+    /\buntrusted\s+(?:data|input|source|material)\b/,
+    /\bdo\s+not\s+follow\s+(?:the\s+)?(?:quoted|embedded|pasted|source)\s+instructions?\b/,
+    /\bignore\s+(?:the\s+)?(?:quoted|embedded|pasted|source)\s+instructions?\b/,
+  ])) {
+    return value;
+  }
+
+  return value
+    .replace(/```[\s\S]*?```/g, ' ')
+    .replace(/^\s*>.*$/gm, ' ')
+    .replace(/"(?:[^"\\]|\\.)*"/g, ' ')
+    .replace(/“[^”]*”/g, ' ')
+    .replace(/`[^`]*`/g, ' ');
+}
+
+function allowedRoute(route: readonly SkillName[], exclusions: ReadonlySet<SkillName>): SkillName[] {
+  return route.filter((skill) => !exclusions.has(skill));
+}
+
+function fallbackRoute(exclusions: ReadonlySet<SkillName>): SkillName[] {
+  return allowedRoute(defaultNextMove, exclusions);
+}
+
+export function recommendPlanningWorkflow(
+  situation: string,
+  options: RecommendationOptions = {},
+): SkillName[] {
+  const normalized = stripExplicitlyUntrustedQuotedMaterial(situation).toLowerCase();
+  const exclusions = explicitSkillExclusions(normalized);
+  for (const skill of options.excludedSkills ?? []) exclusions.add(skill);
+
+  if (includesAnyAffirmed(normalized, ['planning drift', 'implementation reality', 'compare to implementation', 'reflect on the breadboard'])) {
+    const route = allowedRoute(['breadboard-reflection'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const activeWayfindingTicket = includesAny(normalized, [
@@ -77,7 +158,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
       'planning frontier',
     ]);
   if (explicitWayfinding || multiSessionDecisionRoute) {
-    return ['wayfinding'];
+    const route = allowedRoute(['wayfinding'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const solutionFirstShaping = includesAny(normalized, [
@@ -100,7 +182,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'capture',
   ]);
   if (solutionFirstShaping) {
-    return ['shaping'];
+    const route = allowedRoute(['shaping'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const multipleCandidateBreadboarding = includesAny(normalized, [
@@ -112,7 +195,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'each candidate',
   ]) && includesAny(normalized, ['breadboard', 'behavior map']);
   if (multipleCandidateBreadboarding) {
-    return ['shaping'];
+    const route = allowedRoute(['shaping'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const namedCandidateBreadboarding = (
@@ -134,7 +218,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'appetite unset',
   ]);
   if (namedCandidateBreadboarding) {
-    return ['breadboarding'];
+    const route = allowedRoute(['breadboarding'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const explicitVisualReference = includesAny(normalized, [
@@ -196,7 +281,17 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     ])
     && visualReconciliationAction;
   if (visualReconciliation) {
-    return ['sketch-reconciliation'];
+    const route = allowedRoute(['sketch-reconciliation'], exclusions);
+    if (route.length > 0) return route;
+  }
+
+  const optionComparison = matches(normalized, [
+    /\bcompare\b[^.;:\n]{0,60}\b(?:options?|alternatives?|shapes?|directions?)\b/,
+    /\b(?:options?|alternatives?|shapes?|directions?)\b[^.;:\n]{0,60}\b(?:tradeoffs?|before\s+choosing|before\s+selection)\b/,
+  ]);
+  if (optionComparison) {
+    const route = allowedRoute(['shaping'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const fitCheckShorthand = includesAny(normalized, ['fit check', 'reverse fit', 'rotate the fit', 'working fit'])
@@ -216,7 +311,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     /\b[Pp]ut\s+.+\s+into\s+(?:[Ss]hape\s+)?[A-Z]\d*\b/,
   ]));
   if (alternativeVisualDesign || fitCheckShorthand || spikeShorthand || shapeUpdateShorthand) {
-    return ['shaping'];
+    const route = allowedRoute(['shaping'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const negatedSlicing = matches(normalized, [
@@ -239,7 +335,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     ])
   );
   if (sliceShorthand) {
-    return ['breadboarding'];
+    const route = allowedRoute(['breadboarding'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const implementationPlanning = includesAny(normalized, [
@@ -255,7 +352,8 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
       /\bfor\s+(?:the\s+)?v\d+\b/,
     ]);
   if (sliceImplementationPlan) {
-    return ['executable-breadboards', 'feed-planning-context'];
+    const route = allowedRoute(['executable-breadboards', 'feed-planning-context'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const explicitSliceReference = matches(normalized, [
@@ -289,11 +387,11 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     || includesAny(normalized, ['coding agent', 'implementation agent']);
 
   if (genericBuildRequest && !explicitBuildHandoff) {
-    return defaultNextMove;
+    return fallbackRoute(exclusions);
   }
 
   const executionVerification = (
-    includesAnyUnnegated(normalized, [
+    includesAnyAffirmed(normalized, [
       'run the app yourself',
       'run it yourself',
       'test it yourself',
@@ -307,16 +405,17 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     ])
   );
   if (executionVerification) {
-    return ['feed-planning-context'];
+    const route = allowedRoute(['feed-planning-context'], exclusions);
+    if (route.length > 0) return route;
   }
 
   const recommendations: SkillName[] = [];
 
-  if (includesAny(normalized, ['transcript', 'raw notes', 'messy notes', 'fuzzy request', 'unclear problem', 'problem frame'])) {
-    recommendations.push('framing-doc');
+  if (includesAny(normalized, ['transcript', 'raw notes', 'messy notes', 'fuzzy request', 'unclear problem', 'problem is unclear', 'problem remains unclear', 'problem frame'])) {
+    if (!exclusions.has('framing-doc')) recommendations.push('framing-doc');
   }
 
-  const selectedDirection = includesAny(normalized, ['selected shape', 'chosen shape', 'selected direction', 'chosen direction']);
+  const selectedDirection = includesAnyAffirmed(normalized, ['selected shape', 'chosen shape', 'selected direction', 'chosen direction']);
   const currentStateBreadboard = includesAny(normalized, [
     'current-state breadboard',
     'current state breadboard',
@@ -324,12 +423,11 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'map the existing system',
     'existing system behavior',
   ]);
-  const acceptedBreadboard = includesAny(normalized, [
+  const acceptedBreadboard = includesAnyAffirmed(normalized, [
     'accepted breadboard',
     'approved breadboard',
     'selected breadboard',
     'selected-design breadboard',
-    'from the breadboard',
   ]);
   if (!selectedDirection && includesAny(normalized, [
     'criteria',
@@ -338,32 +436,34 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
     'alternative',
     'shape',
     'tradeoff',
+    'option',
+    'shaping',
     'direction',
     'solution idea',
     'proposed solution',
     'working fit',
     'appetite',
   ])) {
-    recommendations.push('shaping');
+    if (!exclusions.has('shaping')) recommendations.push('shaping');
   }
 
-  if (!acceptedBreadboard && (currentStateBreadboard || selectedDirection || includesAny(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring']))) {
-    recommendations.push('breadboarding');
+  if (!acceptedBreadboard && (currentStateBreadboard || selectedDirection || includesAnyAffirmed(normalized, ['breadboard', 'affordance', 'places and stores', 'behavior map', 'wiring']))) {
+    if (!exclusions.has('breadboarding')) recommendations.push('breadboarding');
   }
 
-  const statechartRequested = includesAny(normalized, ['statechart', 'state machine', 'lifecycle', 'retry', 'timeout', 'guard condition']);
-  if (statechartRequested && !acceptedBreadboard && !recommendations.includes('breadboarding')) {
+  const statechartRequested = includesAnyAffirmed(normalized, ['statechart', 'state machine', 'lifecycle', 'retry', 'timeout', 'guard condition']);
+  if (statechartRequested && !acceptedBreadboard && !exclusions.has('breadboarding') && !recommendations.includes('breadboarding')) {
     recommendations.push('breadboarding');
   }
-  if (statechartRequested) {
+  if (statechartRequested && acceptedBreadboard && !exclusions.has('statechart')) {
     recommendations.push('statechart');
   }
 
-  if (includesAny(normalized, ['interface contract', 'api contract', 'boundary contract', 'data exchange', 'nullability', 'enum value'])) {
+  if (!exclusions.has('interface-contracts') && includesAnyAffirmed(normalized, ['interface contract', 'api contract', 'boundary contract', 'data exchange', 'nullability', 'enum value'])) {
     recommendations.push('interface-contracts');
   }
 
-  if (includesAny(normalized, ['fixture', 'example run', 'expected output', 'edge case', 'acceptance test', 'executable breadboard'])) {
+  if (!exclusions.has('executable-breadboards') && includesAnyAffirmed(normalized, ['fixture', 'example run', 'expected output', 'edge case', 'acceptance test', 'executable breadboard'])) {
     recommendations.push('executable-breadboards');
   }
 
@@ -376,19 +476,19 @@ export function recommendPlanningWorkflow(situation: string): SkillName[] {
   ]);
   if (dumplinkRequested) {
     if (projectUnavailable) {
-      if (!recommendations.includes('shaping')) recommendations.push('shaping');
+      if (!exclusions.has('shaping') && !recommendations.includes('shaping')) recommendations.push('shaping');
     } else {
-      recommendations.push('dumplink');
+      if (!exclusions.has('dumplink')) recommendations.push('dumplink');
     }
   }
 
   if ((explicitBuildHandoff && !dumplinkRequested) || includesAny(normalized, ['feed context', 'package context', 'execution contract'])) {
-    recommendations.push('feed-planning-context');
+    if (!exclusions.has('feed-planning-context')) recommendations.push('feed-planning-context');
   }
 
   if (includesAny(normalized, ['kickoff transcript', 'kickoff notes', 'builder-facing reference'])) {
-    recommendations.push('kickoff-doc');
+    if (!exclusions.has('kickoff-doc')) recommendations.push('kickoff-doc');
   }
 
-  return recommendations.length > 0 ? unique(recommendations) : defaultNextMove;
+  return recommendations.length > 0 ? unique(recommendations) : fallbackRoute(exclusions);
 }

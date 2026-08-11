@@ -25,6 +25,7 @@ The workflow checks:
 - the generated Claude Code plugin bundle, including canonical skills, non-duplicate commands, license, and bundle-local supporting references
 - reproducible visual-viewer installation and hot-reload server tests using the pinned Mermaid package
 - reproducible MCP installation, TypeScript compilation, recommendation tests, and stdio tool smoke tests using `npm ci`
+- pinned Python validation dependencies and their vulnerability audit
 - moderate-or-higher dependency audit findings in either Node package
 
 Run the same checks locally from the repository root:
@@ -35,6 +36,15 @@ bash scripts/check-repo-health.sh
 ```
 
 Use the workflow's **Run workflow** control when an explicit GitHub-hosted verification is needed without a new code change.
+
+Tag releases run the same health suite before publication. The release workflow accepts only exact stable SemVer tags whose commit is on `main`, requires version parity and an exact changelog section, builds deterministic Claude skill and plugin ZIPs, writes `SHA256SUMS`, and publishes only the validated payload.
+
+Preview a release payload without publishing it:
+
+```bash
+python3 scripts/release.py preflight --tag v1.3.1
+python3 scripts/release.py assets
+```
 
 When editing a canonical root skill, update its packaged copy with:
 

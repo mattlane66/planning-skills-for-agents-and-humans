@@ -4,6 +4,32 @@
 
 _No changes yet._
 
+## v1.3.1 — Routing safety and reproducible releases — 2026-08-11
+
+### Fixed
+
+- Made MCP workflow recommendations honor explicit skill exclusions, negated prerequisite states, and clearly labeled untrusted quoted material.
+- Required an accepted breadboard before recommending Statechart and added regression coverage for routing, prompt-injection, and source-trust boundaries.
+- Derived the MCP server version from its package manifest so runtime metadata cannot drift from coordinated plugin versions.
+- Defined `active_scope` as the canonical machine-readable alias for either one selected slice or one selected Dumplink task group.
+
+### Added
+
+- Added deterministic release tooling for all Claude upload ZIPs, the Claude Code plugin bundle, and a `SHA256SUMS` manifest.
+- Added CodeQL analysis, weekly Dependabot updates, Python dependency auditing, and an opt-in blind real-runtime behavior-evaluation workflow.
+- Added contribution, security, conduct, issue, and pull-request guidance plus Dumplink source attribution.
+
+### Security
+
+- Separated trusted routing instructions from untrusted transcripts, issue bodies, web content, pasted files, quoted text, and tool output across canonical and packaged skill surfaces.
+- Pinned every GitHub Action to a full commit SHA, applied least-privilege workflow permissions, disabled persisted checkout credentials, and added bounded workflow timeouts and concurrency.
+- Documented that non-loopback visualizer hosting has no authentication and is appropriate only on trusted networks.
+
+### Changed
+
+- Hardened tag releases to require exact stable SemVer, coordinated versions, an exact changelog section, ancestry on `main`, a passing full health suite, and prebuilt checksummed assets before publication.
+- Updated the MCP SDK and `tsx` within their existing major-version compatibility boundaries.
+
 ## v1.3.0 — Fluid shaping, Wayfinding, and verifiable breadboards — 2026-08-11
 
 ### Improved

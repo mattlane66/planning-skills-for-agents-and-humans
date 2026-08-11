@@ -1,0 +1,46 @@
+name: Bug report
+description: Report incorrect behavior, packaging, documentation, or runtime integration.
+title: "Bug: "
+labels: [bug]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the observed behavior and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Include the smallest prompt, files, commands, or steps that reproduce the problem. Remove secrets and personal data.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: v1.3.1 or commit SHA
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Surface
+      options:
+        - Canonical skill
+        - Claude Code plugin or upload ZIP
+        - Codex plugin
+        - Gemini integration
+        - MCP server
+        - Visualizer
+        - Documentation or templates
+        - CI or release tooling
+    validations:
+      required: true
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety check
+      options:
+        - label: I removed credentials, private transcripts, and other sensitive material from this report.
+          required: true
