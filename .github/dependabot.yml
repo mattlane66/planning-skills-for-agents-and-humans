@@ -25,12 +25,24 @@ updates:
         patterns: ["*"]
     open-pull-requests-limit: 5
 
+  - package-ecosystem: npm
+    directory: /site
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "06:20"
+      timezone: America/New_York
+    groups:
+      site-dependencies:
+        patterns: ["*"]
+    open-pull-requests-limit: 5
+
   - package-ecosystem: pip
     directory: /
     schedule:
       interval: weekly
       day: tuesday
-      time: "06:20"
+      time: "06:30"
       timezone: America/New_York
     groups:
       python-dependencies:
@@ -42,7 +54,7 @@ updates:
     schedule:
       interval: weekly
       day: tuesday
-      time: "06:30"
+      time: "06:40"
       timezone: America/New_York
     groups:
       workflow-actions:

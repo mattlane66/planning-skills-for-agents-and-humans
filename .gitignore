@@ -1,4 +1,7 @@
 .DS_Store
+site/node_modules/
+site/src/generated/
+site/.build/
 __MACOSX/
 ._*
 

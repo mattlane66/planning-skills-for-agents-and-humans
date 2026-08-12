@@ -40,7 +40,7 @@ Canvas = review / collaboration surface
 The repository ships a local hot-reload viewer for the Mermaid layer:
 
 ```bash
-bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/04-breadboard.md
+bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/03-breadboard.md
 ```
 
 It watches one or more Markdown files, renders every Mermaid block with the pinned local Mermaid package, and updates the browser after each save. See [visual hot reload](./visual-hot-reload.md).

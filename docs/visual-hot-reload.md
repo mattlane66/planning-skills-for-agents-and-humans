@@ -7,7 +7,7 @@ The repository includes a working local viewer for Mermaid diagrams inside plann
 From the repository root:
 
 ```bash
-bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/04-breadboard.md
+bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/03-breadboard.md
 ```
 
 The first run installs the pinned local Mermaid dependency. The viewer then opens `http://127.0.0.1:3456` and prints every watched file.
@@ -16,14 +16,14 @@ Watch several artifacts together:
 
 ```bash
 bash scripts/watch-planning-diagrams.sh \
-  examples/simple-grocery-list/04-breadboard.md \
+  examples/simple-grocery-list/03-breadboard.md \
   examples/statechart-retry-workflow/02-derived-statechart.md
 ```
 
 Choose another port or prevent automatic browser opening:
 
 ```bash
-bash scripts/watch-planning-diagrams.sh --port 4567 --no-open examples/simple-grocery-list/04-breadboard.md
+bash scripts/watch-planning-diagrams.sh --port 4567 --no-open examples/simple-grocery-list/03-breadboard.md
 ```
 
 Replace the example path with any Markdown planning artifact that contains fenced `mermaid` blocks.
@@ -50,7 +50,7 @@ The viewer has no authentication or authorization layer. Keep the default loopba
 cd visualizer
 npm ci
 npm test
-npm start -- --no-open ../examples/simple-grocery-list/04-breadboard.md
+npm start -- --no-open ../examples/simple-grocery-list/03-breadboard.md
 ```
 
 Use `--port 0` in automation to select any available local port.

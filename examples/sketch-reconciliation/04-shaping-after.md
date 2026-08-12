@@ -1,5 +1,12 @@
 # Availability Board - Shaping After Visual Review
 
+## Accepted inputs unchanged
+
+- Requirements R0–R2 remain accepted.
+- Appetite and cut line remain unchanged from `01-shaping-before.md`.
+- Shape A remains the human-selected direction.
+- Accepted delta D1 clarifies the visible R2 mechanism without expanding scope.
+
 ## Selected shape
 
 ### A: Single comparison surface with natural-language control

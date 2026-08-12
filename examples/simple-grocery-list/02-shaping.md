@@ -4,7 +4,9 @@ planning: true
 
 # Simple Grocery List — Shaping
 
-## Appetite
+## Accepted Appetite
+
+Human acceptance recorded before shape selection.
 
 - Time budget: a few focused days for a deliberately small first version
 - Team shape: one builder
@@ -13,16 +15,18 @@ planning: true
 - Accepted uncertainty: lightweight visual polish can remain rough for the demo
 - Must-resolve unknowns: none before shape selection
 
-## Requirements
+## Accepted Requirements
 
-| ID | Requirement | Status |
-|----|-------------|--------|
-| R0 | User can add a grocery item quickly from one place. | Core goal |
-| R1 | User can mark an item as bought and undo that state if needed. | Must-have |
-| R2 | User can see what is still needed at a glance while shopping. | Must-have |
-| R3 | Bought items can be hidden without being deleted. | Must-have |
-| R4 | The list persists between sessions on the same device. | Must-have |
-| R5 | Exact duplicate item names are prevented or made obvious at add time. | Nice-to-have |
+Human acceptance recorded before fit comparison and shape selection.
+
+| ID | Requirement | Status | Authority |
+|----|-------------|--------|-----------|
+| R0 | User can add a grocery item quickly from one place. | Core goal | Accepted |
+| R1 | User can mark an item as bought and undo that state if needed. | Must-have | Accepted |
+| R2 | User can see what is still needed at a glance while shopping. | Must-have | Accepted |
+| R3 | Bought items can be hidden without being deleted. | Must-have | Accepted |
+| R4 | The list persists between sessions on the same device. | Must-have | Accepted |
+| R5 | Exact duplicate item names are prevented or made obvious at add time. | Nice-to-have | Accepted |
 
 ## Requirement smell check
 

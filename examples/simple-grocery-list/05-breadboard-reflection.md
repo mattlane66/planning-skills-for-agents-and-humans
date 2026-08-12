@@ -4,7 +4,7 @@ planning: true
 
 # Simple Grocery List — Breadboard Reflection
 
-This is a post-implementation example.
+This is a post-implementation example based on the accepted selected-design breadboard in `03-breadboard.md`.
 
 Assume the code was built, and now the team wants to compare the implementation to the breadboard.
 
