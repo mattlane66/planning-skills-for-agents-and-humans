@@ -4,6 +4,15 @@ planning: true
 
 # Simple Grocery List — Kickoff
 
+## Accepted sources and authority
+
+- Accepted frame: `01-frame.md`
+- Accepted shaping and human-selected direction: `02-shaping.md`, Shape A
+- Accepted selected-design breadboard: `03-breadboard.md`
+- Human-selected active slice: V1 — Add and persist grocery items
+
+This document orients the builder to the full selected product territory. It does not expand V1, replace the accepted breadboard, or define build sequence.
+
 ## Frame
 
 ### Problem

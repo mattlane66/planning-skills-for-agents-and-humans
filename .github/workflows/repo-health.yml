@@ -38,6 +38,7 @@ jobs:
           cache: npm
           cache-dependency-path: |
             mcp-server/package-lock.json
+            site/package-lock.json
             visualizer/package-lock.json
 
       - name: Build and validate Claude upload skills

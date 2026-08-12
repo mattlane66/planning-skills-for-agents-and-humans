@@ -1,0 +1,28 @@
+{
+  "name": "planning-skills-docs-portal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "content": "node scripts/generate-content.mjs",
+    "build": "npm run content && node scripts/build-standalone.mjs",
+    "validate": "node scripts/validate-build.mjs",
+    "test:interactions": "node scripts/test-interactions.mjs",
+    "test:integrity": "node scripts/test-integrity.mjs",
+    "test:accessibility": "node scripts/test-accessibility.mjs",
+    "check": "npm run build && npm run validate && npm run test:interactions && npm run test:integrity && npm run test:accessibility"
+  },
+  "dependencies": {
+    "dompurify": "^3.2.6",
+    "marked": "^15.0.12",
+    "mermaid": "^11.6.0"
+  },
+  "devDependencies": {
+    "axe-core": "^4.10.3",
+    "esbuild": "^0.25.5",
+    "jsdom": "^29.1.1"
+  }
+}

@@ -19,8 +19,8 @@ It also includes one important shaping lesson: some early solution ideas belong 
 - `00-source-notes.md` — the messy starting point
 - `01-frame.md` — output of the `framing-doc` skill
 - `02-shaping.md` — output of the `shaping` skill
-- `03-kickoff.md` — optional handoff output of the `kickoff-doc` skill
-- `04-breadboard.md` — output of the `breadboarding` skill
+- `03-breadboard.md` — accepted selected-design output of the `breadboarding` skill
+- `04-kickoff.md` — optional handoff output of the `kickoff-doc` skill after slice selection
 - `05-breadboard-reflection.md` — post-implementation example of the `breadboard-reflection` skill
 
 ## Core workflow
@@ -82,19 +82,40 @@ Use the `breadboarding` skill after a direction is chosen and concrete enough to
 Example prompt:
 
 ```text
-Use the breadboarding skill on the selected shape from examples/simple-grocery-list/02-shaping.md.
+Use the breadboarding skill in selected-design mode with examples/simple-grocery-list/01-frame.md
+and examples/simple-grocery-list/02-shaping.md.
+Cite accepted requirements R0–R5, the accepted Appetite and cut line, and human-selected Shape A.
 Create places, UI affordances, non-UI affordances, stores, and wiring.
-Then identify likely slices.
+Then identify candidate vertical slices and stop for human slice selection.
 ```
 
-Compare your output to `04-breadboard.md`.
+Compare your output to `03-breadboard.md`.
 
 What to notice:
 - the breadboard maps one chosen direction, not all possible directions
 - UI, code, and state are visible in one system view
 - slices come after the structure is visible
 
-## Step 4 — Reflect only after implementation exists
+## Optional Step 4 — Create a kickoff doc for handoff
+
+Use the `kickoff-doc` skill after the accepted selected-design breadboard exists and a person has selected an active slice, when another builder needs a clean reference doc.
+
+If you are working solo, you may not need this step.
+
+Example prompt:
+
+```text
+Use the kickoff-doc skill with examples/simple-grocery-list/01-frame.md,
+examples/simple-grocery-list/02-shaping.md, and
+examples/simple-grocery-list/03-breadboard.md.
+Use the recorded V1 human slice selection as the active boundary.
+Create a builder-facing kickoff doc organized by system area, not by conversation order.
+Do not expand the selected slice or turn the kickoff document into a build plan.
+```
+
+Compare your output to `04-kickoff.md`.
+
+## Step 5 — Reflect only after implementation exists
 
 Use the `breadboard-reflection` skill after code exists and you want to compare the breadboard to reality.
 
@@ -103,28 +124,12 @@ Always record implementation reality separately first, then compare and critique
 Example prompt:
 
 ```text
-Use the breadboard-reflection skill on examples/simple-grocery-list/04-breadboard.md.
+Use the breadboard-reflection skill on examples/simple-grocery-list/03-breadboard.md.
 Assume the implementation drifted from the chosen shape.
 First sync the artifact to reality, then identify smells and propose fixes.
 ```
 
 Compare your output to `05-breadboard-reflection.md`.
-
-## Optional Step 5 — Create a kickoff doc for handoff
-
-Use the `kickoff-doc` skill when a project has already been discussed and shaped enough that another builder needs a clean reference doc.
-
-If you are working solo, you may not need this step.
-
-Example prompt:
-
-```text
-Use the kickoff-doc skill on examples/simple-grocery-list/02-shaping.md.
-Create a builder-facing kickoff doc organized by system area, not by conversation order.
-Capture the chosen direction only.
-```
-
-Compare your output to `03-kickoff.md`.
 
 ## Quick rule of thumb
 

@@ -6,6 +6,12 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
+## Interactive documentation portal
+
+The repository includes a self-contained documentation portal at [`site/index.html`](./site/index.html). Download that one file and open it in a modern browser; it does not need a web server, package install, or network connection at runtime.
+
+The portal includes the workflow explorer, searchable skills catalog, full guide reader, canonical skill references and templates, and example artifact trails. Its content is generated from this repository's canonical Markdown files and works offline after download. See [`site/README.md`](./site/README.md) for browser support, rebuild, and validation commands.
+
 ## When should I use these skills?
 
 You do not have to begin your idea inside this repo.
@@ -325,7 +331,7 @@ See the [MCP server README](./mcp-server/README.md) for client configuration and
 Watch the diagrams in one or more planning artifacts and refresh them in a local browser after every save:
 
 ```bash
-bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/04-breadboard.md
+bash scripts/watch-planning-diagrams.sh examples/simple-grocery-list/03-breadboard.md
 ```
 
 The viewer uses a pinned local Mermaid package, binds to localhost, and uploads nothing. See [visual hot reload](./docs/visual-hot-reload.md).

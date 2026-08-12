@@ -100,6 +100,7 @@ TEMPLATES=(
 
 DOCS=(
   README.md AGENTS.md GEMINI.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
+  site/README.md site/index.html site/package.json site/package-lock.json
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
@@ -500,6 +501,25 @@ if python3 -m pip_audit --strict --cache-dir "${TMPDIR:-/tmp}/planning-skills-pi
   pass "Python validation dependencies pass vulnerability audit"
 else
   fail "Python validation dependency audit failed"
+fi
+
+echo
+echo "Checking interactive documentation portal..."
+if command -v npm >/dev/null 2>&1; then
+  if (
+    export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
+    cd site
+    npm ci --ignore-scripts
+    npm run check
+    npm audit --audit-level=moderate
+    git diff --exit-code -- index.html
+  ); then
+    pass "Documentation portal installs, rebuilds reproducibly, passes tests, and passes dependency audit"
+  else
+    fail "Documentation portal verification failed"
+  fi
+else
+  fail "npm is required to verify the documentation portal"
 fi
 
 echo

@@ -1,4 +1,21 @@
+---
+planning: true
+mode: selected-design
+---
+
 # Background Import — Accepted Breadboard
+
+## Mode and accepted sources
+
+- Mode: `selected-design`
+- Accepted project boundary: one background import job lifecycle
+- Accepted requirements: start a valid import, observe progress, see a terminal result, cancel an active import, and retry a failed import
+- Accepted Appetite: one reviewable lifecycle with explicit success, failure, retry, cancellation, and timeout behavior
+- Accepted cut line: no retry limits, backoff policy, concurrent imports, resumable uploads, or recovery after browser closure
+- Human-selected shape: one background job with progress updates and explicit terminal results
+- Human-selected slice: V1 — Import job lifecycle
+
+This compact example carries its accepted inputs inline so the derived statechart can cite a complete selected-design source.
 
 ## Places
 

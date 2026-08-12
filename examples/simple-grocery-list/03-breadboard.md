@@ -1,8 +1,19 @@
 ---
 planning: true
+mode: selected-design
 ---
 
 # Simple Grocery List — Breadboard
+
+## Mode and accepted sources
+
+- Mode: `selected-design`
+- Accepted frame: `01-frame.md`
+- Accepted shaping: `02-shaping.md`
+- Accepted requirements: R0–R5
+- Accepted Appetite and cut line: a few focused days; no accounts, sharing, categories, pricing, recipes, or store-specific behavior
+- Human-selected shape: A — single list with bought toggle and hide-bought filter
+- Reconciliation: no candidate breadboard was promoted; this map was created from the selected shape
 
 ## Places
 
@@ -139,7 +150,7 @@ flowchart LR
 - Duplicate checking is shown as a product-relevant hidden rule because it affects whether the user stays on the main list or enters a duplicate-feedback state.
 - The center of gravity is place → affordance → visible consequence, with hidden system consequences shown only where they explain product behavior.
 
-## Likely slices
+## Candidate vertical slices
 
 ### V1 — Add and persist grocery items
 Demo:
@@ -157,3 +168,9 @@ Demo:
 
 Produces:
 - usable in-store scanning and completion flow
+
+## Human slice selection
+
+Recorded human choice: **V1 — Add and persist grocery items** is the active implementation slice.
+
+V2 remains accepted future behavior inside the selected project, but it is not part of the active build scope until a person selects it.

@@ -17,14 +17,14 @@
 
 | Observation | Requirement(s) | Shape part(s) | Breadboard IDs | Status by layer | Notes |
 |---|---|---|---|---|---|
-| OBS1 | R2 | - | - | R2: covered; Shape A: missing | R2 has no explicit visible mechanism in Shape A. |
+| OBS1 | R2 | A2 | - | covered but underspecified | A2 keeps the date visible in the control; the sketch proposes a clearer persistent label. |
 | OBS2 | R1 | A2 | - | covered | The image does not prove the parser's internal behavior. |
 
 ## Proposed deltas
 
 | Delta | Target | Proposed change | Evidence | Fit / scope impact | Decision |
 |---|---|---|---|---|---|
-| D1 | Shape A | Add A3: display the selected date persistently above the table and refresh it with accepted date changes. | OBS1 + explicit user instruction | Makes R2 pass; clarifies the selected UI mechanism. | accepted |
+| D1 | Shape A | Add A3: display the selected date persistently above the table and refresh it with accepted date changes. | OBS1 + explicit user instruction | Preserves the accepted boundary and makes the R2 mechanism explicit. | accepted |
 
 ## Accepted changes
 
@@ -37,7 +37,7 @@
 - Shape part added: A3
 - Fit check rerun: yes
 - Reverse fit check rerun: yes; A3 serves R2
-- Result: all must-have requirements pass for Shape A
+- Result: all must-have requirements continue to pass for Shape A, with clearer visible support for R2
 
 ## Ripple status
 
