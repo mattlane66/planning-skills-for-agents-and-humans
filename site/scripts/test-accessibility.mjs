@@ -33,7 +33,9 @@ assert.equal(window.__PLANNING_PORTAL_READY__, true, 'The embedded application d
 window.eval(axe.source);
 
 const scenarios = [
-  ['overview', '#/'],
+  ['collaboration walkthrough', '#/'],
+  ['planning compass', '#/compass'],
+  ['planning map', '#/map?stage=selected-design'],
   ['skills', '#/skills'],
   ['guide', '#/guides/start-here'],
   ['skill guide', '#/skills/shaping/guide'],
@@ -54,6 +56,15 @@ for (const [label, hash] of scenarios) {
     impact: violation.impact,
     targets: violation.nodes.map((node) => node.target.join(' ')),
   })), null, 2)}`);
+}
+
+window.location.hash = '#/';
+await wait(25);
+for (const [index, label] of [[2, 'requirements matrix'], [3, 'shape comparison'], [4, 'breadboard'], [5, 'slice groups'], [6, 'build handoff'], [7, 'reality comparison']]) {
+  document.querySelector(`[data-action="select-walkthrough-stage"][data-stage-index="${index}"]`)?.click();
+  await wait(20);
+  const stageResult = await window.axe.run(document, { rules: { 'color-contrast': { enabled: false } } });
+  assert.equal(stageResult.violations.length, 0, `${label} has automated accessibility violations: ${JSON.stringify(stageResult.violations.map((item) => item.id))}`);
 }
 
 window.location.hash = '#/';

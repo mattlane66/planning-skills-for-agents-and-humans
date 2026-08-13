@@ -31,16 +31,16 @@ const html = `<!doctype html>
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="description" content="Interactive documentation for Planning Skills for Agents and Humans.">
+    <meta name="description" content="A click-through human and agent collaboration walkthrough from messy evidence to a build-ready slice.">
     <meta name="color-scheme" content="light">
-    <title>Planning Skills — From fuzzy work to a buildable plan</title>
+    <title>Planning Skills Lab — Watch a plan take shape</title>
     <style>${css}</style>
   </head>
   <body>
     <div id="root">
       <main class="boot-shell">
-        <h1>Planning Skills</h1>
-        <p>Loading the self-contained documentation portal…</p>
+        <h1>Planning Skills Lab</h1>
+        <p>Loading the collaboration walkthrough…</p>
         <noscript>This interactive file needs JavaScript enabled. No network connection is required.</noscript>
       </main>
     </div>
