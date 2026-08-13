@@ -73,11 +73,21 @@ assert.ok(document.querySelector('.walkthrough-input'));
 assert.ok(document.querySelector('.walkthrough-output'));
 assert.equal(document.querySelector('.decision-options'), null, 'The walkthrough must not render quiz choices.');
 assert.equal(document.querySelector('[data-action="select-lab-answer"]'), null, 'The retired quiz action must be absent.');
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /No skill required yet[\s\S]*plugin makes a skill available/i);
+assert.equal(document.querySelector('.optional-skill-moments')?.open, false, 'Optional skills should stay compact until requested.');
+await click('.optional-skill-moments > summary');
+assert.equal(document.querySelector('.optional-skill-moments')?.open, true);
+assert.match(document.querySelector('.skill-moment')?.textContent || '', /Planning Router[\s\S]*recommend exactly one smallest next move/i);
+assert.match(document.querySelector('.skill-moment .invocation-shortcuts')?.textContent || '', /\/planning-skills:plan[\s\S]*\/plan/i);
+await click('.skill-moment .invocation-surface.is-portable .invocation-copy');
+assert.match(document.querySelector('#toast-region')?.textContent || '', /Copied to clipboard/);
 
 await click('[data-action="next-walkthrough-stage"]');
 assert.equal(document.querySelector('#walkthrough-stage-title')?.textContent, 'Separate the problem from the idea.');
 assert.equal(document.querySelectorAll('.walkthrough-ledger li.is-done').length, 1);
 assert.match(document.querySelector('.walkthrough-output')?.textContent || '', /Problem: needed-item state is easy to lose/i);
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Run this move with Framing Doc[\s\S]*\/planning-skills:frame/i);
+assert.match(document.querySelector('.optional-skill-moments')?.textContent || '', /Wayfinding[\s\S]*Skipped here/i);
 
 await click('[data-action="next-walkthrough-stage"]');
 assert.equal(document.querySelector('#walkthrough-stage-title')?.textContent, 'Agree on what will judge the options.');
@@ -85,6 +95,7 @@ assert.equal(document.querySelector('#stage-visual-title')?.textContent, 'Accept
 assert.equal(document.querySelectorAll('.requirements-matrix tbody tr').length, 6);
 assert.equal(document.querySelectorAll('.accepted-check').length, 6);
 assert.match(document.querySelector('.appetite-boundary')?.textContent || '', /A few focused days[\s\S]*No accounts/i);
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Run this move with Shaping[\s\S]*requirements, Appetite, and a cut line/i);
 
 await click('[data-action="select-walkthrough-stage"][data-stage-index="3"]');
 assert.equal(document.querySelector('#walkthrough-stage-title')?.textContent, 'Select a direction.');
@@ -98,6 +109,7 @@ assert.match(document.querySelector('.fit-gate-explainer')?.textContent || '', /
 assert.equal(document.querySelectorAll('.shape-tradeoff-table tbody tr').length, 4);
 assert.match(document.querySelector('.human-shape-decision')?.textContent || '', /Why the human selected Shape A[\s\S]*simpler for a first version/i);
 assert.match(document.querySelector('.shape-path-detail')?.textContent || '', /Single list \+ filter[\s\S]*Recorded authority/i);
+assert.match(document.querySelector('.optional-skill-moments')?.textContent || '', /Sketch Reconciliation[\s\S]*visual may change the plan/i);
 await click('[data-action="inspect-shape"][data-shape="b"]');
 assert.equal(document.querySelector('[data-action="inspect-shape"][data-shape="b"]')?.getAttribute('aria-pressed'), 'true');
 assert.match(document.querySelector('.shape-path-detail')?.textContent || '', /Needed \+ Bought sections[\s\S]*not build scope/i);
@@ -109,6 +121,8 @@ assert.match(document.querySelector('.collaboration-timeline')?.textContent || '
 assert.match(document.querySelector('.walkthrough-output')?.textContent || '', /duplicate check/i);
 assert.equal(document.querySelector('#stage-visual-title')?.textContent, 'Selected-design breadboard');
 assert.ok(document.querySelector('.walkthrough-breadboard .walkthrough-mermaid'), 'The behavior stage should render the breadboard diagram.');
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Run this move with Breadboarding[\s\S]*selected-design/i);
+assert.match(document.querySelector('.optional-skill-moments')?.textContent || '', /Statechart[\s\S]*lifecycle behavior/i);
 for (let attempts = 0; attempts < 50 && !document.querySelector('.walkthrough-mermaid svg'); attempts += 1) await wait(20);
 assert.ok(document.querySelector('.walkthrough-mermaid[data-processed="true"] svg'), 'Mermaid should transform the canonical breadboard text into an SVG.');
 assert.match(document.querySelector('.breadboard-canvas')?.textContent || '', /P1 Grocery list page[\s\S]*P2 Duplicate feedback[\s\S]*P3 Local storage/i);
@@ -122,6 +136,11 @@ assert.match(document.querySelector('.task-group-card.is-active')?.textContent |
 assert.match(document.querySelector('.task-group-dependency')?.textContent || '', /item model and persistence boundary/i);
 assert.match(document.querySelector('.dumplink-context')?.textContent || '', /full Dumplink artifact is optional/i);
 assert.match(document.querySelector('.task-group-gate')?.textContent || '', /sequence does not activate scope/i);
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Select directly when the slice is obvious/i);
+assert.deepEqual(
+  [...document.querySelectorAll('.skill-moment h3')].map((item) => item.textContent),
+  ['Dumplink', 'Interface Contracts', 'Executable Breadboards'],
+);
 
 await click('[data-action="select-walkthrough-stage"][data-stage-index="6"]');
 assert.equal(document.querySelector('main h1')?.textContent, 'The planning handoff is ready.');
@@ -145,11 +164,14 @@ assert.equal(document.querySelector('[data-packet-section="repository-context"]'
 assert.match(document.querySelector('[data-packet-section="execution-verification"]')?.textContent || '', /Goal condition[\s\S]*Return to planning[\s\S]*Finish line/i);
 assert.equal(document.querySelectorAll('.provenance-ledger li').length, 6);
 assert.match(document.querySelector('.walkthrough-exchange.is-compact')?.textContent || '', /Build agent/i);
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Run this move with Feed Planning Context[\s\S]*\/planning-skills:feed-context/i);
+assert.match(document.querySelector('.optional-skill-moments')?.textContent || '', /Kickoff Doc[\s\S]*orientation/i);
 
 await click('[data-action="next-walkthrough-stage"]');
 assert.equal(document.querySelector('main h1')?.textContent, 'Compare the plan with reality.');
 assert.match(document.querySelector('.collaboration-timeline')?.textContent || '', /separate array/i);
 assert.match(document.querySelector('.walkthrough-output')?.textContent || '', /restore one items store/i);
+assert.match(document.querySelector('.walkthrough-invocation')?.textContent || '', /Run this move with Breadboard Reflection[\s\S]*\/planning-skills:reflect-breadboard/i);
 await click('[data-action="reset-walkthrough"]');
 assert.equal(document.querySelector('#walkthrough-stage-title')?.textContent, 'Start with the messy reality.');
 
@@ -188,11 +210,16 @@ assert.equal(document.querySelector('.search-dialog'), null, 'Escape should clos
 
 await route('#/skills');
 assert.equal(document.querySelector('main h1')?.textContent, 'Reference');
+assert.equal(document.querySelectorAll('.skill-row').length, 13, 'The invocation reference should cover every canonical skill.');
+assert.match(document.querySelector('.invocation-primer')?.textContent || '', /plugin makes skills available[\s\S]*Natural language is the portable default/i);
+assert.equal(document.querySelectorAll('.runtime-invocation-list a').length, 4);
 await click('[data-action="filter-skills"][data-category="conditional"]');
 assert.match(document.querySelector('.skill-groups')?.textContent || '', /Statechart/);
 await click('[data-action="select-skill"][data-skill="statechart"]');
 assert.equal(document.querySelector('.skill-detail h2')?.textContent, 'Statechart');
-await click('[data-action="copy-skill-prompt"][data-skill="statechart"]');
+assert.match(document.querySelector('.skill-invocation-detail .is-portable code')?.textContent || '', /installed statechart skill/i);
+assert.match(document.querySelector('.skill-invocation-detail .invocation-shortcuts')?.textContent || '', /\/planning-skills:statechart[\s\S]*\/statechart/i);
+await click('.skill-invocation-detail .invocation-surface.is-portable .invocation-copy');
 assert.match(document.querySelector('#toast-region')?.textContent || '', /Copied to clipboard/);
 
 const guideLink = document.querySelector('.skill-detail a[href="#/skills/statechart/guide"]');

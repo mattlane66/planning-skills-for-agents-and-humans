@@ -4,10 +4,13 @@ import mermaid from 'mermaid';
 import content from './generated/content.json';
 import {
   entryStates,
+  invocationSurfaces,
   mapStages,
   simpleExampleModel,
   skillGroups,
+  skillInvocations,
   skillModel,
+  walkthroughStageInvocations,
   walkthroughSteps,
 } from './planning-model.js';
 
@@ -310,6 +313,58 @@ function collaborationExchange(step, compact = false) {
   </section>`;
 }
 
+function invocationCopyButton(value, label = 'Copy') {
+  return `<button class="invocation-copy" type="button" data-action="copy-text" data-copy="${escapeHtml(value)}" aria-label="${escapeHtml(`${label} to clipboard`)}">${icon('copy', 16)}<span>${escapeHtml(label)}</span></button>`;
+}
+
+function resolvedInvocation(record) {
+  return { ...(skillInvocations[record.slug] || {}), ...record };
+}
+
+function invocationSurfacesView(record, { compact = false } = {}) {
+  const invocation = resolvedInvocation(record);
+  const shortcuts = [
+    invocation.claude ? { key: 'claude', value: invocation.claude } : null,
+    invocation.gemini ? { key: 'gemini', value: invocation.gemini } : null,
+  ].filter(Boolean);
+  return `<div class="invocation-surfaces ${compact ? 'is-compact' : ''}">
+    <div class="invocation-surface is-portable">
+      <header><strong>${escapeHtml(invocationSurfaces.portable.label)}</strong><small>${escapeHtml(invocationSurfaces.portable.environments)}</small></header>
+      <div class="invocation-code-row"><code>${escapeHtml(invocation.prompt)}</code>${invocationCopyButton(invocation.prompt, 'Copy prompt')}</div>
+    </div>
+    ${shortcuts.length ? `<div class="invocation-shortcuts" aria-label="Supported slash-command shortcuts">${shortcuts.map((shortcut) => `<div class="invocation-surface is-shortcut"><header><strong>${escapeHtml(invocationSurfaces[shortcut.key].label)}</strong></header><div class="invocation-code-row"><code>${escapeHtml(shortcut.value)}</code>${invocationCopyButton(shortcut.value, 'Copy command')}</div></div>`).join('')}</div>` : '<p class="invocation-no-shortcut">No repository shortcut wraps this skill. Use the portable prompt directly.</p>'}
+  </div>`;
+}
+
+function walkthroughInvocation(step) {
+  const stage = walkthroughStageInvocations[step.id];
+  if (!stage) return '';
+  const moments = stage.moments || [];
+  const primary = stage.primary ? resolvedInvocation(stage.primary) : null;
+  const primarySkill = primary ? skillsBySlug.get(primary.slug) : null;
+  return `<section class="walkthrough-invocation" aria-labelledby="walkthrough-invocation-title">
+    <header class="walkthrough-invocation-heading">
+      <div><p class="system-label">How to invoke the skills</p><h2 id="walkthrough-invocation-title">${primary ? `Run this move with ${escapeHtml(primarySkill?.title || primary.slug)}.` : escapeHtml(stage.note.title)}</h2></div>
+      <p>A plugin makes a skill available. The prompt or supported command invokes it.</p>
+    </header>
+    <div class="walkthrough-primary-invocation ${primary ? '' : 'is-no-skill'}">
+      ${primary ? invocationSurfacesView(primary, { compact: true }) : `<div><strong>${escapeHtml(stage.note.title)}</strong><p>${escapeHtml(stage.note.text)}</p></div>`}
+    </div>
+    ${moments.length ? `<details class="optional-skill-moments">
+      <summary><span>${icon('bulb', 19)}</span><div><strong>Optional skill moments</strong><small>${moments.length} ${moments.length === 1 ? 'branch' : 'branches'} at this point—use only if the trigger appears</small></div>${icon('arrow', 18)}</summary>
+      <div class="skill-moment-list">${moments.map((moment) => {
+        const invocation = resolvedInvocation(moment);
+        const skill = skillsBySlug.get(moment.slug);
+        return `<article class="skill-moment">
+          <header><span>Conditional</span><div><h3>${escapeHtml(skill?.title || moment.slug)}</h3><p>${escapeHtml(moment.label)}</p></div><a href="#/skills/${escapeHtml(moment.slug)}/guide">Guide ${icon('arrow', 14)}</a></header>
+          <dl><div><dt>Trigger</dt><dd>${escapeHtml(moment.trigger)}</dd></div><div><dt>In this example</dt><dd>${escapeHtml(moment.fit)}</dd></div></dl>
+          ${invocationSurfacesView(invocation, { compact: true })}
+        </article>`;
+      }).join('')}</div>
+    </details>` : ''}
+  </section>`;
+}
+
 function outputPanel(step) {
   return `<section class="walkthrough-output walkthrough-panel ${state.walkthroughPanels.output ? 'is-open' : ''}" aria-label="Output added">
     ${panelHeading('output', 'Output added', step.artifact.status)}
@@ -520,6 +575,7 @@ function walkthroughPage() {
       <section class="walkthrough-workspace ${step.visual ? 'has-stage-visual' : ''}" aria-label="${escapeHtml(step.label)} collaboration stage">
         ${inputPanel(step)}${collaborationExchange(step)}${planLedger()}${stageVisual(step)}${outputPanel(step)}
       </section>`}
+    ${walkthroughInvocation(step)}
     ${walkthroughControls(step, index)}
     ${handoff ? '<p class="handoff-note">Planning resolves the slice. Repository inspection completes the execution context.</p>' : ''}
   </main>`;
@@ -618,6 +674,29 @@ function mapPage(requestedStage) {
   </main>`;
 }
 
+function invocationPrimer() {
+  return `<section class="invocation-primer" aria-labelledby="invocation-primer-title">
+    <div class="invocation-primer-copy"><p class="system-label">Invocation, made explicit</p><h2 id="invocation-primer-title">A plugin makes skills available. A prompt or command runs one.</h2><p>Natural language is the portable default. Select any skill below to get a ready-to-adapt prompt and only the shortcuts that runtime actually supports.</p></div>
+    <div class="runtime-invocation-list">
+      <a href="#/guides/codex-plugin"><strong>Codex</strong><span>Install the plugin; prompt by skill name. No Claude-style slash commands.</span>${icon('arrow', 15)}</a>
+      <a href="#/guides/claude-code-plugin"><strong>Claude Code</strong><span>Use the generated plugin and its namespaced /planning-skills:… commands.</span>${icon('arrow', 15)}</a>
+      <a href="#/guides/claude-skills-installation"><strong>Claude / Design</strong><span>Upload and enable the skill; invoke it in natural language.</span>${icon('arrow', 15)}</a>
+      <a href="#/guides/gemini-usage"><strong>Gemini CLI</strong><span>Install or link skills; use an adapted shortcut only when one is listed.</span>${icon('arrow', 15)}</a>
+    </div>
+    <a class="invocation-matrix-link" href="#/guides/agent-invocation-matrix">Open the complete runtime invocation matrix ${icon('arrow', 16)}</a>
+  </section>`;
+}
+
+function skillInvocationDetail(slug) {
+  const skill = skillsBySlug.get(slug);
+  const invocation = skillInvocations[slug];
+  if (!skill || !invocation) return '';
+  return `<section class="skill-invocation-detail" aria-labelledby="skill-invocation-title">
+    <header><p class="system-label">Invoke this skill</p><h3 id="skill-invocation-title">Start with the portable prompt.</h3><p>Replace the bracketed context. Slash shortcuts appear only where this repository supplies one.</p></header>
+    ${invocationSurfacesView({ slug, ...invocation })}
+  </section>`;
+}
+
 function skillsPage(routeSlug) {
   if (routeSlug && skillsBySlug.has(routeSlug)) state.selectedSkill = routeSlug;
   const query = state.skillQuery.trim().toLowerCase();
@@ -638,8 +717,9 @@ function skillsPage(routeSlug) {
   return `
     <main id="main-content" class="skills-layout">
       <section id="skill-list" class="skills-main">
-        <div class="page-heading"><h1>Reference</h1><p>The canonical details live here. Start with the experience or compass; open a skill when you need its exact contract.</p></div>
+        <div class="page-heading"><h1>Reference</h1><p>The canonical details live here. Select a skill to see when to use it, what it protects, and exactly how to invoke it.</p></div>
         <nav class="reference-paths" aria-label="Reference collections"><a href="#/guides/start-here">Guides</a><a href="#/examples">Source examples</a><a href="${REPOSITORY_URL}" target="_blank" rel="noreferrer">GitHub repository ${icon('external', 14)}</a></nav>
+        ${invocationPrimer()}
         <div class="skill-controls">
           <label class="field-with-icon">${icon('search', 18)}<span class="sr-only">Search skills</span><input id="skill-search" value="${escapeHtml(state.skillQuery)}" placeholder="Search skills"><kbd>/</kbd></label>
           <div class="filter-tabs" aria-label="Filter by category">
@@ -663,9 +743,9 @@ function skillsPage(routeSlug) {
           <div><dt>${icon('user')} Boundary</dt><dd>${escapeHtml(detail.gate)}</dd></div>
         </dl>
         ${detail.modes ? `<div class="mode-strip" aria-label="Breadboarding modes">${detail.modes.map((mode) => `<div><strong>${escapeHtml(mode.label)}</strong><span>${escapeHtml(mode.role)}</span><small>${escapeHtml(mode.authority)}</small></div>`).join('')}</div>` : ''}
+        ${skillInvocationDetail(active.slug)}
         <div class="skill-detail-actions">
           <a class="button button-planning" href="#/skills/${active.slug}/guide">${icon('external', 18)} Open guide</a>
-          <button class="button button-outline" type="button" data-action="copy-skill-prompt" data-skill="${active.slug}">${icon('copy', 18)} Copy starter prompt</button>
           <code>${escapeHtml(active.sourcePath)}</code>
         </div>
         <a class="detail-next-link" href="#/skills/${active.slug}/guide">Read the authoritative instructions ${icon('arrow', 17)}</a>
@@ -943,10 +1023,6 @@ function closeSearch() {
   render({ preserveScroll: true });
 }
 
-function starterPrompt(skill) {
-  return `Use the ${skill.title} skill on [source material].\n\nPreserve working versus accepted intent, make unknowns explicit, and do not cross any applicable human decision gate.`;
-}
-
 async function copyText(value) {
   try {
     if (navigator.clipboard && window.isSecureContext) {
@@ -1060,7 +1136,6 @@ document.addEventListener('click', (event) => {
     document.getElementById('skill-list')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     window.setTimeout(() => document.querySelector('.skill-row.is-selected')?.focus(), 350);
   }
-  if (action === 'copy-skill-prompt') copyText(starterPrompt(skillsBySlug.get(actionTarget.dataset.skill)));
   if (action === 'copy-text') copyText(actionTarget.dataset.copy || '');
   if (event.target.closest('.primary-nav a, .site-brand')) state.mobileMenuOpen = false;
 });
