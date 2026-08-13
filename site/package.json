@@ -10,10 +10,11 @@
     "content": "node scripts/generate-content.mjs",
     "build": "npm run content && node scripts/build-standalone.mjs",
     "validate": "node scripts/validate-build.mjs",
+    "test:model": "node scripts/test-planning-model.mjs",
     "test:interactions": "node scripts/test-interactions.mjs",
     "test:integrity": "node scripts/test-integrity.mjs",
     "test:accessibility": "node scripts/test-accessibility.mjs",
-    "check": "npm run build && npm run validate && npm run test:interactions && npm run test:integrity && npm run test:accessibility"
+    "check": "npm run build && npm run validate && npm run test:model && npm run test:interactions && npm run test:integrity && npm run test:accessibility"
   },
   "dependencies": {
     "dompurify": "^3.2.6",

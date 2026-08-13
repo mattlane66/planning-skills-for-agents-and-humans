@@ -2,13 +2,25 @@ import DOMPurify from 'dompurify';
 import { marked } from 'marked';
 import mermaid from 'mermaid';
 import content from './generated/content.json';
+import {
+  entryStates,
+  mapStages,
+  simpleExampleModel,
+  skillGroups,
+  skillModel,
+  walkthroughSteps,
+} from './planning-model.js';
 
 const REPOSITORY_URL = 'https://github.com/mattlane66/planning-skills-for-agents-and-humans';
 const SEARCH_RESULT_LIMIT = 15;
 const root = document.getElementById('root');
 
 const state = {
-  selectedEntry: 'solution',
+  walkthroughStep: 0,
+  walkthroughPanels: { input: false, output: false, ledger: false },
+  inspectedShape: 'a',
+  selectedEntry: 'fuzzy',
+  selectedMapStage: 'selected-design',
   skillCategory: 'all',
   skillQuery: '',
   selectedSkill: 'shaping',
@@ -16,57 +28,6 @@ const state = {
   searchQuery: '',
   mobileMenuOpen: false,
   restoreFocus: null,
-};
-
-const workflowSteps = [
-  { title: 'Explore', description: 'Requirements, shapes, fit, and evidence stay fluid.', tone: 'evidence' },
-  { title: 'Accept judging inputs', description: 'A person accepts requirements, Appetite, and the cut line.', tone: 'planning', gate: true },
-  { title: 'Human selection', description: 'A person selects, revises, or stops after comparing fit.', tone: 'planning', gate: true },
-  { title: 'Selected design', description: 'Accepted behavior becomes explicit.', tone: 'planning' },
-  { title: 'Slice', description: 'Choose one demoable implementation boundary.', tone: 'implementation' },
-  { title: 'Build', description: 'Execute with bounded context and verification.', tone: 'verification' },
-  { title: 'Reflect', description: 'Compare accepted intent with reality.', tone: 'reflection' },
-];
-
-const entryPoints = [
-  {
-    id: 'requirements', label: 'Requirements', icon: 'file', recommendation: 'Shaping', slug: 'shaping',
-    description: 'Start R-first: clarify needs and constraints, then explore shapes and fit without forcing a fixed sequence.',
-  },
-  {
-    id: 'solution', label: 'A solution idea', icon: 'bulb', recommendation: 'Shaping', slug: 'shaping',
-    description: 'Explore requirements, solution shapes, fit, and appetite without selecting on the user’s behalf.',
-  },
-  {
-    id: 'evidence', label: 'Evidence or a prototype', icon: 'flask', recommendation: 'Shaping', slug: 'shaping',
-    description: 'Treat existing evidence as a starting point, extract working requirements and shapes, and test what it changes.',
-  },
-  {
-    id: 'uncertainty', label: 'One uncertainty', icon: 'help', recommendation: 'Planning Router', slug: 'planning-router',
-    description: 'Identify the smallest next move: a focused spike, candidate breadboard, framing pass, or no planning skill at all.',
-  },
-];
-
-const skillGroups = [
-  { id: 'core', label: 'Core planning moves', skills: ['planning-router', 'framing-doc', 'shaping', 'breadboarding'] },
-  { id: 'conditional', label: 'Conditional moves', skills: ['wayfinding', 'sketch-reconciliation', 'statechart', 'interface-contracts', 'executable-breadboards'] },
-  { id: 'handoff', label: 'Handoff and reflection', skills: ['dumplink', 'kickoff-doc', 'feed-planning-context', 'breadboard-reflection'] },
-];
-
-const skillPresentation = {
-  'planning-router': { stage: 'Start here', tone: 'evidence', useWhen: 'You have mixed planning context and do not yet know which move will resolve the current uncertainty.', produces: 'Exactly one recommended next move, or an explicit recommendation to use no planning skill.', gate: 'The router recommends but does not select a solution or scope.' },
-  'framing-doc': { stage: 'Start here', tone: 'evidence', useWhen: 'Raw notes, research, requests, or transcripts do not yet express a clear problem and outcome.', produces: 'A concise frame with source, current situation, problem, outcome, and boundaries.', gate: 'A person accepts or revises the problem boundary.' },
-  shaping: { stage: 'During shaping', tone: 'planning', useWhen: 'Requirements, a solution idea, a prototype, or mixed evidence needs comparison.', produces: 'Working and accepted requirements, appetite, candidate shapes, fit evidence, and a recorded decision.', gate: 'A person selects, revises, or stops.' },
-  breadboarding: { stage: 'Explore or specify', tone: 'planning', useWhen: 'Current, candidate, or selected behavior needs to become concrete as places, affordances, stores, and wiring.', produces: 'A declared current-state, candidate-shape, or selected-design behavior map.', gate: 'Candidate evidence cannot become selected intent without explicit selection and reconciliation.' },
-  wayfinding: { stage: 'Across sessions', tone: 'implementation', useWhen: 'A bounded planning destination requires several dependent decisions or investigations across sessions.', produces: 'A shared map of decision, evidence, prototype, and prerequisite tickets.', gate: 'Accepted results still land in their canonical planning artifacts.' },
-  'sketch-reconciliation': { stage: 'During shaping', tone: 'implementation', useWhen: 'A screenshot, wireframe, mockup, or whiteboard may clarify or contradict accepted planning.', produces: 'Visual observations, proposed deltas, and synchronized accepted updates.', gate: 'A person accepts or rejects consequential deltas.' },
-  statechart: { stage: 'After selection', tone: 'implementation', useWhen: 'Accepted behavior has retries, timeouts, approvals, lifecycle stages, or several valid actions per state.', produces: 'A state inventory, transition table, Mermaid projection, and explicit gaps.', gate: 'The statechart remains derived from accepted selected-design behavior.' },
-  'interface-contracts': { stage: 'After selection', tone: 'verification', useWhen: 'A selected slice crosses a meaningful boundary with ambiguous inputs, outputs, branches, or errors.', produces: 'A plain-language contract for the named boundary.', gate: 'Open boundary decisions remain explicit until accepted.' },
-  'executable-breadboards': { stage: 'Before build', tone: 'verification', useWhen: 'A selected slice needs fixtures, example runs, edge cases, and acceptance tests.', produces: 'A buildable behavioral handoff with expected results.', gate: 'The executable evidence cannot expand the selected slice.' },
-  dumplink: { stage: 'Before build', tone: 'verification', useWhen: 'A selected project needs vertical task groups, dependencies, risk states, sequence, or appetite-based cuts.', produces: 'A project-wide task-group plan with one active group selected separately.', gate: 'A person approves the plan and selects the active group.' },
-  'kickoff-doc': { stage: 'Handoff', tone: 'reflection', useWhen: 'Builders need a durable orientation reference after accepted artifacts converge.', produces: 'A builder-facing map of accepted product territory.', gate: 'The kickoff document does not replace build scope or sequence.' },
-  'feed-planning-context': { stage: 'Handoff', tone: 'verification', useWhen: 'An implementation agent needs only the authoritative subset for one active task group or slice.', produces: 'A compact context packet with an execution contract and verification target.', gate: 'Working alternatives and candidate evidence stay out of build scope.' },
-  'breadboard-reflection': { stage: 'After build', tone: 'reflection', useWhen: 'Implementation exists and may differ from accepted intent.', produces: 'Separate intent and reality records, drift evidence, design smells, and correction options.', gate: 'A person decides whether to fix code, revise the plan, cut, split, or stop.' },
 };
 
 const requestedGuideGroups = [
@@ -82,24 +43,6 @@ const guideGroups = [
   ...requestedGuideGroups,
   { label: 'Reference', slugs: content.docs.map((guide) => guide.slug).filter((slug) => !assignedGuides.has(slug)) },
 ];
-
-const simpleStages = {
-  '00-source-notes.md': { label: 'Source notes', description: 'The messy starting point in the user’s words.', tone: 'evidence', prompt: 'Capture [your raw feature notes] without resolving contradictions or promoting solution ideas into accepted requirements.' },
-  '01-frame.md': { label: 'Frame', description: 'Clarify the problem, outcome, and boundary.', tone: 'evidence', prompt: 'Use the framing-doc skill on [your source notes]. Create a concise frame, preserve source evidence, and stop for acceptance of the problem boundary.' },
-  '02-shaping.md': { label: 'Shaping', description: 'Accept requirements and Appetite, compare fit, then record the human selection.', tone: 'planning', prompt: 'Use the shaping skill on [your accepted frame]. Separate requirements from mechanisms, make Appetite and the cut line explicit, compare viable shapes, and stop for human selection.' },
-  '03-breadboard.md': { label: 'Breadboard', description: 'Map accepted selected-design behavior and candidate slices.', tone: 'verification', prompt: 'Use the breadboarding skill in selected-design mode on [your accepted shaping artifact]. Cite the selected shape, accepted requirements, Appetite, and cut line; map behavior before proposing slices.' },
-  '04-kickoff.md': { label: 'Kickoff', description: 'Optional builder-facing orientation after a slice is selected.', tone: 'implementation', optional: true, prompt: 'Use the kickoff-doc skill on [your accepted frame, selected shape, accepted breadboard, and selected slice]. Create an orientation reference without redefining scope or sequence.' },
-  '05-breadboard-reflection.md': { label: 'Reflection', description: 'Compare accepted intent with implementation reality.', tone: 'reflection', prompt: 'Use the breadboard-reflection skill on [your accepted breadboard and current implementation evidence]. Record reality separately, identify drift, and stop for the correction decision.' },
-};
-
-const simpleGroceryNotes = {
-  '00-source-notes.md': ['Raw evidence stays distinct from interpretation', 'Early mechanisms remain unselected ideas', 'Contradictions are preserved for framing'],
-  '01-frame.md': ['The problem and outcome are stated without choosing a mechanism', 'The boundary is explicit', 'Acceptance belongs to a person'],
-  '02-shaping.md': ['Requirements describe needs, not implementation choices', 'Requirements, Appetite, and the cut line are accepted before selection', 'Fit evidence supports an explicit human choice'],
-  '03-breadboard.md': ['The mode is selected-design', 'Accepted sources and the selected shape are cited', 'Slices follow the behavior map and remain candidate boundaries until selected'],
-  '04-kickoff.md': ['The accepted breadboard and selected slice already exist', 'The document orients builders without redefining scope', 'Build sequence stays in the selected plan or slice'],
-  '05-breadboard-reflection.md': ['Implementation reality is recorded separately', 'Drift is compared against accepted intent', 'A person chooses whether code, plan, or scope changes'],
-};
 
 const docsBySlug = new Map(content.docs.map((item) => [item.slug, item]));
 const skillsBySlug = new Map(content.skills.map((item) => [item.slug, item]));
@@ -304,78 +247,375 @@ function currentRoute() {
 
 function header(active) {
   const items = [
-    ['Overview', '/', 'overview'], ['Skills', '/skills', 'skills'],
-    ['Guides', '/guides/start-here', 'guides'], ['Examples', '/examples', 'examples'],
+    ['Walkthrough', '/', 'walkthrough'], ['Compass', '/compass', 'compass'],
+    ['Model', '/map', 'model'], ['Reference', '/skills', 'reference'],
   ];
   return `
     <a class="skip-link" href="#main-content">Skip to content</a>
     <header class="site-header">
-      <a class="site-brand" href="#/">Planning Skills</a>
+      <a class="site-brand" href="#/"><span aria-hidden="true">PSL</span> Planning Skills Lab</a>
       <nav id="primary-navigation" class="primary-nav ${state.mobileMenuOpen ? 'is-open' : ''}" aria-label="Primary navigation">
         ${items.map(([label, route, id]) => `<a class="nav-link ${active === id ? 'is-active' : ''}" href="#${route}" ${active === id ? 'aria-current="page"' : ''}>${label}</a>`).join('')}
       </nav>
       <div class="header-actions">
-        <button id="search-trigger" class="search-trigger" type="button" data-action="open-search">
-          ${icon('search', 18)}<span>Search docs</span><kbd>⌘ K</kbd>
-        </button>
-        <a class="icon-button desktop-github" href="${REPOSITORY_URL}" target="_blank" rel="noreferrer" aria-label="Open repository on GitHub">${icon('github', 24)}</a>
-        <button id="mobile-search-trigger" class="icon-button mobile-search" type="button" data-action="open-search" aria-label="Search docs">${icon('search', 24)}</button>
-        <button class="icon-button menu-button" type="button" data-action="toggle-menu" aria-controls="primary-navigation" aria-expanded="${state.mobileMenuOpen}" aria-label="${state.mobileMenuOpen ? 'Close' : 'Open'} navigation menu">${icon(state.mobileMenuOpen ? 'close' : 'menu', 26)}</button>
+        <a class="header-compass-link" href="${REPOSITORY_URL}" target="_blank" rel="noreferrer">Open repository ${icon('external', 16)}</a>
+        <button id="search-trigger" class="icon-button header-search" type="button" data-action="open-search" aria-label="Search the reference">${icon('search', 21)}</button>
+        <button id="menu-button" class="icon-button menu-button" type="button" data-action="toggle-menu" aria-controls="primary-navigation" aria-expanded="${state.mobileMenuOpen}" aria-label="${state.mobileMenuOpen ? 'Close' : 'Open'} navigation menu">${icon(state.mobileMenuOpen ? 'close' : 'menu', 26)}</button>
       </div>
     </header>`;
 }
 
-function homePage() {
-  const selected = entryPoints.find((item) => item.id === state.selectedEntry) || entryPoints[1];
+function walkthroughProgress() {
+  return `<nav class="walkthrough-progress" aria-label="Walkthrough stages">
+    <ol>${walkthroughSteps.map((step, index) => {
+      const done = index < state.walkthroughStep;
+      const current = index === state.walkthroughStep;
+      return `<li class="${done ? 'is-done' : ''} ${current ? 'is-current' : ''}">
+        <button type="button" data-action="select-walkthrough-stage" data-stage-index="${index}" ${current ? 'aria-current="step"' : ''} aria-label="${index + 1}. ${escapeHtml(step.label)}${done ? ', completed' : current ? ', current' : ''}">
+          <span aria-hidden="true">${done ? icon('check', 14) : index + 1}</span><strong>${escapeHtml(step.label)}</strong>
+        </button>
+      </li>`;
+    }).join('')}</ol>
+  </nav>`;
+}
+
+function panelHeading(kind, title, meta = '') {
+  const open = state.walkthroughPanels[kind];
+  return `<div class="walkthrough-panel-heading"><h3>${escapeHtml(title)}</h3>${meta ? `<small>${escapeHtml(meta)}</small>` : ''}</div>
+    <button class="walkthrough-panel-toggle" type="button" data-action="toggle-walkthrough-panel" data-panel="${kind}" aria-controls="walkthrough-${kind}-body" aria-expanded="${open}">
+      <span><strong>${escapeHtml(title)}</strong>${meta ? `<small>${escapeHtml(meta)}</small>` : ''}</span>${icon('arrow', 17)}
+    </button>`;
+}
+
+function inputPanel(step) {
+  return `<section class="walkthrough-input walkthrough-panel ${state.walkthroughPanels.input ? 'is-open' : ''}" aria-label="${escapeHtml(step.inputTitle)}">
+    ${panelHeading('input', step.inputTitle)}
+    <div id="walkthrough-input-body" class="walkthrough-panel-body"><ul>${step.input.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>
+  </section>`;
+}
+
+function roleLabel(role) {
+  if (role === 'human') return { label: 'Human', initials: 'H' };
+  if (role === 'builder') return { label: 'Build agent', initials: 'BA' };
+  return { label: 'Planning agent', initials: 'PA' };
+}
+
+function collaborationExchange(step, compact = false) {
+  return `<section class="walkthrough-exchange ${compact ? 'is-compact' : ''}" aria-labelledby="exchange-title">
+    <div class="exchange-heading"><h3 id="exchange-title">Human + agent</h3><a href="#/skills/${step.skillSlug}/guide">${escapeHtml(step.skill)}</a></div>
+    <ol class="collaboration-timeline">${step.exchange.map((turn) => {
+      const role = roleLabel(turn.role);
+      return `<li class="role-${turn.role}"><span class="role-mark" aria-hidden="true">${role.initials}</span><div><strong>${role.label}</strong><p>${escapeHtml(turn.text)}</p></div></li>`;
+    }).join('')}</ol>
+  </section>`;
+}
+
+function outputPanel(step) {
+  return `<section class="walkthrough-output walkthrough-panel ${state.walkthroughPanels.output ? 'is-open' : ''}" aria-label="Output added">
+    ${panelHeading('output', 'Output added', step.artifact.status)}
+    <div id="walkthrough-output-body" class="walkthrough-panel-body">
+      <div class="artifact-preview-card"><span class="artifact-sheet" aria-hidden="true">${icon('file', 24)}</span><div><strong>${escapeHtml(step.artifact.title)}</strong><p>${escapeHtml(step.output)}</p></div></div>
+      <p class="why-it-matters"><strong>Why this matters</strong>${escapeHtml(step.why)}</p>
+    </div>
+  </section>`;
+}
+
+function planLedger() {
+  const count = state.walkthroughStep + 1;
+  return `<section class="walkthrough-ledger walkthrough-panel ${state.walkthroughPanels.ledger ? 'is-open' : ''}" aria-label="Plan so far">
+    ${panelHeading('ledger', 'Plan so far', `${count} of ${walkthroughSteps.length}`)}
+    <div id="walkthrough-ledger-body" class="walkthrough-panel-body">
+      <ol>${walkthroughSteps.map((step, index) => {
+        const done = index < state.walkthroughStep;
+        const current = index === state.walkthroughStep;
+        return `<li class="${done ? 'is-done' : ''} ${current ? 'is-current' : ''}">
+          <span class="ledger-status" aria-hidden="true">${done ? icon('check', 14) : index + 1}</span><span><strong>${escapeHtml(step.artifact.title)}</strong><small>${current ? 'Just added' : done ? 'Completed' : 'Future'}</small></span>
+        </li>`;
+      }).join('')}</ol>
+      <p class="ledger-foot">${icon('file', 17)} Build packet grows here</p>
+    </div>
+  </section>`;
+}
+
+function visualHeading(visual, meta = '') {
+  return `<header class="stage-visual-heading"><div><h3 id="stage-visual-title">${escapeHtml(visual.title)}</h3><p>${escapeHtml(visual.caption)}</p></div>${meta ? `<span>${escapeHtml(meta)}</span>` : ''}</header>`;
+}
+
+function requirementRows(requirements, { includeFit = false } = {}) {
+  return requirements.map((requirement) => `<tr>
+    <th scope="row"><span>${escapeHtml(requirement.id)}</span></th>
+    <td>${escapeHtml(requirement.text)}</td>
+    <td><span class="requirement-priority">${escapeHtml(requirement.priority)}</span></td>
+    ${includeFit ? '<td><span class="fit-check" aria-label="Shape A fits">✓</span></td><td><span class="fit-check" aria-label="Shape B fits">✓</span></td>' : '<td><span class="accepted-check">Accepted</span></td>'}
+  </tr>`).join('');
+}
+
+function requirementsVisual(visual) {
+  return `<section class="walkthrough-stage-visual requirements-visual" aria-labelledby="stage-visual-title">
+    ${visualHeading(visual, 'Accepted before selection')}
+    <div class="requirements-visual-layout">
+      <div class="walkthrough-table-scroll"><table class="requirements-matrix">
+        <thead><tr><th scope="col">ID</th><th scope="col">Requirement</th><th scope="col">Priority</th><th scope="col">Authority</th></tr></thead>
+        <tbody>${requirementRows(visual.requirements)}</tbody>
+      </table></div>
+      <div class="appetite-boundary" role="group" aria-label="Accepted Appetite and cut line">
+        <div><strong>Appetite</strong><ul>${visual.appetite.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></div>
+        <div><strong>Cut line</strong><p>${escapeHtml(visual.cutLine)}</p></div>
+      </div>
+    </div>
+  </section>`;
+}
+
+function inlineCode(value) {
+  return escapeHtml(value).replace(/`([^`]+)`/g, '<code>$1</code>');
+}
+
+function shapeFitVisual(visual) {
+  const inspected = visual.paths.find((path) => path.id === state.inspectedShape) || visual.paths[0];
+  const { decision } = visual;
+  return `<section class="walkthrough-stage-visual shape-fit-visual" aria-labelledby="stage-visual-title">
+    ${visualHeading(visual, 'Human decision required')}
+    <div class="shape-path-switcher" aria-label="Inspect candidate shapes">
+      ${visual.paths.map((path) => `<button class="shape-path-button ${path.selected ? 'is-selected' : ''} ${path.id === inspected.id ? 'is-inspected' : ''}" type="button" data-action="inspect-shape" data-shape="${path.id}" aria-pressed="${path.id === inspected.id}">
+        <span><strong>${escapeHtml(path.label)}</strong><small>${escapeHtml(path.name)}</small></span><em>${escapeHtml(path.status)}</em>
+      </button>`).join('')}
+    </div>
+    <div class="walkthrough-table-scroll"><table class="requirements-matrix shape-fit-matrix">
+      <thead><tr><th scope="col">ID</th><th scope="col">Accepted requirement</th><th scope="col">Priority</th>${visual.paths.map((path) => `<th scope="col" class="${path.selected ? 'is-selected-path' : ''}">${escapeHtml(path.label)}<small>${path.selected ? 'Selected' : 'Candidate'}</small></th>`).join('')}</tr></thead>
+      <tbody>${requirementRows(visual.requirements, { includeFit: true })}</tbody>
+    </table></div>
+    <div class="fit-gate-explainer">
+      <span aria-hidden="true">PASS</span>
+      <div><h4>${escapeHtml(decision.gateTitle)}</h4><p>${escapeHtml(decision.gateText)}</p></div>
+    </div>
+    <div class="shape-tradeoff-scroll"><table class="shape-tradeoff-table">
+      <thead><tr><th scope="col">Decision lens</th><th scope="col" class="is-selected-path">Shape A <small>Selected</small></th><th scope="col">Shape B <small>Eligible</small></th></tr></thead>
+      <tbody>${decision.comparisons.map((comparison) => `<tr><th scope="row">${escapeHtml(comparison.label)}</th><td class="is-selected-path">${escapeHtml(comparison.a)}</td><td>${escapeHtml(comparison.b)}</td></tr>`).join('')}</tbody>
+    </table></div>
+    <section class="human-shape-decision" aria-labelledby="human-shape-decision-title">
+      <span aria-hidden="true">H</span><div><h4 id="human-shape-decision-title">${escapeHtml(decision.selection.title)}</h4><p>${escapeHtml(decision.selection.lead)}</p><ul>${decision.selection.reasons.map((reason) => `<li>${escapeHtml(reason)}</li>`).join('')}</ul></div>
+    </section>
+    <article id="shape-path-detail" class="shape-path-detail ${inspected.selected ? 'is-selected' : ''}" aria-live="polite">
+      <header><span>${escapeHtml(inspected.label)}</span><div><h4>${escapeHtml(inspected.name)}</h4><p>${escapeHtml(inspected.tradeoff)}</p></div></header>
+      <ul>${inspected.mechanisms.map((item) => `<li>${inlineCode(item)}</li>`).join('')}</ul>
+      <p class="shape-authority">${inspected.selected ? 'Recorded authority: selected by the human.' : 'Authority: viable evidence only—not build scope.'}</p>
+    </article>
+  </section>`;
+}
+
+function breadboardVisual(visual) {
+  return `<section class="walkthrough-stage-visual walkthrough-breadboard" aria-labelledby="stage-visual-title">
+    ${visualHeading(visual, 'Accepted selected design')}
+    <div class="breadboard-canvas" role="img" aria-label="Simplified grocery list selected-design breadboard showing item input, duplicate branch, one items store, bought state, display filtering, visible list, duplicate feedback, and local storage">
+      <div class="mermaid walkthrough-mermaid">${escapeHtml(visual.diagram)}</div>
+    </div>
+    <ul class="breadboard-legend" aria-label="Breadboard notation">${visual.legend.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul>
+  </section>`;
+}
+
+function slicePlanVisual(visual) {
+  const { plan } = visual;
+  return `<section class="walkthrough-stage-visual slice-plan-visual" aria-labelledby="stage-visual-title">
+    ${visualHeading(visual, 'Dumplink pattern')}
+    <ol class="dumplink-moves" aria-label="Dumplink moves"><li><strong>1</strong><span>DUMP</span></li><li>${icon('arrow', 17)}</li><li><strong>2</strong><span>CLUSTER</span></li><li>${icon('arrow', 17)}</li><li><strong>3</strong><span>SEQUENCE</span></li></ol>
+    <p class="dumplink-context">${escapeHtml(plan.note)}</p>
+    <div class="task-group-sequence">
+      ${plan.groups.map((group, index) => `${index > 0 ? `<div class="task-group-dependency" aria-label="Dependency from ${plan.groups[index - 1].id} to ${group.id}">${icon('arrow', 22)}<span>${escapeHtml(plan.dependency)}</span></div>` : ''}<article class="task-group-card ${group.selected ? 'is-active' : ''}">
+        <header><span>${escapeHtml(group.id)} · ${escapeHtml(group.slice)}</span><em>${escapeHtml(group.state)}</em><h4>${escapeHtml(group.name)}</h4></header>
+        <ol>${group.tasks.map((task) => `<li><span>${escapeHtml(task.id)}</span>${escapeHtml(task.text)}</li>`).join('')}</ol>
+        <dl><div><dt>Produces</dt><dd>${escapeHtml(group.produces)}</dd></div><div><dt>Acceptance check</dt><dd>${escapeHtml(group.check)}</dd></div></dl>
+      </article>`).join('')}
+    </div>
+    <p class="task-group-gate"><span aria-hidden="true">H</span><strong>Human gate:</strong> sequence does not activate scope. The recorded selection makes TG1 / V1 the only active group.</p>
+  </section>`;
+}
+
+function stageVisual(step) {
+  if (!step.visual) return '';
+  if (step.visual.type === 'requirements') return requirementsVisual(step.visual);
+  if (step.visual.type === 'shape-fit') return shapeFitVisual(step.visual);
+  if (step.visual.type === 'breadboard') return breadboardVisual(step.visual);
+  if (step.visual.type === 'slice-plan') return slicePlanVisual(step.visual);
+  return '';
+}
+
+function walkthroughControls(step, index) {
+  const previous = index > 0 ? walkthroughSteps[index - 1] : null;
+  const next = index < walkthroughSteps.length - 1 ? walkthroughSteps[index + 1] : null;
+  const nextLabel = step.id === 'handoff' ? 'See implementation reality' : next ? `Continue to ${next.label.toLowerCase()}` : 'Start again';
+  const sourceHref = step.id === 'handoff'
+    ? '#/examples/simple-grocery-list'
+    : `#/examples/simple-grocery-list?file=${encodeURIComponent(step.sourceFile)}`;
+  return `<nav class="walkthrough-controls" aria-label="Walkthrough controls">
+    ${previous ? `<button class="button button-outline" type="button" data-action="previous-walkthrough-stage">${icon('back', 18)} Previous${step.id === 'handoff' ? ': Slice selection' : ''}</button>` : '<span></span>'}
+    <button class="button button-primary" type="button" data-action="${next ? 'next-walkthrough-stage' : 'reset-walkthrough'}">${escapeHtml(nextLabel)} ${next ? icon('arrow', 18) : ''}</button>
+    <a class="text-link" href="${sourceHref}">${step.id === 'handoff' ? 'Inspect the source artifacts' : 'See the canonical source'} ${icon('external', 15)}</a>
+  </nav>`;
+}
+
+function provenanceLedger() {
+  const items = [
+    ['human', 'Human accepted frame'], ['human', 'Human accepted R0–R5 + Appetite'],
+    ['human', 'Human selected shape A'], ['human', 'Human accepted behavior'],
+    ['human', 'Human selected V1'], ['agent', 'Planning agent packaged context'],
+  ];
+  return `<section class="provenance-ledger" aria-labelledby="provenance-title"><h2 id="provenance-title">How it got here</h2><ol>${items.map(([role, label]) => `<li class="role-${role}"><span aria-hidden="true">${role === 'human' ? 'H' : 'PA'}</span><strong>${escapeHtml(label)}</strong>${icon('check', 17)}</li>`).join('')}</ol></section>`;
+}
+
+function contextPacket(step) {
+  return `<section class="context-packet" aria-labelledby="packet-title"><h2 id="packet-title">What planning contributes</h2>
+    <div class="packet-sheet"><header><span>${icon('file', 22)}</span><div><small>Active slice</small><strong>${escapeHtml(step.packet.active)}</strong></div></header>
+      ${step.packet.sections.map((section) => `<section class="packet-row tone-${section.tone}"><h3>${escapeHtml(section.label)}</h3><ul>${section.items.map((item) => `<li>${escapeHtml(item)}</li>`).join('')}</ul></section>`).join('')}
+    </div>
+    ${collaborationExchange(step, true)}
+  </section>`;
+}
+
+function handoffAssembly(step) {
+  const { assembly } = step.packet;
+  const card = (item, type) => `<article class="assembly-card is-${type}">
+    <header><span>${icon(type === 'repository' ? 'github' : type === 'complete' ? 'target' : 'file', 22)}</span><div><h3>${escapeHtml(item.title)}</h3><small>${escapeHtml(item.status)}</small></div></header>
+    <ul>${item.items.map((entry) => `<li>${escapeHtml(entry)}</li>`).join('')}</ul>
+  </article>`;
+  return `<section class="handoff-assembly" aria-labelledby="handoff-assembly-title">
+    <header><h2 id="handoff-assembly-title">${escapeHtml(assembly.title)}</h2><p>${escapeHtml(assembly.caption)}</p></header>
+    <div class="assembly-flow">
+      ${card(assembly.inputs[0], 'planning')}
+      <span class="assembly-operator is-plus" aria-hidden="true">+</span>
+      ${card(assembly.inputs[1], 'repository')}
+      <span class="assembly-operator is-arrow" aria-hidden="true">${icon('arrow', 23)}</span>
+      ${card(assembly.result, 'complete')}
+    </div>
+  </section>`;
+}
+
+function fullContextPacket(step) {
+  return `<section class="full-context-packet" aria-labelledby="full-packet-title">
+    <header><div><h2 id="full-packet-title">What the complete packet must contain</h2><p>Planning fields are filled. Repository-specific fields stay visibly unresolved until the target codebase is inspected.</p></div><span>${icon('target', 21)} Inspectable handoff</span></header>
+    <div class="packet-details">
+      ${step.packet.details.map((section, index) => `<details class="packet-detail" data-packet-section="${escapeHtml(section.id)}" ${section.open ? 'open' : ''}>
+        <summary><span>${index + 1}</span><div><strong>${escapeHtml(section.title)}</strong><small>${escapeHtml(section.summary)}</small></div>${icon('arrow', 18)}</summary>
+        <div class="packet-detail-body"><dl>${section.rows.map((row) => `<div class="${row.status === 'unresolved' ? 'is-unresolved' : ''}"><dt>${escapeHtml(row.label)}${row.status === 'unresolved' ? '<span>Resolve in target repo</span>' : ''}</dt><dd><ul>${row.values.map((value) => `<li>${escapeHtml(value)}</li>`).join('')}</ul></dd></div>`).join('')}</dl></div>
+      </details>`).join('')}
+    </div>
+  </section>`;
+}
+
+function walkthroughPage() {
+  const index = Math.max(0, Math.min(state.walkthroughStep, walkthroughSteps.length - 1));
+  const step = walkthroughSteps[index];
+  const handoff = step.id === 'handoff';
+  const reality = step.id === 'reality';
+  const heading = handoff ? 'The planning handoff is ready.' : reality ? 'Compare the plan with reality.' : 'Watch a plan take shape.';
+  const subheading = handoff
+    ? 'Planning resolved the product decisions. Target-repository context completes the build-agent packet.'
+    : reality
+      ? 'After implementation, the same accepted artifacts make drift visible and decidable.'
+      : 'Follow one human and one planning agent from messy notes to a build-ready slice.';
+  return `<main id="main-content" class="walkthrough-page ${handoff ? 'is-handoff' : ''}">
+    <header class="walkthrough-intro"><h1 tabindex="-1">${heading}</h1><p>${subheading}</p><div><strong>Simple Grocery List</strong><span>${index + 1} of ${walkthroughSteps.length}</span></div></header>
+    ${walkthroughProgress()}
+    ${handoff ? `${handoffAssembly(step)}<section class="handoff-workspace">${contextPacket(step)}${provenanceLedger()}</section>${fullContextPacket(step)}` : `
+      <header class="walkthrough-stage-heading"><span>${index + 1}</span><div><h2 id="walkthrough-stage-title" tabindex="-1">${escapeHtml(step.title)}</h2><p><strong>Human:</strong> ${escapeHtml(step.humanMove)} <i aria-hidden="true">·</i> <strong>Agent:</strong> ${escapeHtml(step.agentMove)}</p></div></header>
+      <section class="walkthrough-workspace ${step.visual ? 'has-stage-visual' : ''}" aria-label="${escapeHtml(step.label)} collaboration stage">
+        ${inputPanel(step)}${collaborationExchange(step)}${planLedger()}${stageVisual(step)}${outputPanel(step)}
+      </section>`}
+    ${walkthroughControls(step, index)}
+    ${handoff ? '<p class="handoff-note">Planning resolves the slice. Repository inspection completes the execution context.</p>' : ''}
+  </main>`;
+}
+
+function compassPage() {
+  const selected = entryStates.find((item) => item.id === state.selectedEntry) || entryStates[0];
+  const selectedSkill = skillsBySlug.get(selected.skill);
   return `
-    <main id="main-content" class="home-page">
+    <main id="main-content" class="home-page compass-page">
       <section class="home-hero">
-        <div class="hero-copy">
-          <h1>Turn fuzzy work into a buildable plan.</h1>
-          <p>Preserve intent from raw evidence through a selected, testable implementation slice.</p>
-          <div class="hero-actions">
-            <button class="button button-primary" type="button" data-action="focus-navigator">Find your next move ${icon('arrow')}</button>
-            <a class="text-link" href="#/guides/start-here">Read the 10-minute guide ${icon('arrow', 18)}</a>
-          </div>
+        <div class="hero-copy compact-hero">
+          <p class="system-label">Planning compass</p>
+          <h1>What is happening in your work?</h1>
+          <p>Pick the closest observable state. Get one next move.</p>
         </div>
         <div class="entry-navigator" id="entry-navigator">
-          <div class="entry-options" role="radiogroup" aria-label="What are you starting with?">
-            <h2>What are you starting with?</h2>
-            ${entryPoints.map((item, index) => {
+          <div class="entry-options" role="radiogroup" aria-label="What needs to become clearer?">
+            <h2 class="sr-only">Choose the current state</h2>
+            ${entryStates.map((item, index) => {
               const selectedItem = item.id === selected.id;
-              return `<button class="entry-option tone-${item.id} ${selectedItem ? 'is-selected' : ''}" type="button" role="radio" aria-checked="${selectedItem}" tabindex="${selectedItem ? '0' : '-1'}" data-action="select-entry" data-entry="${item.id}" data-index="${index}">
-                <span class="radio-mark" aria-hidden="true"></span>${icon(item.icon, 21)}<span>${escapeHtml(item.label)}</span>
+              return `<button class="entry-option tone-${item.tone} ${selectedItem ? 'is-selected' : ''}" type="button" role="radio" aria-checked="${selectedItem}" tabindex="${selectedItem ? '0' : '-1'}" data-action="select-entry" data-entry="${item.id}" data-index="${index}">
+                <span class="radio-mark" aria-hidden="true"></span><span>${escapeHtml(item.label)}</span>
               </button>`;
             }).join('')}
           </div>
-          <div class="recommendation" aria-live="polite">
-            <span>Recommended next move:</span>
+          <div class="recommendation tone-${selected.tone}" aria-live="polite">
+            <span>Next move</span>
             <h2>${escapeHtml(selected.recommendation)}</h2>
             <p>${escapeHtml(selected.description)}</p>
-            <a class="button button-outline planning-button" href="#/skills/${selected.slug}/guide">Open ${escapeHtml(selected.recommendation.toLowerCase())} guide ${icon('arrow', 18)}</a>
+            <dl class="recommendation-facts">
+              <div><dt>${icon('file', 17)} Needs</dt><dd>${escapeHtml(selected.needs)}</dd></div>
+              <div><dt>${icon('check', 17)} Stop when</dt><dd>${escapeHtml(selected.stop)}</dd></div>
+            </dl>
+            <p class="recommendation-caution">${icon('user', 17)} ${escapeHtml(selected.caution)}</p>
+            <div class="recommendation-actions">
+              <a class="button button-planning" href="#/skills/${selected.skill}/guide">${escapeHtml(selected.actionLabel || `Open ${selectedSkill?.title || selected.recommendation}`)} ${icon('arrow', 18)}</a>
+              <a class="text-link" href="#/map?stage=${selected.mapStage}">See where this sits ${icon('arrow', 17)}</a>
+            </div>
           </div>
         </div>
       </section>
-      <section class="workflow-band" aria-labelledby="workflow-title">
-        <h2 id="workflow-title" class="sr-only">How planning works</h2>
-        <ol class="workflow-rail" aria-label="Planning workflow">
-          ${workflowSteps.map((step, index) => `<li class="workflow-step tone-${step.tone} ${step.gate ? 'is-gate' : ''}"><span class="step-marker">${index + 1}</span><strong>${step.title}</strong><small>${step.description}</small></li>`).join('')}
-        </ol>
-      </section>
-      <section class="principle-section">
-        <div class="principle-copy">
-          <h2>Exploration is fluid.<br>Commitment is gated.</h2>
-          <p>Move among requirements, shapes, fit checks, focused spikes, and candidate evidence while they remain working material. A person decides what becomes accepted intent.</p>
-          <a class="text-link" href="#/guides/human-decision-gates">Understand the human gates ${icon('arrow', 18)}</a>
-        </div>
-        <div class="planning-loop" aria-label="Collaborative shaping loop">
-          <div class="loop-node tone-evidence"><strong>Requirements</strong><span>Needs and constraints</span></div><span aria-hidden="true">↔</span>
-          <div class="loop-node tone-planning"><strong>Shapes</strong><span>Mechanisms and trade-offs</span></div><span aria-hidden="true">↔</span>
-          <div class="loop-node tone-verification"><strong>Fit checks</strong><span>Criteria and appetite</span></div><span aria-hidden="true">↔</span>
-          <div class="loop-node tone-evidence is-dashed"><strong>Candidate evidence</strong><span>Spikes and breadboards</span></div>
+      <section class="home-principles" aria-labelledby="principles-title">
+        <div><p class="system-label">The whole idea</p><h2 id="principles-title">Explore freely. Promote deliberately.</h2></div>
+        <ul>
+          <li><strong>Explore</strong><span>Requirements, shapes, and evidence can loop.</span></li>
+          <li><strong>Decide</strong><span>People accept direction, behavior, and slices.</span></li>
+          <li><strong>Build</strong><span>Agents receive one selected slice—not the whole history.</span></li>
+        </ul>
+        <div class="home-next-links">
+          <a class="button button-outline" href="#/map">Understand the planning model ${icon('arrow', 18)}</a>
+          <a class="text-link" href="#/">Return to the hands-on experience ${icon('arrow', 18)}</a>
+          <a class="text-link" href="#/skills/planning-router/guide">Still unsure? Use the router ${icon('arrow', 18)}</a>
         </div>
       </section>
     </main>`;
+}
+
+function mapPage(requestedStage) {
+  if (requestedStage && mapStages.some((item) => item.id === requestedStage)) state.selectedMapStage = requestedStage;
+  const selected = mapStages.find((item) => item.id === state.selectedMapStage) || mapStages[0];
+  return `<main id="main-content" class="map-page">
+    <header class="map-heading">
+      <div><p class="system-label">Planning model</p><h1>How authority moves through the work.</h1></div>
+      <p>This is a promotion model, not a task recipe. Exploration can loop; only explicit decisions make material buildable.</p>
+    </header>
+    <section class="map-workspace" aria-label="Interactive planning map">
+      <div class="planning-map" role="list" aria-label="Planning stages">
+        ${mapStages.map((item, index) => `<div class="map-stage-wrap" role="listitem">
+          <button type="button" class="map-stage kind-${item.kind} ${item.id === selected.id ? 'is-selected' : ''}" aria-pressed="${item.id === selected.id}" data-action="select-map-stage" data-map-stage="${item.id}">
+            <span class="map-stage-kind">${item.kind === 'gate' ? 'Human decision' : item.kind === 'loop' ? 'Exploration loop' : item.kind === 'artifact' ? 'Accepted behavior' : item.kind === 'reflection' ? 'Reality check' : item.kind === 'build' ? 'Active build' : 'Conditional support'}</span>
+            <span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.short)}</small></span>
+            ${item.helpers ? `<span class="map-stage-chips">${item.helpers.map((helper) => `<em>${escapeHtml(helper)}</em>`).join('')}</span>` : ''}
+            ${item.optional ? `<span class="map-optional">${item.optional.map((helper) => `<em>${escapeHtml(helper)}</em>`).join('')}</span>` : ''}
+          </button>
+          ${index < mapStages.length - 1 ? `<span class="map-connector" aria-hidden="true">${icon('arrow', 20)}</span>` : ''}
+        </div>`).join('')}
+      </div>
+      <div class="map-detail kind-${selected.kind}" role="region" aria-labelledby="map-detail-title" aria-live="polite">
+        <p class="system-label">${selected.kind === 'gate' ? 'Human decision' : 'Authority check'}</p>
+        <h2 id="map-detail-title" tabindex="-1">${escapeHtml(selected.title)}</h2>
+        <p>${escapeHtml(selected.summary)}</p>
+        <dl>
+          <div><dt>Needs</dt><dd>${escapeHtml(selected.needs)}</dd></div>
+          <div><dt>Stop when</dt><dd>${escapeHtml(selected.stop)}</dd></div>
+          <div><dt>Never</dt><dd>${escapeHtml(selected.never)}</dd></div>
+        </dl>
+        <a class="button button-planning" href="#${selected.route}">Open the relevant guide ${icon('arrow', 18)}</a>
+      </div>
+    </section>
+    <section class="kickoff-placement" aria-labelledby="kickoff-placement-title">
+      <span class="optional-line" aria-hidden="true"></span>
+      <div><p class="system-label">Optional side branch after slice selection</p><h2 id="kickoff-placement-title">Kickoff orients. It never kicks off the sequence.</h2><p>Use it only after the selected-design breadboard and active slice already exist. Scope still comes from the selected project, slice, contracts, and accepted behavior.</p></div>
+      <a class="text-link" href="#/skills/kickoff-doc/guide">Open kickoff reference ${icon('arrow', 18)}</a>
+    </section>
+  </main>`;
 }
 
 function skillsPage(routeSlug) {
@@ -385,19 +625,21 @@ function skillsPage(routeSlug) {
     ...group,
     items: group.skills.map((slug) => skillsBySlug.get(slug)).filter(Boolean).filter((skill) => {
       const categoryMatches = state.skillCategory === 'all' || group.id === state.skillCategory;
-      const queryMatches = !query || `${skill.title} ${skill.description}`.toLowerCase().includes(query);
+      const presentation = skillModel[skill.slug];
+      const queryMatches = !query || `${skill.title} ${presentation.useWhen} ${presentation.produces} ${presentation.needs}`.toLowerCase().includes(query);
       return categoryMatches && queryMatches;
     }),
   })).filter((group) => group.items.length > 0);
   const visibleSlugs = new Set(visibleGroups.flatMap((group) => group.items.map((item) => item.slug)));
   const active = skillsBySlug.get(visibleSlugs.has(state.selectedSkill) ? state.selectedSkill : visibleGroups[0]?.items[0]?.slug) || skillsBySlug.get('shaping');
-  const detail = skillPresentation[active.slug];
+  const detail = skillModel[active.slug];
   state.selectedSkill = active.slug;
 
   return `
     <main id="main-content" class="skills-layout">
       <section id="skill-list" class="skills-main">
-        <div class="page-heading"><h1>Skills</h1><p>Use the smallest planning move that prevents an important misunderstanding.</p></div>
+        <div class="page-heading"><h1>Reference</h1><p>The canonical details live here. Start with the experience or compass; open a skill when you need its exact contract.</p></div>
+        <nav class="reference-paths" aria-label="Reference collections"><a href="#/guides/start-here">Guides</a><a href="#/examples">Source examples</a><a href="${REPOSITORY_URL}" target="_blank" rel="noreferrer">GitHub repository ${icon('external', 14)}</a></nav>
         <div class="skill-controls">
           <label class="field-with-icon">${icon('search', 18)}<span class="sr-only">Search skills</span><input id="skill-search" value="${escapeHtml(state.skillQuery)}" placeholder="Search skills"><kbd>/</kbd></label>
           <div class="filter-tabs" aria-label="Filter by category">
@@ -405,21 +647,22 @@ function skillsPage(routeSlug) {
           </div>
         </div>
         <div class="skill-groups" aria-live="polite">
-          ${visibleGroups.length ? visibleGroups.map((group) => `<section class="skill-group"><h2>${group.label}</h2><div class="skill-rows">
+          ${visibleGroups.length ? visibleGroups.map((group) => `<section class="skill-group"><div class="skill-group-heading"><h2>${group.label}</h2><p>${escapeHtml(group.description)}</p></div><div class="skill-rows">
             ${group.items.map((skill) => {
-              const presentation = skillPresentation[skill.slug];
-              return `<button type="button" class="skill-row tone-${presentation.tone} ${skill.slug === active.slug ? 'is-selected' : ''}" aria-pressed="${skill.slug === active.slug}" data-action="select-skill" data-skill="${skill.slug}"><strong>${escapeHtml(skill.title)}</strong><span>${escapeHtml(skill.description)}</span><small>${presentation.stage}</small></button>`;
+              const presentation = skillModel[skill.slug];
+              return `<button type="button" class="skill-row tone-${presentation.tone} ${skill.slug === active.slug ? 'is-selected' : ''}" aria-pressed="${skill.slug === active.slug}" data-action="select-skill" data-skill="${skill.slug}"><strong>${escapeHtml(skill.title)}</strong><span>${escapeHtml(presentation.useWhen)}</span><small>${presentation.stage}</small></button>`;
             }).join('')}
           </div></section>`).join('') : '<div class="empty-state"><strong>No skill matches that search.</strong><span>Try “state”, “context”, or “drift”.</span></div>'}
         </div>
       </section>
       <aside class="skill-detail tone-${detail.tone}" aria-labelledby="skill-detail-title" aria-live="polite">
-        <div class="skill-detail-heading"><h2 id="skill-detail-title" tabindex="-1">${escapeHtml(active.title)}</h2><p>${escapeHtml(active.description)}</p></div>
+        <div class="skill-detail-heading"><p class="system-label">${escapeHtml(detail.stage)}</p><h2 id="skill-detail-title" tabindex="-1">${escapeHtml(active.title)}</h2><p>${escapeHtml(detail.useWhen)}</p></div>
         <dl>
-          <div><dt>${icon('target')} Use when</dt><dd>${escapeHtml(detail.useWhen)}</dd></div>
+          <div><dt>${icon('target')} Needs</dt><dd>${escapeHtml(detail.needs)}</dd></div>
           <div><dt>${icon('file')} Produces</dt><dd>${escapeHtml(detail.produces)}</dd></div>
-          <div><dt>${icon('user')} Decision / guardrail</dt><dd>${escapeHtml(detail.gate)}</dd></div>
+          <div><dt>${icon('user')} Boundary</dt><dd>${escapeHtml(detail.gate)}</dd></div>
         </dl>
+        ${detail.modes ? `<div class="mode-strip" aria-label="Breadboarding modes">${detail.modes.map((mode) => `<div><strong>${escapeHtml(mode.label)}</strong><span>${escapeHtml(mode.role)}</span><small>${escapeHtml(mode.authority)}</small></div>`).join('')}</div>` : ''}
         <div class="skill-detail-actions">
           <a class="button button-planning" href="#/skills/${active.slug}/guide">${icon('external', 18)} Open guide</a>
           <button class="button button-outline" type="button" data-action="copy-skill-prompt" data-skill="${active.slug}">${icon('copy', 18)} Copy starter prompt</button>
@@ -525,28 +768,45 @@ function examplePage(slug, requestedFile, section) {
   const example = content.examples.find((item) => item.slug === slug);
   if (!example) return notFoundPage();
   const artifactFiles = example.files.filter((file) => file.name !== 'README.md');
-  const defaultName = slug === 'simple-grocery-list' ? '02-shaping.md' : artifactFiles[0]?.name || example.files[0]?.name;
-  const selected = example.files.find((file) => file.name === requestedFile) || example.files.find((file) => file.name === defaultName) || example.files[0];
-  const selectedIndex = artifactFiles.findIndex((file) => file.name === selected.name);
-  const previous = selectedIndex > 0 ? artifactFiles[selectedIndex - 1] : null;
-  const next = selectedIndex >= 0 && selectedIndex < artifactFiles.length - 1 ? artifactFiles[selectedIndex + 1] : null;
   const isSimple = slug === 'simple-grocery-list';
-  const selectedStage = isSimple ? simpleStages[selected.name] : null;
+  const primaryFiles = isSimple
+    ? simpleExampleModel.primaryFiles.map((name) => artifactFiles.find((file) => file.name === name)).filter(Boolean)
+    : artifactFiles;
+  const optionalFiles = isSimple
+    ? simpleExampleModel.optionalFiles.map((name) => artifactFiles.find((file) => file.name === name)).filter(Boolean)
+    : [];
+  const defaultName = primaryFiles[0]?.name || artifactFiles[0]?.name || example.files[0]?.name;
+  const selected = example.files.find((file) => file.name === requestedFile) || example.files.find((file) => file.name === defaultName) || example.files[0];
+  const selectedIndex = primaryFiles.findIndex((file) => file.name === selected.name);
+  const previous = selectedIndex > 0 ? primaryFiles[selectedIndex - 1] : null;
+  const next = selectedIndex >= 0 && selectedIndex < primaryFiles.length - 1 ? primaryFiles[selectedIndex + 1] : null;
+  const selectedStage = isSimple ? simpleExampleModel.stages[selected.name] : null;
   const prompt = examplePrompt(example, selected, selectedStage);
   const route = `/examples/${slug}?file=${encodeURIComponent(selected.name)}`;
   const rendered = renderMarkdown(selected.raw, selected.sourcePath, route, { headingOffset: 1 });
-  const notes = isSimple ? (simpleGroceryNotes[selected.name] || []) : ['Each artifact has one clear job', 'Accepted intent stays separate from exploratory evidence', 'The sequence follows the complexity actually present'];
+  const notes = isSimple ? (simpleExampleModel.notes[selected.name] || []) : ['Each artifact has one clear job', 'Accepted intent stays separate from exploratory evidence', 'The set follows the complexity actually present'];
+  const simpleTrail = isSimple ? `<nav class="artifact-trail" aria-label="Grocery-list planning story">
+    <p class="system-label">Required story</p>
+    ${primaryFiles.map((file, index) => {
+      const stage = simpleExampleModel.stages[file.name];
+      const selectedItem = file.name === selected.name;
+      const buildGap = file.name === '05-breadboard-reflection.md' ? `<div class="artifact-gap"><span>${icon('check', 16)}</span><div><strong>Implementation</strong><small>The selected V1 is built here. This example omits the code.</small></div></div>` : '';
+      return `${buildGap}<a class="artifact-stage tone-${stage.tone} ${selectedItem ? 'is-selected' : ''}" href="#/examples/${slug}?file=${encodeURIComponent(file.name)}" ${selectedItem ? 'aria-current="step"' : ''}><span class="artifact-marker">${index + 1}</span><span><strong>${escapeHtml(stage.label)}</strong><small>${escapeHtml(stage.description)}</small></span></a>`;
+    }).join('')}
+    <div class="optional-artifacts"><p class="system-label">Optional orientation</p>${optionalFiles.map((file) => {
+      const stage = simpleExampleModel.stages[file.name];
+      const selectedItem = file.name === selected.name;
+      return `<a class="artifact-stage is-optional tone-${stage.tone} ${selectedItem ? 'is-selected' : ''}" href="#/examples/${slug}?file=${encodeURIComponent(file.name)}" ${selectedItem ? 'aria-current="step"' : ''}><span class="artifact-marker">↳</span><span><strong>${escapeHtml(stage.label)}</strong><em>After selected design + V1</em><small>${escapeHtml(stage.description)}</small></span></a>`;
+    }).join('')}</div>
+  </nav>` : `<nav class="artifact-trail" aria-label="Example artifacts">${artifactFiles.map((file, index) => {
+    const selectedItem = file.name === selected.name;
+    return `<a class="artifact-stage tone-evidence ${selectedItem ? 'is-selected' : ''}" href="#/examples/${slug}?file=${encodeURIComponent(file.name)}" ${selectedItem ? 'aria-current="step"' : ''}><span class="artifact-marker">${index + 1}</span><span><strong>${escapeHtml(fileLabel(file))}</strong><small>${escapeHtml(file.description)}</small></span></a>`;
+  }).join('')}</nav>`;
   queuePostRender(section);
   return `<main id="main-content" class="example-page">
-    <div class="example-heading"><h1>${escapeHtml(example.title.replace(/\s+—\s+Step-by-Step Example$/, ''))}</h1><p>${isSimple ? 'See the foundational workflow on a tiny feature without getting lost in implementation detail.' : escapeHtml(example.description)}</p><a class="back-link" href="#/examples">${icon('back', 17)} All examples</a></div>
+    <div class="example-heading"><p class="system-label">Worked example</p><h1>${escapeHtml(example.title.replace(/\s+—\s+Step-by-Step Example$/, ''))}</h1><p>${isSimple ? 'Follow the decisions, not a pile of documents. Optional artifacts sit outside the required story.' : escapeHtml(example.description)}</p><a class="back-link" href="#/examples">${icon('back', 17)} All examples</a></div>
     <div class="example-workspace">
-      <nav class="artifact-trail" aria-label="Example artifacts">
-        ${artifactFiles.map((file, index) => {
-          const stage = isSimple ? simpleStages[file.name] : null;
-          const selectedStage = file.name === selected.name;
-          return `<a class="artifact-stage tone-${stage?.tone || 'evidence'} ${stage?.optional ? 'is-optional' : ''} ${selectedStage ? 'is-selected' : ''}" href="#/examples/${slug}?file=${encodeURIComponent(file.name)}" ${selectedStage ? 'aria-current="step"' : ''}><span class="artifact-marker">${index + 1}</span><span><strong>${escapeHtml(stage?.label || fileLabel(file))}</strong>${stage?.optional ? '<em>Optional</em>' : ''}<small>${escapeHtml(stage?.description || file.description)}</small></span></a>`;
-        }).join('')}
-      </nav>
+      ${simpleTrail}
       <article class="artifact-preview"><div class="markdown-body">${rendered.html}</div></article>
       <aside class="learning-notes"><h2>What to notice</h2><ul>${notes.map((note) => `<li>${escapeHtml(note)}</li>`).join('')}</ul>
         <div class="example-actions"><a class="button button-planning" href="${REPOSITORY_URL}/blob/main/${selected.sourcePath}" target="_blank" rel="noreferrer">${icon('external', 18)} Open source file</a><button class="button button-outline" type="button" data-action="copy-text" data-copy="${escapeHtml(prompt.text)}">${icon('copy', 18)} ${prompt.label}</button><code>${escapeHtml(selected.sourcePath)}</code></div>
@@ -598,9 +858,9 @@ function searchDialog() {
   const results = rankedResults.slice(0, SEARCH_RESULT_LIMIT);
   const resultLabel = rankedResults.length > results.length ? `Showing ${results.length} of ${rankedResults.length} results` : `${rankedResults.length} results`;
   return `<div class="dialog-backdrop" data-action="close-search-backdrop"><section class="search-dialog" role="dialog" aria-modal="true" aria-labelledby="search-dialog-title"><h2 id="search-dialog-title" class="sr-only">Search documentation</h2>
-    <div class="dialog-search-row">${icon('search', 21)}<input id="global-search" value="${escapeHtml(state.searchQuery)}" placeholder="Search guides, skills, and examples" aria-label="Search guides, skills, and examples"><button class="icon-button compact" type="button" data-action="close-search" aria-label="Close search">${icon('close', 20)}</button></div>
+    <div class="dialog-search-row">${icon('search', 21)}<input id="global-search" value="${escapeHtml(state.searchQuery)}" placeholder="Search all portal content" aria-label="Search all portal content"><button class="icon-button compact" type="button" data-action="close-search" aria-label="Close search">${icon('close', 20)}</button></div>
     <div class="search-results" aria-live="polite" data-result-total="${rankedResults.length}"><p class="system-label">${query ? resultLabel : 'Suggested paths'}</p>
-      ${results.length ? results.map((item) => `<a class="search-result" href="#${item.route}"><span class="result-icon">${icon(item.type === 'Skill' ? 'target' : 'file', 18)}</span><span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.description)}</small></span><span class="result-type">${item.type}</span>${icon('arrow', 18)}</a>`).join('') : '<div class="empty-search"><strong>No matching path found.</strong><span>Try a skill name, artifact, or workflow question.</span></div>'}
+      ${results.length ? results.map((item) => `<a class="search-result" href="#${item.route}"><span class="result-icon">${icon(item.type === 'Skill' ? 'target' : 'file', 18)}</span><span><strong>${escapeHtml(item.title)}</strong><small>${escapeHtml(item.description)}</small></span><span class="result-type">${item.type}</span>${icon('arrow', 18)}</a>`).join('') : '<div class="empty-search"><strong>No matching path found.</strong><span>Try a skill, guide, example, template, or reference.</span></div>'}
     </div>
   </section></div>`;
 }
@@ -627,20 +887,26 @@ async function postRender() {
 
 function render({ preserveScroll = false } = {}) {
   const { path, query } = currentRoute();
-  let active = 'overview';
-  let page = homePage();
+  let active = 'walkthrough';
+  let page = walkthroughPage();
   const parts = path.split('/').filter(Boolean);
-  if (parts[0] === 'skills') {
-    active = 'skills';
+  if (parts[0] === 'compass') {
+    active = 'compass';
+    page = compassPage();
+  } else if (parts[0] === 'skills') {
+    active = 'reference';
     page = parts[2] === 'guide' ? guidePage('skill', parts[1], query.get('section')) : skillsPage(parts[1]);
+  } else if (parts[0] === 'map') {
+    active = 'model';
+    page = mapPage(query.get('stage'));
   } else if (parts[0] === 'guides') {
-    active = 'guides';
+    active = 'reference';
     page = guidePage('guide', parts[1] || 'start-here', query.get('section'));
   } else if (parts[0] === 'resources') {
-    active = 'guides';
+    active = 'reference';
     page = guidePage('resource', parts[1], query.get('section'));
   } else if (parts[0] === 'examples') {
-    active = 'examples';
+    active = 'reference';
     page = parts[1] ? examplePage(parts[1], query.get('file'), query.get('section')) : exampleIndexPage();
   } else if (path !== '/') {
     page = notFoundPage();
@@ -668,6 +934,7 @@ function openSearch(trigger) {
   state.restoreFocus = trigger?.id || 'search-trigger';
   state.searchQuery = '';
   state.searchOpen = true;
+  state.mobileMenuOpen = false;
   render({ preserveScroll: true });
 }
 
@@ -708,6 +975,13 @@ function showToast(message) {
   window.setTimeout(() => { if (region) region.innerHTML = ''; }, 1800);
 }
 
+function focusWalkthroughStage() {
+  requestAnimationFrame(() => {
+    document.querySelector('.walkthrough-progress [aria-current="step"]')?.scrollIntoView({ behavior: 'auto', block: 'nearest', inline: 'center' });
+    (document.getElementById('walkthrough-stage-title') || document.querySelector('.walkthrough-intro h1'))?.focus({ preventScroll: true });
+  });
+}
+
 document.addEventListener('click', (event) => {
   const actionTarget = event.target.closest('[data-action]');
   const action = actionTarget?.dataset.action;
@@ -718,14 +992,55 @@ document.addEventListener('click', (event) => {
     state.mobileMenuOpen = !state.mobileMenuOpen;
     render({ preserveScroll: true });
   }
-  if (action === 'focus-navigator') {
-    document.getElementById('entry-navigator')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => document.querySelector('.entry-option[aria-checked="true"]')?.focus(), 350);
+  if (action === 'select-walkthrough-stage') {
+    state.walkthroughStep = Math.max(0, Math.min(Number(actionTarget.dataset.stageIndex), walkthroughSteps.length - 1));
+    state.walkthroughPanels = { input: false, output: false, ledger: false };
+    render();
+    focusWalkthroughStage();
+  }
+  if (action === 'next-walkthrough-stage') {
+    state.walkthroughStep = Math.min(walkthroughSteps.length - 1, state.walkthroughStep + 1);
+    state.walkthroughPanels = { input: false, output: false, ledger: false };
+    render();
+    focusWalkthroughStage();
+  }
+  if (action === 'previous-walkthrough-stage') {
+    state.walkthroughStep = Math.max(0, state.walkthroughStep - 1);
+    state.walkthroughPanels = { input: false, output: false, ledger: false };
+    render();
+    focusWalkthroughStage();
+  }
+  if (action === 'reset-walkthrough') {
+    state.walkthroughStep = 0;
+    state.walkthroughPanels = { input: false, output: false, ledger: false };
+    render();
+    focusWalkthroughStage();
+  }
+  if (action === 'toggle-walkthrough-panel') {
+    const panel = actionTarget.dataset.panel;
+    if (Object.prototype.hasOwnProperty.call(state.walkthroughPanels, panel)) {
+      state.walkthroughPanels[panel] = !state.walkthroughPanels[panel];
+      render({ preserveScroll: true });
+      requestAnimationFrame(() => document.querySelector(`[data-action="toggle-walkthrough-panel"][data-panel="${panel}"]`)?.focus());
+    }
+  }
+  if (action === 'inspect-shape') {
+    state.inspectedShape = actionTarget.dataset.shape === 'b' ? 'b' : 'a';
+    render({ preserveScroll: true });
+    requestAnimationFrame(() => document.querySelector(`[data-action="inspect-shape"][data-shape="${state.inspectedShape}"]`)?.focus());
   }
   if (action === 'select-entry') {
     state.selectedEntry = actionTarget.dataset.entry;
     render({ preserveScroll: true });
     requestAnimationFrame(() => document.querySelector(`[data-entry="${state.selectedEntry}"]`)?.focus());
+  }
+  if (action === 'select-map-stage') {
+    const nextStage = actionTarget.dataset.mapStage;
+    state.selectedMapStage = nextStage;
+    const nextHash = `#/map?stage=${encodeURIComponent(nextStage)}`;
+    if (location.hash === nextHash) render({ preserveScroll: true });
+    else location.hash = nextHash;
+    requestAnimationFrame(() => document.getElementById('map-detail-title')?.focus({ preventScroll: true }));
   }
   if (action === 'filter-skills') {
     state.skillCategory = actionTarget.dataset.category;
@@ -777,6 +1092,13 @@ document.addEventListener('keydown', (event) => {
     closeSearch();
     return;
   }
+  if (event.key === 'Escape' && state.mobileMenuOpen) {
+    event.preventDefault();
+    state.mobileMenuOpen = false;
+    render({ preserveScroll: true });
+    requestAnimationFrame(() => document.getElementById('menu-button')?.focus());
+    return;
+  }
   if (!state.searchOpen && event.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement?.tagName)) {
     const { path } = currentRoute();
     if (path.startsWith('/skills')) {
@@ -789,11 +1111,11 @@ document.addEventListener('keydown', (event) => {
     event.preventDefault();
     const currentIndex = Number(radio.dataset.index);
     let nextIndex = currentIndex;
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % entryPoints.length;
-    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + entryPoints.length) % entryPoints.length;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % entryStates.length;
+    if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + entryStates.length) % entryStates.length;
     if (event.key === 'Home') nextIndex = 0;
-    if (event.key === 'End') nextIndex = entryPoints.length - 1;
-    state.selectedEntry = entryPoints[nextIndex].id;
+    if (event.key === 'End') nextIndex = entryStates.length - 1;
+    state.selectedEntry = entryStates[nextIndex].id;
     render({ preserveScroll: true });
     requestAnimationFrame(() => document.querySelector(`[data-entry="${state.selectedEntry}"]`)?.focus());
   }

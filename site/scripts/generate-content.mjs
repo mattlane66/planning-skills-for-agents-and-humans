@@ -19,7 +19,7 @@ function cleanInline(value) {
   return value
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/[`*_~]/g, '')
+    .replace(/[`*~]/g, '')
     .replace(/<[^>]+>/g, '')
     .trim();
 }
@@ -31,7 +31,7 @@ function plainText(markdown) {
     .replace(/^#{1,6}\s+/gm, '')
     .replace(/^[-*>|]\s*/gm, '')
     .replace(/!?\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/[`*_~]/g, '')
+    .replace(/[`*~]/g, '')
     .replace(/<[^>]+>/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
@@ -44,16 +44,19 @@ function titleFrom(markdown, fallback) {
 
 function descriptionFrom(markdown) {
   const body = stripFrontmatter(markdown).replace(/^#\s+.+?\r?\n/, '');
-  const paragraphs = body.split(/\r?\n\s*\r?\n/).map(plainText).filter(Boolean);
-  for (let index = 0; index < paragraphs.length; index += 1) {
-    let cleaned = paragraphs[index];
+  const paragraphs = body.split(/\r?\n\s*\r?\n/).map((source) => ({
+    source,
+    cleaned: plainText(source),
+  })).filter(({ cleaned }) => cleaned);
+  for (const { source, cleaned } of paragraphs) {
     if (cleaned.length <= 24) continue;
-    if (/[:—–]\s*$/.test(cleaned) && paragraphs[index + 1]) cleaned = `${cleaned} ${paragraphs[index + 1]}`;
+    const lines = source.split(/\r?\n/).map((line) => line.trim()).filter(Boolean);
+    const isStructuredBlock = lines.length > 0 && lines.every((line) => /^(?:[-*+]\s+|\d+\.\s+|\|)/.test(line));
+    if (isStructuredBlock || /[:—–]\s*$/.test(cleaned)) continue;
     if (cleaned.length <= 240) return cleaned;
-    const candidate = cleaned.slice(0, 241);
-    const sentenceEnd = Math.max(candidate.lastIndexOf('. '), candidate.lastIndexOf('? '), candidate.lastIndexOf('! '));
-    const boundary = sentenceEnd >= 120 ? sentenceEnd + 1 : candidate.lastIndexOf(' ');
-    return `${candidate.slice(0, boundary > 0 ? boundary : 240).trimEnd()}…`;
+    const candidate = cleaned.slice(0, 240);
+    const sentenceEnds = [...candidate.matchAll(/[.!?](?=\s|$)/g)];
+    if (sentenceEnds.length > 0) return candidate.slice(0, sentenceEnds.at(-1).index + 1).trimEnd();
   }
   return '';
 }
