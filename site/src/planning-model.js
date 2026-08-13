@@ -112,6 +112,93 @@ export const grocerySlicePlan = {
   dependency: 'TG1 establishes the item model and persistence boundary that TG2 extends.',
 };
 
+// Plugins and uploaded skills make a skill available. A prompt or supported command
+// invokes it. Natural-language prompts are the portable surface across runtimes;
+// slash commands are adapters and must not be presented as universal syntax.
+export const invocationSurfaces = {
+  portable: {
+    label: 'Portable prompt',
+    environments: 'Codex · Claude · Claude Design · Gemini · other agents',
+    note: 'Use after the skill or plugin is installed, uploaded, linked, or otherwise available to the agent.',
+  },
+  claude: {
+    label: 'Claude Code plugin',
+    note: 'Generated plugin commands are namespaced as /planning-skills:… . Some skills are invoked directly by name instead of through a wrapper.',
+  },
+  gemini: {
+    label: 'Gemini CLI shortcut',
+    note: 'Only the repository’s adapted TOML commands have slash shortcuts. Use the portable prompt for every other skill.',
+  },
+};
+
+export const skillInvocations = {
+  'planning-router': {
+    prompt: 'Use the installed planning-router skill on [current evidence]. Recommend exactly one smallest next move—including no planning skill when appropriate—and do not execute that move yet.',
+    claude: '/planning-skills:plan "[current situation]"',
+    gemini: '/plan "[current situation]"',
+  },
+  wayfinding: {
+    prompt: 'Use the installed wayfinding skill to coordinate [bounded planning destination] across dependent decisions. Keep the map as coordination only and write accepted results into their canonical artifacts.',
+    claude: '/planning-skills:wayfind "[bounded planning destination]"',
+    gemini: '/wayfind "[bounded planning destination]"',
+  },
+  'framing-doc': {
+    prompt: 'Use the installed framing-doc skill on [source material]. Separate evidence, problem, outcome, and boundary from solution ideas, then stop for human acceptance.',
+    claude: '/planning-skills:frame [source material]',
+    gemini: null,
+  },
+  shaping: {
+    prompt: 'Use the installed shaping skill in collaborative mode on [context]. Keep requirements, shapes, fit evidence, and Appetite explicit; preserve Working versus Accepted authority and stop for human selection.',
+    claude: '/planning-skills:shape "[context]"',
+    gemini: '/shape "[context]"',
+  },
+  'sketch-reconciliation': {
+    prompt: 'Use the installed sketch-reconciliation skill to compare [visual] with [accepted planning artifacts]. Separate observations from interpretations and apply only human-accepted deltas.',
+    claude: '/planning-skills:reconcile-sketch [planning files] [visual]',
+    gemini: '/reconcile-sketch [planning files] [visual]',
+  },
+  breadboarding: {
+    prompt: 'Use the installed breadboarding skill in [current-state | candidate-shape | selected-design] mode on [planning evidence]. Declare the mode and preserve its authority boundary.',
+    claude: '/planning-skills:breadboard [planning files] "mode: [current-state | candidate-shape | selected-design]"',
+    gemini: '/breadboard [planning files] "mode: [current-state | candidate-shape | selected-design]"',
+  },
+  statechart: {
+    prompt: 'Use the installed statechart skill on [accepted breadboard] for [selected stateful scope]. Derive states and transitions, preserve source IDs, and flag missing decisions instead of changing the breadboard.',
+    claude: '/planning-skills:statechart [accepted breadboard] "[selected stateful scope]"',
+    gemini: '/statechart [accepted breadboard] "[selected stateful scope]"',
+  },
+  'interface-contracts': {
+    prompt: 'Use the installed interface-contracts skill for the selected slice boundaries in [breadboard or slice]. Define plain-language inputs, outputs, branches, and errors without inventing implementation.',
+    claude: null,
+    gemini: null,
+  },
+  'executable-breadboards': {
+    prompt: 'Use the installed executable-breadboards skill on [selected slice]. Add fixtures, example runs, visible results, state changes, edge cases, and acceptance tests without expanding scope.',
+    claude: null,
+    gemini: null,
+  },
+  dumplink: {
+    prompt: 'Use the installed dumplink skill on [selected bounded project]. Propose vertical task groups, dependencies, risks, sequence, and cuts; stop for plan approval and active-group selection.',
+    claude: '/planning-skills:dumplink [shaping] [breadboard] "[selected project]"',
+    gemini: '/dumplink [shaping] [breadboard] "[selected project]"',
+  },
+  'kickoff-doc': {
+    prompt: 'Use the installed kickoff-doc skill on [accepted frame, selected shape, accepted breadboard, and selected slice]. Create durable builder orientation without redefining scope or sequence.',
+    claude: '/planning-skills:kickoff [accepted planning files]',
+    gemini: null,
+  },
+  'feed-planning-context': {
+    prompt: 'Use the installed feed-planning-context skill for [selected slice]. Package only authoritative scope, non-goals, relevant behavior, checks, and return conditions; exclude Working alternatives from build scope.',
+    claude: '/planning-skills:feed-context [accepted planning files]',
+    gemini: null,
+  },
+  'breadboard-reflection': {
+    prompt: 'Use the installed breadboard-reflection skill to compare [accepted breadboard and selected slice] with [implementation evidence]. Keep intent and reality separate and stop for the human correction decision.',
+    claude: '/planning-skills:reflect-breadboard [accepted breadboard] [implementation evidence]',
+    gemini: null,
+  },
+};
+
 export const walkthroughSteps = [
   {
     id: 'source',
@@ -391,6 +478,158 @@ export const walkthroughSteps = [
     agentMove: 'Made drift decidable',
   },
 ];
+
+// The walkthrough demonstrates the smallest required path, then exposes optional
+// skills exactly where their triggering complexity would appear. This prevents the
+// complete inventory from reading like a mandatory thirteen-step checklist.
+export const walkthroughStageInvocations = {
+  source: {
+    note: {
+      title: 'No skill required yet',
+      text: 'The human can simply paste the notes and preserve them as evidence. Invoke the router only when the next useful move is genuinely unclear.',
+    },
+    moments: [
+      {
+        slug: 'planning-router',
+        label: 'If the next move is unclear',
+        trigger: 'Use when mixed evidence makes it hard to choose one smallest planning move.',
+        fit: 'Here it would recommend framing; it would not run the framing step itself.',
+        prompt: 'Use the installed planning-router skill on these grocery-list notes. Recommend exactly one smallest next move—or no planning skill—and do not execute it yet.',
+        claude: '/planning-skills:plan "These grocery-list notes mix a problem, boundaries, and a web-page idea. Choose one next move."',
+        gemini: '/plan "These grocery-list notes mix a problem, boundaries, and a web-page idea. Choose one next move."',
+      },
+    ],
+  },
+  frame: {
+    primary: {
+      slug: 'framing-doc',
+      prompt: 'Use the installed framing-doc skill on the Simple Grocery List source notes. Separate evidence, problem, outcome, and boundary from the web-page idea, then stop for acceptance.',
+      claude: '/planning-skills:frame examples/simple-grocery-list/00-source-notes.md',
+      gemini: null,
+    },
+    moments: [
+      {
+        slug: 'wayfinding',
+        label: 'If planning will span dependent sessions',
+        trigger: 'Use when one bounded destination has several dependent decisions or investigations that must survive across sessions.',
+        fit: 'Skipped here: this tiny bet can stay coherent in one short planning thread.',
+        prompt: 'Use the installed wayfinding skill only if this grocery-list bet expands into dependent planning sessions. Map the decision frontier, route each ticket to one canonical skill, and keep accepted truth in the owning artifacts.',
+        claude: '/planning-skills:wayfind "Coordinate this bounded grocery-list planning effort across dependent decisions."',
+        gemini: '/wayfind "Coordinate this bounded grocery-list planning effort across dependent decisions."',
+      },
+    ],
+  },
+  requirements: {
+    primary: {
+      slug: 'shaping',
+      prompt: 'Use the installed shaping skill in collaborative mode on the accepted grocery-list frame. Propose requirements, Appetite, and a cut line; keep them Working until I accept them and do not select a shape.',
+      claude: '/planning-skills:shape "From the accepted grocery-list frame, propose R, Appetite, and cuts. Stop for acceptance before selection."',
+      gemini: '/shape "From the accepted grocery-list frame, propose R, Appetite, and cuts. Stop for acceptance before selection."',
+    },
+    moments: [],
+  },
+  shape: {
+    primary: {
+      slug: 'shaping',
+      prompt: 'Continue using the installed shaping skill on accepted R0–R5 and Appetite. Compare Shape A and Shape B through fit, reverse fit, cuts, and tradeoffs; stop for my selection and record only the choice I make.',
+      claude: '/planning-skills:shape "Compare grocery-list Shapes A and B against accepted R0–R5 and Appetite. Stop for human selection."',
+      gemini: '/shape "Compare grocery-list Shapes A and B against accepted R0–R5 and Appetite. Stop for human selection."',
+    },
+    moments: [
+      {
+        slug: 'sketch-reconciliation',
+        label: 'If a visual may change the plan',
+        trigger: 'Use when a sketch, screenshot, prototype, or whiteboard contains evidence that may imply planning deltas.',
+        fit: 'Skipped here: no external visual evidence is needed to compare the two simple shapes.',
+        prompt: 'Use the installed sketch-reconciliation skill to compare the grocery-list visual with accepted R0–R5 and the current shapes. Record observations and proposed deltas separately; apply only the deltas I accept.',
+        claude: '/planning-skills:reconcile-sketch examples/simple-grocery-list/02-shaping.md [grocery-list-visual]',
+        gemini: '/reconcile-sketch examples/simple-grocery-list/02-shaping.md [grocery-list-visual]',
+      },
+    ],
+  },
+  behavior: {
+    primary: {
+      slug: 'breadboarding',
+      prompt: 'Use the installed breadboarding skill in selected-design mode on selected Shape A, accepted R0–R5, and accepted Appetite. Map places, affordances, stores, branches, and wiring; stop for behavior acceptance.',
+      claude: '/planning-skills:breadboard examples/simple-grocery-list/02-shaping.md "mode: selected-design; selected shape: A"',
+      gemini: '/breadboard examples/simple-grocery-list/02-shaping.md "mode: selected-design; selected shape: A"',
+    },
+    moments: [
+      {
+        slug: 'statechart',
+        label: 'If lifecycle behavior becomes hard to reason about',
+        trigger: 'Use after selected-design behavior is accepted when retries, timeouts, approvals, cancellation, or recovery create real state complexity.',
+        fit: 'Skipped here: a bought boolean and local restore do not justify a separate lifecycle model.',
+        prompt: 'Use the installed statechart skill only if the accepted grocery-list behavior gains a complex selected lifecycle. Derive states and transitions from the accepted breadboard, preserve its IDs, and flag missing decisions.',
+        claude: '/planning-skills:statechart examples/simple-grocery-list/03-breadboard.md "[selected complex lifecycle]"',
+        gemini: '/statechart examples/simple-grocery-list/03-breadboard.md "[selected complex lifecycle]"',
+      },
+    ],
+  },
+  slice: {
+    note: {
+      title: 'Select directly when the slice is obvious',
+      text: 'The accepted breadboard already exposes V1, so the agent proposes it and the human selects it. Invoke Dumplink only when decomposition itself needs work.',
+    },
+    moments: [
+      {
+        slug: 'dumplink',
+        label: 'If the project needs several vertical task groups',
+        trigger: 'Use when a selected bounded project needs dependency-aware groups, risk states, sequence, or Appetite cuts.',
+        fit: 'Optional here: the visualization borrows the pattern, but a full Dumplink artifact would be unnecessary overhead.',
+        prompt: 'Use the installed dumplink skill on the selected grocery-list project only if its decomposition stops being obvious. Propose vertical task groups, dependencies, risks, sequence, and cuts; stop for approval and active-group selection.',
+        claude: '/planning-skills:dumplink examples/simple-grocery-list/02-shaping.md examples/simple-grocery-list/03-breadboard.md "Selected project: Simple Grocery List"',
+        gemini: '/dumplink examples/simple-grocery-list/02-shaping.md examples/simple-grocery-list/03-breadboard.md "Selected project: Simple Grocery List"',
+      },
+      {
+        slug: 'interface-contracts',
+        label: 'If a selected boundary remains ambiguous',
+        trigger: 'Use when the active slice crosses a meaningful client, API, service, storage, or agent boundary with unclear data or errors.',
+        fit: 'Skipped here: same-device local persistence is simple enough to specify in the breadboard and packet.',
+        prompt: 'Use the installed interface-contracts skill if V1 crosses an ambiguous persistence boundary. Define plain-language inputs, outputs, branches, and errors for that selected boundary without inventing implementation.',
+        claude: null,
+        gemini: null,
+      },
+      {
+        slug: 'executable-breadboards',
+        label: 'If examples must become a testable contract',
+        trigger: 'Use when the selected slice needs fixtures, difficult cases, expected outputs, edge cases, or acceptance tests before implementation.',
+        fit: 'Useful if “exact duplicate” needs fixture-level precision; otherwise the packet’s two acceptance checks are sufficient.',
+        prompt: 'Use the installed executable-breadboards skill on grocery-list V1. Add fixtures for Milk, a second Milk, reload, and any agreed normalization case; keep the examples inside the selected slice.',
+        claude: null,
+        gemini: null,
+      },
+    ],
+  },
+  handoff: {
+    primary: {
+      slug: 'feed-planning-context',
+      prompt: 'Use the installed feed-planning-context skill for selected grocery-list V1. Package only its authoritative scope, preserved behavior, non-goals, checks, return conditions, and unresolved target-repository context.',
+      claude: '/planning-skills:feed-context examples/simple-grocery-list/01-frame.md examples/simple-grocery-list/02-shaping.md examples/simple-grocery-list/03-breadboard.md',
+      gemini: null,
+    },
+    moments: [
+      {
+        slug: 'kickoff-doc',
+        label: 'If builders need durable orientation',
+        trigger: 'Use after the breadboard and active slice exist when several builders need a stable territory-oriented reference.',
+        fit: 'Skipped here: one builder can work from the compact context packet. Kickoff prose would not add scope or sequence.',
+        prompt: 'Use the installed kickoff-doc skill on the accepted grocery-list frame, selected Shape A, accepted breadboard, and selected V1. Create orientation only; do not redefine build scope or order.',
+        claude: '/planning-skills:kickoff examples/simple-grocery-list/01-frame.md examples/simple-grocery-list/02-shaping.md examples/simple-grocery-list/03-breadboard.md',
+        gemini: null,
+      },
+    ],
+  },
+  reality: {
+    primary: {
+      slug: 'breadboard-reflection',
+      prompt: 'Use the installed breadboard-reflection skill to compare the accepted grocery-list breadboard and V1 with the implementation evidence. Keep intent and reality separate, identify drift, and stop for my correction decision.',
+      claude: '/planning-skills:reflect-breadboard examples/simple-grocery-list/03-breadboard.md [implementation evidence]',
+      gemini: null,
+    },
+    moments: [],
+  },
+};
 
 export const entryStates = [
   {

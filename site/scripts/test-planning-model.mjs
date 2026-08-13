@@ -7,22 +7,41 @@ import {
   groceryShapeDecision,
   groceryShapePaths,
   grocerySlicePlan,
+  invocationSurfaces,
   mapStages,
   promotionRules,
   simpleExampleModel,
   skillGroups,
+  skillInvocations,
   skillModel,
+  walkthroughStageInvocations,
   walkthroughSteps,
 } from '../src/planning-model.js';
 
 const readCanonical = (path) => readFile(new URL(`../../${path}`, import.meta.url), 'utf8');
-const [shapingSource, breadboardingSource, dumplinkSource, kickoffSource, contextSource, readmeSource, exampleShaping, exampleBreadboard, exampleReflection] = await Promise.all([
+const [
+  shapingSource,
+  breadboardingSource,
+  dumplinkSource,
+  kickoffSource,
+  contextSource,
+  readmeSource,
+  invocationMatrix,
+  codexPluginGuide,
+  claudeSlashGuide,
+  exampleShaping,
+  exampleBreadboard,
+  exampleReflection,
+] = await Promise.all([
   readCanonical('shaping/SKILL.md'),
   readCanonical('breadboarding/SKILL.md'),
   readCanonical('dumplink/SKILL.md'),
   readCanonical('kickoff-doc/SKILL.md'),
   readCanonical('feed-planning-context/SKILL.md'),
   readCanonical('README.md'),
+  readCanonical('docs/agent-invocation-matrix.md'),
+  readCanonical('docs/codex-plugin.md'),
+  readCanonical('docs/claude-slash-commands.md'),
   readCanonical('examples/simple-grocery-list/02-shaping.md'),
   readCanonical('examples/simple-grocery-list/03-breadboard.md'),
   readCanonical('examples/simple-grocery-list/05-breadboard-reflection.md'),
@@ -35,6 +54,10 @@ assert.match(dumplinkSource, /project is the discrete unit of work Dumplink inge
 assert.match(kickoffSource, /Start with the accepted frame, selected shape, accepted breadboard, selected slice/i);
 assert.match(kickoffSource, /Do not organize by build sequence/i);
 assert.match(contextSource, /kickoff document, for orientation only/i);
+assert.match(invocationMatrix, /Codex \| Codex plugin plus natural-language prompts \| No Claude-style slash commands/i);
+assert.match(codexPluginGuide, /Install from GitHub/i);
+assert.match(codexPluginGuide, /invoke the installed skills there/i);
+assert.match(claudeSlashGuide, /namespaces entries as `\/planning-skills:<name>`/i);
 const controlledPath = readmeSource.match(/A common \*\*controlled\*\* path is:([^\n]+)/i)?.[1] || '';
 assert.ok(controlledPath.indexOf('accepted selected-design breadboard') < controlledPath.indexOf('optional Dumplink'));
 assert.ok(controlledPath.indexOf('human-selected active task group') < controlledPath.indexOf('optional kickoff reference'));
@@ -196,7 +219,34 @@ const modeledSkills = new Set(Object.keys(skillModel));
 const groupedSkills = skillGroups.flatMap((group) => group.skills);
 assert.equal(new Set(groupedSkills).size, groupedSkills.length, 'A skill may appear in only one navigator group.');
 assert.deepEqual(new Set(groupedSkills), modeledSkills, 'Every modeled skill must appear in the navigator exactly once.');
+assert.deepEqual(new Set(Object.keys(skillInvocations)), modeledSkills, 'Every canonical skill must have one portable invocation.');
+assert.match(invocationSurfaces.portable.environments, /Codex/);
+assert.match(invocationSurfaces.claude.note, /namespaced/i);
+assert.match(invocationSurfaces.gemini.note, /only/i);
+for (const [slug, invocation] of Object.entries(skillInvocations)) {
+  assert.match(invocation.prompt, new RegExp(slug.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i'), `${slug} must name itself in its portable prompt.`);
+  if (invocation.claude) assert.match(invocation.claude, /^\/planning-skills:/, `${slug} must use the generated Claude Code namespace.`);
+  if (invocation.gemini) assert.match(invocation.gemini, /^\//, `${slug} Gemini shortcut must use slash-command syntax.`);
+}
+assert.equal(skillInvocations['interface-contracts'].claude, null, 'Direct-only skills must not invent Claude wrapper commands.');
+assert.equal(skillInvocations['executable-breadboards'].gemini, null, 'Direct-only skills must not invent Gemini wrapper commands.');
+
+assert.deepEqual(
+  Object.keys(walkthroughStageInvocations),
+  walkthroughSteps.map((step) => step.id),
+  'Every walkthrough stage must explain how its move is invoked.',
+);
+const walkthroughInvocationSkills = new Set(Object.values(walkthroughStageInvocations).flatMap((stage) => [
+  stage.primary?.slug,
+  ...(stage.moments || []).map((moment) => moment.slug),
+]).filter(Boolean));
+assert.deepEqual(walkthroughInvocationSkills, modeledSkills, 'The main path plus contextual branches must expose every canonical skill exactly where it could matter.');
+assert.match(walkthroughStageInvocations.source.note.text, /router only when/i);
+assert.match(walkthroughStageInvocations.slice.note.text, /Invoke Dumplink only/i);
+assert.deepEqual(walkthroughStageInvocations.slice.moments.map((moment) => moment.slug), ['dumplink', 'interface-contracts', 'executable-breadboards']);
+assert.deepEqual(walkthroughStageInvocations.handoff.moments.map((moment) => moment.slug), ['kickoff-doc']);
+assert.match(walkthroughStageInvocations.handoff.moments[0].fit, /Skipped here/i);
 assert.equal(entryStates.length, 7);
 assert.equal(new Set(entryStates.map((item) => item.id)).size, entryStates.length);
 
-console.log('Canonical planning-model validation passed (modes, promotion gates, slice authority, kickoff placement, and example story).');
+console.log('Canonical planning-model validation passed (modes, promotion gates, invocation coverage, slice authority, kickoff placement, and example story).');
