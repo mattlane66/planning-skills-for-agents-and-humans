@@ -148,7 +148,7 @@ You do not first estimate the ideal solution and then decide whether you can aff
 
 For future-facing opportunity discovery, use **[Lead User Research](./lead-user-research/SKILL.md)**. It applies Eric von Hippel's Lead User Method through a lightweight, phase-gated research workflow with persistent evidence state, pyramiding, advanced analogs, coverage-bias controls, and proportionate SCOUT / STANDARD / FULL modes.
 
-It is designed to work across ChatGPT, Claude, Gemini, Codex, Cursor, and other tool-using AI environments. Start with the **[quick guide](./lead-user-research/QUICKSTART.md)**; users only need to supply a domain, a decision, and optionally a mode. The full protocol stays available for audit without requiring one giant memory-dependent prompt.
+It is designed to work across ChatGPT, Claude, Gemini, Codex, Cursor, and other tool-using AI environments. For the lowest-friction path, copy the **[portable prompt](./lead-user-research/PORTABLE_PROMPT.md)** into the AI platform of your choice and fill in the research brief: domain/problem space, target market, what you want to understand, the human decision the research should inform, desired innovation altitude, optional hypotheses, and mode. The **[quick guide](./lead-user-research/QUICKSTART.md)** and **[fill-in research template](./lead-user-research/study-templates/research-input.md)** cover file-backed and no-file workflows. If only the domain and decision are known, Phase A can draft the missing fields as PROVISIONAL rather than silently inventing them. The full protocol stays available for audit without requiring one giant memory-dependent prompt.
 
 ## The core workflow
 
