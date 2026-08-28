@@ -52,7 +52,7 @@ def main() -> int:
     write_json(
         root / "manifest.json",
         {
-            "protocol_version": "1.3",
+            "protocol_version": "1.4",
             "mode": mode,
             "phase": "A",
             "human_review": "NOT_REVIEWED",
