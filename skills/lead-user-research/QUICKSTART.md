@@ -31,9 +31,20 @@ Optional hypotheses:
 
 Mode:
 SCOUT | STANDARD | FULL
+
+Optional discovery seeds:
+[sources, links, repositories, communities, files, people, experts]
+
+Optional candidate-profile hypotheses:
+[types of users or situations that may contain unusually advanced or high-benefit cases]
+
+Optional search constraints:
+[explicit hard limits on sources, source types, geography, language, privacy, time, or other discovery dimensions]
 ```
 
 Use **STANDARD** when unsure.
+
+Discovery seeds and candidate-profile hypotheses are starting directions, not prequalified Lead Users or a closed search universe. The research should continue pyramiding and advanced-analog discovery beyond them unless you explicitly impose a search constraint. If you provide a source list without saying the research is restricted to it, the agent should treat it as a seed set.
 
 If you only know the domain and decision, you can start with those two. Phase A should expose any drafted target market, learning objective, or innovation altitude as **PROVISIONAL** instead of silently inventing them.
 
@@ -74,6 +85,9 @@ python lead-user-research/scripts/init_study.py \
   --decision "Should we spend two weeks validating an opportunity here?" \
   --innovation-altitude "workflow" \
   --hypothesis "Cross-tool context recovery is unusually valuable to advanced users" \
+  --discovery-seed "GitHub repositories for persistent AI context systems" \
+  --candidate-profile "People maintaining elaborate cross-tool context workarounds" \
+  --search-constraint "English-language sources only for this SCOUT pass" \
   --workspace research/designer-ai-study
 ```
 
