@@ -39,7 +39,15 @@ A QUALIFIED episode requires valid evidence for both:
 - LU1 — ahead of an important trend;
 - LU2 — unusually high expected benefit.
 
-Do not infer qualification from fame, expertise, early adoption, or invention alone.
+For every QUALIFIED episode also record:
+
+- LU1 rationale — why the evidence establishes advancement;
+- advancement indicator — the observable indicator placing the episode ahead;
+- LU2 rationale — why the evidence establishes unusually high expected benefit;
+- benefit signal — the concrete signal of that expected benefit;
+- qualification caveats — unresolved weaknesses or alternate explanations.
+
+The same evidence may support both LU1 and LU2 only when the separate rationales show why. Do not infer qualification from fame, expertise, early adoption, or invention alone.
 
 Keep separate:
 
