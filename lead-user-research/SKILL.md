@@ -334,7 +334,7 @@ Use [prompts/phase-g-decide.md](prompts/phase-g-decide.md).
 
 Only when proportionate and supported by the environment.
 
-Markdown is canonical. PDF and interactive HTML are derived views, not independent analysis.
+Structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report. PDF and interactive HTML are derived views, not independent analysis.
 
 Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 
