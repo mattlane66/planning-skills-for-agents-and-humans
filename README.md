@@ -144,6 +144,12 @@ An estimate is not a prediction made before the work. It is the output of prelim
 First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
 You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
 
+## Lead User research
+
+For future-facing opportunity discovery, use **[Lead User Research](./lead-user-research/SKILL.md)**. It applies Eric von Hippel's Lead User Method through a lightweight, phase-gated research workflow with persistent evidence state, pyramiding, advanced analogs, coverage-bias controls, and proportionate SCOUT / STANDARD / FULL modes.
+
+It is designed to work across ChatGPT, Claude, Gemini, Codex, Cursor, and other tool-using AI environments. Start with the **[quick guide](./lead-user-research/QUICKSTART.md)**; users only need to supply a domain, a decision, and optionally a mode. The full protocol stays available for audit without requiring one giant memory-dependent prompt.
+
 ## The core workflow
 
 ### Collaborative shaping loop

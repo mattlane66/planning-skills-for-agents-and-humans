@@ -52,7 +52,8 @@
       "Use the dumplink skill when a selected project needs vertical task groups with dependency-aware sequence, risk states, or scope cuts.",
       "Use the feed-planning-context skill to package only accepted authoritative context for an implementation agent.",
       "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision.",
-      "Use the kickoff-doc skill when builders need a durable orientation reference derived from accepted planning artifacts."
+      "Use the kickoff-doc skill when builders need a durable orientation reference derived from accepted planning artifacts.",
+      "Use the lead-user-research skill when the decision depends on future-facing needs: establish important trends first, pyramid toward qualified Lead User Need Episodes and advanced analogs, preserve evidence state, and do not generate concepts before the evidence gate."
     ]
   }
 }

@@ -1,0 +1,136 @@
+# Lead User Research — Quick Start
+
+This skill is designed to work across AI platforms.
+
+For an ordinary chat product with no installation step, copy **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** into a new conversation. You do **not** need to paste the full protocol into every conversation.
+
+## Fastest start
+
+Give your AI:
+
+```text
+Use the Lead User Research method in this folder/repository.
+
+Domain:
+[problem space]
+
+Decision:
+[what decision should this research inform?]
+
+Mode:
+SCOUT | STANDARD | FULL
+```
+
+Use **STANDARD** when unsure.
+
+## Choose a mode
+
+### SCOUT
+
+Use for:
+
+> Is this worth more investigation?
+
+Expected output: compact evidence pass + Decision Brief.
+
+### STANDARD
+
+Use for:
+
+> I need enough evidence to make a meaningful product/research decision.
+
+Expected output: persistent research state, Evidence Freeze, need synthesis, Decision Brief, and concept shaping only if warranted.
+
+### FULL
+
+Use for a durable or publishable study with broader evidence coverage, lineage analysis, advanced analogs, and synchronized report artifacts when supported.
+
+## Coding/agent platforms with file access
+
+1. Clone or make this repository available.
+2. Tell the agent to read `lead-user-research/SKILL.md`.
+3. Initialize a study:
+
+```bash
+python lead-user-research/scripts/init_study.py \
+  --mode standard \
+  --domain "AI tools for designers" \
+  --decision "Should we spend two weeks validating an opportunity here?" \
+  --workspace research/designer-ai-study
+```
+
+4. Tell the agent:
+
+```text
+Run the Lead User Research skill phase-by-phase.
+Reopen authoritative workspace files at the start of every phase.
+Write structured state before narrative synthesis.
+Run the validator after each phase when possible.
+```
+
+5. Validate at any time:
+
+```bash
+python lead-user-research/scripts/validate_study.py research/designer-ai-study
+```
+
+No Python packages are required.
+
+## Chat platforms with Projects/files but no shell
+
+Upload or reference:
+
+- `SKILL.md`;
+- `PROTOCOL.md`;
+- the relevant phase prompt;
+- the study JSON files.
+
+Ask the model to update the files after each phase.
+
+The critical rule is:
+
+> Re-read the files before the next phase. Do not reconstruct authoritative state from chat memory.
+
+## Plain chat with no persistent files
+
+Use the phase prompts sequentially.
+
+At the end of each phase ask for:
+
+> **STATE PACKET**
+
+Save it locally or paste it into the next phase.
+
+Example:
+
+```text
+Run Phase A using phase-a-frame.md.
+
+Domain:
+...
+
+Decision:
+...
+
+Mode:
+SCOUT
+
+You do not have persistent file tools, so end with a complete STATE PACKET for the next phase.
+```
+
+This fallback is less robust. The model should say so rather than claiming durable state.
+
+## What you should expect
+
+Good Lead User research may conclude:
+
+- a need appears important and future-facing;
+- more fieldwork is needed;
+- the public web overrepresents one type of user;
+- an apparent trend does not hold up;
+- the evidence is derivative;
+- no concept should be generated yet.
+
+Those are valid outcomes.
+
+The tool is designed to reduce the pressure on AI to make every study end in a product idea.
