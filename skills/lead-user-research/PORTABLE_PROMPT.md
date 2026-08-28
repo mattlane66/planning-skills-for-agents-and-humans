@@ -35,15 +35,23 @@ SCOUT | STANDARD | FULL
 
 If Mode is omitted, use STANDARD.
 
-Optional additional context:
-- seed sources/experts:
-- source/language/geography constraints:
-- privacy or source-type constraints:
+Optional discovery seeds:
+[sources, links, repositories, communities, files, people, experts]
+
+Optional candidate-profile hypotheses:
+[types of users or situations that may contain unusually advanced or high-benefit cases]
+
+Optional search constraints:
+[explicit hard limits on sources, source types, geography, language, privacy, time, or other discovery dimensions]
 
 ### Input handling rules
 
 - Preserve the user's wording for all supplied fields.
 - Do **not** collapse "What do we want to understand?" into the decision; the learning objective and the decision are distinct.
+- Treat discovery seeds and candidate-profile hypotheses as starting directions, not qualification evidence, proof of Lead User status, or a closed search universe.
+- Continue pyramiding and advanced-analog discovery beyond seeds and candidate profiles unless the user explicitly defines a hard search constraint.
+- If the user supplies a source list without clearly restricting the search to it, treat the list as seeds rather than a boundary.
+- Persist explicit search constraints and report any resulting coverage limitation.
 - If the user provides only a domain and decision, Phase A may draft missing fields only when low-risk.
 - Any drafted target market, learning objective, innovation altitude, or hypothesis must be labeled **PROVISIONAL**.
 - If a missing field could materially change scope, keep it UNKNOWN or ask for clarification when appropriate rather than inventing it.
@@ -73,6 +81,7 @@ Discover:
 - Fame, expertise, early adoption, heavy use, or invention alone do not establish Lead User status.
 - Behavior generally outweighs stated preference.
 - A workaround is not automatically the underlying need.
+- Discovery seeds and candidate-profile hypotheses guide search; they do not prequalify Lead Users or close the search universe.
 - UNKNOWN stays UNKNOWN.
 - PARTIAL source access stays PARTIAL.
 - Derivative evidence is not independent evidence.
