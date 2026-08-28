@@ -50,6 +50,22 @@ Fit Check is a **project-specific post-research concept-shaping method**, not a 
 
 Its job is to derive solution-independent fitness conditions from supported needs before mechanism selection.
 
+## Canonical research brief
+
+Every study begins from the same research-input contract:
+
+- **Research Domain / Problem Space**
+- **Target Market**
+- **What do we want to understand?**
+- **What human decision should this research help inform?**
+- **Desired innovation altitude**
+- **Optional hypotheses**
+- **Mode — SCOUT / STANDARD / FULL**
+
+Preserve the user's wording for these fields. The learning objective and the human decision are related but not interchangeable: one states what the study should learn; the other states what choice that learning should improve.
+
+If a field is missing, Phase A may draft it only when doing so is low-risk. Any drafted field must be labeled **PROVISIONAL** rather than silently treated as user-provided. If the missing field could materially change the research boundary, retain it as UNKNOWN or request clarification when the environment permits.
+
 ## Research purpose
 
 The goal is not the most persuasive narrative.

@@ -12,23 +12,41 @@ Use Fit Check only after a need is sufficiently supported. Fit Check is a projec
 
 ## INPUT
 
-Domain:
+Research Domain / Problem Space:
 [INSERT DOMAIN / PROBLEM SPACE]
 
-Decision:
-[INSERT THE HUMAN DECISION THIS RESEARCH SHOULD INFORM]
+Target Market:
+[INSERT WHO OR WHAT MARKET IS IN SCOPE]
+
+What do we want to understand?
+[INSERT THE RESEARCH QUESTION / LEARNING OBJECTIVE]
+
+What human decision should this research help inform?
+[INSERT THE HUMAN DECISION THIS RESEARCH SHOULD IMPROVE]
+
+Desired innovation altitude:
+[need / workflow / product category / system / other]
+
+Optional hypotheses:
+[INSERT IDEAS TO TEST; THESE ARE NOT ASSUMPTIONS TO PROVE]
 
 Mode:
 SCOUT | STANDARD | FULL
 
 If Mode is omitted, use STANDARD.
 
-Optional:
-- target market:
-- starting hypotheses:
-- desired innovation altitude:
+Optional additional context:
 - seed sources/experts:
 - source/language/geography constraints:
+- privacy or source-type constraints:
+
+### Input handling rules
+
+- Preserve the user's wording for all supplied fields.
+- Do **not** collapse "What do we want to understand?" into the decision; the learning objective and the decision are distinct.
+- If the user provides only a domain and decision, Phase A may draft missing fields only when low-risk.
+- Any drafted target market, learning objective, innovation altitude, or hypothesis must be labeled **PROVISIONAL**.
+- If a missing field could materially change scope, keep it UNKNOWN or ask for clarification when appropriate rather than inventing it.
 
 ## PURPOSE
 

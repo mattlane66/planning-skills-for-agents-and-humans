@@ -6,22 +6,36 @@ For an ordinary chat product with no installation step, copy **[PORTABLE_PROMPT.
 
 ## Fastest start
 
-Give your AI:
+Give your AI the research brief below. You can paste it directly or use [study-templates/research-input.md](study-templates/research-input.md).
 
 ```text
 Use the Lead User Research method in this folder/repository.
 
-Domain:
-[problem space]
+Research Domain / Problem Space:
+[what space are we investigating?]
 
-Decision:
-[what decision should this research inform?]
+Target Market:
+[who or what market is in scope?]
+
+What do we want to understand?
+[the research question / learning objective]
+
+What human decision should this research help inform?
+[the decision the evidence should improve]
+
+Desired innovation altitude:
+[need / workflow / product category / system / other]
+
+Optional hypotheses:
+[ideas to test, not assumptions to prove]
 
 Mode:
 SCOUT | STANDARD | FULL
 ```
 
 Use **STANDARD** when unsure.
+
+If you only know the domain and decision, you can start with those two. Phase A should expose any drafted target market, learning objective, or innovation altitude as **PROVISIONAL** instead of silently inventing them.
 
 ## Choose a mode
 
@@ -55,7 +69,11 @@ Use for a durable or publishable study with broader evidence coverage, lineage a
 python lead-user-research/scripts/init_study.py \
   --mode standard \
   --domain "AI tools for designers" \
+  --target-market "Professional designers using generative AI" \
+  --understand "Which future-facing workflow needs are advanced users already solving for themselves?" \
   --decision "Should we spend two weeks validating an opportunity here?" \
+  --innovation-altitude "workflow" \
+  --hypothesis "Cross-tool context recovery is unusually valuable to advanced users" \
   --workspace research/designer-ai-study
 ```
 

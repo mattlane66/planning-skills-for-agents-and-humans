@@ -33,8 +33,12 @@ def write_json(path: Path, value: object) -> None:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mode", choices=["scout", "standard", "full"], default="standard")
-    parser.add_argument("--domain", required=True)
-    parser.add_argument("--decision", required=True)
+    parser.add_argument("--domain", required=True, help="Research Domain / Problem Space")
+    parser.add_argument("--target-market", default=None, help="Target market or population in scope")
+    parser.add_argument("--understand", default=None, help="What the research should help us understand")
+    parser.add_argument("--decision", required=True, help="Human decision this research should inform")
+    parser.add_argument("--innovation-altitude", default=None, help="Need, workflow, product category, system, or other altitude")
+    parser.add_argument("--hypothesis", action="append", default=[], help="Optional hypothesis to test; may be supplied more than once")
     parser.add_argument("--workspace", default="research/lead-user-study")
     args = parser.parse_args()
 
@@ -63,9 +67,11 @@ def main() -> int:
         root / "decision.json",
         {
             "domain": args.domain,
+            "target_market": args.target_market,
+            "what_to_understand": args.understand,
             "decision": args.decision,
-            "target_market": None,
-            "innovation_altitude": None,
+            "innovation_altitude": args.innovation_altitude,
+            "starting_hypotheses": args.hypothesis,
             "scope": {"in": [], "out": []},
             "assumptions": [],
             "consequential_unknowns": [],
