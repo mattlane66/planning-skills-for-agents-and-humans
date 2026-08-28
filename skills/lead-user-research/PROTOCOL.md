@@ -1,4 +1,4 @@
-# Canonical Lead User Deep Research Protocol — v1.5
+# Canonical Lead User Deep Research Protocol — v1.6
 
 This document is the methodological specification for the `lead-user-research` skill.
 
@@ -18,6 +18,8 @@ For a bounded case to qualify, evidence must support:
 
 - **LU1 — ahead of an important trend:** the user experiences needs or conditions now that others may encounter later if the trend continues;
 - **LU2 — high expected benefit:** solving the need is unusually valuable to the user.
+
+Qualification must record both evidence references and the reasoning that connects them to the criteria: an observable advancement indicator plus LU1 rationale, and a concrete benefit signal plus LU2 rationale. Record qualification caveats explicitly. The same evidence may legitimately support both criteria only when the separate rationales show why.
 
 User innovation is powerful evidence and contains solution information, but invention is not itself the definition of Lead User status.
 
@@ -52,6 +54,18 @@ The following are operational adaptations for reliable AI-assisted research, not
 Fit Check is a **project-specific post-research concept-shaping method**, not a von Hippel or Christensen method.
 
 Its job is to derive solution-independent fitness conditions from supported needs before mechanism selection.
+
+### 5. Study execution level
+
+Methodological rigor and study completeness are different questions.
+
+Record what the study actually did:
+
+- **DESK_RESEARCH** — public/documentary/AI-assisted research without material direct fieldwork;
+- **FIELDWORK_ENRICHED** — direct interviews, observation, or comparable fieldwork materially informs the study;
+- **FULL_LEAD_USER_PROJECT** — direct Lead User/expert participation supports both need/solution learning and collaborative concept development.
+
+Do not represent an AI-only or public-source Phase F as equivalent to the collaborative later stages of a full Lead User project. A desk study may still be rigorous and decision-useful; label it honestly.
 
 ## Canonical research brief
 
@@ -236,11 +250,30 @@ Do not treat a workaround as the need. Do not rank fit points or formulate produ
 
 SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain `PARTIAL` when public evidence cannot establish the full chronology; do not fill the gaps.
 
+## Research sufficiency
+
+STANDARD/FULL studies must make an explicit, decision-relative sufficiency judgment before Evidence Freeze.
+
+Assess:
+
+1. **Trend support** — the important trends used downstream are supported strongly enough for the decision.
+2. **LU qualification** — pivotal episodes have defensible LU1/LU2 evidence, rationales, advancement indicators, benefit signals, and caveats.
+3. **Contradiction search** — consequential alternate explanations and contrary cases were pursued proportionately.
+4. **Lineage resolution** — important derivative relationships are understood well enough not to overcount independent support.
+5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals.
+6. **Marginal value** — another proportionate evidence batch is unlikely to change the decision enough to justify delaying synthesis.
+
+Use `SUFFICIENT | INSUFFICIENT | NOT_ASSESSED`. Do not use numeric user/source quotas as a substitute for judgment.
+
+If any consequential dimension is insufficient, leave the evidence corpus open and name the exact next evidence work. A valid stopping point may be a referral for direct fieldwork rather than more public search.
+
 ## Discovery / interpretation firewall
 
 For STANDARD/FULL studies, finish the evidence corpus before opportunity synthesis.
 
 Before Evidence Freeze, do not formulate preferred product concepts.
+
+Evidence Freeze requires `sufficiency.status = SUFFICIENT`.
 
 The Evidence Freeze records:
 
@@ -416,6 +449,8 @@ Each requirement must pass:
 5. correct evidence altitude;
 6. information gain when a mechanism is introduced.
 
+Persist each check explicitly as a boolean. A requirement may be marked PASS only when all six checks pass and supporting evidence refs exist.
+
 Freeze requirements before evaluating concepts.
 
 Generate enough materially different mechanisms to test whether the requirements are genuinely solution-independent. Do not invent weak alternatives to satisfy a quota. If only one credible mechanism emerges, say so and re-examine whether the requirements are overly mechanism-specific.
@@ -424,15 +459,21 @@ Generate enough materially different mechanisms to test whether the requirements
 
 Return to the decision named at the start.
 
-State:
+Write structured decision state before narrative rendering. The first human-facing layer should answer:
+
+> decision → recommendation → why → decisive evidence → critical uncertainty → action now → what would change the decision
+
+Then state:
 
 - what the evidence supports;
 - what it does not support;
 - consequential unknowns;
-- disconfirming evidence;
+- disconfirming evidence and alternate explanations;
 - discoverability/coverage caveat;
 - next highest-information evidence;
 - priority human review.
+
+When file tools are available, render the canonical Decision Brief from the structured decision outcome so the report cannot silently diverge from state.
 
 For STANDARD/FULL, classify the specific decision as:
 
@@ -495,9 +536,11 @@ Canonical Markdown + structured state are the default. PDF/HTML are optional.
 
 When supported, produce synchronized:
 
-- canonical Markdown;
+- canonical Markdown Decision Brief + structured research state;
 - polished PDF;
 - interactive HTML evidence explorer.
+
+`FULL` run mode controls research breadth and delivery. It does **not** by itself mean `FULL_LEAD_USER_PROJECT`; that execution label requires direct Lead User/expert participation in the later collaborative stages.
 
 The Markdown research record is canonical. PDF and HTML are derived views and must not introduce new substantive claims.
 
@@ -509,8 +552,12 @@ Do the strongest valid subset and label limitations.
 
 ## Final standard
 
-The research should let a human distinguish:
+The research should let a human act without reconstructing the research process, while still being able to inspect the evidence trail.
 
+It should let a human distinguish:
+
+- the decision and recommended action now;
+- what would change that decision;
 - what changed;
 - which evidence supports the trend;
 - which bounded LU episodes qualify and why;
