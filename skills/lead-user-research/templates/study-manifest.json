@@ -1,0 +1,11 @@
+{
+  "protocol_version": "1.3",
+  "mode": "STANDARD",
+  "phase": "A",
+  "human_review": "NOT_REVIEWED",
+  "deterministic_validation": "NOT_RUN",
+  "interpretive_status": "PROVISIONAL",
+  "model_check": "NOT_RUN",
+  "created_at": null,
+  "updated_at": null
+}

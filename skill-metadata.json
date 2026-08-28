@@ -50,5 +50,9 @@
   "breadboard-reflection": {
     "title": "Breadboard Reflection",
     "description": "Compare accepted intent with implementation reality when code or a prototype exists, preserve both separately, surface drift and design smells, and prepare an explicit correction decision."
+  },
+  "lead-user-research": {
+    "title": "Lead User Research",
+    "description": "Conduct AI-assisted Lead User research using von Hippel’s method with phase-gated discovery, persistent evidence state, coverage-bias controls, and proportionate decision outputs."
   }
 }
