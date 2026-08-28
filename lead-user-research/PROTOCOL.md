@@ -250,11 +250,30 @@ Do not treat a workaround as the need. Do not rank fit points or formulate produ
 
 SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain `PARTIAL` when public evidence cannot establish the full chronology; do not fill the gaps.
 
+## Research sufficiency
+
+STANDARD/FULL studies must make an explicit, decision-relative sufficiency judgment before Evidence Freeze.
+
+Assess:
+
+1. **Trend support** — the important trends used downstream are supported strongly enough for the decision.
+2. **LU qualification** — pivotal episodes have defensible LU1/LU2 evidence, rationales, advancement indicators, benefit signals, and caveats.
+3. **Contradiction search** — consequential alternate explanations and contrary cases were pursued proportionately.
+4. **Lineage resolution** — important derivative relationships are understood well enough not to overcount independent support.
+5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals.
+6. **Marginal value** — another proportionate evidence batch is unlikely to change the decision enough to justify delaying synthesis.
+
+Use `SUFFICIENT | INSUFFICIENT | NOT_ASSESSED`. Do not use numeric user/source quotas as a substitute for judgment.
+
+If any consequential dimension is insufficient, leave the evidence corpus open and name the exact next evidence work. A valid stopping point may be a referral for direct fieldwork rather than more public search.
+
 ## Discovery / interpretation firewall
 
 For STANDARD/FULL studies, finish the evidence corpus before opportunity synthesis.
 
 Before Evidence Freeze, do not formulate preferred product concepts.
+
+Evidence Freeze requires `sufficiency.status = SUFFICIENT`.
 
 The Evidence Freeze records:
 
