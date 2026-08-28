@@ -28,6 +28,18 @@ For each trend record:
 
 Reject trends invented merely to justify an interesting user.
 
+## Discovery-input handling
+
+Use persisted discovery inputs deliberately:
+
+- start with supplied discovery seeds when they are relevant to the trend map or candidate search;
+- treat candidate-profile hypotheses as search heuristics to test, not as Lead User qualification evidence;
+- actively allow evidence to disconfirm the candidate-profile hypothesis or lead toward different user types;
+- obey explicit search constraints as hard boundaries and record the coverage they prevent;
+- unless a hard constraint says otherwise, continue pyramiding and advanced-analog discovery beyond supplied sources, people, communities, and candidate profiles.
+
+A human-supplied source list is not a closed search universe unless the human explicitly makes it one.
+
 ## Task 2 — Candidate discovery
 
 Search for:

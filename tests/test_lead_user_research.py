@@ -19,6 +19,9 @@ class LeadUserResearchInputTests(unittest.TestCase):
             "What human decision should this research help inform?",
             "Desired innovation altitude",
             "Optional hypotheses",
+            "Optional discovery seeds",
+            "Optional candidate-profile hypotheses",
+            "Optional search constraints",
         ]
         for relative in ["SKILL.md", "QUICKSTART.md", "PORTABLE_PROMPT.md", "study-templates/research-input.md"]:
             body = (LEAD / relative).read_text(encoding="utf-8")
@@ -40,6 +43,10 @@ class LeadUserResearchInputTests(unittest.TestCase):
                     "--innovation-altitude", "workflow",
                     "--hypothesis", "Context recovery has unusually high expected benefit",
                     "--hypothesis", "Cross-tool portability may matter",
+                    "--discovery-seed", "GitHub repositories for persistent context systems",
+                    "--discovery-seed", "AI workflow communities",
+                    "--candidate-profile", "People maintaining elaborate cross-tool context workarounds",
+                    "--search-constraint", "English-language sources only for this pass",
                     "--workspace", str(workspace),
                 ],
                 check=True,
@@ -55,6 +62,18 @@ class LeadUserResearchInputTests(unittest.TestCase):
             self.assertEqual(
                 ["Context recovery has unusually high expected benefit", "Cross-tool portability may matter"],
                 decision["starting_hypotheses"],
+            )
+            self.assertEqual(
+                ["GitHub repositories for persistent context systems", "AI workflow communities"],
+                decision["discovery_seeds"],
+            )
+            self.assertEqual(
+                ["People maintaining elaborate cross-tool context workarounds"],
+                decision["candidate_profile_hypotheses"],
+            )
+            self.assertEqual(
+                ["English-language sources only for this pass"],
+                decision["search_constraints"],
             )
 
     def test_fresh_full_brief_workspace_validates(self):
@@ -82,6 +101,17 @@ class LeadUserResearchInputTests(unittest.TestCase):
             )
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertIn("structural validation passed", result.stdout.lower())
+
+
+    def test_discovery_inputs_do_not_prequalify_lead_users(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_b = (LEAD / "prompts" / "phase-b-discover.md").read_text(encoding="utf-8")
+        state = (LEAD / "references" / "state-contract.md").read_text(encoding="utf-8")
+
+        self.assertIn("not qualification evidence", protocol)
+        self.assertIn("not as Lead User qualification evidence", phase_b)
+        self.assertIn("not a closed search universe", phase_b)
+        self.assertIn("Search constraints are the only one", state)
 
 
     def test_episode_tracing_contract_is_explicit(self):

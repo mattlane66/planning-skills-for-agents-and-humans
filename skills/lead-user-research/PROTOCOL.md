@@ -1,4 +1,4 @@
-# Canonical Lead User Deep Research Protocol — v1.4
+# Canonical Lead User Deep Research Protocol — v1.5
 
 This document is the methodological specification for the `lead-user-research` skill.
 
@@ -65,7 +65,17 @@ Every study begins from the same research-input contract:
 - **Optional hypotheses**
 - **Mode — SCOUT / STANDARD / FULL**
 
+Optional discovery inputs may also be supplied:
+
+- **Discovery seeds** — sources, links, repositories, communities, files, people, or experts the human wants the research to start from;
+- **Candidate-profile hypotheses** — types of users or situations the human suspects may contain unusually advanced or high-benefit cases;
+- **Search constraints** — explicit hard boundaries on sources, source types, geography, language, privacy, time, or other discovery dimensions.
+
 Preserve the user's wording for these fields. The learning objective and the human decision are related but not interchangeable: one states what the study should learn; the other states what choice that learning should improve.
+
+Treat discovery seeds and candidate-profile hypotheses as starting directions, not qualification evidence, proof of Lead User status, or a closed search universe. Continue pyramiding and advanced-analog discovery beyond them unless the user explicitly defines a hard search constraint. A supplied source list is a seed set unless the user clearly says the search must be restricted to it.
+
+Persist search constraints and surface any resulting coverage limitation. Do not silently convert a seed or candidate-profile hypothesis into a hard boundary.
 
 If a field is missing, Phase A may draft it only when doing so is low-risk. Any drafted field must be labeled **PROVISIONAL** rather than silently treated as user-provided. If the missing field could materially change the research boundary, retain it as UNKNOWN or request clarification when the environment permits.
 

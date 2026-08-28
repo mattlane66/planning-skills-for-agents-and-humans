@@ -19,15 +19,20 @@ Preserve or define:
 4. What human decision should this research help inform?;
 5. Desired innovation altitude;
 6. Optional starting hypotheses;
-7. mode — SCOUT / STANDARD / FULL;
-8. study boundary;
-9. starting assumptions;
-10. consequential unknowns;
-11. evidence that could disconfirm the starting hypothesis;
-12. questions this method will not answer;
-13. likely discoverability biases in an AI-plus-search study.
+7. optional discovery seeds;
+8. optional candidate-profile hypotheses;
+9. optional search constraints;
+10. mode — SCOUT / STANDARD / FULL;
+11. study boundary;
+12. starting assumptions;
+13. consequential unknowns;
+14. evidence that could disconfirm the starting hypothesis;
+15. questions this method will not answer;
+16. likely discoverability biases in an AI-plus-search study.
 
 Do not silently collapse the learning objective into the decision. Preserve the user's wording for supplied fields. If a missing brief field can be drafted safely, label it PROVISIONAL; if it could materially change scope, leave it UNKNOWN or request clarification when appropriate.
+
+Treat discovery seeds and candidate-profile hypotheses as starting directions, not qualification evidence or a closed search universe. Preserve explicit search constraints as hard boundaries. If a human supplies sources, people, communities, or candidate profiles without explicitly restricting the search to them, record them as seeds/hypotheses and allow Phase B to pyramid outward.
 
 ## Proportionality check
 
@@ -59,6 +64,7 @@ The phase is complete when another researcher can tell:
 - what is in/out;
 - what uncertainty matters most;
 - what evidence could reverse the decision;
-- what populations search may systematically miss.
+- what populations search may systematically miss;
+- which discovery inputs are seeds/hypotheses versus hard search constraints.
 
 Do not proceed by inventing missing scope. Mark consequential ambiguity.

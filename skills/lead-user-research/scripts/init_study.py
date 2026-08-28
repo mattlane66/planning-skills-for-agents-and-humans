@@ -39,6 +39,9 @@ def main() -> int:
     parser.add_argument("--decision", required=True, help="Human decision this research should inform")
     parser.add_argument("--innovation-altitude", default=None, help="Need, workflow, product category, system, or other altitude")
     parser.add_argument("--hypothesis", action="append", default=[], help="Optional hypothesis to test; may be supplied more than once")
+    parser.add_argument("--discovery-seed", action="append", default=[], help="Optional source, person, community, repository, file, or other discovery seed; may be supplied more than once")
+    parser.add_argument("--candidate-profile", action="append", default=[], help="Optional user or situation profile to investigate as a discovery hypothesis; may be supplied more than once")
+    parser.add_argument("--search-constraint", action="append", default=[], help="Optional hard discovery boundary; may be supplied more than once")
     parser.add_argument("--workspace", default="research/lead-user-study")
     args = parser.parse_args()
 
@@ -52,7 +55,7 @@ def main() -> int:
     write_json(
         root / "manifest.json",
         {
-            "protocol_version": "1.4",
+            "protocol_version": "1.5",
             "mode": mode,
             "phase": "A",
             "human_review": "NOT_REVIEWED",
@@ -72,6 +75,9 @@ def main() -> int:
             "decision": args.decision,
             "innovation_altitude": args.innovation_altitude,
             "starting_hypotheses": args.hypothesis,
+            "discovery_seeds": args.discovery_seed,
+            "candidate_profile_hypotheses": args.candidate_profile,
+            "search_constraints": args.search_constraint,
             "scope": {"in": [], "out": []},
             "assumptions": [],
             "consequential_unknowns": [],
