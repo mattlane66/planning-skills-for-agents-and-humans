@@ -24,6 +24,17 @@ Only now ask:
 - desired progress;
 - compensating behavior.
 
+When an LU episode has a trace, run this interpretation against the traced sequence and its cited atomic evidence.
+
+Keep separate:
+
+- OBSERVED behavior;
+- STATED purpose;
+- INFERRED purpose;
+- UNKNOWN elements.
+
+Do not fill missing circumstance, chronology, struggle, prior solution, desired progress, motivation, or compensating purpose merely because they would make the story coherent.
+
 Do not turn this into a separate JTBD study.
 
 ## 3. Findings
