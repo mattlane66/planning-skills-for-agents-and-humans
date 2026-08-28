@@ -542,7 +542,7 @@ When supported, produce synchronized:
 
 `FULL` run mode controls research breadth and delivery. It does **not** by itself mean `FULL_LEAD_USER_PROJECT`; that execution label requires direct Lead User/expert participation in the later collaborative stages.
 
-The Markdown research record is canonical. PDF and HTML are derived views and must not introduce new substantive claims.
+Structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report. PDF and HTML are derived views and must not introduce new substantive claims.
 
 ## Capability honesty
 
