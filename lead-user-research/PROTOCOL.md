@@ -536,9 +536,11 @@ Canonical Markdown + structured state are the default. PDF/HTML are optional.
 
 When supported, produce synchronized:
 
-- canonical Markdown;
+- canonical Markdown Decision Brief + structured research state;
 - polished PDF;
 - interactive HTML evidence explorer.
+
+`FULL` run mode controls research breadth and delivery. It does **not** by itself mean `FULL_LEAD_USER_PROJECT`; that execution label requires direct Lead User/expert participation in the later collaborative stages.
 
 The Markdown research record is canonical. PDF and HTML are derived views and must not introduce new substantive claims.
 
