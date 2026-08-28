@@ -97,9 +97,25 @@ Array of bounded Lead User Need Episodes:
 - user response;
 - desired progress;
 - observed result;
+- optional `trace` for pivotal episodes;
 - unknowns.
 
-A QUALIFIED episode must contain valid evidence references for both LU1 and LU2.
+When present, `trace` contains:
+
+- `status` — `NOT_ASSESSED | PARTIAL | SUFFICIENT`;
+- `initiating_condition`;
+- `prior_approach`;
+- `switch_or_change_trigger`;
+- `expected_improvement`;
+- `sequence` — ordered steps with action, context, result, and `evidence_refs`;
+- `fit_points` — consequential points with step reference, observed behavior, compensating behavior, stated purpose, inferred purpose, UNKNOWNs, and `evidence_refs`;
+- `actual_outcome`;
+- `evidence_refs` — episode-level trace support when evidence applies across multiple trace fields;
+- `unknowns`.
+
+`SUFFICIENT` means sufficient for the intended downstream interpretation, not complete knowledge of the episode.
+
+A trace is optional and is not part of Lead User qualification. A QUALIFIED episode must contain valid evidence references for both LU1 and LU2 regardless of trace status.
 
 ### `lineage.json`
 
