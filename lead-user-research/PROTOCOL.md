@@ -552,8 +552,12 @@ Do the strongest valid subset and label limitations.
 
 ## Final standard
 
-The research should let a human distinguish:
+The research should let a human act without reconstructing the research process, while still being able to inspect the evidence trail.
 
+It should let a human distinguish:
+
+- the decision and recommended action now;
+- what would change that decision;
 - what changed;
 - which evidence supports the trend;
 - which bounded LU episodes qualify and why;
