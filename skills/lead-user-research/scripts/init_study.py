@@ -55,9 +55,11 @@ def main() -> int:
     write_json(
         root / "manifest.json",
         {
-            "protocol_version": "1.5",
+            "protocol_version": "1.6",
             "mode": mode,
             "phase": "A",
+            "study_execution_level": "DESK_RESEARCH",
+            "study_execution_basis": [],
             "human_review": "NOT_REVIEWED",
             "deterministic_validation": "NOT_RUN",
             "interpretive_status": "PROVISIONAL",
@@ -97,6 +99,20 @@ def main() -> int:
         },
     )
     write_json(
+        root / "sufficiency.json",
+        {
+            "status": "NOT_ASSESSED",
+            "trend_support": "NOT_ASSESSED",
+            "lu_qualification": "NOT_ASSESSED",
+            "contradiction_search": "NOT_ASSESSED",
+            "lineage_resolution": "NOT_ASSESSED",
+            "pyramid_coverage": "NOT_ASSESSED",
+            "marginal_value": "NOT_ASSESSED",
+            "rationale": "",
+            "unresolved_actions": [],
+        },
+    )
+    write_json(
         root / "freeze.json",
         {
             "status": "OPEN",
@@ -106,6 +122,24 @@ def main() -> int:
             "independent_lineage_count": 0,
             "unresolved_gaps": [],
             "post_freeze_evidence": [],
+        },
+    )
+    write_json(
+        root / "decision_outcome.json",
+        {
+            "status": None,
+            "recommendation": "",
+            "why": [],
+            "decisive_finding_refs": [],
+            "decisive_lu_refs": [],
+            "critical_uncertainties": [],
+            "action_now": [],
+            "change_conditions": [],
+            "what_evidence_supports": [],
+            "what_evidence_does_not_support": [],
+            "contradictions": [],
+            "recommended_next_evidence": [],
+            "priority_human_review": [],
         },
     )
     for filename in EMPTY_LIST_FILES:
