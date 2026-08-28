@@ -229,6 +229,16 @@ Prefer:
 
 Qualify LU## only with evidence for both LU1 and LU2.
 
+For every QUALIFIED episode state:
+
+- LU1 rationale;
+- observable advancement indicator;
+- LU2 rationale;
+- concrete benefit signal;
+- qualification caveats.
+
+The same evidence may support both criteria only when the separate rationales show why.
+
 Keep separate:
 
 prior baseline → desired progress → observed result
@@ -249,11 +259,24 @@ Pyramiding may validly conclude:
 
 Search is not a substitute for fieldwork.
 
-## PHASE D — EVIDENCE FREEZE
+## PHASE D — RESEARCH SUFFICIENCY + EVIDENCE FREEZE
 
 STANDARD/FULL only.
 
-Before interpretation, audit:
+Before freezing, assess each dimension as NOT_ASSESSED | SUFFICIENT | INSUFFICIENT:
+
+- trend support;
+- pivotal LU qualification;
+- contradiction search;
+- lineage resolution;
+- pyramid coverage;
+- marginal value of another proportionate evidence batch.
+
+Do not use numeric source/user quotas as a substitute for this judgment. If a consequential branch requires direct contact, record the fieldwork referral rather than pretending public search is exhaustive.
+
+Only freeze when all consequential dimensions are SUFFICIENT for the intended decision.
+
+Before interpretation, also audit:
 
 - source coverage;
 - evidence references;
@@ -361,15 +384,24 @@ Do not invent weak alternatives for symmetry.
 
 Return to the original decision.
 
-Provide:
+Lead with:
+
+1. exact decision;
+2. recommendation / decision status;
+3. why;
+4. decisive evidence;
+5. critical uncertainty;
+6. action now;
+7. what evidence or conditions would change the decision.
+
+Then provide:
 
 - what the evidence supports;
 - strongest evidence;
 - what the evidence does not support;
 - what could make the interpretation wrong;
 - consequential unknowns;
-- recommended next evidence;
-- decision status.
+- recommended next evidence.
 
 SCOUT:
 STOP | INVESTIGATE | ESCALATE
@@ -399,11 +431,21 @@ In outward-facing Decision Briefs:
 - do not imply consent, endorsement, or commercial participation;
 - avoid unnecessary personal details.
 
+## STUDY EXECUTION LEVEL
+
+Keep run mode separate from what the study actually did:
+
+- DESK_RESEARCH — public/documentary/AI-assisted research without material direct fieldwork;
+- FIELDWORK_ENRICHED — direct interviews, observation, or comparable fieldwork materially informs the study;
+- FULL_LEAD_USER_PROJECT — direct Lead User/expert participation supports both need/solution learning and collaborative concept development.
+
+FULL run mode alone does not justify FULL_LEAD_USER_PROJECT. AI-only concept shaping from public evidence remains DESK_RESEARCH.
+
 ## PHASE H — DELIVER
 
 Only when proportionate and actually supported by the environment.
 
-Markdown is canonical.
+Structured state + Markdown Decision Brief are canonical.
 
 PDF and interactive HTML are derived views and must not introduce claims absent from Markdown.
 
@@ -414,6 +456,8 @@ STANDARD defaults to Markdown + structured state.
 FULL may produce Markdown + PDF + interactive HTML.
 
 ## FINAL STANDARD
+
+The human-facing result should make the next decision/action clear without forcing the reader to reconstruct the research process. Preserve drill-down to evidence for audit.
 
 Do not produce the most convincing story.
 

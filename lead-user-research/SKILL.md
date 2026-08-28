@@ -10,7 +10,7 @@ Use this skill to investigate future-facing needs using Eric von Hippel's Lead U
 
 The governing research method is von Hippel's Lead User Method. Clayton Christensen's Jobs to Be Done is a limited post-evidence interpretive lens. Fit Check is a separate project-specific concept-shaping method used only after a need is supported strongly enough to justify concept work.
 
-Read [PROTOCOL.md](PROTOCOL.md) for the canonical methodology. Use the bounded phase prompts under [prompts/](prompts/) for execution. For plain chat products, [PORTABLE_PROMPT.md](PORTABLE_PROMPT.md) is the single copy-paste entry point.
+Start at [README.md](README.md) for the human-facing entry points. Read [PROTOCOL.md](PROTOCOL.md) for the canonical methodology. Use the bounded phase prompts under [prompts/](prompts/) for execution. For plain chat products, [PORTABLE_PROMPT.md](PORTABLE_PROMPT.md) is the single copy-paste entry point.
 
 ## Goal
 
@@ -18,7 +18,7 @@ Produce decision-useful Lead User research that can show:
 
 - which important trends are changing a market or activity;
 - which users are meaningfully ahead of those trends;
-- which bounded Lead User Need Episodes demonstrate unusually high benefit from solving an emerging need;
+- which bounded Lead User Need Episodes demonstrate unusually high benefit from solving an emerging need, and why they satisfy LU1/LU2;
 - what users have actually tried, modified, rejected, or invented;
 - how pivotal Lead User episodes actually unfold, including fit breaks and compensating behavior;
 - what advanced analog markets reveal;
@@ -162,6 +162,8 @@ Default workspace:
 ```text
 manifest.json
 decision.json
+sufficiency.json
+decision_outcome.json
 trends.json
 candidates.json
 sources.json
@@ -264,13 +266,16 @@ Use [prompts/phase-c-evidence.md](prompts/phase-c-evidence.md).
 
 ### D — Freeze
 
-For STANDARD/FULL, structurally validate and audit the evidence before interpretive synthesis.
+For STANDARD/FULL, first make an explicit decision-relative research-sufficiency judgment, then structurally validate and audit the evidence before interpretive synthesis.
 
 Write:
 
+- `sufficiency.json`;
 - freeze record;
 - unresolved gaps;
 - coverage status.
+
+Do not freeze unless trend support, pivotal LU qualification, contradiction search, lineage resolution, pyramid coverage, and marginal value of another evidence batch are all SUFFICIENT for the intended decision.
 
 Use [prompts/phase-d-freeze.md](prompts/phase-d-freeze.md).
 
@@ -306,16 +311,22 @@ Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
 
 Return to the original decision.
 
-Write:
+Write `decision_outcome.json` before narrative rendering. The top human-facing layer must answer:
+
+> decision → recommendation → why → decisive evidence → critical uncertainty → action now → what would change the decision
+
+Then include:
 
 - what evidence supports;
 - what it does not support;
 - coverage-bias caveat;
 - consequential unknowns;
-- disconfirming evidence;
+- disconfirming evidence / alternate explanations;
 - next evidence;
 - decision status;
 - priority human review.
+
+When file tools are available, render `outputs/decision-brief.md` with `scripts/render_decision_brief.py`.
 
 Use [prompts/phase-g-decide.md](prompts/phase-g-decide.md).
 
@@ -323,14 +334,14 @@ Use [prompts/phase-g-decide.md](prompts/phase-g-decide.md).
 
 Only when proportionate and supported by the environment.
 
-Markdown is canonical. PDF and interactive HTML are derived views, not independent analysis.
+Structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report. PDF and interactive HTML are derived views, not independent analysis.
 
 Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 
 ## Hard methodological rules
 
 - Trend before Lead User.
-- A qualified Lead User Need Episode requires evidence for both advancement on an important trend and unusually high expected benefit.
+- A qualified Lead User Need Episode requires evidence for both advancement on an important trend and unusually high expected benefit, plus explicit LU1/LU2 rationales, advancement indicator, benefit signal, and qualification caveats.
 - Lead User status is relational to a trend and need, not a personality type.
 - Revealed behavior usually carries more weight than stated preference.
 - A workaround is not automatically the need.
@@ -347,6 +358,8 @@ Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 - Insufficient evidence is a valid result.
 - Search coverage is not population coverage.
 - Presentation must never outrun evidence.
+- `FULL` run mode does not by itself mean a full classical Lead User project. Keep `study_execution_level` honest: `DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT`.
+- Never represent AI-only concept shaping from public evidence as equivalent to collaborative Lead User/expert concept development.
 
 ## Coverage-bias rule
 

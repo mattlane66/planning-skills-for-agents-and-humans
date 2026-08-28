@@ -28,11 +28,14 @@ Preserve or define:
 13. consequential unknowns;
 14. evidence that could disconfirm the starting hypothesis;
 15. questions this method will not answer;
-16. likely discoverability biases in an AI-plus-search study.
+16. likely discoverability biases in an AI-plus-search study;
+17. actual study execution level — DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT — and its basis.
 
 Do not silently collapse the learning objective into the decision. Preserve the user's wording for supplied fields. If a missing brief field can be drafted safely, label it PROVISIONAL; if it could materially change scope, leave it UNKNOWN or request clarification when appropriate.
 
 Treat discovery seeds and candidate-profile hypotheses as starting directions, not qualification evidence or a closed search universe. Preserve explicit search constraints as hard boundaries. If a human supplies sources, people, communities, or candidate profiles without explicitly restricting the search to them, record them as seeds/hypotheses and allow Phase B to pyramid outward.
+
+Default to DESK_RESEARCH. Set FIELDWORK_ENRICHED only when direct interviews, observation, or comparable fieldwork materially informs the study. Set FULL_LEAD_USER_PROJECT only when direct Lead User/expert participation supports both need/solution learning and collaborative concept development. FULL run mode alone does not justify that execution label.
 
 ## Proportionality check
 

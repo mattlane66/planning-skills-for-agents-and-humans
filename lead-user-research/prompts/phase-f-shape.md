@@ -42,13 +42,16 @@ For each passing need derive:
 - constraints;
 - R## — fitness conditions.
 
-Each requirement must be:
+Each requirement must explicitly record:
 
-- evidence-traceable;
-- implementation-independent;
-- plausibly satisfiable by different mechanisms;
-- causally relevant to the gap;
-- stated at the need rather than workaround altitude.
+- traceability to evidence;
+- implementation independence;
+- solution plurality;
+- causal relevance to the gap;
+- altitude check — stated at the need rather than workaround altitude;
+- information gain — a mechanism adds implementation information rather than merely restating R.
+
+Persist these six checks as booleans. Mark a requirement PASS only when all six are true and supporting evidence refs exist.
 
 Freeze requirements before evaluating mechanisms.
 

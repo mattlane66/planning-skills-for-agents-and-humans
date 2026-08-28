@@ -551,6 +551,103 @@
         "product concepts before evidence",
         "production code"
       ]
+    },
+    {
+      "id": "lead-user-research-rejects-impressive-early-adopter-without-lu2",
+      "prompt": "Research this future-facing workflow with the Lead User method. You find a highly expert early adopter who uses every new tool immediately but there is no evidence that solving the focal need is unusually valuable to them. Decide whether this person qualifies and continue only if methodologically justified.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "evidence-freeze",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "LU1 and LU2 are separate",
+        "high expected benefit evidence",
+        "qualification caveat or rejection"
+      ],
+      "forbidden_evidence": [
+        "expertise as Lead User proof",
+        "early adoption as LU2 evidence",
+        "automatic concept generation"
+      ]
+    },
+    {
+      "id": "lead-user-research-collapses-derivative-confirmations",
+      "prompt": "Run Lead User research on an emerging workaround pattern. Five public examples look independent at first, but four are forks or adaptations of the same upstream project. Preserve the lineage and tell me what the evidence actually supports.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "evidence-freeze",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "lineage mapping",
+        "derivative versus independent evidence",
+        "independent support not raw example count"
+      ],
+      "forbidden_evidence": [
+        "five independent confirmations",
+        "frequency as importance",
+        "prevalence claim"
+      ]
+    },
+    {
+      "id": "lead-user-research-stops-when-sufficiency-is-not-met",
+      "prompt": "Use the Lead User method on this market, but the strongest candidate has ambiguous benefit evidence, one major contradictory case, and the best pyramiding branch requires direct contact. Produce the responsible decision output rather than forcing synthesis.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "evidence-freeze",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "research sufficiency",
+        "INSUFFICIENT or OPEN freeze",
+        "fieldwork referral",
+        "consequential contradiction"
+      ],
+      "forbidden_evidence": [
+        "FROZEN despite insufficient evidence",
+        "invented LU2",
+        "product concept"
+      ]
+    },
+    {
+      "id": "lead-user-research-fit-check-requires-solution-independent-r",
+      "prompt": "A supported Lead User need passes the concept gate. Derive Fit Check requirements and compare candidate mechanisms, but make sure the requirements are not disguised features.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "concept-generation-gate",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "traceability",
+        "implementation independence",
+        "solution plurality",
+        "causal relevance",
+        "altitude check",
+        "information gain"
+      ],
+      "forbidden_evidence": [
+        "mechanism restated as requirement",
+        "requirement changed to make preferred concept win",
+        "concept quota"
+      ]
+    },
+    {
+      "id": "lead-user-research-decision-brief-is-action-first",
+      "prompt": "Finish this Lead User study and give the executive team a clean decision packet. They should be able to act without reading the whole research record, while still being able to drill into evidence.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "decision",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "decision",
+        "recommendation",
+        "decisive evidence",
+        "critical uncertainty",
+        "action now",
+        "what would change the decision"
+      ],
+      "forbidden_evidence": [
+        "research chronology before recommendation",
+        "single trust badge",
+        "unsupported prevalence"
+      ]
     }
   ]
 }

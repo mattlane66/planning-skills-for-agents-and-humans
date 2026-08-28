@@ -6,7 +6,9 @@ Reopen the complete structured state before rendering.
 
 ## Canonical source
 
-Markdown is the canonical report.
+The structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report.
+
+When file tools are available, regenerate the Decision Brief from `decision_outcome.json` with `scripts/render_decision_brief.py` before producing derived views.
 
 PDF and HTML are derived from the same research state and must not introduce new substantive claims.
 
@@ -26,9 +28,11 @@ Generate PDF/HTML only when requested or clearly useful.
 
 When supported, produce:
 
-1. Markdown;
+1. Markdown Decision Brief + structured state;
 2. polished PDF;
 3. interactive HTML.
+
+FULL run mode does not itself imply FULL_LEAD_USER_PROJECT. Surface the actual study execution level in outward-facing delivery.
 
 The HTML may support progressive disclosure:
 
