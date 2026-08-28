@@ -449,6 +449,8 @@ Each requirement must pass:
 5. correct evidence altitude;
 6. information gain when a mechanism is introduced.
 
+Persist each check explicitly as a boolean. A requirement may be marked PASS only when all six checks pass and supporting evidence refs exist.
+
 Freeze requirements before evaluating concepts.
 
 Generate enough materially different mechanisms to test whether the requirements are genuinely solution-independent. Do not invent weak alternatives to satisfy a quota. If only one credible mechanism emerges, say so and re-examine whether the requirements are overly mechanism-specific.
