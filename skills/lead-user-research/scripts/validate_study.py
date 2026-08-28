@@ -474,14 +474,22 @@ def main() -> int:
         if not isinstance(basis, list):
             errors.append("manifest study_execution_basis must be a list")
             basis = []
-        if level == "FIELDWORK_ENRICHED" and not basis:
+        valid_basis: set[str] = set()
+        for index, item in enumerate(basis):
+            if not isinstance(item, str) or not item.strip():
+                errors.append(
+                    f"manifest study_execution_basis[{index}] must be a non-empty string"
+                )
+                continue
+            valid_basis.add(item)
+        if level == "FIELDWORK_ENRICHED" and not valid_basis:
             errors.append("FIELDWORK_ENRICHED requires study_execution_basis")
         if level == "FULL_LEAD_USER_PROJECT":
             required_basis = {
                 "direct_lead_user_participation",
                 "direct_concept_development_participation",
             }
-            if not required_basis.issubset(set(basis)):
+            if not required_basis.issubset(valid_basis):
                 errors.append(
                     "FULL_LEAD_USER_PROJECT requires direct_lead_user_participation and "
                     "direct_concept_development_participation in study_execution_basis"
