@@ -2,6 +2,8 @@
 
 This skill is designed to work across AI platforms.
 
+If you landed in this folder and are unsure where to start, use **[README.md](README.md)**.
+
 For an ordinary chat product with no installation step, copy **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** into a new conversation. You do **not** need to paste the full protocol into every conversation.
 
 ## Fastest start
@@ -106,6 +108,12 @@ Run the validator after each phase when possible.
 python lead-user-research/scripts/validate_study.py research/designer-ai-study
 ```
 
+6. After Phase G, render the canonical human-facing brief:
+
+```bash
+python lead-user-research/scripts/render_decision_brief.py research/designer-ai-study
+```
+
 No Python packages are required.
 
 ## Chat platforms with Projects/files but no shell
@@ -154,6 +162,10 @@ This fallback is less robust. The model should say so rather than claiming durab
 
 ## What you should expect
 
+The Decision Brief should lead with:
+
+> decision → recommendation → why → decisive evidence → critical uncertainty → action now → what would change the decision
+
 Good Lead User research may conclude:
 
 - a need appears important and future-facing;
@@ -166,3 +178,5 @@ Good Lead User research may conclude:
 Those are valid outcomes.
 
 The tool is designed to reduce the pressure on AI to make every study end in a product idea.
+
+Also keep **run mode** separate from **study execution level**. A FULL desk-research run is still DESK_RESEARCH unless direct fieldwork and collaborative Lead User/expert concept development actually occurred.
