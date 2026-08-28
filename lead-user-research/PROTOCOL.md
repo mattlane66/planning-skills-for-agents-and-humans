@@ -55,6 +55,18 @@ Fit Check is a **project-specific post-research concept-shaping method**, not a 
 
 Its job is to derive solution-independent fitness conditions from supported needs before mechanism selection.
 
+### 5. Study execution level
+
+Methodological rigor and study completeness are different questions.
+
+Record what the study actually did:
+
+- **DESK_RESEARCH** — public/documentary/AI-assisted research without material direct fieldwork;
+- **FIELDWORK_ENRICHED** — direct interviews, observation, or comparable fieldwork materially informs the study;
+- **FULL_LEAD_USER_PROJECT** — direct Lead User/expert participation supports both need/solution learning and collaborative concept development.
+
+Do not represent an AI-only or public-source Phase F as equivalent to the collaborative later stages of a full Lead User project. A desk study may still be rigorous and decision-useful; label it honestly.
+
 ## Canonical research brief
 
 Every study begins from the same research-input contract:
