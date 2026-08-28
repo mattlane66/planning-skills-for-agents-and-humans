@@ -23,15 +23,19 @@ Tracks:
 
 Tracks:
 
-- domain;
-- decision;
+- domain / problem space;
 - target market;
+- what the research should understand;
+- human decision the research should inform;
 - innovation altitude;
+- starting hypotheses;
 - scope;
 - assumptions;
 - consequential unknowns;
 - disconfirming evidence;
 - out-of-scope questions.
+
+The learning objective (`what_to_understand`) and decision are separate fields and must not be silently merged.
 
 ### `trends.json`
 

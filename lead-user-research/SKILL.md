@@ -27,16 +27,28 @@ Produce decision-useful Lead User research that can show:
 
 Do not optimize for a persuasive story. Optimize for traceable evidence and a better-informed decision under uncertainty.
 
-## Smallest useful input
+## Research brief — canonical input
 
-A user only needs to provide:
+The reusable research brief preserves the input contract from the canonical prompt:
 
 ```text
-Domain:
-[problem space]
+Research Domain / Problem Space:
+[what space are we investigating?]
 
-Decision:
-[the decision this research should inform]
+Target Market:
+[who or what market is in scope?]
+
+What do we want to understand?
+[the research question / learning objective]
+
+What human decision should this research help inform?
+[the decision the evidence should improve]
+
+Desired innovation altitude:
+[need / workflow / product category / system / other]
+
+Optional hypotheses:
+[ideas to test, not assumptions to prove]
 
 Mode:
 SCOUT | STANDARD | FULL
@@ -44,11 +56,10 @@ SCOUT | STANDARD | FULL
 
 If Mode is omitted, use **STANDARD**.
 
-Optional inputs:
+For ease of use, a user may begin with only the domain and decision. In that case Phase A may draft the missing brief fields, but it must label those drafts **PROVISIONAL** and surface them explicitly. Never silently treat inferred scope, target market, learning objective, altitude, or hypotheses as user-provided facts.
 
-- target market;
-- starting hypotheses;
-- desired innovation altitude;
+Additional optional inputs:
+
 - known sources or seed experts;
 - constraints on time, geography, language, privacy, or source types.
 

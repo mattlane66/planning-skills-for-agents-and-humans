@@ -217,8 +217,21 @@ def main() -> int:
         if not coverage.get("corrective_actions"):
             warnings.append("coverage corrective_actions is empty")
 
-    if not isinstance(decision, dict) or not decision.get("decision"):
-        errors.append("decision.json must contain a non-empty decision")
+    if not isinstance(decision, dict):
+        errors.append("decision.json must contain a JSON object")
+    else:
+        if not decision.get("domain"):
+            errors.append("decision.json must contain a non-empty domain")
+        if not decision.get("decision"):
+            errors.append("decision.json must contain a non-empty decision")
+        if not decision.get("what_to_understand"):
+            warnings.append("decision.json what_to_understand is empty; Phase A should make the learning objective explicit")
+        if not decision.get("target_market"):
+            warnings.append("decision.json target_market is empty; Phase A should preserve or draft the target market")
+        if not decision.get("innovation_altitude"):
+            warnings.append("decision.json innovation_altitude is empty; Phase A should preserve or draft the desired altitude")
+        if "starting_hypotheses" not in decision:
+            warnings.append("decision.json starting_hypotheses is missing; use an empty list when none were supplied")
 
     if isinstance(manifest, dict):
         manifest["deterministic_validation"] = "FAILED" if errors else "PASSED"

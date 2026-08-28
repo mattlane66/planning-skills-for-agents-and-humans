@@ -11,18 +11,23 @@ Do not perform broad Lead User discovery yet.
 
 ## Task
 
-Define:
+Preserve or define:
 
-1. the exact decision this research should inform;
-2. domain and target market;
-3. mode — SCOUT / STANDARD / FULL;
-4. study boundary;
-5. desired innovation altitude;
-6. starting assumptions;
-7. consequential unknowns;
-8. evidence that could disconfirm the starting hypothesis;
-9. questions this method will not answer;
-10. likely discoverability biases in an AI-plus-search study.
+1. Research Domain / Problem Space;
+2. Target Market;
+3. What do we want to understand? — the learning objective;
+4. What human decision should this research help inform?;
+5. Desired innovation altitude;
+6. Optional starting hypotheses;
+7. mode — SCOUT / STANDARD / FULL;
+8. study boundary;
+9. starting assumptions;
+10. consequential unknowns;
+11. evidence that could disconfirm the starting hypothesis;
+12. questions this method will not answer;
+13. likely discoverability biases in an AI-plus-search study.
+
+Do not silently collapse the learning objective into the decision. Preserve the user's wording for supplied fields. If a missing brief field can be drafted safely, label it PROVISIONAL; if it could materially change scope, leave it UNKNOWN or request clarification when appropriate.
 
 ## Proportionality check
 
@@ -49,6 +54,7 @@ If files are unavailable, emit a complete STATE PACKET.
 
 The phase is complete when another researcher can tell:
 
+- what the study is trying to understand;
 - what decision is being informed;
 - what is in/out;
 - what uncertainty matters most;
