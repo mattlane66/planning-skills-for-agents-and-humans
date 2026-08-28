@@ -14,6 +14,7 @@ COVERAGE = {"FULL", "PARTIAL", "UNREADABLE", "UNKNOWN"}
 LU_STATUS = {"CANDIDATE", "QUALIFIED", "REJECTED"}
 EPISTEMIC = {"VERIFIED", "INFERRED", "SPECULATIVE", "UNKNOWN"}
 GATE = {"PASS", "FAIL", "NOT_ASSESSED"}
+TRACE_STATUS = {"NOT_ASSESSED", "PARTIAL", "SUFFICIENT"}
 
 ID_PATTERNS = {
     "trend_id": re.compile(r"^T\d+$"),
@@ -158,6 +159,72 @@ def main() -> int:
                 errors.append(f"{luid} is QUALIFIED without LU1 evidence")
             if not row.get("lu2_evidence"):
                 errors.append(f"{luid} is QUALIFIED without LU2 evidence")
+
+        trace = row.get("trace")
+        if trace is not None:
+            if not isinstance(trace, dict):
+                errors.append(f"{luid} trace must be an object")
+            else:
+                trace_status = trace.get("status", "NOT_ASSESSED")
+                if trace_status not in TRACE_STATUS:
+                    errors.append(f"{luid} has invalid trace status {trace_status!r}")
+
+                refs_exist(
+                    trace.get("evidence_refs", []),
+                    evidence_ids,
+                    "trace evidence",
+                    luid,
+                    errors,
+                )
+
+                sequence = trace.get("sequence", [])
+                if not isinstance(sequence, list):
+                    errors.append(f"{luid} trace sequence must be a list")
+                    sequence = []
+                for index, step in enumerate(sequence):
+                    if not isinstance(step, dict):
+                        errors.append(f"{luid} trace sequence row {index} must be an object")
+                        continue
+                    refs_exist(
+                        step.get("evidence_refs", []),
+                        evidence_ids,
+                        "trace step evidence",
+                        f"{luid} trace step {index}",
+                        errors,
+                    )
+
+                fit_points = trace.get("fit_points", [])
+                if not isinstance(fit_points, list):
+                    errors.append(f"{luid} trace fit_points must be a list")
+                    fit_points = []
+                for index, point in enumerate(fit_points):
+                    if not isinstance(point, dict):
+                        errors.append(f"{luid} trace fit point {index} must be an object")
+                        continue
+                    refs_exist(
+                        point.get("evidence_refs", []),
+                        evidence_ids,
+                        "trace fit-point evidence",
+                        f"{luid} trace fit point {index}",
+                        errors,
+                    )
+
+                if trace_status == "SUFFICIENT":
+                    trace_ref_count = len(trace.get("evidence_refs", [])) if isinstance(trace.get("evidence_refs", []), list) else 0
+                    trace_ref_count += sum(
+                        len(step.get("evidence_refs", []))
+                        for step in sequence
+                        if isinstance(step, dict) and isinstance(step.get("evidence_refs", []), list)
+                    )
+                    trace_ref_count += sum(
+                        len(point.get("evidence_refs", []))
+                        for point in fit_points
+                        if isinstance(point, dict) and isinstance(point.get("evidence_refs", []), list)
+                    )
+                    if not sequence:
+                        errors.append(f"{luid} trace is SUFFICIENT without any sequence steps")
+                    if trace_ref_count == 0:
+                        errors.append(f"{luid} trace is SUFFICIENT without trace evidence refs")
 
     for row in findings:
         fid = row.get("finding_id", "<unknown>")
