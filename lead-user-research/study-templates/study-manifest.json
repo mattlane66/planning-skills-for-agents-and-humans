@@ -1,7 +1,9 @@
 {
-  "protocol_version": "1.3",
+  "protocol_version": "1.6",
   "mode": "STANDARD",
   "phase": "A",
+  "study_execution_level": "DESK_RESEARCH",
+  "study_execution_basis": [],
   "human_review": "NOT_REVIEWED",
   "deterministic_validation": "NOT_RUN",
   "interpretive_status": "PROVISIONAL",
