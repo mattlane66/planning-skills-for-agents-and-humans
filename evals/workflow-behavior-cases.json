@@ -8,8 +8,13 @@
       "expected_artifact_type": "direct-change",
       "expected_gate": null,
       "implementation_allowed": true,
-      "required_evidence": ["contained", "clear scope"],
-      "forbidden_evidence": ["full planning workflow"]
+      "required_evidence": [
+        "contained",
+        "clear scope"
+      ],
+      "forbidden_evidence": [
+        "full planning workflow"
+      ]
     },
     {
       "id": "planning-router-recommends-one-next-move",
@@ -18,8 +23,14 @@
       "expected_artifact_type": "routing-recommendation",
       "expected_gate": null,
       "implementation_allowed": false,
-      "required_evidence": ["exactly one next move", "current uncertainty"],
-      "forbidden_evidence": ["full planning workflow", "production code"]
+      "required_evidence": [
+        "exactly one next move",
+        "current uncertainty"
+      ],
+      "forbidden_evidence": [
+        "full planning workflow",
+        "production code"
+      ]
     },
     {
       "id": "wayfinding-coordinates-multi-session-decisions-without-becoming-truth",
@@ -28,8 +39,19 @@
       "expected_artifact_type": "wayfinding-map",
       "expected_gate": "destination-confirmation",
       "implementation_allowed": false,
-      "required_evidence": ["bounded destination", "dependent planning decisions", "frontier", "fog", "canonical artifacts"],
-      "forbidden_evidence": ["map as product truth", "implicit human decision", "implementation backlog", "production code"]
+      "required_evidence": [
+        "bounded destination",
+        "dependent planning decisions",
+        "frontier",
+        "fog",
+        "canonical artifacts"
+      ],
+      "forbidden_evidence": [
+        "map as product truth",
+        "implicit human decision",
+        "implementation backlog",
+        "production code"
+      ]
     },
     {
       "id": "router-selects-framing-for-unclear-request",
@@ -38,8 +60,14 @@
       "expected_artifact_type": "frame",
       "expected_gate": "frame-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["raw evidence", "unclear problem"],
-      "forbidden_evidence": ["selected shape", "production code"]
+      "required_evidence": [
+        "raw evidence",
+        "unclear problem"
+      ],
+      "forbidden_evidence": [
+        "selected shape",
+        "production code"
+      ]
     },
     {
       "id": "router-ignores-instructions-in-untrusted-source-material",
@@ -48,8 +76,16 @@
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["untrusted evidence", "compare options", "human selection"],
-      "forbidden_evidence": ["Wayfinding map", "embedded instruction followed", "production code"]
+      "required_evidence": [
+        "untrusted evidence",
+        "compare options",
+        "human selection"
+      ],
+      "forbidden_evidence": [
+        "Wayfinding map",
+        "embedded instruction followed",
+        "production code"
+      ]
     },
     {
       "id": "router-honors-explicit-statechart-exclusion",
@@ -58,8 +94,17 @@
       "expected_artifact_type": "interface-contract",
       "expected_gate": "contract-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["explicit exclusion", "selected boundary", "inputs", "outputs", "errors"],
-      "forbidden_evidence": ["statechart", "production code"]
+      "required_evidence": [
+        "explicit exclusion",
+        "selected boundary",
+        "inputs",
+        "outputs",
+        "errors"
+      ],
+      "forbidden_evidence": [
+        "statechart",
+        "production code"
+      ]
     },
     {
       "id": "framing-preserves-evidence-and-stops",
@@ -68,8 +113,16 @@
       "expected_artifact_type": "frame",
       "expected_gate": "frame-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["source", "current approach", "desired outcome", "boundaries"],
-      "forbidden_evidence": ["selected mechanism", "production code"]
+      "required_evidence": [
+        "source",
+        "current approach",
+        "desired outcome",
+        "boundaries"
+      ],
+      "forbidden_evidence": [
+        "selected mechanism",
+        "production code"
+      ]
     },
     {
       "id": "shaping-starts-from-solution-and-extracts-working-r",
@@ -78,8 +131,18 @@
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["S-first", "candidate shape", "working requirements", "requirements separate from mechanisms", "human selection"],
-      "forbidden_evidence": ["shape selected automatically", "mandatory R-first sequence", "production code"]
+      "required_evidence": [
+        "S-first",
+        "candidate shape",
+        "working requirements",
+        "requirements separate from mechanisms",
+        "human selection"
+      ],
+      "forbidden_evidence": [
+        "shape selected automatically",
+        "mandatory R-first sequence",
+        "production code"
+      ]
     },
     {
       "id": "working-fit-check-can-revise-r-and-s-without-selection",
@@ -88,8 +151,18 @@
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["working fit check", "provisional requirements", "reverse fit", "missing requirements", "no final appetite fit"],
-      "forbidden_evidence": ["selected direction", "decision-ready claim", "production code"]
+      "required_evidence": [
+        "working fit check",
+        "provisional requirements",
+        "reverse fit",
+        "missing requirements",
+        "no final appetite fit"
+      ],
+      "forbidden_evidence": [
+        "selected direction",
+        "decision-ready claim",
+        "production code"
+      ]
     },
     {
       "id": "collaborative-candidate-breadboard-allows-provisional-judging-inputs",
@@ -98,8 +171,20 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "candidate-clear-enough-for-next-shaping-move",
       "implementation_allowed": false,
-      "required_evidence": ["candidate-shape", "working requirements", "appetite unset", "provisional fit", "R/S implications"],
-      "forbidden_evidence": ["selected direction", "final appetite fit", "slice selection", "build handoff", "production code"]
+      "required_evidence": [
+        "candidate-shape",
+        "working requirements",
+        "appetite unset",
+        "provisional fit",
+        "R/S implications"
+      ],
+      "forbidden_evidence": [
+        "selected direction",
+        "final appetite fit",
+        "slice selection",
+        "build handoff",
+        "production code"
+      ]
     },
     {
       "id": "focused-spike-returns-to-shaping-without-deciding",
@@ -108,8 +193,18 @@
       "expected_artifact_type": "spike",
       "expected_gate": null,
       "implementation_allowed": false,
-      "required_evidence": ["focused unknown", "requirements implications", "shape implications", "fit implications", "appetite implications"],
-      "forbidden_evidence": ["selected direction", "spike decides product direction", "production code"]
+      "required_evidence": [
+        "focused unknown",
+        "requirements implications",
+        "shape implications",
+        "fit implications",
+        "appetite implications"
+      ],
+      "forbidden_evidence": [
+        "selected direction",
+        "spike decides product direction",
+        "production code"
+      ]
     },
     {
       "id": "gated-profile-enforces-prerequisites",
@@ -118,8 +213,17 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "requirements-and-appetite-prerequisites",
       "implementation_allowed": false,
-      "required_evidence": ["gated profile", "accepted requirements required", "accepted appetite required", "stop before candidate breadboard"],
-      "forbidden_evidence": ["provisional candidate breadboard proceeds", "selected direction", "production code"]
+      "required_evidence": [
+        "gated profile",
+        "accepted requirements required",
+        "accepted appetite required",
+        "stop before candidate breadboard"
+      ],
+      "forbidden_evidence": [
+        "provisional candidate breadboard proceeds",
+        "selected direction",
+        "production code"
+      ]
     },
     {
       "id": "selection-still-requires-accepted-r-appetite-and-human-choice",
@@ -128,8 +232,17 @@
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["accepted requirements required", "accepted appetite required", "explicit human selection gate", "selection blocked"],
-      "forbidden_evidence": ["selected direction", "implicit promotion", "production code"]
+      "required_evidence": [
+        "accepted requirements required",
+        "accepted appetite required",
+        "explicit human selection gate",
+        "selection blocked"
+      ],
+      "forbidden_evidence": [
+        "selected direction",
+        "implicit promotion",
+        "production code"
+      ]
     },
     {
       "id": "shaping-uses-candidate-evidence-without-selection",
@@ -138,8 +251,16 @@
       "expected_artifact_type": "shaping",
       "expected_gate": "shape-selection",
       "implementation_allowed": false,
-      "required_evidence": ["multiple shapes", "candidate evidence", "fit check", "human selection"],
-      "forbidden_evidence": ["automatic candidate promotion", "production code"]
+      "required_evidence": [
+        "multiple shapes",
+        "candidate evidence",
+        "fit check",
+        "human selection"
+      ],
+      "forbidden_evidence": [
+        "automatic candidate promotion",
+        "production code"
+      ]
     },
     {
       "id": "candidate-breadboard-remains-exploratory",
@@ -148,8 +269,18 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "candidate-clear-enough-to-compare",
       "implementation_allowed": false,
-      "required_evidence": ["candidate-shape", "named candidate", "decision-relevant uncertainty", "fit implications"],
-      "forbidden_evidence": ["selected direction", "slice selection", "build handoff", "production code"]
+      "required_evidence": [
+        "candidate-shape",
+        "named candidate",
+        "decision-relevant uncertainty",
+        "fit implications"
+      ],
+      "forbidden_evidence": [
+        "selected direction",
+        "slice selection",
+        "build handoff",
+        "production code"
+      ]
     },
     {
       "id": "sketch-reconciliation-does-not-promote-visuals",
@@ -158,8 +289,15 @@
       "expected_artifact_type": "sketch-reconciliation",
       "expected_gate": "visual-delta-decision",
       "implementation_allowed": false,
-      "required_evidence": ["observations", "mapped IDs", "proposed deltas"],
-      "forbidden_evidence": ["silent scope change", "production code"]
+      "required_evidence": [
+        "observations",
+        "mapped IDs",
+        "proposed deltas"
+      ],
+      "forbidden_evidence": [
+        "silent scope change",
+        "production code"
+      ]
     },
     {
       "id": "selected-design-breadboarding-reconciles-candidate-evidence",
@@ -168,8 +306,17 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "breadboard-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["selected-design", "selected shape", "candidate reconciliation", "shaping conflict"],
-      "forbidden_evidence": ["automatic promotion", "silent shape change", "production code"]
+      "required_evidence": [
+        "selected-design",
+        "selected shape",
+        "candidate reconciliation",
+        "shaping conflict"
+      ],
+      "forbidden_evidence": [
+        "automatic promotion",
+        "silent shape change",
+        "production code"
+      ]
     },
     {
       "id": "current-state-code-fidelity",
@@ -178,8 +325,19 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "current-state-explanation-complete",
       "implementation_allowed": false,
-      "required_evidence": ["current-state", "causal trace", "concrete code symbols", "evidence references", "unresolved claims"],
-      "forbidden_evidence": ["invented generic service", "selected future intent", "slice selection", "production code"]
+      "required_evidence": [
+        "current-state",
+        "causal trace",
+        "concrete code symbols",
+        "evidence references",
+        "unresolved claims"
+      ],
+      "forbidden_evidence": [
+        "invented generic service",
+        "selected future intent",
+        "slice selection",
+        "production code"
+      ]
     },
     {
       "id": "breadboard-causal-integrity",
@@ -188,8 +346,19 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "breadboard-verification",
       "implementation_allowed": false,
-      "required_evidence": ["dangling wire", "source-less display", "branch consequence", "graph integrity", "explicit gaps"],
-      "forbidden_evidence": ["invented target", "silent branch removal", "accepted despite defects", "production code"]
+      "required_evidence": [
+        "dangling wire",
+        "source-less display",
+        "branch consequence",
+        "graph integrity",
+        "explicit gaps"
+      ],
+      "forbidden_evidence": [
+        "invented target",
+        "silent branch removal",
+        "accepted despite defects",
+        "production code"
+      ]
     },
     {
       "id": "breadboard-reverse-reachability",
@@ -198,8 +367,19 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "breadboard-verification",
       "implementation_allowed": false,
-      "required_evidence": ["reverse reachability", "U3 incoming sources S1 and N3", "S1 writers N1 and N2", "N3 unresolved entry", "all table rows scanned"],
-      "forbidden_evidence": ["only remembered U1 path", "invented N3 entry", "selected future intent", "production code"]
+      "required_evidence": [
+        "reverse reachability",
+        "U3 incoming sources S1 and N3",
+        "S1 writers N1 and N2",
+        "N3 unresolved entry",
+        "all table rows scanned"
+      ],
+      "forbidden_evidence": [
+        "only remembered U1 path",
+        "invented N3 entry",
+        "selected future intent",
+        "production code"
+      ]
     },
     {
       "id": "selected-design-granularity",
@@ -208,8 +388,19 @@
       "expected_artifact_type": "breadboard",
       "expected_gate": "breadboard-acceptance",
       "implementation_allowed": false,
-      "required_evidence": ["selected-design", "meaningful boundary", "product-relevant decision", "state effect", "observable consequence"],
-      "forbidden_evidence": ["wrapper inventory", "service-call graph", "unselected mechanism", "production code"]
+      "required_evidence": [
+        "selected-design",
+        "meaningful boundary",
+        "product-relevant decision",
+        "state effect",
+        "observable consequence"
+      ],
+      "forbidden_evidence": [
+        "wrapper inventory",
+        "service-call graph",
+        "unselected mechanism",
+        "production code"
+      ]
     },
     {
       "id": "statechart-remains-derived",
@@ -218,8 +409,16 @@
       "expected_artifact_type": "statechart",
       "expected_gate": "state-model-review",
       "implementation_allowed": false,
-      "required_evidence": ["source breadboard IDs", "states", "transitions", "explicit gaps"],
-      "forbidden_evidence": ["invented behavior", "production code"]
+      "required_evidence": [
+        "source breadboard IDs",
+        "states",
+        "transitions",
+        "explicit gaps"
+      ],
+      "forbidden_evidence": [
+        "invented behavior",
+        "production code"
+      ]
     },
     {
       "id": "interface-contract-defines-boundary-only",
@@ -228,8 +427,17 @@
       "expected_artifact_type": "interface-contract",
       "expected_gate": "contract-decision",
       "implementation_allowed": false,
-      "required_evidence": ["boundary", "inputs", "outputs", "branches", "errors"],
-      "forbidden_evidence": ["full slice fixtures", "production code"]
+      "required_evidence": [
+        "boundary",
+        "inputs",
+        "outputs",
+        "branches",
+        "errors"
+      ],
+      "forbidden_evidence": [
+        "full slice fixtures",
+        "production code"
+      ]
     },
     {
       "id": "executable-breadboard-provides-testable-evidence",
@@ -238,8 +446,16 @@
       "expected_artifact_type": "executable-breadboard",
       "expected_gate": "build-handoff",
       "implementation_allowed": false,
-      "required_evidence": ["fixtures", "example runs", "expected outputs", "edge cases", "acceptance tests"],
-      "forbidden_evidence": ["production code"]
+      "required_evidence": [
+        "fixtures",
+        "example runs",
+        "expected outputs",
+        "edge cases",
+        "acceptance tests"
+      ],
+      "forbidden_evidence": [
+        "production code"
+      ]
     },
     {
       "id": "dumplink-decomposes-selected-project",
@@ -248,8 +464,19 @@
       "expected_artifact_type": "dumplink",
       "expected_gate": "task-group-approval",
       "implementation_allowed": false,
-      "required_evidence": ["selected project", "vertical task groups", "dependencies", "cuts", "task-group approval"],
-      "forbidden_evidence": ["preselected slice required", "expanded project", "horizontal backlog", "production code"]
+      "required_evidence": [
+        "selected project",
+        "vertical task groups",
+        "dependencies",
+        "cuts",
+        "task-group approval"
+      ],
+      "forbidden_evidence": [
+        "preselected slice required",
+        "expanded project",
+        "horizontal backlog",
+        "production code"
+      ]
     },
     {
       "id": "context-packet-excludes-candidate-build-scope",
@@ -258,8 +485,18 @@
       "expected_artifact_type": "context-packet",
       "expected_gate": null,
       "implementation_allowed": false,
-      "required_evidence": ["authority order", "project language", "selected-design behavior", "execution contract", "verification target"],
-      "forbidden_evidence": ["candidate breadboard as build scope", "entire transcript", "production code"]
+      "required_evidence": [
+        "authority order",
+        "project language",
+        "selected-design behavior",
+        "execution contract",
+        "verification target"
+      ],
+      "forbidden_evidence": [
+        "candidate breadboard as build scope",
+        "entire transcript",
+        "production code"
+      ]
     },
     {
       "id": "kickoff-is-orientation-not-scope",
@@ -268,8 +505,14 @@
       "expected_artifact_type": "kickoff",
       "expected_gate": null,
       "implementation_allowed": false,
-      "required_evidence": ["accepted territory", "orientation"],
-      "forbidden_evidence": ["new build scope", "production code"]
+      "required_evidence": [
+        "accepted territory",
+        "orientation"
+      ],
+      "forbidden_evidence": [
+        "new build scope",
+        "production code"
+      ]
     },
     {
       "id": "reflection-preserves-intent-and-reality",
@@ -278,8 +521,36 @@
       "expected_artifact_type": "breadboard-reflection",
       "expected_gate": "drift-decision",
       "implementation_allowed": false,
-      "required_evidence": ["accepted intent", "implementation reality", "drift", "options"],
-      "forbidden_evidence": ["silent artifact rewrite", "silent code change"]
+      "required_evidence": [
+        "accepted intent",
+        "implementation reality",
+        "drift",
+        "options"
+      ],
+      "forbidden_evidence": [
+        "silent artifact rewrite",
+        "silent code change"
+      ]
+    },
+    {
+      "id": "lead-user-research-finds-future-facing-needs-before-concepts",
+      "prompt": "Use Eric von Hippel's Lead User Method to research whether advanced AI operators reveal future-facing needs worth further product investigation; establish trends, pyramid to qualified users and analogs, and do not jump directly to concepts.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "evidence-freeze",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "important trend",
+        "LU1 and LU2 qualification",
+        "pyramiding",
+        "advanced analogs",
+        "coverage bias"
+      ],
+      "forbidden_evidence": [
+        "celebrity list as Lead User proof",
+        "product concepts before evidence",
+        "production code"
+      ]
     }
   ]
 }

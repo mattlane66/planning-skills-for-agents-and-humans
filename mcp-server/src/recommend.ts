@@ -12,6 +12,7 @@ export const skillNames = [
   'kickoff-doc',
   'feed-planning-context',
   'breadboard-reflection',
+  'lead-user-research',
 ] as const;
 
 export type SkillName = (typeof skillNames)[number];
@@ -37,6 +38,7 @@ const skillExclusionAliases: Record<SkillName, string[]> = {
   'kickoff-doc': ['kickoff doc', 'kickoff document', 'kickoff-doc'],
   'feed-planning-context': ['feed planning context', 'context packet', 'feed-planning-context'],
   'breadboard-reflection': ['breadboard reflection', 'breadboard-reflection', 'reflect on (?:this |the )?breadboard'],
+  'lead-user-research': ['lead user research', 'lead-user-research', 'lead user method', 'lead users'],
 };
 
 function includesAny(value: string, terms: string[]): boolean {
@@ -159,6 +161,32 @@ export function recommendPlanningWorkflow(
     ]);
   if (explicitWayfinding || multiSessionDecisionRoute) {
     const route = allowedRoute(['wayfinding'], exclusions);
+    if (route.length > 0) return route;
+  }
+
+  const leadUserResearchRequested = (
+    includesAny(normalized, [
+      'lead user research',
+      'lead-user research',
+      'lead user method',
+      'von hippel',
+      'pyramiding',
+      'advanced analog',
+      'future-facing need',
+      'future facing need',
+    ])
+    && includesAny(normalized, [
+      'research',
+      'market',
+      'trend',
+      'opportunity',
+      'user innovation',
+      'workaround',
+      'emerging need',
+    ])
+  );
+  if (leadUserResearchRequested) {
+    const route = allowedRoute(['lead-user-research'], exclusions);
     if (route.length > 0) return route;
   }
 
