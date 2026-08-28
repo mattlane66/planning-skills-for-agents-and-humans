@@ -20,6 +20,7 @@ Produce decision-useful Lead User research that can show:
 - which users are meaningfully ahead of those trends;
 - which bounded Lead User Need Episodes demonstrate unusually high benefit from solving an emerging need;
 - what users have actually tried, modified, rejected, or invented;
+- how pivotal Lead User episodes actually unfold, including fit breaks and compensating behavior;
 - what advanced analog markets reveal;
 - which needs and solution principles are supported by the evidence;
 - what remains unknown, contradictory, or systematically undiscovered;
@@ -250,8 +251,11 @@ Write:
 - source coverage;
 - atomic evidence;
 - candidate/qualified Lead User Need Episodes;
+- pivotal episode traces when they will materially support later interpretation or concept shaping;
 - lineage/dependency relationships;
 - discoverability coverage.
+
+Trace as far as evidence permits. Keep OBSERVED behavior, STATED purpose, INFERRED purpose, and UNKNOWN elements separate. Trace completeness is not a third Lead User qualification criterion.
 
 Use [prompts/phase-c-evidence.md](prompts/phase-c-evidence.md).
 
@@ -274,7 +278,8 @@ Read persisted frozen evidence.
 Only now:
 
 - abstract needs from mechanisms;
-- apply the limited Christensen lens;
+- apply the limited Christensen lens against traced episode evidence when available;
+- do not fill missing chronology, motivation, or desired progress merely to complete a coherent story;
 - synthesize across episodes;
 - identify solution principles;
 - assess propagation;
@@ -285,6 +290,8 @@ Use [prompts/phase-e-interpret.md](prompts/phase-e-interpret.md).
 ### F — Shape
 
 Run only if a need passes the Concept Generation Gate.
+
+Reopen pivotal episode traces supporting a passing need. If missing chronology, motivation, or outcome prevents a defensible x → y → gap account, keep it UNKNOWN or fail the gate rather than filling the gap.
 
 Derive Fit Check requirements before concepts. Freeze requirements before evaluating mechanisms.
 
@@ -324,6 +331,7 @@ Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 - Lead User status is relational to a trend and need, not a personality type.
 - Revealed behavior usually carries more weight than stated preference.
 - A workaround is not automatically the need.
+- Episode tracing deepens evidence; it does not replace LU1/LU2 qualification.
 - UNKNOWN stays UNKNOWN.
 - PARTIAL source access stays PARTIAL.
 - Derivative evidence is not independent evidence.
