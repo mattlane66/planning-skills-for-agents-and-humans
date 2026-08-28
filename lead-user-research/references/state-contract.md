@@ -29,6 +29,9 @@ Tracks:
 - human decision the research should inform;
 - innovation altitude;
 - starting hypotheses;
+- discovery seeds;
+- candidate-profile hypotheses;
+- search constraints;
 - scope;
 - assumptions;
 - consequential unknowns;
@@ -36,6 +39,8 @@ Tracks:
 - out-of-scope questions.
 
 The learning objective (`what_to_understand`) and decision are separate fields and must not be silently merged.
+
+`discovery_seeds`, `candidate_profile_hypotheses`, and `search_constraints` are arrays that preserve the human's supplied wording. Seeds and candidate-profile hypotheses guide discovery but do not count as LU1/LU2 evidence or close the search universe. Search constraints are the only one of these three fields that impose hard discovery boundaries.
 
 ### `trends.json`
 
