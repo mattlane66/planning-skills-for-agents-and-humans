@@ -297,8 +297,23 @@ def main() -> int:
             warnings.append("decision.json target_market is empty; Phase A should preserve or draft the target market")
         if not decision.get("innovation_altitude"):
             warnings.append("decision.json innovation_altitude is empty; Phase A should preserve or draft the desired altitude")
-        if "starting_hypotheses" not in decision:
-            warnings.append("decision.json starting_hypotheses is missing; use an empty list when none were supplied")
+        optional_list_fields = {
+            "starting_hypotheses": "starting hypotheses",
+            "discovery_seeds": "discovery seeds",
+            "candidate_profile_hypotheses": "candidate-profile hypotheses",
+            "search_constraints": "search constraints",
+        }
+        for field, label in optional_list_fields.items():
+            if field not in decision:
+                warnings.append(f"decision.json {field} is missing; use an empty list when no {label} were supplied")
+                continue
+            value = decision.get(field)
+            if not isinstance(value, list):
+                errors.append(f"decision.json {field} must be a list")
+                continue
+            for index, item in enumerate(value):
+                if not isinstance(item, str) or not item.strip():
+                    errors.append(f"decision.json {field}[{index}] must be a non-empty string")
 
     if isinstance(manifest, dict):
         manifest["deterministic_validation"] = "FAILED" if errors else "PASSED"
