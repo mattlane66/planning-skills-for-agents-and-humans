@@ -2,7 +2,7 @@
 
 This skill is designed to work across AI platforms.
 
-You do **not** need to paste the full protocol into every conversation.
+For an ordinary chat product with no installation step, copy **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** into a new conversation. You do **not** need to paste the full protocol into every conversation.
 
 ## Fastest start
 

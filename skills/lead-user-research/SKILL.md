@@ -10,7 +10,7 @@ Use this skill to investigate future-facing needs using Eric von Hippel's Lead U
 
 The governing research method is von Hippel's Lead User Method. Clayton Christensen's Jobs to Be Done is a limited post-evidence interpretive lens. Fit Check is a separate project-specific concept-shaping method used only after a need is supported strongly enough to justify concept work.
 
-Read [PROTOCOL.md](PROTOCOL.md) for the canonical methodology. Use the bounded phase prompts under [prompts/](prompts/) for execution.
+Read [PROTOCOL.md](PROTOCOL.md) for the canonical methodology. Use the bounded phase prompts under [prompts/](prompts/) for execution. For plain chat products, [PORTABLE_PROMPT.md](PORTABLE_PROMPT.md) is the single copy-paste entry point.
 
 ## Goal
 
