@@ -459,15 +459,21 @@ Generate enough materially different mechanisms to test whether the requirements
 
 Return to the decision named at the start.
 
-State:
+Write structured decision state before narrative rendering. The first human-facing layer should answer:
+
+> decision → recommendation → why → decisive evidence → critical uncertainty → action now → what would change the decision
+
+Then state:
 
 - what the evidence supports;
 - what it does not support;
 - consequential unknowns;
-- disconfirming evidence;
+- disconfirming evidence and alternate explanations;
 - discoverability/coverage caveat;
 - next highest-information evidence;
 - priority human review.
+
+When file tools are available, render the canonical Decision Brief from the structured decision outcome so the report cannot silently diverge from state.
 
 For STANDARD/FULL, classify the specific decision as:
 
