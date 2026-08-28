@@ -1,6 +1,6 @@
 ---
 name: lead-user-research
-description: Conduct AI-assisted Lead User research using von Hippel’s method with phase-gated discovery, persistent evidence state, coverage-bias controls, and proportionate decision outputs.
+description: Inspect future-facing markets with Eric von Hippel's Lead User Method when teams need evidence-traceable trend, lead-user, and opportunity research.
 license: MIT
 ---
 
