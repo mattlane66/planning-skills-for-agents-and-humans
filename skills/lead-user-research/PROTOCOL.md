@@ -1,4 +1,4 @@
-# Canonical Lead User Deep Research Protocol — v1.3
+# Canonical Lead User Deep Research Protocol — v1.4
 
 This document is the methodological specification for the `lead-user-research` skill.
 
@@ -27,6 +27,8 @@ Use only after evidence collection to help distinguish:
 
 > circumstance → struggle → desired progress → compensating behavior
 
+Apply this lens to traced episode evidence when available; do not invent missing chronology, motivation, or desired progress merely to complete the pattern.
+
 Do not use JTBD to replace Lead User qualification or trend analysis.
 
 ### 3. AI research-integrity adaptations
@@ -34,6 +36,7 @@ Do not use JTBD to replace Lead User qualification or trend analysis.
 The following are operational adaptations for reliable AI-assisted research, not claims about von Hippel's original procedure:
 
 - Lead User Need Episodes;
+- pivotal episode tracing;
 - atomic evidence IDs;
 - source coverage states;
 - persisted registries;
@@ -193,6 +196,35 @@ Keep separate:
 > prior baseline → desired progress → observed result
 
 If outcome, motivation, chronology, benefit, adoption, or causality is not established, record `UNKNOWN` or an explicitly labeled inference.
+
+## Trace pivotal Lead User episodes
+
+For Lead User episodes likely to materially support need interpretation or concept shaping, reconstruct the actual episode as far as the evidence permits.
+
+Capture, when available:
+
+- the initiating condition or circumstance;
+- the prior approach and relevant history;
+- what triggered a switch, modification, workaround, abandonment, or non-action;
+- what improvement the user expected;
+- the sequence of actions through the actual outcome, including actions outside the focal product or workflow;
+- points of hesitation, repetition, confusion, failure, abandonment, or compensating behavior;
+- what the user explicitly said they were trying to preserve, avoid, or accomplish;
+- the observed result;
+- unresolved chronology, motivation, causality, or outcome as `UNKNOWN`.
+
+For each consequential fit point, keep separate:
+
+- **OBSERVED** — what the user actually did;
+- **STATED** — what the user explicitly said they were trying to accomplish, preserve, or avoid;
+- **INFERRED** — an evidence-grounded interpretation of the purpose or underlying need;
+- **UNKNOWN** — what the evidence does not establish.
+
+A trace is an evidence-deepening operation, not a third Lead User qualification criterion. LU1 and LU2 remain the qualification test.
+
+Do not treat a workaround as the need. Do not rank fit points or formulate producer solutions during evidence collection. Trace first; interpret after Evidence Freeze.
+
+SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain `PARTIAL` when public evidence cannot establish the full chronology; do not fill the gaps.
 
 ## Discovery / interpretation firewall
 
@@ -356,6 +388,8 @@ Otherwise report:
 ## Fit Check
 
 For a qualified opportunity derive:
+
+Where pivotal support depends on an episode trace, derive fitness conditions only from what that trace and its cited evidence establish. If missing chronology, motivation, or outcome prevents a defensible x → y → gap account, keep it UNKNOWN or fail the Concept Generation Gate rather than completing the story.
 
 - `x` — current state;
 - `y` — desired state;
