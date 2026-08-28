@@ -30,6 +30,10 @@ That is a successful outcome.
 
 ## Fit Check
 
+Where a passing need depends materially on one or more traced LU episodes, reopen those traces and their evidence refs before deriving fitness conditions.
+
+Do not infer x, y, the gap, or constraints from missing chronology, motivation, or outcome. If those gaps make the fitness conditions non-defensible, return the need to the Concept Generation Gate rather than completing the story.
+
 For each passing need derive:
 
 - x — current state;

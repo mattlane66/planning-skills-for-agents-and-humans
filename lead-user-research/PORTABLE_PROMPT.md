@@ -58,10 +58,11 @@ Discover:
 2. users meaningfully ahead of those trends;
 3. bounded Lead User Need Episodes where users expect unusually high benefit from solving emerging needs;
 4. what those users actually tried, changed, rejected, modified, or invented;
-5. what advanced analog markets reveal;
-6. which underlying needs and transferable principles the evidence supports;
-7. what the research process may have systematically missed;
-8. what humans can responsibly decide or test next.
+5. how pivotal Lead User episodes actually unfold, including fit breaks and compensating behavior;
+6. what advanced analog markets reveal;
+7. which underlying needs and transferable principles the evidence supports;
+8. what the research process may have systematically missed;
+9. what humans can responsibly decide or test next.
 
 ## NON-NEGOTIABLES
 
@@ -225,6 +226,10 @@ prior baseline → desired progress → observed result
 
 Mark missing elements UNKNOWN.
 
+For LU episodes likely to materially support need interpretation or concept shaping, trace the episode as far as evidence permits: initiating condition, prior approach/history, switch or change trigger, expected improvement, ordered actions, fit breaks or compensating behaviors, stated purpose, actual outcome, and unresolved UNKNOWNs.
+
+For consequential fit points keep OBSERVED behavior, STATED purpose, INFERRED purpose, and UNKNOWN elements separate. Use trace status NOT_ASSESSED | PARTIAL | SUFFICIENT. Trace completeness is not a third LU qualification criterion.
+
 Map forks, adaptations, dependencies, and common lineage before counting independent support.
 
 Update coverage bias continuously.
@@ -276,6 +281,8 @@ Use Christensen sparingly to clarify:
 
 circumstance → struggle → desired progress → compensating behavior
 
+Ground this interpretation in traced episode evidence when available. Do not fill missing chronology, motivation, prior solution, desired progress, or compensating purpose merely to complete the story.
+
 Do not turn this into a JTBD study.
 
 Synthesize across LU episodes.
@@ -315,6 +322,8 @@ A need passes the **Concept Generation Gate** only if:
 Otherwise stop with:
 
 > No opportunity is currently supported strongly enough for concept generation.
+
+For a passing need, reopen any pivotal episode traces supporting it. If missing chronology, motivation, or outcome prevents a defensible fitness account, keep it UNKNOWN or fail the gate rather than filling the gap.
 
 For a passing need define:
 

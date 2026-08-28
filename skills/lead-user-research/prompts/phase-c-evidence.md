@@ -49,6 +49,39 @@ Keep separate:
 
 Use UNKNOWN whenever the source does not establish an element.
 
+## Episode tracing
+
+For LU episodes likely to materially support later need interpretation or concept shaping, trace the episode as far as the evidence permits.
+
+Record:
+
+- initiating condition;
+- prior approach and relevant history;
+- switch/change trigger when present;
+- expected improvement;
+- the sequence of actions through the actual outcome, including activity outside the focal product or workflow;
+- fit points such as hesitation, repetition, confusion, failure, abandonment, non-action, or compensating behavior;
+- what the user explicitly said they were trying to preserve, avoid, or accomplish;
+- actual outcome;
+- unresolved elements as UNKNOWN.
+
+For consequential fit points, keep separate:
+
+- OBSERVED behavior;
+- STATED purpose;
+- INFERRED purpose;
+- UNKNOWN elements.
+
+Use trace status:
+
+NOT_ASSESSED | PARTIAL | SUFFICIENT
+
+`SUFFICIENT` means sufficient for the intended downstream interpretation, not complete knowledge of the episode.
+
+Tracing is not a third Lead User qualification criterion. Do not infer LU status from trace completeness.
+
+Do not turn the workaround into the need, rank fit points, or generate producer solutions in Phase C.
+
 ## Lineage
 
 Map derivative relationships before treating examples as independent evidence.
