@@ -1,4 +1,4 @@
-# Canonical Lead User Deep Research Protocol — v1.5
+# Canonical Lead User Deep Research Protocol — v1.6
 
 This document is the methodological specification for the `lead-user-research` skill.
 
@@ -18,6 +18,8 @@ For a bounded case to qualify, evidence must support:
 
 - **LU1 — ahead of an important trend:** the user experiences needs or conditions now that others may encounter later if the trend continues;
 - **LU2 — high expected benefit:** solving the need is unusually valuable to the user.
+
+Qualification must record both evidence references and the reasoning that connects them to the criteria: an observable advancement indicator plus LU1 rationale, and a concrete benefit signal plus LU2 rationale. Record qualification caveats explicitly. The same evidence may legitimately support both criteria only when the separate rationales show why.
 
 User innovation is powerful evidence and contains solution information, but invention is not itself the definition of Lead User status.
 
