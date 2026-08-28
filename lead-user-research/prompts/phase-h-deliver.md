@@ -6,7 +6,7 @@ Reopen the complete structured state before rendering.
 
 ## Canonical source
 
-The structured research state plus Markdown Decision Brief are canonical.
+The structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report.
 
 When file tools are available, regenerate the Decision Brief from `decision_outcome.json` with `scripts/render_decision_brief.py` before producing derived views.
 
