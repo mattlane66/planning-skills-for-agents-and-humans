@@ -4,13 +4,41 @@ At the start, reopen the authoritative structured study state.
 
 Return to the exact decision recorded in `decision.json`.
 
-## Decision Brief
+## Structured decision state first
 
-State:
+Write `decision_outcome.json` before narrative output.
+
+The first human-facing layer must contain:
 
 ### Decision
 
 The exact decision being informed.
+
+### Recommendation
+
+The decision status plus a concise recommendation.
+
+### Why
+
+The few reasons that actually drive the recommendation.
+
+### Decisive evidence
+
+Finding/LU refs that carry the decision.
+
+### Critical uncertainty
+
+The few uncertainties that could reverse the decision.
+
+### Action now
+
+Concrete next action(s) implied by the current evidence.
+
+### What would change this decision
+
+Observable evidence or conditions that should cause reconsideration.
+
+Then include the supporting sections below.
 
 ### What the evidence supports
 
@@ -55,6 +83,14 @@ The few uncertainties that could reverse the decision.
 
 Prefer the highest-information next step rather than automatically recommending more research.
 
+When file tools are available, run:
+
+```bash
+python lead-user-research/scripts/render_decision_brief.py <workspace>
+```
+
+The rendered Decision Brief is derived from structured state and must not introduce new substantive claims.
+
 ### Decision status
 
 For SCOUT:
@@ -83,6 +119,10 @@ In outward-facing briefs, default to aggregation/anonymization of individuals.
 Name public individuals only when identity materially matters and there is a legitimate reason to surface it.
 
 Do not imply endorsement or consent.
+
+## Study execution label
+
+Display `study_execution_level` separately from run mode. Do not imply that FULL mode is a full Lead User fieldwork project.
 
 ## Verification labels
 
