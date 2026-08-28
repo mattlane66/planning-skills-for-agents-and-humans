@@ -233,6 +233,7 @@ class LeadUserResearchTests(unittest.TestCase):
                     "--hypothesis", "Context recovery has unusually high expected benefit",
                     "--hypothesis", "Cross-tool portability may matter",
                     "--discovery-seed", "GitHub repositories for persistent context systems",
+                    "--discovery-seed", "AI workflow communities",
                     "--candidate-profile", "People maintaining elaborate cross-tool context workarounds",
                     "--search-constraint", "English-language sources only for this pass",
                     "--workspace", str(workspace),
@@ -244,8 +245,12 @@ class LeadUserResearchTests(unittest.TestCase):
             decision = json.loads((workspace / "decision.json").read_text(encoding="utf-8"))
             manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
             self.assertEqual("AI-assisted design workflows", decision["domain"])
+            self.assertEqual("Professional designers", decision["target_market"])
+            self.assertEqual("Which future-facing needs are advanced users already solving?", decision["what_to_understand"])
+            self.assertEqual("Should we fund a validation sprint?", decision["decision"])
+            self.assertEqual("workflow", decision["innovation_altitude"])
             self.assertEqual(["Context recovery has unusually high expected benefit", "Cross-tool portability may matter"], decision["starting_hypotheses"])
-            self.assertEqual(["GitHub repositories for persistent context systems"], decision["discovery_seeds"])
+            self.assertEqual(["GitHub repositories for persistent context systems", "AI workflow communities"], decision["discovery_seeds"])
             self.assertEqual(["People maintaining elaborate cross-tool context workarounds"], decision["candidate_profile_hypotheses"])
             self.assertEqual(["English-language sources only for this pass"], decision["search_constraints"])
             self.assertEqual("1.6", manifest["protocol_version"])
@@ -268,6 +273,17 @@ class LeadUserResearchTests(unittest.TestCase):
         self.assertIn("not as Lead User qualification evidence", phase_b)
         self.assertIn("not a closed search universe", phase_b)
         self.assertIn("Search constraints are the only one", state)
+
+    def test_episode_tracing_contract_is_explicit(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_c = (LEAD / "prompts" / "phase-c-evidence.md").read_text(encoding="utf-8")
+        phase_e = (LEAD / "prompts" / "phase-e-interpret.md").read_text(encoding="utf-8")
+        state = (LEAD / "references" / "state-contract.md").read_text(encoding="utf-8")
+        self.assertIn("Trace pivotal Lead User episodes", protocol)
+        self.assertIn("Episode tracing", phase_c)
+        self.assertIn("OBSERVED behavior", phase_c)
+        self.assertIn("traced sequence", phase_e)
+        self.assertIn("NOT_ASSESSED | PARTIAL | SUFFICIENT", state)
 
     def test_validator_requires_qualification_reasoning(self):
         with tempfile.TemporaryDirectory() as tmp:
