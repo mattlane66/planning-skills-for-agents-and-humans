@@ -61,8 +61,11 @@ For ease of use, a user may begin with only the domain and decision. In that cas
 
 Additional optional inputs:
 
-- known sources or seed experts;
-- constraints on time, geography, language, privacy, or source types.
+- **Optional discovery seeds** — sources, links, repositories, communities, files, people, or experts to start from;
+- **Optional candidate-profile hypotheses** — types of users or situations that may contain unusually advanced or high-benefit cases;
+- **Optional search constraints** — explicit hard limits on sources, source types, geography, language, privacy, time, or other discovery dimensions.
+
+Discovery seeds and candidate-profile hypotheses guide discovery; they do not prequalify Lead Users, count as LU1/LU2 evidence, or define a closed search universe. Continue pyramiding and advanced-analog discovery beyond them unless the user explicitly imposes a search constraint. If the user supplies sources without saying the search is restricted to them, treat them as seeds rather than boundaries.
 
 ## Proportional modes
 
@@ -332,6 +335,7 @@ Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 - Revealed behavior usually carries more weight than stated preference.
 - A workaround is not automatically the need.
 - Episode tracing deepens evidence; it does not replace LU1/LU2 qualification.
+- Discovery seeds and candidate-profile hypotheses guide search; they do not prequalify Lead Users or close the search universe.
 - UNKNOWN stays UNKNOWN.
 - PARTIAL source access stays PARTIAL.
 - Derivative evidence is not independent evidence.
