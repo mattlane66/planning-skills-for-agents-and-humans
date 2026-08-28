@@ -402,6 +402,18 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual(1, result.returncode)
             self.assertIn("direct_lead_user_participation", result.stderr)
 
+    def test_execution_basis_rejects_non_string_without_crashing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp, mode="full")
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["study_execution_level"] = "FULL_LEAD_USER_PROJECT"
+            manifest["study_execution_basis"] = [{"unexpected": "object"}]
+            self.write_json(workspace, "manifest.json", manifest)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertNotIn("Traceback", result.stderr)
+            self.assertIn("study_execution_basis[0]", result.stderr)
+
     def test_decision_outcome_is_validated_and_rendered_action_first(self):
         with tempfile.TemporaryDirectory() as tmp:
             workspace = self.init_workspace(tmp)
