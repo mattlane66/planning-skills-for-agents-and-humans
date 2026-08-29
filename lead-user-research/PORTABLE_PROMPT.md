@@ -67,7 +67,7 @@ Discover:
 3. bounded Lead User Need Episodes where users expect unusually high benefit from solving emerging needs;
 4. what those users actually tried, changed, rejected, modified, or invented;
 5. how pivotal Lead User episodes actually unfold, including fit breaks and compensating behavior;
-6. what advanced analog markets reveal;
+6. what target-market, advanced-analog, and attribute-specific Lead User searches reveal;
 7. which underlying needs and transferable principles the evidence supports;
 8. what the research process may have systematically missed;
 9. what humans can responsibly decide or test next.
@@ -82,6 +82,9 @@ Discover:
 - Behavior generally outweighs stated preference.
 - A workaround is not automatically the underlying need.
 - Discovery seeds and candidate-profile hypotheses guide search; they do not prequalify Lead Users or close the search universe.
+- Explicitly consider three Lead User discovery paths: target-market, advanced-analog, and attribute-specific.
+- Every material pyramid must pursue a specified target attribute or information target and record its chain and stopping logic.
+- Technical expertise and community-resource signals may prioritize search, but never establish or replace LU1/LU2.
 - UNKNOWN stays UNKNOWN.
 - PARTIAL source access stays PARTIAL.
 - Derivative evidence is not independent evidence.
@@ -160,6 +163,7 @@ Recommended state families:
 
 SRC## sources  
 T## trends  
+PY## attribute-specific pyramids  
 E### atomic evidence  
 LU## Lead User Need Episodes  
 F## findings  
@@ -198,21 +202,29 @@ For each trend identify:
 - why it matters;
 - observable indicators of advancement.
 
-Then search for:
+Then explicitly consider all three Lead User discovery paths:
 
-- domain experts;
-- referral nodes;
-- advanced users;
-- user innovators;
-- Lead User candidates.
+1. **Target-market** — users unusually far ahead inside the focal market.
+2. **Advanced-analog** — users facing the same functional problem under more extreme conditions elsewhere.
+3. **Attribute-specific** — users or experts exceptionally far ahead on one important attribute of the target need, even when their overall domain is unrelated.
 
-Use **pyramiding**, not simple snowballing:
+Record the applicable search path on candidates. These paths guide discovery only; LU1 + LU2 still govern qualification.
 
-> Who knows more? Who is further ahead? Who faces the more extreme need? Who originated this practice? Who should be contacted next?
+Use **attribute-specific pyramiding**, not simple snowballing. For each material PY## branch record:
 
-Search **advanced analogs**:
+- target attribute or information target;
+- starting node;
+- success criterion;
+- termination criterion;
+- why the referral network can observe/care about the attribute;
+- each hop's referral rationale and why the next node is expected to be farther ahead or better informed;
+- termination reason when the branch closes or becomes a fieldwork referral.
 
-> Where does the same underlying functional problem occur under more extreme conditions?
+Ask:
+
+> Who has more of this attribute? Who is further ahead on it? Who knows who is further ahead? Who faces the more extreme need on this dimension? Who originated the relevant practice? Who should be contacted next?
+
+Optionally record technical-expertise and community-resource signals to prioritize search. Never use them as Lead User qualification criteria.
 
 ## PHASE C — EVIDENCE
 
