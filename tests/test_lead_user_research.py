@@ -347,7 +347,6 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(workspace, "trends.json", [{"trend_id": "T1"}])
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
-            self.write_open_pyramid(workspace)
             move = self.next_move(workspace)
             self.assertEqual("B", move["next_phase"])
             self.assertTrue(any("pyramid" in blocker.lower() for blocker in move["blockers"]))
