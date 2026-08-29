@@ -61,6 +61,49 @@ Array of:
 
 Experts, referral nodes, Lead User candidates, or user innovators discovered before qualification.
 
+Each candidate uses `candidate_id` — `C##`. When applicable, record `search_path` as:
+
+- `TARGET_MARKET`;
+- `ADVANCED_ANALOG`;
+- `ATTRIBUTE_SPECIFIC`;
+- `OTHER`.
+
+`ATTRIBUTE_SPECIFIC` means the candidate is unusually advanced on one important attribute of the target need even when their overall domain is not a whole-problem analog.
+
+Candidates may optionally contain `search_enrichment` with:
+
+- `technical_expertise_signal`;
+- `community_resource_signal`;
+- `evidence_refs`;
+- `priority_rationale`.
+
+These enrichment fields are discovery/prioritization aids only. They are not Lead User criteria, are not required for qualification, and may not establish or substitute for LU1/LU2.
+
+### `pyramids.json`
+
+Array of auditable attribute-specific search chains:
+
+- `pyramid_id` — `PY##`;
+- `target_attribute` — the specified attribute or information target being pursued;
+- `starting_node`;
+- `success_criterion`;
+- `termination_criterion`;
+- `network_visibility_note` — why the referral network is or is not positioned to observe/care about the target attribute;
+- `status` — `OPEN | TERMINATED | FIELDWORK_REFERRAL`;
+- `hops` — ordered hop objects;
+- `termination_reason` — required when status is not `OPEN`.
+
+Each hop contains:
+
+- `hop_id` — unique within the pyramid;
+- `from_node`;
+- `to_node`;
+- `referral_rationale`;
+- `advancement_rationale` — why the next node is expected to have more of the target attribute or better information about who does;
+- `evidence_refs` when available.
+
+A pyramid is a discovery/search record, not evidence that a candidate satisfies LU1/LU2. Network visibility and referral quality affect search efficiency only.
+
 ### `sources.json`
 
 Array of:
@@ -190,7 +233,7 @@ Tracks discovery bias:
 
 ### `search_log.json`
 
-Major search families, pyramiding hops, analog pivots, and abandoned branches.
+Major search families, path coverage, analog pivots, and abandoned branches. Formal pyramiding chains belong in `pyramids.json`.
 
 Do not record every trivial query.
 
@@ -204,7 +247,7 @@ For STANDARD/FULL, records the interpretive stopping decision before Evidence Fr
   - LU qualification;
   - contradiction search;
   - lineage resolution;
-  - pyramid coverage;
+  - pyramid coverage across target-market, advanced-analog, and attribute-specific search paths;
   - marginal value of another evidence batch;
 - overall rationale;
 - unresolved actions.
