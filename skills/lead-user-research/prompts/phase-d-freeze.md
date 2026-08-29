@@ -15,7 +15,7 @@ Before freezing, write `sufficiency.json` and assess each dimension as NOT_ASSES
 
 - trend support;
 - pivotal LU qualification;
-- contradiction search;
+- contradiction search, including targeted hypothesis refutation and contrastive cases;
 - lineage resolution;
 - pyramid coverage;
 - marginal value of another proportionate evidence batch.
@@ -41,7 +41,10 @@ Check:
 - contradictions and outliers;
 - coverage bias;
 - important inaccessible/private populations;
-- whether advanced analogs were meaningfully investigated.
+- whether advanced analogs were meaningfully investigated;
+- hypothesis ledgers and important contrastive cases;
+- whether decision-critical observability questions are resolved by traces, explicitly accepted as unknown, or converted into targeted fieldwork referrals;
+- whether every AI analysis run referenced by frozen evidence passed sampled validation.
 
 Run deterministic validation when available.
 
@@ -60,7 +63,9 @@ If and only if `sufficiency.status = SUFFICIENT` and the evidence corpus is stru
 
 - set `freeze.status = FROZEN`;
 - record exact evidence, qualified-LU, and independent-lineage counts from current state;
-- record unresolved gaps.
+- record unresolved gaps;
+- refuse freeze while a decision-critical observability item remains OPEN;
+- refuse freeze when evidence depends on an AI analysis run whose sampled validation has not PASSED.
 
 If not:
 
