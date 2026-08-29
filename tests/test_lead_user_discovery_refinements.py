@@ -6,6 +6,8 @@ ROOT = Path(__file__).resolve().parents[1]
 CANONICAL = ROOT / "lead-user-research"
 MIRROR = ROOT / "skills" / "lead-user-research"
 
+# Regression boundary: these discovery refinements must never become extra LU1/LU2 qualification criteria.
+
 
 class LeadUserDiscoveryRefinementTests(unittest.TestCase):
     def test_phase_b_requires_all_three_discovery_paths(self):
