@@ -89,12 +89,14 @@ def recommend(root: Path) -> dict[str, Any]:
 
     trends = load_json(root, "trends.json", [])
     candidates = load_json(root, "candidates.json", [])
+    pyramids = load_json(root, "pyramids.json", [])
     search_log = load_json(root, "search_log.json", [])
     missing_discovery = [
         label
         for label, value in [
             ("a trend map", trends),
             ("candidate or referral paths", candidates),
+            ("an auditable attribute-specific pyramid", pyramids),
             ("a search log", search_log),
         ]
         if not nonempty_list(value)
