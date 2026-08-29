@@ -1047,6 +1047,7 @@ class LeadUserResearchTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             workspace = self.init_workspace(tmp)
             self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
             self.write_json(
                 workspace,
                 "findings.json",

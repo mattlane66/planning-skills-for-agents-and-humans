@@ -332,21 +332,13 @@ Use [prompts/phase-e-interpret.md](prompts/phase-e-interpret.md).
 
 ### F — Shape
 
-Run only if a need passes the Concept Generation Gate.
+Run only if a need passes the Concept Generation Gate. Reopen its pivotal traces; if missing chronology, motivation, or outcome prevents a defensible shaping frame, keep it UNKNOWN or fail the gate.
 
-Reopen pivotal episode traces supporting a passing need. If missing chronology, motivation, or outcome prevents a defensible shaping frame, keep it UNKNOWN or fail the gate rather than filling the gap.
-
-Construct `SF##` as `x → f() → y`: `x` contains trigger/context, current approach, current result, and breakdowns; `f()` remains UNSPECIFIED; `y` is the desired outcome; also record the gap, boundaries, and evidence. This shaping frame is distinct from the Phase A research frame.
-
-Persist the frame as PROVISIONAL and stop for explicit human acceptance or revision. Do not self-accept it, and do not mark any requirement PASS while its frame remains provisional.
-
-After acceptance, derive R## from the frame. Every R records its `frame_ref` and whether it came `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`. Hold x and y constant while comparing candidate f()s, and freeze requirements before evaluating mechanisms.
-
-Persist all five Concept Generation Gate checks as booleans. PASS must trace through a
-supporting finding to a QUALIFIED LU episode and a relevant trend.
-
-Generate enough materially different candidate shapes to test the requirements. Run Requirements × Shapes first. If a shape is explicitly selected, run the Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
-
+Construct `SF##` as `x → f() → y`: x = trigger/context + current approach + current result + breakdowns; f() stays UNSPECIFIED; y = desired outcome; also record gap, boundaries, and evidence. This is not the Phase A research frame.
+Persist it as PROVISIONAL and stop for explicit human acceptance/revision; never self-accept it or mark R## PASS while provisional.
+After acceptance, derive R## with `frame_ref` and `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`; hold x and y constant and freeze R before mechanism evaluation.
+Persist the five Concept Generation Gate checks; PASS must trace through a supporting finding to a QUALIFIED LU episode and relevant trend.
+Generate materially different candidate shapes, run Requirements × Shapes, and, after explicit selection, run Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
 Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
 
 ### G — Decide
