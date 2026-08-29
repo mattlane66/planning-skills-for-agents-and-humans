@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: repo-health-${{ github.workflow }}-${{ github.ref }}
@@ -21,8 +21,7 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Set up Python
         uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
@@ -62,21 +61,6 @@ jobs:
         run: |
           set -o pipefail
           bash scripts/check-repo-health.sh 2>&1 | tee repo-health.log
-
-      - name: Commit regenerated portal
-        if: failure() && github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          set -euo pipefail
-          if git diff --quiet -- site/index.html; then
-            echo "No generated portal changes to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add site/index.html
-          git commit -m "Regenerate documentation portal"
-          git push origin HEAD:${GITHUB_HEAD_REF}
 
       - name: Upload repository health diagnostics
         if: failure()
