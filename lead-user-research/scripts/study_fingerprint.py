@@ -18,6 +18,7 @@ STATE_FILES = (
     "decision_outcome.json",
     "trends.json",
     "candidates.json",
+    "pyramids.json",
     "sources.json",
     "evidence.json",
     "lu_episodes.json",
