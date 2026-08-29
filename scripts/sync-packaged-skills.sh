@@ -11,6 +11,18 @@ done < skill-inventory.txt
 
 mode="${1:-sync}"
 
+# Runtime imports can create Python bytecode caches inside a canonical skill
+# before this check runs (for example, in a clean CI checkout). These caches
+# are not distributable skill content and are already excluded by the Claude
+# package builder, so keep the canonical/package comparison aligned with that
+# contract.
+DIFF_EXCLUDES=(
+  "--exclude=.git"
+  "--exclude=__pycache__"
+  "--exclude=*.pyc"
+  "--exclude=*.pyo"
+)
+
 if [[ "$mode" != "sync" && "$mode" != "--check" ]]; then
   echo "Usage: $0 [sync|--check]" >&2
   exit 2
@@ -26,9 +38,9 @@ for skill in "${SKILLS[@]}"; do
   fi
 
   if [[ "$mode" == "--check" ]]; then
-    if [[ ! -d "$packaged_dir" ]] || ! diff -qr "$source_dir" "$packaged_dir" >/dev/null; then
+    if [[ ! -d "$packaged_dir" ]] || ! diff -qr "${DIFF_EXCLUDES[@]}" "$source_dir" "$packaged_dir" >/dev/null; then
       echo "Packaged skill directory is out of sync: $packaged_dir" >&2
-      diff -qr "$source_dir" "$packaged_dir" || true
+      diff -qr "${DIFF_EXCLUDES[@]}" "$source_dir" "$packaged_dir" || true
       exit 1
     fi
     echo "✓ $packaged_dir matches $source_dir"
