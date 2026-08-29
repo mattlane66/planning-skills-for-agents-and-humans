@@ -311,6 +311,12 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual("DESK_RESEARCH", manifest["study_execution_level"])
             self.assertTrue((workspace / "sufficiency.json").exists())
             self.assertTrue((workspace / "decision_outcome.json").exists())
+            self.assertTrue((workspace / "hypotheses.json").exists())
+            self.assertTrue((workspace / "observability.json").exists())
+            self.assertTrue((workspace / "analysis_runs.json").exists())
+            hypotheses = json.loads((workspace / "hypotheses.json").read_text(encoding="utf-8"))
+            self.assertEqual(["H1", "H2"], [row["hypothesis_id"] for row in hypotheses])
+            self.assertTrue(all(row["status"] == "UNTESTED" for row in hypotheses))
 
     def test_fresh_workspace_validates(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -784,6 +790,188 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertIn("complete study must be in phase H", result.stderr)
             self.assertIn("complete study requires model_check COMPLETED", result.stderr)
             self.assertIn("complete study requires non-empty outputs/decision-brief.md", result.stderr)
+
+
+    def test_next_move_blocks_unfalsifiable_starting_hypothesis(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "study"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(LEAD / "scripts" / "init_study.py"),
+                    "--mode", "standard",
+                    "--domain", "AI-assisted design workflows",
+                    "--target-market", "Professional designers",
+                    "--understand", "Which future-facing needs are advanced users already solving?",
+                    "--decision", "Should we fund a validation sprint?",
+                    "--innovation-altitude", "workflow",
+                    "--hypothesis", "Cross-tool context loss creates unusually high benefit from continuity tooling",
+                    "--workspace", str(workspace),
+                ],
+                check=True,
+                text=True,
+                capture_output=True,
+            )
+            move = self.next_move(workspace)
+            self.assertEqual("A", move["next_phase"])
+            self.assertEqual("BLOCKED", move["state"])
+            self.assertIn("falsifiable", move["reason"])
+
+            hypotheses = json.loads((workspace / "hypotheses.json").read_text(encoding="utf-8"))
+            hypotheses[0]["observable_predictions"] = [
+                "Advanced users repeatedly reconstruct or persist context across tool boundaries."
+            ]
+            hypotheses[0]["strongest_plausible_refuter"] = (
+                "Comparable advanced users exposed to cross-tool work do not incur meaningful continuity cost."
+            )
+            self.write_json(workspace, "hypotheses.json", hypotheses)
+            move = self.next_move(workspace)
+            self.assertEqual("B", move["next_phase"])
+
+    def test_validator_enforces_hypothesis_status_and_contrastive_cases(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            hypothesis = {
+                "hypothesis_id": "H1",
+                "claim": "Cross-tool context loss creates material continuity cost.",
+                "scope": "Advanced multi-tool AI workflows",
+                "observable_predictions": ["Advanced users create persistent continuity workarounds."],
+                "strongest_plausible_refuter": "Comparable exposed users show no continuity cost.",
+                "rival_explanations": ["The workaround exists for convenience rather than loss."],
+                "targeted_refutation_searches": ["Find advanced users without continuity workarounds."],
+                "evidence_for": ["E1"],
+                "evidence_against": [],
+                "contrastive_cases": [],
+                "boundary_conditions": [],
+                "status": "CONFIRMED",
+                "update_rationale": "Not allowed.",
+            }
+            self.write_json(workspace, "hypotheses.json", [hypothesis])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("invalid status", result.stderr)
+
+            hypothesis["status"] = "SURVIVED_CURRENT_TESTS"
+            hypothesis["update_rationale"] = "The current bounded evidence did not overturn the claim."
+            self.write_json(workspace, "hypotheses.json", [hypothesis])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("contrastive case", result.stderr)
+
+            hypothesis["contrastive_cases"] = [
+                {
+                    "case_type": "PREDICTED_POSITIVE",
+                    "evidence_refs": ["E1"],
+                    "interpretation": "The predicted condition and observed workaround co-occur.",
+                }
+            ]
+            self.write_json(workspace, "hypotheses.json", [hypothesis])
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_validator_rejects_synthetic_or_simulated_human_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            evidence = json.loads((workspace / "evidence.json").read_text(encoding="utf-8"))
+            evidence[0]["evidence_basis"] = "SYNTHETIC_OR_SIMULATED"
+            self.write_json(workspace, "evidence.json", evidence)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("cannot be persisted as human evidence", result.stderr)
+
+    def test_freeze_blocks_open_observability_and_unvalidated_ai_analysis(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+
+            self.write_json(
+                workspace,
+                "observability.json",
+                [
+                    {
+                        "observability_id": "O1",
+                        "question": "Does continuity cost persist in private enterprise workflows?",
+                        "decision_critical": True,
+                        "status": "NOT_OBSERVABLE",
+                        "evidence_refs": [],
+                        "resolution": "OPEN",
+                        "fieldwork_referral": "",
+                        "acceptance_rationale": "",
+                    }
+                ],
+            )
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("observability", result.stderr)
+
+            observability = json.loads((workspace / "observability.json").read_text(encoding="utf-8"))
+            observability[0]["resolution"] = "FIELDWORK_REFERRAL"
+            observability[0]["fieldwork_referral"] = "Interview referred private-enterprise operators."
+            self.write_json(workspace, "observability.json", observability)
+
+            self.write_json(
+                workspace,
+                "analysis_runs.json",
+                [
+                    {
+                        "analysis_run_id": "AR1",
+                        "task": "Extract repeated continuity failures from a large issue corpus.",
+                        "model": "ExampleModel",
+                        "model_version": "1",
+                        "prompt_or_workflow_version": "v1",
+                        "extraction_schema": "episode-v1",
+                        "sampled_validation": {
+                            "status": "NOT_ASSESSED",
+                            "sample_size": 0,
+                            "agreement_or_error_summary": "",
+                        },
+                    }
+                ],
+            )
+            evidence = json.loads((workspace / "evidence.json").read_text(encoding="utf-8"))
+            evidence[0]["analysis_run_id"] = "AR1"
+            self.write_json(workspace, "evidence.json", evidence)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("sampled validation PASSED", result.stderr)
+
+            analysis_runs = json.loads((workspace / "analysis_runs.json").read_text(encoding="utf-8"))
+            analysis_runs[0]["sampled_validation"] = {
+                "status": "PASSED",
+                "sample_size": 20,
+                "agreement_or_error_summary": "Sampled extraction errors were within the study's accepted bound.",
+            }
+            self.write_json(workspace, "analysis_runs.json", analysis_runs)
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_adversarial_trace_research_contract_is_explicit(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_b = (LEAD / "prompts" / "phase-b-discover.md").read_text(encoding="utf-8")
+        phase_c = (LEAD / "prompts" / "phase-c-evidence.md").read_text(encoding="utf-8")
+        phase_d = (LEAD / "prompts" / "phase-d-freeze.md").read_text(encoding="utf-8")
+        state = (LEAD / "references" / "state-contract.md").read_text(encoding="utf-8")
+
+        for value in [
+            "SURVIVED_CURRENT_TESTS",
+            "EXPOSED_NO_OUTCOME",
+            "OUTCOME_WITHOUT_EXPOSURE",
+            "ABANDONED_OR_REVERSED_SOLUTION",
+            "Observability gate",
+            "AI analysis validation",
+        ]:
+            self.assertIn(value, protocol)
+        self.assertIn("targeted refutation searches", phase_b)
+        self.assertIn("Synthetic personas", phase_c)
+        self.assertIn("process-mining-style", phase_c)
+        self.assertIn("platform/community context", phase_c)
+        self.assertIn("decision-critical observability", phase_d)
+        self.assertIn("hypotheses.json", state)
+        self.assertIn("observability.json", state)
+        self.assertIn("analysis_runs.json", state)
 
 
 if __name__ == "__main__":
