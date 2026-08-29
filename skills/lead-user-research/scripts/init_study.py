@@ -17,6 +17,8 @@ EMPTY_LIST_FILES = [
     "lu_episodes.json",
     "lineage.json",
     "search_log.json",
+    "observability.json",
+    "analysis_runs.json",
     "change_log.json",
     "findings.json",
     "needs.json",
@@ -97,6 +99,27 @@ def main() -> int:
             "disconfirming_evidence": [],
             "questions_not_answered": [],
         },
+    )
+    write_json(
+        root / "hypotheses.json",
+        [
+            {
+                "hypothesis_id": f"H{index}",
+                "claim": claim,
+                "scope": "",
+                "observable_predictions": [],
+                "strongest_plausible_refuter": "",
+                "rival_explanations": [],
+                "targeted_refutation_searches": [],
+                "evidence_for": [],
+                "evidence_against": [],
+                "contrastive_cases": [],
+                "boundary_conditions": [],
+                "status": "UNTESTED",
+                "update_rationale": "",
+            }
+            for index, claim in enumerate(args.hypothesis, start=1)
+        ],
     )
     write_json(
         root / "coverage.json",
