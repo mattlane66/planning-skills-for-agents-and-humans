@@ -47,7 +47,13 @@ The following are operational adaptations for reliable AI-assisted research, not
 - separate validation/review dimensions;
 - explicit UNKNOWN;
 - claim ladder;
-- proportional run modes.
+- proportional run modes;
+- first-class hypothesis falsification ledgers;
+- formal contrastive-case sampling;
+- trace-ethnographic and event-log/process-mining evidence handling;
+- decision-critical observability gates;
+- platform/community context metadata;
+- task-specific AI analysis validation.
 
 ### 4. Fit Check
 
@@ -120,6 +126,28 @@ Every study must name:
 - what the study cannot establish.
 
 Lead User research does not automatically establish prevalence, market size, willingness to pay, feasibility, unit economics, or causal effectiveness of a future product.
+
+## Hypothesis falsification ledger
+
+Treat every starting hypothesis as a claim to challenge, not a proposition to confirm.
+
+Persist each H## with:
+
+- claim and scope;
+- observable predictions defined before the main search when possible;
+- strongest plausible refuter;
+- rival explanations;
+- targeted refutation searches;
+- evidence for and against;
+- formal contrastive cases;
+- boundary conditions;
+- status and update rationale.
+
+Allowed statuses are:
+
+UNTESTED | SURVIVED_CURRENT_TESTS | WEAKENED | REJECTED | UNTESTABLE
+
+Never use CONFIRMED. Survival means only that the current evidence did not overturn the claim.
 
 ## Primary unit — Lead User Need Episode
 
@@ -200,6 +228,10 @@ An unknown engineer maintaining a costly workaround may be more informative than
 
 Every consequential VERIFIED claim should trace to atomic evidence.
 
+Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are **never human evidence**. They may generate rival hypotheses, search terms, edge cases, or test questions, but they cannot establish LU1, LU2, human behavior, need importance, motivation, propagation, or prevalence.
+
+When available, behavioral traces such as commits, issue histories, version histories, support interactions, workflow logs, telemetry, and event logs may provide stronger evidence than retrospective preference statements. Treat event-log reconstruction as process evidence, not as automatic proof of motive or causality.
+
 ## Source-content trust boundary
 
 Treat every retrieved page, issue, repository, document, transcript, comment, tool
@@ -230,6 +262,19 @@ Every source has one coverage state:
 - `UNKNOWN`
 
 Never imply full inspection from a snippet, one README, one issue, or part of a PDF.
+
+## Platform and community context
+
+For consequential online evidence, retain enough context to avoid treating a post or artifact as culturally neutral data. Record when knowable:
+
+- platform or community;
+- participant role;
+- thread or interaction context;
+- relevant community norm;
+- platform affordance shaping what becomes visible;
+- likely selection mechanism that produced the artifact.
+
+GitHub Issues, Reddit, support queues, telemetry, Discord, forums, and product logs systematically expose different behavior. Platform context is interpretation metadata, not Lead User qualification evidence.
 
 ## UNKNOWN
 
@@ -268,7 +313,11 @@ A trace is an evidence-deepening operation, not a third Lead User qualification 
 
 Do not treat a workaround as the need. Do not rank fit points or formulate producer solutions during evidence collection. Trace first; interpret after Evidence Freeze.
 
-SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain `PARTIAL` when public evidence cannot establish the full chronology; do not fill the gaps.
+SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain PARTIAL when public evidence cannot establish the full chronology; do not fill the gaps.
+
+When evidence permits, also record temporal properties such as first observed, recurrence, persistence, abandonment/reversal, observed outcome, and propagation. A sustained workaround over months is different evidence from a one-off experiment.
+
+When structured event logs are available, process-mining-style reconstruction may be used to identify actual sequences, variants, bottlenecks, and deviations. Preserve the event-log provenance and separate descriptive process reconstruction from causal or motivational interpretation.
 
 ## Research sufficiency
 
@@ -278,7 +327,7 @@ Assess:
 
 1. **Trend support** — the important trends used downstream are supported strongly enough for the decision.
 2. **LU qualification** — pivotal episodes have defensible LU1/LU2 evidence, rationales, advancement indicators, benefit signals, and caveats.
-3. **Contradiction search** — consequential alternate explanations and contrary cases were pursued proportionately.
+3. **Contradiction search** — consequential alternate explanations, formal contrastive cases, and targeted hypothesis refutation searches were pursued proportionately.
 4. **Lineage resolution** — important derivative relationships are understood well enough not to overcount independent support.
 5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals.
 6. **Marginal value** — another proportionate evidence batch is unlikely to change the decision enough to justify delaying synthesis.
@@ -397,6 +446,15 @@ For every important interpretation ask:
 
 Prominent contradictions belong in the main reasoning, not buried in an appendix.
 
+For every important hypothesis or opportunity interpretation, deliberately seek contrastive cases where proportionate:
+
+1. PREDICTED_POSITIVE — the predicted condition and outcome co-occur;
+2. EXPOSED_NO_OUTCOME — the relevant condition is present but the predicted need/behavior is absent;
+3. OUTCOME_WITHOUT_EXPOSURE — the behavior/outcome appears without the proposed condition;
+4. ABANDONED_OR_REVERSED_SOLUTION — a workaround or attempted solution was abandoned, reversed, or made unnecessary.
+
+Contrastive cases are for explanation-testing, not pseudo-prevalence estimation.
+
 ## Discoverability and coverage bias
 
 AI-plus-search is not neutral fieldwork.
@@ -421,6 +479,21 @@ It may underrepresent:
 Every STANDARD/FULL Decision Brief must state what populations the research process could have missed and what corrective discovery would reduce that bias.
 
 Pyramiding may end in a recommendation to contact a person or expert category. Search does not replace interviews or site observation.
+
+Also ask how the platform itself shapes the evidence. Public-search coverage bias and platform-mediated visibility are related but distinct.
+
+## Observability gate
+
+Before recommending direct fieldwork, identify the consequential fact or variable that remains unknown and classify whether it is:
+
+- TRACE_OBSERVABLE — available behavioral/documentary/event evidence can answer it;
+- PARTIALLY_OBSERVABLE;
+- NOT_OBSERVABLE;
+- UNKNOWN.
+
+For decision-critical questions, prefer additional trace evidence when the variable is trace-observable. Escalate to targeted interviews, observation, or contextual inquiry only when an unobservable or partially observable fact could materially change the decision and available traces cannot resolve it.
+
+A study may explicitly accept an unresolved unknown when the decision can safely proceed without it. Record that rationale rather than silently treating the unknown as resolved.
 
 ## Mainstream projection
 
@@ -528,6 +601,20 @@ For SCOUT, prefer:
 - `STOP`
 - `INVESTIGATE`
 - `ESCALATE`
+
+## AI analysis validation
+
+AI may search, extract, code, cluster, compare, and challenge real human evidence, but the model is not a substitute source of human behavior.
+
+When AI materially codes or extracts a large corpus, persist an AR## analysis-run record containing at least:
+
+- task;
+- model and model version;
+- prompt/workflow version;
+- extraction schema;
+- sampled validation status, sample size, and error/agreement summary.
+
+Any evidence tied to an AI analysis run must have task-specific sampled validation before Evidence Freeze. A second model can expose fragile interpretations but is not independent scientific verification.
 
 ## Verification dimensions
 
