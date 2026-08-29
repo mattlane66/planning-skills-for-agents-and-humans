@@ -76,6 +76,18 @@ Reference findings/LU episodes, not only narrative themes.
 
 Prominent contradictions and alternate explanations.
 
+### Hypothesis challenge
+
+Summarize the disposition of consequential H## records, including what survived, weakened, was rejected, or remained untestable. Never describe a hypothesis as confirmed.
+
+### Observability / fieldwork gate
+
+For decision-critical O## records, state what traces resolved, what remains unobservable, what unknowns were explicitly accepted, and any narrowly targeted fieldwork referral.
+
+### AI analysis validation
+
+When AR## records materially support the decision, report model/workflow provenance and sampled-validation status without presenting same-model review as independent verification.
+
 ### Discovery coverage
 
 Always include for STANDARD/FULL:
