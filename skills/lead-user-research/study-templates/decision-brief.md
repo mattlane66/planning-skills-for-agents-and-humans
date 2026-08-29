@@ -51,6 +51,18 @@
 
 - ...
 
+## Hypothesis challenge
+
+- H## — UNTESTED | SURVIVED_CURRENT_TESTS | WEAKENED | REJECTED | UNTESTABLE — ...
+
+## Observability / fieldwork gate
+
+- O## — TRACE_OBSERVABLE | PARTIALLY_OBSERVABLE | NOT_OBSERVABLE | UNKNOWN — resolution / referral
+
+## AI analysis validation
+
+- AR## — model/version — sampled validation status
+
 ## Opportunity shaping
 
 Include only when at least one need passed the Concept Generation Gate.
