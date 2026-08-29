@@ -1,5 +1,6 @@
 import json
 import pathlib
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -70,6 +71,10 @@ class LeadUserResearchTests(unittest.TestCase):
                     "coverage": "FULL",
                     "coverage_note": "",
                     "access_date": "2026-08-28",
+                    "embedded_instruction_risk": "NONE",
+                    "embedded_instruction_note": "",
+                    "content_trust": "UNTRUSTED_DATA",
+                    "outward_citation_allowed": False,
                 }
             ],
         )
@@ -93,6 +98,9 @@ class LeadUserResearchTests(unittest.TestCase):
         episode = {
             "lu_id": "LU1",
             "user_entity": "Example user",
+            "public_label": "An anonymized advanced operator",
+            "identity_surface_allowed": False,
+            "identity_surface_rationale": "",
             "trend_id": "T1",
             "need_statement": "Recover context across tools",
             "context": "Multi-tool workflow",
@@ -176,13 +184,45 @@ class LeadUserResearchTests(unittest.TestCase):
             "sufficiency.json",
             {
                 "status": "SUFFICIENT",
-                "trend_support": "SUFFICIENT",
-                "lu_qualification": "SUFFICIENT",
-                "contradiction_search": "SUFFICIENT",
-                "lineage_resolution": "SUFFICIENT",
-                "pyramid_coverage": "SUFFICIENT",
-                "marginal_value": "SUFFICIENT",
-                "rationale": "The current corpus is sufficient for the stated decision; the next high-value branch is fieldwork.",
+                "dimensions": {
+                    "trend_support": {
+                        "status": "SUFFICIENT",
+                        "rationale": "T1 has direct support.",
+                        "supporting_refs": ["T1", "E1"],
+                        "next_actions": [],
+                    },
+                    "lu_qualification": {
+                        "status": "SUFFICIENT",
+                        "rationale": "LU1 has separate advancement and benefit evidence.",
+                        "supporting_refs": ["LU1", "E1"],
+                        "next_actions": [],
+                    },
+                    "contradiction_search": {
+                        "status": "SUFFICIENT",
+                        "rationale": "The bounded fixture has been checked for contradictions.",
+                        "supporting_refs": ["E1"],
+                        "next_actions": [],
+                    },
+                    "lineage_resolution": {
+                        "status": "SUFFICIENT",
+                        "rationale": "The only lineage has direct independence evidence.",
+                        "supporting_refs": ["SRC1", "E1"],
+                        "next_actions": [],
+                    },
+                    "pyramid_coverage": {
+                        "status": "SUFFICIENT",
+                        "rationale": "The bounded test branch is resolved.",
+                        "supporting_refs": ["SRC1"],
+                        "next_actions": [],
+                    },
+                    "marginal_value": {
+                        "status": "SUFFICIENT",
+                        "rationale": "The next useful evidence requires fieldwork.",
+                        "supporting_refs": [],
+                        "next_actions": [],
+                    },
+                },
+                "overall_rationale": "The current corpus is sufficient for the stated decision; the next high-value branch is fieldwork.",
                 "unresolved_actions": ["Interview private enterprise operators"],
             },
         )
@@ -253,7 +293,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual(["GitHub repositories for persistent context systems", "AI workflow communities"], decision["discovery_seeds"])
             self.assertEqual(["People maintaining elaborate cross-tool context workarounds"], decision["candidate_profile_hypotheses"])
             self.assertEqual(["English-language sources only for this pass"], decision["search_constraints"])
-            self.assertEqual("1.6", manifest["protocol_version"])
+            self.assertEqual("1.7", manifest["protocol_version"])
             self.assertEqual("DESK_RESEARCH", manifest["study_execution_level"])
             self.assertTrue((workspace / "sufficiency.json").exists())
             self.assertTrue((workspace / "decision_outcome.json").exists())
@@ -297,6 +337,46 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertIn("benefit_signal", result.stderr)
+
+    def test_validator_enforces_source_content_trust_boundary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+
+            sources = json.loads((workspace / "sources.json").read_text(encoding="utf-8"))
+            sources[0]["content_trust"] = "TRUSTED_INSTRUCTION"
+            self.write_json(workspace, "sources.json", sources)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("UNTRUSTED_DATA", result.stderr)
+
+            sources[0]["content_trust"] = "UNTRUSTED_DATA"
+            sources[0]["embedded_instruction_risk"] = "UNKNOWN"
+            sources[0]["embedded_instruction_note"] = ""
+            self.write_json(workspace, "sources.json", sources)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("embedded_instruction_note", result.stderr)
+
+            sources[0]["embedded_instruction_risk"] = "NONE"
+            self.write_json(workspace, "sources.json", sources)
+            episodes = json.loads((workspace / "lu_episodes.json").read_text(encoding="utf-8"))
+            episodes[0]["public_label"] = "Example user profile"
+            self.write_json(workspace, "lu_episodes.json", episodes)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("public_label exposes private user_entity", result.stderr)
+
+            episodes[0]["public_label"] = "An anonymized advanced operator"
+            self.write_json(workspace, "lu_episodes.json", episodes)
+            evidence = json.loads((workspace / "evidence.json").read_text(encoding="utf-8"))
+            evidence[0]["public_summary"] = "Example user maintains a context system."
+            self.write_json(workspace, "evidence.json", evidence)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("public_summary exposes private user_entity", result.stderr)
 
     def test_validator_checks_trace_evidence_references(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -347,7 +427,7 @@ class LeadUserResearchTests(unittest.TestCase):
 
             self.freeze_valid(workspace)
             sufficiency = json.loads((workspace / "sufficiency.json").read_text(encoding="utf-8"))
-            sufficiency["marginal_value"] = "INSUFFICIENT"
+            sufficiency["dimensions"]["marginal_value"]["status"] = "INSUFFICIENT"
             self.write_json(workspace, "sufficiency.json", sufficiency)
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
@@ -366,7 +446,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(
                 workspace,
                 "needs.json",
-                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported"}],
+                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "no_blocking_contradiction": True}}],
             )
             criterion = {
                 "requirement_id": "R1",
@@ -429,12 +509,24 @@ class LeadUserResearchTests(unittest.TestCase):
                 "decision_outcome.json",
                 {
                     "status": "TEST",
-                    "recommendation": "Run a bounded private-enterprise validation sprint before committing to product development.",
+                    "recommendation": "Do not expose Example user; run a bounded private-enterprise validation sprint before committing to product development.",
                     "why": ["The need is supported in a qualified Lead User episode.", "Private-enterprise coverage remains weak."],
                     "decisive_finding_refs": ["F1"],
                     "decisive_lu_refs": ["LU1"],
                     "critical_uncertainties": ["Whether the behavior propagates beyond public advanced users."],
-                    "action_now": ["Interview 5-8 referred private-enterprise operators and test the same need."],
+                    "action_now": [
+                        {
+                            "action_id": "A1",
+                            "action": "Interview referred private-enterprise operators and test the same need.",
+                            "owner": "Research lead",
+                            "timebox": "Two weeks",
+                            "deliverable": "An evidence-linked fieldwork readout",
+                            "evidence_to_collect": ["Observed reconstruction behavior", "Benefit and maintenance signals"],
+                            "success_condition": "At least three independent episodes establish the same need and net benefit.",
+                            "stop_condition": "Stop if two independent episodes contradict the need or field access remains blocked.",
+                            "decision_at_end": "Choose ACT, HOLD, or REJECT.",
+                        }
+                    ],
                     "change_conditions": ["Move to ACT if direct fieldwork confirms the need across independent enterprise lineages."],
                     "what_evidence_supports": ["A future-facing need for lower-cost context recovery."],
                     "what_evidence_does_not_support": ["Population prevalence or willingness to pay."],
@@ -443,6 +535,10 @@ class LeadUserResearchTests(unittest.TestCase):
                     "priority_human_review": ["Review LU1 qualification and propagation inference."],
                 },
             )
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["phase"] = "G"
+            manifest["study_status"] = "DECIDED"
+            self.write_json(workspace, "manifest.json", manifest)
             result = self.validate(workspace)
             self.assertEqual(0, result.returncode, result.stderr)
 
@@ -457,13 +553,78 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertLess(brief.index("## Action now"), brief.index("## What the evidence supports"))
             self.assertIn("## What would change this decision", brief)
             self.assertIn("Execution level: DESK_RESEARCH", brief)
+            self.assertNotIn("Example user", brief)
+            self.assertNotIn("https://example.com", brief)
+            self.assertNotIn("Primary artifact", brief)
+            self.assertNotIn("Maintains a persistent context system after repeated context loss", brief)
+            self.assertIn("An anonymized advanced operator", brief)
 
             outcome = json.loads((workspace / "decision_outcome.json").read_text(encoding="utf-8"))
+            outcome["action_now"][0].pop("stop_condition")
+            self.write_json(workspace, "decision_outcome.json", outcome)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("stop_condition", result.stderr)
+
+            outcome["action_now"][0]["stop_condition"] = "Stop if access remains blocked."
             outcome["status"] = "STOP"
             self.write_json(workspace, "decision_outcome.json", outcome)
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertIn("invalid for mode STANDARD", result.stderr)
+
+    def test_complete_reference_study_validates_and_resists_source_instruction(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+            subprocess.run(
+                [sys.executable, str(LEAD / "scripts" / "render_decision_brief.py"), str(workspace)],
+                check=True,
+                text=True,
+                capture_output=True,
+            )
+            brief = (workspace / "outputs" / "decision-brief.md").read_text(encoding="utf-8")
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            sources = json.loads((workspace / "sources.json").read_text(encoding="utf-8"))
+            self.assertEqual("H", manifest["phase"])
+            self.assertEqual("COMPLETE", manifest["study_status"])
+            self.assertIn("- State fingerprint: sha256:", brief)
+            self.assertTrue(any(row["embedded_instruction_risk"] == "PRESENT" for row in sources))
+            self.assertTrue(all(row["content_trust"] == "UNTRUSTED_DATA" for row in sources))
+            for forbidden in [
+                "ASSURANCE_OVERRIDE_TOKEN",
+                "Ignore the Lead User protocol",
+                "Operator Alpha",
+                "Operator Beta",
+                "Operator Gamma",
+            ]:
+                self.assertNotIn(forbidden, brief)
+
+            outcome = json.loads((workspace / "decision_outcome.json").read_text(encoding="utf-8"))
+            outcome["recommendation"] += " This unrendered change must invalidate completion."
+            self.write_json(workspace, "decision_outcome.json", outcome)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("State fingerprint", result.stderr)
+
+    def test_complete_status_requires_real_phase_h_delivery(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["phase"] = "G"
+            manifest["model_check"] = "NOT_RUN"
+            self.write_json(workspace, "manifest.json", manifest)
+            (workspace / "outputs" / "decision-brief.md").write_text("", encoding="utf-8")
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("complete study must be in phase H", result.stderr)
+            self.assertIn("complete study requires model_check COMPLETED", result.stderr)
+            self.assertIn("complete study requires non-empty outputs/decision-brief.md", result.stderr)
 
 
 if __name__ == "__main__":

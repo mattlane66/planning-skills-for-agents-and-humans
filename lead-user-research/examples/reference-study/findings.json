@@ -1,0 +1,57 @@
+[
+  {
+    "finding_id": "F1",
+    "claim": "The synthetic corpus depicts multi-workspace AI projects creating enough handoff burden that teams maintain explicit transfer artifacts.",
+    "epistemic_label": "VERIFIED",
+    "evidence_refs": [
+      "E1"
+    ],
+    "lu_refs": [],
+    "contradictions": [],
+    "confidence_rationale": "The claim is bounded to the bundled synthetic trend memo and does not assert real-market prevalence."
+  },
+  {
+    "finding_id": "F2",
+    "claim": "One fictional advanced operator sustained a structured handoff packet and reported substantially lower reconstruction effort while preserving decisions and constraints.",
+    "epistemic_label": "VERIFIED",
+    "evidence_refs": [
+      "E2",
+      "E3"
+    ],
+    "lu_refs": [
+      "LU1"
+    ],
+    "contradictions": [
+      "F4"
+    ],
+    "confidence_rationale": "The synthetic episode contains separate advancement and benefit observations, but the reported result is not independently measured."
+  },
+  {
+    "finding_id": "F3",
+    "claim": "The second fictional adoption is derivative and therefore does not add independent confirmation of either discovery or benefit.",
+    "epistemic_label": "VERIFIED",
+    "evidence_refs": [
+      "E4"
+    ],
+    "lu_refs": [
+      "LU2"
+    ],
+    "contradictions": [],
+    "confidence_rationale": "The fixture explicitly states that the operator copied the first operator's template."
+  },
+  {
+    "finding_id": "F4",
+    "claim": "An independent fictional counterexample abandoned a detailed handoff ledger because its maintenance cost exceeded its recovery value.",
+    "epistemic_label": "VERIFIED",
+    "evidence_refs": [
+      "E5"
+    ],
+    "lu_refs": [
+      "LU3"
+    ],
+    "contradictions": [
+      "F2"
+    ],
+    "confidence_rationale": "The behavior is explicit in the synthetic record, although its time values are self-estimated and fictional."
+  }
+]

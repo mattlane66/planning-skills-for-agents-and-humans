@@ -153,7 +153,7 @@ def copy_support(package_root: Path) -> None:
     for directory in SUPPORT_DIRS:
         source = ROOT / directory
         if source.is_dir():
-            shutil.copytree(source, package_root / directory)
+            shutil.copytree(source, package_root / directory, dirs_exist_ok=True)
     for filename in SUPPORT_FILES:
         source = ROOT / filename
         if source.is_file():

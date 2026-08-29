@@ -34,6 +34,18 @@ The few uncertainties that could reverse the decision.
 
 Concrete next action(s) implied by the current evidence.
 
+Write each as a structured A## action with:
+
+- accountable owner or role;
+- action and deliverable;
+- timebox;
+- evidence to collect;
+- success condition;
+- stop condition;
+- decision at end.
+
+Do not invent a person's name. "Do more research" is not operationally complete.
+
 ### What would change this decision
 
 Observable evidence or conditions that should cause reconsideration.
@@ -91,6 +103,11 @@ python lead-user-research/scripts/render_decision_brief.py <workspace>
 
 The rendered Decision Brief is derived from structured state and must not introduce new substantive claims.
 
+The brief must link decisive F## / LU## refs to privacy-safe E### / SRC## drill-down.
+Never fall back to internal `user_entity`, reproduce raw excerpts by default, or expose
+a source URL unless `outward_citation_allowed` is true. Distinguish PASS fitness
+conditions from PROVISIONAL or FAIL criteria and label mechanisms as candidates.
+
 ### Decision status
 
 For SCOUT:
@@ -133,3 +150,7 @@ Display separately:
 - interpretive status.
 
 Do not compress them into a single trust badge.
+
+Set `manifest.study_status` to DECIDED in Phase G before rendering the Decision Brief.
+Use COMPLETE only after Phase H has regenerated the brief and completed its cross-format
+and model checks.

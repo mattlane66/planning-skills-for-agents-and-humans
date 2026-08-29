@@ -22,6 +22,10 @@ A need may proceed only when:
 
 Record PASS / FAIL / NOT_ASSESSED and rationale in `needs.json`.
 
+Persist the five gate tests as `concept_gate_checks` booleans. PASS requires all five
+true, a relevant trend ref, and a supporting finding that links to a QUALIFIED LU
+episode.
+
 If no need passes, stop and say:
 
 > No opportunity is currently supported strongly enough for concept generation.

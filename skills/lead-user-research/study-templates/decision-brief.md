@@ -22,6 +22,17 @@
 
 ## Action now
 
+### A## — [specific action]
+
+- **Owner:** ...
+- **Timebox:** ...
+- **Deliverable:** ...
+- **Success condition:** ...
+- **Stop condition:** ...
+- **Decision at end:** ...
+
+**Evidence to collect**
+
 - ...
 
 ## What would change this decision
@@ -46,11 +57,15 @@ Include only when at least one need passed the Concept Generation Gate.
 
 ### N## — [supported need]
 
-**Fitness conditions**
+**Passing fitness conditions**
 
 - R## — ...
 
-**Candidate mechanisms**
+**Provisional or failed criteria**
+
+- R## — PROVISIONAL | FAIL — ...
+
+**Candidate mechanisms — not selected solutions**
 
 - M## — ...
 
@@ -69,6 +84,10 @@ Include only when at least one need passed the Concept Generation Gate.
 - ...
 
 ### Corrective discovery
+
+- ...
+
+### Fieldwork referrals
 
 - ...
 
@@ -91,3 +110,10 @@ Include only when at least one need passed the Concept Generation Gate.
 - Deterministic validation: PASSED | FAILED | NOT_RUN
 - Interpretive status: STABLE | PROVISIONAL
 - Model checklist: COMPLETED | NOT_RUN
+- State fingerprint: sha256:...
+
+## Evidence drill-down
+
+For decisive F## and LU## records only. Use privacy-safe public labels, epistemic
+status, evidence refs, source coverage, and outward-approved source links. Do not
+reproduce raw source excerpts or internal identities by default.

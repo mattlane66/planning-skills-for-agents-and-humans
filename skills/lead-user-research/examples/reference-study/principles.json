@@ -1,0 +1,12 @@
+[
+  {
+    "principle_id": "SP1",
+    "need_id": "N1",
+    "principle": "Transfer the smallest state that preserves consequential decisions, constraints, and open questions; every additional maintenance step must earn more recovery value than it costs.",
+    "evidence_refs": [
+      "E3",
+      "E5"
+    ],
+    "status": "INFERRED"
+  }
+]

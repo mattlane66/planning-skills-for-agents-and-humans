@@ -2,7 +2,22 @@
 
 ## Unreleased
 
-_No changes yet._
+### Added
+
+- Added a complete synthetic Lead User v1.7 reference study with qualified, derivative,
+  contradictory, concept-shaping, operational-action, and privacy-safe drill-down state.
+- Added a blind real-runtime assurance harness that scores generated study artifacts
+  independently of adapter self-report, plus a manual GitHub Actions workflow.
+
+### Improved
+
+- Made source content explicitly `UNTRUSTED_DATA`, persisted instruction-risk handling,
+  and added a malicious-source regression fixture.
+- Strengthened structural validation for source, evidence, trends, lineage, findings,
+  concept gates, sufficiency dimensions, decision status, completion, and cross-format
+  privacy/state markers, including a deterministic brief-to-state fingerprint.
+- Replaced narrative action strings with evidence-oriented A## execution contracts and
+  made the Decision Brief action-first, evidence-linked, and privacy-safe by default.
 
 ## v1.3.1 — Routing safety and reproducible releases — 2026-08-11
 

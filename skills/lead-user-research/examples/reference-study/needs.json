@@ -1,0 +1,27 @@
+[
+  {
+    "need_id": "N1",
+    "statement": "Preserve current decisions, constraints, and open questions across AI-workspace handoffs with materially less total effort than manual reconstruction or ledger upkeep.",
+    "finding_ids": [
+      "F2",
+      "F3",
+      "F4"
+    ],
+    "relevant_trends": [
+      "T1"
+    ],
+    "propagation_status": "Plausible propagation",
+    "contradictions": [
+      "F4"
+    ],
+    "concept_gate_status": "PASS",
+    "concept_gate_rationale": "The synthetic trend and qualified episode support a solution-independent need; the counterexample narrows the fitness conditions to net effort and context integrity rather than blocking bounded concept comparison.",
+    "concept_gate_checks": {
+      "credible_trend": true,
+      "qualified_lu_support": true,
+      "need_workaround_separation": true,
+      "fitness_evidence_sufficient": true,
+      "no_blocking_contradiction": true
+    }
+  }
+]

@@ -1,0 +1,16 @@
+[
+  {
+    "trend_id": "T1",
+    "statement": "Fictional project work increasingly crosses multiple AI workspaces and requires explicit transfer of decision context.",
+    "direction": "Increasing multi-workspace coordination and handoff burden",
+    "evidence_refs": [
+      "E1"
+    ],
+    "observable_indicators": [
+      "Use of three or more AI workspaces in one project",
+      "Maintenance of an explicit cross-workspace handoff artifact"
+    ],
+    "importance": "Lost constraints and repeated decisions can erase the expected speed benefit of using multiple AI workspaces.",
+    "status": "VERIFIED"
+  }
+]

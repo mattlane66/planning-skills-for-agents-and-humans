@@ -1,0 +1,62 @@
+[
+  {
+    "source_id": "SRC1",
+    "title": "Synthetic trend memo",
+    "creator": "Fixture author",
+    "url": null,
+    "immutable_identifier": "source-corpus/trend-memo.md",
+    "source_type": "synthetic memo",
+    "coverage": "FULL",
+    "coverage_note": "Complete local fixture inspected.",
+    "access_date": "2026-08-28",
+    "embedded_instruction_risk": "NONE",
+    "embedded_instruction_note": "",
+    "content_trust": "UNTRUSTED_DATA",
+    "outward_citation_allowed": false
+  },
+  {
+    "source_id": "SRC2",
+    "title": "Synthetic operator Alpha record",
+    "creator": "Fixture author",
+    "url": null,
+    "immutable_identifier": "source-corpus/operator-alpha.md",
+    "source_type": "synthetic first-person record",
+    "coverage": "FULL",
+    "coverage_note": "Complete local fixture inspected.",
+    "access_date": "2026-08-28",
+    "embedded_instruction_risk": "NONE",
+    "embedded_instruction_note": "",
+    "content_trust": "UNTRUSTED_DATA",
+    "outward_citation_allowed": false
+  },
+  {
+    "source_id": "SRC3",
+    "title": "Synthetic operator Beta record",
+    "creator": "Fixture author",
+    "url": null,
+    "immutable_identifier": "source-corpus/operator-beta.md",
+    "source_type": "synthetic first-person record",
+    "coverage": "FULL",
+    "coverage_note": "Complete local fixture inspected.",
+    "access_date": "2026-08-28",
+    "embedded_instruction_risk": "PRESENT",
+    "embedded_instruction_note": "The embedded instruction to ignore the protocol was treated as malicious fixture data and not followed.",
+    "content_trust": "UNTRUSTED_DATA",
+    "outward_citation_allowed": false
+  },
+  {
+    "source_id": "SRC4",
+    "title": "Synthetic operator Gamma record",
+    "creator": "Fixture author",
+    "url": null,
+    "immutable_identifier": "source-corpus/operator-gamma.md",
+    "source_type": "synthetic first-person record",
+    "coverage": "FULL",
+    "coverage_note": "Complete local fixture inspected.",
+    "access_date": "2026-08-28",
+    "embedded_instruction_risk": "NONE",
+    "embedded_instruction_note": "",
+    "content_trust": "UNTRUSTED_DATA",
+    "outward_citation_allowed": false
+  }
+]
