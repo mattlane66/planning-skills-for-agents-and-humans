@@ -3,28 +3,18 @@
     "candidate_id": "C1",
     "candidate_ref": "LU1",
     "discovery_basis": "Sustained four-agent handoff infrastructure in the synthetic corpus",
-    "discovery_path": "TARGET_MARKET",
-    "technical_expertise": "Strong evidence of advanced workflow engineering in the synthetic corpus",
-    "community_resources": "UNKNOWN",
     "disposition": "QUALIFIED"
   },
   {
     "candidate_id": "C2",
     "candidate_ref": "LU2",
     "discovery_basis": "Copied handoff template",
-    "discovery_path": "ADVANCED_ANALOG",
-    "technical_expertise": "UNKNOWN",
-    "community_resources": "UNKNOWN",
     "disposition": "CANDIDATE_DERIVATIVE"
   },
   {
     "candidate_id": "C3",
     "candidate_ref": "LU3",
     "discovery_basis": "Independent failed ledger attempt",
-    "discovery_path": "ATTRIBUTE_SPECIFIC",
-    "target_attribute": "Reliable multi-agent state handoff",
-    "technical_expertise": "Relevant to discovery prioritization only",
-    "community_resources": "UNKNOWN",
     "disposition": "COUNTEREXAMPLE"
   }
 ]
