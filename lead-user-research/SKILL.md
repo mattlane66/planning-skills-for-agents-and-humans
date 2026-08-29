@@ -171,6 +171,7 @@ sufficiency.json
 decision_outcome.json
 trends.json
 candidates.json
+pyramids.json
 sources.json
 evidence.json
 lu_episodes.json
@@ -260,9 +261,10 @@ Read the persisted decision state.
 Write:
 
 - Trend Map;
-- expert/referral candidates;
-- pyramiding paths;
+- expert/referral candidates across target-market, advanced-analog, and attribute-specific search paths;
+- auditable PY## pyramids anchored to specified target attributes, with success/termination criteria and hop rationales;
 - advanced analog hypotheses;
+- optional technical-expertise/community-resource enrichment signals for search prioritization only;
 - search log.
 
 Trend precedes Lead User qualification.
@@ -395,6 +397,9 @@ them before invoking `framing-doc`; the research record remains cited evidence.
 - A workaround is not automatically the need.
 - Episode tracing deepens evidence; it does not replace LU1/LU2 qualification.
 - Discovery seeds and candidate-profile hypotheses guide search; they do not prequalify Lead Users or close the search universe.
+- Explicitly consider target-market, advanced-analog, and attribute-specific Lead User discovery paths.
+- Pyramid on a specified target attribute or information target and persist material PY## chains with hop rationales and explicit stopping criteria.
+- Technical expertise and community-resource signals are optional discovery aids only; they never establish or substitute for LU1/LU2.
 - UNKNOWN stays UNKNOWN.
 - PARTIAL source access stays PARTIAL.
 - Derivative evidence is not independent evidence.
