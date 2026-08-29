@@ -89,6 +89,7 @@ def recommend(root: Path) -> dict[str, Any]:
 
     trends = load_json(root, "trends.json", [])
     candidates = load_json(root, "candidates.json", [])
+    pyramids = load_json(root, "pyramids.json", [])
     search_log = load_json(root, "search_log.json", [])
     missing_discovery = [
         label
