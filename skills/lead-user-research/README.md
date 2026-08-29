@@ -27,7 +27,7 @@ python lead-user-research/scripts/next_research_move.py research/lead-user-study
 
 ### Audit or adapt the methodology
 
-Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, pyramiding, advanced analogs, evidence freeze, episode tracing, research sufficiency, fieldwork/completeness semantics, interpretation, Fit Check, and decision delivery.
+Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, the three target-market/advanced-analog/attribute-specific discovery paths, attribute-specific pyramiding, evidence freeze, episode tracing, research sufficiency, fieldwork/completeness semantics, interpretation, Fit Check, and decision delivery.
 
 ## Minimum input
 
