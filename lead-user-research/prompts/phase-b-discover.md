@@ -61,11 +61,12 @@ Do not optimize for fame.
 
 ### Optional search enrichment
 
-When evidence permits, candidate records may include:
+When evidence permits, candidate records may include a `search_enrichment` object containing:
 
 - `technical_expertise_signal`;
 - `community_resource_signal`;
-- supporting evidence refs and a search-priority rationale.
+- `evidence_refs`;
+- `priority_rationale`.
 
 Use these only to prioritize which candidate or branch to inspect next. They do not establish LU1 or LU2 and must never compensate for missing LU1/LU2 evidence.
 
