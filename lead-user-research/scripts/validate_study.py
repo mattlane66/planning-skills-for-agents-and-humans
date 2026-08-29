@@ -46,8 +46,12 @@ LINEAGE_RELATIONSHIP = {
 }
 INDEPENDENCE = {"INDEPENDENT", "DERIVATIVE", "RELATED", "UNKNOWN"}
 FIT_STATUS = {"PASS", "FAIL", "PROVISIONAL"}
+SEARCH_PATHS = {"TARGET_MARKET", "ADVANCED_ANALOG", "ATTRIBUTE_SPECIFIC", "OTHER"}
+PYRAMID_STATUS = {"OPEN", "TERMINATED", "FIELDWORK_REFERRAL"}
 
 ID_PATTERNS = {
+    "candidate_id": re.compile(r"^C\d+$"),
+    "pyramid_id": re.compile(r"^PY\d+$"),
     "trend_id": re.compile(r"^T\d+$"),
     "source_id": re.compile(r"^SRC\d+$"),
     "evidence_id": re.compile(r"^E\d+$"),
@@ -186,6 +190,8 @@ def main() -> int:
     manifest = load(root, "manifest.json", errors)
     decision = load(root, "decision.json", errors)
     trends = load(root, "trends.json", errors)
+    candidates = load(root, "candidates.json", errors)
+    pyramids = load(root, "pyramids.json", errors)
     sources = load(root, "sources.json", errors)
     evidence = load(root, "evidence.json", errors)
     episodes = load(root, "lu_episodes.json", errors)
@@ -202,6 +208,8 @@ def main() -> int:
 
     list_files = [
         ("trends.json", trends),
+        ("candidates.json", candidates),
+        ("pyramids.json", pyramids),
         ("sources.json", sources),
         ("evidence.json", evidence),
         ("lu_episodes.json", episodes),
@@ -217,6 +225,8 @@ def main() -> int:
             errors.append(f"{name} must contain a JSON array")
 
     trends = trends if isinstance(trends, list) else []
+    candidates = candidates if isinstance(candidates, list) else []
+    pyramids = pyramids if isinstance(pyramids, list) else []
     sources = sources if isinstance(sources, list) else []
     evidence = evidence if isinstance(evidence, list) else []
     episodes = episodes if isinstance(episodes, list) else []
@@ -229,6 +239,8 @@ def main() -> int:
 
     mode = manifest.get("mode") if isinstance(manifest, dict) else None
 
+    candidate_ids = ids(candidates, "candidate_id", errors)
+    pyramid_ids = ids(pyramids, "pyramid_id", errors)
     trend_ids = ids(trends, "trend_id", errors)
     source_ids = ids(sources, "source_id", errors)
     evidence_ids = ids(evidence, "evidence_id", errors)
@@ -265,6 +277,69 @@ def main() -> int:
         for row in criteria
         if isinstance(row, dict) and row.get("requirement_id")
     }
+
+    for candidate in candidates:
+        cid = candidate.get("candidate_id", "<unknown>")
+        search_path = candidate.get("search_path")
+        if search_path not in (None, "") and search_path not in SEARCH_PATHS:
+            errors.append(f"{cid} has invalid search_path {search_path!r}")
+        enrichment = candidate.get("search_enrichment")
+        if enrichment is not None:
+            if not isinstance(enrichment, dict):
+                errors.append(f"{cid} search_enrichment must be an object")
+            else:
+                for field in ["technical_expertise_signal", "community_resource_signal"]:
+                    if field in enrichment:
+                        require_nonempty_string(enrichment, field, f"{cid} search_enrichment", errors)
+                enrichment_refs = require_string_list(
+                    enrichment, "evidence_refs", f"{cid} search_enrichment", errors
+                )
+                for ref in enrichment_refs:
+                    if ref not in evidence_ids:
+                        errors.append(f"{cid} search_enrichment references missing evidence: {ref}")
+                if "priority_rationale" in enrichment:
+                    require_nonempty_string(
+                        enrichment, "priority_rationale", f"{cid} search_enrichment", errors
+                    )
+
+    for pyramid in pyramids:
+        pid = pyramid.get("pyramid_id", "<unknown>")
+        for field in [
+            "target_attribute",
+            "starting_node",
+            "success_criterion",
+            "termination_criterion",
+            "network_visibility_note",
+        ]:
+            require_nonempty_string(pyramid, field, pid, errors)
+        status = pyramid.get("status")
+        if status not in PYRAMID_STATUS:
+            errors.append(f"{pid} has invalid status {status!r}")
+        hops = pyramid.get("hops")
+        if not isinstance(hops, list):
+            errors.append(f"{pid} hops must be a list")
+            hops = []
+        seen_hops: set[str] = set()
+        for index, hop in enumerate(hops):
+            owner = f"{pid} hops[{index}]"
+            if not isinstance(hop, dict):
+                errors.append(f"{owner} must be an object")
+                continue
+            hop_id = hop.get("hop_id")
+            if not isinstance(hop_id, str) or not re.match(r"^H\d+$", hop_id):
+                errors.append(f"{owner} has invalid hop_id {hop_id!r}")
+            elif hop_id in seen_hops:
+                errors.append(f"{pid} has duplicate hop_id {hop_id}")
+            else:
+                seen_hops.add(hop_id)
+            for field in ["from_node", "to_node", "referral_rationale", "advancement_rationale"]:
+                require_nonempty_string(hop, field, owner, errors)
+            hop_refs = require_string_list(hop, "evidence_refs", owner, errors)
+            for ref in hop_refs:
+                if ref not in evidence_ids:
+                    errors.append(f"{owner} references missing evidence: {ref}")
+        if status != "OPEN":
+            require_nonempty_string(pyramid, "termination_reason", pid, errors)
 
     for source in sources:
         sid = source.get("source_id", "<unknown>")
@@ -662,7 +737,9 @@ def main() -> int:
             require_string_list(row, field, mid, errors)
 
     all_structured_refs = (
-        trend_ids
+        candidate_ids
+        | pyramid_ids
+        | trend_ids
         | source_ids
         | evidence_ids
         | lu_ids
