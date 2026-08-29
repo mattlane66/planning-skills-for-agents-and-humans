@@ -41,7 +41,9 @@ These are promotion gates, not navigation locks.
 When the **gated/orchestrated profile** is explicitly selected, the controlled path can also be enforced during exploration:
 
 ```text
-accepted frame
+[optional Lead User Research when future-facing opportunity evidence is missing]
+→ accepted research-to-frame implications
+→ accepted frame
 → accepted requirements
 → accepted Appetite
 → candidate shapes
@@ -64,6 +66,7 @@ When the bounded planning route itself spans multiple sessions, Wayfinding wraps
 | Move / stage | Purpose | Output / authority |
 | --- | --- | --- |
 | Wayfinding, optional outer loop | Coordinate dependent planning decisions, evidence, prototypes, and prerequisites across sessions without creating a second source of truth. | coordination map and tickets, never product truth |
+| Lead User Research, optional upstream lane | Establish decision-useful evidence about important trends, advanced users, unusually high-benefit needs, and analogs before framing when that evidence is genuinely missing. | authoritative research record plus proposed handoff; not accepted planning intent until the human accepts the handoff |
 | Frame, when needed | Name the current situation, problem, outcome, forces, and boundaries when those are not clear enough for judgment. | Working or Accepted `planning/frame.md` |
 | R move | Create, extract, or revise requirements. R may come first or be extracted from S/prototype/fit evidence. | Working or Accepted requirements table |
 | Appetite move | Set, revise, or accept the budget, cut line, accepted uncertainty, and spike threshold. | Unset / Working / Accepted Appetite |

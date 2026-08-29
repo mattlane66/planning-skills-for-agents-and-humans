@@ -18,6 +18,11 @@ A user may begin from requirements, a rough solution, a prototype, a fit questio
 
 Use the **gated/orchestrated profile** only when the user, team policy, or automation explicitly needs strict prerequisites and deterministic stopping points.
 
+When a consequential opportunity decision depends on future-facing trends,
+advanced users, unusually high-benefit needs, pyramiding, or advanced analogs,
+`lead-user-research` may precede framing as an upstream evidence move. It is not a
+mandatory first stage and is not a generic synonym for customer or market research.
+
 Do not write production code unless the user asks for implementation and a selected slice or equally clear accepted boundary exists.
 
 ## Shaping loop
@@ -54,7 +59,9 @@ These are promotion gates, not navigation locks.
 Use this when a team or automation wants a formal default:
 
 ```text
-accepted frame
+[optional Lead User Research when future-facing opportunity evidence is missing]
+→ explicit human acceptance of any research-to-frame implications
+→ accepted frame
 → accepted requirements
 → accepted Appetite
 → candidate shapes
@@ -73,6 +80,7 @@ The controlled route is a safe default, not the only legal order for exploration
 
 ## Core planning moves
 
+- `lead-user-research` — establish future-facing opportunity evidence before framing when the decision genuinely requires trends, pyramiding, qualified Lead User Need Episodes, or advanced analogs
 - `framing-doc` — clarify the real problem, desired outcome, evidence, and boundary when those are genuinely unclear
 - `shaping` — iterate among R, S, Appetite, fit, focused spikes, candidate evidence, and human selection
 - `breadboarding` — map current behavior, test an unselected candidate, or make a selected design concrete as places, affordances, stores, and wiring
@@ -93,6 +101,7 @@ Advanced moves are conditional, not a checklist:
 
 Agents may gather facts, expose alternatives, update working material, and prepare decision-ready evidence. Humans decide or explicitly authorize:
 
+- whether proposed Lead User research implications should feed a frame
 - which problem or opportunity becomes accepted scope
 - which requirements become accepted judging criteria
 - what Appetite and cut line the bet deserves
@@ -158,7 +167,8 @@ Use this default order when artifacts disagree:
 9. candidate-shape breadboards and focused spikes, for evidence about their named question only
 10. kickoff document, for orientation only
 11. framing document
-12. raw notes, transcripts, rejected alternatives, and brainstorming
+12. accepted research-to-frame handoff, for cited evidence input only
+13. raw notes, transcripts, rejected alternatives, and brainstorming
 
 Authority is concern-specific. Working material may be revised during exploration; accepted material cannot be silently rewritten. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank accepted shaping decisions. No lower artifact may expand the selected project or active slice.
 
@@ -250,6 +260,8 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Kickoff document — human-readable orientation, not build scope
 - Context packet — exact subset handed to the implementation agent
 - Breadboard reflection — explicit comparison of accepted intent and implementation reality
+- Lead User research record — authoritative evidence and interpretation for its named research decision; never accepted product-planning intent by itself
+- Research-to-frame handoff — proposed evidence-backed framing inputs that require explicit human acceptance before `framing-doc`
 
 ## Completion standard
 

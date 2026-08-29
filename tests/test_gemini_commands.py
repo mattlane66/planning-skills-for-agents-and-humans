@@ -19,6 +19,15 @@ EXPECTED = {
     "statechart",
     "dumplink",
     "check-drift",
+    "lead-user",
+    "lead-user-frame",
+    "lead-user-discover",
+    "lead-user-evidence",
+    "lead-user-freeze",
+    "lead-user-interpret",
+    "lead-user-shape",
+    "lead-user-decide",
+    "lead-user-deliver",
 }
 
 
@@ -47,6 +56,9 @@ class GeminiCommandTests(unittest.TestCase):
         self.assertIn("vertical implementation slices", prompts["dumplink"])
         self.assertIn("do not implement", prompts["statechart"])
         self.assertIn("do not implement", prompts["check-drift"])
+        self.assertIn("one next move", prompts["lead-user"])
+        self.assertIn("real sources", prompts["lead-user-evidence"])
+        self.assertIn("human acceptance", prompts["lead-user-deliver"])
 
 
 if __name__ == "__main__":

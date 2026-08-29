@@ -36,7 +36,7 @@ CONTEXT_WORDS = re.compile(
     re.IGNORECASE,
 )
 LOCAL_PATH = re.compile(
-    r"(?:AGENTS\.md|\.agent-orchestration\.yaml|(?:docs|templates|hooks)/[A-Za-z0-9._/-]+)"
+    r"(?<![A-Za-z0-9_-])(?:AGENTS\.md|\.agent-orchestration\.yaml|(?:docs|templates|hooks)/[A-Za-z0-9._/-]+)"
 )
 MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 ZIP_TIMESTAMP = (1980, 1, 1, 0, 0, 0)

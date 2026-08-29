@@ -127,6 +127,7 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
       ['spike', /# \[Part\] Spike: \[Title\]/],
       ['decision-log', /# \[Project\] — Decision Log/],
       ['appetite-card', /# \[Project\] — Appetite Card/],
+      ['research-to-frame-handoff', /# Proposed Research-to-Frame Handoff/],
     ] as const) {
       const artifactTemplate = await client.callTool({
         name: 'get_artifact_template',

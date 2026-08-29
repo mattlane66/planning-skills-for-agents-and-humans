@@ -71,3 +71,9 @@ The phase is complete when another researcher can tell:
 - which discovery inputs are seeds/hypotheses versus hard search constraints.
 
 Do not proceed by inventing missing scope. Mark consequential ambiguity.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

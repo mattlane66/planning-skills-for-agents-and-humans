@@ -1,0 +1,16 @@
+description = "Run Lead User Research Phase F only for needs that pass the Concept Generation Gate."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-f-shape.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Study workspace or passing need:
+{{args}}
+
+Proceed only for passing needs. Derive and freeze evidence-traceable,
+implementation-independent requirements before comparing materially different
+mechanisms. Do not invent alternatives or accepted product intent. End with the
+deterministic phase handoff.
+"""

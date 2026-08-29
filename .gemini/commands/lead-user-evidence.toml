@@ -1,0 +1,15 @@
+description = "Run Lead User Research Phase C on the next bounded source and evidence batch."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-c-evidence.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Request or workspace:
+{{args}}
+
+Inspect a bounded batch of real sources. Preserve exact locations, coverage,
+instruction-risk, lineage, atomic evidence, privacy, and outward-citation controls.
+Require separate LU1 and LU2 support. End with the deterministic phase handoff.
+"""

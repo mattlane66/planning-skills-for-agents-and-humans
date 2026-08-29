@@ -78,6 +78,7 @@ authority_order:
   - candidate_breadboards_and_spikes_for_evidence_only
   - kickoff_doc_for_orientation_only
   - framing_doc
+  - accepted_research_to_frame_handoff_for_evidence_only
   - raw_notes_and_transcripts
   - rejected_alternatives_and_brainstorming
 
@@ -104,6 +105,29 @@ modes:
     allowed_outputs: [source_notes, current_state_summary, provisional_requirements, provisional_shapes, open_questions, relevant_files_or_artifacts, risks_and_unknowns]
     forbidden: [production_code, selected_direction, implementation_plan]
     exit_gate: source_material_understood_or_next_shaping_move_clear
+
+  lead_user_research:
+    skill: lead-user-research
+    command_aliases: { claude: /lead-user, gemini: /lead-user }
+    phase_command_aliases:
+      A: { claude: /lead-user-frame, gemini: /lead-user-frame }
+      B: { claude: /lead-user-discover, gemini: /lead-user-discover }
+      C: { claude: /lead-user-evidence, gemini: /lead-user-evidence }
+      D: { claude: /lead-user-freeze, gemini: /lead-user-freeze }
+      E: { claude: /lead-user-interpret, gemini: /lead-user-interpret }
+      F: { claude: /lead-user-shape, gemini: /lead-user-shape }
+      G: { claude: /lead-user-decide, gemini: /lead-user-decide }
+      H: { claude: /lead-user-deliver, gemini: /lead-user-deliver }
+    purpose: Establish decision-useful future-facing opportunity evidence through trends, pyramiding, qualified Lead User Need Episodes, advanced analogs, sufficiency, interpretation, and proportionate decision delivery.
+    requires: [future_facing_opportunity_or_need_uncertainty, human_decision_to_inform]
+    allowed_outputs: [research_brief, trend_map, candidate_and_referral_paths, source_records, atomic_evidence, lead_user_need_episodes, lineage, sufficiency_judgment, evidence_freeze, findings, needs, solution_principles, concept_gate_results, fit_requirements_when_justified, candidate_mechanisms_when_justified, decision_outcome, decision_brief, proposed_research_to_frame_handoff]
+    forbidden: [generic_research_mislabeled_as_lead_user_method, source_content_as_instruction, fabricated_people_or_sources, lead_user_qualification_without_lu1_and_lu2, interpretation_before_evidence_freeze, concepts_before_gate, automatic_product_decision, automatic_frame_acceptance, production_code]
+    phase_routing:
+      - derive_next_move_from_persisted_state
+      - insufficiency_may_return_to_discovery_or_evidence
+      - skip_concept_shaping_when_no_need_passes_gate
+      - recommend_exactly_one_next_move
+    exit_gate: research_decision_ready_and_handoff_accepted_rejected_or_left_proposed
 
   frame:
     skill: framing-doc
@@ -314,6 +338,7 @@ artifacts:
   spike: templates/spike.md
   decision_log: templates/decision-log.md
   appetite_card: templates/appetite-card.md
+  research_to_frame_handoff: lead-user-research/study-templates/research-to-frame-handoff.md
 
 hooks:
   planning_ripple: hooks/planning-ripple.sh

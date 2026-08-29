@@ -4,6 +4,9 @@
 
 ### Added
 
+- Added deterministic Lead User next-phase routing, a `/lead-user` start/resume
+  controller, and focused Phase A–H wrappers for Claude Code and Gemini CLI.
+- Added an explicit research-to-frame handoff template and human acceptance gate.
 - Added a complete synthetic Lead User v1.7 reference study with qualified, derivative,
   contradictory, concept-shaping, operational-action, and privacy-safe drill-down state.
 - Added a blind real-runtime assurance harness that scores generated study artifacts
@@ -11,6 +14,9 @@
 
 ### Improved
 
+- Integrated Lead User Research into the planning router, orchestration contract,
+  cross-platform invocation guidance, and optional upstream planning flow without
+  making research a mandatory predecessor to framing.
 - Made source content explicitly `UNTRUSTED_DATA`, persisted instruction-risk handling,
   and added a malicious-source regression fixture.
 - Strengthened structural validation for source, evidence, trends, lineage, findings,

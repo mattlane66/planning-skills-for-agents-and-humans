@@ -48,7 +48,7 @@ rewrite_args=(
   -e 's#docs/lifecycle-hooks\.md#${CLAUDE_PLUGIN_ROOT}/docs/lifecycle-hooks.md#g'
   -e 's#docs/loop-prompting\.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
   -e 's#docs/stable-ids\.md#${CLAUDE_PLUGIN_ROOT}/docs/stable-ids.md#g'
-  -e 's#templates/#${CLAUDE_PLUGIN_ROOT}/templates/#g'
+  -e 's#\(^\|[^A-Za-z0-9_-]\)templates/#\1${CLAUDE_PLUGIN_ROOT}/templates/#g'
   -e 's#hooks/#${CLAUDE_PLUGIN_ROOT}/hooks/#g'
 )
 for skill in "${SKILLS[@]}"; do

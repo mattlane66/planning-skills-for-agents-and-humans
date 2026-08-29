@@ -217,6 +217,23 @@ A same-model checklist may be recorded as `MODEL_CHECK_COMPLETED`, but it is not
 
 ## Phase controller
 
+This is one canonical skill with phase-specific entry points, not eight separate
+skills. When a file-backed study exists, determine the smallest valid next move
+from persisted state:
+
+```bash
+python lead-user-research/scripts/next_research_move.py research/lead-user-study
+```
+
+The controller may advance, stop, skip Phase F when no need passes the Concept
+Generation Gate, or route back from Phase D to discovery/evidence. Never advance
+merely because the previous phase was invoked.
+
+After every phase, return the standardized status and handoff described in
+[references/phase-handoff.md](references/phase-handoff.md). When the runtime has
+phase commands, name the exact command. Otherwise name this skill, the next phase,
+and the workspace to resume.
+
 ### A — Frame
 
 Read:
@@ -355,6 +372,19 @@ Only when proportionate and supported by the environment.
 Structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report. PDF and interactive HTML are derived views, not independent analysis.
 
 Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
+
+## Relationship to the planning workflow
+
+Use this as an optional upstream evidence move when a consequential decision needs
+future-facing trends, advanced users, pyramiding, or advanced analogs. It is not a
+mandatory predecessor to framing or a synonym for ordinary customer research. If
+the problem is already concrete, route directly to framing or shaping.
+
+Research state is authoritative only for what the study found; it does not become
+planning truth. After Phase G/H, use
+[study-templates/research-to-frame-handoff.md](study-templates/research-to-frame-handoff.md)
+to propose evidence-backed framing inputs. A human must accept, reject, or revise
+them before invoking `framing-doc`; the research record remains cited evidence.
 
 ## Hard methodological rules
 

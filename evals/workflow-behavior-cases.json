@@ -648,6 +648,44 @@
         "single trust badge",
         "unsupported prevalence"
       ]
+    },
+    {
+      "id": "lead-user-research-resumes-the-smallest-valid-phase",
+      "prompt": "Resume this persisted Lead User study. Its sufficiency record says trend support and pyramid coverage are insufficient, while the existing evidence batch is structurally valid. Tell me and perform only the next valid move.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "lead-user-research",
+      "expected_gate": "phase-handoff",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "persisted state",
+        "Phase B or lead-user-discover",
+        "one next move",
+        "insufficient trend or pyramid dimension"
+      ],
+      "forbidden_evidence": [
+        "automatic Phase E interpretation",
+        "automatic concept generation",
+        "entire remaining pipeline"
+      ]
+    },
+    {
+      "id": "lead-user-research-stops-before-framing-handoff-acceptance",
+      "prompt": "This Lead User study is complete. Convert its supported implications into the next planning step, but do not make product decisions for me.",
+      "expected_skill": "lead-user-research",
+      "expected_artifact_type": "research-to-frame-handoff",
+      "expected_gate": "research-to-frame-human-acceptance",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "proposed research-to-frame handoff",
+        "evidence references",
+        "explicit human acceptance",
+        "framing-doc only after acceptance"
+      ],
+      "forbidden_evidence": [
+        "automatic accepted frame",
+        "automatic accepted requirements",
+        "automatic product scope"
+      ]
     }
   ]
 }

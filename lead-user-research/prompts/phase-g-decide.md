@@ -154,3 +154,9 @@ Do not compress them into a single trust badge.
 Set `manifest.study_status` to DECIDED in Phase G before rendering the Decision Brief.
 Use COMPLETE only after Phase H has regenerated the brief and completed its cross-format
 and model checks.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

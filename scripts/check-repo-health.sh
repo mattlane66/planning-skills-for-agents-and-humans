@@ -81,15 +81,18 @@ done < skill-inventory.txt
 CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 GEMINI_COMMANDS=(
   plan wayfind shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink check-drift
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 TEMPLATES=(
