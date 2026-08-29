@@ -152,21 +152,58 @@ For each trend ask:
 
 Do not reverse-engineer a trend from an interesting workaround.
 
+## Three Lead User discovery paths
+
+For every important trend/need, explicitly consider three distinct discovery paths:
+
+1. **Target-market Lead Users** — users inside the focal market who are unusually far ahead on the relevant trend.
+2. **Advanced-analog Lead Users** — users in another domain where the same underlying functional problem occurs under more extreme conditions.
+3. **Attribute-specific Lead Users** — users or experts who are exceptionally far ahead on one important attribute of the target need, even when their overall domain is not an analog of the focal market.
+
+Record the applicable `search_path` on candidate records. A study does not have to produce a qualified Lead User from all three paths, but it must not silently collapse attribute-specific search into advanced-analog search.
+
+These are discovery paths only. Every resulting Lead User Need Episode must still satisfy LU1 and LU2.
+
 ## Pyramiding
 
 Do not merely search sideways for similar examples.
 
+Every pyramid must pursue a **specified target attribute or information target**. Persist each material branch as `PY##` so the chain is auditable rather than reconstructed from prose.
+
+For each pyramid record:
+
+- `target_attribute` — the dimension on which the search is trying to move farther ahead or become better informed;
+- `starting_node`;
+- `success_criterion`;
+- `termination_criterion`;
+- `network_visibility_note` — why the referral network is or is not positioned to observe and care about that target attribute;
+- ordered hops with `from_node`, `to_node`, `referral_rationale`, `advancement_rationale`, and evidence refs when available;
+- `status`;
+- `termination_reason` when the branch closes or becomes a fieldwork referral.
+
 At each node ask:
 
-- who knows more;
-- who is further ahead on the relevant dimension;
-- who experiences the more extreme need;
-- who originated or advanced this practice;
-- who do knowledgeable people point to next?
+- who has more of the specified attribute;
+- who is further ahead on that attribute;
+- who has better information about who is further ahead;
+- who experiences the more extreme need on that dimension;
+- who originated or advanced the relevant practice;
+- who should be contacted next?
 
 Inspect citations, acknowledgements, maintainers, contributors, forks, dependencies, issue participants, specialist communities, conference references, and direct referrals where available.
 
-A referral node may be highly valuable without itself qualifying as a Lead User.
+Prefer referral networks whose members can plausibly observe and care about the target attribute. Record that visibility as search-quality context, not as Lead User qualification evidence.
+
+A referral node may be highly valuable without itself qualifying as a Lead User. Terminate a pyramid only against its stated success/termination criterion, an explicit hard boundary, diminishing information value, or a fieldwork referral; record why.
+
+## Optional discovery enrichment
+
+Candidate records may optionally track two search-prioritization signals derived from later empirical Lead User research:
+
+- **technical expertise signal**;
+- **community-resource signal** — access to knowledgeable peers or other innovation-relevant community resources.
+
+Use these signals only to prioritize which candidates or branches deserve investigation. They do **not** establish LU1, do **not** establish LU2, are not required for Lead User status, and must never compensate for missing LU1/LU2 evidence.
 
 ## Advanced analogs
 
@@ -280,7 +317,7 @@ Assess:
 2. **LU qualification** — pivotal episodes have defensible LU1/LU2 evidence, rationales, advancement indicators, benefit signals, and caveats.
 3. **Contradiction search** — consequential alternate explanations and contrary cases were pursued proportionately.
 4. **Lineage resolution** — important derivative relationships are understood well enough not to overcount independent support.
-5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals.
+5. **Pyramid coverage** — the highest-value branches across target-market, advanced-analog, and attribute-specific discovery were investigated with auditable attribute-specific pyramids, explicitly deferred, or converted into fieldwork referrals.
 6. **Marginal value** — another proportionate evidence batch is unlikely to change the decision enough to justify delaying synthesis.
 
 Use `SUFFICIENT | INSUFFICIENT | NOT_ASSESSED`. Record a separate rationale,
@@ -645,6 +682,7 @@ Primary von Hippel references:
 - Lead User Project Handbook: https://web.mit.edu/evhippel/www/Lead%20User%20Project%20Handbook%20%28Full%20Version%29.pdf
 - 3M lead-user application: https://web.mit.edu/people/evhippel/papers/HBR%2099%20LU%20pub%20version%203M.pdf
 - Pyramiding research: https://web.mit.edu/evhippel/www-old/papers/Pyramiding%20WP%20Oct%2008.pdf
+- Nikolaus Franke, Eric von Hippel, and Martin Schreier, “Finding Commercially Attractive User Innovations: A Test of Lead-User Theory” (2006): https://doi.org/10.1111/j.1540-5885.2006.00203.x
 
 Secondary Christensen reference:
 
