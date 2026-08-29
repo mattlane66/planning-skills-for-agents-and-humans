@@ -7,6 +7,7 @@ At the start, reopen:
 - `coverage.json`;
 - `trends.json`;
 - `candidates.json`;
+- `pyramids.json`;
 - `search_log.json`;
 - `../PROTOCOL.md`.
 
@@ -44,29 +45,57 @@ Use persisted discovery inputs deliberately:
 
 A human-supplied source list is not a closed search universe unless the human explicitly makes it one.
 
-## Task 2 — Candidate discovery
+## Task 2 — Candidate discovery through three paths
 
-Search for:
+Explicitly consider:
 
-- domain experts;
-- referral nodes;
-- advanced users;
-- user innovators;
-- potential Lead User Need Episodes.
+1. **TARGET_MARKET** — advanced users inside the focal market;
+2. **ADVANCED_ANALOG** — users in another domain where the same functional problem occurs under more extreme conditions;
+3. **ATTRIBUTE_SPECIFIC** — users or experts exceptionally far ahead on one important attribute of the target need, even when their overall domain is not a whole-problem analog.
+
+Also search for domain experts, referral nodes, user innovators, and potential Lead User Need Episodes.
+
+Record the applicable `search_path` on each candidate when known. A path is a discovery mechanism, not Lead User qualification evidence. Do not force a candidate from every path, but do not silently treat ATTRIBUTE_SPECIFIC as the same thing as ADVANCED_ANALOG.
 
 Do not optimize for fame.
 
-## Task 3 — Pyramiding
+### Optional search enrichment
+
+When evidence permits, candidate records may include:
+
+- `technical_expertise_signal`;
+- `community_resource_signal`;
+- supporting evidence refs and a search-priority rationale.
+
+Use these only to prioritize which candidate or branch to inspect next. They do not establish LU1 or LU2 and must never compensate for missing LU1/LU2 evidence.
+
+## Task 3 — Attribute-specific pyramiding
+
+Every material pyramid must have a specified target attribute or information target.
+
+Persist a `PY##` record with:
+
+- `target_attribute`;
+- `starting_node`;
+- `success_criterion`;
+- `termination_criterion`;
+- `network_visibility_note` explaining why the referral network can or cannot observe/care about that attribute;
+- ordered hops containing `from_node`, `to_node`, `referral_rationale`, `advancement_rationale`, and evidence refs when available;
+- `status`;
+- `termination_reason` when the branch closes or becomes a fieldwork referral.
 
 For promising nodes ask:
 
-- who knows more;
-- who is further ahead;
-- who has the more extreme need;
-- who originated the practice;
+- who has more of the specified attribute;
+- who is further ahead on that attribute;
+- who has better information about who is further ahead;
+- who has the more extreme need on that dimension;
+- who originated the relevant practice;
 - who should be contacted next?
 
-Record major hops, not every trivial search.
+Prefer referral networks whose members plausibly observe and care about the target attribute. That improves search quality; it is not a Lead User criterion.
+
+Record major hops, not every trivial search. Do not terminate implicitly: close a branch only against its success/termination criterion, an explicit hard boundary, diminishing information value, or a fieldwork referral, and record why.
 
 ## Task 4 — Advanced analog hypotheses
 
@@ -88,6 +117,7 @@ Update:
 
 - `trends.json`;
 - `candidates.json`;
+- `pyramids.json`;
 - `search_log.json`;
 - `coverage.json`;
 - `change_log.json`.
