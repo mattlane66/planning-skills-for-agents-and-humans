@@ -61,6 +61,15 @@ Array of:
 
 Experts, referral nodes, Lead User candidates, or user innovators discovered before qualification.
 
+Candidate records may optionally include:
+
+- `discovery_path` — `TARGET_MARKET | ADVANCED_ANALOG | ATTRIBUTE_SPECIFIC`;
+- `target_attribute` — the important attribute being pursued when the discovery path or pyramid is attribute-specific;
+- `technical_expertise` — evidence or a bounded assessment useful for prioritizing discovery;
+- `community_resources` — relevant community embeddedness, access, or resources useful for prioritizing discovery.
+
+`technical_expertise` and `community_resources` are discovery/prioritization aids only. They do not establish LU1, do not establish LU2, are not required for Lead User status, and must never compensate for missing LU1/LU2 evidence. Likewise, a candidate's discovery path or position in a pyramid does not qualify the candidate as a Lead User.
+
 ### `sources.json`
 
 Array of:
@@ -190,9 +199,29 @@ Tracks discovery bias:
 
 ### `search_log.json`
 
-Major search families, pyramiding hops, analog pivots, and abandoned branches.
+Array of major search families, pyramids, analog pivots, and abandoned branches. Do not record every trivial query.
 
-Do not record every trivial query.
+A substantive pyramiding chain is persisted as one `PY##` record with:
+
+- `pyramid_id` — `PY##`;
+- `target_attribute` — the specified attribute or information target being sought;
+- `starting_node`;
+- `network_visibility` — whether the referral network plausibly observes or cares about the target attribute, with rationale when useful;
+- `termination_criterion` — the success/sufficiency condition defined before or during the search;
+- `termination_reason` — why the chain stopped, or `null` while active;
+- `hops` — ordered referral/search hops.
+
+Each hop should record:
+
+- `from_node`;
+- `referral_rationale`;
+- `next_node`;
+- `advancement_rationale` — why the next node is expected to have more of the target attribute or better information about who does;
+- supporting refs when available.
+
+Pyramiding is attribute-specific search. `network_visibility` is contextual search-quality information, not a Lead User qualification criterion. A referral node, technical expert, or highly connected community member may be useful without satisfying LU1 or LU2.
+
+The three Lead User discovery paths are `TARGET_MARKET`, `ADVANCED_ANALOG`, and `ATTRIBUTE_SPECIFIC`. Advanced-analog discovery searches for a more extreme version of the underlying functional problem; attribute-specific discovery may cross domains that share only one important property.
 
 ### `sufficiency.json`
 
