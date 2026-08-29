@@ -29,9 +29,17 @@ Produce decision-useful Lead User research that can show:
 - what advanced analog markets reveal;
 - which needs and solution principles are supported by the evidence;
 - what remains unknown, contradictory, or systematically undiscovered;
+- which starting hypotheses survived, weakened, were rejected, or remain untestable;
+- which decision-critical facts can be resolved from traces and which genuinely require targeted fieldwork;
 - what humans can responsibly decide or test next.
 
 Do not optimize for a persuasive story. Optimize for traceable evidence and a better-informed decision under uncertainty.
+
+Treat starting hypotheses as falsifiable claims. Define observable predictions and a strongest plausible refuter before broad discovery when possible; seek contrastive cases and rival explanations; never label a hypothesis CONFIRMED.
+
+Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are never human evidence. AI may analyze evidence from real humans, but it does not become the human sample.
+
+Prefer trace evidence over defaulting to interviews when the decision-critical variable is observable in behavioral, documentary, or event data. Escalate only unresolved, consequential, non-observable variables to targeted fieldwork.
 
 ## Research brief — canonical input
 
@@ -177,6 +185,9 @@ lu_episodes.json
 lineage.json
 coverage.json
 search_log.json
+hypotheses.json
+observability.json
+analysis_runs.json
 change_log.json
 freeze.json
 findings.json
@@ -248,6 +259,8 @@ Write:
 - scope;
 - consequential unknowns;
 - disconfirming evidence;
+- falsifiable H## hypothesis records;
+- decision-critical O## observability records;
 - likely discoverability biases;
 - mode.
 
