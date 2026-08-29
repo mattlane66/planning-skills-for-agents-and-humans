@@ -133,6 +133,7 @@ class LeadUserResearchTests(unittest.TestCase):
             "observed_result": "Workaround used",
             "trace": {
                 "status": "SUFFICIENT",
+                "trace_basis": "EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION",
                 "initiating_condition": "Context was missing",
                 "prior_approach": "Manual reconstruction",
                 "switch_or_change_trigger": "Repeated loss",
@@ -148,6 +149,7 @@ class LeadUserResearchTests(unittest.TestCase):
                 ],
                 "fit_points": [
                     {
+                        "fit_point_id": "FP1",
                         "step_ref": "S1",
                         "observed_behavior": "Manual reconstruction",
                         "compensating_behavior": "Persistent context artifact",
@@ -420,7 +422,33 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(workspace, "principles.json", [{"principle_id": "SP1"}])
             move = self.next_move(workspace)
             self.assertEqual("F", move["next_phase"])
+            self.assertIn("shaping frame", move["reason"])
 
+            self.write_json(
+                workspace,
+                "shaping_frame.json",
+                [{
+                    "frame_id": "SF1",
+                    "need_id": "N1",
+                    "status": "PROVISIONAL",
+                    "accepted_by_human": False,
+                }],
+            )
+            move = self.next_move(workspace)
+            self.assertEqual("HUMAN_REVIEW", move["state"])
+            self.assertEqual("F", move["next_phase"])
+            self.assertIn("must not self-accept", move["human_gate"])
+
+            self.write_json(
+                workspace,
+                "shaping_frame.json",
+                [{
+                    "frame_id": "SF1",
+                    "need_id": "N1",
+                    "status": "ACCEPTED",
+                    "accepted_by_human": True,
+                }],
+            )
             self.write_json(workspace, "fit_criteria.json", [{"need_id": "N1"}])
             self.write_json(workspace, "concepts.json", [{"need_id": "N1"}])
             move = self.next_move(workspace)
@@ -613,9 +641,33 @@ class LeadUserResearchTests(unittest.TestCase):
                 "needs.json",
                 [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "no_blocking_contradiction": True}}],
             )
+            self.write_json(
+                workspace,
+                "shaping_frame.json",
+                [{
+                    "frame_id": "SF1",
+                    "need_id": "N1",
+                    "x": {
+                        "trigger_or_context": "Context is missing in a new session.",
+                        "current_approach": "Manual reconstruction.",
+                        "current_result": "Repeated effort.",
+                        "breakdowns": ["The user repeats prior reconstruction work."],
+                    },
+                    "f": {"status": "UNSPECIFIED"},
+                    "y": {"desired_outcome": "Resume work without reconstruction."},
+                    "gap": "Carry enough state forward to avoid repeated reconstruction.",
+                    "boundaries": ["Do not require more upkeep than reconstruction."],
+                    "evidence_refs": ["E1"],
+                    "status": "ACCEPTED",
+                    "accepted_by_human": True,
+                    "acceptance_note": "Accepted for the test.",
+                }],
+            )
             criterion = {
                 "requirement_id": "R1",
                 "need_id": "N1",
+                "frame_ref": "SF1",
+                "origin": "FROM_GAP",
                 "requirement": "Resuming work must require materially less reconstruction.",
                 "evidence_refs": ["E1"],
                 "traceability": True,
@@ -972,6 +1024,102 @@ class LeadUserResearchTests(unittest.TestCase):
         self.assertIn("hypotheses.json", state)
         self.assertIn("observability.json", state)
         self.assertIn("analysis_runs.json", state)
+
+
+    def test_trace_requires_real_case_basis_and_stable_fit_point_refs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            episode = self.write_valid_evidence_core(workspace)
+            episode["trace"]["trace_basis"] = "FRAGMENTARY_EVIDENCE"
+            self.write_json(workspace, "lu_episodes.json", [episode])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("cannot be SUFFICIENT", result.stderr)
+
+            episode["trace"]["trace_basis"] = "EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION"
+            episode["trace"]["fit_points"][0]["step_ref"] = "S999"
+            self.write_json(workspace, "lu_episodes.json", [episode])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("missing step_ref", result.stderr)
+
+    def test_pass_requirement_requires_human_accepted_frame_and_origin(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.write_json(
+                workspace,
+                "findings.json",
+                [{"finding_id": "F1", "claim": "Context recovery is costly", "epistemic_label": "VERIFIED", "evidence_refs": ["E1"], "lu_refs": ["LU1"], "trace_refs": ["LU1:FP1"], "contradictions": [], "confidence_rationale": "Direct artifact"}],
+            )
+            self.write_json(
+                workspace,
+                "needs.json",
+                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "trace_refs": ["LU1:FP1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "no_blocking_contradiction": True}}],
+            )
+            frame = {
+                "frame_id": "SF1",
+                "need_id": "N1",
+                "x": {"trigger_or_context": "New session", "current_approach": "Manual reconstruction", "current_result": "Repeated effort", "breakdowns": ["Repeated reconstruction"]},
+                "f": {"status": "UNSPECIFIED"},
+                "y": {"desired_outcome": "Resume without reconstruction"},
+                "gap": "Preserve enough state to avoid reconstruction",
+                "boundaries": [],
+                "evidence_refs": ["E1"],
+                "status": "PROVISIONAL",
+                "accepted_by_human": False,
+                "acceptance_note": "",
+            }
+            self.write_json(workspace, "shaping_frame.json", [frame])
+            criterion = {
+                "requirement_id": "R1", "need_id": "N1", "frame_ref": "SF1",
+                "origin": "FROM_GAP", "requirement": "Reduce reconstruction effort.",
+                "evidence_refs": ["E1"], "traceability": True,
+                "implementation_independence": True, "solution_plurality": True,
+                "causal_relevance": True, "altitude_check": True,
+                "information_gain": True, "status": "PASS",
+            }
+            self.write_json(workspace, "fit_criteria.json", [criterion])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("accepted human-reviewed shaping frame", result.stderr)
+
+            frame["status"] = "ACCEPTED"
+            frame["accepted_by_human"] = True
+            frame["acceptance_note"] = "Accepted explicitly."
+            self.write_json(workspace, "shaping_frame.json", [frame])
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_selected_shape_requires_rotated_parts_covering_requirements(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["study_status"] = "DECIDED"
+            manifest["phase"] = "G"
+            self.write_json(workspace, "manifest.json", manifest)
+            concepts = json.loads((workspace / "concepts.json").read_text(encoding="utf-8"))
+            concepts[0]["rotation_status"] = "NOT_RUN"
+            concepts[0]["parts"] = []
+            self.write_json(workspace, "concepts.json", concepts)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("SELECTED requires rotation_status RUN", result.stderr)
+
+    def test_trace_frame_fit_contract_is_explicit(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_c = (LEAD / "prompts" / "phase-c-evidence.md").read_text(encoding="utf-8")
+        phase_f = (LEAD / "prompts" / "phase-f-shape.md").read_text(encoding="utf-8")
+        framing = (ROOT / "framing-doc" / "SKILL.md").read_text(encoding="utf-8")
+        shaping = (ROOT / "shaping" / "SKILL.md").read_text(encoding="utf-8")
+        for value in ["real episode → ordered steps", "x → f() → y", "FROM_X", "Requirements × Shapes", "Rotated Fit Check"]:
+            self.assertIn(value, protocol)
+        self.assertIn("specific real use case", phase_c)
+        self.assertIn("accepted_by_human", phase_f)
+        self.assertIn("x → f() → y", framing)
+        self.assertIn("Parts × Requirements", shaping)
 
 
 if __name__ == "__main__":
