@@ -96,6 +96,7 @@ def recommend(root: Path) -> dict[str, Any]:
         for label, value in [
             ("a trend map", trends),
             ("candidate or referral paths", candidates),
+            ("an auditable attribute-specific pyramid", pyramids),
             ("a search log", search_log),
         ]
         if not nonempty_list(value)
