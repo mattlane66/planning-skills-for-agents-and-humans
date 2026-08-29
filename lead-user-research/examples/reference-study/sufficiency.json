@@ -44,6 +44,7 @@
       "status": "SUFFICIENT",
       "rationale": "Every branch in the intentionally closed synthetic corpus was inspected; real-world pyramiding is explicitly deferred to fieldwork.",
       "supporting_refs": [
+        "PY1",
         "SRC2",
         "SRC3",
         "SRC4"
