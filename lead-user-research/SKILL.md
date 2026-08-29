@@ -187,6 +187,7 @@ freeze.json
 findings.json
 needs.json
 principles.json
+shaping_frame.json
 fit_criteria.json
 concepts.json
 outputs/
@@ -290,7 +291,7 @@ Write:
 - lineage/dependency relationships;
 - discoverability coverage.
 
-Trace as far as evidence permits. Keep OBSERVED behavior, STATED purpose, INFERRED purpose, and UNKNOWN elements separate. Trace completeness is not a third Lead User qualification criterion.
+Use Trace only for a specific real use case: direct observation, a detailed first-person account, evidence-backed artifact reconstruction, or structured event-log reconstruction. Record the ordered steps and stable fit-point refs, flag problems/workarounds, but do not prioritize them in Phase C. Keep OBSERVED behavior, STATED purpose, INFERRED purpose, and UNKNOWN elements separate. Trace completeness is not a third Lead User qualification criterion.
 
 Use [prompts/phase-c-evidence.md](prompts/phase-c-evidence.md).
 
@@ -319,6 +320,7 @@ Read persisted frozen evidence.
 Only now:
 
 - abstract needs from mechanisms;
+- isolate which traced fit points are consequential only now, after Evidence Freeze, and persist exact trace refs for trace-derived findings/needs;
 - apply the limited Christensen lens against traced episode evidence when available;
 - do not fill missing chronology, motivation, or desired progress merely to complete a coherent story;
 - synthesize across episodes;
@@ -332,14 +334,18 @@ Use [prompts/phase-e-interpret.md](prompts/phase-e-interpret.md).
 
 Run only if a need passes the Concept Generation Gate.
 
-Reopen pivotal episode traces supporting a passing need. If missing chronology, motivation, or outcome prevents a defensible x → y → gap account, keep it UNKNOWN or fail the gate rather than filling the gap.
+Reopen pivotal episode traces supporting a passing need. If missing chronology, motivation, or outcome prevents a defensible shaping frame, keep it UNKNOWN or fail the gate rather than filling the gap.
 
-Derive Fit Check requirements before concepts. Freeze requirements before evaluating mechanisms.
+Construct `SF##` as `x → f() → y`: `x` contains trigger/context, current approach, current result, and breakdowns; `f()` remains UNSPECIFIED; `y` is the desired outcome; also record the gap, boundaries, and evidence. This shaping frame is distinct from the Phase A research frame.
+
+Persist the frame as PROVISIONAL and stop for explicit human acceptance or revision. Do not self-accept it, and do not mark any requirement PASS while its frame remains provisional.
+
+After acceptance, derive R## from the frame. Every R records its `frame_ref` and whether it came `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`. Hold x and y constant while comparing candidate f()s, and freeze requirements before evaluating mechanisms.
 
 Persist all five Concept Generation Gate checks as booleans. PASS must trace through a
 supporting finding to a QUALIFIED LU episode and a relevant trend.
 
-Generate enough materially different mechanisms to test the requirements. **Do not invent weak alternatives to satisfy a quota.**
+Generate enough materially different candidate shapes to test the requirements. Run Requirements × Shapes first. If a shape is explicitly selected, run the Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
 
 Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
 
@@ -408,6 +414,8 @@ them before invoking `framing-doc`; the research record remains cited evidence.
 - Frequency is not importance.
 - Computation is not interpretation.
 - Discovery precedes synthesis.
+- Trace a real episode before isolating a problem; prioritize traced fit points only after Evidence Freeze.
+- An accepted shaping frame precedes PASS requirements.
 - Requirements precede concepts.
 - Contradictions and outliers remain visible.
 - Insufficient evidence is a valid result.

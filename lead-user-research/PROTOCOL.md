@@ -61,6 +61,8 @@ Fit Check is a **project-specific post-research concept-shaping method**, not a 
 
 Its job is to derive solution-independent fitness conditions from supported needs before mechanism selection.
 
+Fit Check operates on a **shaping/design frame**, not the Phase A research frame. The shaping frame makes the transformation explicit as `x → f() → y`: `x` is the evidenced current situation, `f()` is the solution/shape variable deliberately left unspecified, and `y` is the desired outcome. Requirements constrain acceptable `f()`s; they do not define `f()` in advance.
+
 ### 5. Study execution level
 
 Methodological rigor and study completeness are different questions.
@@ -290,14 +292,20 @@ If outcome, motivation, chronology, benefit, adoption, or causality is not estab
 
 For Lead User episodes likely to materially support need interpretation or concept shaping, reconstruct the actual episode as far as the evidence permits.
 
+A Trace is grounded in a **specific real use case**: direct observation, a detailed first-person account, an evidence-backed artifact reconstruction, or a structured event-log reconstruction. A generic complaint, feature request, hypothetical workflow, or abstract summary may be evidence, but it is not a SUFFICIENT Trace.
+
+Use the Trace micro-method as:
+
+> real episode → ordered steps → flag fit breaks / problems / workarounds → preserve without prioritizing
+
 Capture, when available:
 
 - the initiating condition or circumstance;
 - the prior approach and relevant history;
 - what triggered a switch, modification, workaround, abandonment, or non-action;
 - what improvement the user expected;
-- the sequence of actions through the actual outcome, including actions outside the focal product or workflow;
-- points of hesitation, repetition, confusion, failure, abandonment, or compensating behavior;
+- the sequence of actions through the actual outcome, including actions outside the focal product or workflow, with a stable `step_id` for each evidenced step;
+- fit points such as hesitation, repetition, confusion, failure, abandonment, or compensating behavior, each with a stable `fit_point_id`;
 - what the user explicitly said they were trying to preserve, avoid, or accomplish;
 - the observed result;
 - unresolved chronology, motivation, causality, or outcome as `UNKNOWN`.
@@ -312,6 +320,8 @@ For each consequential fit point, keep separate:
 A trace is an evidence-deepening operation, not a third Lead User qualification criterion. LU1 and LU2 remain the qualification test.
 
 Do not treat a workaround as the need. Do not rank fit points or formulate producer solutions during evidence collection. Trace first; interpret after Evidence Freeze.
+
+After Evidence Freeze, Phase E may isolate which traced fit points are consequential problems or emerging needs. When a finding or need materially derives from a trace, record the exact nested trace refs (for example `LU1:S1` or `LU1:FP1`) so the interpretation can be traced back to the observed step or fit point.
 
 SCOUT may use sparse traces. STANDARD/FULL should trace the pivotal episodes carrying major findings deeply enough for the intended interpretation. A trace may remain PARTIAL when public evidence cannot establish the full chronology; do not fill the gaps.
 
@@ -529,30 +539,45 @@ not enough.
 
 ## Fit Check
 
-For a qualified opportunity derive:
+For a qualified opportunity, first construct a **shaping/design frame**. This is distinct from the Phase A research frame.
 
-Where pivotal support depends on an episode trace, derive fitness conditions only from what that trace and its cited evidence establish. If missing chronology, motivation, or outcome prevents a defensible x → y → gap account, keep it UNKNOWN or fail the Concept Generation Gate rather than completing the story.
+Where pivotal support depends on an episode trace, derive the frame only from what that trace and its cited evidence establish. If missing chronology, motivation, or outcome prevents a defensible transformation account, keep the missing element UNKNOWN or fail the Concept Generation Gate rather than completing the story.
 
-- `x` — current state;
-- `y` — desired state;
-- gap;
-- constraints;
-- `R##` — solution-independent fitness conditions.
+Persist one `SF##` in `shaping_frame.json` for each passing need:
 
-Each requirement must pass:
+- `x.trigger_or_context` — the real moment in which the struggle appears;
+- `x.current_approach` — the current approach, workaround, or nonconsumption;
+- `x.current_result` — what currently happens;
+- `x.breakdowns` — where the current approach/result breaks down;
+- `f.status = UNSPECIFIED` — the solution/shape variable is deliberately not chosen yet;
+- `y.desired_outcome` — the better result required;
+- `gap` — what must change between `x` and `y`;
+- `boundaries` — constraints or guardrails an acceptable `f()` must respect;
+- evidence refs;
+- `status = PROVISIONAL | ACCEPTED`.
 
-1. traceability to evidence;
-2. implementation independence;
-3. solution plurality;
-4. causal relevance;
-5. correct evidence altitude;
-6. information gain when a mechanism is introduced.
+A model must not self-accept this frame. Phase F stops for explicit human acceptance or revision before any requirement can become PASS.
 
-Persist each check explicitly as a boolean. A requirement may be marked PASS only when all six checks pass and supporting evidence refs exist.
+Only after the shaping frame is ACCEPTED derive `R##` fitness conditions. Every requirement records:
 
-Freeze requirements before evaluating concepts.
+- `frame_ref` — the accepted SF## it constrains;
+- `origin` — exactly one of `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`;
+- traceability to evidence;
+- implementation independence;
+- solution plurality;
+- causal relevance;
+- correct evidence altitude;
+- information gain when a mechanism is introduced.
 
-Generate enough materially different mechanisms to test whether the requirements are genuinely solution-independent. Do not invent weak alternatives to satisfy a quota. If only one credible mechanism emerges, say so and re-examine whether the requirements are overly mechanism-specific.
+Persist the six quality checks explicitly as booleans. A requirement may be marked PASS only when all six checks pass, supporting evidence refs exist, and its referenced frame is human-accepted.
+
+Freeze requirements before evaluating concepts. Hold `x` and `y` constant while comparing candidate `f()`s. If the frame changes materially, invalidate the prior comparison and re-derive the affected requirements rather than letting a preferred solution redefine the problem.
+
+Generate enough materially different candidate shapes to test whether the requirements are genuinely solution-independent. Do not invent weak alternatives to satisfy a quota. If only one credible mechanism emerges, say so and re-examine whether the requirements are overly mechanism-specific.
+
+Run the first Fit Check as **Requirements × Shapes**: every candidate shape records a binary result against every frozen PASS requirement.
+
+If a shape is explicitly selected, run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**. The rotation should expose parts that serve no requirement, requirements with no supporting part, duplicated mechanisms, or one part carrying disproportionate responsibility. Do not preserve an unjustified part merely because the overall shape looked attractive.
 
 ## Decision output
 

@@ -202,18 +202,19 @@ Array of bounded Lead User Need Episodes:
 When present, `trace` contains:
 
 - `status` — `NOT_ASSESSED | PARTIAL | SUFFICIENT`;
+- `trace_basis` — `DIRECT_OBSERVATION | DETAILED_FIRST_PERSON_ACCOUNT | EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION | EVENT_LOG_RECONSTRUCTION | FRAGMENTARY_EVIDENCE`;
 - `initiating_condition`;
 - `prior_approach`;
 - `switch_or_change_trigger`;
 - `expected_improvement`;
-- `sequence` — ordered steps with action, context, result, and `evidence_refs`;
-- `fit_points` — consequential points with step reference, observed behavior, compensating behavior, stated purpose, inferred purpose, UNKNOWNs, and `evidence_refs`;
+- `sequence` — ordered steps with stable `step_id`, action, context, result, and `evidence_refs`;
+- `fit_points` — consequential points with stable `fit_point_id`, valid step reference, observed behavior, compensating behavior, stated purpose, inferred purpose, UNKNOWNs, and `evidence_refs`;
 - `actual_outcome`;
 - `evidence_refs` — episode-level trace support when evidence applies across multiple trace fields;
 - unknowns;
 - optional temporal context such as first observed, recurrence, persistence, abandonment/reversal, and propagation when the evidence establishes it.
 
-SUFFICIENT means sufficient for the intended downstream interpretation, not complete knowledge of the episode.
+SUFFICIENT means sufficient for the intended downstream interpretation, not complete knowledge of the episode. `FRAGMENTARY_EVIDENCE` cannot be marked SUFFICIENT. Nested trace references use `LU##:step_id` and `LU##:fit_point_id` so post-freeze findings and needs can point to the exact observed sequence element that supports them.
 
 A trace is optional and is not part of Lead User qualification. A QUALIFIED episode must contain valid evidence references for both LU1 and LU2 regardless of trace status.
 
@@ -342,7 +343,8 @@ Array of:
 - evidence refs;
 - LU refs;
 - contradictory finding refs;
-- confidence rationale.
+- confidence rationale;
+- optional `trace_refs` when the finding materially derives from traced steps or fit points.
 
 A VERIFIED finding requires at least one valid evidence reference.
 
@@ -357,7 +359,8 @@ Array of:
 - propagation status;
 - contradictory finding refs;
 - concept gate status — `PASS | FAIL | NOT_ASSESSED`;
-- concept gate rationale.
+- concept gate rationale;
+- optional `trace_refs` when the need materially derives from traced steps or fit points.
 
 Every need also records `concept_gate_checks` as five booleans:
 
@@ -381,12 +384,35 @@ implementation:
 - evidence refs;
 - status — `VERIFIED | INFERRED | SPECULATIVE | UNKNOWN`.
 
+### `shaping_frame.json`
+
+Array of evidence-backed design frames used only after a need passes the Concept Generation Gate. Each frame records:
+
+- `frame_id` — `SF##`;
+- `need_id`;
+- `x.trigger_or_context`;
+- `x.current_approach`;
+- `x.current_result`;
+- `x.breakdowns` — one or more observed breakdowns or compromises;
+- `f.status` — always `UNSPECIFIED` while the frame is the judging basis;
+- `y.desired_outcome`;
+- `gap`;
+- `boundaries`;
+- `evidence_refs`;
+- `status` — `PROVISIONAL | ACCEPTED`;
+- `accepted_by_human` — boolean;
+- `acceptance_note`.
+
+An ACCEPTED frame requires explicit human acceptance. A model may construct or revise a PROVISIONAL frame, but it must not self-promote it.
+
 ### `fit_criteria.json`
 
 Array of:
 
 - `requirement_id` — `R##`;
 - `need_id`;
+- `frame_ref` — accepted `SF##`;
+- `origin` — `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`;
 - requirement;
 - evidence refs;
 - `traceability` — boolean;
@@ -397,7 +423,7 @@ Array of:
 - `information_gain` — boolean;
 - status — `PASS | FAIL | PROVISIONAL`.
 
-A PASS requirement must have evidence refs and all six checks true.
+A PASS requirement must have evidence refs, all six checks true, and an accepted human-reviewed shaping frame. During a single comparison, x and y remain fixed; a material frame change invalidates the affected fit comparison.
 
 ### `concepts.json`
 
@@ -407,9 +433,15 @@ Array of:
 - `need_id`;
 - mechanism;
 - requirement IDs;
+- `requirement_fit` — object mapping every frozen PASS R## for the same need to a boolean;
+- `selection_status` — `CANDIDATE | SELECTED | REJECTED`;
+- `rotation_status` — `NOT_RUN | RUN`;
+- `parts` — for a rotated selected shape, concrete parts with `part_id`, mechanism, and requirement IDs;
 - assumptions;
 - risks;
 - evidence needed next.
+
+`requirement_ids` must match the requirements whose `requirement_fit` value is true. A SELECTED concept requires `rotation_status = RUN`; every selected part must serve at least one PASS requirement and every PASS requirement for that need must be served by at least one selected part.
 
 No minimum concept count is required.
 
