@@ -3,18 +3,30 @@
     "candidate_id": "C1",
     "candidate_ref": "LU1",
     "discovery_basis": "Sustained four-agent handoff infrastructure in the synthetic corpus",
-    "disposition": "QUALIFIED"
+    "disposition": "QUALIFIED",
+    "search_path": "TARGET_MARKET",
+    "search_enrichment": {
+      "technical_expertise_signal": "Maintains a multi-agent handoff system in the synthetic corpus",
+      "community_resource_signal": "UNKNOWN",
+      "evidence_refs": [
+        "E2",
+        "E3"
+      ],
+      "priority_rationale": "The technical-workaround signal makes this fictional candidate useful to inspect first; it does not contribute to LU1/LU2 qualification."
+    }
   },
   {
     "candidate_id": "C2",
     "candidate_ref": "LU2",
     "discovery_basis": "Copied handoff template",
-    "disposition": "CANDIDATE_DERIVATIVE"
+    "disposition": "CANDIDATE_DERIVATIVE",
+    "search_path": "TARGET_MARKET"
   },
   {
     "candidate_id": "C3",
     "candidate_ref": "LU3",
     "discovery_basis": "Independent failed ledger attempt",
-    "disposition": "COUNTEREXAMPLE"
+    "disposition": "COUNTEREXAMPLE",
+    "search_path": "TARGET_MARKET"
   }
 ]
