@@ -46,7 +46,7 @@ Optional search constraints:
 
 Use **STANDARD** when unsure.
 
-Discovery seeds and candidate-profile hypotheses are starting directions, not prequalified Lead Users or a closed search universe. The research should continue pyramiding and advanced-analog discovery beyond them unless you explicitly impose a search constraint. If you provide a source list without saying the research is restricted to it, the agent should treat it as a seed set.
+Discovery seeds and candidate-profile hypotheses are starting directions, not prequalified Lead Users or a closed search universe. The research should continue across target-market, advanced-analog, and attribute-specific discovery paths, using attribute-specific pyramiding beyond them unless you explicitly impose a search constraint. If you provide a source list without saying the research is restricted to it, the agent should treat it as a seed set.
 
 If you only know the domain and decision, you can start with those two. Phase A should expose any drafted target market, learning objective, or innovation altitude as **PROVISIONAL** instead of silently inventing them.
 
