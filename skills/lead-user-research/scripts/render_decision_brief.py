@@ -102,6 +102,9 @@ def main() -> int:
     needs = load(root, "needs.json", [])
     criteria = load(root, "fit_criteria.json", [])
     concepts = load(root, "concepts.json", [])
+    hypotheses = load(root, "hypotheses.json", [])
+    observability = load(root, "observability.json", [])
+    analysis_runs = load(root, "analysis_runs.json", [])
 
     finding_by_id = indexed(findings, "finding_id")
     lu_by_id = indexed(episodes, "lu_id")
@@ -150,6 +153,63 @@ def main() -> int:
     lines += ["## What the evidence supports", "", bullets(outcome.get("what_evidence_supports", [])), ""]
     lines += ["## What the evidence does not support", "", bullets(outcome.get("what_evidence_does_not_support", [])), ""]
     lines += ["## What could make us wrong", "", bullets(outcome.get("contradictions", [])), ""]
+
+    if hypotheses:
+        lines += ["## Hypothesis challenge", ""]
+        lines += [
+            bullets(
+                [
+                    f"{row.get('hypothesis_id', 'H?')} — {row.get('status', 'UNTESTED')} — "
+                    f"{row.get('claim', 'Missing hypothesis')}"
+                    + (
+                        f" — {row.get('update_rationale')}"
+                        if row.get("update_rationale")
+                        else ""
+                    )
+                    for row in hypotheses
+                    if isinstance(row, dict)
+                ]
+            ),
+            "",
+        ]
+
+    critical_observability = [
+        row for row in observability
+        if isinstance(row, dict) and row.get("decision_critical") is True
+    ]
+    if critical_observability:
+        lines += ["## Observability / fieldwork gate", ""]
+        lines += [
+            bullets(
+                [
+                    f"{row.get('observability_id', 'O?')} — {row.get('status', 'UNKNOWN')} — "
+                    f"{row.get('question', 'Missing question')}"
+                    + (
+                        f" — Fieldwork: {row.get('fieldwork_referral')}"
+                        if row.get("fieldwork_referral")
+                        else ""
+                    )
+                    for row in critical_observability
+                ]
+            ),
+            "",
+        ]
+
+    if analysis_runs:
+        lines += ["## AI analysis validation", ""]
+        lines += [
+            bullets(
+                [
+                    f"{row.get('analysis_run_id', 'AR?')} — "
+                    f"{row.get('model', 'UNKNOWN')} {row.get('model_version', '')}".strip()
+                    + f" — sampled validation: "
+                    f"{(row.get('sampled_validation') or {}).get('status', 'NOT_ASSESSED')}"
+                    for row in analysis_runs
+                    if isinstance(row, dict)
+                ]
+            ),
+            "",
+        ]
 
     shaped = [need for need in needs if need.get("concept_gate_status") == "PASS"]
     if shaped or criteria or concepts:

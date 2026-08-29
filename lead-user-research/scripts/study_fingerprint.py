@@ -23,6 +23,9 @@ STATE_FILES = (
     "lu_episodes.json",
     "lineage.json",
     "search_log.json",
+    "hypotheses.json",
+    "observability.json",
+    "analysis_runs.json",
     "change_log.json",
     "findings.json",
     "needs.json",
@@ -41,6 +44,8 @@ def _normalized_state(root: Path) -> dict[str, Any]:
     state: dict[str, Any] = {}
     for filename in STATE_FILES:
         path = root / filename
+        if not path.exists():
+            continue
         value = json.loads(path.read_text(encoding="utf-8"))
         if filename == "manifest.json" and isinstance(value, dict):
             value = {

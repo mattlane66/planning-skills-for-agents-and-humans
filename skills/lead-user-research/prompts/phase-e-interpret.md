@@ -84,9 +84,15 @@ Classify each important need:
 
 Do not infer prevalence.
 
-## 8. Contradictions
+## 8. Contradictions and hypothesis disposition
 
-Actively test the strongest interpretations against contrary evidence and coverage gaps.
+Actively test the strongest interpretations against contrary evidence, formal contrastive cases, rival explanations, and coverage gaps.
+
+After the frozen corpus has been interpreted, update each consequential H## to exactly one of:
+
+UNTESTED | SURVIVED_CURRENT_TESTS | WEAKENED | REJECTED | UNTESTABLE
+
+Record the update rationale and boundary conditions. Never use CONFIRMED.
 
 ## Write state
 
@@ -94,8 +100,9 @@ Update:
 
 - `findings.json`;
 - `needs.json`;
-- `principles.json`;
-- `change_log.json`.
+- principles.json;
+- hypotheses.json;
+- change_log.json.
 
 Do not create concepts in this phase.
 

@@ -44,6 +44,17 @@ Use persisted discovery inputs deliberately:
 
 A human-supplied source list is not a closed search universe unless the human explicitly makes it one.
 
+## Adversarial hypothesis search
+
+For every H##, execute the highest-value targeted refutation searches before treating corroboration as persuasive. Deliberately seek rival explanations and, where proportionate, all four contrastive case types:
+
+- PREDICTED_POSITIVE;
+- EXPOSED_NO_OUTCOME;
+- OUTCOME_WITHOUT_EXPOSURE;
+- ABANDONED_OR_REVERSED_SOLUTION.
+
+Record searches that fail to find evidence as search outcomes, not proof that the hypothesis is true.
+
 ## Task 2 — Candidate discovery through three paths
 
 For each important trend or high-value emerging need, explicitly consider all three Lead User discovery paths:
@@ -123,15 +134,18 @@ Update likely over/underrepresented populations as search paths develop.
 
 Actively look beyond the easiest public English-language sources when proportionate.
 
+Also record how important platforms or communities shape visibility: who tends to post there, what the platform makes easy to observe, and what selection mechanism may be producing the available artifacts.
+
 ## Write state
 
 Update:
 
 - `trends.json`;
 - `candidates.json`;
-- `search_log.json`;
-- `coverage.json`;
-- `change_log.json`.
+- search_log.json;
+- hypotheses.json;
+- coverage.json;
+- change_log.json.
 
 If the environment supports validation, run it after writing.
 

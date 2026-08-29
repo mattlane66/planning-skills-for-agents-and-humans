@@ -46,6 +46,41 @@ LINEAGE_RELATIONSHIP = {
 }
 INDEPENDENCE = {"INDEPENDENT", "DERIVATIVE", "RELATED", "UNKNOWN"}
 FIT_STATUS = {"PASS", "FAIL", "PROVISIONAL"}
+HYPOTHESIS_STATUS = {
+    "UNTESTED",
+    "SURVIVED_CURRENT_TESTS",
+    "WEAKENED",
+    "REJECTED",
+    "UNTESTABLE",
+}
+CONTRAST_CASE_TYPES = {
+    "PREDICTED_POSITIVE",
+    "EXPOSED_NO_OUTCOME",
+    "OUTCOME_WITHOUT_EXPOSURE",
+    "ABANDONED_OR_REVERSED_SOLUTION",
+}
+OBSERVABILITY_STATUS = {
+    "TRACE_OBSERVABLE",
+    "PARTIALLY_OBSERVABLE",
+    "NOT_OBSERVABLE",
+    "UNKNOWN",
+}
+OBSERVABILITY_RESOLUTION = {
+    "OPEN",
+    "RESOLVED_BY_TRACES",
+    "FIELDWORK_REFERRAL",
+    "ACCEPTED_UNKNOWN",
+}
+ANALYSIS_VALIDATION = {"NOT_ASSESSED", "PASSED", "FAILED"}
+EVIDENCE_BASIS = {
+    "REAL_HUMAN_TRACE",
+    "REAL_HUMAN_STATEMENT",
+    "REAL_HUMAN_ARTIFACT",
+    "INDEPENDENT_OBSERVATION",
+    "EVENT_LOG",
+    "NONHUMAN_CONTEXT",
+    "SYNTHETIC_OR_SIMULATED",
+}
 
 ID_PATTERNS = {
     "trend_id": re.compile(r"^T\d+$"),
@@ -59,6 +94,9 @@ ID_PATTERNS = {
     "requirement_id": re.compile(r"^R\d+$"),
     "concept_id": re.compile(r"^M\d+$"),
     "action_id": re.compile(r"^A\d+$"),
+    "hypothesis_id": re.compile(r"^H\d+$"),
+    "observability_id": re.compile(r"^O\d+$"),
+    "analysis_run_id": re.compile(r"^AR\d+$"),
 }
 
 SUFFICIENCY_DIMENSIONS = [
@@ -199,6 +237,9 @@ def main() -> int:
     sufficiency = load(root, "sufficiency.json", errors)
     freeze = load(root, "freeze.json", errors)
     decision_outcome = load(root, "decision_outcome.json", errors)
+    hypotheses = load(root, "hypotheses.json", errors) if (root / "hypotheses.json").exists() else []
+    observability = load(root, "observability.json", errors) if (root / "observability.json").exists() else []
+    analysis_runs = load(root, "analysis_runs.json", errors) if (root / "analysis_runs.json").exists() else []
 
     list_files = [
         ("trends.json", trends),
@@ -211,6 +252,9 @@ def main() -> int:
         ("principles.json", principles),
         ("fit_criteria.json", criteria),
         ("concepts.json", concepts),
+        ("hypotheses.json", hypotheses),
+        ("observability.json", observability),
+        ("analysis_runs.json", analysis_runs),
     ]
     for name, value in list_files:
         if not isinstance(value, list):
@@ -226,6 +270,9 @@ def main() -> int:
     principles = principles if isinstance(principles, list) else []
     criteria = criteria if isinstance(criteria, list) else []
     concepts = concepts if isinstance(concepts, list) else []
+    hypotheses = hypotheses if isinstance(hypotheses, list) else []
+    observability = observability if isinstance(observability, list) else []
+    analysis_runs = analysis_runs if isinstance(analysis_runs, list) else []
 
     mode = manifest.get("mode") if isinstance(manifest, dict) else None
 
@@ -239,6 +286,9 @@ def main() -> int:
     principle_ids = ids(principles, "principle_id", errors)
     requirement_ids = ids(criteria, "requirement_id", errors)
     concept_ids = ids(concepts, "concept_id", errors)
+    hypothesis_ids = ids(hypotheses, "hypothesis_id", errors)
+    observability_ids = ids(observability, "observability_id", errors)
+    analysis_run_ids = ids(analysis_runs, "analysis_run_id", errors)
 
     source_by_id = {
         row.get("source_id"): row
@@ -298,6 +348,22 @@ def main() -> int:
         require_bool(source, "outward_citation_allowed", sid, errors)
         if source.get("outward_citation_allowed") is True and not source.get("url"):
             errors.append(f"{sid} outward citation requires a URL")
+        for field in [
+            "platform_or_community",
+            "participant_role",
+            "thread_or_context",
+            "community_norm",
+            "platform_affordance",
+            "selection_mechanism",
+        ]:
+            if field in source and source.get(field) not in (None, ""):
+                require_nonempty_string(source, field, sid, errors)
+
+    analysis_run_by_id = {
+        row.get("analysis_run_id"): row
+        for row in analysis_runs
+        if isinstance(row, dict) and row.get("analysis_run_id")
+    }
 
     for row in evidence:
         eid = row.get("evidence_id", "<unknown>")
@@ -310,6 +376,16 @@ def main() -> int:
                 f"{source_by_id[sid].get('coverage')!r}"
             )
         require_nonempty_string(row, "evidence_type", eid, errors)
+        basis = row.get("evidence_basis")
+        if basis is not None and basis not in EVIDENCE_BASIS:
+            errors.append(f"{eid} has invalid evidence_basis {basis!r}")
+        if basis == "SYNTHETIC_OR_SIMULATED":
+            errors.append(
+                f"{eid} synthetic or simulated material cannot be persisted as human evidence"
+            )
+        analysis_run_id = row.get("analysis_run_id")
+        if analysis_run_id not in (None, "") and analysis_run_id not in analysis_run_ids:
+            errors.append(f"{eid} references missing analysis_run_id: {analysis_run_id}")
         excerpt = row.get("verbatim_excerpt")
         observation = row.get("bounded_observation")
         if not (
@@ -338,6 +414,88 @@ def main() -> int:
             and private_identity.casefold() in public_summary.casefold()
         ):
             errors.append(f"{eid} public_summary exposes private user_entity")
+
+    for row in hypotheses:
+        hid = row.get("hypothesis_id", "<unknown>")
+        require_nonempty_string(row, "claim", hid, errors)
+        status = row.get("status")
+        if status not in HYPOTHESIS_STATUS:
+            errors.append(f"{hid} has invalid status {status!r}")
+        predictions = require_string_list(row, "observable_predictions", hid, errors)
+        require_string_list(row, "rival_explanations", hid, errors)
+        require_string_list(row, "targeted_refutation_searches", hid, errors)
+        require_string_list(row, "boundary_conditions", hid, errors)
+        refs_exist(row.get("evidence_for", []), evidence_ids, "supporting evidence", hid, errors)
+        refs_exist(row.get("evidence_against", []), evidence_ids, "challenging evidence", hid, errors)
+        cases = row.get("contrastive_cases", [])
+        if not isinstance(cases, list):
+            errors.append(f"{hid} contrastive_cases must be a list")
+            cases = []
+        for index, case in enumerate(cases):
+            owner = f"{hid} contrastive_cases[{index}]"
+            if not isinstance(case, dict):
+                errors.append(f"{owner} must be an object")
+                continue
+            if case.get("case_type") not in CONTRAST_CASE_TYPES:
+                errors.append(f"{owner} has invalid case_type {case.get('case_type')!r}")
+            refs_exist(case.get("evidence_refs", []), evidence_ids, "evidence", owner, errors)
+            require_nonempty_string(case, "interpretation", owner, errors)
+        if status in {"SURVIVED_CURRENT_TESTS", "WEAKENED", "REJECTED"}:
+            if not predictions:
+                errors.append(f"{hid} assessed status requires observable_predictions")
+            require_nonempty_string(row, "strongest_plausible_refuter", hid, errors)
+            require_nonempty_string(row, "update_rationale", hid, errors)
+            if not row.get("evidence_for") and not row.get("evidence_against"):
+                errors.append(f"{hid} assessed status requires evidence_for or evidence_against")
+            if not cases:
+                errors.append(f"{hid} assessed status requires at least one contrastive case")
+        if status == "UNTESTABLE":
+            require_nonempty_string(row, "update_rationale", hid, errors)
+
+    for row in observability:
+        oid = row.get("observability_id", "<unknown>")
+        require_nonempty_string(row, "question", oid, errors)
+        require_bool(row, "decision_critical", oid, errors)
+        if row.get("status") not in OBSERVABILITY_STATUS:
+            errors.append(f"{oid} has invalid status {row.get('status')!r}")
+        if row.get("resolution") not in OBSERVABILITY_RESOLUTION:
+            errors.append(f"{oid} has invalid resolution {row.get('resolution')!r}")
+        refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", oid, errors)
+        if row.get("resolution") == "FIELDWORK_REFERRAL":
+            require_nonempty_string(row, "fieldwork_referral", oid, errors)
+        if row.get("resolution") == "ACCEPTED_UNKNOWN":
+            require_nonempty_string(row, "acceptance_rationale", oid, errors)
+        if row.get("status") in {"NOT_OBSERVABLE", "PARTIALLY_OBSERVABLE", "UNKNOWN"} and row.get("resolution") == "RESOLVED_BY_TRACES":
+            errors.append(f"{oid} cannot be RESOLVED_BY_TRACES with status {row.get('status')}")
+
+    for row in analysis_runs:
+        arid = row.get("analysis_run_id", "<unknown>")
+        for field in [
+            "task",
+            "model",
+            "model_version",
+            "prompt_or_workflow_version",
+            "extraction_schema",
+        ]:
+            require_nonempty_string(row, field, arid, errors)
+        validation = row.get("sampled_validation")
+        if not isinstance(validation, dict):
+            errors.append(f"{arid} sampled_validation must be an object")
+            validation = {}
+        if validation.get("status") not in ANALYSIS_VALIDATION:
+            errors.append(
+                f"{arid} sampled_validation has invalid status {validation.get('status')!r}"
+            )
+        if validation.get("status") in {"PASSED", "FAILED"}:
+            sample_size = validation.get("sample_size")
+            if not isinstance(sample_size, int) or sample_size <= 0:
+                errors.append(f"{arid} sampled_validation sample_size must be a positive integer")
+            require_nonempty_string(
+                validation,
+                "agreement_or_error_summary",
+                f"{arid} sampled_validation",
+                errors,
+            )
 
     for row in trends:
         tid = row.get("trend_id", "<unknown>")
@@ -396,6 +554,8 @@ def main() -> int:
             require_nonempty_string(row, "benefit_signal", luid, errors)
             for ref in row.get("lu1_evidence", []) + row.get("lu2_evidence", []):
                 evidence_row = evidence_by_id.get(ref, {})
+                if evidence_row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED":
+                    errors.append(f"{luid} qualification cannot use synthetic or simulated evidence {ref}")
                 evidence_trend = evidence_row.get("trend_id")
                 if evidence_trend not in (None, "", row.get("trend_id")):
                     errors.append(
@@ -672,6 +832,9 @@ def main() -> int:
         | principle_ids
         | requirement_ids
         | concept_ids
+        | hypothesis_ids
+        | observability_ids
+        | analysis_run_ids
     )
 
     if not isinstance(sufficiency, dict):
@@ -756,6 +919,29 @@ def main() -> int:
             for field, expected in expected_counts.items():
                 if freeze.get(field) != expected:
                     errors.append(f"freeze {field}={freeze.get(field)!r} does not match actual {expected}")
+            open_critical = [
+                row.get("observability_id", "<unknown>")
+                for row in observability
+                if isinstance(row, dict)
+                and row.get("decision_critical") is True
+                and row.get("resolution") == "OPEN"
+            ]
+            if open_critical:
+                errors.append(
+                    "Evidence Freeze cannot leave decision-critical observability questions OPEN: "
+                    + ", ".join(open_critical)
+                )
+            referenced_analysis_runs = {
+                row.get("analysis_run_id")
+                for row in evidence
+                if isinstance(row, dict) and row.get("analysis_run_id")
+            }
+            for arid in sorted(referenced_analysis_runs):
+                validation = analysis_run_by_id.get(arid, {}).get("sampled_validation", {})
+                if validation.get("status") != "PASSED":
+                    errors.append(
+                        f"Evidence Freeze requires sampled validation PASSED for analysis run {arid}"
+                    )
 
     if (
         mode in {"STANDARD", "FULL"}

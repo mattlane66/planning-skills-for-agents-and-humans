@@ -87,6 +87,30 @@ def recommend(root: Path) -> dict[str, Any]:
             human_gate="Confirm supplied or explicitly provisional research-brief fields before discovery.",
         )
 
+    hypotheses = load_json(root, "hypotheses.json", [])
+    incomplete_hypotheses = [
+        row.get("hypothesis_id", "<unknown>")
+        for row in hypotheses
+        if isinstance(row, dict)
+        and (
+            not nonempty_list(row.get("observable_predictions"))
+            or not isinstance(row.get("strongest_plausible_refuter"), str)
+            or not row.get("strongest_plausible_refuter").strip()
+        )
+    ]
+    if incomplete_hypotheses:
+        return result(
+            current_phase=current_phase,
+            state="BLOCKED",
+            next_phase="A",
+            reason="Starting hypotheses must be made falsifiable before discovery begins.",
+            blockers=[
+                f"Define observable predictions and the strongest plausible refuter for {hypothesis_id}"
+                for hypothesis_id in incomplete_hypotheses
+            ],
+            human_gate="Treat hypotheses as claims to challenge, never as assumptions to prove.",
+        )
+
     trends = load_json(root, "trends.json", [])
     candidates = load_json(root, "candidates.json", [])
     search_log = load_json(root, "search_log.json", [])
