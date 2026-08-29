@@ -23,6 +23,7 @@ EMPTY_LIST_FILES = [
     "findings.json",
     "needs.json",
     "principles.json",
+    "shaping_frame.json",
     "fit_criteria.json",
     "concepts.json",
 ]

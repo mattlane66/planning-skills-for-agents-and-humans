@@ -246,6 +246,40 @@ def recommend(root: Path) -> dict[str, Any]:
         for row in needs
         if isinstance(row, dict) and row.get("concept_gate_status") == "PASS"
     }
+    shaping_frames = load_json(root, "shaping_frame.json", [])
+    accepted_frame_need_ids = {
+        row.get("need_id")
+        for row in shaping_frames
+        if isinstance(row, dict)
+        and row.get("status") == "ACCEPTED"
+        and row.get("accepted_by_human") is True
+    }
+    provisional_frame_need_ids = {
+        row.get("need_id")
+        for row in shaping_frames
+        if isinstance(row, dict) and row.get("status") == "PROVISIONAL"
+    }
+    missing_frame = sorted(passing_need_ids - accepted_frame_need_ids - provisional_frame_need_ids)
+    if missing_frame:
+        return result(
+            current_phase=current_phase,
+            state="READY",
+            next_phase="F",
+            reason="At least one supported need passed the Concept Generation Gate and requires an evidence-backed x → f() → y shaping frame.",
+            blockers=[f"Passing need lacks a shaping frame: {need_id}" for need_id in missing_frame],
+        )
+
+    awaiting_frame_review = sorted(passing_need_ids & provisional_frame_need_ids)
+    if awaiting_frame_review:
+        return result(
+            current_phase=current_phase,
+            state="HUMAN_REVIEW",
+            next_phase="F",
+            reason="Phase F constructed a provisional shaping frame; requirements cannot be frozen until a human accepts or revises x, y, the gap, and boundaries.",
+            blockers=[f"Human review required for provisional shaping frame: {need_id}" for need_id in awaiting_frame_review],
+            human_gate="Accept or revise the proposed x → f() → y frame. The model must not self-accept it.",
+        )
+
     criteria = load_json(root, "fit_criteria.json", [])
     concepts = load_json(root, "concepts.json", [])
     criteria_need_ids = {row.get("need_id") for row in criteria if isinstance(row, dict)}
@@ -260,7 +294,7 @@ def recommend(root: Path) -> dict[str, Any]:
             current_phase=current_phase,
             state="READY",
             next_phase="F",
-            reason="At least one supported need passed the Concept Generation Gate and requires Fit Check shaping.",
+            reason="At least one accepted shaping frame still requires frozen requirements and candidate-shape Fit Check work.",
             blockers=[f"Passing need lacks requirements or materially distinct mechanisms: {need_id}" for need_id in incomplete_shape],
         )
 
