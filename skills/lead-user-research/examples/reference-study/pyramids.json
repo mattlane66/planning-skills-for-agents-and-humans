@@ -1,0 +1,25 @@
+[
+  {
+    "pyramid_id": "PY1",
+    "target_attribute": "degree of cross-workspace context-continuity infrastructure",
+    "starting_node": "SRC1 synthetic trend memo",
+    "success_criterion": "Identify the most advanced supported operator example inside the intentionally closed synthetic corpus",
+    "termination_criterion": "Stop after every operator record in the closed fixture has been inspected or a more advanced supported node is identified",
+    "network_visibility_note": "The fixture enumerates all operator records, so network visibility is artificially complete and demonstrates the contract rather than real referral quality.",
+    "status": "TERMINATED",
+    "hops": [
+      {
+        "hop_id": "H1",
+        "from_node": "SRC1 synthetic trend memo",
+        "to_node": "LU1",
+        "referral_rationale": "The trend memo points to the operator maintaining the most elaborate cross-workspace handoff infrastructure in the fixture.",
+        "advancement_rationale": "LU1 maintains a sustained four-agent handoff system, the strongest supported value of the target attribute in this bounded corpus.",
+        "evidence_refs": [
+          "E2",
+          "E3"
+        ]
+      }
+    ],
+    "termination_reason": "All records in the intentionally closed synthetic corpus were inspected; LU1 is the most advanced supported example available in the fixture."
+  }
+]
