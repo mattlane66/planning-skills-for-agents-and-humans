@@ -66,7 +66,7 @@ For every QUALIFIED episode also record:
 - benefit signal — the concrete signal of that expected benefit;
 - qualification caveats — unresolved weaknesses or alternate explanations.
 
-The same evidence may support both LU1 and LU2 only when the separate rationales show why. Do not infer qualification from fame, expertise, early adoption, or invention alone.
+The same evidence may support both LU1 and LU2 only when the separate rationales show why. Do not infer qualification from fame, expertise, early adoption, invention, technical-expertise enrichment, community-resource enrichment, or discovery path alone.
 
 Keep separate:
 
@@ -113,11 +113,13 @@ Do not turn the workaround into the need, rank fit points, or generate producer 
 
 Map derivative relationships before treating examples as independent evidence.
 
-## Coverage
+## Pyramiding and coverage
+
+Update `pyramids.json` as evidence substantiates or weakens hop rationales. Add evidence refs where available, and record the explicit termination reason when a branch closes or becomes a fieldwork referral.
 
 Update discoverability bias continuously.
 
-If pyramiding reaches a person/category who likely requires direct contact, record that referral rather than pretending search has exhausted the pyramid.
+If pyramiding reaches a person/category who likely requires direct contact, record that referral and close/route the PY## branch accordingly rather than pretending search has exhausted the pyramid.
 
 ## Write state
 
@@ -126,6 +128,7 @@ Update:
 - `sources.json`;
 - `evidence.json`;
 - `lu_episodes.json`;
+- `pyramids.json`;
 - `lineage.json`;
 - `coverage.json`;
 - `search_log.json`;
