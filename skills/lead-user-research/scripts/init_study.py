@@ -12,6 +12,7 @@ from pathlib import Path
 EMPTY_LIST_FILES = [
     "trends.json",
     "candidates.json",
+    "pyramids.json",
     "sources.json",
     "evidence.json",
     "lu_episodes.json",
