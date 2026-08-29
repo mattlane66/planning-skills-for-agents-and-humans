@@ -90,6 +90,7 @@ const artifactTemplates = {
   'sketch-reconciliation': 'templates/sketch-reconciliation.md',
   'decision-log': 'templates/decision-log.md',
   'appetite-card': 'templates/appetite-card.md',
+  'research-to-frame-handoff': 'lead-user-research/study-templates/research-to-frame-handoff.md',
 } as const;
 
 type ArtifactName = keyof typeof artifactTemplates;

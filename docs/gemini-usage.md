@@ -35,6 +35,15 @@ This repo includes Gemini-native wrappers for both fluid shaping moves and downs
 | Command | Purpose |
 |---|---|
 | `/plan` | Choose the smallest next planning move without forcing a fixed exploration order. |
+| `/lead-user` | Start or resume the next valid Lead User research phase from persisted state. |
+| `/lead-user-frame` | Phase A — establish or revise the research brief. |
+| `/lead-user-discover` | Phase B — trend-first discovery, pyramiding, candidates, and analogs. |
+| `/lead-user-evidence` | Phase C — inspect a bounded real-source evidence batch. |
+| `/lead-user-freeze` | Phase D — judge sufficiency and freeze only when justified. |
+| `/lead-user-interpret` | Phase E — interpret frozen evidence and assess concept gates. |
+| `/lead-user-shape` | Phase F — shape only needs that pass the Concept Generation Gate. |
+| `/lead-user-decide` | Phase G — prepare the decision outcome and operational actions. |
+| `/lead-user-deliver` | Phase H — render supported outputs and a proposed frame handoff. |
 | `/wayfind` | Chart or advance a bounded multi-session planning effort through one shared map and frontier. |
 | `/shape` | Main collaborative shaping surface; start R-first, S-first, evidence-first, or uncertainty-first. |
 | `/criteria` | Work on R for the current move; may extract requirements from an existing shape or prototype. |

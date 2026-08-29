@@ -76,3 +76,9 @@ If PDF generation, HTML generation, interactive validation, browser testing, or 
 - say so;
 - deliver the strongest supported subset;
 - never fabricate the artifact or verification result.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

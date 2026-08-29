@@ -76,3 +76,9 @@ Later evidence may be added, but every post-freeze search must record:
 - why it was sought;
 - what interpretation/question triggered it;
 - what state changed as a result.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

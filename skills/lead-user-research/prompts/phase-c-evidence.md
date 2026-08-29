@@ -142,3 +142,9 @@ For SCOUT, stop evidence collection when the bounded pass is enough to answer:
 > Is this worth more investigation?
 
 Do not run the full evidence machinery merely because it exists.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

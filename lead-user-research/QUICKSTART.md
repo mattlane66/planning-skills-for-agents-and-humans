@@ -100,15 +100,26 @@ Run the Lead User Research skill phase-by-phase.
 Reopen authoritative workspace files at the start of every phase.
 Write structured state before narrative synthesis.
 Run the validator after each phase when possible.
+Derive and report exactly one next phase from persisted state; do not advance by
+invocation history alone.
 ```
 
-5. Validate at any time:
+5. Ask what happens next at any time:
+
+```bash
+python lead-user-research/scripts/next_research_move.py research/designer-ai-study
+```
+
+Claude Code and Gemini CLI can use `/lead-user` for the same start/resume behavior,
+or a `/lead-user-*` phase command for explicit control.
+
+6. Validate at any time:
 
 ```bash
 python lead-user-research/scripts/validate_study.py research/designer-ai-study
 ```
 
-6. After Phase G, render the canonical human-facing brief:
+7. After Phase G, render the canonical human-facing brief:
 
 ```bash
 python lead-user-research/scripts/render_decision_brief.py research/designer-ai-study
@@ -154,6 +165,9 @@ At the end of each phase ask for:
 
 > **STATE PACKET**
 
+and the standardized phase handoff: current status, one next move, reason, exact
+blockers, and any human gate.
+
 Save it locally or paste it into the next phase.
 
 Example:
@@ -174,6 +188,10 @@ You do not have persistent file tools, so end with a complete STATE PACKET for t
 ```
 
 This fallback is less robust. The model should say so rather than claiming durable state.
+
+After completion, do not silently treat the research as an accepted frame. Propose
+the research-to-frame implications and ask the human to accept, reject, or revise
+them before invoking framing.
 
 ## What you should expect
 

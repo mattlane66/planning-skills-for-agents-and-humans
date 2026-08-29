@@ -18,11 +18,22 @@ The command wrappers constrain the **current move**, not the entire order of exp
 
 Use `/shape` as the broad collaborative front door. Use focused commands when you want to work on R, S, fit, a spike, or a breadboard without implying that the other moves had to happen first.
 
+Use `/lead-user` when a consequential decision depends on future-facing opportunity evidence. It starts or resumes one valid research phase from persisted state; it is not a mandatory step before `/frame`.
+
 ## Commands
 
 | Command | Uses skill | Purpose |
 |---|---|---|
 | `/plan` | `planning-router/SKILL.md` | Choose the smallest next planning move while respecting R-first, S-first, evidence-first, or uncertainty-first entry. |
+| `/lead-user` | `lead-user-research/SKILL.md` | Start or resume the next valid Lead User research phase from persisted state. |
+| `/lead-user-frame` | `lead-user-research` Phase A | Establish or revise the decision-relative research brief. |
+| `/lead-user-discover` | `lead-user-research` Phase B | Establish trends, pyramiding paths, candidates, referrals, and advanced analogs. |
+| `/lead-user-evidence` | `lead-user-research` Phase C | Inspect the next bounded real-source evidence batch. |
+| `/lead-user-freeze` | `lead-user-research` Phase D | Judge sufficiency and freeze evidence only when justified. |
+| `/lead-user-interpret` | `lead-user-research` Phase E | Interpret frozen evidence into findings, needs, principles, and gate results. |
+| `/lead-user-shape` | `lead-user-research` Phase F | Shape only needs that pass the Concept Generation Gate. |
+| `/lead-user-decide` | `lead-user-research` Phase G | Prepare the evidence-backed human decision and operational actions. |
+| `/lead-user-deliver` | `lead-user-research` Phase H | Render supported outputs and a proposed research-to-frame handoff. |
 | `/wayfind` | `wayfinding/SKILL.md` | Chart or advance a bounded multi-session planning effort through one shared map and frontier. |
 | `/frame` | `framing-doc/SKILL.md` | Clarify the problem, outcome, evidence, and boundary when they are genuinely unclear. |
 | `/shape` | `shaping/SKILL.md` | Main collaborative shaping surface: iterate among R, S, Appetite, fit, spikes, and candidate evidence without forcing a fixed exploration order. |

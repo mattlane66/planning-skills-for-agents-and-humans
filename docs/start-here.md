@@ -6,6 +6,12 @@ Use this guide when you are new to the repository and want the smallest planning
 
 Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
 
+If a consequential opportunity decision depends on future-facing trends,
+advanced users, unusually high-benefit needs, pyramiding, or advanced analogs,
+start with [Lead User Research](../lead-user-research/README.md). It is an optional
+evidence lane before framing, not a required first step. Its findings feed a frame
+only after explicit human acceptance of the proposed implications.
+
 ## Start with what you actually have
 
 You do **not** need to begin with a completed frame or requirements list.

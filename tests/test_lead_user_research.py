@@ -39,6 +39,20 @@ class LeadUserResearchTests(unittest.TestCase):
             capture_output=True,
         )
 
+    def next_move(self, workspace):
+        result = subprocess.run(
+            [
+                sys.executable,
+                str(LEAD / "scripts" / "next_research_move.py"),
+                str(workspace),
+                "--json",
+            ],
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        return json.loads(result.stdout)
+
     def write_json(self, workspace, name, value):
         (workspace / name).write_text(json.dumps(value), encoding="utf-8")
 
@@ -304,6 +318,151 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertIn("structural validation passed", result.stdout.lower())
+
+    def test_next_move_routes_from_brief_through_discovery_and_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            move = self.next_move(workspace)
+            self.assertEqual("B", move["next_phase"])
+            self.assertEqual("/lead-user-discover", move["recommended_command"])
+
+            self.write_json(workspace, "trends.json", [{"trend_id": "T1"}])
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            move = self.next_move(workspace)
+            self.assertEqual("C", move["next_phase"])
+            self.assertEqual("/lead-user-evidence", move["recommended_command"])
+
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            move = self.next_move(workspace)
+            self.assertEqual("D", move["next_phase"])
+
+    def test_next_move_routes_insufficient_research_to_the_right_loop(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            sufficiency = json.loads((workspace / "sufficiency.json").read_text(encoding="utf-8"))
+            sufficiency["status"] = "INSUFFICIENT"
+            sufficiency["dimensions"]["trend_support"] = {
+                "status": "INSUFFICIENT",
+                "rationale": "The trend branch is too narrow.",
+                "supporting_refs": ["T1"],
+                "next_actions": ["Search an independent trend branch."],
+            }
+            sufficiency["unresolved_actions"] = ["Search an independent trend branch."]
+            self.write_json(workspace, "sufficiency.json", sufficiency)
+            move = self.next_move(workspace)
+            self.assertEqual("B", move["next_phase"])
+
+            sufficiency["dimensions"]["trend_support"]["status"] = "SUFFICIENT"
+            sufficiency["dimensions"]["lu_qualification"] = {
+                "status": "INSUFFICIENT",
+                "rationale": "Benefit evidence remains weak.",
+                "supporting_refs": ["LU1"],
+                "next_actions": ["Inspect another evidence batch."],
+            }
+            self.write_json(workspace, "sufficiency.json", sufficiency)
+            move = self.next_move(workspace)
+            self.assertEqual("C", move["next_phase"])
+
+    def test_next_move_routes_scout_from_bounded_evidence_to_decision(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp, mode="scout")
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            move = self.next_move(workspace)
+            self.assertEqual("G", move["next_phase"])
+            self.assertEqual("/lead-user-decide", move["recommended_command"])
+            self.assertIn("bounded SCOUT", move["reason"])
+
+    def test_next_move_skips_shape_when_no_need_passes_gate(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.freeze_valid(workspace)
+            self.write_json(workspace, "findings.json", [{"finding_id": "F1"}])
+            self.write_json(
+                workspace,
+                "needs.json",
+                [{"need_id": "N1", "concept_gate_status": "FAIL"}],
+            )
+            self.write_json(workspace, "principles.json", [{"principle_id": "SP1"}])
+            move = self.next_move(workspace)
+            self.assertEqual("G", move["next_phase"])
+            self.assertIn("without inventing concepts", move["reason"])
+
+    def test_next_move_requires_shape_only_for_passing_needs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.freeze_valid(workspace)
+            self.write_json(workspace, "findings.json", [{"finding_id": "F1"}])
+            self.write_json(
+                workspace,
+                "needs.json",
+                [{"need_id": "N1", "concept_gate_status": "PASS"}],
+            )
+            self.write_json(workspace, "principles.json", [{"principle_id": "SP1"}])
+            move = self.next_move(workspace)
+            self.assertEqual("F", move["next_phase"])
+
+            self.write_json(workspace, "fit_criteria.json", [{"need_id": "N1"}])
+            self.write_json(workspace, "concepts.json", [{"need_id": "N1"}])
+            move = self.next_move(workspace)
+            self.assertEqual("G", move["next_phase"])
+
+    def test_next_move_marks_complete_study_and_preserves_frame_gate(self):
+        move = self.next_move(LEAD / "examples" / "reference-study")
+        self.assertEqual("COMPLETE", move["state"])
+        self.assertIsNone(move["recommended_command"])
+        self.assertEqual("framing-doc", move["conditional_next_skill"])
+        self.assertIn("Accept, reject, or revise", move["human_gate"])
+
+    def test_planning_system_exposes_one_skill_with_phase_commands(self):
+        phases = {
+            "frame": "phase-a-frame.md",
+            "discover": "phase-b-discover.md",
+            "evidence": "phase-c-evidence.md",
+            "freeze": "phase-d-freeze.md",
+            "interpret": "phase-e-interpret.md",
+            "shape": "phase-f-shape.md",
+            "decide": "phase-g-decide.md",
+            "deliver": "phase-h-deliver.md",
+        }
+        for name, prompt in phases.items():
+            claude = ROOT / ".claude" / "commands" / f"lead-user-{name}.md"
+            gemini = ROOT / ".gemini" / "commands" / f"lead-user-{name}.toml"
+            self.assertTrue(claude.is_file(), claude)
+            self.assertTrue(gemini.is_file(), gemini)
+            self.assertIn("lead-user-research/SKILL.md", claude.read_text(encoding="utf-8"))
+            self.assertIn(prompt, claude.read_text(encoding="utf-8"))
+            self.assertIn(prompt, gemini.read_text(encoding="utf-8"))
+
+        router = (ROOT / "planning-router" / "SKILL.md").read_text(encoding="utf-8")
+        orchestration = (ROOT / ".agent-orchestration.yaml").read_text(encoding="utf-8")
+        agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        self.assertIn("`lead-user-research`", router)
+        self.assertIn("lead_user_research:", orchestration)
+        self.assertIn("/lead-user-deliver", orchestration)
+        self.assertIn("upstream evidence move", agents)
+
+    def test_research_to_frame_transition_requires_human_acceptance(self):
+        handoff = (LEAD / "study-templates" / "research-to-frame-handoff.md").read_text(encoding="utf-8")
+        skill = (LEAD / "SKILL.md").read_text(encoding="utf-8")
+        controller = (LEAD / "references" / "phase-handoff.md").read_text(encoding="utf-8")
+        self.assertIn("PROPOSED | ACCEPTED | REJECTED | REVISE", handoff)
+        self.assertIn("Do not invoke `framing-doc`", handoff)
+        self.assertIn("before invoking `framing-doc`", skill)
+        self.assertIn("Completion does not automatically invoke framing", controller)
 
     def test_discovery_inputs_do_not_prequalify_lead_users(self):
         protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")

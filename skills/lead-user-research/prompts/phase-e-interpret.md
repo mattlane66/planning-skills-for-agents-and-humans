@@ -98,3 +98,9 @@ Update:
 - `change_log.json`.
 
 Do not create concepts in this phase.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

@@ -500,3 +500,21 @@ When the evidence does not justify concepts, stop before concepts.
 ---
 
 Start with **Phase A only** unless the selected mode and available tools make automatic phase progression safe.
+
+After every phase, return exactly one handoff:
+
+- Research status: READY | BLOCKED | HUMAN_REVIEW | COMPLETE
+- Completed phase
+- Next recommended phase or move
+- Why that is the next move
+- Exact required inputs or blockers
+- Human gate, if any
+
+Do not advance merely because the prior phase was run. Insufficient research may
+return to discovery/evidence, and a failed Concept Generation Gate skips concept
+work rather than inventing it.
+
+Lead User Research is optional upstream evidence, not a mandatory predecessor to
+framing. At completion, propose evidence-backed research-to-frame implications and
+stop for explicit human acceptance. The research record remains evidence; it does
+not automatically become an accepted frame or product decision.

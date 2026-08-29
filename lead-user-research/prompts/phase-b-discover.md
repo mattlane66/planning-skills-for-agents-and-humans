@@ -97,3 +97,9 @@ If the environment supports validation, run it after writing.
 ## Exit gate
 
 Do not formally QUALIFY LU episodes until at least one important trend has credible evidence and observable advancement indicators.
+
+## Phase handoff
+
+After writing and validating this phase, follow
+`references/phase-handoff.md`. For a file-backed study, derive the next move with
+`scripts/next_research_move.py`; do not advance from invocation history alone.

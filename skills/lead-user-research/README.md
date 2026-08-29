@@ -12,6 +12,19 @@ Use **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** when you want a single prompt y
 
 Use **[QUICKSTART.md](QUICKSTART.md)** and **[SKILL.md](SKILL.md)** when the AI can read/write files, run scripts, or work in a repository. This is the most robust execution path because research state is persisted and structurally validated.
 
+In Claude Code or Gemini CLI, `/lead-user` starts or resumes the smallest valid
+phase. The focused commands are `/lead-user-frame`, `/lead-user-discover`,
+`/lead-user-evidence`, `/lead-user-freeze`, `/lead-user-interpret`,
+`/lead-user-shape`, `/lead-user-decide`, and `/lead-user-deliver`. In Codex or
+another skill-capable agent, invoke `lead-user-research` and name the workspace;
+the skill derives the next phase.
+
+For file-backed work, inspect the same deterministic recommendation with:
+
+```bash
+python lead-user-research/scripts/next_research_move.py research/lead-user-study
+```
+
 ### Audit or adapt the methodology
 
 Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, pyramiding, advanced analogs, evidence freeze, episode tracing, research sufficiency, fieldwork/completeness semantics, interpretation, Fit Check, and decision delivery.
@@ -55,6 +68,18 @@ runtime runs are scored from the JSON and brief they actually write, not from an
 adapter's self-report.
 
 A valid result may be to stop, investigate further, hold, reject, or decline concept generation.
+
+## Place in the broader planning system
+
+Use this method before framing only when the product or opportunity decision
+genuinely depends on future-facing trends, advanced users, unusually high-benefit
+needs, pyramiding, or advanced analogs. It is not required when the concrete
+problem is already understood.
+
+After Phase G/H, research implications may be proposed through
+[the research-to-frame handoff](study-templates/research-to-frame-handoff.md).
+That handoff is evidence input, not an accepted frame. A human must accept, reject,
+or revise it before `framing-doc` is invoked.
 
 ## Important boundary
 

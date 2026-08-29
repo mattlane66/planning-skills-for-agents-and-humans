@@ -23,6 +23,29 @@ The hard gates remain:
 
 Use the **gated/orchestrated profile** only when the user, team policy, or automation explicitly wants strict prerequisites.
 
+## Lead User research
+
+Codex exposes the canonical `lead-user-research` skill rather than repository-style
+slash commands. Use it as an optional upstream evidence move when a consequential
+decision depends on future-facing trends, advanced users, unusually high-benefit
+needs, pyramiding, or advanced analogs.
+
+```text
+Use the installed `lead-user-research` skill.
+Start or resume the study at [workspace].
+Derive the next valid phase from persisted state and perform only that phase.
+Use real sources and preserve exact citations, source coverage, evidence lineage,
+privacy controls, and outward-citation eligibility.
+End with the standardized phase handoff and one next move or stop condition.
+Do not invoke framing automatically after completion; propose the research-to-frame
+handoff and wait for my acceptance.
+```
+
+To request a specific phase, name it explicitly—for example, “Use
+`lead-user-research` Phase C on the next bounded evidence batch.” If persisted state
+does not satisfy its prerequisites, Codex should stop or treat the request as an
+explicit repair move rather than claiming progression.
+
 ## Collaborative shaping prompt
 
 ```text

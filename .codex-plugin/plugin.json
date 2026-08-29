@@ -1,7 +1,7 @@
 {
   "name": "planning-skills-for-agents-and-humans",
   "version": "1.3.1",
-  "description": "Planning workflows with fluid collaborative shaping, explicit promotion gates, multi-session Wayfinding, visual reconciliation, breadboarding, statecharts, contracts, executable handoffs, task grouping, context, and reflection.",
+  "description": "Planning workflows with evidence-gated Lead User research, fluid collaborative shaping, explicit promotion gates, Wayfinding, breadboarding, executable handoffs, context, and reflection.",
   "author": {
     "name": "Matt Lane",
     "url": "https://github.com/mattlane66"
@@ -21,13 +21,15 @@
     "agent-orchestration",
     "product-development",
     "agent-skills",
+    "lead-user-research",
+    "opportunity-research",
     "codex-plugin"
   ],
   "skills": "./skills/",
   "interface": {
     "displayName": "Planning Skills for Agents and Humans",
-    "shortDescription": "Start from R, S, or evidence; shape fluidly, gate commitment, and build bounded slices.",
-    "longDescription": "Reusable workflows that help humans and agents start from requirements, a solution idea, evidence, or a focused uncertainty; iterate among requirements, shapes, fit checks, spikes, and candidate breadboards; preserve explicit human promotion gates; and hand bounded accepted context to implementation.",
+    "shortDescription": "Research future needs, shape fluidly, gate commitment, and build bounded slices.",
+    "longDescription": "Reusable workflows that help humans and agents investigate future-facing needs with evidence-gated Lead User research; start planning from requirements, a solution idea, evidence, or a focused uncertainty; preserve explicit human promotion gates; and hand bounded accepted context to implementation.",
     "developerName": "Matt Lane",
     "category": "Productivity",
     "capabilities": [
@@ -53,7 +55,7 @@
       "Use the feed-planning-context skill to package only accepted authoritative context for an implementation agent.",
       "Use the breadboard-reflection skill to compare accepted intent with implementation reality and prepare an explicit correction decision.",
       "Use the kickoff-doc skill when builders need a durable orientation reference derived from accepted planning artifacts.",
-      "Use the lead-user-research skill when the decision depends on future-facing needs: establish important trends first, pyramid toward qualified Lead User Need Episodes and advanced analogs, preserve evidence state, and do not generate concepts before the evidence gate."
+      "Use the lead-user-research skill when the decision depends on future-facing needs. Start or resume from persisted state, perform only the next valid phase, use real evidence with exact citations and privacy controls, and stop for explicit acceptance before research implications feed framing."
     ]
   }
 }
