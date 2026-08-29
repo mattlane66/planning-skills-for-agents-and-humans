@@ -68,13 +68,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- site/index.html site/src/generated/content.json; then
+          if git diff --quiet -- site/index.html; then
             echo "No generated portal changes to commit."
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add site/index.html site/src/generated/content.json
+          git add site/index.html
           git commit -m "Regenerate documentation portal"
           git push origin HEAD:${GITHUB_HEAD_REF}
 
