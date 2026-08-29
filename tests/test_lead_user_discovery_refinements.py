@@ -43,8 +43,9 @@ class LeadUserDiscoveryRefinementTests(unittest.TestCase):
             self.assertIn(value, contract)
         self.assertIn("do not establish LU1 or LU2", phase)
         self.assertIn("must never compensate for missing LU1/LU2 evidence", phase)
-        self.assertIn("does not establish LU1", contract)
-        self.assertIn("does not establish LU2", contract)
+        self.assertIn("do not establish LU1", contract)
+        self.assertIn("do not establish LU2", contract)
+        self.assertIn("must never compensate for missing LU1/LU2 evidence", contract)
 
     def test_packaged_mirror_matches_changed_canonical_files(self):
         for relative in (
