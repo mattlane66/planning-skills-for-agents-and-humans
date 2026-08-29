@@ -56,6 +56,24 @@ class LeadUserResearchTests(unittest.TestCase):
     def write_json(self, workspace, name, value):
         (workspace / name).write_text(json.dumps(value), encoding="utf-8")
 
+    def write_open_pyramid(self, workspace):
+        self.write_json(
+            workspace,
+            "pyramids.json",
+            [
+                {
+                    "pyramid_id": "PY1",
+                    "target_attribute": "cross-tool workflow advancement",
+                    "starting_node": "C1",
+                    "success_criterion": "Find a materially more advanced node",
+                    "termination_criterion": "Stop at fieldwork or diminishing information value",
+                    "network_visibility_note": "The referral node observes the target workflow attribute.",
+                    "status": "OPEN",
+                    "hops": [],
+                }
+            ],
+        )
+
     def write_valid_evidence_core(self, workspace):
         self.write_json(
             workspace,
@@ -329,6 +347,12 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(workspace, "trends.json", [{"trend_id": "T1"}])
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
+            move = self.next_move(workspace)
+            self.assertEqual("B", move["next_phase"])
+            self.assertTrue(any("pyramid" in blocker.lower() for blocker in move["blockers"]))
+
+            self.write_open_pyramid(workspace)
             move = self.next_move(workspace)
             self.assertEqual("C", move["next_phase"])
             self.assertEqual("/lead-user-evidence", move["recommended_command"])
@@ -336,6 +360,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_valid_evidence_core(workspace)
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
             move = self.next_move(workspace)
             self.assertEqual("D", move["next_phase"])
 
@@ -345,6 +370,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_valid_evidence_core(workspace)
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
             sufficiency = json.loads((workspace / "sufficiency.json").read_text(encoding="utf-8"))
             sufficiency["status"] = "INSUFFICIENT"
             sufficiency["dimensions"]["trend_support"] = {
@@ -375,6 +401,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_valid_evidence_core(workspace)
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
             move = self.next_move(workspace)
             self.assertEqual("G", move["next_phase"])
             self.assertEqual("/lead-user-decide", move["recommended_command"])
@@ -386,6 +413,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_valid_evidence_core(workspace)
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
             self.freeze_valid(workspace)
             self.write_json(workspace, "findings.json", [{"finding_id": "F1"}])
             self.write_json(
@@ -404,6 +432,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_valid_evidence_core(workspace)
             self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
             self.write_json(workspace, "search_log.json", [{"query": "advanced workflows"}])
+            self.write_open_pyramid(workspace)
             self.freeze_valid(workspace)
             self.write_json(workspace, "findings.json", [{"finding_id": "F1"}])
             self.write_json(
@@ -472,6 +501,64 @@ class LeadUserResearchTests(unittest.TestCase):
         self.assertIn("not as Lead User qualification evidence", phase_b)
         self.assertIn("not a closed search universe", phase_b)
         self.assertIn("Search constraints are the only one", state)
+
+    def test_three_lead_user_discovery_paths_are_explicit(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_b = (LEAD / "prompts" / "phase-b-discover.md").read_text(encoding="utf-8")
+        portable = (LEAD / "PORTABLE_PROMPT.md").read_text(encoding="utf-8")
+        for token in ["TARGET_MARKET", "ADVANCED_ANALOG", "ATTRIBUTE_SPECIFIC"]:
+            self.assertIn(token, phase_b)
+        self.assertIn("Three Lead User discovery paths", protocol)
+        self.assertIn("Attribute-specific Lead Users", protocol)
+        self.assertIn("attribute-specific", portable.lower())
+
+    def test_pyramiding_contract_is_attribute_specific_and_validated(self):
+        state = (LEAD / "references" / "state-contract.md").read_text(encoding="utf-8")
+        phase_b = (LEAD / "prompts" / "phase-b-discover.md").read_text(encoding="utf-8")
+        self.assertIn("pyramids.json", state)
+        self.assertIn("target_attribute", state)
+        self.assertIn("termination_criterion", state)
+        self.assertIn("network_visibility_note", state)
+        self.assertIn("Attribute-specific pyramiding", phase_b)
+
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_json(
+                workspace,
+                "pyramids.json",
+                [
+                    {
+                        "pyramid_id": "PY1",
+                        "target_attribute": "cross-tool workflow advancement",
+                        "starting_node": "C1",
+                        "success_criterion": "Find a more advanced node",
+                        "termination_criterion": "Stop when the success criterion is met or fieldwork is required",
+                        "network_visibility_note": "The referral network observes the target workflow attribute.",
+                        "status": "TERMINATED",
+                        "hops": [],
+                        "termination_reason": "The bounded branch was exhausted.",
+                    }
+                ],
+            )
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+
+            pyramid = json.loads((workspace / "pyramids.json").read_text(encoding="utf-8"))[0]
+            pyramid.pop("termination_reason")
+            self.write_json(workspace, "pyramids.json", [pyramid])
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("termination_reason", result.stderr)
+
+    def test_search_enrichment_is_optional_and_nonqualifying(self):
+        protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
+        phase_b = (LEAD / "prompts" / "phase-b-discover.md").read_text(encoding="utf-8")
+        state = (LEAD / "references" / "state-contract.md").read_text(encoding="utf-8")
+        self.assertIn("technical expertise signal", protocol)
+        self.assertIn("community-resource signal", protocol)
+        self.assertIn("do **not** establish LU1", protocol)
+        self.assertIn("must never compensate for missing LU1/LU2 evidence", phase_b)
+        self.assertIn("not required for qualification", state)
 
     def test_episode_tracing_contract_is_explicit(self):
         protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")
