@@ -26,6 +26,16 @@ EMPTY_LIST_FILES = [
 ]
 
 
+SUFFICIENCY_DIMENSIONS = [
+    "trend_support",
+    "lu_qualification",
+    "contradiction_search",
+    "lineage_resolution",
+    "pyramid_coverage",
+    "marginal_value",
+]
+
+
 def write_json(path: Path, value: object) -> None:
     path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -55,9 +65,10 @@ def main() -> int:
     write_json(
         root / "manifest.json",
         {
-            "protocol_version": "1.6",
+            "protocol_version": "1.7",
             "mode": mode,
             "phase": "A",
+            "study_status": "IN_PROGRESS",
             "study_execution_level": "DESK_RESEARCH",
             "study_execution_basis": [],
             "human_review": "NOT_REVIEWED",
@@ -102,13 +113,16 @@ def main() -> int:
         root / "sufficiency.json",
         {
             "status": "NOT_ASSESSED",
-            "trend_support": "NOT_ASSESSED",
-            "lu_qualification": "NOT_ASSESSED",
-            "contradiction_search": "NOT_ASSESSED",
-            "lineage_resolution": "NOT_ASSESSED",
-            "pyramid_coverage": "NOT_ASSESSED",
-            "marginal_value": "NOT_ASSESSED",
-            "rationale": "",
+            "dimensions": {
+                name: {
+                    "status": "NOT_ASSESSED",
+                    "rationale": "",
+                    "supporting_refs": [],
+                    "next_actions": [],
+                }
+                for name in SUFFICIENCY_DIMENSIONS
+            },
+            "overall_rationale": "",
             "unresolved_actions": [],
         },
     )

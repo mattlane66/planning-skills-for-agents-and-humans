@@ -1,7 +1,8 @@
 {
-  "protocol_version": "1.6",
+  "protocol_version": "1.7",
   "mode": "STANDARD",
   "phase": "A",
+  "study_status": "IN_PROGRESS",
   "study_execution_level": "DESK_RESEARCH",
   "study_execution_basis": [],
   "human_review": "NOT_REVIEWED",

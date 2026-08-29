@@ -10,6 +10,11 @@ The structured research state is the authoritative analytical record. The Markdo
 
 When file tools are available, regenerate the Decision Brief from `decision_outcome.json` with `scripts/render_decision_brief.py` before producing derived views.
 
+After delivery checks pass, set `manifest.phase` to `H`, `manifest.study_status` to
+`COMPLETE`, and `manifest.model_check` to `COMPLETED`. Regenerate the brief after final
+state changes and run deterministic validation again so its completion markers are
+current. COMPLETE does not imply human review; keep `human_review` separate.
+
 PDF and HTML are derived from the same research state and must not introduce new substantive claims.
 
 ## SCOUT
@@ -60,6 +65,9 @@ Verify mechanically where possible:
 - UNKNOWN stays UNKNOWN;
 - contradictions remain visible;
 - derived outputs contain no substantive claim absent from canonical Markdown.
+- internal identities and non-approved source URLs remain absent;
+- PASS, PROVISIONAL, and FAIL shaping records remain visibly distinct;
+- structured operational actions remain complete across formats.
 
 ## Capability honesty
 

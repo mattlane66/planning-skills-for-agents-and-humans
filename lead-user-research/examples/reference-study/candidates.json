@@ -1,0 +1,20 @@
+[
+  {
+    "candidate_id": "C1",
+    "candidate_ref": "LU1",
+    "discovery_basis": "Sustained four-agent handoff infrastructure in the synthetic corpus",
+    "disposition": "QUALIFIED"
+  },
+  {
+    "candidate_id": "C2",
+    "candidate_ref": "LU2",
+    "discovery_basis": "Copied handoff template",
+    "disposition": "CANDIDATE_DERIVATIVE"
+  },
+  {
+    "candidate_id": "C3",
+    "candidate_ref": "LU3",
+    "discovery_basis": "Independent failed ledger attempt",
+    "disposition": "COUNTEREXAMPLE"
+  }
+]

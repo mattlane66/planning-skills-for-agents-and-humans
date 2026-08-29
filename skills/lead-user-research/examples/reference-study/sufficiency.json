@@ -1,0 +1,64 @@
+{
+  "status": "SUFFICIENT",
+  "dimensions": {
+    "trend_support": {
+      "status": "SUFFICIENT",
+      "rationale": "The synthetic trend memo directly records multi-workspace use and manual handoff artifacts, which is adequate for the bounded fictional TEST decision.",
+      "supporting_refs": [
+        "T1",
+        "E1"
+      ],
+      "next_actions": []
+    },
+    "lu_qualification": {
+      "status": "SUFFICIENT",
+      "rationale": "LU1 has separate advancement and benefit evidence with explicit rationales and a sustained-cost signal.",
+      "supporting_refs": [
+        "LU1",
+        "E2",
+        "E3"
+      ],
+      "next_actions": []
+    },
+    "contradiction_search": {
+      "status": "SUFFICIENT",
+      "rationale": "The corpus deliberately includes an independent abandonment case that tests maintenance burden as an alternate explanation.",
+      "supporting_refs": [
+        "LU3",
+        "E5"
+      ],
+      "next_actions": []
+    },
+    "lineage_resolution": {
+      "status": "SUFFICIENT",
+      "rationale": "The copied Beta template is recorded as derivative, while Alpha and Gamma are counted as separate fictional lineages.",
+      "supporting_refs": [
+        "L1",
+        "L2",
+        "L3",
+        "E4"
+      ],
+      "next_actions": []
+    },
+    "pyramid_coverage": {
+      "status": "SUFFICIENT",
+      "rationale": "Every branch in the intentionally closed synthetic corpus was inspected; real-world pyramiding is explicitly deferred to fieldwork.",
+      "supporting_refs": [
+        "SRC2",
+        "SRC3",
+        "SRC4"
+      ],
+      "next_actions": []
+    },
+    "marginal_value": {
+      "status": "SUFFICIENT",
+      "rationale": "Another pass over the same closed fixture cannot change the fictional TEST decision; the next informative work would be real fieldwork.",
+      "supporting_refs": [],
+      "next_actions": []
+    }
+  },
+  "overall_rationale": "The closed synthetic corpus is sufficient to demonstrate a TEST decision and the v1.7 state contract, while explicitly remaining insufficient for any real-market claim.",
+  "unresolved_actions": [
+    "Do not generalize this synthetic study to a real market"
+  ]
+}

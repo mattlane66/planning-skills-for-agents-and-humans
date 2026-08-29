@@ -1,0 +1,14 @@
+[
+  {
+    "search_id": "Q1",
+    "branch": "Closed synthetic corpus",
+    "query_or_route": "Inspect the bundled trend memo and all three operator records",
+    "result_refs": [
+      "SRC1",
+      "SRC2",
+      "SRC3",
+      "SRC4"
+    ],
+    "next_branch": "Real fieldwork is outside this fixture"
+  }
+]

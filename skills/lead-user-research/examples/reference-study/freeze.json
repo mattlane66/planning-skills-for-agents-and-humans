@@ -1,0 +1,11 @@
+{
+  "status": "FROZEN",
+  "frozen_at": "2026-08-28T19:15:00+00:00",
+  "evidence_count": 5,
+  "qualified_lu_count": 1,
+  "independent_lineage_count": 2,
+  "unresolved_gaps": [
+    "All real-world prevalence, benefit, and feasibility questions remain outside this synthetic demonstration"
+  ],
+  "post_freeze_evidence": []
+}

@@ -20,6 +20,10 @@ Before freezing, write `sufficiency.json` and assess each dimension as NOT_ASSES
 - pyramid coverage;
 - marginal value of another proportionate evidence batch.
 
+For each dimension record its own rationale, supporting structured refs when
+available, and exact next actions when insufficient. Do not rely on one overall
+rationale to justify six separate judgments.
+
 Do not substitute a source/user quota for this judgment. SUFFICIENT means the corpus is adequate for the intended decision and another proportionate batch is unlikely to change the decision enough to justify delaying synthesis.
 
 If a consequential branch now requires direct contact, record the fieldwork referral rather than pretending more public search resolves it.
