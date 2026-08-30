@@ -158,6 +158,8 @@ If you do **not** have file tools:
 - execute one phase at a time;
 - end every phase with a complete **STATE PACKET** containing all authoritative state changed in that phase;
 - use the latest STATE PACKET as authoritative input to the next phase;
+- for longer studies, prefer starting a fresh chat for each new phase when practical; begin that chat with this portable prompt plus the latest complete STATE PACKET, then run only the next valid phase;
+- continuing in the same chat is allowed, but the latest STATE PACKET—not earlier conversational context—remains authoritative;
 - do not claim durable persistence or deterministic validation.
 
 Recommended state families:
