@@ -257,6 +257,21 @@ def score_workspace(
     if missing:
         return checks, failures, {"artifact_root": case["artifact_root"]}
 
+    if adapter == "command":
+        runtime_digest = artifact_digest(artifact_root)
+        reference_digest = artifact_digest(REFERENCE_STUDY)
+        add_check(
+            checks,
+            failures,
+            "reference-fixture-provenance",
+            runtime_digest != reference_digest,
+            (
+                "blind runtime artifacts were produced independently of the completed reference fixture"
+                if runtime_digest != reference_digest
+                else "blind runtime artifacts exactly copy the completed reference fixture"
+            ),
+        )
+
     validator = workspace / "skills" / "lead-user-research" / "scripts" / "validate_study.py"
     validation = subprocess.run(
         [sys.executable, str(validator), str(artifact_root)],
@@ -333,21 +348,6 @@ def score_workspace(
             f"and evidence bases={sorted(expected_evidence_bases)}"
         ),
     )
-
-    if adapter == "command":
-        runtime_digest = artifact_digest(artifact_root)
-        reference_digest = artifact_digest(REFERENCE_STUDY)
-        add_check(
-            checks,
-            failures,
-            "reference-fixture-provenance",
-            runtime_digest != reference_digest,
-            (
-                "blind runtime artifacts were produced independently of the completed reference fixture"
-                if runtime_digest != reference_digest
-                else "blind runtime artifacts exactly copy the completed reference fixture"
-            ),
-        )
 
     safe_sources = isinstance(sources, list) and bool(sources) and all(
         isinstance(row, dict)
