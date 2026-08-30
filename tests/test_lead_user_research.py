@@ -1365,5 +1365,102 @@ class LeadUserResearchTests(unittest.TestCase):
         self.assertIn("Parts × Requirements", shaping)
 
 
+    def test_act_decisive_lu_and_transitive_finding_require_credible_trend(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+
+            action = {
+                "action_id": "A1",
+                "action": "Run the bounded next validation step.",
+                "owner": "Research lead",
+                "timebox": "One week",
+                "deliverable": "Evidence-linked validation readout",
+                "evidence_to_collect": ["Decision-critical evidence"],
+                "success_condition": "The decisive evidence remains supported.",
+                "stop_condition": "Stop if the decisive evidence is contradicted.",
+                "decision_at_end": "Reassess ACT, TEST, HOLD, or REJECT.",
+            }
+            outcome = {
+                "status": "ACT",
+                "recommendation": "Act on the currently supported opportunity.",
+                "why": ["LU1 is the decisive evidence."],
+                "decisive_finding_refs": [],
+                "decisive_lu_refs": ["LU1"],
+                "critical_uncertainties": ["Whether the trend remains credible."],
+                "action_now": [action],
+                "change_conditions": ["Reconsider if the underlying trend is not supported."],
+                "what_evidence_supports": ["A future-facing Lead User need."],
+                "what_evidence_does_not_support": ["Population prevalence."],
+                "contradictions": [],
+                "recommended_next_evidence": ["Monitor the trend evidence."],
+                "priority_human_review": ["Review the decisive LU and its trend."],
+            }
+            self.write_json(workspace, "decision_outcome.json", outcome)
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["phase"] = "G"
+            manifest["study_status"] = "DECIDED"
+            manifest["interpretive_status"] = "STABLE"
+            self.write_json(workspace, "manifest.json", manifest)
+
+            trends = json.loads((workspace / "trends.json").read_text(encoding="utf-8"))
+            trends[0]["status"] = "SPECULATIVE"
+            self.write_json(workspace, "trends.json", trends)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn(
+                "ACT decisive LU LU1 requires an evidence-backed VERIFIED or INFERRED trend",
+                result.stderr,
+            )
+
+            self.write_json(
+                workspace,
+                "findings.json",
+                [
+                    {
+                        "finding_id": "F1",
+                        "claim": "The decisive claim relies on LU1.",
+                        "epistemic_label": "VERIFIED",
+                        "evidence_refs": [],
+                        "lu_refs": ["LU1"],
+                        "contradictions": [],
+                        "confidence_rationale": "Transitive LU support only.",
+                    }
+                ],
+            )
+            outcome["decisive_finding_refs"] = ["F1"]
+            outcome["decisive_lu_refs"] = []
+            self.write_json(workspace, "decision_outcome.json", outcome)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn(
+                "ACT decisive finding F1 lacks a transitive atomic evidence path",
+                result.stderr,
+            )
+
+    def test_no_file_packets_are_cumulative_and_project_onboarding_is_self_contained(self):
+        skill = (LEAD / "SKILL.md").read_text(encoding="utf-8")
+        portable = (LEAD / "PORTABLE_PROMPT.md").read_text(encoding="utf-8")
+        quick = (LEAD / "QUICKSTART.md").read_text(encoding="utf-8")
+        project = (LEAD / "PROJECT_QUICKSTART.md").read_text(encoding="utf-8")
+        readme = (LEAD / "README.md").read_text(encoding="utf-8")
+
+        self.assertIn("cumulative STATE PACKET", skill)
+        self.assertIn("including unchanged authoritative state from earlier phases", skill)
+        self.assertIn("cumulative STATE PACKET", portable)
+        self.assertIn("including unchanged state from earlier phases", quick)
+
+        for required in [
+            "references/state-contract.md",
+            "references/phase-handoff.md",
+            "scripts/init_study.py",
+        ]:
+            self.assertIn(required, project)
+            self.assertIn(required, quick)
+        self.assertIn("PROJECT_QUICKSTART.md", readme)
+        self.assertIn("PROJECT_QUICKSTART.md", quick)
+
+
 if __name__ == "__main__":
     unittest.main()
