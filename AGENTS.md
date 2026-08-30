@@ -23,6 +23,8 @@ advanced users, unusually high-benefit needs, pyramiding, or advanced analogs,
 `lead-user-research` may precede framing as an upstream evidence move. It is not a
 mandatory first stage and is not a generic synonym for customer or market research.
 
+For a plain-English Codex walkthrough, see `lead-user-research/CODEX_QUICKSTART.md`.
+
 Do not write production code unless the user asks for implementation and a selected slice or equally clear accepted boundary exists.
 
 ## Shaping loop
