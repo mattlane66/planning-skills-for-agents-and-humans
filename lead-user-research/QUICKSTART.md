@@ -6,6 +6,59 @@ If you landed in this folder and are unsure where to start, use **[README.md](RE
 
 For an ordinary chat product with no installation step, copy **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** into a new conversation. You do **not** need to paste the full protocol into every conversation.
 
+## Using this with Codex
+
+If you are using Codex and do not want to manage the research files or Python scripts yourself, use this simple flow:
+
+1. Open this repository in Codex.
+2. Start a new Codex thread with the repository available.
+3. Tell Codex to use `lead-user-research/SKILL.md` and create a new study under `research/[study-name]`.
+4. Give it your research domain, what you want to understand, and the human decision the research should inform. Add the target market or innovation altitude if you know them; otherwise they may remain unknown or be proposed as **PROVISIONAL**.
+5. When web or browser access is available, allow it so Codex can investigate real public sources, people, behavior, artifacts, communities, and advanced analogs.
+6. Let Codex perform the **current valid phase**, persist the study state, run the repository's validation/controller checks when supported, and return the standard phase handoff.
+7. If the handoff recommends another phase, say: **"Continue with the next valid phase."** Repeat until the study reaches its decision or delivery stop.
+8. Read the generated Decision Brief. You do not need to edit or interpret the JSON files yourself unless you want to audit the research record.
+
+Copy/paste starter:
+
+```text
+Use the Lead User Research system in `lead-user-research/`.
+
+Read `lead-user-research/SKILL.md` and follow it as the authoritative execution instructions.
+
+Run a STANDARD study.
+
+Research Domain / Problem Space:
+[insert]
+
+Target Market:
+[insert, or leave unknown]
+
+What do we want to understand?
+[insert]
+
+What human decision should this research help inform?
+[insert]
+
+Desired innovation altitude:
+[insert, or leave unknown]
+
+Create the study in `research/[study-name]`.
+
+Use real public evidence and real people where available. Preserve links, citations,
+evidence lineage, uncertainties, contradictions, and source-coverage limitations.
+
+Run the current valid phase, persist the research state, validate it as required,
+and end with the repository's standard phase handoff. Do not modify the Lead User
+Research methodology itself.
+```
+
+Codex is intentionally **phase-bounded** here. Prefer:
+
+> current phase → persist and validate → phase handoff → continue
+
+over asking one long session to run the entire study from memory.
+
 ## Fastest start
 
 Give your AI the research brief below. You can paste it directly or use [study-templates/research-input.md](study-templates/research-input.md).
