@@ -1,0 +1,45 @@
+name: Temporary portable prompt portal regeneration
+
+on:
+  push:
+    branches:
+      - docs/portable-chat-phase-restarts
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+          fetch-depth: 0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Regenerate documentation portal
+        working-directory: site
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Commit generated portal
+        run: |
+          git add site/index.html
+          if git diff --cached --quiet; then
+            echo "Portal already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Regenerate documentation portal"
+          git push origin HEAD:docs/portable-chat-phase-restarts
