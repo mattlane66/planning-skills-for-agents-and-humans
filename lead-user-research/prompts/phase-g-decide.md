@@ -117,8 +117,11 @@ The rendered Decision Brief is derived from structured state and must not introd
 
 The brief must link decisive F## / LU## refs to privacy-safe E### / SRC## drill-down.
 Never fall back to internal `user_entity`, reproduce raw excerpts by default, or expose
-a source URL unless `outward_citation_allowed` is true. Distinguish PASS fitness
-conditions from PROVISIONAL or FAIL criteria and label mechanisms as candidates.
+a source URL unless `outward_citation_allowed` is true and the URL is safe HTTP(S).
+Distinguish PASS fitness conditions from PROVISIONAL or FAIL criteria, show the
+accepted x → f() → y frame, and report each mechanism's actual
+CANDIDATE/SELECTED/REJECTED state plus human-selection provenance. Never relabel a
+candidate as selected in prose.
 
 ### Decision status
 

@@ -95,7 +95,11 @@ For every M## record a binary `requirement_fit` result for every frozen PASS R##
 
 Do not alter x, y, or requirements merely to make a preferred mechanism win.
 
-Selection is optional. If a human explicitly selects a shape, mark it SELECTED and run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**:
+Selection is optional. Every M## records `selected_by_human` and `selection_note`.
+The model must leave candidates and rejected mechanisms with
+`selected_by_human = false`. If a human explicitly selects a shape, mark it SELECTED,
+set `selected_by_human = true`, record the human's bounded selection rationale in
+`selection_note`, and run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**:
 
 - decompose the selected shape into concrete parts;
 - map every part to the R## it serves;
@@ -103,7 +107,8 @@ Selection is optional. If a human explicitly selects a shape, mark it SELECTED a
 - expose R with no supporting part;
 - call out duplicated mechanisms or a single part carrying disproportionate responsibility.
 
-A selected shape cannot remain selected with an unrun rotation.
+A selected shape cannot remain selected without explicit human provenance or with an
+unrun rotation.
 
 ## Write state
 

@@ -46,7 +46,7 @@
   ],
   "what_evidence_does_not_support": [
     "Any claim about real users, prevalence, market size, willingness to pay, or production feasibility",
-    "Selection of M1 or M2 as a product solution"
+    "Selection of M1 or M2 as a production product solution; M1 is selected only as a fictional prototype-comparison arm"
   ],
   "contradictions": [
     "The independent counterexample shows that a handoff artifact can cost more to maintain than it saves.",

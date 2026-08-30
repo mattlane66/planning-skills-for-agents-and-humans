@@ -59,6 +59,14 @@ def main() -> int:
     args = parser.parse_args()
 
     root = Path(args.workspace)
+    if root.is_symlink():
+        parser.error(f"workspace must not be a symlink: {root}")
+    if root.exists() and not root.is_dir():
+        parser.error(f"workspace exists and is not a directory: {root}")
+    if root.is_dir() and any(root.iterdir()):
+        parser.error(
+            f"workspace is not empty: {root}; choose a new or empty directory so existing study state is not overwritten"
+        )
     root.mkdir(parents=True, exist_ok=True)
     (root / "outputs").mkdir(exist_ok=True)
 
@@ -69,6 +77,7 @@ def main() -> int:
         root / "manifest.json",
         {
             "protocol_version": "1.7",
+            "fixture_type": "NONE",
             "mode": mode,
             "phase": "A",
             "study_status": "IN_PROGRESS",
@@ -76,6 +85,7 @@ def main() -> int:
             "study_execution_basis": [],
             "human_review": "NOT_REVIEWED",
             "deterministic_validation": "NOT_RUN",
+            "interpretation_completion": "NOT_STARTED",
             "interpretive_status": "PROVISIONAL",
             "model_check": "NOT_RUN",
             "created_at": now,
@@ -137,6 +147,7 @@ def main() -> int:
         root / "sufficiency.json",
         {
             "status": "NOT_ASSESSED",
+            "repair_status": "NOT_REQUIRED",
             "dimensions": {
                 name: {
                     "status": "NOT_ASSESSED",

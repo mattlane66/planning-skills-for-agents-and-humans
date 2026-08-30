@@ -481,12 +481,24 @@ required_rewrites = {
     bundle / "AGENTS.md": ["${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml", "${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md", "${CLAUDE_PLUGIN_ROOT}/hooks/"],
     bundle / "skills/sketch-reconciliation/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/templates/sketch-reconciliation.md"],
     bundle / "skills/feed-planning-context/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/AGENTS.md"],
+    bundle / "commands/lead-user-interpret.md": ["${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/prompts/phase-e-interpret.md"],
 }
 for document, expected in required_rewrites.items():
     text = document.read_text(encoding="utf-8")
     absent = [value for value in expected if value not in text]
     if absent:
         raise SystemExit(f"Missing rewritten references in {document}: {absent}")
+
+bare_lead_user_refs = []
+for document in bundle.glob("commands/lead-user*.md"):
+    for line_number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), start=1):
+        if "lead-user-research/" in line and "${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/" not in line:
+            bare_lead_user_refs.append(f"{document.relative_to(bundle)}:{line_number}")
+if bare_lead_user_refs:
+    raise SystemExit(
+        "Bare Lead User repository paths remain in bundled commands: "
+        + ", ".join(bare_lead_user_refs)
+    )
 PY
   then
     pass "Claude bundle support references are self-contained"

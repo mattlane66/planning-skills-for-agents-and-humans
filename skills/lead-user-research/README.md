@@ -53,6 +53,11 @@ The human-facing output is a Decision Brief organized around:
 
 The underlying research record remains evidence-traceable through trends, sources, atomic evidence, Lead User Need Episodes, lineage, hypothesis tests, observability decisions, AI analysis provenance, findings, needs, and—only when justified—Fit Check requirements and candidate mechanisms.
 
+The initializer refuses non-empty workspaces. The validator also requires the
+hypothesis, observability, AI-analysis, candidate, search, and change registries even
+when they are empty; records cannot disappear merely because a phase produced a
+negative result.
+
 Each recommended action names an owner or accountable role, timebox, deliverable,
 evidence to collect, success and stop conditions, and the decision to make afterward.
 Decisive findings link to privacy-safe evidence drill-down without exposing internal

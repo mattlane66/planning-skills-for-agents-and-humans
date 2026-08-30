@@ -61,6 +61,7 @@ Record separately:
 
 If and only if `sufficiency.status = SUFFICIENT` and the evidence corpus is structurally coherent enough for synthesis:
 
+- set `sufficiency.repair_status = NOT_REQUIRED`;
 - set `freeze.status = FROZEN`;
 - record exact evidence, qualified-LU, and independent-lineage counts from current state;
 - record unresolved gaps;
@@ -71,8 +72,13 @@ If not:
 
 - leave OPEN;
 - set sufficiency to INSUFFICIENT on the relevant dimensions;
+- set `sufficiency.repair_status = REQUIRED` before returning to Phase B or C;
 - mark interpretive status PROVISIONAL;
 - identify the exact highest-information evidence work or fieldwork referral needed.
+
+When Phase D follows a completed repair, reassess all six dimensions rather than
+copying the prior result. A still-insufficient result starts a new repair cycle by
+setting `repair_status = REQUIRED`; a sufficient result clears it to `NOT_REQUIRED`.
 
 ## Post-freeze rule
 

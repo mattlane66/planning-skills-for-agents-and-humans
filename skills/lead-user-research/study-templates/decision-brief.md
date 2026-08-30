@@ -69,6 +69,20 @@ Include only when at least one need passed the Concept Generation Gate.
 
 ### N## — [supported need]
 
+**Shaping frame (x → f() → y)**
+
+- Frame: SF## — PROVISIONAL | ACCEPTED
+- x — trigger/context: ...
+- x — current approach: ...
+- x — current result: ...
+- x — breakdowns: ...
+- f(): UNSPECIFIED
+- y — desired outcome: ...
+- Gap: ...
+- Boundaries: ...
+- Human acceptance: ...
+- Acceptance note: ...
+
 **Passing fitness conditions**
 
 - R## — ...
@@ -77,9 +91,13 @@ Include only when at least one need passed the Concept Generation Gate.
 
 - R## — PROVISIONAL | FAIL — ...
 
-**Candidate mechanisms — not selected solutions**
+**Candidate and selected mechanisms**
 
-- M## — ...
+- M## — ... — CANDIDATE | SELECTED | REJECTED
+- Selected by human: true | false
+- Selection note: ...
+- Rotation status: NOT_RUN | RUN
+- Rotated parts × requirements when selected
 
 ## Discovery coverage
 
@@ -113,6 +131,7 @@ Include only when at least one need passed the Concept Generation Gate.
 
 ## Study execution
 
+- Fixture type: NONE | SYNTHETIC_REFERENCE
 - Execution level: DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT
 - Basis: ...
 
@@ -120,6 +139,7 @@ Include only when at least one need passed the Concept Generation Gate.
 
 - Human review: REVIEWED | NOT_REVIEWED
 - Deterministic validation: PASSED | FAILED | NOT_RUN
+- Interpretation completion: NOT_STARTED | COMPLETED
 - Interpretive status: STABLE | PROVISIONAL
 - Model checklist: COMPLETED | NOT_RUN
 - State fingerprint: sha256:...

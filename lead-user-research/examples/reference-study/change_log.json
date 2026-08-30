@@ -1,11 +1,13 @@
 [
   {
+    "change_id": "CH1",
     "changed_at": "2026-08-28T19:15:00+00:00",
     "phase": "D",
     "change": "Froze the five-item synthetic evidence corpus after recording sufficiency by dimension.",
     "reason": "Additional inspection of the deliberately closed fixture had no expected decision value."
   },
   {
+    "change_id": "CH2",
     "changed_at": "2026-08-28T19:30:00+00:00",
     "phase": "G",
     "change": "Recorded a TEST decision and one bounded operational action.",

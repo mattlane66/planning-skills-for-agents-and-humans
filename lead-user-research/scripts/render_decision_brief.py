@@ -9,6 +9,7 @@ import re
 from pathlib import Path
 from typing import Any
 
+from report_safety import identity_pattern, markdown_escape, safe_outward_url
 from study_fingerprint import study_fingerprint
 
 
@@ -19,18 +20,44 @@ def load(root: Path, name: str, default: Any) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def bullets(values: list[Any], empty: str = "None recorded.") -> str:
+def bullets(
+    values: list[Any],
+    empty: str = "None recorded.",
+    *,
+    trusted_markdown: bool = False,
+) -> str:
     if not values:
-        return f"- {empty}"
-    return "\n".join(f"- {value}" for value in values)
+        return f"- {markdown_escape(empty)}"
+    return "\n".join(
+        f"- {value if trusted_markdown else markdown_escape(value)}"
+        for value in values
+    )
+
+
+def safe_join(values: Any, separator: str = ", ", empty: str = "none") -> str:
+    if not isinstance(values, list) or not values:
+        return markdown_escape(empty)
+    return separator.join(markdown_escape(value) for value in values)
+
+
+def safe_token(value: object) -> str:
+    token = str(value)
+    if re.fullmatch(r"[A-Za-z0-9_-]+", token):
+        return token
+    return markdown_escape(token)
 
 
 def indexed(rows: list[dict[str, Any]], key: str) -> dict[str, dict[str, Any]]:
-    return {row.get(key): row for row in rows if isinstance(row, dict) and row.get(key)}
+    return {
+        row[key]: row
+        for row in rows
+        if isinstance(row, dict) and isinstance(row.get(key), str) and row.get(key)
+    }
 
 
 def ref_link(ref: str) -> str:
-    return f"[{ref}](#{ref.lower()})"
+    anchor = re.sub(r"[^a-z0-9_-]", "", ref.lower()) or "record"
+    return f"[{markdown_escape(ref)}](#{anchor})"
 
 
 def public_lu_label(row: dict[str, Any]) -> str:
@@ -42,22 +69,22 @@ def public_lu_label(row: dict[str, Any]) -> str:
 
 def source_citation(source: dict[str, Any]) -> str:
     title = str(source.get("title") or source.get("source_id") or "Source")
-    url = source.get("url")
-    if source.get("outward_citation_allowed") is True and isinstance(url, str) and url:
-        return f"[{title}]({url})"
-    return f"{source.get('source_id', 'Source')} (citation withheld)"
+    url = safe_outward_url(source.get("url"))
+    if source.get("outward_citation_allowed") is True and url:
+        return f"[{markdown_escape(title)}]({url})"
+    return f"{markdown_escape(source.get('source_id', 'Source'))} (citation withheld)"
 
 
 def render_action(action: dict[str, Any]) -> list[str]:
-    action_id = action.get("action_id", "A?")
-    lines = [f"### {action_id} — {action.get('action', 'Action missing')}", ""]
+    action_id = markdown_escape(action.get("action_id", "A?"))
+    lines = [f"### {action_id} — {markdown_escape(action.get('action', 'Action missing'))}", ""]
     lines += [
-        f"- **Owner:** {action.get('owner', 'UNKNOWN')}",
-        f"- **Timebox:** {action.get('timebox', 'UNKNOWN')}",
-        f"- **Deliverable:** {action.get('deliverable', 'UNKNOWN')}",
-        f"- **Success condition:** {action.get('success_condition', 'UNKNOWN')}",
-        f"- **Stop condition:** {action.get('stop_condition', 'UNKNOWN')}",
-        f"- **Decision at end:** {action.get('decision_at_end', 'UNKNOWN')}",
+        f"- **Owner:** {markdown_escape(action.get('owner', 'UNKNOWN'))}",
+        f"- **Timebox:** {markdown_escape(action.get('timebox', 'UNKNOWN'))}",
+        f"- **Deliverable:** {markdown_escape(action.get('deliverable', 'UNKNOWN'))}",
+        f"- **Success condition:** {markdown_escape(action.get('success_condition', 'UNKNOWN'))}",
+        f"- **Stop condition:** {markdown_escape(action.get('stop_condition', 'UNKNOWN'))}",
+        f"- **Decision at end:** {markdown_escape(action.get('decision_at_end', 'UNKNOWN'))}",
         "",
         "**Evidence to collect**",
         "",
@@ -75,12 +102,14 @@ def redact_private_entities(rendered: str, episodes: list[dict[str, Any]]) -> st
         internal = row.get("user_entity")
         if not isinstance(internal, str) or not internal.strip():
             continue
-        rendered = re.sub(
-            re.escape(internal.strip()),
-            lambda _match: public_lu_label(row),
-            rendered,
-            flags=re.IGNORECASE,
-        )
+        replacement = markdown_escape(public_lu_label(row))
+        rendered = identity_pattern(internal).sub(lambda _match: replacement, rendered)
+        escaped_internal = markdown_escape(internal)
+        if escaped_internal != internal:
+            rendered = identity_pattern(escaped_internal).sub(
+                lambda _match: replacement,
+                rendered,
+            )
     return rendered
 
 
@@ -100,6 +129,7 @@ def main() -> int:
     evidence = load(root, "evidence.json", [])
     sources = load(root, "sources.json", [])
     needs = load(root, "needs.json", [])
+    shaping_frames = load(root, "shaping_frame.json", [])
     criteria = load(root, "fit_criteria.json", [])
     concepts = load(root, "concepts.json", [])
     hypotheses = load(root, "hypotheses.json", [])
@@ -112,12 +142,17 @@ def main() -> int:
     source_by_id = indexed(sources, "source_id")
 
     lines: list[str] = ["# Lead User Research — Decision Brief", ""]
-    lines += ["## Decision", "", str(decision.get("decision") or "UNKNOWN"), ""]
+    if manifest.get("fixture_type") == "SYNTHETIC_REFERENCE":
+        lines += [
+            "> **Synthetic reference fixture — not empirical human or market evidence.**",
+            "",
+        ]
+    lines += ["## Decision", "", markdown_escape(decision.get("decision") or "UNKNOWN"), ""]
     status = outcome.get("status") or "NOT_DECIDED"
     lines += [
-        f"## Recommendation — {status}",
+        f"## Recommendation — {safe_token(status)}",
         "",
-        str(outcome.get("recommendation") or "No recommendation recorded."),
+        markdown_escape(outcome.get("recommendation") or "No recommendation recorded."),
         "",
     ]
     lines += ["## Why", "", bullets(outcome.get("why", [])), ""]
@@ -127,17 +162,24 @@ def main() -> int:
     for ref in outcome.get("decisive_finding_refs", []):
         row = finding_by_id.get(ref, {})
         decisive_rows.append(
-            f"**{ref_link(ref)} — {row.get('epistemic_label', 'UNKNOWN')}** — "
-            f"{row.get('claim', 'Missing finding text')}"
+            f"**{ref_link(ref)} — {markdown_escape(row.get('epistemic_label', 'UNKNOWN'))}** — "
+            f"{markdown_escape(row.get('claim', 'Missing finding text'))}"
         )
     for ref in outcome.get("decisive_lu_refs", []):
         row = lu_by_id.get(ref, {})
         decisive_rows.append(
-            f"**{ref_link(ref)} — {row.get('status', 'UNKNOWN')}** — "
-            f"{row.get('need_statement', 'Missing LU need statement')} "
-            f"({public_lu_label(row)})"
+            f"**{ref_link(ref)} — {markdown_escape(row.get('status', 'UNKNOWN'))}** — "
+            f"{markdown_escape(row.get('need_statement', 'Missing LU need statement'))} "
+            f"({markdown_escape(public_lu_label(row))})"
         )
-    lines += [bullets(decisive_rows, "No decisive evidence refs recorded."), ""]
+    lines += [
+        bullets(
+            decisive_rows,
+            "No decisive evidence refs recorded.",
+            trusted_markdown=True,
+        ),
+        "",
+    ]
 
     lines += ["## Critical uncertainty", "", bullets(outcome.get("critical_uncertainties", [])), ""]
     lines += ["## Action now", ""]
@@ -159,16 +201,17 @@ def main() -> int:
         lines += [
             bullets(
                 [
-                    f"{row.get('hypothesis_id', 'H?')} — {row.get('status', 'UNTESTED')} — "
-                    f"{row.get('claim', 'Missing hypothesis')}"
+                    f"{safe_token(row.get('hypothesis_id', 'H?'))} — {safe_token(row.get('status', 'UNTESTED'))} — "
+                    f"{markdown_escape(row.get('claim', 'Missing hypothesis'))}"
                     + (
-                        f" — {row.get('update_rationale')}"
+                        f" — {markdown_escape(row.get('update_rationale'))}"
                         if row.get("update_rationale")
                         else ""
                     )
                     for row in hypotheses
                     if isinstance(row, dict)
-                ]
+                ],
+                trusted_markdown=True,
             ),
             "",
         ]
@@ -182,15 +225,16 @@ def main() -> int:
         lines += [
             bullets(
                 [
-                    f"{row.get('observability_id', 'O?')} — {row.get('status', 'UNKNOWN')} — "
-                    f"{row.get('question', 'Missing question')}"
+                    f"{safe_token(row.get('observability_id', 'O?'))} — {safe_token(row.get('status', 'UNKNOWN'))} — "
+                    f"{markdown_escape(row.get('question', 'Missing question'))}"
                     + (
-                        f" — Fieldwork: {row.get('fieldwork_referral')}"
+                        f" — Fieldwork: {markdown_escape(row.get('fieldwork_referral'))}"
                         if row.get("fieldwork_referral")
                         else ""
                     )
                     for row in critical_observability
-                ]
+                ],
+                trusted_markdown=True,
             ),
             "",
         ]
@@ -200,27 +244,69 @@ def main() -> int:
         lines += [
             bullets(
                 [
-                    f"{row.get('analysis_run_id', 'AR?')} — "
-                    f"{row.get('model', 'UNKNOWN')} {row.get('model_version', '')}".strip()
+                    f"{safe_token(row.get('analysis_run_id', 'AR?'))} — "
+                    f"{markdown_escape(row.get('model', 'UNKNOWN'))} {markdown_escape(row.get('model_version', ''))}".strip()
                     + f" — sampled validation: "
-                    f"{(row.get('sampled_validation') or {}).get('status', 'NOT_ASSESSED')}"
+                    f"{safe_token((row.get('sampled_validation') or {}).get('status', 'NOT_ASSESSED'))}"
                     for row in analysis_runs
                     if isinstance(row, dict)
-                ]
+                    and isinstance(row.get("sampled_validation") or {}, dict)
+                ],
+                trusted_markdown=True,
             ),
             "",
         ]
 
-    shaped = [need for need in needs if need.get("concept_gate_status") == "PASS"]
+    shaped = [
+        need
+        for need in needs
+        if isinstance(need, dict) and need.get("concept_gate_status") == "PASS"
+    ]
     if shaped or criteria or concepts:
         lines += ["## Opportunity shaping", ""]
         for need in shaped:
             need_id = need.get("need_id")
-            lines += [f"### {need_id} — {need.get('statement', 'Need statement missing')}", ""]
-            reqs = [row for row in criteria if row.get("need_id") == need_id]
-            mechanisms = [row for row in concepts if row.get("need_id") == need_id]
+            lines += [
+                f"### {safe_token(need_id)} — {markdown_escape(need.get('statement', 'Need statement missing'))}",
+                "",
+            ]
+            frames = [
+                row
+                for row in shaping_frames
+                if isinstance(row, dict) and row.get("need_id") == need_id
+            ]
+            reqs = [
+                row
+                for row in criteria
+                if isinstance(row, dict) and row.get("need_id") == need_id
+            ]
+            mechanisms = [
+                row
+                for row in concepts
+                if isinstance(row, dict) and row.get("need_id") == need_id
+            ]
             passing_reqs = [row for row in reqs if row.get("status") == "PASS"]
             nonpassing_reqs = [row for row in reqs if row.get("status") != "PASS"]
+            if frames:
+                lines += ["**Shaping frame (x → f() → y)**", ""]
+                for frame in frames:
+                    x = frame.get("x") if isinstance(frame.get("x"), dict) else {}
+                    f_value = frame.get("f") if isinstance(frame.get("f"), dict) else {}
+                    y = frame.get("y") if isinstance(frame.get("y"), dict) else {}
+                    lines += [
+                        f"- Frame: {safe_token(frame.get('frame_id', 'SF?'))} — {safe_token(frame.get('status', 'UNKNOWN'))}",
+                        f"- x — trigger/context: {markdown_escape(x.get('trigger_or_context', 'UNKNOWN'))}",
+                        f"- x — current approach: {markdown_escape(x.get('current_approach', 'UNKNOWN'))}",
+                        f"- x — current result: {markdown_escape(x.get('current_result', 'UNKNOWN'))}",
+                        f"- x — breakdowns: {safe_join(x.get('breakdowns', []), '; ', 'none recorded')}",
+                        f"- f(): {safe_token(f_value.get('status', 'UNKNOWN'))}",
+                        f"- y — desired outcome: {markdown_escape(y.get('desired_outcome', 'UNKNOWN'))}",
+                        f"- Gap: {markdown_escape(frame.get('gap', 'UNKNOWN'))}",
+                        f"- Boundaries: {safe_join(frame.get('boundaries', []), '; ', 'none recorded')}",
+                        f"- Human acceptance: {safe_token(frame.get('accepted_by_human', False))}",
+                        f"- Acceptance note: {markdown_escape(frame.get('acceptance_note') or 'none recorded')}",
+                        "",
+                    ]
             lines += ["**Passing fitness conditions**", ""]
             lines += [
                 bullets(
@@ -245,17 +331,34 @@ def main() -> int:
                     "",
                 ]
             if mechanisms:
-                lines += ["**Candidate mechanisms — not selected solutions**", ""]
+                lines += ["**Candidate and selected mechanisms**", ""]
                 for mechanism in mechanisms:
                     lines += [
-                        f"#### {mechanism.get('concept_id')} — {mechanism.get('mechanism')}",
+                        f"#### {safe_token(mechanism.get('concept_id', 'M?'))} — {markdown_escape(mechanism.get('mechanism'))}",
                         "",
-                        f"- Requirements: {', '.join(mechanism.get('requirement_ids', [])) or 'none'}",
-                        f"- Assumptions: {'; '.join(mechanism.get('assumptions', [])) or 'none recorded'}",
-                        f"- Risks: {'; '.join(mechanism.get('risks', [])) or 'none recorded'}",
-                        f"- Evidence needed next: {'; '.join(mechanism.get('evidence_needed_next', [])) or 'none recorded'}",
+                        f"- Selection status: {safe_token(mechanism.get('selection_status', 'UNKNOWN'))}",
+                        f"- Selected by human: {safe_token(mechanism.get('selected_by_human', False))}",
+                        f"- Selection note: {markdown_escape(mechanism.get('selection_note') or 'none recorded')}",
+                        f"- Rotation status: {safe_token(mechanism.get('rotation_status', 'UNKNOWN'))}",
+                        f"- Requirements: {safe_join(mechanism.get('requirement_ids', []))}",
+                        f"- Assumptions: {safe_join(mechanism.get('assumptions', []), '; ', 'none recorded')}",
+                        f"- Risks: {safe_join(mechanism.get('risks', []), '; ', 'none recorded')}",
+                        f"- Evidence needed next: {safe_join(mechanism.get('evidence_needed_next', []), '; ', 'none recorded')}",
                         "",
                     ]
+                    parts = mechanism.get("parts", [])
+                    if isinstance(parts, list) and parts:
+                        lines += ["**Rotated parts × requirements**", ""]
+                        lines += [
+                            bullets(
+                                [
+                                    f"{part.get('part_id', 'P?')} — {part.get('mechanism', 'Missing mechanism')} — requirements: {', '.join(part.get('requirement_ids', [])) or 'none'}"
+                                    for part in parts
+                                    if isinstance(part, dict)
+                                ]
+                            ),
+                            "",
+                        ]
 
     lines += ["## Discovery coverage", ""]
     lines += ["### Likely overrepresented", "", bullets(coverage.get("likely_overrepresented", [])), ""]
@@ -269,20 +372,22 @@ def main() -> int:
 
     lines += ["## Study execution", ""]
     lines += [
-        f"- Run mode: {manifest.get('mode', 'UNKNOWN')}",
-        f"- Current phase: {manifest.get('phase', 'UNKNOWN')}",
-        f"- Study status: {manifest.get('study_status', 'UNKNOWN')}",
-        f"- Execution level: {manifest.get('study_execution_level', 'UNKNOWN')}",
-        f"- Basis: {', '.join(manifest.get('study_execution_basis', [])) or 'none recorded'}",
+        f"- Fixture type: {safe_token(manifest.get('fixture_type', 'UNKNOWN'))}",
+        f"- Run mode: {safe_token(manifest.get('mode', 'UNKNOWN'))}",
+        f"- Current phase: {safe_token(manifest.get('phase', 'UNKNOWN'))}",
+        f"- Study status: {safe_token(manifest.get('study_status', 'UNKNOWN'))}",
+        f"- Execution level: {safe_token(manifest.get('study_execution_level', 'UNKNOWN'))}",
+        f"- Basis: {safe_join(manifest.get('study_execution_basis', []), ', ', 'none recorded')}",
         "",
     ]
 
     lines += ["## Verification state", ""]
     lines += [
-        f"- Human review: {manifest.get('human_review', 'UNKNOWN')}",
-        f"- Deterministic validation: {manifest.get('deterministic_validation', 'UNKNOWN')}",
-        f"- Interpretive status: {manifest.get('interpretive_status', 'UNKNOWN')}",
-        f"- Model checklist: {manifest.get('model_check', 'UNKNOWN')}",
+        f"- Human review: {safe_token(manifest.get('human_review', 'UNKNOWN'))}",
+        f"- Deterministic validation: {safe_token(manifest.get('deterministic_validation', 'UNKNOWN'))}",
+        f"- Interpretation completion: {safe_token(manifest.get('interpretation_completion', 'UNKNOWN'))}",
+        f"- Interpretive status: {safe_token(manifest.get('interpretive_status', 'UNKNOWN'))}",
+        f"- Model checklist: {safe_token(manifest.get('model_check', 'UNKNOWN'))}",
         f"- State fingerprint: {study_fingerprint(root)}",
         "",
     ]
@@ -291,30 +396,30 @@ def main() -> int:
     drill_evidence_refs: list[str] = []
     for ref in outcome.get("decisive_finding_refs", []):
         row = finding_by_id.get(ref, {})
-        lines += [f"### {ref}", ""]
+        lines += [f"### {safe_token(ref)}", ""]
         lines += [
-            f"- Epistemic label: {row.get('epistemic_label', 'UNKNOWN')}",
-            f"- Claim: {row.get('claim', 'Missing finding text')}",
-            f"- Confidence rationale: {row.get('confidence_rationale', 'None recorded')}",
-            f"- LU refs: {', '.join(row.get('lu_refs', [])) or 'none'}",
-            f"- Contradictions: {'; '.join(row.get('contradictions', [])) or 'none recorded'}",
+            f"- Epistemic label: {markdown_escape(row.get('epistemic_label', 'UNKNOWN'))}",
+            f"- Claim: {markdown_escape(row.get('claim', 'Missing finding text'))}",
+            f"- Confidence rationale: {markdown_escape(row.get('confidence_rationale', 'None recorded'))}",
+            f"- LU refs: {safe_join(row.get('lu_refs', []))}",
+            f"- Contradictions: {safe_join(row.get('contradictions', []), '; ', 'none recorded')}",
             "",
         ]
         drill_evidence_refs.extend(row.get("evidence_refs", []))
 
     for ref in outcome.get("decisive_lu_refs", []):
         row = lu_by_id.get(ref, {})
-        lines += [f"### {ref}", ""]
+        lines += [f"### {safe_token(ref)}", ""]
         lines += [
-            f"- Public label: {public_lu_label(row)}",
-            f"- Status: {row.get('status', 'UNKNOWN')}",
-            f"- Trend: {row.get('trend_id', 'UNKNOWN')}",
-            f"- Emerging need: {row.get('need_statement', 'UNKNOWN')}",
-            f"- Advancement indicator: {row.get('advancement_indicator', 'UNKNOWN')}",
-            f"- LU1 rationale: {row.get('lu1_rationale', 'UNKNOWN')}",
-            f"- Benefit signal: {row.get('benefit_signal', 'UNKNOWN')}",
-            f"- LU2 rationale: {row.get('lu2_rationale', 'UNKNOWN')}",
-            f"- Qualification caveats: {'; '.join(row.get('qualification_caveats', [])) or 'none recorded'}",
+            f"- Public label: {markdown_escape(public_lu_label(row))}",
+            f"- Status: {markdown_escape(row.get('status', 'UNKNOWN'))}",
+            f"- Trend: {markdown_escape(row.get('trend_id', 'UNKNOWN'))}",
+            f"- Emerging need: {markdown_escape(row.get('need_statement', 'UNKNOWN'))}",
+            f"- Advancement indicator: {markdown_escape(row.get('advancement_indicator', 'UNKNOWN'))}",
+            f"- LU1 rationale: {markdown_escape(row.get('lu1_rationale', 'UNKNOWN'))}",
+            f"- Benefit signal: {markdown_escape(row.get('benefit_signal', 'UNKNOWN'))}",
+            f"- LU2 rationale: {markdown_escape(row.get('lu2_rationale', 'UNKNOWN'))}",
+            f"- Qualification caveats: {safe_join(row.get('qualification_caveats', []), '; ', 'none recorded')}",
             "",
         ]
         drill_evidence_refs.extend(row.get("lu1_evidence", []))
@@ -327,13 +432,14 @@ def main() -> int:
         seen.add(ref)
         row = evidence_by_id.get(ref, {})
         source = source_by_id.get(row.get("source_id"), {})
-        lines += [f"#### {ref}", ""]
+        lines += [f"#### {safe_token(ref)}", ""]
         lines += [
-            f"- Public summary: {row.get('public_summary') or 'See the structured evidence record; raw source content is not reproduced outwardly.'}",
-            f"- Evidence type: {row.get('evidence_type', 'UNKNOWN')}",
+            f"- Public summary: {markdown_escape(row.get('public_summary') or 'See the structured evidence record; raw source content is not reproduced outwardly.')}",
+            f"- Evidence type: {markdown_escape(row.get('evidence_type', 'UNKNOWN'))}",
+            f"- Evidence basis: {safe_token(row.get('evidence_basis', 'UNKNOWN'))}",
             f"- Source: {source_citation(source)}",
-            f"- Source coverage: {source.get('coverage', 'UNKNOWN')}",
-            f"- Source ref: {row.get('source_id', 'UNKNOWN')}",
+            f"- Source coverage: {markdown_escape(source.get('coverage', 'UNKNOWN'))}",
+            f"- Source ref: {markdown_escape(row.get('source_id', 'UNKNOWN'))}",
             "",
         ]
 

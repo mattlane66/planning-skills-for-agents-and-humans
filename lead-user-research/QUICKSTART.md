@@ -93,6 +93,9 @@ python lead-user-research/scripts/init_study.py \
   --workspace research/designer-ai-study
 ```
 
+Use a new or empty workspace. Initialization refuses a non-empty directory rather than
+overwriting existing research state.
+
 4. Tell the agent:
 
 ```text

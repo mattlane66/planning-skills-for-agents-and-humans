@@ -175,6 +175,9 @@ H## hypothesis tests
 O## observability questions  
 AR## AI analysis runs
 
+Always persist H##, O##, and AR## ledgers when file/state tools are available, even
+when a ledger is an empty array. Record a required evidence basis on every E###.
+
 Do not create families the selected mode does not need.
 
 ## PHASE A — FRAME
@@ -310,6 +313,11 @@ Do not use numeric source/user quotas as a substitute for this judgment. If a co
 
 Only freeze when all consequential dimensions are SUFFICIENT for the intended decision.
 
+Track sufficiency repair as NOT_REQUIRED | REQUIRED | COMPLETED. An INSUFFICIENT
+judgment sets REQUIRED; the bounded Phase B/C repair sets COMPLETED; Phase D then
+reassesses all dimensions and either starts another REQUIRED cycle or clears the state
+to NOT_REQUIRED. Do not let a repair phase certify itself.
+
 Before interpretation, also audit:
 
 - source coverage;
@@ -333,7 +341,9 @@ STABLE | PROVISIONAL
 
 A same-model checklist is not independent verification.
 
-Only proceed to interpretive synthesis when the evidence is coherent enough, or clearly label downstream work PROVISIONAL.
+For STANDARD/FULL, proceed to interpretive synthesis only after decision-relative
+sufficiency is SUFFICIENT and the evidence is FROZEN. A PROVISIONAL label does not
+bypass Evidence Freeze.
 
 ## PHASE E — INTERPRET
 
@@ -342,6 +352,10 @@ Only after the evidence pass/freeze:
 Separate:
 
 observed situation → emerging need → user mechanism → transferable principle
+
+After considering the complete frozen corpus, explicitly record interpretation
+completion even when the supported negative result contains no findings, needs, or
+principles. Empty arrays alone do not establish that interpretation ran.
 
 Use Christensen sparingly to clarify:
 
@@ -422,7 +436,10 @@ Generate enough materially different candidate shapes to test whether R is genui
 
 Run **Requirements × Shapes** first. Every candidate shape is checked against every frozen PASS R.
 
-If a shape is explicitly selected, run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**. Use it to expose parts that serve no R, R with no supporting part, duplicated mechanisms, or one part carrying disproportionate responsibility.
+If a human explicitly selects a shape, persist human-selection provenance and run the
+**Rotated Fit Check / reverse fit** as **Parts × Requirements**. Use it to expose parts
+that serve no R, R with no supporting part, duplicated mechanisms, or one part carrying
+disproportionate responsibility. Never let the model self-select a mechanism.
 
 Do not invent weak alternatives for symmetry.
 
