@@ -147,12 +147,19 @@ v1.7 contract and is not real-market evidence.
 
 ## Chat platforms with Projects/files but no shell
 
+Use **[PROJECT_QUICKSTART.md](PROJECT_QUICKSTART.md)** for the complete no-shell Project/files path.
+
 Upload or reference:
 
 - `SKILL.md`;
 - `PROTOCOL.md`;
+- `references/state-contract.md`;
+- `references/phase-handoff.md`;
+- `scripts/init_study.py`;
 - the relevant phase prompt;
-- the study JSON files.
+- the complete study JSON files.
+
+Before Phase A, have the model read the initializer and state contract and create the full initial workspace exactly as specified. It may use `init_study.py` as a readable specification, but must not claim the script ran when the platform has no shell.
 
 Ask the model to update the files after each phase.
 
@@ -171,7 +178,7 @@ At the end of each phase ask for:
 and the standardized phase handoff: current status, one next move, reason, exact
 blockers, and any human gate.
 
-Save it locally or paste it into the next phase.
+The STATE PACKET must be cumulative: it should contain the complete authoritative structured state needed to resume, including unchanged state from earlier phases. Save the latest packet locally or paste it into the next phase; the latest packet supersedes earlier packets.
 
 Example:
 

@@ -120,9 +120,13 @@ print(json.dumps({{"model_output": "Copied a completed synthetic fixture."}}))
             )
             self.assertEqual(1, completed.returncode, completed.stderr)
             report = json.loads(report_path.read_text(encoding="utf-8"))
-            failures = report["cases"][0]["failures"]
+            case = report["cases"][0]
+            failures = case["failures"]
+            checks = {check["name"]: check for check in case["checks"]}
+            self.assertTrue(checks["synthetic-fixture-boundary"]["passed"], checks)
+            self.assertFalse(checks["reference-fixture-provenance"]["passed"], checks)
             self.assertTrue(
-                any("synthetic-fixture-boundary" in failure for failure in failures),
+                any("reference-fixture-provenance" in failure for failure in failures),
                 failures,
             )
 

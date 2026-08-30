@@ -12,6 +12,8 @@ Use **[PORTABLE_PROMPT.md](PORTABLE_PROMPT.md)** when you want a single prompt y
 
 Use **[QUICKSTART.md](QUICKSTART.md)** and **[SKILL.md](SKILL.md)** when the AI can read/write files, run scripts, or work in a repository. This is the most robust execution path because research state is persisted and structurally validated.
 
+If you are using a ChatGPT Project, Claude Project, or another persistent files workspace **without shell access**, use **[PROJECT_QUICKSTART.md](PROJECT_QUICKSTART.md)**. It includes the state-contract, handoff, and initializer files needed to avoid inventing the study schema.
+
 In Claude Code or Gemini CLI, `/lead-user` starts or resumes the smallest valid
 phase. The focused commands are `/lead-user-frame`, `/lead-user-discover`,
 `/lead-user-evidence`, `/lead-user-freeze`, `/lead-user-interpret`,

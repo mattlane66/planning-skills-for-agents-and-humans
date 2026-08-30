@@ -338,6 +338,11 @@ def main() -> int:
     hypothesis_ids = ids(hypotheses, "hypothesis_id", errors)
     observability_ids = ids(observability, "observability_id", errors)
     analysis_run_ids = ids(analysis_runs, "analysis_run_id", errors)
+    trend_by_id = {
+        row.get("trend_id"): row
+        for row in trends
+        if isinstance(row, dict) and isinstance(row.get("trend_id"), str)
+    }
 
     for row in candidates:
         if not isinstance(row, dict):
@@ -1728,6 +1733,15 @@ def main() -> int:
                             episode_by_id.get(lu_ref, {}).get("lu1_evidence")
                             or episode_by_id.get(lu_ref, {}).get("lu2_evidence")
                         )
+                        and trend_by_id.get(
+                            episode_by_id.get(lu_ref, {}).get("trend_id"), {}
+                        ).get("status")
+                        in {"VERIFIED", "INFERRED"}
+                        and bool(
+                            trend_by_id.get(
+                                episode_by_id.get(lu_ref, {}).get("trend_id"), {}
+                            ).get("evidence_refs")
+                        )
                         for lu_ref in as_string_list(finding.get("lu_refs"))
                     )
                     if not direct_support and not qualified_lu_support:
@@ -1741,6 +1755,13 @@ def main() -> int:
                     ):
                         errors.append(
                             f"ACT decisive LU {ref} must be QUALIFIED with LU1 and LU2 evidence"
+                        )
+                    trend = trend_by_id.get(episode.get("trend_id"), {})
+                    if trend.get("status") not in {"VERIFIED", "INFERRED"} or not trend.get(
+                        "evidence_refs"
+                    ):
+                        errors.append(
+                            f"ACT decisive LU {ref} requires an evidence-backed VERIFIED or INFERRED trend"
                         )
             if (
                 status == "TEST"
