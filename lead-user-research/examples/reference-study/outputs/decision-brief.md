@@ -135,7 +135,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Deterministic validation: PASSED
 - Interpretive status: PROVISIONAL
 - Model checklist: COMPLETED
-- State fingerprint: sha256:2bc6e7da7c600c0f83abe61b4b0573544a4d66087011765eb7a39c4784fb0c20
+- State fingerprint: sha256:e0f82004535b0b9bb81ea12c57527d75dd408db575996bfcfae8404161722fae
 
 ## Evidence drill-down
 

@@ -14,6 +14,8 @@ For each major case distinguish:
 
 Do not copy the workaround into the need.
 
+Trace first; isolate now. For traced episodes, decide only after Evidence Freeze which fit points represent consequential problems or emerging needs. When a finding or need materially derives from a trace, persist exact `trace_refs` such as `LU1:S1` or `LU1:FP1`.
+
 ## 2. Limited Christensen lens
 
 Only now ask:
@@ -44,11 +46,12 @@ Create `F##` with:
 - VERIFIED / INFERRED / SPECULATIVE / UNKNOWN;
 - evidence refs;
 - LU refs;
+- trace refs when materially derived from a trace;
 - contradictions.
 
 ## 4. Emerging needs
 
-Create `N##` based on evidence, not mention count.
+Create `N##` based on evidence, not mention count. Persist `trace_refs` when the need materially depends on one or more traced steps or fit points.
 
 Cluster at LU-episode level when useful.
 

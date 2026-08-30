@@ -60,6 +60,8 @@ Describe the real moment before describing what should change:
 
 Keep the current approach separate from the proposed future solution. If the source does not establish part of the current situation, mark it as unknown rather than filling the gap.
 
+When the frame will feed shaping, make the transformation explicit as `x → f() → y`. Define `x` from the trigger/context, current approach, current result, and where it breaks down. Leave `f()` unspecified: it is the solution/shape variable, not part of the problem statement. Define `y` as the desired outcome, then state the x→y gap and the boundaries an acceptable f() must respect.
+
 ### Problem
 
 Describe what is broken, painful, risky, or missing.
@@ -79,6 +81,8 @@ Use `Less about / More about` when people were clearly drawing a line around wha
 Capture preliminary standards only when the source clearly suggests what a good solution must achieve or avoid.
 
 Use IDs such as `R0`, `R1`, and `R2`, but mark the section as candidates rather than accepted requirements. The shaping step is responsible for testing, revising, prioritizing, or rejecting them.
+
+Criteria candidates should unfold from the frame. When useful, tag each candidate as coming from `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`.
 
 Criteria candidates must:
 - describe needs, outcomes, or constraints rather than mechanisms
@@ -145,8 +149,10 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Trigger or context: ...
 - Current approach, workaround, or nonconsumption: ...
 - Current result: ...
-- Struggle or compromise: ...
+- Struggle or compromise / where it breaks down: ...
 - Evidence and confidence: ...
+- Frame equation: x → f() → y, with f() intentionally unspecified
+- Gap from x to y: ...
 
 ## Problem
 - ...
@@ -180,7 +186,8 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 ## Self-check before finishing
 
 - Source material is separate from interpretation.
-- The trigger, current approach, and current result are explicit or marked unknown.
+- The trigger, current approach, current result, and breakdowns are explicit or marked unknown.
+- When shaping will follow, x and y are explicit, f() remains unspecified, and the x→y gap and boundaries are visible.
 - Every problem and outcome claim is traceable to source material or explicitly marked as an inference.
 - Outcome lines describe effects, not mechanisms.
 - Boundaries prevent likely wrong directions without over-constraining the solution space.

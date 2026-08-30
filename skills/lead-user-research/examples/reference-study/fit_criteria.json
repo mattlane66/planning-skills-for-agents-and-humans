@@ -2,6 +2,8 @@
   {
     "requirement_id": "R1",
     "need_id": "N1",
+    "frame_ref": "SF1",
+    "origin": "FROM_Y",
     "requirement": "A handoff must preserve consequential decisions, constraints, and open questions without reinstating rejected choices.",
     "evidence_refs": [
       "E3"
@@ -17,6 +19,8 @@
   {
     "requirement_id": "R2",
     "need_id": "N1",
+    "frame_ref": "SF1",
+    "origin": "FROM_GAP",
     "requirement": "Preparing and recovering a handoff must require materially less total effort than reconstructing the state manually.",
     "evidence_refs": [
       "E3",

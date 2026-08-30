@@ -65,6 +65,7 @@ REQUIRED_ARTIFACT_FILES = {
     "lineage.json",
     "findings.json",
     "needs.json",
+    "shaping_frame.json",
     "fit_criteria.json",
     "concepts.json",
     "coverage.json",

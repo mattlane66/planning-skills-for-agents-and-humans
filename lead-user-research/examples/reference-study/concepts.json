@@ -19,6 +19,36 @@
       "Observed preparation and recovery time",
       "Consequential omission and decision-revival rate",
       "Abandonment or compensating behavior"
+    ],
+    "requirement_fit": {
+      "R1": true,
+      "R2": true
+    },
+    "selection_status": "SELECTED",
+    "rotation_status": "RUN",
+    "parts": [
+      {
+        "part_id": "M1P1",
+        "mechanism": "Extract active decisions, constraints, rejected options, open questions, and evidence links.",
+        "requirement_ids": [
+          "R1"
+        ]
+      },
+      {
+        "part_id": "M1P2",
+        "mechanism": "Ask for a bounded confirmation before transfer.",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ]
+      },
+      {
+        "part_id": "M1P3",
+        "mechanism": "Transfer the confirmed packet to the receiving workspace.",
+        "requirement_ids": [
+          "R2"
+        ]
+      }
     ]
   },
   {
@@ -41,6 +71,13 @@
       "Observed ledger maintenance time",
       "Rate of stale or conflicting decisions",
       "Recovery accuracy across independent workflows"
-    ]
+    ],
+    "requirement_fit": {
+      "R1": true,
+      "R2": true
+    },
+    "selection_status": "CANDIDATE",
+    "rotation_status": "NOT_RUN",
+    "parts": []
   }
 ]

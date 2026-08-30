@@ -14,6 +14,9 @@
     "contradictions": [
       "F4"
     ],
+    "trace_refs": [
+      "LU1:FP1"
+    ],
     "concept_gate_status": "PASS",
     "concept_gate_rationale": "The synthetic trend and qualified episode support a solution-independent need; the counterexample narrows the fitness conditions to net effort and context integrity rather than blocking bounded concept comparison.",
     "concept_gate_checks": {

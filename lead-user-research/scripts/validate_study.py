@@ -46,6 +46,17 @@ LINEAGE_RELATIONSHIP = {
 }
 INDEPENDENCE = {"INDEPENDENT", "DERIVATIVE", "RELATED", "UNKNOWN"}
 FIT_STATUS = {"PASS", "FAIL", "PROVISIONAL"}
+TRACE_BASIS = {
+    "DIRECT_OBSERVATION",
+    "DETAILED_FIRST_PERSON_ACCOUNT",
+    "EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION",
+    "EVENT_LOG_RECONSTRUCTION",
+    "FRAGMENTARY_EVIDENCE",
+}
+SHAPING_FRAME_STATUS = {"PROVISIONAL", "ACCEPTED"}
+REQUIREMENT_ORIGIN = {"FROM_X", "FROM_Y", "FROM_GAP", "FROM_BOUNDARY"}
+CONCEPT_SELECTION_STATUS = {"CANDIDATE", "SELECTED", "REJECTED"}
+ROTATION_STATUS = {"NOT_RUN", "RUN"}
 HYPOTHESIS_STATUS = {
     "UNTESTED",
     "SURVIVED_CURRENT_TESTS",
@@ -91,6 +102,7 @@ ID_PATTERNS = {
     "finding_id": re.compile(r"^F\d+$"),
     "need_id": re.compile(r"^N\d+$"),
     "principle_id": re.compile(r"^SP\d+$"),
+    "frame_id": re.compile(r"^SF\d+$"),
     "requirement_id": re.compile(r"^R\d+$"),
     "concept_id": re.compile(r"^M\d+$"),
     "action_id": re.compile(r"^A\d+$"),
@@ -231,6 +243,7 @@ def main() -> int:
     findings = load(root, "findings.json", errors)
     needs = load(root, "needs.json", errors)
     principles = load(root, "principles.json", errors)
+    shaping_frames = load(root, "shaping_frame.json", errors)
     criteria = load(root, "fit_criteria.json", errors)
     concepts = load(root, "concepts.json", errors)
     coverage = load(root, "coverage.json", errors)
@@ -250,6 +263,7 @@ def main() -> int:
         ("findings.json", findings),
         ("needs.json", needs),
         ("principles.json", principles),
+        ("shaping_frame.json", shaping_frames),
         ("fit_criteria.json", criteria),
         ("concepts.json", concepts),
         ("hypotheses.json", hypotheses),
@@ -268,6 +282,7 @@ def main() -> int:
     findings = findings if isinstance(findings, list) else []
     needs = needs if isinstance(needs, list) else []
     principles = principles if isinstance(principles, list) else []
+    shaping_frames = shaping_frames if isinstance(shaping_frames, list) else []
     criteria = criteria if isinstance(criteria, list) else []
     concepts = concepts if isinstance(concepts, list) else []
     hypotheses = hypotheses if isinstance(hypotheses, list) else []
@@ -284,6 +299,7 @@ def main() -> int:
     finding_ids = ids(findings, "finding_id", errors)
     need_ids = ids(needs, "need_id", errors)
     principle_ids = ids(principles, "principle_id", errors)
+    frame_ids = ids(shaping_frames, "frame_id", errors)
     requirement_ids = ids(criteria, "requirement_id", errors)
     concept_ids = ids(concepts, "concept_id", errors)
     hypothesis_ids = ids(hypotheses, "hypothesis_id", errors)
@@ -309,6 +325,11 @@ def main() -> int:
         row.get("finding_id"): row
         for row in findings
         if isinstance(row, dict) and row.get("finding_id")
+    }
+    shaping_frame_by_id = {
+        row.get("frame_id"): row
+        for row in shaping_frames
+        if isinstance(row, dict) and row.get("frame_id")
     }
     criterion_by_id = {
         row.get("requirement_id"): row
@@ -514,6 +535,8 @@ def main() -> int:
         if status in {"VERIFIED", "INFERRED"} and not indicators:
             errors.append(f"{tid} {status} requires observable_indicators")
 
+    trace_ref_ids: set[str] = set()
+
     for row in episodes:
         luid = row.get("lu_id", "<unknown>")
         for field in ["user_entity", "need_statement", "context"]:
@@ -575,6 +598,11 @@ def main() -> int:
                 trace_status = trace.get("status", "NOT_ASSESSED")
                 if trace_status not in TRACE_STATUS:
                     errors.append(f"{luid} has invalid trace status {trace_status!r}")
+                trace_basis = trace.get("trace_basis")
+                if trace_basis not in TRACE_BASIS:
+                    errors.append(f"{luid} has invalid trace_basis {trace_basis!r}")
+                if trace_status == "SUFFICIENT" and trace_basis == "FRAGMENTARY_EVIDENCE":
+                    errors.append(f"{luid} trace cannot be SUFFICIENT from FRAGMENTARY_EVIDENCE")
 
                 refs_exist(
                     trace.get("evidence_refs", []),
@@ -588,6 +616,7 @@ def main() -> int:
                 if not isinstance(sequence, list):
                     errors.append(f"{luid} trace sequence must be a list")
                     sequence = []
+                step_ids: set[str] = set()
                 for index, step in enumerate(sequence):
                     if not isinstance(step, dict):
                         errors.append(f"{luid} trace sequence row {index} must be an object")
@@ -599,6 +628,12 @@ def main() -> int:
                             f"{luid} trace step {index}",
                             errors,
                         )
+                    step_id = step.get("step_id")
+                    if isinstance(step_id, str) and step_id.strip():
+                        if step_id in step_ids:
+                            errors.append(f"{luid} trace has duplicate step_id {step_id}")
+                        step_ids.add(step_id)
+                        trace_ref_ids.add(f"{luid}:{step_id}")
                     refs_exist(
                         step.get("evidence_refs", []),
                         evidence_ids,
@@ -611,10 +646,23 @@ def main() -> int:
                 if not isinstance(fit_points, list):
                     errors.append(f"{luid} trace fit_points must be a list")
                     fit_points = []
+                fit_point_ids: set[str] = set()
                 for index, point in enumerate(fit_points):
                     if not isinstance(point, dict):
                         errors.append(f"{luid} trace fit point {index} must be an object")
                         continue
+                    require_nonempty_string(point, "fit_point_id", f"{luid} trace fit point {index}", errors)
+                    fit_point_id = point.get("fit_point_id")
+                    if isinstance(fit_point_id, str) and fit_point_id.strip():
+                        if not re.match(r"^FP\d+$", fit_point_id):
+                            errors.append(f"{luid} trace fit point {index} has invalid fit_point_id {fit_point_id!r}")
+                        if fit_point_id in fit_point_ids:
+                            errors.append(f"{luid} trace has duplicate fit_point_id {fit_point_id}")
+                        fit_point_ids.add(fit_point_id)
+                        trace_ref_ids.add(f"{luid}:{fit_point_id}")
+                    step_ref = point.get("step_ref")
+                    if not isinstance(step_ref, str) or step_ref not in step_ids:
+                        errors.append(f"{luid} trace fit point {index} references missing step_ref: {step_ref}")
                     refs_exist(
                         point.get("evidence_refs", []),
                         evidence_ids,
@@ -697,6 +745,7 @@ def main() -> int:
             errors.append(f"{fid} has invalid epistemic_label {label!r}")
         refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", fid, errors)
         refs_exist(row.get("lu_refs", []), lu_ids, "LU", fid, errors)
+        refs_exist(row.get("trace_refs", []), trace_ref_ids, "trace ref", fid, errors)
         refs_exist(
             row.get("contradictions", []),
             finding_ids,
@@ -712,6 +761,7 @@ def main() -> int:
         require_nonempty_string(row, "statement", nid, errors)
         refs_exist(row.get("finding_ids", []), finding_ids, "finding", nid, errors)
         refs_exist(row.get("relevant_trends", []), trend_ids, "trend", nid, errors)
+        refs_exist(row.get("trace_refs", []), trace_ref_ids, "trace ref", nid, errors)
         refs_exist(
             row.get("contradictions", []),
             finding_ids,
@@ -779,6 +829,42 @@ def main() -> int:
         if status in {"VERIFIED", "INFERRED"} and not row.get("evidence_refs"):
             errors.append(f"{spid} {status} requires evidence_refs")
 
+    for row in shaping_frames:
+        sfid = row.get("frame_id", "<unknown>")
+        nid = row.get("need_id")
+        if nid not in need_ids:
+            errors.append(f"{sfid} references missing need_id: {nid}")
+        x = row.get("x")
+        if not isinstance(x, dict):
+            errors.append(f"{sfid} x must be an object")
+            x = {}
+        for field in ["trigger_or_context", "current_approach", "current_result"]:
+            require_nonempty_string(x, field, f"{sfid} x", errors)
+        require_string_list(x, "breakdowns", f"{sfid} x", errors, nonempty=True)
+        f_value = row.get("f")
+        if not isinstance(f_value, dict) or f_value.get("status") != "UNSPECIFIED":
+            errors.append(f"{sfid} f.status must be UNSPECIFIED")
+        y = row.get("y")
+        if not isinstance(y, dict):
+            errors.append(f"{sfid} y must be an object")
+            y = {}
+        require_nonempty_string(y, "desired_outcome", f"{sfid} y", errors)
+        require_nonempty_string(row, "gap", sfid, errors)
+        require_string_list(row, "boundaries", sfid, errors)
+        refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", sfid, errors)
+        status = row.get("status")
+        if status not in SHAPING_FRAME_STATUS:
+            errors.append(f"{sfid} has invalid shaping frame status {status!r}")
+        require_bool(row, "accepted_by_human", sfid, errors)
+        if status == "ACCEPTED":
+            if row.get("accepted_by_human") is not True:
+                errors.append(f"{sfid} ACCEPTED requires accepted_by_human=true")
+            require_nonempty_string(row, "acceptance_note", sfid, errors)
+            if not row.get("evidence_refs"):
+                errors.append(f"{sfid} ACCEPTED requires evidence_refs")
+        elif row.get("accepted_by_human") is True:
+            errors.append(f"{sfid} PROVISIONAL cannot have accepted_by_human=true")
+
     fit_checks = [
         "traceability",
         "implementation_independence",
@@ -793,6 +879,16 @@ def main() -> int:
         nid = row.get("need_id")
         if nid not in need_ids:
             errors.append(f"{rid} references missing need_id: {nid}")
+        frame_ref = row.get("frame_ref")
+        if frame_ref not in frame_ids:
+            errors.append(f"{rid} references missing frame_ref: {frame_ref}")
+        else:
+            frame = shaping_frame_by_id.get(frame_ref, {})
+            if frame.get("need_id") != nid:
+                errors.append(f"{rid} frame_ref {frame_ref} belongs to need {frame.get('need_id')}")
+        origin = row.get("origin")
+        if origin not in REQUIREMENT_ORIGIN:
+            errors.append(f"{rid} has invalid origin {origin!r}")
         refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", rid, errors)
         status = row.get("status")
         if status not in FIT_STATUS:
@@ -802,10 +898,14 @@ def main() -> int:
         if status == "PASS":
             if not row.get("evidence_refs"):
                 errors.append(f"{rid} PASS requires evidence_refs")
+            frame = shaping_frame_by_id.get(row.get("frame_ref"), {})
+            if frame.get("status") != "ACCEPTED" or frame.get("accepted_by_human") is not True:
+                errors.append(f"{rid} PASS requires an accepted human-reviewed shaping frame")
             for field in fit_checks:
                 if row.get(field) is not True:
                     errors.append(f"{rid} PASS requires {field}=true")
 
+    selected_by_need: dict[str, int] = {}
     for row in concepts:
         mid = row.get("concept_id", "<unknown>")
         require_nonempty_string(row, "mechanism", mid, errors)
@@ -818,8 +918,82 @@ def main() -> int:
         for ref in row.get("requirement_ids", []):
             if criterion_by_id.get(ref, {}).get("status") != "PASS":
                 errors.append(f"{mid} references non-PASS requirement {ref}")
+            if criterion_by_id.get(ref, {}).get("need_id") != nid:
+                errors.append(f"{mid} requirement {ref} belongs to another need")
+
+        pass_requirements = {
+            ref
+            for ref, criterion in criterion_by_id.items()
+            if criterion.get("need_id") == nid and criterion.get("status") == "PASS"
+        }
+        requirement_fit = row.get("requirement_fit")
+        if not isinstance(requirement_fit, dict):
+            errors.append(f"{mid} requirement_fit must be an object")
+            requirement_fit = {}
+        if set(requirement_fit) != pass_requirements:
+            errors.append(f"{mid} requirement_fit must cover every frozen PASS requirement for its need")
+        for ref, value in requirement_fit.items():
+            if ref not in pass_requirements:
+                errors.append(f"{mid} requirement_fit references non-PASS or foreign requirement {ref}")
+            if not isinstance(value, bool):
+                errors.append(f"{mid} requirement_fit[{ref}] must be boolean")
+        passed_refs = {ref for ref, value in requirement_fit.items() if value is True}
+        if set(row.get("requirement_ids", [])) != passed_refs:
+            errors.append(f"{mid} requirement_ids must match true requirement_fit entries")
+
+        selection_status = row.get("selection_status")
+        if selection_status not in CONCEPT_SELECTION_STATUS:
+            errors.append(f"{mid} has invalid selection_status {selection_status!r}")
+        rotation_status = row.get("rotation_status")
+        if rotation_status not in ROTATION_STATUS:
+            errors.append(f"{mid} has invalid rotation_status {rotation_status!r}")
+        parts = row.get("parts")
+        if not isinstance(parts, list):
+            errors.append(f"{mid} parts must be a list")
+            parts = []
+
+        served_by_parts: set[str] = set()
+        part_ids: set[str] = set()
+        for index, part in enumerate(parts):
+            if not isinstance(part, dict):
+                errors.append(f"{mid} part {index} must be an object")
+                continue
+            require_nonempty_string(part, "part_id", f"{mid} part {index}", errors)
+            require_nonempty_string(part, "mechanism", f"{mid} part {index}", errors)
+            part_id = part.get("part_id")
+            if isinstance(part_id, str) and part_id.strip():
+                if not re.match(rf"^{re.escape(str(mid))}P\d+$", part_id):
+                    errors.append(f"{mid} part {index} has invalid part_id {part_id!r}")
+                if part_id in part_ids:
+                    errors.append(f"{mid} has duplicate part_id {part_id}")
+                part_ids.add(part_id)
+            part_refs = part.get("requirement_ids", [])
+            refs_exist(part_refs, requirement_ids, "requirement", f"{mid} part {index}", errors)
+            if not part_refs:
+                errors.append(f"{mid} part {index} must serve at least one requirement")
+            for ref in part_refs:
+                if ref not in pass_requirements:
+                    errors.append(f"{mid} part {index} references non-PASS or foreign requirement {ref}")
+                served_by_parts.add(ref)
+
+        if selection_status == "SELECTED":
+            selected_by_need[nid] = selected_by_need.get(nid, 0) + 1
+            if rotation_status != "RUN":
+                errors.append(f"{mid} SELECTED requires rotation_status RUN")
+            if not parts:
+                errors.append(f"{mid} SELECTED requires rotated parts")
+            missing_support = pass_requirements - served_by_parts
+            if missing_support:
+                errors.append(f"{mid} SELECTED rotated fit leaves requirements unsupported: {sorted(missing_support)}")
+        elif rotation_status == "RUN":
+            errors.append(f"{mid} rotation_status RUN requires selection_status SELECTED")
+
         for field in ["assumptions", "risks", "evidence_needed_next"]:
             require_string_list(row, field, mid, errors)
+
+    for nid, selected_count in selected_by_need.items():
+        if selected_count > 1:
+            errors.append(f"{nid} has more than one SELECTED concept")
 
     all_structured_refs = (
         trend_ids
@@ -830,6 +1004,7 @@ def main() -> int:
         | finding_ids
         | need_ids
         | principle_ids
+        | frame_ids
         | requirement_ids
         | concept_ids
         | hypothesis_ids

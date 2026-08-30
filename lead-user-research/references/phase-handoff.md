@@ -27,6 +27,9 @@ Rules:
 - Do not enter Phase E before decision-relative sufficiency and Evidence Freeze.
 - Do not enter Phase F unless at least one need passes every Concept Generation
   Gate check.
+- Phase F first constructs a PROVISIONAL `x → f() → y` shaping frame. Stop with
+  HUMAN_REVIEW until a human accepts or revises it; do not derive PASS requirements
+  or evaluate candidate shapes against a provisional frame.
 - If no need passes, proceed to Phase G without generating concepts merely to
   complete the sequence.
 - Phase G prepares decision-ready evidence; it does not make the human's product

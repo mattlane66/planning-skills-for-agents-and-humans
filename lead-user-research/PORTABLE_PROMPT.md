@@ -272,7 +272,7 @@ prior baseline → desired progress → observed result
 
 Mark missing elements UNKNOWN.
 
-For LU episodes likely to materially support need interpretation or concept shaping, trace the episode as far as evidence permits: initiating condition, prior approach/history, switch or change trigger, expected improvement, ordered actions, fit breaks or compensating behaviors, stated purpose, actual outcome, and unresolved UNKNOWNs. When established, capture first observed, recurrence, persistence, abandonment/reversal, and propagation.
+For LU episodes likely to materially support need interpretation or concept shaping, Trace only a specific real use case: direct observation, a detailed first-person account, evidence-backed artifact reconstruction, or structured event-log reconstruction. Record the basis, initiating condition, prior approach/history, switch or change trigger, expected improvement, ordered actions with stable step IDs, fit breaks or compensating behaviors with stable fit-point IDs, stated purpose, actual outcome, and unresolved UNKNOWNs. A generic complaint, feature request, or hypothetical workflow is not a SUFFICIENT Trace. When established, capture first observed, recurrence, persistence, abandonment/reversal, and propagation.
 
 When structured event logs exist, process-mining-style reconstruction may identify real sequence variants and bottlenecks. Keep that descriptive reconstruction separate from inferred motive or causality.
 
@@ -347,7 +347,7 @@ Use Christensen sparingly to clarify:
 
 circumstance → struggle → desired progress → compensating behavior
 
-Ground this interpretation in traced episode evidence when available. Do not fill missing chronology, motivation, prior solution, desired progress, or compensating purpose merely to complete the story.
+Ground this interpretation in traced episode evidence when available. Trace first; isolate consequential problems only now, after Evidence Freeze. For any finding or need materially derived from a trace, persist the exact nested trace refs (for example `LU1:S1` or `LU1:FP1`). Do not fill missing chronology, motivation, prior solution, desired progress, or compensating purpose merely to complete the story.
 
 Do not turn this into a JTBD study.
 
@@ -392,28 +392,37 @@ Otherwise stop with:
 
 > No opportunity is currently supported strongly enough for concept generation.
 
-For a passing need, reopen any pivotal episode traces supporting it. If missing chronology, motivation, or outcome prevents a defensible fitness account, keep it UNKNOWN or fail the gate rather than filling the gap.
+For a passing need, reopen pivotal traces. If missing chronology, motivation, or outcome prevents a defensible shaping frame, keep it UNKNOWN or fail the gate rather than filling the gap.
 
-For a passing need define:
+Construct and persist `SF##`:
 
-x = current state  
-y = desired state  
-gap  
-constraints  
-R## = what any adequate solution must accomplish
+x = trigger/context + current approach + current result + breakdowns  
+f() = UNSPECIFIED solution/shape variable  
+y = desired outcome  
+gap = what must change from x to y  
+boundaries = constraints/guardrails on acceptable f()s
 
-Each R must be:
+Record evidence refs and `status = PROVISIONAL | ACCEPTED`. This shaping/design frame is distinct from the Phase A research frame. A model must not self-accept it. Stop for explicit human acceptance or revision before any R## can become PASS.
 
-- traceable to evidence;
-- implementation-independent;
-- causally relevant;
-- at the need rather than workaround altitude.
+After frame acceptance, derive R##. Each R must record:
 
-Freeze R before evaluating mechanisms.
+- `frame_ref`;
+- `origin = FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`;
+- evidence refs;
+- traceability;
+- implementation independence;
+- solution plurality;
+- causal relevance;
+- altitude check;
+- information gain.
 
-Generate enough materially different mechanisms to test whether R is genuinely solution-independent.
+Freeze R before evaluating mechanisms. Hold x and y constant while comparing candidate f()s.
 
-There is **no concept quota**.
+Generate enough materially different candidate shapes to test whether R is genuinely solution-independent. There is **no concept quota**.
+
+Run **Requirements × Shapes** first. Every candidate shape is checked against every frozen PASS R.
+
+If a shape is explicitly selected, run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**. Use it to expose parts that serve no R, R with no supporting part, duplicated mechanisms, or one part carrying disproportionate responsibility.
 
 Do not invent weak alternatives for symmetry.
 

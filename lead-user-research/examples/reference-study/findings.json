@@ -21,6 +21,10 @@
     "lu_refs": [
       "LU1"
     ],
+    "trace_refs": [
+      "LU1:S1",
+      "LU1:FP1"
+    ],
     "contradictions": [
       "F4"
     ],

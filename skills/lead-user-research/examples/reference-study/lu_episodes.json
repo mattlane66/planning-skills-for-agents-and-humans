@@ -32,6 +32,7 @@
     "observed_result": "The fictional record reports handoff effort falling to about five minutes.",
     "trace": {
       "status": "SUFFICIENT",
+      "trace_basis": "EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION",
       "initiating_condition": "Changing AI agents required repeated reconstruction of decisions and constraints.",
       "prior_approach": "Manual reconstruction from prior conversations.",
       "switch_or_change_trigger": "Repeated 20-minute handoffs across four agents.",
@@ -59,6 +60,7 @@
       ],
       "fit_points": [
         {
+          "fit_point_id": "FP1",
           "step_ref": "S1",
           "observed_behavior": "Repeated manual reconstruction.",
           "compensating_behavior": "A structured decision-and-open-questions packet.",

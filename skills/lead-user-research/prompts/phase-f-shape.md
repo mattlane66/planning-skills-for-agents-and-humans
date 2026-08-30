@@ -8,6 +8,7 @@ At the start, reopen:
 - findings;
 - needs;
 - principles;
+- existing `shaping_frame.json`;
 - existing fit criteria and concepts.
 
 ## Concept Generation Gate
@@ -34,20 +35,33 @@ That is a successful outcome.
 
 ## Fit Check
 
-Where a passing need depends materially on one or more traced LU episodes, reopen those traces and their evidence refs before deriving fitness conditions.
+Where a passing need depends materially on one or more traced LU episodes, reopen those traces and their evidence refs before framing the transformation.
 
-Do not infer x, y, the gap, or constraints from missing chronology, motivation, or outcome. If those gaps make the fitness conditions non-defensible, return the need to the Concept Generation Gate rather than completing the story.
+Do not infer the current situation, desired outcome, gap, or boundaries from missing chronology, motivation, or outcome. If those gaps make the frame non-defensible, return the need to the Concept Generation Gate rather than completing the story.
 
-For each passing need derive:
+For each passing need construct `SF##` in `shaping_frame.json`:
 
-- x — current state;
-- y — desired state;
-- gap;
-- constraints;
-- R## — fitness conditions.
+- `x.trigger_or_context`;
+- `x.current_approach`;
+- `x.current_result`;
+- `x.breakdowns`;
+- `f.status = UNSPECIFIED`;
+- `y.desired_outcome`;
+- `gap`;
+- `boundaries`;
+- `evidence_refs`;
+- `status = PROVISIONAL | ACCEPTED`;
+- `accepted_by_human`;
+- `acceptance_note`.
 
-Each requirement must explicitly record:
+This is the shaping/design frame, not the Phase A research frame.
 
+When the frame is first constructed, write it as PROVISIONAL and stop for explicit human review. A model must not set `status = ACCEPTED` or `accepted_by_human = true` without an explicit human decision.
+
+Only after the frame is ACCEPTED derive R## fitness conditions. Each requirement must explicitly record:
+
+- `frame_ref` — the accepted SF##;
+- `origin` — `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`;
 - traceability to evidence;
 - implementation independence;
 - solution plurality;
@@ -55,13 +69,13 @@ Each requirement must explicitly record:
 - altitude check — stated at the need rather than workaround altitude;
 - information gain — a mechanism adds implementation information rather than merely restating R.
 
-Persist these six checks as booleans. Mark a requirement PASS only when all six are true and supporting evidence refs exist.
+Persist these six checks as booleans. Mark a requirement PASS only when all six are true, supporting evidence refs exist, and its frame is accepted by a human.
 
-Freeze requirements before evaluating mechanisms.
+Freeze requirements before evaluating mechanisms. Hold x and y constant while comparing candidate f()s. If the accepted frame changes materially, invalidate the prior comparison and re-derive affected requirements.
 
 ## Concept generation
 
-Generate enough materially different mechanisms to test the requirements.
+Generate enough materially different candidate shapes to test the requirements.
 
 There is **no minimum concept quota**.
 
@@ -75,15 +89,28 @@ If only one credible mechanism emerges:
 
 ## Compare
 
-Assess each M## against frozen R##.
+Run the first Fit Check as **Requirements × Shapes**.
 
-Do not alter requirements merely to make a preferred mechanism win.
+For every M## record a binary `requirement_fit` result for every frozen PASS R## belonging to the same need. Unknown is not a pass. `requirement_ids` must match the requirements the candidate actually passes.
+
+Do not alter x, y, or requirements merely to make a preferred mechanism win.
+
+Selection is optional. If a human explicitly selects a shape, mark it SELECTED and run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**:
+
+- decompose the selected shape into concrete parts;
+- map every part to the R## it serves;
+- remove or justify parts that serve no R;
+- expose R with no supporting part;
+- call out duplicated mechanisms or a single part carrying disproportionate responsibility.
+
+A selected shape cannot remain selected with an unrun rotation.
 
 ## Write state
 
 Update:
 
 - `needs.json`;
+- `shaping_frame.json`;
 - `fit_criteria.json`;
 - `concepts.json`;
 - `change_log.json`.

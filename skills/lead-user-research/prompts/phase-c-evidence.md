@@ -85,14 +85,24 @@ Use UNKNOWN whenever the source does not establish an element.
 
 For LU episodes likely to materially support later need interpretation or concept shaping, trace the episode as far as the evidence permits.
 
+A Trace must be grounded in a specific real use case. Record `trace_basis` as one of:
+
+DIRECT_OBSERVATION | DETAILED_FIRST_PERSON_ACCOUNT | EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION | EVENT_LOG_RECONSTRUCTION | FRAGMENTARY_EVIDENCE
+
+A generic complaint, feature request, hypothetical workflow, or abstract description may support atomic evidence, but it cannot by itself justify `trace.status = SUFFICIENT`. `FRAGMENTARY_EVIDENCE` may support a PARTIAL trace only.
+
+Use the micro-method:
+
+> real episode → write every evidenced step → flag fit breaks / problems / workarounds → preserve without prioritizing
+
 Record:
 
 - initiating condition;
 - prior approach and relevant history;
 - switch/change trigger when present;
 - expected improvement;
-- the sequence of actions through the actual outcome, including activity outside the focal product or workflow;
-- fit points such as hesitation, repetition, confusion, failure, abandonment, non-action, or compensating behavior;
+- the ordered sequence of actions through the actual outcome, including activity outside the focal product or workflow; every step has a stable `step_id`;
+- fit points such as hesitation, repetition, confusion, failure, abandonment, non-action, or compensating behavior; every fit point has a stable `fit_point_id` and a valid `step_ref`;
 - what the user explicitly said they were trying to preserve, avoid, or accomplish;
 - actual outcome;
 - unresolved elements as UNKNOWN.
@@ -114,7 +124,7 @@ Tracing is not a third Lead User qualification criterion. Do not infer LU status
 
 When the evidence supports it, add temporal context: first observed, recurrence, persistence, abandonment or reversal, and observed outcome. For structured event logs, process-mining-style reconstruction may describe actual sequence variants and bottlenecks, but it must not invent motive or causality.
 
-Do not turn the workaround into the need, rank fit points, or generate producer solutions in Phase C.
+Do not turn the workaround into the need, rank fit points, isolate the priority problem, or generate producer solutions in Phase C. Preserve the trace for post-freeze interpretation.
 
 ## Hypothesis and contrastive-case evidence
 
