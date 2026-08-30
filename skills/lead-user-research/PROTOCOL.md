@@ -230,7 +230,16 @@ An unknown engineer maintaining a costly workaround may be more informative than
 
 Every consequential VERIFIED claim should trace to atomic evidence.
 
+Every atomic E### records an explicit evidence basis. VERIFIED and INFERRED findings
+must retain a direct or transitive path through evidence, qualified LU episodes, or
+stable trace refs. An ACT decision may use only decisive VERIFIED/INFERRED findings or
+QUALIFIED LU episodes with atomic LU1/LU2 support.
+
 Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are **never human evidence**. They may generate rival hypotheses, search terms, edge cases, or test questions, but they cannot establish LU1, LU2, human behavior, need importance, motivation, propagation, or prevalence.
+
+Repository assurance may use an explicitly labeled SYNTHETIC_REFERENCE fixture to
+exercise validators and renderers. Its output must say that it is non-empirical, and
+blind/runtime evaluation must reject that fixture mode.
 
 When available, behavioral traces such as commits, issue histories, version histories, support interactions, workflow logs, telemetry, and event logs may provide stronger evidence than retrospective preference statements. Treat event-log reconstruction as process evidence, not as automatic proof of motive or causality.
 
@@ -348,6 +357,11 @@ dimension. Do not use numeric user/source quotas as a substitute for judgment.
 
 If any consequential dimension is insufficient, leave the evidence corpus open and name the exact next evidence work. A valid stopping point may be a referral for direct fieldwork rather than more public search.
 
+Persist the repair transition: INSUFFICIENT means REQUIRED; the bounded Phase B/C
+repair sets COMPLETED; Phase D then reassesses every dimension and either begins a new
+REQUIRED cycle or clears the repair to NOT_REQUIRED. Repair work cannot self-certify
+sufficiency.
+
 ## Discovery / interpretation firewall
 
 For STANDARD/FULL studies, finish the evidence corpus before opportunity synthesis.
@@ -366,6 +380,10 @@ The Evidence Freeze records:
 - review/validation state.
 
 Post-freeze evidence is allowed only when its purpose is recorded.
+
+Phase E records explicit interpretation completion after considering the entire frozen
+corpus. This is required even for a supported negative result with no findings, needs,
+or principles; empty arrays do not prove the phase ran.
 
 ## Need/solution separation
 
@@ -456,6 +474,9 @@ For every important interpretation ask:
 
 Prominent contradictions belong in the main reasoning, not buried in an appendix.
 
+A source or LU lineage member classified DERIVATIVE must never also be counted in an
+INDEPENDENT lineage record.
+
 For every important hypothesis or opportunity interpretation, deliberately seek contrastive cases where proportionate:
 
 1. PREDICTED_POSITIVE — the predicted condition and outcome co-occur;
@@ -533,9 +554,9 @@ Otherwise report:
 
 > No opportunity is currently supported strongly enough for concept generation.
 
-Persist the five gate tests as explicit booleans. PASS requires a credible referenced
-trend and a supporting finding linked to a QUALIFIED LU episode; a rationale alone is
-not enough.
+Persist the five gate tests as explicit booleans. PASS requires an evidence-backed
+VERIFIED or INFERRED relevant trend and a supporting finding with an atomic evidence
+path to a QUALIFIED LU episode on that same trend; a rationale alone is not enough.
 
 ## Fit Check
 
@@ -577,7 +598,12 @@ Generate enough materially different candidate shapes to test whether the requir
 
 Run the first Fit Check as **Requirements × Shapes**: every candidate shape records a binary result against every frozen PASS requirement.
 
-If a shape is explicitly selected, run the **Rotated Fit Check / reverse fit** as **Parts × Requirements**. The rotation should expose parts that serve no requirement, requirements with no supporting part, duplicated mechanisms, or one part carrying disproportionate responsibility. Do not preserve an unjustified part merely because the overall shape looked attractive.
+If a human explicitly selects a shape, persist `selected_by_human = true` plus a
+non-empty selection note, then run the **Rotated Fit Check / reverse fit** as
+**Parts × Requirements**. The rotation should expose parts that serve no requirement,
+requirements with no supporting part, duplicated mechanisms, or one part carrying
+disproportionate responsibility. The model must not self-select a shape or preserve an
+unjustified part merely because the overall shape looked attractive.
 
 ## Decision output
 
@@ -598,6 +624,10 @@ Then state:
 - priority human review.
 
 When file tools are available, render the canonical Decision Brief from the structured decision outcome so the report cannot silently diverge from state.
+
+Render untrusted state as inert Markdown, allow outward citations only for validated
+HTTP(S) URLs, apply identity redaction at token/phrase boundaries, and show the
+accepted shaping frame plus each mechanism's actual selection provenance.
 
 ### Operational action contract
 

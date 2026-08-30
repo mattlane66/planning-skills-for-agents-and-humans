@@ -7,6 +7,7 @@ import argparse
 import json
 import os
 import pathlib
+import re
 import shlex
 import shutil
 import subprocess
@@ -59,12 +60,19 @@ REQUIRED_ARTIFACT_FILES = {
     "manifest.json",
     "decision.json",
     "trends.json",
+    "candidates.json",
     "sources.json",
     "evidence.json",
     "lu_episodes.json",
     "lineage.json",
+    "search_log.json",
+    "hypotheses.json",
+    "observability.json",
+    "analysis_runs.json",
+    "change_log.json",
     "findings.json",
     "needs.json",
+    "principles.json",
     "shaping_frame.json",
     "fit_criteria.json",
     "concepts.json",
@@ -213,6 +221,7 @@ def has_nonempty_fields(row: Any, fields: set[str]) -> bool:
 def score_workspace(
     workspace: pathlib.Path,
     case: dict[str, Any],
+    adapter: str,
 ) -> tuple[list[dict[str, Any]], list[str], dict[str, Any]]:
     checks: list[dict[str, Any]] = []
     failures: list[str] = []
@@ -250,12 +259,21 @@ def score_workspace(
     )
 
     manifest = read_json(artifact_root / "manifest.json", failures)
+    decision = read_json(artifact_root / "decision.json", failures)
+    candidates = read_json(artifact_root / "candidates.json", failures)
     sources = read_json(artifact_root / "sources.json", failures)
     evidence = read_json(artifact_root / "evidence.json", failures)
     episodes = read_json(artifact_root / "lu_episodes.json", failures)
     lineage = read_json(artifact_root / "lineage.json", failures)
+    search_log = read_json(artifact_root / "search_log.json", failures)
+    hypotheses = read_json(artifact_root / "hypotheses.json", failures)
+    observability = read_json(artifact_root / "observability.json", failures)
+    analysis_runs = read_json(artifact_root / "analysis_runs.json", failures)
+    change_log = read_json(artifact_root / "change_log.json", failures)
     findings = read_json(artifact_root / "findings.json", failures)
     needs = read_json(artifact_root / "needs.json", failures)
+    principles = read_json(artifact_root / "principles.json", failures)
+    shaping_frames = read_json(artifact_root / "shaping_frame.json", failures)
     criteria = read_json(artifact_root / "fit_criteria.json", failures)
     concepts = read_json(artifact_root / "concepts.json", failures)
     sufficiency = read_json(artifact_root / "sufficiency.json", failures)
@@ -268,6 +286,7 @@ def score_workspace(
         and manifest.get("phase") == "H"
         and manifest.get("study_status") == "COMPLETE"
         and manifest.get("model_check") == "COMPLETED"
+        and manifest.get("interpretation_completion") == "COMPLETED"
     )
     add_check(
         checks,
@@ -275,6 +294,33 @@ def score_workspace(
         "v1.7-completion",
         complete,
         "manifest records a Phase H COMPLETE v1.7 study with model check",
+    )
+
+    expected_fixture_type = "SYNTHETIC_REFERENCE" if adapter == "fixture" else "NONE"
+    bases = {
+        row.get("evidence_basis")
+        for row in evidence or []
+        if isinstance(row, dict)
+    } if isinstance(evidence, list) else set()
+    synthetic_boundary = (
+        isinstance(manifest, dict)
+        and manifest.get("fixture_type") == expected_fixture_type
+        and (
+            bases == {"SYNTHETIC_OR_SIMULATED"}
+            if adapter == "fixture"
+            else "SYNTHETIC_OR_SIMULATED" not in bases
+        )
+    )
+    add_check(
+        checks,
+        failures,
+        "synthetic-fixture-boundary",
+        synthetic_boundary,
+        (
+            "the reference fixture is explicitly synthetic and every evidence row is labeled simulated"
+            if adapter == "fixture"
+            else "blind runtime artifacts are real-study state and contain no synthetic human evidence"
+        ),
     )
 
     safe_sources = isinstance(sources, list) and bool(sources) and all(
@@ -334,12 +380,91 @@ def score_workspace(
         isinstance(row, dict) and row.get("status") == "REJECTED"
         for row in episodes
     )
+    member_assessments: dict[str, set[str]] = {}
+    if isinstance(lineage, list):
+        for row in lineage:
+            if not isinstance(row, dict):
+                continue
+            members = row.get("member_refs")
+            if not isinstance(members, list):
+                continue
+            for member in members:
+                if isinstance(member, str):
+                    member_assessments.setdefault(member, set()).add(row.get("independence"))
+    derivative_conflict = any(
+        {"DERIVATIVE", "INDEPENDENT"}.issubset(values)
+        for values in member_assessments.values()
+    )
     add_check(
         checks,
         failures,
         "lead-user-method",
-        qualified_sound and derivative and counterexample,
-        "qualification has LU1/LU2 reasoning, derivative evidence is collapsed, and a counterexample remains visible",
+        qualified_sound and derivative and not derivative_conflict and counterexample,
+        "qualification has LU1/LU2 reasoning, derivative lineage is explicit and never also counted independent, and a counterexample remains visible",
+    )
+
+    raw_starting_claims = decision.get("starting_hypotheses", []) if isinstance(decision, dict) else []
+    starting_claims = {
+        " ".join(value.split()).casefold()
+        for value in (raw_starting_claims if isinstance(raw_starting_claims, list) else [])
+        if isinstance(value, str)
+    }
+    ledger_claims = {
+        " ".join(row["claim"].split()).casefold()
+        for row in hypotheses or []
+        if isinstance(row, dict) and isinstance(row.get("claim"), str)
+    } if isinstance(hypotheses, list) else set()
+    observability_closed = isinstance(observability, list) and all(
+        not isinstance(row, dict)
+        or row.get("decision_critical") is not True
+        or row.get("resolution") != "OPEN"
+        for row in observability
+    )
+    ledgers_sound = (
+        isinstance(hypotheses, list)
+        and starting_claims.issubset(ledger_claims)
+        and isinstance(observability, list)
+        and observability_closed
+        and isinstance(analysis_runs, list)
+    )
+    add_check(
+        checks,
+        failures,
+        "adversarial-ledgers",
+        ledgers_sound,
+        "starting hypotheses map to falsification records, critical observability is resolved, and AI-run provenance is present even when empty",
+    )
+
+    terminated_pyramid = isinstance(search_log, list) and any(
+        isinstance(row, dict)
+        and re.fullmatch(r"PY\d+", str(row.get("pyramid_id", "")))
+        and isinstance(row.get("termination_reason"), str)
+        and bool(row["termination_reason"].strip())
+        and isinstance(row.get("hops"), list)
+        for row in search_log
+    )
+    discovery_registries = (
+        isinstance(candidates, list)
+        and bool(candidates)
+        and all(
+            isinstance(row, dict)
+            and re.fullmatch(r"C\d+", str(row.get("candidate_id", "")))
+            for row in candidates
+        )
+        and terminated_pyramid
+        and isinstance(change_log, list)
+        and all(
+            isinstance(row, dict)
+            and re.fullmatch(r"CH\d+", str(row.get("change_id", "")))
+            for row in change_log
+        )
+    )
+    add_check(
+        checks,
+        failures,
+        "discovery-registries",
+        discovery_registries,
+        "candidate, terminated-pyramid, and material-change registries are structured and auditable",
     )
 
     dimensions = sufficiency.get("dimensions") if isinstance(sufficiency, dict) else None
@@ -377,7 +502,15 @@ def score_workspace(
         for row in passing_needs
     )
     shaped_sound = (
-        isinstance(criteria, list)
+        isinstance(shaping_frames, list)
+        and bool(shaping_frames)
+        and all(
+            isinstance(row, dict)
+            and row.get("status") == "ACCEPTED"
+            and row.get("accepted_by_human") is True
+            for row in shaping_frames
+        )
+        and isinstance(criteria, list)
         and bool(criteria)
         and isinstance(concepts, list)
         and bool(concepts)
@@ -398,12 +531,23 @@ def score_workspace(
             for row in criteria
         )
     )
+    selected = [
+        row for row in concepts or []
+        if isinstance(row, dict) and row.get("selection_status") == "SELECTED"
+    ] if isinstance(concepts, list) else []
+    selection_sound = bool(selected) and all(
+        row.get("selected_by_human") is True
+        and isinstance(row.get("selection_note"), str)
+        and bool(row["selection_note"].strip())
+        and row.get("rotation_status") == "RUN"
+        for row in selected
+    )
     add_check(
         checks,
         failures,
         "concept-gate-and-fit",
-        gates_sound and shaped_sound,
-        "concept work follows explicit gate checks and solution-independent PASS requirements",
+        gates_sound and shaped_sound and selection_sound,
+        "concept work follows transitive gates, an accepted frame, solution-independent PASS requirements, and explicit human selection",
     )
 
     status_sound = isinstance(outcome, dict) and outcome.get("status") == case["expected_outcome_status"]
@@ -433,13 +577,43 @@ def score_workspace(
         "required Decision Brief sections exist in decision-first order",
     )
 
+    output_parity = (
+        "**Shaping frame (x → f() → y)**" in brief
+        and "**Candidate and selected mechanisms**" in brief
+        and "- Selection status: SELECTED" in brief
+        and "- Selected by human: True" in brief
+        and (
+            "Synthetic reference fixture — not empirical human or market evidence."
+            in brief
+            if adapter == "fixture"
+            else True
+        )
+    )
+    add_check(
+        checks,
+        failures,
+        "rendered-state-parity",
+        output_parity,
+        "the brief exposes the accepted frame, selection provenance, rotated mechanism state, and fixture warning",
+    )
+
     privacy_leaks: list[str] = []
     if isinstance(episodes, list):
         for row in episodes:
             if not isinstance(row, dict) or row.get("identity_surface_allowed") is True:
                 continue
             identity = row.get("user_entity")
-            if isinstance(identity, str) and identity and identity in brief:
+            if (
+                isinstance(identity, str)
+                and identity
+                and re.search(
+                    (r"(?<!\w)" if identity[0].isalnum() or identity[0] == "_" else "")
+                    + re.escape(identity)
+                    + (r"(?!\w)" if identity[-1].isalnum() or identity[-1] == "_" else ""),
+                    brief,
+                    flags=re.IGNORECASE,
+                )
+            ):
                 privacy_leaks.append(f"private identity {identity!r}")
     if isinstance(sources, list):
         for row in sources:
@@ -493,6 +667,10 @@ def score_workspace(
             "needs": len(needs) if isinstance(needs, list) else None,
             "criteria": len(criteria) if isinstance(criteria, list) else None,
             "concepts": len(concepts) if isinstance(concepts, list) else None,
+            "hypotheses": len(hypotheses) if isinstance(hypotheses, list) else None,
+            "observability": len(observability) if isinstance(observability, list) else None,
+            "analysis_runs": len(analysis_runs) if isinstance(analysis_runs, list) else None,
+            "principles": len(principles) if isinstance(principles, list) else None,
             "actions": len(actions) if isinstance(actions, list) else None,
         },
         "decision_status": outcome.get("status") if isinstance(outcome, dict) else None,
@@ -561,7 +739,7 @@ def run_case(
                     f"adapter result model_output must be non-empty for {case['id']}"
                 )
 
-        checks, failures, snapshot = score_workspace(workspace, case)
+        checks, failures, snapshot = score_workspace(workspace, case, adapter)
         return {
             "id": case["id"],
             "passed": not failures,

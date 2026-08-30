@@ -4,7 +4,7 @@ At the start, reopen the persisted frozen evidence state.
 
 Do not synthesize from conversational recollection.
 
-For STANDARD/FULL, do not proceed if `freeze.status` is not FROZEN unless the work is explicitly marked PROVISIONAL.
+For STANDARD/FULL, do not proceed if `freeze.status` is not FROZEN.
 
 ## 1. Need abstraction
 
@@ -106,6 +106,13 @@ Update:
 - principles.json;
 - hypotheses.json;
 - change_log.json.
+
+After the entire frozen corpus has been interpreted, set
+`manifest.interpretation_completion = COMPLETED`. This marker is required even when
+the supported result is explicitly negative and `findings.json`, `needs.json`, and
+`principles.json` are all empty. Do not use empty arrays alone to imply that Phase E
+ran. Leave the marker `NOT_STARTED` until the full frozen corpus has actually been
+considered.
 
 Do not create concepts in this phase.
 

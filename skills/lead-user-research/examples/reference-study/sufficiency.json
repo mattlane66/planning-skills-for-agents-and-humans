@@ -1,5 +1,6 @@
 {
   "status": "SUFFICIENT",
+  "repair_status": "NOT_REQUIRED",
   "dimensions": {
     "trend_support": {
       "status": "SUFFICIENT",
@@ -44,6 +45,7 @@
       "status": "SUFFICIENT",
       "rationale": "Every branch in the intentionally closed synthetic corpus was inspected; real-world pyramiding is explicitly deferred to fieldwork.",
       "supporting_refs": [
+        "PY1",
         "SRC2",
         "SRC3",
         "SRC4"

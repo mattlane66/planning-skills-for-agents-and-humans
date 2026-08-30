@@ -1,0 +1,49 @@
+[
+  {
+    "hypothesis_id": "H1",
+    "claim": "Advanced multi-agent operators receive unusually high benefit from preserving decision context across handoffs",
+    "scope": "The bundled fictional multi-workspace AI corpus",
+    "observable_predictions": [
+      "Operators ahead on multi-workspace coordination sustain explicit handoff artifacts when reconstruction cost is high.",
+      "The artifact produces net benefit only when its upkeep remains below avoided reconstruction cost."
+    ],
+    "strongest_plausible_refuter": "Independent advanced operators consistently abandon low-maintenance handoff practices because avoided reconstruction never exceeds upkeep.",
+    "rival_explanations": [
+      "The maintained artifact reflects personal documentation preference rather than unusually high handoff benefit.",
+      "Reported savings reflect fictional self-estimation rather than a reliable outcome."
+    ],
+    "targeted_refutation_searches": [
+      "Inspect the independent abandonment case and any operators exposed to multi-workspace coordination without sustained handoff artifacts."
+    ],
+    "evidence_for": [
+      "E2",
+      "E3"
+    ],
+    "evidence_against": [
+      "E5"
+    ],
+    "contrastive_cases": [
+      {
+        "case_type": "PREDICTED_POSITIVE",
+        "evidence_refs": [
+          "E2",
+          "E3"
+        ],
+        "interpretation": "The qualified fictional episode sustained a handoff artifact and reports lower reconstruction effort."
+      },
+      {
+        "case_type": "ABANDONED_OR_REVERSED_SOLUTION",
+        "evidence_refs": [
+          "E5"
+        ],
+        "interpretation": "The independent fictional counterexample abandoned a ledger when upkeep exceeded estimated savings."
+      }
+    ],
+    "boundary_conditions": [
+      "Any benefit claim is bounded to the synthetic fixture.",
+      "Upkeep must remain below avoided reconstruction cost."
+    ],
+    "status": "WEAKENED",
+    "update_rationale": "The positive episode survives within the fixture, while the independent abandonment case narrows the claim to low-maintenance mechanisms and prevents generalization."
+  }
+]

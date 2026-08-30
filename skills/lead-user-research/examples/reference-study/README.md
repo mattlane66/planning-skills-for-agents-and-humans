@@ -10,9 +10,11 @@ The example deliberately contains:
 - one qualified Lead User episode;
 - one derivative candidate that must not be counted independently;
 - one counterexample;
+- explicit falsification and observability ledgers;
+- a terminated, attribute-specific synthetic pyramid;
 - an embedded instruction in a source that is recorded and ignored;
 - a passing Concept Generation Gate with two solution-independent requirements;
-- candidate mechanisms that remain visibly unselected;
+- one human-selected fictional prototype arm plus one unselected candidate, with production selection explicitly unsupported;
 - a structured operational action;
 - privacy-safe evidence drill-down.
 

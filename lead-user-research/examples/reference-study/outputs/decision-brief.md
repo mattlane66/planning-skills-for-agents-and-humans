@@ -1,5 +1,7 @@
 # Lead User Research — Decision Brief
 
+> **Synthetic reference fixture — not empirical human or market evidence.**
+
 ## Decision
 
 Should the fictional product team run a three-week prototype validation of a structured AI handoff capability?
@@ -57,33 +59,69 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 ## What the evidence does not support
 
 - Any claim about real users, prevalence, market size, willingness to pay, or production feasibility
-- Selection of M1 or M2 as a product solution
+- Selection of M1 or M2 as a production product solution; M1 is selected only as a fictional prototype-comparison arm
 
 ## What could make us wrong
 
 - The independent counterexample shows that a handoff artifact can cost more to maintain than it saves.
 - The second adoption is derivative and supplies no independent benefit evidence.
 
+## Hypothesis challenge
+
+- H1 — WEAKENED — Advanced multi-agent operators receive unusually high benefit from preserving decision context across handoffs — The positive episode survives within the fixture, while the independent abandonment case narrows the claim to low-maintenance mechanisms and prevents generalization.
+
+## Observability / fieldwork gate
+
+- O1 — NOT_OBSERVABLE — Does the fictional net benefit generalize to independent real operators without increasing consequential context loss? — Fieldwork: Observe live handoffs among independently recruited multi-agent operators before making any real product decision.
+
 ## Opportunity shaping
 
 ### N1 — Preserve current decisions, constraints, and open questions across AI-workspace handoffs with materially less total effort than manual reconstruction or ledger upkeep.
+
+**Shaping frame (x → f() → y)**
+
+- Frame: SF1 — ACCEPTED
+- x — trigger/context: Changing AI agents or workspaces requires transferring the current decision state.
+- x — current approach: Manual reconstruction from prior conversations and ad hoc summaries.
+- x — current result: The fictional episode reports about 20 minutes of reconstruction per agent change.
+- x — breakdowns: Rejected choices can be revived and consequential constraints or open questions can be lost during reconstruction.
+- f(): UNSPECIFIED
+- y — desired outcome: Resume from the current decision state without reviving rejected options or losing constraints, with materially less total effort.
+- Gap: Preserve consequential state across handoffs while reducing preparation and recovery effort versus manual reconstruction.
+- Boundaries: Do not make ongoing upkeep cost exceed recovery value.; Do not reinstate rejected choices.
+- Human acceptance: True
+- Acceptance note: Synthetic reference fixture models explicit human acceptance for validator coverage.
 
 **Passing fitness conditions**
 
 - R1 — A handoff must preserve consequential decisions, constraints, and open questions without reinstating rejected choices.
 - R2 — Preparing and recovering a handoff must require materially less total effort than reconstructing the state manually.
 
-**Candidate mechanisms — not selected solutions**
+**Candidate and selected mechanisms**
 
 #### M1 — Generate a bounded handoff packet from the current workspace that lists active decisions, constraints, rejected options, open questions, and evidence links for confirmation before transfer.
 
+- Selection status: SELECTED
+- Selected by human: True
+- Selection note: The fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.
+- Rotation status: RUN
 - Requirements: R1, R2
 - Assumptions: The current workspace exposes enough structured state to generate an accurate packet; A short confirmation step costs less than manual reconstruction
 - Risks: Summarization may omit or revive consequential decisions; Confirmation may become another maintenance burden
 - Evidence needed next: Observed preparation and recovery time; Consequential omission and decision-revival rate; Abandonment or compensating behavior
 
+**Rotated parts × requirements**
+
+- M1P1 — Extract active decisions, constraints, rejected options, open questions, and evidence links. — requirements: R1
+- M1P2 — Ask for a bounded confirmation before transfer. — requirements: R1, R2
+- M1P3 — Transfer the confirmed packet to the receiving workspace. — requirements: R2
+
 #### M2 — Maintain a shared decision ledger that automatically shows changes since the receiving workspace last synchronized.
 
+- Selection status: CANDIDATE
+- Selected by human: False
+- Selection note: none recorded
+- Rotation status: NOT_RUN
 - Requirements: R1, R2
 - Assumptions: Automatic change capture can keep manual upkeep below recovery value; Recipients can distinguish superseded from active decisions
 - Risks: The ledger may accumulate noise or stale state; Synchronization errors may create false confidence
@@ -123,6 +161,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 ## Study execution
 
+- Fixture type: SYNTHETIC_REFERENCE
 - Run mode: STANDARD
 - Current phase: H
 - Study status: COMPLETE
@@ -133,9 +172,10 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Human review: NOT_REVIEWED
 - Deterministic validation: PASSED
+- Interpretation completion: COMPLETED
 - Interpretive status: PROVISIONAL
 - Model checklist: COMPLETED
-- State fingerprint: sha256:e0f82004535b0b9bb81ea12c57527d75dd408db575996bfcfae8404161722fae
+- State fingerprint: sha256:e5ee76aef00a3e2c81e1e6d33cb8eb37aab7d12580ce4e422eea4e48e2f7b953
 
 ## Evidence drill-down
 
@@ -179,6 +219,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Public summary: An anonymized fictional operator sustained a structured handoff artifact across four agents for eight weeks.
 - Evidence type: synthetic behavior
+- Evidence basis: SYNTHETIC_OR_SIMULATED
 - Source: SRC2 (citation withheld)
 - Source coverage: FULL
 - Source ref: SRC2
@@ -187,6 +228,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Public summary: The fictional qualified episode reports a sustained 75% reduction in handoff effort while preserving decision context.
 - Evidence type: synthetic measured result and stated purpose
+- Evidence basis: SYNTHETIC_OR_SIMULATED
 - Source: SRC2 (citation withheld)
 - Source coverage: FULL
 - Source ref: SRC2
@@ -195,6 +237,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Public summary: A second fictional example is explicitly derivative and supplies no independent benefit evidence.
 - Evidence type: synthetic lineage evidence
+- Evidence basis: SYNTHETIC_OR_SIMULATED
 - Source: SRC3 (citation withheld)
 - Source coverage: FULL
 - Source ref: SRC3
@@ -203,6 +246,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Public summary: An independent fictional counterexample abandoned a handoff ledger because upkeep exceeded recovery value.
 - Evidence type: synthetic counterexample behavior
+- Evidence basis: SYNTHETIC_OR_SIMULATED
 - Source: SRC4 (citation withheld)
 - Source coverage: FULL
 - Source ref: SRC4

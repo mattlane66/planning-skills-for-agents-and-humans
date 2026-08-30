@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from report_safety import contains_private_identity, safe_outward_url
 from study_fingerprint import study_fingerprint
 
 COVERAGE = {"FULL", "PARTIAL", "UNREADABLE", "UNKNOWN"}
@@ -25,6 +26,9 @@ HUMAN_REVIEW = {"REVIEWED", "NOT_REVIEWED"}
 DETERMINISTIC_VALIDATION = {"PASSED", "FAILED", "NOT_RUN"}
 INTERPRETIVE_STATUS = {"STABLE", "PROVISIONAL"}
 MODEL_CHECK = {"COMPLETED", "NOT_RUN"}
+FIXTURE_TYPE = {"NONE", "SYNTHETIC_REFERENCE"}
+INTERPRETATION_COMPLETION = {"NOT_STARTED", "COMPLETED"}
+SUFFICIENCY_REPAIR = {"NOT_REQUIRED", "REQUIRED", "COMPLETED"}
 SOURCE_INSTRUCTION_RISK = {"NONE", "PRESENT", "UNKNOWN"}
 SOURCE_CONTENT_TRUST = {"UNTRUSTED_DATA"}
 PROPAGATION = {
@@ -83,6 +87,7 @@ OBSERVABILITY_RESOLUTION = {
     "ACCEPTED_UNKNOWN",
 }
 ANALYSIS_VALIDATION = {"NOT_ASSESSED", "PASSED", "FAILED"}
+DISCOVERY_PATH = {"TARGET_MARKET", "ADVANCED_ANALOG", "ATTRIBUTE_SPECIFIC"}
 EVIDENCE_BASIS = {
     "REAL_HUMAN_TRACE",
     "REAL_HUMAN_STATEMENT",
@@ -109,6 +114,10 @@ ID_PATTERNS = {
     "hypothesis_id": re.compile(r"^H\d+$"),
     "observability_id": re.compile(r"^O\d+$"),
     "analysis_run_id": re.compile(r"^AR\d+$"),
+    "candidate_id": re.compile(r"^C\d+$"),
+    "search_id": re.compile(r"^Q\d+$"),
+    "pyramid_id": re.compile(r"^PY\d+$"),
+    "change_id": re.compile(r"^CH\d+$"),
 }
 
 SUFFICIENCY_DIMENSIONS = [
@@ -163,6 +172,9 @@ def refs_exist(
         errors.append(f"{owner} {label} must be a list")
         return
     for value in values:
+        if not isinstance(value, str) or not value.strip():
+            errors.append(f"{owner} has invalid {label} reference: {value!r}")
+            continue
         if value not in valid:
             errors.append(f"{owner} references missing {label}: {value}")
 
@@ -201,6 +213,15 @@ def require_string_list(
     return valid
 
 
+def as_list(value: Any) -> list[Any]:
+    """Keep schema errors reportable instead of crashing on a non-list value."""
+    return value if isinstance(value, list) else []
+
+
+def as_string_list(value: Any) -> list[str]:
+    return [item for item in as_list(value) if isinstance(item, str)]
+
+
 def validate_action(row: Any, index: int, errors: list[str]) -> str | None:
     owner = f"decision_outcome action_now[{index}]"
     if not isinstance(row, dict):
@@ -236,6 +257,7 @@ def main() -> int:
     manifest = load(root, "manifest.json", errors)
     decision = load(root, "decision.json", errors)
     trends = load(root, "trends.json", errors)
+    candidates = load(root, "candidates.json", errors)
     sources = load(root, "sources.json", errors)
     evidence = load(root, "evidence.json", errors)
     episodes = load(root, "lu_episodes.json", errors)
@@ -250,12 +272,15 @@ def main() -> int:
     sufficiency = load(root, "sufficiency.json", errors)
     freeze = load(root, "freeze.json", errors)
     decision_outcome = load(root, "decision_outcome.json", errors)
-    hypotheses = load(root, "hypotheses.json", errors) if (root / "hypotheses.json").exists() else []
-    observability = load(root, "observability.json", errors) if (root / "observability.json").exists() else []
-    analysis_runs = load(root, "analysis_runs.json", errors) if (root / "analysis_runs.json").exists() else []
+    hypotheses = load(root, "hypotheses.json", errors)
+    observability = load(root, "observability.json", errors)
+    analysis_runs = load(root, "analysis_runs.json", errors)
+    search_log = load(root, "search_log.json", errors)
+    change_log = load(root, "change_log.json", errors)
 
     list_files = [
         ("trends.json", trends),
+        ("candidates.json", candidates),
         ("sources.json", sources),
         ("evidence.json", evidence),
         ("lu_episodes.json", episodes),
@@ -269,12 +294,15 @@ def main() -> int:
         ("hypotheses.json", hypotheses),
         ("observability.json", observability),
         ("analysis_runs.json", analysis_runs),
+        ("search_log.json", search_log),
+        ("change_log.json", change_log),
     ]
     for name, value in list_files:
         if not isinstance(value, list):
             errors.append(f"{name} must contain a JSON array")
 
     trends = trends if isinstance(trends, list) else []
+    candidates = candidates if isinstance(candidates, list) else []
     sources = sources if isinstance(sources, list) else []
     evidence = evidence if isinstance(evidence, list) else []
     episodes = episodes if isinstance(episodes, list) else []
@@ -288,10 +316,15 @@ def main() -> int:
     hypotheses = hypotheses if isinstance(hypotheses, list) else []
     observability = observability if isinstance(observability, list) else []
     analysis_runs = analysis_runs if isinstance(analysis_runs, list) else []
+    search_log = search_log if isinstance(search_log, list) else []
+    change_log = change_log if isinstance(change_log, list) else []
 
     mode = manifest.get("mode") if isinstance(manifest, dict) else None
+    fixture_type = manifest.get("fixture_type") if isinstance(manifest, dict) else None
+    is_synthetic_fixture = fixture_type == "SYNTHETIC_REFERENCE"
 
     trend_ids = ids(trends, "trend_id", errors)
+    candidate_ids = ids(candidates, "candidate_id", errors)
     source_ids = ids(sources, "source_id", errors)
     evidence_ids = ids(evidence, "evidence_id", errors)
     lu_ids = ids(episodes, "lu_id", errors)
@@ -306,38 +339,152 @@ def main() -> int:
     observability_ids = ids(observability, "observability_id", errors)
     analysis_run_ids = ids(analysis_runs, "analysis_run_id", errors)
 
+    for row in candidates:
+        if not isinstance(row, dict):
+            continue
+        cid = row.get("candidate_id", "<unknown>")
+        for field in ["candidate_ref", "discovery_basis", "disposition"]:
+            require_nonempty_string(row, field, cid, errors)
+        discovery_path = row.get("discovery_path")
+        if discovery_path is not None and discovery_path not in DISCOVERY_PATH:
+            errors.append(f"{cid} has invalid discovery_path {discovery_path!r}")
+        if discovery_path == "ATTRIBUTE_SPECIFIC":
+            require_nonempty_string(row, "target_attribute", cid, errors)
+        for field in ["technical_expertise", "community_resources"]:
+            if field not in row:
+                continue
+            value = row.get(field)
+            if isinstance(value, str):
+                if not value.strip():
+                    errors.append(f"{cid} {field} must not be empty when present")
+            elif isinstance(value, list):
+                require_string_list(row, field, cid, errors, nonempty=True)
+            else:
+                errors.append(f"{cid} {field} must be a non-empty string or string list")
+
+    search_ids: set[str] = set()
+    pyramid_ids: set[str] = set()
+    search_refs_to_check: list[tuple[Any, str, str]] = []
+    for index, row in enumerate(search_log):
+        owner = f"search_log.json row {index}"
+        if not isinstance(row, dict):
+            continue
+        search_id = row.get("search_id")
+        pyramid_id = row.get("pyramid_id")
+        if bool(search_id) == bool(pyramid_id):
+            errors.append(f"{owner} requires exactly one of search_id or pyramid_id")
+            continue
+        if search_id:
+            if not isinstance(search_id, str) or not ID_PATTERNS["search_id"].match(search_id):
+                errors.append(f"{owner} has invalid search_id {search_id!r}")
+            elif search_id in search_ids:
+                errors.append(f"duplicate search_id: {search_id}")
+            else:
+                search_ids.add(search_id)
+            owner = str(search_id)
+            for field in ["branch", "query_or_route", "next_branch"]:
+                require_nonempty_string(row, field, owner, errors)
+            require_string_list(row, "result_refs", owner, errors)
+            search_refs_to_check.append((row.get("result_refs", []), "result", owner))
+            continue
+
+        if not isinstance(pyramid_id, str) or not ID_PATTERNS["pyramid_id"].match(pyramid_id):
+            errors.append(f"{owner} has invalid pyramid_id {pyramid_id!r}")
+        elif pyramid_id in pyramid_ids:
+            errors.append(f"duplicate pyramid_id: {pyramid_id}")
+        else:
+            pyramid_ids.add(pyramid_id)
+        owner = str(pyramid_id)
+        for field in [
+            "target_attribute",
+            "starting_node",
+            "network_visibility",
+            "termination_criterion",
+        ]:
+            require_nonempty_string(row, field, owner, errors)
+        termination_reason = row.get("termination_reason")
+        if termination_reason is not None and (
+            not isinstance(termination_reason, str) or not termination_reason.strip()
+        ):
+            errors.append(f"{owner} termination_reason must be null or a non-empty string")
+        hops = row.get("hops")
+        if not isinstance(hops, list):
+            errors.append(f"{owner} hops must be a list")
+            hops = []
+        for hop_index, hop in enumerate(hops):
+            hop_owner = f"{owner} hop {hop_index}"
+            if not isinstance(hop, dict):
+                errors.append(f"{hop_owner} must be an object")
+                continue
+            for field in [
+                "from_node",
+                "referral_rationale",
+                "next_node",
+                "advancement_rationale",
+            ]:
+                require_nonempty_string(hop, field, hop_owner, errors)
+            require_string_list(hop, "supporting_refs", hop_owner, errors)
+            search_refs_to_check.append((hop.get("supporting_refs", []), "supporting", hop_owner))
+
+    change_ids: set[str] = set()
+    for index, row in enumerate(change_log):
+        owner = f"change_log.json row {index}"
+        if not isinstance(row, dict):
+            continue
+        change_id = row.get("change_id")
+        if not isinstance(change_id, str) or not ID_PATTERNS["change_id"].match(change_id):
+            errors.append(f"{owner} has invalid change_id {change_id!r}")
+        elif change_id in change_ids:
+            errors.append(f"duplicate change_id: {change_id}")
+        else:
+            change_ids.add(change_id)
+        changed_at = row.get("changed_at")
+        if not isinstance(changed_at, str) or not changed_at.strip():
+            errors.append(f"{owner} requires non-empty changed_at")
+        else:
+            try:
+                datetime.fromisoformat(changed_at.replace("Z", "+00:00"))
+            except ValueError:
+                errors.append(f"{owner} changed_at must be ISO-8601")
+        if row.get("phase") not in PHASES:
+            errors.append(f"{owner} has invalid phase {row.get('phase')!r}")
+        for field in ["change", "reason"]:
+            require_nonempty_string(row, field, owner, errors)
+
     source_by_id = {
         row.get("source_id"): row
         for row in sources
-        if isinstance(row, dict) and row.get("source_id")
+        if isinstance(row, dict) and isinstance(row.get("source_id"), str)
     }
     evidence_by_id = {
         row.get("evidence_id"): row
         for row in evidence
-        if isinstance(row, dict) and row.get("evidence_id")
+        if isinstance(row, dict) and isinstance(row.get("evidence_id"), str)
     }
     episode_by_id = {
         row.get("lu_id"): row
         for row in episodes
-        if isinstance(row, dict) and row.get("lu_id")
+        if isinstance(row, dict) and isinstance(row.get("lu_id"), str)
     }
     finding_by_id = {
         row.get("finding_id"): row
         for row in findings
-        if isinstance(row, dict) and row.get("finding_id")
+        if isinstance(row, dict) and isinstance(row.get("finding_id"), str)
     }
     shaping_frame_by_id = {
         row.get("frame_id"): row
         for row in shaping_frames
-        if isinstance(row, dict) and row.get("frame_id")
+        if isinstance(row, dict) and isinstance(row.get("frame_id"), str)
     }
     criterion_by_id = {
         row.get("requirement_id"): row
         for row in criteria
-        if isinstance(row, dict) and row.get("requirement_id")
+        if isinstance(row, dict) and isinstance(row.get("requirement_id"), str)
     }
 
     for source in sources:
+        if not isinstance(source, dict):
+            continue
         sid = source.get("source_id", "<unknown>")
         for field in ["title", "source_type", "access_date"]:
             require_nonempty_string(source, field, sid, errors)
@@ -367,8 +514,9 @@ def main() -> int:
         if source.get("content_trust") not in SOURCE_CONTENT_TRUST:
             errors.append(f"{sid} content_trust must be 'UNTRUSTED_DATA'")
         require_bool(source, "outward_citation_allowed", sid, errors)
-        if source.get("outward_citation_allowed") is True and not source.get("url"):
-            errors.append(f"{sid} outward citation requires a URL")
+        if source.get("outward_citation_allowed") is True:
+            if safe_outward_url(source.get("url")) is None:
+                errors.append(f"{sid} outward citation requires a safe HTTP(S) URL")
         for field in [
             "platform_or_community",
             "participant_role",
@@ -383,13 +531,15 @@ def main() -> int:
     analysis_run_by_id = {
         row.get("analysis_run_id"): row
         for row in analysis_runs
-        if isinstance(row, dict) and row.get("analysis_run_id")
+        if isinstance(row, dict) and isinstance(row.get("analysis_run_id"), str)
     }
 
     for row in evidence:
+        if not isinstance(row, dict):
+            continue
         eid = row.get("evidence_id", "<unknown>")
         sid = row.get("source_id")
-        if sid not in source_ids:
+        if not isinstance(sid, str) or sid not in source_ids:
             errors.append(f"{eid} references missing source_id: {sid}")
         elif source_by_id[sid].get("coverage") not in {"FULL", "PARTIAL"}:
             errors.append(
@@ -398,14 +548,17 @@ def main() -> int:
             )
         require_nonempty_string(row, "evidence_type", eid, errors)
         basis = row.get("evidence_basis")
-        if basis is not None and basis not in EVIDENCE_BASIS:
+        if basis not in EVIDENCE_BASIS:
             errors.append(f"{eid} has invalid evidence_basis {basis!r}")
-        if basis == "SYNTHETIC_OR_SIMULATED":
+        if basis == "SYNTHETIC_OR_SIMULATED" and not is_synthetic_fixture:
             errors.append(
                 f"{eid} synthetic or simulated material cannot be persisted as human evidence"
             )
         analysis_run_id = row.get("analysis_run_id")
-        if analysis_run_id not in (None, "") and analysis_run_id not in analysis_run_ids:
+        if analysis_run_id not in (None, "") and (
+            not isinstance(analysis_run_id, str)
+            or analysis_run_id not in analysis_run_ids
+        ):
             errors.append(f"{eid} references missing analysis_run_id: {analysis_run_id}")
         excerpt = row.get("verbatim_excerpt")
         observation = row.get("bounded_observation")
@@ -421,22 +574,35 @@ def main() -> int:
         ):
             errors.append(f"{eid} public_summary must be a non-empty string when present")
         tid = row.get("trend_id")
-        if tid not in (None, "") and tid not in trend_ids:
+        if tid not in (None, "") and (
+            not isinstance(tid, str) or tid not in trend_ids
+        ):
             errors.append(f"{eid} references missing trend_id: {tid}")
         luid = row.get("lu_id")
-        if luid not in (None, "") and luid not in lu_ids:
-            errors.append(f"{eid} references missing lu_id: {luid}")
-        private_episode = episode_by_id.get(luid, {})
-        private_identity = private_episode.get("user_entity")
-        if (
-            isinstance(public_summary, str)
-            and isinstance(private_identity, str)
-            and private_episode.get("identity_surface_allowed") is not True
-            and private_identity.casefold() in public_summary.casefold()
+        if luid not in (None, "") and (
+            not isinstance(luid, str) or luid not in lu_ids
         ):
-            errors.append(f"{eid} public_summary exposes private user_entity")
+            errors.append(f"{eid} references missing lu_id: {luid}")
+        if isinstance(public_summary, str):
+            for private_episode in episodes:
+                if (
+                    not isinstance(private_episode, dict)
+                    or private_episode.get("identity_surface_allowed") is True
+                ):
+                    continue
+                private_identity = private_episode.get("user_entity")
+                if (
+                    isinstance(private_identity, str)
+                    and contains_private_identity(public_summary, private_identity)
+                ):
+                    errors.append(
+                        f"{eid} public_summary exposes private user_entity for "
+                        f"{private_episode.get('lu_id', '<unknown>')}"
+                    )
 
     for row in hypotheses:
+        if not isinstance(row, dict):
+            continue
         hid = row.get("hypothesis_id", "<unknown>")
         require_nonempty_string(row, "claim", hid, errors)
         status = row.get("status")
@@ -473,7 +639,23 @@ def main() -> int:
         if status == "UNTESTABLE":
             require_nonempty_string(row, "update_rationale", hid, errors)
 
+    if isinstance(decision, dict) and isinstance(decision.get("starting_hypotheses"), list):
+        ledger_claims = {
+            " ".join(row.get("claim", "").split()).casefold()
+            for row in hypotheses
+            if isinstance(row, dict) and isinstance(row.get("claim"), str)
+        }
+        for index, claim in enumerate(decision.get("starting_hypotheses", [])):
+            if not isinstance(claim, str) or not claim.strip():
+                continue
+            if " ".join(claim.split()).casefold() not in ledger_claims:
+                errors.append(
+                    f"decision.json starting_hypotheses[{index}] has no matching hypotheses.json claim"
+                )
+
     for row in observability:
+        if not isinstance(row, dict):
+            continue
         oid = row.get("observability_id", "<unknown>")
         require_nonempty_string(row, "question", oid, errors)
         require_bool(row, "decision_critical", oid, errors)
@@ -490,6 +672,8 @@ def main() -> int:
             errors.append(f"{oid} cannot be RESOLVED_BY_TRACES with status {row.get('status')}")
 
     for row in analysis_runs:
+        if not isinstance(row, dict):
+            continue
         arid = row.get("analysis_run_id", "<unknown>")
         for field in [
             "task",
@@ -519,6 +703,8 @@ def main() -> int:
             )
 
     for row in trends:
+        if not isinstance(row, dict):
+            continue
         tid = row.get("trend_id", "<unknown>")
         for field in ["statement", "direction", "importance"]:
             require_nonempty_string(row, field, tid, errors)
@@ -526,8 +712,8 @@ def main() -> int:
         status = row.get("status")
         if status is not None and status not in EPISTEMIC:
             errors.append(f"{tid} has invalid status {status!r}")
-        if status == "VERIFIED" and not row.get("evidence_refs"):
-            errors.append(f"{tid} is VERIFIED without evidence_refs")
+        if status in {"VERIFIED", "INFERRED"} and not row.get("evidence_refs"):
+            errors.append(f"{tid} {status} requires evidence_refs")
         indicators = require_string_list(
             row, "observable_indicators", tid, errors,
             nonempty=status in {"VERIFIED", "INFERRED"},
@@ -538,6 +724,8 @@ def main() -> int:
     trace_ref_ids: set[str] = set()
 
     for row in episodes:
+        if not isinstance(row, dict):
+            continue
         luid = row.get("lu_id", "<unknown>")
         for field in ["user_entity", "need_statement", "context"]:
             require_nonempty_string(row, field, luid, errors)
@@ -548,7 +736,7 @@ def main() -> int:
             row.get("identity_surface_allowed") is False
             and isinstance(public_label, str)
             and isinstance(internal_identity, str)
-            and internal_identity.casefold() in public_label.casefold()
+            and contains_private_identity(public_label, internal_identity)
         ):
             errors.append(f"{luid} public_label exposes private user_entity")
         if row.get("identity_surface_allowed") is True:
@@ -556,7 +744,7 @@ def main() -> int:
             require_nonempty_string(row, "identity_surface_rationale", luid, errors)
         if row.get("status") not in LU_STATUS:
             errors.append(f"{luid} has invalid status {row.get('status')!r}")
-        if row.get("trend_id") not in trend_ids:
+        if not isinstance(row.get("trend_id"), str) or row.get("trend_id") not in trend_ids:
             errors.append(f"{luid} references missing trend_id: {row.get('trend_id')}")
         refs_exist(row.get("lu1_evidence", []), evidence_ids, "LU1 evidence", luid, errors)
         refs_exist(row.get("lu2_evidence", []), evidence_ids, "LU2 evidence", luid, errors)
@@ -575,9 +763,15 @@ def main() -> int:
             require_nonempty_string(row, "advancement_indicator", luid, errors)
             require_nonempty_string(row, "lu2_rationale", luid, errors)
             require_nonempty_string(row, "benefit_signal", luid, errors)
-            for ref in row.get("lu1_evidence", []) + row.get("lu2_evidence", []):
+            qualification_refs = as_string_list(row.get("lu1_evidence")) + as_string_list(
+                row.get("lu2_evidence")
+            )
+            for ref in qualification_refs:
                 evidence_row = evidence_by_id.get(ref, {})
-                if evidence_row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED":
+                if (
+                    evidence_row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED"
+                    and not is_synthetic_fixture
+                ):
                     errors.append(f"{luid} qualification cannot use synthetic or simulated evidence {ref}")
                 evidence_trend = evidence_row.get("trend_id")
                 if evidence_trend not in (None, "", row.get("trend_id")):
@@ -699,7 +893,10 @@ def main() -> int:
     valid_lineage_refs = source_ids | lu_ids
     independent_lineage_count = 0
     independent_member_sets: set[frozenset[str]] = set()
+    member_independence: dict[str, set[str]] = {}
     for row in lineage:
+        if not isinstance(row, dict):
+            continue
         lid = row.get("lineage_id", "<unknown>")
         relationship = row.get("relationship")
         independence = row.get("independence")
@@ -711,6 +908,10 @@ def main() -> int:
         refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", lid, errors)
         if not row.get("member_refs"):
             errors.append(f"{lid} has no member_refs")
+        elif isinstance(row.get("member_refs"), list) and independence in INDEPENDENCE:
+            for member_ref in row["member_refs"]:
+                if isinstance(member_ref, str):
+                    member_independence.setdefault(member_ref, set()).add(independence)
         require_nonempty_string(row, "rationale", lid, errors)
         if independence == "INDEPENDENT":
             independent_lineage_count += 1
@@ -722,6 +923,8 @@ def main() -> int:
                 if member_set in independent_member_sets:
                     errors.append(f"{lid} duplicates an independent lineage member set")
                 independent_member_sets.add(member_set)
+        if independence == "DERIVATIVE" and not row.get("evidence_refs"):
+            errors.append(f"{lid} is DERIVATIVE without direct lineage evidence refs")
         if relationship == "INDEPENDENT_REDISCOVERY" and independence != "INDEPENDENT":
             errors.append(
                 f"{lid} INDEPENDENT_REDISCOVERY requires independence=INDEPENDENT"
@@ -736,7 +939,15 @@ def main() -> int:
         } and independence == "INDEPENDENT":
             errors.append(f"{lid} relationship {relationship} cannot be INDEPENDENT")
 
+    for member_ref, assessments in sorted(member_independence.items()):
+        if "DERIVATIVE" in assessments and "INDEPENDENT" in assessments:
+            errors.append(
+                f"lineage member {member_ref} cannot be counted as both DERIVATIVE and INDEPENDENT"
+            )
+
     for row in findings:
+        if not isinstance(row, dict):
+            continue
         fid = row.get("finding_id", "<unknown>")
         require_nonempty_string(row, "claim", fid, errors)
         require_nonempty_string(row, "confidence_rationale", fid, errors)
@@ -753,10 +964,14 @@ def main() -> int:
             fid,
             errors,
         )
-        if label == "VERIFIED" and not row.get("evidence_refs"):
-            errors.append(f"{fid} is VERIFIED without evidence_refs")
+        if label in {"VERIFIED", "INFERRED"} and not (
+            row.get("evidence_refs") or row.get("lu_refs") or row.get("trace_refs")
+        ):
+            errors.append(f"{fid} {label} requires evidence, LU, or trace refs")
 
     for row in needs:
+        if not isinstance(row, dict):
+            continue
         nid = row.get("need_id", "<unknown>")
         require_nonempty_string(row, "statement", nid, errors)
         refs_exist(row.get("finding_ids", []), finding_ids, "finding", nid, errors)
@@ -805,22 +1020,56 @@ def main() -> int:
                     errors.append(f"{nid} PASS requires concept_gate_checks.{field}=true")
             supporting_lus = {
                 lu_ref
-                for finding_ref in row.get("finding_ids", [])
-                for lu_ref in finding_by_id.get(finding_ref, {}).get("lu_refs", [])
+                for finding_ref in as_string_list(row.get("finding_ids"))
+                for lu_ref in as_string_list(
+                    finding_by_id.get(finding_ref, {}).get("lu_refs")
+                )
             }
             qualified_lus = {
                 episode.get("lu_id")
                 for episode in episodes
-                if episode.get("status") == "QUALIFIED"
+                if isinstance(episode, dict) and episode.get("status") == "QUALIFIED"
             }
             if not supporting_lus.intersection(qualified_lus):
                 errors.append(f"{nid} PASS requires a qualified LU through its findings")
+            relevant_trends = set(as_string_list(row.get("relevant_trends")))
+            credible_trends = {
+                trend.get("trend_id")
+                for trend in trends
+                if isinstance(trend, dict)
+                and trend.get("trend_id") in relevant_trends
+                and trend.get("status") in {"VERIFIED", "INFERRED"}
+                and bool(trend.get("evidence_refs"))
+            }
+            if not credible_trends:
+                errors.append(f"{nid} PASS requires an evidence-backed VERIFIED or INFERRED relevant trend")
+            aligned_support = False
+            finding_refs = as_string_list(row.get("finding_ids"))
+            for finding_ref in finding_refs:
+                finding = finding_by_id.get(finding_ref, {})
+                if finding.get("epistemic_label") not in {"VERIFIED", "INFERRED"}:
+                    continue
+                finding_has_atomic_support = bool(finding.get("evidence_refs"))
+                for lu_ref in as_string_list(finding.get("lu_refs")):
+                    episode = episode_by_id.get(lu_ref, {})
+                    if episode.get("status") != "QUALIFIED":
+                        continue
+                    if episode.get("trend_id") not in credible_trends:
+                        continue
+                    if finding_has_atomic_support or episode.get("lu1_evidence") or episode.get("lu2_evidence"):
+                        aligned_support = True
+            if not aligned_support:
+                errors.append(
+                    f"{nid} PASS requires a supporting finding with an atomic evidence path to a qualified LU on a credible relevant trend"
+                )
 
     for row in principles:
+        if not isinstance(row, dict):
+            continue
         spid = row.get("principle_id", "<unknown>")
         require_nonempty_string(row, "principle", spid, errors)
         nid = row.get("need_id")
-        if nid not in need_ids:
+        if not isinstance(nid, str) or nid not in need_ids:
             errors.append(f"{spid} references missing need_id: {nid}")
         refs_exist(row.get("evidence_refs", []), evidence_ids, "evidence", spid, errors)
         status = row.get("status")
@@ -830,9 +1079,11 @@ def main() -> int:
             errors.append(f"{spid} {status} requires evidence_refs")
 
     for row in shaping_frames:
+        if not isinstance(row, dict):
+            continue
         sfid = row.get("frame_id", "<unknown>")
         nid = row.get("need_id")
-        if nid not in need_ids:
+        if not isinstance(nid, str) or nid not in need_ids:
             errors.append(f"{sfid} references missing need_id: {nid}")
         x = row.get("x")
         if not isinstance(x, dict):
@@ -874,13 +1125,15 @@ def main() -> int:
         "information_gain",
     ]
     for row in criteria:
+        if not isinstance(row, dict):
+            continue
         rid = row.get("requirement_id", "<unknown>")
         require_nonempty_string(row, "requirement", rid, errors)
         nid = row.get("need_id")
-        if nid not in need_ids:
+        if not isinstance(nid, str) or nid not in need_ids:
             errors.append(f"{rid} references missing need_id: {nid}")
         frame_ref = row.get("frame_ref")
-        if frame_ref not in frame_ids:
+        if not isinstance(frame_ref, str) or frame_ref not in frame_ids:
             errors.append(f"{rid} references missing frame_ref: {frame_ref}")
         else:
             frame = shaping_frame_by_id.get(frame_ref, {})
@@ -907,15 +1160,20 @@ def main() -> int:
 
     selected_by_need: dict[str, int] = {}
     for row in concepts:
+        if not isinstance(row, dict):
+            continue
         mid = row.get("concept_id", "<unknown>")
         require_nonempty_string(row, "mechanism", mid, errors)
         nid = row.get("need_id")
-        if nid not in need_ids:
+        if not isinstance(nid, str) or nid not in need_ids:
             errors.append(f"{mid} references missing need_id: {nid}")
-        refs_exist(row.get("requirement_ids", []), requirement_ids, "requirement", mid, errors)
-        if not row.get("requirement_ids"):
+        concept_requirement_ids = require_string_list(
+            row, "requirement_ids", mid, errors
+        )
+        refs_exist(concept_requirement_ids, requirement_ids, "requirement", mid, errors)
+        if not concept_requirement_ids:
             errors.append(f"{mid} requires requirement_ids")
-        for ref in row.get("requirement_ids", []):
+        for ref in concept_requirement_ids:
             if criterion_by_id.get(ref, {}).get("status") != "PASS":
                 errors.append(f"{mid} references non-PASS requirement {ref}")
             if criterion_by_id.get(ref, {}).get("need_id") != nid:
@@ -938,12 +1196,13 @@ def main() -> int:
             if not isinstance(value, bool):
                 errors.append(f"{mid} requirement_fit[{ref}] must be boolean")
         passed_refs = {ref for ref, value in requirement_fit.items() if value is True}
-        if set(row.get("requirement_ids", [])) != passed_refs:
+        if set(concept_requirement_ids) != passed_refs:
             errors.append(f"{mid} requirement_ids must match true requirement_fit entries")
 
         selection_status = row.get("selection_status")
         if selection_status not in CONCEPT_SELECTION_STATUS:
             errors.append(f"{mid} has invalid selection_status {selection_status!r}")
+        require_bool(row, "selected_by_human", mid, errors)
         rotation_status = row.get("rotation_status")
         if rotation_status not in ROTATION_STATUS:
             errors.append(f"{mid} has invalid rotation_status {rotation_status!r}")
@@ -967,8 +1226,11 @@ def main() -> int:
                 if part_id in part_ids:
                     errors.append(f"{mid} has duplicate part_id {part_id}")
                 part_ids.add(part_id)
-            part_refs = part.get("requirement_ids", [])
-            refs_exist(part_refs, requirement_ids, "requirement", f"{mid} part {index}", errors)
+            part_owner = f"{mid} part {index}"
+            part_refs = require_string_list(
+                part, "requirement_ids", part_owner, errors
+            )
+            refs_exist(part_refs, requirement_ids, "requirement", part_owner, errors)
             if not part_refs:
                 errors.append(f"{mid} part {index} must serve at least one requirement")
             for ref in part_refs:
@@ -978,6 +1240,9 @@ def main() -> int:
 
         if selection_status == "SELECTED":
             selected_by_need[nid] = selected_by_need.get(nid, 0) + 1
+            if row.get("selected_by_human") is not True:
+                errors.append(f"{mid} SELECTED requires selected_by_human=true")
+            require_nonempty_string(row, "selection_note", mid, errors)
             if rotation_status != "RUN":
                 errors.append(f"{mid} SELECTED requires rotation_status RUN")
             if not parts:
@@ -985,8 +1250,11 @@ def main() -> int:
             missing_support = pass_requirements - served_by_parts
             if missing_support:
                 errors.append(f"{mid} SELECTED rotated fit leaves requirements unsupported: {sorted(missing_support)}")
-        elif rotation_status == "RUN":
-            errors.append(f"{mid} rotation_status RUN requires selection_status SELECTED")
+        else:
+            if row.get("selected_by_human") is True:
+                errors.append(f"{mid} {selection_status} cannot have selected_by_human=true")
+            if rotation_status == "RUN":
+                errors.append(f"{mid} rotation_status RUN requires selection_status SELECTED")
 
         for field in ["assumptions", "risks", "evidence_needed_next"]:
             require_string_list(row, field, mid, errors)
@@ -1010,13 +1278,23 @@ def main() -> int:
         | hypothesis_ids
         | observability_ids
         | analysis_run_ids
+        | candidate_ids
+        | search_ids
+        | pyramid_ids
+        | change_ids
     )
+
+    for values, label, owner in search_refs_to_check:
+        refs_exist(values, all_structured_refs, label, owner, errors)
 
     if not isinstance(sufficiency, dict):
         errors.append("sufficiency.json must contain a JSON object")
     else:
         if sufficiency.get("status") not in SUFFICIENCY:
             errors.append(f"sufficiency.json has invalid status {sufficiency.get('status')!r}")
+        repair_status = sufficiency.get("repair_status")
+        if repair_status not in SUFFICIENCY_REPAIR:
+            errors.append(f"sufficiency.json has invalid repair_status {repair_status!r}")
         dimensions = sufficiency.get("dimensions")
         if not isinstance(dimensions, dict):
             errors.append("sufficiency.json dimensions must be an object")
@@ -1041,8 +1319,11 @@ def main() -> int:
                     errors.append(f"{owner} references missing supporting ref: {ref}")
             require_string_list(dimension, "next_actions", owner, errors)
         if sufficiency.get("status") == "SUFFICIENT":
+            if repair_status != "NOT_REQUIRED":
+                errors.append("sufficiency status SUFFICIENT requires repair_status NOT_REQUIRED")
             for field in SUFFICIENCY_DIMENSIONS:
-                if dimensions.get(field, {}).get("status") != "SUFFICIENT":
+                dimension = dimensions.get(field)
+                if not isinstance(dimension, dict) or dimension.get("status") != "SUFFICIENT":
                     errors.append(
                         "sufficiency status SUFFICIENT requires "
                         f"dimensions.{field}.status=SUFFICIENT"
@@ -1054,8 +1335,13 @@ def main() -> int:
                 errors,
             )
         if sufficiency.get("status") == "INSUFFICIENT":
+            if repair_status not in {"REQUIRED", "COMPLETED"}:
+                errors.append(
+                    "sufficiency status INSUFFICIENT requires repair_status REQUIRED or COMPLETED"
+                )
             if not any(
-                dimensions.get(field, {}).get("status") == "INSUFFICIENT"
+                isinstance(dimensions.get(field), dict)
+                and dimensions[field].get("status") == "INSUFFICIENT"
                 for field in SUFFICIENCY_DIMENSIONS
             ):
                 errors.append(
@@ -1068,6 +1354,23 @@ def main() -> int:
                 errors,
                 nonempty=True,
             )
+        if sufficiency.get("status") == "NOT_ASSESSED" and repair_status != "NOT_REQUIRED":
+            errors.append("sufficiency status NOT_ASSESSED requires repair_status NOT_REQUIRED")
+        pyramid_dimension = dimensions.get("pyramid_coverage", {})
+        if not isinstance(pyramid_dimension, dict):
+            pyramid_dimension = {}
+        if pyramid_dimension.get("status") == "SUFFICIENT":
+            supporting_refs = as_string_list(
+                pyramid_dimension.get("supporting_refs")
+            )
+            has_pyramid_ref = bool(set(supporting_refs).intersection(pyramid_ids))
+            no_pyramid_reason = pyramid_dimension.get("not_applicable_rationale")
+            if not has_pyramid_ref and not (
+                isinstance(no_pyramid_reason, str) and no_pyramid_reason.strip()
+            ):
+                errors.append(
+                    "sufficiency pyramid_coverage SUFFICIENT requires a PY## supporting ref or not_applicable_rationale"
+                )
 
     if not isinstance(freeze, dict):
         errors.append("freeze.json must contain a JSON object")
@@ -1085,7 +1388,11 @@ def main() -> int:
                     datetime.fromisoformat(frozen_at.replace("Z", "+00:00"))
                 except ValueError:
                     errors.append("Evidence Freeze frozen_at must be ISO-8601")
-            qualified_count = sum(1 for row in episodes if row.get("status") == "QUALIFIED")
+            qualified_count = sum(
+                1
+                for row in episodes
+                if isinstance(row, dict) and row.get("status") == "QUALIFIED"
+            )
             expected_counts = {
                 "evidence_count": len(evidence),
                 "qualified_lu_count": qualified_count,
@@ -1109,10 +1416,14 @@ def main() -> int:
             referenced_analysis_runs = {
                 row.get("analysis_run_id")
                 for row in evidence
-                if isinstance(row, dict) and row.get("analysis_run_id")
+                if isinstance(row, dict)
+                and isinstance(row.get("analysis_run_id"), str)
+                and row.get("analysis_run_id")
             }
             for arid in sorted(referenced_analysis_runs):
                 validation = analysis_run_by_id.get(arid, {}).get("sampled_validation", {})
+                if not isinstance(validation, dict):
+                    validation = {}
                 if validation.get("status") != "PASSED":
                     errors.append(
                         f"Evidence Freeze requires sampled validation PASSED for analysis run {arid}"
@@ -1130,14 +1441,18 @@ def main() -> int:
         passing = {
             row.get("need_id")
             for row in needs
-            if row.get("concept_gate_status") == "PASS"
+            if isinstance(row, dict) and row.get("concept_gate_status") == "PASS"
         }
         for row in criteria:
+            if not isinstance(row, dict):
+                continue
             if row.get("need_id") not in passing:
                 errors.append(
                     f"{row.get('requirement_id')} exists for need that did not PASS concept gate"
                 )
         for row in concepts:
+            if not isinstance(row, dict):
+                continue
             if row.get("need_id") not in passing:
                 errors.append(
                     f"{row.get('concept_id')} exists for need that did not PASS concept gate"
@@ -1229,6 +1544,13 @@ def main() -> int:
             errors.append(
                 f"manifest requires protocol_version '1.7', got {manifest.get('protocol_version')!r}"
             )
+        if fixture_type not in FIXTURE_TYPE:
+            errors.append(f"manifest has invalid fixture_type {fixture_type!r}")
+        if manifest.get("interpretation_completion") not in INTERPRETATION_COMPLETION:
+            errors.append(
+                "manifest has invalid interpretation_completion "
+                f"{manifest.get('interpretation_completion')!r}"
+            )
         if manifest.get("phase") not in PHASES:
             errors.append(f"manifest has invalid phase {manifest.get('phase')!r}")
         if study_status not in STUDY_STATUS:
@@ -1257,6 +1579,8 @@ def main() -> int:
                 errors.append("complete study must be in phase H")
             if manifest.get("model_check") != "COMPLETED":
                 errors.append("complete study requires model_check COMPLETED")
+            if mode in {"STANDARD", "FULL"} and manifest.get("interpretation_completion") != "COMPLETED":
+                errors.append("complete STANDARD/FULL study requires interpretation_completion COMPLETED")
             decision_brief = root / "outputs" / "decision-brief.md"
             try:
                 decision_brief_text = decision_brief.read_text(encoding="utf-8")
@@ -1283,6 +1607,20 @@ def main() -> int:
             valid_basis.add(item)
         if level == "FIELDWORK_ENRICHED" and not valid_basis:
             errors.append("FIELDWORK_ENRICHED requires study_execution_basis")
+        if is_synthetic_fixture:
+            if level != "DESK_RESEARCH":
+                errors.append("SYNTHETIC_REFERENCE requires study_execution_level DESK_RESEARCH")
+            nonsynthetic = [
+                row.get("evidence_id", "<unknown>")
+                for row in evidence
+                if isinstance(row, dict)
+                and row.get("evidence_basis") != "SYNTHETIC_OR_SIMULATED"
+            ]
+            if nonsynthetic:
+                errors.append(
+                    "SYNTHETIC_REFERENCE requires every evidence row to use SYNTHETIC_OR_SIMULATED: "
+                    + ", ".join(nonsynthetic)
+                )
         if level == "FULL_LEAD_USER_PROJECT":
             required_basis = {
                 "direct_lead_user_participation",
@@ -1295,6 +1633,12 @@ def main() -> int:
                 )
             if not concepts:
                 errors.append("FULL_LEAD_USER_PROJECT requires concept-development state")
+
+        interpretation_completion = manifest.get("interpretation_completion")
+        if (findings or needs or principles) and interpretation_completion != "COMPLETED":
+            errors.append(
+                "interpretive artifacts require manifest.interpretation_completion COMPLETED"
+            )
 
     if not isinstance(decision_outcome, dict):
         errors.append("decision_outcome.json must contain a JSON object")
@@ -1371,6 +1715,33 @@ def main() -> int:
                     errors.append("ACT requires decisive evidence refs")
                 if not isinstance(manifest, dict) or manifest.get("interpretive_status") != "STABLE":
                     errors.append("ACT requires interpretive_status STABLE")
+                for ref in as_string_list(decision_outcome.get("decisive_finding_refs")):
+                    finding = finding_by_id.get(ref, {})
+                    if finding.get("epistemic_label") not in {"VERIFIED", "INFERRED"}:
+                        errors.append(
+                            f"ACT decisive finding {ref} must be VERIFIED or INFERRED"
+                        )
+                    direct_support = bool(finding.get("evidence_refs"))
+                    qualified_lu_support = any(
+                        episode_by_id.get(lu_ref, {}).get("status") == "QUALIFIED"
+                        and bool(
+                            episode_by_id.get(lu_ref, {}).get("lu1_evidence")
+                            or episode_by_id.get(lu_ref, {}).get("lu2_evidence")
+                        )
+                        for lu_ref in as_string_list(finding.get("lu_refs"))
+                    )
+                    if not direct_support and not qualified_lu_support:
+                        errors.append(
+                            f"ACT decisive finding {ref} lacks a transitive atomic evidence path"
+                        )
+                for ref in as_string_list(decision_outcome.get("decisive_lu_refs")):
+                    episode = episode_by_id.get(ref, {})
+                    if episode.get("status") != "QUALIFIED" or not (
+                        episode.get("lu1_evidence") and episode.get("lu2_evidence")
+                    ):
+                        errors.append(
+                            f"ACT decisive LU {ref} must be QUALIFIED with LU1 and LU2 evidence"
+                        )
             if (
                 status == "TEST"
                 and mode in {"STANDARD", "FULL"}
@@ -1400,7 +1771,7 @@ def main() -> int:
             expected_markers.append(
                 f"## Recommendation — {decision_outcome['status']}"
             )
-            for action in decision_outcome.get("action_now", []):
+            for action in as_list(decision_outcome.get("action_now")):
                 if isinstance(action, dict) and isinstance(action.get("action_id"), str):
                     expected_markers.append(f"### {action['action_id']} —")
         for marker in expected_markers:
@@ -1416,11 +1787,7 @@ def main() -> int:
             if (
                 isinstance(internal_identity, str)
                 and internal_identity.strip()
-                and re.search(
-                    re.escape(internal_identity.strip()),
-                    decision_brief_text,
-                    flags=re.IGNORECASE,
-                )
+                and contains_private_identity(decision_brief_text, internal_identity)
             ):
                 errors.append(
                     f"complete Decision Brief exposes private identity for {episode.get('lu_id')}"

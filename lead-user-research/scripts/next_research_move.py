@@ -188,6 +188,14 @@ def recommend(root: Path) -> dict[str, Any]:
     sufficiency_status = sufficiency.get("status") if isinstance(sufficiency, dict) else None
     dimensions = sufficiency.get("dimensions", {}) if isinstance(sufficiency, dict) else {}
     if sufficiency_status == "INSUFFICIENT":
+        if sufficiency.get("repair_status") == "COMPLETED":
+            return result(
+                current_phase=current_phase,
+                state="READY",
+                next_phase="D",
+                reason="The requested discovery or evidence repair is complete; reassess every sufficiency dimension before freezing or choosing another bounded repair.",
+                blockers=[],
+            )
         insufficient = {
             name
             for name, value in dimensions.items()
@@ -218,12 +226,12 @@ def recommend(root: Path) -> dict[str, Any]:
     findings = load_json(root, "findings.json", [])
     needs = load_json(root, "needs.json", [])
     principles = load_json(root, "principles.json", [])
-    if not (nonempty_list(findings) and nonempty_list(needs) and nonempty_list(principles)):
+    if manifest.get("interpretation_completion") != "COMPLETED":
         return result(
             current_phase=current_phase,
             state="READY",
             next_phase="E",
-            reason="Frozen evidence is ready for interpretation into findings, needs, and principles.",
+            reason="Frozen evidence is ready for interpretation. Record explicit completion even when the supported result contains no findings, needs, or principles.",
             blockers=[],
         )
 

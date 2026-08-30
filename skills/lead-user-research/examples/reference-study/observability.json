@@ -1,0 +1,12 @@
+[
+  {
+    "observability_id": "O1",
+    "question": "Does the fictional net benefit generalize to independent real operators without increasing consequential context loss?",
+    "decision_critical": true,
+    "status": "NOT_OBSERVABLE",
+    "evidence_refs": [],
+    "resolution": "FIELDWORK_REFERRAL",
+    "fieldwork_referral": "Observe live handoffs among independently recruited multi-agent operators before making any real product decision.",
+    "acceptance_rationale": ""
+  }
+]

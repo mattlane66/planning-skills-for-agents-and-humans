@@ -1,5 +1,6 @@
 {
   "protocol_version": "1.7",
+  "fixture_type": "NONE",
   "mode": "STANDARD",
   "phase": "A",
   "study_status": "IN_PROGRESS",
@@ -7,6 +8,7 @@
   "study_execution_basis": [],
   "human_review": "NOT_REVIEWED",
   "deterministic_validation": "NOT_RUN",
+  "interpretation_completion": "NOT_STARTED",
   "interpretive_status": "PROVISIONAL",
   "model_check": "NOT_RUN",
   "created_at": null,

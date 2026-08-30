@@ -147,6 +147,12 @@ Update:
 - coverage.json;
 - change_log.json.
 
+When Phase B was entered to repair an INSUFFICIENT sufficiency judgment, complete only
+the requested discovery branch and then set `sufficiency.repair_status = COMPLETED`.
+Leave the prior dimension statuses and rationales intact for audit, keep
+`freeze.status = OPEN`, and return to Phase D for an explicit reassessment. Do not
+self-declare the repaired dimension SUFFICIENT from Phase B.
+
 If the environment supports validation, run it after writing.
 
 ## Exit gate

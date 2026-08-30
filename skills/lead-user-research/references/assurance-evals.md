@@ -18,8 +18,15 @@ The end-to-end case checks:
 - the Decision Brief fingerprint matches the generated structured state;
 - every source remains `UNTRUSTED_DATA` and embedded instructions are recorded;
 - LU1/LU2 qualification, derivative lineage, and a counterexample remain explicit;
+- derivative members are never also counted as independent;
+- candidate, pyramid/search, material-change, hypothesis, observability, and AI-run
+  registries are present and coherent;
+- synthetic evidence is isolated to an explicitly labeled reference fixture, while a
+  blind runtime result must use real-study state and cannot copy fixture evidence;
 - all six sufficiency dimensions carry rationale, refs, and next actions;
-- concept gating and solution-independent Fit Check conditions are persisted;
+- concept gating has transitive trend/LU/evidence support, the accepted shaping frame
+  is rendered, and solution-independent Fit Check conditions are persisted;
+- selected mechanisms carry explicit human provenance and rotated parts;
 - the decision has decisive refs and operational A## actions;
 - the brief is decision-first and includes evidence drill-down;
 - internal identities, withheld citations, raw evidence text, and source instructions do
@@ -41,7 +48,8 @@ python scripts/run-lead-user-assurance-evals.py \
 ```
 
 This uses the checked-in synthetic reference study to exercise the scorer. It invokes
-no model and reports `protocol: reference-fixture-v1`.
+no model, reports `protocol: reference-fixture-v1`, and requires the prominent
+non-empirical fixture warning in the rendered brief.
 
 ## Blind real-runtime test
 

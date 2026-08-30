@@ -24,6 +24,22 @@
   privacy/state markers, including a deterministic brief-to-state fingerprint.
 - Replaced narrative action strings with evidence-oriented A## execution contracts and
   made the Decision Brief action-first, evidence-linked, and privacy-safe by default.
+- Made Lead User assurance cover every authoritative registry, explicit synthetic-fixture
+  isolation, falsification/observability ledgers, pyramiding, lineage conflicts,
+  transitive concept/ACT evidence, shaping-frame output, and human selection provenance.
+
+### Fixed
+
+- Prevented empty negative interpretations and completed insufficiency repairs from
+  looping forever by persisting explicit interpretation and repair transitions.
+- Refused non-empty initializer targets, required adversarial and discovery registries,
+  required evidence bases, and rejected unsafe outward URLs and Markdown injection.
+- Made private-identity detection token-aware, prevented derivative lineage from also
+  counting as independent, and enforced evidence-backed trend/LU paths at decision gates.
+- Rewrote every Lead User support path in the generated Claude plugin to a resolvable
+  bundle-local path and added bundle regression checks.
+- Rendered accepted shaping frames, real candidate/selected mechanism states, human
+  selection provenance, rotated parts, and prominent synthetic-fixture warnings.
 
 ## v1.3.1 — Routing safety and reproducible releases — 2026-08-11
 

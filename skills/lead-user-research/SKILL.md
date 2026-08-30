@@ -142,6 +142,8 @@ python lead-user-research/scripts/init_study.py \
   --workspace research/lead-user-study
 ```
 
+Initialization refuses non-empty workspaces; start in a new or empty directory.
+
 Validate it with:
 
 ```bash
@@ -193,7 +195,7 @@ concepts.json
 outputs/
 ```
 
-Create entities only when needed. Empty registries are valid.
+Create entities only when needed. Empty registries are valid, but every listed JSON file remains required in a file-backed workspace.
 
 ## Verification semantics
 
@@ -308,8 +310,9 @@ Write:
 
 Do not freeze unless trend support, pivotal LU qualification, contradiction search, lineage resolution, pyramid coverage, and marginal value of another evidence batch are all SUFFICIENT for the intended decision.
 
-Every sufficiency dimension requires its own rationale, supporting refs when available,
-and exact next actions when insufficient.
+Every sufficiency dimension requires a rationale, supporting refs when available, and exact next actions when insufficient.
+
+INSUFFICIENT starts an auditable repair cycle: Phase B/C marks bounded repair complete, then Phase D alone reassesses sufficiency.
 
 Use [prompts/phase-d-freeze.md](prompts/phase-d-freeze.md).
 
@@ -328,6 +331,8 @@ Only now:
 - assess propagation;
 - preserve contradictions and outliers.
 
+Record interpretation completion after considering the complete frozen corpus, including an empty negative result.
+
 Use [prompts/phase-e-interpret.md](prompts/phase-e-interpret.md).
 
 ### F — Shape
@@ -337,8 +342,8 @@ Run only if a need passes the Concept Generation Gate. Reopen its pivotal traces
 Construct `SF##` as `x → f() → y`: x = trigger/context + current approach + current result + breakdowns; f() stays UNSPECIFIED; y = desired outcome; also record gap, boundaries, and evidence. This is not the Phase A research frame.
 Persist it as PROVISIONAL and stop for explicit human acceptance/revision; never self-accept it or mark R## PASS while provisional.
 After acceptance, derive R## with `frame_ref` and `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`; hold x and y constant and freeze R before mechanism evaluation.
-Persist the five Concept Generation Gate checks; PASS must trace through a supporting finding to a QUALIFIED LU episode and relevant trend.
-Generate materially different candidate shapes, run Requirements × Shapes, and, after explicit selection, run Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
+Persist the five Concept Generation Gate checks; PASS must trace through atomic evidence and a supporting finding to a QUALIFIED LU episode on an evidence-backed VERIFIED/INFERRED relevant trend.
+Generate materially different candidate shapes, run Requirements × Shapes, and, after explicit human selection with persisted provenance, run Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
 Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
 
 ### G — Decide
@@ -360,11 +365,7 @@ Then include:
 - decision status;
 - priority human review.
 
-Represent `action_now` as structured A## actions with owner/role, timebox, deliverable,
-evidence to collect, success condition, stop condition, and decision at end. The
-Decision Brief must link decisive refs to privacy-safe evidence drill-down, never fall
-back to internal identity, and clearly distinguish PASS fitness conditions from
-provisional or failed criteria.
+Represent `action_now` as structured A## actions with owner/role, timebox, deliverable, evidence to collect, success condition, stop condition, and decision at end. The Decision Brief must link decisive refs to privacy-safe evidence drill-down, never fall back to internal identity, distinguish PASS from provisional or failed criteria, and show the accepted shaping frame plus each mechanism's actual state and human-selection provenance.
 
 When file tools are available, render `outputs/decision-brief.md` with `scripts/render_decision_brief.py`.
 
@@ -494,6 +495,4 @@ Do not generate concepts unless the evidence passes the concept gate.
 - Do not claim PDF/HTML generation or browser validation if the environment cannot perform it.
 - Keep methodology attribution honest: von Hippel governs the Lead User method; Christensen is limited; Fit Check is project-specific; state machinery is an AI operationalization.
 
-For a complete synthetic, validator-ready example of the v1.7 state and rendered
-output, inspect `examples/reference-study/`. It demonstrates the contract and is not
-empirical evidence about its fictional domain.
+For a complete synthetic, validator-ready v1.7 example, inspect `examples/reference-study/`; it demonstrates the contract and is not empirical evidence.
