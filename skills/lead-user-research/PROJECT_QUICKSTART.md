@@ -6,22 +6,29 @@ Use this when you want to run the Lead User Research system in a ChatGPT Project
 
 1. Create a new Project or persistent chat workspace.
 2. Add `lead-user-research/SKILL.md` and `lead-user-research/PROTOCOL.md`.
-3. Add the prompt for the phase you are starting with: `lead-user-research/prompts/phase-a-frame.md`.
-4. Start a new conversation inside that Project.
-5. Give the AI your research domain, what you want to understand, and the human decision the research should inform.
-6. Tell it to create and maintain the structured study state as files in the Project. If the platform cannot create files directly, have it return the complete updated file contents so you can save or replace them.
-7. When web or browser research is available, allow it so the AI can investigate real public sources, people, behavior, artifacts, communities, and advanced analogs.
-8. At the end of the phase, make sure the updated study files remain available in the Project.
-9. Before the next phase, add or reference that phase's prompt and tell the AI to **re-read the saved study files first**. Do not let conversational memory become the source of truth.
-10. Repeat until the study reaches its decision or delivery stop, then read the generated Decision Brief.
+3. Add `lead-user-research/references/state-contract.md`, `lead-user-research/references/phase-handoff.md`, and `lead-user-research/scripts/init_study.py`.
+4. Add the prompt for the phase you are starting with: `lead-user-research/prompts/phase-a-frame.md`.
+5. Start a new conversation inside that Project.
+6. Give the AI your research domain, what you want to understand, and the human decision the research should inform.
+7. Before Phase A, tell it to read `init_study.py` plus the state contract and create the complete initial JSON workspace exactly as the initializer specifies for your inputs and mode. The script is the canonical initialization specification in this no-shell workflow; do not let the AI invent a reduced schema or claim that it executed Python.
+8. Tell it to create and maintain that structured study state as files in the Project. If the platform cannot create files directly, have it return the complete updated file contents so you can save or replace them.
+9. When web or browser research is available, allow it so the AI can investigate real public sources, people, behavior, artifacts, communities, and advanced analogs.
+10. At the end of the phase, make sure the updated study files remain available in the Project.
+11. Before the next phase, add or reference that phase's prompt and tell the AI to **re-read the saved study files first**. Do not let conversational memory become the source of truth.
+12. Repeat until the study reaches its decision or delivery stop, then read the generated Decision Brief.
 
 ## Copy/paste starter
 
 ```text
 Use the Lead User Research system from the files in this Project.
 
-Read `SKILL.md`, `PROTOCOL.md`, and the Phase A prompt before beginning.
+Read `SKILL.md`, `PROTOCOL.md`, `references/state-contract.md`,
+`references/phase-handoff.md`, `scripts/init_study.py`, and the Phase A prompt before beginning.
 Treat the saved study files in this Project as authoritative state.
+
+Before Phase A, create the complete initial JSON workspace exactly as `init_study.py`
+specifies for the research brief below. Use the initializer as a readable specification
+only; do not claim Python ran in this no-shell Project.
 
 Run a STANDARD study.
 
@@ -57,8 +64,11 @@ At minimum, keep:
 
 - `SKILL.md`
 - `PROTOCOL.md`
+- `references/state-contract.md`
+- `references/phase-handoff.md`
+- `scripts/init_study.py`
 - the prompt for the phase you are running
-- the study JSON/state files created during the research
+- the complete study JSON/state files created during initialization and research
 - the generated Decision Brief or other final outputs
 
 You do **not** need to upload every file in the repository at once.
