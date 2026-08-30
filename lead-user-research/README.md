@@ -19,6 +19,8 @@ phase. The focused commands are `/lead-user-frame`, `/lead-user-discover`,
 another skill-capable agent, invoke `lead-user-research` and name the workspace;
 the skill derives the next phase.
 
+If you are new to Codex, see **[Using this with Codex](QUICKSTART.md#using-this-with-codex)** for a plain-English start-to-finish walkthrough and copy/paste starter.
+
 For file-backed work, inspect the same deterministic recommendation with:
 
 ```bash
