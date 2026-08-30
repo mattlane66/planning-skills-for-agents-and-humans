@@ -156,9 +156,9 @@ The scripts use only the Python standard library.
 
 Do not pretend state is persistent.
 
-At the end of each phase emit a compact **STATE PACKET** containing the complete authoritative structured state changed in that phase. The user can save it or paste it into the next phase.
+At the end of each phase emit a compact **cumulative STATE PACKET** containing the complete authoritative structured state needed to resume the study, including unchanged authoritative state from earlier phases. The user can save it or paste it into the next phase.
 
-In the next phase, treat the supplied STATE PACKET—not recalled conversation—as authoritative.
+In the next phase, treat the latest cumulative STATE PACKET as a full replacement snapshot—not recalled conversation and not merely the state changed in the previous phase—as authoritative.
 
 This fallback is less robust than file-backed execution and should be labeled as such.
 
