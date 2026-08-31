@@ -81,15 +81,18 @@ done < skill-inventory.txt
 CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
   kickoff feed-context check-drift reflect-breadboard
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
   kickoff feed-context check-drift reflect-breadboard
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 GEMINI_COMMANDS=(
   plan wayfind shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink check-drift
+  lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 TEMPLATES=(
@@ -478,12 +481,24 @@ required_rewrites = {
     bundle / "AGENTS.md": ["${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml", "${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md", "${CLAUDE_PLUGIN_ROOT}/hooks/"],
     bundle / "skills/sketch-reconciliation/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/templates/sketch-reconciliation.md"],
     bundle / "skills/feed-planning-context/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/AGENTS.md"],
+    bundle / "commands/lead-user-interpret.md": ["${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/prompts/phase-e-interpret.md"],
 }
 for document, expected in required_rewrites.items():
     text = document.read_text(encoding="utf-8")
     absent = [value for value in expected if value not in text]
     if absent:
         raise SystemExit(f"Missing rewritten references in {document}: {absent}")
+
+bare_lead_user_refs = []
+for document in bundle.glob("commands/lead-user*.md"):
+    for line_number, line in enumerate(document.read_text(encoding="utf-8").splitlines(), start=1):
+        if "lead-user-research/" in line and "${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/" not in line:
+            bare_lead_user_refs.append(f"{document.relative_to(bundle)}:{line_number}")
+if bare_lead_user_refs:
+    raise SystemExit(
+        "Bare Lead User repository paths remain in bundled commands: "
+        + ", ".join(bare_lead_user_refs)
+    )
 PY
   then
     pass "Claude bundle support references are self-contained"
@@ -508,10 +523,10 @@ echo "Checking interactive documentation portal..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd site
-    npm ci --ignore-scripts
-    npm run check
-    npm audit --audit-level=moderate
+    cd site &&
+    npm ci --ignore-scripts &&
+    npm run check &&
+    npm audit --audit-level=moderate &&
     git diff --exit-code -- index.html
   ); then
     pass "Documentation portal installs, rebuilds reproducibly, passes tests, and passes dependency audit"
@@ -527,9 +542,9 @@ echo "Checking visual hot-reload viewer..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd visualizer
-    npm ci --ignore-scripts
-    npm run check
+    cd visualizer &&
+    npm ci --ignore-scripts &&
+    npm run check &&
     npm audit --audit-level=moderate
   ); then
     pass "Visual viewer installs, passes tests, and passes dependency audit"
@@ -545,9 +560,9 @@ echo "Checking MCP server..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd mcp-server
-    npm ci --ignore-scripts
-    npm run check
+    cd mcp-server &&
+    npm ci --ignore-scripts &&
+    npm run check &&
     npm audit --audit-level=moderate
   ); then
     pass "MCP server installs, builds, passes tests, and passes dependency audit"

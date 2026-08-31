@@ -158,6 +158,16 @@ These are promotion gates, not navigation locks.
 
 Requirements describe needs, outcomes, or constraints independently of one implementation approach.
 
+When a frame is the judging basis, represent it as `x → f() → y`:
+
+- `x` = trigger/context + current approach + current result + breakdowns;
+- `f()` = the solution/shape variable being explored;
+- `y` = desired outcome;
+- gap = what must change from x to y;
+- boundaries = constraints an acceptable f() must respect.
+
+Requirements may come `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`. Hold x and y constant during one comparative Fit Check. If discovery changes x or y materially, update the frame explicitly, invalidate the affected comparison, and rerun it rather than allowing a candidate shape to redefine its own judging conditions.
+
 Use stable IDs such as `R0`, `R1`, and `R2`. Prefer no more than nine top-level requirements; use sub-requirements when needed.
 
 Recommended statuses:
@@ -245,15 +255,15 @@ A candidate breadboard is subordinate to its named shape. It cannot select itsel
 
 Run these checks whenever they would clarify the work; they are not reserved for the end of shaping.
 
-1. requirements against shapes
-2. shape parts against requirements
+1. **Fit Check — Requirements × Shapes:** which overall candidate shape satisfies the accepted requirements?
+2. **Rotated Fit Check / reverse fit — Parts × Requirements:** why does each part of a selected or deeply examined shape exist?
 3. each viable shape against appetite, when appetite exists
 
 Use binary `✅` or `❌` values for requirement fit. Unknown is not a pass. Put explanations below the table rather than weakening the cells with prose.
 
 When requirements are still provisional, label the table **working fit check**. A working fit check may reveal missing requirements or bad mechanisms; it is not sufficient evidence for selection until the relevant requirements and appetite are accepted.
 
-The reverse-fit check asks whether every mechanism is justified by at least one requirement. Remove, cut, or explicitly justify mechanisms that have no requirement. When reverse fit reveals a genuine missing need, add it as a provisional R and rerun the check.
+The Rotated Fit Check is the existing reverse-fit discipline viewed as Parts × Requirements. It asks whether every mechanism is justified by at least one requirement and whether every accepted requirement has supporting parts. Remove, cut, or explicitly justify mechanisms that have no requirement. Also surface duplicated mechanisms and cases where one part carries disproportionate responsibility. When rotation reveals a genuine missing need, add it as a provisional R and rerun the check; do not silently rewrite accepted R to rescue the shape.
 
 Candidate breadboards and spike results may support the judgment, but they do not outrank the shaping document or decide which shape wins.
 
@@ -316,7 +326,7 @@ Use the gated profile when a team, CI harness, multi-agent planner, or automatio
 Default controlled sequence:
 
 ```text
-accepted frame
+accepted frame (x → f() → y)
 → accepted requirements
 → accepted appetite
 → candidate shapes
@@ -341,6 +351,11 @@ The machine-readable contract is in `.agent-orchestration.yaml`.
 
 ## Frame source
 - ...
+- x — current situation:
+- f() — solution/shape variable:
+- y — desired outcome:
+- gap:
+- boundaries:
 
 ## Project language and decisions
 - Canonical terms:

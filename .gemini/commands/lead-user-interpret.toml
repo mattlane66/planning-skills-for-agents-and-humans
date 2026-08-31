@@ -1,0 +1,15 @@
+description = "Run Lead User Research Phase E on frozen evidence to derive findings, needs, principles, and gate results."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-e-interpret.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Study workspace:
+{{args}}
+
+Interpret only frozen evidence. Separate needs from mechanisms, preserve unknowns
+and contradictions, and record every Concept Generation Gate result without filling
+missing history. End with the deterministic phase handoff.
+"""

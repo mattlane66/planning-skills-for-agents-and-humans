@@ -10,7 +10,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 INLINE_MARKDOWN = re.compile(r"`([^`\n]+\.md)`")
 SKIP_PREFIXES = ("http://", "https://", "mailto:", "#")
-SKIP_PARTS = {"node_modules", "dist", ".git"}
+SKIP_PARTS = {"node_modules", "dist", ".git", ".venv", "venv", "env"}
 
 
 def markdown_files() -> list[pathlib.Path]:

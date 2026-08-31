@@ -50,5 +50,9 @@
   "breadboard-reflection": {
     "title": "Breadboard Reflection",
     "description": "Compare accepted intent with implementation reality when code or a prototype exists, preserve both separately, surface drift and design smells, and prepare an explicit correction decision."
+  },
+  "lead-user-research": {
+    "title": "Lead User Research",
+    "description": "Inspect future-facing markets with Eric von Hippel's Lead User Method when teams need evidence-traceable trend, lead-user, and opportunity research."
   }
 }

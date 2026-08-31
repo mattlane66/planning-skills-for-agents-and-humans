@@ -52,3 +52,7 @@ When changing canonical descriptions, profile behavior, command wrappers, or pac
 Use `scripts/run-skill-behavior-evals.py` with a command adapter to exercise a real runtime. The runner sends only the case ID and prompt, stages a fresh runtime-facing workspace without `evals/` for every case, and scores the adapter result against expectations kept in the parent process.
 
 The fake adapter validates schema and scorer plumbing only. See [Skill Behavior Evaluations](../docs/skill-behavior-evals.md) for the blind command protocol and focused `--case-id` runs.
+
+`lead-user-assurance-cases.json` is scored differently: the runtime must write a complete
+study workspace, and the scorer independently inspects and validates those artifacts.
+See [Lead User v1.7 Assurance Evaluations](../lead-user-research/references/assurance-evals.md).

@@ -48,8 +48,17 @@ rewrite_args=(
   -e 's#docs/lifecycle-hooks\.md#${CLAUDE_PLUGIN_ROOT}/docs/lifecycle-hooks.md#g'
   -e 's#docs/loop-prompting\.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
   -e 's#docs/stable-ids\.md#${CLAUDE_PLUGIN_ROOT}/docs/stable-ids.md#g'
-  -e 's#templates/#${CLAUDE_PLUGIN_ROOT}/templates/#g'
+  -e 's#\(^\|[^A-Za-z0-9_-]\)templates/#\1${CLAUDE_PLUGIN_ROOT}/templates/#g'
   -e 's#hooks/#${CLAUDE_PLUGIN_ROOT}/hooks/#g'
+  -e 's#lead-user-research/prompts/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/prompts/#g'
+  -e 's#lead-user-research/references/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/references/#g'
+  -e 's#lead-user-research/scripts/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/scripts/#g'
+  -e 's#lead-user-research/study-templates/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/study-templates/#g'
+  -e 's#lead-user-research/examples/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/examples/#g'
+  -e 's#lead-user-research/PORTABLE_PROMPT\.md#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/PORTABLE_PROMPT.md#g'
+  -e 's#lead-user-research/PROTOCOL\.md#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/PROTOCOL.md#g'
+  -e 's#lead-user-research/QUICKSTART\.md#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/QUICKSTART.md#g'
+  -e 's#lead-user-research/README\.md#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/README.md#g'
 )
 for skill in "${SKILLS[@]}"; do
   rewrite_args+=(

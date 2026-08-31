@@ -1,0 +1,15 @@
+description = "Run Lead User Research Phase D to judge sufficiency and freeze evidence only when justified."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-d-freeze.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Study workspace:
+{{args}}
+
+Assess every sufficiency dimension with rationale, references, and next actions.
+Validate structure. Freeze only when justified; otherwise route back to the smallest
+relevant discovery or evidence move. End with the deterministic phase handoff.
+"""

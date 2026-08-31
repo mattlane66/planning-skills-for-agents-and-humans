@@ -1,0 +1,16 @@
+description = "Run Lead User Research Phase H to validate and render supported outputs and an optional frame handoff."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-h-deliver.md}
+@{lead-user-research/references/phase-handoff.md}
+@{lead-user-research/study-templates/research-to-frame-handoff.md}
+
+Study workspace and requested format:
+{{args}}
+
+Validate current state and render only useful supported formats. If framing is the
+likely next move, prepare a PROPOSED evidence-backed handoff and stop for explicit
+human acceptance. End with the deterministic phase handoff.
+"""

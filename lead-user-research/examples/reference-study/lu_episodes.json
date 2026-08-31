@@ -1,0 +1,148 @@
+[
+  {
+    "lu_id": "LU1",
+    "user_entity": "Operator Alpha",
+    "public_label": "An anonymized fictional multi-agent operator",
+    "identity_surface_allowed": false,
+    "identity_surface_rationale": "",
+    "trend_id": "T1",
+    "need_statement": "Preserve current decisions, constraints, and open questions across AI-agent handoffs with less reconstruction effort.",
+    "context": "A fictional design project coordinated across four AI agents.",
+    "status": "QUALIFIED",
+    "lu1_evidence": [
+      "E2"
+    ],
+    "lu1_rationale": "Coordinating four agents and sustaining explicit handoff infrastructure places this episode ahead on the multi-workspace coordination trend defined by T1.",
+    "advancement_indicator": "Four-agent coordination plus eight weeks of maintained handoff infrastructure.",
+    "lu2_evidence": [
+      "E3"
+    ],
+    "lu2_rationale": "The sustained workaround and reported reduction from about 20 to five minutes per handoff indicate unusually high expected and realized benefit in the fictional record.",
+    "benefit_signal": "Eight weeks of maintenance and a reported 75% reduction in handoff effort.",
+    "qualification_caveats": [
+      "All evidence is synthetic and not independently measured."
+    ],
+    "baseline": "About 20 minutes of manual reconstruction at each agent change.",
+    "alternatives": [
+      "Ad hoc summaries",
+      "Repeating prior decisions in each workspace"
+    ],
+    "user_response": "Created and maintained a structured decision-and-open-questions packet.",
+    "desired_progress": "Resume work from the current decision state without reviving rejected options or losing constraints.",
+    "observed_result": "The fictional record reports handoff effort falling to about five minutes.",
+    "trace": {
+      "status": "SUFFICIENT",
+      "trace_basis": "EVIDENCE_BACKED_ARTIFACT_RECONSTRUCTION",
+      "initiating_condition": "Changing AI agents required repeated reconstruction of decisions and constraints.",
+      "prior_approach": "Manual reconstruction from prior conversations.",
+      "switch_or_change_trigger": "Repeated 20-minute handoffs across four agents.",
+      "expected_improvement": "Faster resumption without decision drift.",
+      "sequence": [
+        {
+          "step_id": "S1",
+          "action": "Reconstruct decisions and open questions manually.",
+          "context": "Before the handoff packet existed.",
+          "result": "About 20 minutes per agent change.",
+          "evidence_refs": [
+            "E3"
+          ]
+        },
+        {
+          "step_id": "S2",
+          "action": "Maintain and pass the structured handoff packet.",
+          "context": "Across four agents for eight weeks.",
+          "result": "About five minutes per handoff in the fictional record.",
+          "evidence_refs": [
+            "E2",
+            "E3"
+          ]
+        }
+      ],
+      "fit_points": [
+        {
+          "fit_point_id": "FP1",
+          "step_ref": "S1",
+          "observed_behavior": "Repeated manual reconstruction.",
+          "compensating_behavior": "A structured decision-and-open-questions packet.",
+          "stated_purpose": "Avoid repeating rejected options and losing constraints.",
+          "inferred_purpose": "Preserve decision state with less handoff effort.",
+          "unknowns": [
+            "Accuracy of the fictional time estimate"
+          ],
+          "evidence_refs": [
+            "E3"
+          ]
+        }
+      ],
+      "actual_outcome": "Reported handoff effort fell from about 20 to five minutes.",
+      "evidence_refs": [
+        "E2",
+        "E3"
+      ],
+      "unknowns": [
+        "Independent replication",
+        "Consequential error rate"
+      ]
+    },
+    "unknowns": [
+      "Real-world generalization"
+    ]
+  },
+  {
+    "lu_id": "LU2",
+    "user_entity": "Operator Beta",
+    "public_label": "An anonymized derivative fictional adopter",
+    "identity_surface_allowed": false,
+    "identity_surface_rationale": "",
+    "trend_id": "T1",
+    "need_statement": "UNKNOWN — the copied mechanism does not establish an independently experienced need.",
+    "context": "Copied Alpha's handoff template.",
+    "status": "CANDIDATE",
+    "lu1_evidence": [
+      "E4"
+    ],
+    "lu2_evidence": [],
+    "qualification_caveats": [
+      "Derivative adoption is not independent innovation or high-benefit evidence."
+    ],
+    "baseline": "UNKNOWN",
+    "alternatives": [],
+    "user_response": "Copied and relabeled Alpha's template.",
+    "desired_progress": "UNKNOWN",
+    "observed_result": "UNKNOWN",
+    "unknowns": [
+      "Independent need",
+      "Maintenance cost",
+      "Benefit"
+    ]
+  },
+  {
+    "lu_id": "LU3",
+    "user_entity": "Operator Gamma",
+    "public_label": "An anonymized fictional counterexample",
+    "identity_surface_allowed": false,
+    "identity_surface_rationale": "",
+    "trend_id": "T1",
+    "need_statement": "Reduce handoff reconstruction without imposing greater maintenance burden.",
+    "context": "Independently tried a detailed ledger for two weeks.",
+    "status": "REJECTED",
+    "lu1_evidence": [
+      "E5"
+    ],
+    "lu2_evidence": [],
+    "qualification_caveats": [
+      "The episode contradicts high expected net benefit for the attempted mechanism."
+    ],
+    "baseline": "Short ad hoc summaries.",
+    "alternatives": [
+      "Detailed ledger",
+      "Short ad hoc summaries"
+    ],
+    "user_response": "Abandoned the detailed ledger after two weeks.",
+    "desired_progress": "Faster transfers with less reconstruction.",
+    "observed_result": "Maintenance cost exceeded estimated savings.",
+    "unknowns": [
+      "Whether a lower-maintenance mechanism would change expected benefit"
+    ]
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "protocol_version": "1.7",
+  "fixture_type": "SYNTHETIC_REFERENCE",
+  "mode": "STANDARD",
+  "phase": "H",
+  "study_status": "COMPLETE",
+  "study_execution_level": "DESK_RESEARCH",
+  "study_execution_basis": [],
+  "human_review": "NOT_REVIEWED",
+  "deterministic_validation": "PASSED",
+  "interpretation_completion": "COMPLETED",
+  "interpretive_status": "PROVISIONAL",
+  "model_check": "COMPLETED",
+  "created_at": "2026-08-28T19:09:26.683862+00:00",
+  "updated_at": "2026-08-30T12:56:32.491075+00:00"
+}

@@ -1,0 +1,14 @@
+description = "Run or revise Lead User Research Phase A and establish the research brief."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-a-frame.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Request or workspace:
+{{args}}
+
+Complete only Phase A. Keep derived or missing inputs explicitly provisional and
+end with the deterministic phase handoff.
+"""

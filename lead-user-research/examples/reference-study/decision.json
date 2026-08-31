@@ -1,0 +1,43 @@
+{
+  "domain": "Synthetic cross-agent work handoffs",
+  "target_market": "Teams using multiple AI workspaces in one project",
+  "what_to_understand": "Whether advanced operators reveal a future-facing need for low-friction, verifiable work handoffs",
+  "decision": "Should the fictional product team run a three-week prototype validation of a structured AI handoff capability?",
+  "innovation_altitude": "workflow",
+  "starting_hypotheses": [
+    "Advanced multi-agent operators receive unusually high benefit from preserving decision context across handoffs"
+  ],
+  "discovery_seeds": [],
+  "candidate_profile_hypotheses": [
+    "Operators maintaining elaborate cross-agent handoff artifacts"
+  ],
+  "search_constraints": [
+    "Use only the bundled synthetic source corpus"
+  ],
+  "scope": {
+    "in": [
+      "Fictional multi-workspace AI project handoffs",
+      "Need and workflow altitude"
+    ],
+    "out": [
+      "Real-market prevalence",
+      "Willingness to pay",
+      "Production feasibility"
+    ]
+  },
+  "assumptions": [
+    "The bundled synthetic records are complete for this demonstration"
+  ],
+  "consequential_unknowns": [
+    "Whether the fictional time savings would generalize beyond one qualified episode",
+    "Whether lower-maintenance mechanisms can avoid the counterexample's burden"
+  ],
+  "disconfirming_evidence": [
+    "Independent operators abandon low-maintenance handoffs because recovery value remains below upkeep cost"
+  ],
+  "questions_not_answered": [
+    "Population prevalence",
+    "Market size",
+    "Willingness to pay"
+  ]
+}

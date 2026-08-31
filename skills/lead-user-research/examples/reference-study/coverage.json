@@ -1,0 +1,21 @@
+{
+  "likely_overrepresented": [
+    "Fictional operators who documented explicit handoff artifacts"
+  ],
+  "likely_underrepresented": [
+    "Operators using tacit or lightweight handoff practices",
+    "Private enterprise teams with undocumented workflows"
+  ],
+  "inaccessible_or_private": [
+    "Real proprietary AI workflow records"
+  ],
+  "languages_or_regions_searched": [
+    "Bundled English-language synthetic corpus only"
+  ],
+  "corrective_actions": [
+    "In a real study, recruit teams with lightweight and failed handoff practices"
+  ],
+  "fieldwork_referrals": [
+    "In a real study, interview multi-agent operators and observe live handoffs"
+  ]
+}

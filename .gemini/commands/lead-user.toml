@@ -1,0 +1,18 @@
+description = "Start or resume one valid phase of a Lead User research study from persisted state."
+
+prompt = """
+Use the canonical Lead User research skill and phase-handoff contract.
+
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Request or workspace:
+{{args}}
+
+If no study exists, begin Phase A. Otherwise derive the next valid move from the
+persisted artifacts and perform only that phase. Use real sources for real research,
+preserve evidence-level citations and privacy controls, and never substitute the
+synthetic assurance fixture. End with exactly one next move or stop condition using
+the standardized handoff.
+"""

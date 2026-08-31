@@ -8,7 +8,7 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 
 | Environment | Recommended invocation | Project commands | Notes |
 | --- | --- | --- | --- |
-| Claude Code | Plugin skills plus `.claude/commands/` | Yes | `/shape` is the broad collaborative front door; focused wrappers constrain the current move, not the whole exploration order. |
+| Claude Code | Plugin skills plus `.claude/commands/` | Yes | `/shape` is the broad collaborative front door; `/lead-user` starts or resumes the next valid research phase. Focused wrappers constrain the current move, not the whole exploration order. |
 | Codex | Codex plugin plus natural-language prompts | No Claude-style slash commands | Use collaborative or gated prompt recipes; the active product repository's own `AGENTS.md` remains authoritative. |
 | Gemini CLI | Skill folders plus adapted `.gemini/commands/` | Yes, using Gemini TOML commands | Supports `/shape`, `/spike`, and `/breadboard` in addition to focused shaping/gate commands. Preserve product instructions and adapt repo-local includes when installed paths differ. |
 | Claude / Claude Design | Uploaded canonical skills plus natural-language mode requests | No repo-local command wrappers | Start R-first, S-first, evidence-first, or uncertainty-first; use Claude Code to preserve repo-authoritative artifacts when needed. |
@@ -21,6 +21,15 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 | Planning move | Canonical skill or artifact | Claude | Gemini | Codex and plain prompt |
 | --- | --- | --- | --- | --- |
 | Choose the smallest next move | `planning-router/SKILL.md` | `/plan` | `/plan` | “Use the planning-router skill; respect my current entry point…” |
+| Start or resume future-facing opportunity research | `lead-user-research/SKILL.md` | `/lead-user` | `/lead-user` | “Use the lead-user-research skill; derive the next valid phase from [workspace]…” |
+| Research brief — Phase A | `lead-user-research` | `/lead-user-frame` | `/lead-user-frame` | “Use lead-user-research Phase A…” |
+| Trend-first discovery — Phase B | `lead-user-research` | `/lead-user-discover` | `/lead-user-discover` | “Use lead-user-research Phase B…” |
+| Bounded evidence batch — Phase C | `lead-user-research` | `/lead-user-evidence` | `/lead-user-evidence` | “Use lead-user-research Phase C…” |
+| Sufficiency and Evidence Freeze — Phase D | `lead-user-research` | `/lead-user-freeze` | `/lead-user-freeze` | “Use lead-user-research Phase D…” |
+| Interpret frozen evidence — Phase E | `lead-user-research` | `/lead-user-interpret` | `/lead-user-interpret` | “Use lead-user-research Phase E…” |
+| Evidence-gated concept shaping — Phase F | `lead-user-research` | `/lead-user-shape` | `/lead-user-shape` | “Use lead-user-research Phase F only for a passing need…” |
+| Decision outcome and actions — Phase G | `lead-user-research` | `/lead-user-decide` | `/lead-user-decide` | “Use lead-user-research Phase G…” |
+| Delivery and proposed frame handoff — Phase H | `lead-user-research` | `/lead-user-deliver` | `/lead-user-deliver` | “Use lead-user-research Phase H…” |
 | Coordinate multi-session planning | `wayfinding/SKILL.md` | `/wayfind` | `/wayfind` | “Use Wayfinding to chart this bounded planning destination…” |
 | Frame when genuinely needed | `framing-doc/SKILL.md` | `/frame` | Prompt skill directly | “Use the framing-doc skill…” |
 | Collaborative shaping from R, S, evidence, or uncertainty | `shaping/SKILL.md` | `/shape` | `/shape` | “Use the shaping skill in collaborative mode…” |

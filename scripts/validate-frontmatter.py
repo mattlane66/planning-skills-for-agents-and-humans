@@ -44,6 +44,15 @@ MANUAL_COMMANDS = {
     "kickoff",
     "feed-context",
     "reflect-breadboard",
+    "lead-user",
+    "lead-user-frame",
+    "lead-user-discover",
+    "lead-user-evidence",
+    "lead-user-freeze",
+    "lead-user-interpret",
+    "lead-user-shape",
+    "lead-user-decide",
+    "lead-user-deliver",
 }
 
 
