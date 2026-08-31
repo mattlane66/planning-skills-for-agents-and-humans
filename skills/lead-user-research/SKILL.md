@@ -27,6 +27,9 @@ Produce decision-useful Lead User research that can show:
 - what users have actually tried, modified, rejected, or invented;
 - how pivotal Lead User episodes actually unfold, including fit breaks and compensating behavior;
 - what advanced analog markets reveal;
+- what public-web need–solution mining reveals without mistaking popularity for qualification or demand;
+- whether pivotal discovery branches are meaningfully independent rather than one referral/platform clique;
+- whether non-user technological, scientific, regulatory, cost, infrastructure, or platform discontinuities could change the feasible solution space;
 - which needs and solution principles are supported by the evidence;
 - what remains unknown or contradictory, which starting hypotheses survived/weakened/were rejected/remain untestable, and which decision-critical facts require targeted fieldwork;
 - what humans can responsibly decide or test next.
@@ -393,6 +396,13 @@ to propose evidence-backed framing inputs. A human must accept, reject, or revis
 them before invoking `framing-doc`; the research record remains cited evidence.
 
 ## Hard methodological rules
+
+- **Discovery signals are not decision evidence.** Fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish may route discovery, but may not establish LU1/LU2, propagation, prevalence, market size, commercial potential, feasibility, or a build decision.
+- **Use public-web need–solution mining as a discovery lane, not a qualification shortcut.** Search semantically for first-person problem + user-created response episodes and preserve query/platform/interest-signal limits.
+- **Check branch independence for pivotal needs.** One well-documented referral chain or platform lineage is not automatically adequate coverage.
+- **Assess transferability before concept shaping.** Separate the underlying need/principle from extreme-user constraints such as cost tolerance, expertise, maintenance burden, safety, regulation, infrastructure, and workflow disruption.
+- **Scan discontinuities when innovation altitude warrants it.** Treat enabling-technology/regulatory/infrastructure evidence as NONHUMAN_CONTEXT, never as LU evidence.
+- **Preserve rejection layers.** A technical/economic/safety rejection of a mechanism or part does not invalidate a need, principle, or requirement without separate evidence.
 
 - Trend before Lead User.
 - A qualified Lead User Need Episode requires evidence for both advancement on an important trend and unusually high expected benefit, plus explicit LU1/LU2 rationales, advancement indicator, benefit signal, and qualification caveats.
