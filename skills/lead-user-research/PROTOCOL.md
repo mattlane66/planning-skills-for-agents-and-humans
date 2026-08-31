@@ -129,6 +129,14 @@ Every study must name:
 
 Lead User research does not automatically establish prevalence, market size, willingness to pay, feasibility, unit economics, or causal effectiveness of a future product.
 
+## Economic opportunity handoff
+
+When the decision-critical uncertainty is no longer “what future-facing need is emerging?” but instead **“is there a sufficiently large, reachable, economically attractive market around this need?”**, hand the supported Lead User evidence to **[Market Opportunity Underwriting](https://github.com/mattlane66/opportunity-underwriting-for-agents-and-humans/tree/main/market-opportunity-underwriting)** rather than trying to stretch Lead User qualification into market validation.
+
+That sibling methodology owns business-level cruxes and fatal gates, bottom-up TAM/SAM construction, economic-demand grading, reachability/SOM logic, growth and reference-class analysis when supportable, and unit economics when knowable. Lead User evidence can be an input to those judgments; LU1/LU2, discovery signals, propagation reasoning, transferability, or user innovation do not by themselves establish prevalence, willingness to pay, market size, or attractive economics.
+
+The handoff is bidirectional. If Market Opportunity Underwriting identifies a load-bearing uncertainty about future-facing needs, advanced users, emerging workarounds, or transferability, it may invoke Lead User Research as the evidence method for that crux. Neither methodology is a mandatory predecessor of the other, and neither automatically promotes evidence into accepted product-planning truth.
+
 ## Hypothesis falsification ledger
 
 Treat every starting hypothesis as a claim to challenge, not a proposition to confirm.
