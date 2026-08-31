@@ -1038,7 +1038,7 @@ def main() -> int:
                 "qualified_lu_support",
                 "need_workaround_separation",
                 "fitness_evidence_sufficient",
-            "transferability_supported",
+                "transferability_supported",
                 "no_blocking_contradiction",
             ]:
                 if gate_checks.get(field) is not True:
