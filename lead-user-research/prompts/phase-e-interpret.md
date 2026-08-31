@@ -77,15 +77,24 @@ When a need definition materially changes:
 
 Create implementation-flexible `SP##`.
 
-## 7. Propagation
+## 7. Propagation and transferability
 
-Classify each important need:
+Classify propagation for each important need:
 
 - strong propagation evidence;
 - plausible propagation;
 - Lead-user-specific.
 
 Do not infer prevalence.
+
+Separately create `transferability_assessment` for each important need:
+
+- `status`: SUPPORTED | PLAUSIBLE | LEAD_USER_BOUND | UNKNOWN;
+- rationale;
+- evidence refs;
+- `target_market_differences`: consequential differences in cost tolerance, expertise, maintenance burden, safety, regulation, infrastructure, workflow disruption, or other constraints.
+
+Transferability asks whether the underlying need/principle plausibly survives outside the extreme user's special conditions. It is not a prevalence estimate. A Lead User workaround may be non-transferable while the underlying need remains transferable.
 
 ## 8. Contradictions and hypothesis disposition
 
