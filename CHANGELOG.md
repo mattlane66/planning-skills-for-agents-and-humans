@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+### Added
+
+- Add semantic public-web need–solution mining as a complementary discovery lane while keeping popularity/interest metrics as discovery signals only.
+- Add independent discovery-branch coverage checks for pivotal needs and an optional enabler/discontinuity scan for high-altitude opportunity work.
+- Add explicit need transferability assessment as the sixth Concept Generation Gate check.
+- Add layer-preserving rejection records so technical/economic/safety objections to a mechanism or implementation part do not silently invalidate the need, principle, or requirement.
+- Make the discovery-signal/decision-evidence boundary explicit across the Lead User protocol, prompts, state contract, portable workflow, and validator.
+
 ## v1.4.0 — Lead User research and assurance — 2026-08-31
 
 ### Added

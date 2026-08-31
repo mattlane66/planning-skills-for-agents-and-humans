@@ -45,6 +45,15 @@ Do not invoke `framing-doc` from this handoff until the status is `ACCEPTED`.
 - Rejected, speculative, derivative-only, or unsupported implication:
 - Proposed mechanism that must not be mistaken for a requirement:
 
+## Layer-preserving rejection
+
+If downstream design/engineering rejects something for technical, economic, safety, regulatory, operational, or timing reasons, identify whether the rejected layer is the **need, principle, requirement, mechanism, or implementation part**.
+
+A lower-layer rejection does not automatically invalidate a higher layer. In particular:
+
+> reject mechanism ≠ reject requirement ≠ reject need
+
+Any change to an evidenced need/principle/requirement needs its own rationale and evidence.
 ## Proposed next move
 
 If the human accepts this handoff, invoke `framing-doc` to create or revise the

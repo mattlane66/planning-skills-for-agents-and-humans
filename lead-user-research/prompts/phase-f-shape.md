@@ -19,11 +19,12 @@ A need may proceed only when:
 2. at least one qualified LU episode supports it;
 3. the need is separable from the observed workaround;
 4. evidence is sufficient to derive meaningful fitness conditions;
-5. no unresolved contradiction makes concept work premature.
+5. no unresolved contradiction makes concept work premature;
+6. the underlying need/principle has a defensible transferability assessment and is not merely an artifact of exceptional Lead User constraints.
 
 Record PASS / FAIL / NOT_ASSESSED and rationale in `needs.json`.
 
-Persist the five gate tests as `concept_gate_checks` booleans. PASS requires all five
+Persist the six gate tests as `concept_gate_checks` booleans, including `transferability_supported`. PASS requires all six
 true, a relevant trend ref, and a supporting finding that links to a QUALIFIED LU
 episode.
 
@@ -110,6 +111,19 @@ set `selected_by_human = true`, record the human's bounded selection rationale i
 A selected shape cannot remain selected without explicit human provenance or with an
 unrun rotation.
 
+## Layer-preserving rejection
+
+If a candidate mechanism or implementation part is rejected for technical, economic, safety, regulatory, operational, or timing reasons, persist a `rejection_record` with:
+
+- `layer`: NEED | PRINCIPLE | REQUIREMENT | MECHANISM | IMPLEMENTATION_PART;
+- rationale;
+- evidence refs when applicable.
+
+A lower-layer rejection does not automatically invalidate a higher evidence layer. In particular:
+
+> reject mechanism ≠ reject requirement ≠ reject need
+
+Changing an evidenced need, principle, or requirement requires separate evidence/rationale.
 ## Write state
 
 Update:

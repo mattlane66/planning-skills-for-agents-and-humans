@@ -74,6 +74,14 @@ Discover:
 
 ## NON-NEGOTIABLES
 
+- Discovery signals are routing signals, not decision evidence. Fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish cannot establish LU1/LU2, propagation, prevalence, market size, feasibility, commercial potential, or a build decision.
+- Public-web need–solution mining is a complementary discovery lane: semantically look for first-person problem + user-created response episodes; preserve platform/query/semantic-expansion/interest-signal limits.
+- For pivotal needs, assess branch independence rather than treating one long pyramid, platform, or clique as sufficient.
+- When innovation altitude warrants it, scan technological/scientific/regulatory/cost/infrastructure/platform discontinuities and store them as NONHUMAN_CONTEXT.
+- Before concept shaping, assess transferability beyond extreme-user constraints.
+- Preserve rejection layers: rejecting a mechanism or implementation part does not automatically reject a requirement, principle, or need.
+
+
 - Trend before Lead User.
 - A qualified Lead User episode requires evidence for both:
   - LU1: ahead of an important trend;
@@ -201,6 +209,13 @@ Define:
 Do not begin broad Lead User search yet.
 
 ## PHASE B — DISCOVER
+
+In addition to target-market, advanced-analog, and attribute-specific discovery, run `WEB_NEED_SOLUTION` searches when public user-generated content is relevant. Search semantically for problem/need language plus a user-created response, modification, workaround, invention, or abandonment. Record any popularity/interest metrics only as discovery signals.
+
+For pivotal needs, update a branch-independence assessment across starting nodes, communities/platforms, disciplines, geographies/languages, and referral versus non-referral routes.
+
+When the innovation altitude is category/system/capability level, or a discontinuity could materially change the decision, run an `ENABLER_SCAN` for technological, scientific, regulatory, cost, infrastructure, and platform changes. Represent capability change → newly feasible behavior → solution-space implication → relevance, and keep this as NONHUMAN_CONTEXT.
+
 
 First establish important trends.
 
@@ -349,6 +364,9 @@ bypass Evidence Freeze.
 
 ## PHASE E — INTERPRET
 
+For each important need, add `transferability_assessment` with status `SUPPORTED | PLAUSIBLE | LEAD_USER_BOUND | UNKNOWN`, rationale, evidence refs, and target-market differences such as cost tolerance, expertise, maintenance burden, safety, regulation, infrastructure, or workflow disruption. Do not equate transferability with prevalence.
+
+
 Only after the evidence pass/freeze:
 
 Separate:
@@ -391,6 +409,11 @@ Do not infer prevalence.
 
 ## PHASE F — SHAPE
 
+Persist `transferability_supported` as the sixth concept-gate boolean. PASS requires a transferability assessment of SUPPORTED or PLAUSIBLE.
+
+If a mechanism or implementation part is rejected for technical, economic, safety, regulatory, operational, or timing reasons, record the rejected layer and rationale. Never silently propagate a mechanism-level rejection upward into the requirement, principle, or need.
+
+
 Optional.
 
 A need passes the **Concept Generation Gate** only if:
@@ -399,9 +422,10 @@ A need passes the **Concept Generation Gate** only if:
 2. at least one qualified LU episode supports it;
 3. the need is separable from the workaround;
 4. evidence is sufficient to derive meaningful fitness conditions;
-5. no unresolved contradiction makes concept work premature.
+5. no unresolved contradiction makes concept work premature;
+6. transferability is supported strongly enough that the need/principle is not merely an artifact of exceptional Lead User constraints.
 
-Persist these five tests as booleans. PASS requires a relevant credible trend and a
+Persist these six tests as booleans, including `transferability_supported`. PASS requires a relevant credible trend and a
 supporting finding linked to a QUALIFIED LU episode.
 
 Otherwise stop with:
@@ -446,6 +470,9 @@ disproportionate responsibility. Never let the model self-select a mechanism.
 Do not invent weak alternatives for symmetry.
 
 ## PHASE G — DECIDE
+
+Report which discovery inputs were only signals, whether pivotal discovery branches were meaningfully independent, and any enabler/discontinuity context that materially changed the decision. Do not convert popularity or visibility metrics into prevalence or commercial validation.
+
 
 Return to the original decision.
 

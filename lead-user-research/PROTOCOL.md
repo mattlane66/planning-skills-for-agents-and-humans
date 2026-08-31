@@ -182,6 +182,22 @@ For each trend ask:
 
 Do not reverse-engineer a trend from an interesting workaround.
 
+## Discovery signals versus decision evidence
+
+Keep routing signals separate from substantive evidence. Fame, search frequency, posting frequency, stars, referral position, technical sophistication, community reputation, prototype sophistication, and similar visibility signals may help decide **where to look next**. They do not by themselves establish LU1/LU2, propagation, prevalence, market size, willingness to pay, commercial potential, feasibility, causal product impact, or a build decision.
+
+When such a signal is recorded, label its role and preserve its limitations. Never promote a discovery signal into qualification or decision evidence merely because it is easy to count.
+
+## Public-web need–solution mining
+
+As a complementary discovery lane, semantically search openly available user-generated content for bounded episodes containing both:
+
+- a problem/need expression; and
+- a user-created response, modification, workaround, invention, or abandonment.
+
+Do not depend only on exact phrases such as "I invented" or "I solved this." Expand semantically around problem, attempt, modification, failure, workaround, and outcome language. Record the platform/community, query/route, semantic expansions, candidate need–solution pair, and any posting/search/attention signal that influenced prioritization.
+
+Posting or query frequency may indicate discoverability or possible general interest. It is **not** population prevalence, commercial potential, LU1/LU2 evidence, or market validation.
 ## Pyramiding
 
 Do not merely search sideways for similar examples.
@@ -198,6 +214,13 @@ Inspect citations, acknowledgements, maintainers, contributors, forks, dependenc
 
 A referral node may be highly valuable without itself qualifying as a Lead User.
 
+## Independent discovery branches
+
+Pyramiding can become trapped inside a socially visible or technically homogeneous clique. For pivotal needs, assess whether discovery has crossed meaningfully independent branches when proportionate: different starting nodes, communities, platforms, disciplines, geographies, languages, professional networks, or non-referral search routes.
+
+Do not impose a fixed branch quota. Instead record whether branches are plausibly independent, where they share upstream lineage or social visibility, what material populations remain unobserved, and what next branch would have the highest information value.
+
+One long pyramid is not automatically stronger than two genuinely independent branches.
 ## Advanced analogs
 
 For each important need ask:
@@ -217,6 +240,15 @@ Search beyond the target product category for domains with more extreme:
 
 Reject superficial analogies.
 
+## Enabler / discontinuity scan
+
+Lead Users reveal pressure and advanced need states; they do not necessarily reveal capabilities that do not yet exist. When the desired innovation altitude is category-, system-, or capability-level—or when a discontinuity could materially change the decision—run a complementary scan for technological, scientific, regulatory, cost, infrastructure, and platform changes.
+
+Represent the chain explicitly:
+
+> capability change → newly feasible behavior → solution-space implication → relevance to evidenced need/trend
+
+Treat these records as `NONHUMAN_CONTEXT`. They can alter hypotheses, boundaries, or candidate mechanisms, but they do not establish Lead User status or substitute for human need evidence.
 ## Evidence standard
 
 Prefer:
@@ -348,7 +380,7 @@ Assess:
 2. **LU qualification** — pivotal episodes have defensible LU1/LU2 evidence, rationales, advancement indicators, benefit signals, and caveats.
 3. **Contradiction search** — consequential alternate explanations, formal contrastive cases, and targeted hypothesis refutation searches were pursued proportionately.
 4. **Lineage resolution** — important derivative relationships are understood well enough not to overcount independent support.
-5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals.
+5. **Pyramid coverage** — the highest-value discovery branches were investigated or converted into explicit fieldwork referrals, and pivotal needs were checked for meaningful branch independence rather than relying on one referral/platform clique.
 6. **Marginal value** — another proportionate evidence batch is unlikely to change the decision enough to justify delaying synthesis.
 
 Use `SUFFICIENT | INSUFFICIENT | NOT_ASSESSED`. Record a separate rationale,
@@ -528,6 +560,10 @@ A study may explicitly accept an unresolved unknown when the decision can safely
 
 ## Mainstream projection
 
+For each important need, also make a **transferability assessment** before concept shaping. Ask whether the underlying need/principle plausibly survives the move from extreme users to the intended target market, explicitly checking differences in cost tolerance, expertise, maintenance burden, safety, regulation, infrastructure, workflow disruption, and other consequential constraints. Classify transferability as `SUPPORTED | PLAUSIBLE | LEAD_USER_BOUND | UNKNOWN`.
+
+Transferability is not prevalence. A need can transfer in principle without being common, and broad prevalence still requires separate evidence.
+
 Only after Lead User synthesis ask whether the need may propagate.
 
 Classify:
@@ -548,13 +584,14 @@ A need may enter concept shaping only when:
 2. at least one qualified LU episode supports it;
 3. the need is separable from the observed workaround;
 4. evidence is sufficient to derive meaningful fitness conditions;
-5. no unresolved contradiction makes concept work premature.
+5. no unresolved contradiction makes concept work premature;
+6. the underlying need/principle has a defensible transferability assessment and is not merely an artifact of the Lead User's exceptional constraints.
 
 Otherwise report:
 
 > No opportunity is currently supported strongly enough for concept generation.
 
-Persist the five gate tests as explicit booleans. PASS requires an evidence-backed
+Persist the six gate tests as explicit booleans. PASS requires `transferability_supported = true`, a transferability assessment of SUPPORTED or PLAUSIBLE, an evidence-backed
 VERIFIED or INFERRED relevant trend and a supporting finding with an atomic evidence
 path to a QUALIFIED LU episode on that same trend; a rationale alone is not enough.
 
@@ -605,6 +642,17 @@ requirements with no supporting part, duplicated mechanisms, or one part carryin
 disproportionate responsibility. The model must not self-select a shape or preserve an
 unjustified part merely because the overall shape looked attractive.
 
+## Layer-preserving rejection
+
+Downstream teams may reject a proposed mechanism or implementation part for technical, economic, safety, regulatory, operational, or timing reasons. Record **which layer** is being rejected:
+
+`NEED | PRINCIPLE | REQUIREMENT | MECHANISM | IMPLEMENTATION_PART`
+
+A rejection at a lower layer does not automatically invalidate higher evidence layers. In particular:
+
+> reject mechanism ≠ reject requirement ≠ reject need
+
+Changing or rejecting an evidenced need, principle, or requirement requires its own evidence/rationale rather than inheriting a mechanism-level objection.
 ## Decision output
 
 Return to the decision named at the start.

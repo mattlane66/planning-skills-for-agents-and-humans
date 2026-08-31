@@ -95,10 +95,19 @@ Always include for STANDARD/FULL:
 - likely overrepresented populations;
 - likely underrepresented populations;
 - inaccessible/private areas;
+- whether pivotal discovery branches were meaningfully independent or concentrated in one network/platform lineage;
+- which popularity/interest/fame metrics were discovery signals only;
 - corrective interviews/fieldwork/referrals.
 
 Make clear that public-search coverage is not population coverage.
 
+### Enabler / discontinuity context
+
+When an enabler/discontinuity scan materially affected the decision, summarize the capability change → newly feasible behavior → solution-space implication chain and label it as contextual rather than Lead User evidence.
+
+### Rejection-layer integrity
+
+If a mechanism or implementation part was rejected, state the rejection layer and rationale. Do not imply that a mechanism-level objection invalidates an evidenced need, principle, or requirement.
 ### Consequential unknowns
 
 The few uncertainties that could reverse the decision.

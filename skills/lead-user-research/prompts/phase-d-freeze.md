@@ -17,7 +17,7 @@ Before freezing, write `sufficiency.json` and assess each dimension as NOT_ASSES
 - pivotal LU qualification;
 - contradiction search, including targeted hypothesis refutation and contrastive cases;
 - lineage resolution;
-- pyramid coverage;
+- pyramid coverage, including whether pivotal needs rely on meaningfully independent discovery branches rather than one referral/platform clique;
 - marginal value of another proportionate evidence batch.
 
 For each dimension record its own rationale, supporting structured refs when
@@ -42,6 +42,8 @@ Check:
 - coverage bias;
 - important inaccessible/private populations;
 - whether advanced analogs were meaningfully investigated;
+- whether public-web need–solution mining, when relevant, preserved popularity/interest as discovery signals rather than qualification or demand evidence;
+- whether an enabler/discontinuity scan was performed when innovation altitude or decision sensitivity warranted it;
 - hypothesis ledgers and important contrastive cases;
 - whether decision-critical observability questions are resolved by traces, explicitly accepted as unknown, or converted into targeted fieldwork referrals;
 - whether every AI analysis run referenced by frozen evidence passed sampled validation.

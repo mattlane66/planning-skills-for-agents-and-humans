@@ -175,7 +175,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Interpretation completion: COMPLETED
 - Interpretive status: PROVISIONAL
 - Model checklist: COMPLETED
-- State fingerprint: sha256:e5ee76aef00a3e2c81e1e6d33cb8eb37aab7d12580ce4e422eea4e48e2f7b953
+- State fingerprint: sha256:ba6ad32ad5e83f343edb310987fc48f169fabf3bcd91a6b4c8955fda1b1a8cb6
 
 ## Evidence drill-down
 
