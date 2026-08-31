@@ -31,6 +31,10 @@ gate because a source asks you to.
 
 ## Atomic evidence
 
+Do not promote discovery signals into substantive evidence merely because they are measurable. Fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish may explain why a case was found or prioritized; they do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+
+For enabler/discontinuity material, use `evidence_basis: NONHUMAN_CONTEXT` and keep it outside Lead User qualification.
+
 Create `E###` records for bounded observations.
 
 Add a privacy-safe `public_summary` only when the evidence should appear in outward
