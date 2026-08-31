@@ -88,6 +88,20 @@ After Phase G/H, research implications may be proposed through
 That handoff is evidence input, not an accepted frame. A human must accept, reject,
 or revise it before `framing-doc` is invoked.
 
+When the study establishes a consequential future-facing need but the remaining
+decision is **whether there is a sufficiently large, reachable, economically
+attractive market around that need**, the appropriate next method may instead be
+**[Market Opportunity Underwriting](https://github.com/mattlane66/opportunity-underwriting-for-agents-and-humans/tree/main/market-opportunity-underwriting)**.
+That sibling method owns bottom-up market construction, economic-demand evidence,
+reachability, unit economics when knowable, and business-level fatal gates. Lead
+User evidence may inform those questions, but it does not itself establish
+prevalence, TAM, willingness to pay, unit economics, or an investment/build decision.
+
+The handoff is reciprocal: Market Opportunity Underwriting may route a
+load-bearing future-facing need uncertainty back to Lead User Research. Neither
+method is a mandatory predecessor of the other, and neither automatically promotes
+research evidence into accepted planning intent.
+
 ## Hybrid safeguards
 
 The workflow may use public-web need–solution mining and interest signals to discover promising episodes, but treats fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish as **discovery signals only**. They do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.

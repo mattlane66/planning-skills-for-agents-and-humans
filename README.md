@@ -144,6 +144,14 @@ An estimate is not a prediction made before the work. It is the output of prelim
 First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
 You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
 
+## Opportunity underwriting
+
+When the unresolved question is **whether a business or market opportunity is worth pursuing at all**—rather than what product to build—use the sibling **[Opportunity Underwriting for Agents and Humans](https://github.com/mattlane66/opportunity-underwriting-for-agents-and-humans)** repository.
+
+Its first canonical skill, **Market Opportunity Underwriting**, uses crux-first research, fatal gates, bottom-up sizing, explicit `NOT_KNOWABLE_FROM_DESK_RESEARCH` states, reachability rather than arbitrary “percent of TAM” SOM, and adversarial evidence to support a `PURSUE / TEST / HOLD / REJECT` decision. It is a business-level evidence and economics method, not a mandatory stage of this product-planning workflow.
+
+The relationship is bidirectional rather than a conveyor belt. Opportunity Underwriting may invoke Lead User Research when a load-bearing uncertainty concerns future-facing needs, advanced users, emerging workarounds, or transferability. Lead User Research may in turn hand off to Opportunity Underwriting when it establishes an important need but the remaining question is whether that need constitutes a sufficiently large, reachable, economically attractive market. Neither research method automatically promotes its conclusions into accepted product-planning truth.
+
 ## Lead User research
 
 For future-facing opportunity discovery, use **[Lead User Research](./lead-user-research/README.md)**. It applies Eric von Hippel's Lead User Method through a lightweight, phase-gated research workflow with persistent evidence state, pyramiding, advanced analogs, coverage-bias controls, and proportionate SCOUT / STANDARD / FULL modes.
