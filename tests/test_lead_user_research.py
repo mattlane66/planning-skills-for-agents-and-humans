@@ -820,7 +820,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(
                 workspace,
                 "needs.json",
-                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "no_blocking_contradiction": True}}],
+                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "transferability_supported": True, "no_blocking_contradiction": True}, "transferability_assessment": {"status": "PLAUSIBLE", "rationale": "Underlying need plausibly transfers beyond the advanced operator.", "evidence_refs": ["E1", "F1"], "target_market_differences": ["Lower setup and maintenance tolerance"]}}],
             )
             self.write_json(
                 workspace,
@@ -1295,7 +1295,7 @@ class LeadUserResearchTests(unittest.TestCase):
             self.write_json(
                 workspace,
                 "needs.json",
-                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "trace_refs": ["LU1:FP1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "no_blocking_contradiction": True}}],
+                [{"need_id": "N1", "statement": "Resume work with less reconstruction", "finding_ids": ["F1"], "relevant_trends": ["T1"], "trace_refs": ["LU1:FP1"], "propagation_status": "Plausible propagation", "contradictions": [], "concept_gate_status": "PASS", "concept_gate_rationale": "Supported", "concept_gate_checks": {"credible_trend": True, "qualified_lu_support": True, "need_workaround_separation": True, "fitness_evidence_sufficient": True, "transferability_supported": True, "no_blocking_contradiction": True}, "transferability_assessment": {"status": "PLAUSIBLE", "rationale": "Underlying need plausibly transfers beyond the advanced operator.", "evidence_refs": ["E1", "F1"], "target_market_differences": ["Lower setup and maintenance tolerance"]}}],
             )
             frame = {
                 "frame_id": "SF1",
