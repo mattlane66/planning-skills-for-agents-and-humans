@@ -1,0 +1,32 @@
+[
+  {
+    "frame_id": "SF1",
+    "need_id": "N1",
+    "x": {
+      "trigger_or_context": "Changing AI agents or workspaces requires transferring the current decision state.",
+      "current_approach": "Manual reconstruction from prior conversations and ad hoc summaries.",
+      "current_result": "The fictional episode reports about 20 minutes of reconstruction per agent change.",
+      "breakdowns": [
+        "Rejected choices can be revived and consequential constraints or open questions can be lost during reconstruction."
+      ]
+    },
+    "f": {
+      "status": "UNSPECIFIED"
+    },
+    "y": {
+      "desired_outcome": "Resume from the current decision state without reviving rejected options or losing constraints, with materially less total effort."
+    },
+    "gap": "Preserve consequential state across handoffs while reducing preparation and recovery effort versus manual reconstruction.",
+    "boundaries": [
+      "Do not make ongoing upkeep cost exceed recovery value.",
+      "Do not reinstate rejected choices."
+    ],
+    "evidence_refs": [
+      "E3",
+      "E5"
+    ],
+    "status": "ACCEPTED",
+    "accepted_by_human": true,
+    "acceptance_note": "Synthetic reference fixture models explicit human acceptance for validator coverage."
+  }
+]

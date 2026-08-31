@@ -1,0 +1,42 @@
+[
+  {
+    "lineage_id": "L1",
+    "member_refs": [
+      "SRC2",
+      "LU1"
+    ],
+    "relationship": "OTHER",
+    "independence": "INDEPENDENT",
+    "evidence_refs": [
+      "E2",
+      "E3"
+    ],
+    "rationale": "Within the closed synthetic corpus, Alpha's maintained packet has no upstream fixture and is counted as one independent fictional lineage."
+  },
+  {
+    "lineage_id": "L2",
+    "member_refs": [
+      "SRC3",
+      "LU2"
+    ],
+    "relationship": "ADAPTATION",
+    "independence": "DERIVATIVE",
+    "evidence_refs": [
+      "E4"
+    ],
+    "rationale": "Beta explicitly copied Alpha's template and therefore does not add independent confirmation."
+  },
+  {
+    "lineage_id": "L3",
+    "member_refs": [
+      "SRC4",
+      "LU3"
+    ],
+    "relationship": "OTHER",
+    "independence": "INDEPENDENT",
+    "evidence_refs": [
+      "E5"
+    ],
+    "rationale": "Gamma independently attempted and abandoned a different ledger in the closed synthetic corpus."
+  }
+]

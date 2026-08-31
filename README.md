@@ -144,6 +144,16 @@ An estimate is not a prediction made before the work. It is the output of prelim
 First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
 You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
 
+## Lead User research
+
+For future-facing opportunity discovery, use **[Lead User Research](./lead-user-research/README.md)**. It applies Eric von Hippel's Lead User Method through a lightweight, phase-gated research workflow with persistent evidence state, pyramiding, advanced analogs, coverage-bias controls, and proportionate SCOUT / STANDARD / FULL modes.
+
+It is designed to work across ChatGPT, Claude, Gemini, Codex, Cursor, and other tool-using AI environments. For the lowest-friction path, copy the **[portable prompt](./lead-user-research/PORTABLE_PROMPT.md)** into the AI platform of your choice and fill in the research brief: domain/problem space, target market, what you want to understand, the human decision the research should inform, desired innovation altitude, optional hypotheses, and mode. You may also provide optional discovery seeds (sources, communities, files, people, experts), candidate-profile hypotheses (types of users or situations worth looking for), and explicit search constraints. Seeds and candidate profiles guide discovery without prequalifying Lead Users or closing the search universe unless the human explicitly imposes a constraint. The **[quick guide](./lead-user-research/QUICKSTART.md)** and **[fill-in research template](./lead-user-research/study-templates/research-input.md)** cover file-backed and no-file workflows. If only the domain and decision are known, Phase A can draft the missing fields as PROVISIONAL rather than silently inventing them. The full protocol stays available for audit without requiring one giant memory-dependent prompt.
+
+Lead User Research is an optional upstream evidence lane, not a mandatory stage before framing. Use it when the opportunity itself depends on future-facing trend and advanced-user evidence. After completion, its implications require explicit human acceptance before they feed `framing-doc`; the research record remains cited evidence rather than automatically becoming product-planning truth.
+
+Claude Code and Gemini CLI provide `/lead-user` to start or resume the smallest valid phase, plus `/lead-user-frame`, `/lead-user-discover`, `/lead-user-evidence`, `/lead-user-freeze`, `/lead-user-interpret`, `/lead-user-shape`, `/lead-user-decide`, and `/lead-user-deliver` for explicit phase control. Codex and other skill-capable agents invoke the same canonical skill and name the phase in natural language. Every phase ends by recommending exactly one next move, looping back when sufficiency fails and skipping concept generation when no need passes the gate.
+
 ## The core workflow
 
 ### Collaborative shaping loop
@@ -164,6 +174,8 @@ accept requirements + Appetite when decision-ready
   → give the build agent bounded context
   → check drift while building
 ```
+
+When future-facing opportunity evidence is the active uncertainty, an optional Lead User study may precede this loop. It hands accepted evidence implications to framing; it does not force research in front of already-concrete product work.
 
 ### Gated / orchestrated route
 
@@ -190,6 +202,11 @@ Shaping and breadboarding are distinct but composable. Shaping owns working and 
 A candidate breadboard cannot select itself, produce build scope, or automatically become selected-design intent.
 
 When the bounded planning route itself is too large for one session, use Wayfinding as an outer loop around these moves. It keeps a shared frontier of decision, evidence, prototype, and prerequisite tickets while every accepted result still lands in the ordinary canonical artifact.
+
+When the opportunity itself is not yet grounded, the optional upstream move is
+[`lead-user-research`](./lead-user-research/SKILL.md). It produces an
+evidence-traceable research decision and a proposed handoff; a human must accept
+the implications before they feed framing.
 
 The three core moves are:
 

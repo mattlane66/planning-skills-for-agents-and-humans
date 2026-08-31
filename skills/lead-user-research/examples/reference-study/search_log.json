@@ -1,0 +1,35 @@
+[
+  {
+    "search_id": "Q1",
+    "branch": "Closed synthetic corpus",
+    "query_or_route": "Inspect the bundled trend memo and all three operator records",
+    "result_refs": [
+      "SRC1",
+      "SRC2",
+      "SRC3",
+      "SRC4"
+    ],
+    "next_branch": "Real fieldwork is outside this fixture"
+  },
+  {
+    "pyramid_id": "PY1",
+    "target_attribute": "Operators with unusually advanced or high-benefit cross-workspace handoff practices",
+    "starting_node": "SRC1",
+    "network_visibility": "The synthetic trend memo explicitly indexes every operator record in the deliberately closed fixture.",
+    "termination_criterion": "Inspect every indexed operator record and classify advancement, benefit, lineage, and counterevidence.",
+    "termination_reason": "All three operator records in the closed fixture were inspected; further real-world referral search is outside the fixture boundary.",
+    "hops": [
+      {
+        "from_node": "SRC1",
+        "referral_rationale": "The trend memo identifies the complete synthetic operator corpus.",
+        "next_node": "SRC2",
+        "advancement_rationale": "SRC2 records the most advanced sustained handoff practice in the fixture.",
+        "supporting_refs": [
+          "SRC1",
+          "SRC2",
+          "C1"
+        ]
+      }
+    ]
+  }
+]

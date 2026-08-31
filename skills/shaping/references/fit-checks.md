@@ -4,7 +4,7 @@ Load this reference when comparing shapes, checking appetite, resolving a failed
 
 ## Requirements against shapes
 
-Use one matrix with the full requirement text and binary values.
+This is the primary **Fit Check — Requirements × Shapes**. Use one matrix with the full requirement text and binary values. Hold the accepted x and y constant while comparing candidate shapes; if the frame changes materially, invalidate the affected matrix and rerun it.
 
 ```md
 | Req | Requirement | Status | CURRENT | A | B |
@@ -25,7 +25,7 @@ If every visible row passes but a shape still feels wrong, look for a missing re
 
 ## Reverse fit check
 
-Check whether each mechanism is justified by one or more accepted requirements.
+This is the **Rotated Fit Check / reverse fit — Parts × Requirements**. Check whether each mechanism is justified by one or more accepted requirements and whether every accepted requirement has supporting parts.
 
 ```md
 | Shape part | Mechanism | Requirement(s) served | Justified? |
@@ -33,6 +33,8 @@ Check whether each mechanism is justified by one or more accepted requirements.
 | B1 | Persist draft after each completed section | R1, R3 | ✅ |
 | B2 | Add CSV export | — | ❌ |
 ```
+
+Rotation should also call out a requirement with no supporting part, duplicated mechanisms, and a part carrying disproportionate responsibility across requirements.
 
 An unjustified part must be:
 

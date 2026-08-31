@@ -1,17 +1,61 @@
 {
   "confusion_pairs": [
-    ["planning-router", "framing-doc"],
-    ["planning-router", "shaping"],
-    ["planning-router", "wayfinding"],
-    ["wayfinding", "shaping"],
-    ["wayfinding", "dumplink"],
-    ["framing-doc", "shaping"],
-    ["shaping", "breadboarding"],
-    ["breadboarding", "statechart"],
-    ["interface-contracts", "executable-breadboards"],
-    ["kickoff-doc", "feed-planning-context"],
-    ["breadboard-reflection", "feed-planning-context"],
-    ["dumplink", "breadboarding"]
+    [
+      "planning-router",
+      "framing-doc"
+    ],
+    [
+      "planning-router",
+      "shaping"
+    ],
+    [
+      "planning-router",
+      "wayfinding"
+    ],
+    [
+      "wayfinding",
+      "shaping"
+    ],
+    [
+      "wayfinding",
+      "dumplink"
+    ],
+    [
+      "framing-doc",
+      "shaping"
+    ],
+    [
+      "shaping",
+      "breadboarding"
+    ],
+    [
+      "breadboarding",
+      "statechart"
+    ],
+    [
+      "interface-contracts",
+      "executable-breadboards"
+    ],
+    [
+      "kickoff-doc",
+      "feed-planning-context"
+    ],
+    [
+      "breadboard-reflection",
+      "feed-planning-context"
+    ],
+    [
+      "dumplink",
+      "breadboarding"
+    ],
+    [
+      "lead-user-research",
+      "framing-doc"
+    ],
+    [
+      "lead-user-research",
+      "shaping"
+    ]
   ],
   "skills": {
     "planning-router": {
@@ -151,6 +195,16 @@
       "negative": [
         "Package a compact context packet before implementation begins.",
         "Derive a statechart from an accepted breadboard that has not been implemented."
+      ]
+    },
+    "lead-user-research": {
+      "positive": [
+        "Research this future-facing market with Eric von Hippel's Lead User Method, including trend mapping, pyramiding, and advanced analogs.",
+        "Determine whether these emerging user workarounds reveal a Lead User opportunity before we invest in product concepts."
+      ],
+      "negative": [
+        "The market need is already established; compare two concrete solution shapes against accepted requirements and stop before selection.",
+        "Turn these raw interview transcripts into a bounded current-problem frame without doing future-facing Lead User discovery."
       ]
     }
   }

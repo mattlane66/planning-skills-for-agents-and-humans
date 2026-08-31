@@ -84,6 +84,12 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertEqual("write", payload["jobs"]["tag"]["permissions"]["contents"])
         self.assertEqual("write", payload["jobs"]["release"]["permissions"]["contents"])
 
+    def test_repo_health_short_circuits_failed_node_checks(self) -> None:
+        text = (ROOT / "scripts" / "check-repo-health.sh").read_text(encoding="utf-8")
+        self.assertEqual(3, text.count("npm ci --ignore-scripts &&"))
+        self.assertEqual(3, text.count("npm run check &&"))
+        self.assertIn("npm audit --audit-level=moderate &&\n    git diff", text)
+
 
 if __name__ == "__main__":
     unittest.main()

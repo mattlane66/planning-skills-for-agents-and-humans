@@ -25,7 +25,7 @@ class ReleaseTests(unittest.TestCase):
             capture_output=True,
             text=True,
         )
-        self.assertEqual("v1.3.1", version.stdout.strip())
+        self.assertEqual("v1.4.0", version.stdout.strip())
         with tempfile.TemporaryDirectory() as temporary:
             notes = Path(temporary) / "notes.md"
             subprocess.run(
@@ -35,7 +35,7 @@ class ReleaseTests(unittest.TestCase):
                     str(SCRIPT),
                     "preflight",
                     "--tag",
-                    "v1.3.1",
+                    "v1.4.0",
                     "--notes-output",
                     str(notes),
                 ],

@@ -2,7 +2,50 @@
 
 ## Unreleased
 
-_No changes yet._
+## v1.4.0 — Lead User research and assurance — 2026-08-31
+
+### Added
+
+- Added deterministic Lead User next-phase routing, a `/lead-user` start/resume
+  controller, and focused Phase A–H wrappers for Claude Code and Gemini CLI.
+- Added an explicit research-to-frame handoff template and human acceptance gate.
+- Added a complete synthetic Lead User v1.7 reference study with qualified, derivative,
+  contradictory, concept-shaping, operational-action, and privacy-safe drill-down state.
+- Added a blind real-runtime assurance harness that scores generated study artifacts
+  independently of adapter self-report, plus a manual GitHub Actions workflow.
+
+### Improved
+
+- Integrated Lead User Research into the planning router, orchestration contract,
+  cross-platform invocation guidance, and optional upstream planning flow without
+  making research a mandatory predecessor to framing.
+- Made source content explicitly `UNTRUSTED_DATA`, persisted instruction-risk handling,
+  and added a malicious-source regression fixture.
+- Strengthened structural validation for source, evidence, trends, lineage, findings,
+  concept gates, sufficiency dimensions, decision status, completion, and cross-format
+  privacy/state markers, including a deterministic brief-to-state fingerprint.
+- Replaced narrative action strings with evidence-oriented A## execution contracts and
+  made the Decision Brief action-first, evidence-linked, and privacy-safe by default.
+- Made Lead User assurance cover every authoritative registry, explicit synthetic-fixture
+  isolation, falsification/observability ledgers, pyramiding, lineage conflicts,
+  transitive concept/ACT evidence, shaping-frame output, and human selection provenance.
+
+### Fixed
+
+- Ignored repository-local Python virtual environments during Markdown link checks and
+  version-control discovery so third-party package documentation cannot create false failures.
+- Made Node health stages stop immediately on install, build, test, or audit failure so a
+  later successful command cannot mask an earlier verification failure.
+- Prevented empty negative interpretations and completed insufficiency repairs from
+  looping forever by persisting explicit interpretation and repair transitions.
+- Refused non-empty initializer targets, required adversarial and discovery registries,
+  required evidence bases, and rejected unsafe outward URLs and Markdown injection.
+- Made private-identity detection token-aware, prevented derivative lineage from also
+  counting as independent, and enforced evidence-backed trend/LU paths at decision gates.
+- Rewrote every Lead User support path in the generated Claude plugin to a resolvable
+  bundle-local path and added bundle regression checks.
+- Rendered accepted shaping frames, real candidate/selected mechanism states, human
+  selection provenance, rotated parts, and prominent synthetic-fixture warnings.
 
 ## v1.3.1 — Routing safety and reproducible releases — 2026-08-11
 

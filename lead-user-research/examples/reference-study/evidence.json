@@ -1,0 +1,67 @@
+[
+  {
+    "evidence_id": "E1",
+    "source_id": "SRC1",
+    "exact_location": "Complete memo",
+    "evidence_type": "synthetic bounded observation",
+    "evidence_basis": "SYNTHETIC_OR_SIMULATED",
+    "bounded_observation": "Eight of 12 fictional teams used at least three AI workspaces; five maintained manual handoff artifacts.",
+    "public_summary": "A synthetic memo records multi-workspace work and manual handoff artifacts in the majority of its fictional teams.",
+    "user_entity": "Synthetic team sample",
+    "trend_id": "T1",
+    "lu_id": null,
+    "caveat": "Synthetic fixture evidence; not a real prevalence estimate."
+  },
+  {
+    "evidence_id": "E2",
+    "source_id": "SRC2",
+    "exact_location": "Paragraph 1",
+    "evidence_type": "synthetic behavior",
+    "evidence_basis": "SYNTHETIC_OR_SIMULATED",
+    "bounded_observation": "Alpha coordinated four AI agents and maintained a structured decision-and-open-questions handoff packet for eight weeks.",
+    "public_summary": "An anonymized fictional operator sustained a structured handoff artifact across four agents for eight weeks.",
+    "user_entity": "Operator Alpha",
+    "trend_id": "T1",
+    "lu_id": "LU1",
+    "caveat": "The record is synthetic."
+  },
+  {
+    "evidence_id": "E3",
+    "source_id": "SRC2",
+    "exact_location": "Paragraphs 1-2",
+    "evidence_type": "synthetic measured result and stated purpose",
+    "evidence_basis": "SYNTHETIC_OR_SIMULATED",
+    "bounded_observation": "The fictional record reports handoff effort falling from about 20 to five minutes and states that the packet prevented repetition of rejected options and constraints.",
+    "public_summary": "The fictional qualified episode reports a sustained 75% reduction in handoff effort while preserving decision context.",
+    "user_entity": "Operator Alpha",
+    "trend_id": "T1",
+    "lu_id": "LU1",
+    "caveat": "No independent measurement or real-world replication exists."
+  },
+  {
+    "evidence_id": "E4",
+    "source_id": "SRC3",
+    "exact_location": "Paragraph 1",
+    "evidence_type": "synthetic lineage evidence",
+    "evidence_basis": "SYNTHETIC_OR_SIMULATED",
+    "bounded_observation": "Beta copied Alpha's packet template and changed its headings; independent discovery and benefit are not established.",
+    "public_summary": "A second fictional example is explicitly derivative and supplies no independent benefit evidence.",
+    "user_entity": "Operator Beta",
+    "trend_id": "T1",
+    "lu_id": "LU2",
+    "caveat": "The source also contains an ignored embedded instruction."
+  },
+  {
+    "evidence_id": "E5",
+    "source_id": "SRC4",
+    "exact_location": "Complete record",
+    "evidence_type": "synthetic counterexample behavior",
+    "evidence_basis": "SYNTHETIC_OR_SIMULATED",
+    "bounded_observation": "Gamma abandoned an independently created ledger after maintenance took about 15 minutes per transfer while estimated savings were under ten minutes.",
+    "public_summary": "An independent fictional counterexample abandoned a handoff ledger because upkeep exceeded recovery value.",
+    "user_entity": "Operator Gamma",
+    "trend_id": "T1",
+    "lu_id": "LU3",
+    "caveat": "Self-estimated fictional time values."
+  }
+]

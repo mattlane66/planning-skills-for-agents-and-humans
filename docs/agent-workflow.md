@@ -46,7 +46,9 @@ Use when a team, CI harness, multi-agent planner, or user explicitly wants deter
 Controlled default:
 
 ```text
-accepted frame
+[optional Lead User Research when future-facing opportunity evidence is missing]
+→ explicit human acceptance of proposed research-to-frame implications
+→ accepted frame
 → accepted requirements
 → accepted Appetite
 → candidate shapes
@@ -89,6 +91,19 @@ Outputs may include:
 - risks and unknowns
 
 Do not implement production code in Explore mode.
+
+## 1A. Lead User Research — optional upstream evidence
+
+Use when the consequential uncertainty is whether a future-facing need or
+opportunity is real enough to frame, and the decision requires trends, pyramiding,
+qualified Lead User Need Episodes, or advanced analogs. Do not use it as a generic
+label for ordinary customer or market research.
+
+Use `lead-user-research` or `/lead-user`. The skill derives one next phase from
+persisted state, may loop back when sufficiency fails, and skips concept work when
+no need passes the gate. After completion, propose a research-to-frame handoff and
+stop for explicit human acceptance. The study is cited evidence, not an accepted
+frame.
 
 ## 2. Frame — when needed
 

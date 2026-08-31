@@ -1,0 +1,15 @@
+description = "Run Lead User Research Phase G to prepare the evidence-backed human decision and actions."
+
+prompt = """
+@{AGENTS.md}
+@{lead-user-research/SKILL.md}
+@{lead-user-research/prompts/phase-g-decide.md}
+@{lead-user-research/references/phase-handoff.md}
+
+Study workspace:
+{{args}}
+
+Return to the original decision. Write structured decision state first, preserve
+privacy-safe drilldowns and eligible citations, and produce operational actions.
+Do not invent human authorization. End with the deterministic phase handoff.
+"""

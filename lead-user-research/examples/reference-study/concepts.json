@@ -1,0 +1,87 @@
+[
+  {
+    "concept_id": "M1",
+    "need_id": "N1",
+    "mechanism": "Generate a bounded handoff packet from the current workspace that lists active decisions, constraints, rejected options, open questions, and evidence links for confirmation before transfer.",
+    "requirement_ids": [
+      "R1",
+      "R2"
+    ],
+    "assumptions": [
+      "The current workspace exposes enough structured state to generate an accurate packet",
+      "A short confirmation step costs less than manual reconstruction"
+    ],
+    "risks": [
+      "Summarization may omit or revive consequential decisions",
+      "Confirmation may become another maintenance burden"
+    ],
+    "evidence_needed_next": [
+      "Observed preparation and recovery time",
+      "Consequential omission and decision-revival rate",
+      "Abandonment or compensating behavior"
+    ],
+    "requirement_fit": {
+      "R1": true,
+      "R2": true
+    },
+    "selection_status": "SELECTED",
+    "selected_by_human": true,
+    "selection_note": "The fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.",
+    "rotation_status": "RUN",
+    "parts": [
+      {
+        "part_id": "M1P1",
+        "mechanism": "Extract active decisions, constraints, rejected options, open questions, and evidence links.",
+        "requirement_ids": [
+          "R1"
+        ]
+      },
+      {
+        "part_id": "M1P2",
+        "mechanism": "Ask for a bounded confirmation before transfer.",
+        "requirement_ids": [
+          "R1",
+          "R2"
+        ]
+      },
+      {
+        "part_id": "M1P3",
+        "mechanism": "Transfer the confirmed packet to the receiving workspace.",
+        "requirement_ids": [
+          "R2"
+        ]
+      }
+    ]
+  },
+  {
+    "concept_id": "M2",
+    "need_id": "N1",
+    "mechanism": "Maintain a shared decision ledger that automatically shows changes since the receiving workspace last synchronized.",
+    "requirement_ids": [
+      "R1",
+      "R2"
+    ],
+    "assumptions": [
+      "Automatic change capture can keep manual upkeep below recovery value",
+      "Recipients can distinguish superseded from active decisions"
+    ],
+    "risks": [
+      "The ledger may accumulate noise or stale state",
+      "Synchronization errors may create false confidence"
+    ],
+    "evidence_needed_next": [
+      "Observed ledger maintenance time",
+      "Rate of stale or conflicting decisions",
+      "Recovery accuracy across independent workflows"
+    ],
+    "requirement_fit": {
+      "R1": true,
+      "R2": true
+    },
+    "selection_status": "CANDIDATE",
+    "selected_by_human": false,
+    "selection_note": "",
+    "rotation_status": "NOT_RUN",
+    "parts": []
+  }
+]
