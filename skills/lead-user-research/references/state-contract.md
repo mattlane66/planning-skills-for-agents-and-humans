@@ -426,7 +426,7 @@ Array of:
 - concept gate rationale;
 - optional `trace_refs` when the need materially derives from traced steps or fit points.
 
-Every need also records `concept_gate_checks` as five booleans:
+Every need also records `concept_gate_checks` as six booleans:
 
 - `credible_trend`;
 - `qualified_lu_support`;
@@ -434,7 +434,7 @@ Every need also records `concept_gate_checks` as five booleans:
 - `fitness_evidence_sufficient`;
 - `no_blocking_contradiction`.
 
-PASS requires all five checks true, at least one evidence-backed VERIFIED or INFERRED
+PASS requires all six checks true, including `transferability_supported`, at least one evidence-backed VERIFIED or INFERRED
 relevant trend, and a supporting finding with an atomic evidence path to a QUALIFIED
 LU episode on that same relevant trend.
 
