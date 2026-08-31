@@ -1,0 +1,55 @@
+name: Regenerate Lead User derived artifacts (temporary)
+
+on:
+  push:
+    branches: [lead-user-hybrid-safeguards]
+
+permissions:
+  contents: write
+
+jobs:
+  regenerate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Regenerate reference briefs
+        run: |
+          python3 lead-user-research/scripts/render_decision_brief.py lead-user-research/examples/reference-study
+          python3 skills/lead-user-research/scripts/render_decision_brief.py skills/lead-user-research/examples/reference-study
+          python3 lead-user-research/scripts/validate_study.py lead-user-research/examples/reference-study
+          python3 skills/lead-user-research/scripts/validate_study.py skills/lead-user-research/examples/reference-study
+
+      - name: Regenerate documentation portal
+        run: |
+          cd site
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Commit generated artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add \
+            lead-user-research/examples/reference-study/outputs/decision-brief.md \
+            skills/lead-user-research/examples/reference-study/outputs/decision-brief.md \
+            site/index.html
+          if git diff --cached --quiet; then
+            echo "Derived artifacts already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Regenerate Lead User derived artifacts"
+          git push origin HEAD:lead-user-hybrid-safeguards
