@@ -1104,8 +1104,15 @@ def main() -> int:
                     errors,
                     nonempty=True,
                 )
+                transferability_refs = require_string_list(
+                    transferability,
+                    "evidence_refs",
+                    f"{nid} transferability_assessment",
+                    errors,
+                    nonempty=True,
+                )
                 refs_exist(
-                    transferability.get("evidence_refs", []),
+                    transferability_refs,
                     evidence_ids | finding_ids,
                     "transferability evidence",
                     f"{nid} transferability_assessment",
