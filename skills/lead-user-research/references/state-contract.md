@@ -273,6 +273,23 @@ Tracks discovery bias:
 - corrective discovery actions;
 - interview/fieldwork referrals.
 
+#### Branch independence
+
+`coverage.json` may also contain:
+
+```json
+{
+  "branch_independence": {
+    "status": "NOT_ASSESSED | SUFFICIENT | INSUFFICIENT | NOT_APPLICABLE",
+    "branches": ["description of meaningfully distinct branch"],
+    "correlated_or_shared_visibility": ["shared lineage, platform, or clique risk"],
+    "rationale": "...",
+    "next_actions": ["highest-information next branch"]
+  }
+}
+```
+
+Use this for pivotal needs. Do not substitute a fixed branch count for a judgment about genuinely independent discovery.
 ### `search_log.json`
 
 Array of major search families, pyramids, analog pivots, and abandoned branches. Do not record every trivial query.
@@ -302,6 +319,20 @@ Pyramiding is attribute-specific search. `network_visibility` is contextual sear
 
 The three Lead User discovery paths are `TARGET_MARKET`, `ADVANCED_ANALOG`, and `ATTRIBUTE_SPECIFIC`. Advanced-analog discovery searches for a more extreme version of the underlying functional problem; attribute-specific discovery may cross domains that share only one important property.
 
+Search rows (`Q##`) may optionally include:
+
+```json
+{
+  "search_type": "GENERAL | REFUTATION | WEB_NEED_SOLUTION | ENABLER_SCAN",
+  "evidentiary_role": "DISCOVERY_SIGNAL | CONTEXT | EVIDENCE_SEARCH",
+  "platform_or_community": "...",
+  "semantic_expansions": ["..."],
+  "interest_signals": ["..."],
+  "interest_signal_limits": "..."
+}
+```
+
+For `WEB_NEED_SOLUTION`, use `evidentiary_role: DISCOVERY_SIGNAL`. For `ENABLER_SCAN`, use `evidentiary_role: CONTEXT`. Search/post frequency, stars, fame, referral position, technical sophistication, community reputation, and prototype polish are discovery/context signals only; they do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
 ### `sufficiency.json`
 
 For STANDARD/FULL, records the interpretive stopping decision before Evidence Freeze:
@@ -407,6 +438,26 @@ PASS requires all five checks true, at least one evidence-backed VERIFIED or INF
 relevant trend, and a supporting finding with an atomic evidence path to a QUALIFIED
 LU episode on that same relevant trend.
 
+Each important need may include:
+
+```json
+{
+  "transferability_assessment": {
+    "status": "SUPPORTED | PLAUSIBLE | LEAD_USER_BOUND | UNKNOWN",
+    "rationale": "...",
+    "evidence_refs": ["E1", "F1"],
+    "target_market_differences": [
+      "cost tolerance",
+      "expertise",
+      "maintenance burden",
+      "safety/regulatory constraints",
+      "infrastructure or workflow disruption"
+    ]
+  }
+}
+```
+
+A `concept_gate_status: PASS` requires `concept_gate_checks.transferability_supported = true` and a transferability status of SUPPORTED or PLAUSIBLE. Transferability is distinct from prevalence.
 ### `principles.json`
 
 Array of transferable solution principles expressed without prescribing one
@@ -481,6 +532,19 @@ Array of:
 
 No minimum concept count is required.
 
+A concept may optionally carry a layer-preserving rejection record:
+
+```json
+{
+  "rejection_record": {
+    "layer": "NEED | PRINCIPLE | REQUIREMENT | MECHANISM | IMPLEMENTATION_PART",
+    "rationale": "...",
+    "evidence_refs": ["..."]
+  }
+}
+```
+
+A lower-layer rejection must not silently invalidate higher layers.
 ### `decision_outcome.json`
 
 Structured human-action state written before rendering the Decision Brief:
