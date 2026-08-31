@@ -24,7 +24,14 @@
       "qualified_lu_support": true,
       "need_workaround_separation": true,
       "fitness_evidence_sufficient": true,
+      "transferability_supported": true,
       "no_blocking_contradiction": true
+    },
+    "transferability_assessment": {
+      "status": "PLAUSIBLE",
+      "rationale": "The underlying continuity need is not specific to the synthetic lead user, although broader prevalence is not established.",
+      "evidence_refs": ["E1", "F1"],
+      "target_market_differences": ["Lower tolerance for setup and maintenance than the advanced operator"]
     }
   }
 ]
