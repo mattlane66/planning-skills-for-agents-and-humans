@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.4.0 — Lead User research and assurance — 2026-08-31
+
 ### Added
 
 - Added deterministic Lead User next-phase routing, a `/lead-user` start/resume
@@ -30,6 +32,10 @@
 
 ### Fixed
 
+- Ignored repository-local Python virtual environments during Markdown link checks and
+  version-control discovery so third-party package documentation cannot create false failures.
+- Made Node health stages stop immediately on install, build, test, or audit failure so a
+  later successful command cannot mask an earlier verification failure.
 - Prevented empty negative interpretations and completed insufficiency repairs from
   looping forever by persisting explicit interpretation and repair transitions.
 - Refused non-empty initializer targets, required adversarial and discovery registries,
