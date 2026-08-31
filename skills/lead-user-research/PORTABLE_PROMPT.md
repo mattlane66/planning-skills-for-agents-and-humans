@@ -425,7 +425,7 @@ A need passes the **Concept Generation Gate** only if:
 5. no unresolved contradiction makes concept work premature;
 6. transferability is supported strongly enough that the need/principle is not merely an artifact of exceptional Lead User constraints.
 
-Persist these five tests as booleans. PASS requires a relevant credible trend and a
+Persist these six tests as booleans, including `transferability_supported`. PASS requires a relevant credible trend and a
 supporting finding linked to a QUALIFIED LU episode.
 
 Otherwise stop with:
