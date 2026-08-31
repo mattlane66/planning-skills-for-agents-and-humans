@@ -345,7 +345,7 @@ Run only if a need passes the Concept Generation Gate. Reopen its pivotal traces
 Construct `SF##` as `x → f() → y`: x = trigger/context + current approach + current result + breakdowns; f() stays UNSPECIFIED; y = desired outcome; also record gap, boundaries, and evidence. This is not the Phase A research frame.
 Persist it as PROVISIONAL and stop for explicit human acceptance/revision; never self-accept it or mark R## PASS while provisional.
 After acceptance, derive R## with `frame_ref` and `FROM_X | FROM_Y | FROM_GAP | FROM_BOUNDARY`; hold x and y constant and freeze R before mechanism evaluation.
-Persist the five Concept Generation Gate checks; PASS must trace through atomic evidence and a supporting finding to a QUALIFIED LU episode on an evidence-backed VERIFIED/INFERRED relevant trend.
+Persist the six Concept Generation Gate checks, including transferability; PASS must trace through atomic evidence and a supporting finding to a QUALIFIED LU episode on an evidence-backed VERIFIED/INFERRED relevant trend.
 Generate materially different candidate shapes, run Requirements × Shapes, and, after explicit human selection with persisted provenance, run Rotated Fit Check / reverse fit as Parts × Requirements. **Do not invent weak alternatives to satisfy a quota.**
 Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
 
