@@ -55,7 +55,7 @@ For every H##, execute the highest-value targeted refutation searches before tre
 
 Record searches that fail to find evidence as search outcomes, not proof that the hypothesis is true.
 
-## Task 2 — Candidate discovery through three paths
+## Task 2 — Candidate discovery through three Lead User paths
 
 For each important trend or high-value emerging need, explicitly consider all three Lead User discovery paths:
 
@@ -84,6 +84,24 @@ These are **discovery/prioritization aids only**. They do not establish LU1 or L
 
 Do not optimize for fame.
 
+## Task 2A — Public-web need–solution mining
+
+When public user-generated content is relevant, run a complementary `WEB_NEED_SOLUTION` lane. Search semantically for bounded episodes that contain both a problem/need expression and a user-created response, modification, workaround, invention, or abandonment. Do not rely only on exact phrases such as "I invented" or "I solved this."
+
+For each material `Q##` search record, persist when knowable:
+
+- `search_type: WEB_NEED_SOLUTION`;
+- `evidentiary_role: DISCOVERY_SIGNAL`;
+- platform/community;
+- problem-expression terms;
+- solution/attempt-expression terms;
+- semantic expansions;
+- query or route;
+- result refs;
+- any posting/search/attention signals used for prioritization;
+- explicit limits on what those interest signals can establish.
+
+Interest, popularity, stars, or query/posting frequency may route discovery. They do **not** establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
 ## Task 3 — Attribute-specific pyramiding
 
 Every substantive pyramid must have a specified `target_attribute` or information target before the first hop. Seek someone who has more of that attribute or someone with better information about who does.
@@ -118,6 +136,19 @@ Record major hops, not every trivial search. A referral node may be valuable wit
 
 Do not terminate merely because one plausible candidate was found. Stop a pyramid when its explicit termination criterion is met, the branch reaches a justified fieldwork referral or hard search constraint, or additional hops are unlikely to improve the decision enough to justify continuing. Record the reason.
 
+## Task 3A — Independent-branch safeguard
+
+For pivotal needs, assess whether discovery has crossed meaningfully independent branches when proportionate. Independence may come from different starting nodes, communities/platforms, disciplines, geographies/languages, professional networks, or referral versus non-referral search routes.
+
+Do not use a fixed branch quota. Record in `coverage.json.branch_independence`:
+
+- status — NOT_ASSESSED | SUFFICIENT | INSUFFICIENT | NOT_APPLICABLE;
+- branch descriptors;
+- known shared lineage or correlated visibility;
+- rationale;
+- highest-information next branch when insufficient.
+
+One long pyramid, influencer chain, GitHub lineage, subreddit, or professional clique is not automatically sufficient.
 ## Task 4 — Advanced analog hypotheses
 
 For each high-value emerging need ask:
@@ -128,6 +159,15 @@ Record analog domains and the dimension of extremity.
 
 Keep advanced-analog discovery distinct from attribute-specific discovery: an advanced analog transfers learning from a more extreme version of the underlying problem, while an attribute-specific search may deliberately cross into a domain that shares only one important property.
 
+## Task 5 — Enabler / discontinuity scan
+
+When the desired innovation altitude is category-, system-, or capability-level, or when a discontinuity could materially change the decision, run an `ENABLER_SCAN` across technological, scientific, regulatory, cost, infrastructure, and platform changes.
+
+For material `Q##` records use `search_type: ENABLER_SCAN` and `evidentiary_role: CONTEXT`. Capture:
+
+> capability change → newly feasible behavior → solution-space implication → relevance to an evidenced need/trend
+
+Enabler evidence is `NONHUMAN_CONTEXT`. It may change hypotheses, boundaries, or later mechanism search, but it cannot establish LU1/LU2 or substitute for human need evidence.
 ## Coverage check
 
 Update likely over/underrepresented populations as search paths develop.
@@ -135,6 +175,8 @@ Update likely over/underrepresented populations as search paths develop.
 Actively look beyond the easiest public English-language sources when proportionate.
 
 Also record how important platforms or communities shape visibility: who tends to post there, what the platform makes easy to observe, and what selection mechanism may be producing the available artifacts.
+
+Keep **discovery signals separate from decision evidence**. Fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish are routing/prioritization aids only unless separately supported by evidence at the level of the claim being made.
 
 ## Write state
 
