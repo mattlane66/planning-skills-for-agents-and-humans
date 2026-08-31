@@ -29,7 +29,7 @@ python lead-user-research/scripts/next_research_move.py research/lead-user-study
 
 ### Audit or adapt the methodology
 
-Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, pyramiding, advanced analogs, falsification ledgers, contrastive cases, trace/event evidence, platform context, observability-gated fieldwork, evidence freeze, research sufficiency, interpretation, Fit Check, and decision delivery.
+Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, pyramiding, advanced analogs, public-web need–solution mining, enabler/discontinuity scans, independent discovery-branch checks, falsification ledgers, contrastive cases, trace/event evidence, platform context, observability-gated fieldwork, transferability checks, evidence freeze, research sufficiency, interpretation, Fit Check, and decision delivery.
 
 ## Minimum input
 
@@ -88,6 +88,13 @@ After Phase G/H, research implications may be proposed through
 That handoff is evidence input, not an accepted frame. A human must accept, reject,
 or revise it before `framing-doc` is invoked.
 
+## Hybrid safeguards
+
+The workflow may use public-web need–solution mining and interest signals to discover promising episodes, but treats fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish as **discovery signals only**. They do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+
+For pivotal needs, STANDARD/FULL studies assess whether discovery crossed meaningfully independent branches rather than one referral clique or platform lineage. Before concept shaping, the workflow also checks whether the underlying need/principle plausibly transfers beyond the extreme user's special constraints. High-altitude studies should additionally scan for technological, scientific, regulatory, cost, infrastructure, or platform discontinuities that could change the feasible solution space.
+
+Downstream technical, economic, or safety rejection must identify the layer being rejected. Rejecting a mechanism or implementation part does not by itself invalidate the evidenced need, principle, or requirement.
 ## Important boundary
 
 A public-source or AI-only run is **DESK_RESEARCH**, even when methodologically rigorous.
