@@ -88,6 +88,11 @@ OBSERVABILITY_RESOLUTION = {
 }
 ANALYSIS_VALIDATION = {"NOT_ASSESSED", "PASSED", "FAILED"}
 DISCOVERY_PATH = {"TARGET_MARKET", "ADVANCED_ANALOG", "ATTRIBUTE_SPECIFIC"}
+SEARCH_TYPE = {"GENERAL", "REFUTATION", "WEB_NEED_SOLUTION", "ENABLER_SCAN"}
+EVIDENTIARY_ROLE = {"DISCOVERY_SIGNAL", "CONTEXT", "EVIDENCE_SEARCH"}
+TRANSFERABILITY = {"SUPPORTED", "PLAUSIBLE", "LEAD_USER_BOUND", "UNKNOWN"}
+BRANCH_INDEPENDENCE = {"NOT_ASSESSED", "SUFFICIENT", "INSUFFICIENT", "NOT_APPLICABLE"}
+REJECTION_LAYER = {"NEED", "PRINCIPLE", "REQUIREMENT", "MECHANISM", "IMPLEMENTATION_PART"}
 EVIDENCE_BASIS = {
     "REAL_HUMAN_TRACE",
     "REAL_HUMAN_STATEMENT",
@@ -389,6 +394,19 @@ def main() -> int:
             owner = str(search_id)
             for field in ["branch", "query_or_route", "next_branch"]:
                 require_nonempty_string(row, field, owner, errors)
+            search_type = row.get("search_type")
+            if search_type is not None and search_type not in SEARCH_TYPE:
+                errors.append(f"{owner} has invalid search_type {search_type!r}")
+            evidentiary_role = row.get("evidentiary_role")
+            if evidentiary_role is not None and evidentiary_role not in EVIDENTIARY_ROLE:
+                errors.append(f"{owner} has invalid evidentiary_role {evidentiary_role!r}")
+            if search_type == "WEB_NEED_SOLUTION" and evidentiary_role != "DISCOVERY_SIGNAL":
+                errors.append(f"{owner} WEB_NEED_SOLUTION requires evidentiary_role DISCOVERY_SIGNAL")
+            if search_type == "ENABLER_SCAN" and evidentiary_role != "CONTEXT":
+                errors.append(f"{owner} ENABLER_SCAN requires evidentiary_role CONTEXT")
+            for field in ["semantic_expansions", "interest_signals"]:
+                if field in row:
+                    require_string_list(row, field, owner, errors)
             require_string_list(row, "result_refs", owner, errors)
             search_refs_to_check.append((row.get("result_refs", []), "result", owner))
             continue
@@ -1005,6 +1023,7 @@ def main() -> int:
             "qualified_lu_support",
             "need_workaround_separation",
             "fitness_evidence_sufficient",
+            "transferability_supported",
             "no_blocking_contradiction",
         ]:
             require_bool(gate_checks, field, f"{nid} concept_gate_checks", errors)
@@ -1019,6 +1038,7 @@ def main() -> int:
                 "qualified_lu_support",
                 "need_workaround_separation",
                 "fitness_evidence_sufficient",
+            "transferability_supported",
                 "no_blocking_contradiction",
             ]:
                 if gate_checks.get(field) is not True:
@@ -1066,6 +1086,30 @@ def main() -> int:
             if not aligned_support:
                 errors.append(
                     f"{nid} PASS requires a supporting finding with an atomic evidence path to a qualified LU on a credible relevant trend"
+                )
+            transferability = row.get("transferability_assessment")
+            if not isinstance(transferability, dict):
+                errors.append(f"{nid} PASS requires transferability_assessment")
+            else:
+                transfer_status = transferability.get("status")
+                if transfer_status not in TRANSFERABILITY:
+                    errors.append(f"{nid} has invalid transferability status {transfer_status!r}")
+                if transfer_status not in {"SUPPORTED", "PLAUSIBLE"}:
+                    errors.append(f"{nid} PASS requires transferability SUPPORTED or PLAUSIBLE")
+                require_nonempty_string(transferability, "rationale", f"{nid} transferability_assessment", errors)
+                require_string_list(
+                    transferability,
+                    "target_market_differences",
+                    f"{nid} transferability_assessment",
+                    errors,
+                    nonempty=True,
+                )
+                refs_exist(
+                    transferability.get("evidence_refs", []),
+                    evidence_ids | finding_ids,
+                    "transferability evidence",
+                    f"{nid} transferability_assessment",
+                    errors,
                 )
 
     for row in principles:
@@ -1261,6 +1305,16 @@ def main() -> int:
             if rotation_status == "RUN":
                 errors.append(f"{mid} rotation_status RUN requires selection_status SELECTED")
 
+        rejection = row.get("rejection_record")
+        if rejection is not None:
+            if not isinstance(rejection, dict):
+                errors.append(f"{mid} rejection_record must be an object")
+            else:
+                layer = rejection.get("layer")
+                if layer not in REJECTION_LAYER:
+                    errors.append(f"{mid} has invalid rejection layer {layer!r}")
+                require_nonempty_string(rejection, "rationale", f"{mid} rejection_record", errors)
+                require_string_list(rejection, "evidence_refs", f"{mid} rejection_record", errors)
         for field in ["assumptions", "risks", "evidence_needed_next"]:
             require_string_list(row, field, mid, errors)
 
@@ -1482,6 +1536,29 @@ def main() -> int:
             warnings.append("coverage likely_underrepresented is empty")
         if not coverage.get("corrective_actions") and not coverage.get("fieldwork_referrals"):
             warnings.append("coverage corrective_actions and fieldwork_referrals are empty")
+        branch_independence = coverage.get("branch_independence")
+        if branch_independence is not None:
+            if not isinstance(branch_independence, dict):
+                errors.append("coverage.json branch_independence must be an object")
+            else:
+                branch_status = branch_independence.get("status")
+                if branch_status not in BRANCH_INDEPENDENCE:
+                    errors.append(
+                        f"coverage.json branch_independence has invalid status {branch_status!r}"
+                    )
+                for field in ["branches", "correlated_or_shared_visibility", "next_actions"]:
+                    require_string_list(
+                        branch_independence,
+                        field,
+                        "coverage.json branch_independence",
+                        errors,
+                    )
+                require_nonempty_string(
+                    branch_independence,
+                    "rationale",
+                    "coverage.json branch_independence",
+                    errors,
+                )
         if mode in {"STANDARD", "FULL"} and study_status in {"DECIDED", "COMPLETE"}:
             if not coverage.get("likely_underrepresented"):
                 errors.append(
