@@ -523,10 +523,10 @@ echo "Checking interactive documentation portal..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd site
-    npm ci --ignore-scripts
-    npm run check
-    npm audit --audit-level=moderate
+    cd site &&
+    npm ci --ignore-scripts &&
+    npm run check &&
+    npm audit --audit-level=moderate &&
     git diff --exit-code -- index.html
   ); then
     pass "Documentation portal installs, rebuilds reproducibly, passes tests, and passes dependency audit"
@@ -542,9 +542,9 @@ echo "Checking visual hot-reload viewer..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd visualizer
-    npm ci --ignore-scripts
-    npm run check
+    cd visualizer &&
+    npm ci --ignore-scripts &&
+    npm run check &&
     npm audit --audit-level=moderate
   ); then
     pass "Visual viewer installs, passes tests, and passes dependency audit"
@@ -560,9 +560,9 @@ echo "Checking MCP server..."
 if command -v npm >/dev/null 2>&1; then
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
-    cd mcp-server
-    npm ci --ignore-scripts
-    npm run check
+    cd mcp-server &&
+    npm ci --ignore-scripts &&
+    npm run check &&
     npm audit --audit-level=moderate
   ); then
     pass "MCP server installs, builds, passes tests, and passes dependency audit"
