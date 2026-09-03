@@ -62,6 +62,14 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 - Decision-relevant uncertainty for candidate-shape mode:
 - Reconciliation status for selected-design mode:
 
+## Requirement realization map — selected-design mode
+
+| Req | Selected shape part(s) | Breadboard IDs | Observable consequence | Embedded? |
+|---|---|---|---|:---:|
+| R1 | A1 | U2, N3, S1 | ... | ✅ |
+
+Map only the smallest set of behavior IDs that actually embody each Accepted requirement. Coverage here is a design claim, not realized-fit evidence.
+
 ## Places
 
 | ID | Authority | Shape part | Place | Description |

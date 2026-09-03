@@ -89,9 +89,20 @@ Decision status:
 Artifacts or implementation allowed to change after this decision:
 - ...
 
+## Realized fit
+
+Use only when outcome evidence from actual use exists. Implementation conformance alone is not realized-fit evidence.
+
+| Req | Accepted requirement | Embedded refs | Reality evidence | Status | Implication |
+|---|---|---|---|---|---|
+| R1 | ... | U2, N3 | ... | NOT_ASSESSED / SUPPORTED / WEAKENED / CONTRADICTED | ... |
+
+If reality weakens or contradicts accepted planning, preserve the evidence and propose the upstream delta; do not silently rewrite the requirement or frame.
+
 ## Self-check
 - [ ] Implementation reality was inspected before critique.
 - [ ] Accepted intent and current reality remain separate.
 - [ ] Proposed fixes are grounded in concrete drift or smells.
 - [ ] Planning updates and implementation follow-ups are separated.
+- [ ] Realized-fit claims use outcome evidence from actual use; absent evidence remains NOT_ASSESSED.
 - [ ] No accepted artifact was rewritten before an explicit decision.
