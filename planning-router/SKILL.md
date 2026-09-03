@@ -58,6 +58,7 @@ Do not route to solution exploration merely because a solution idea is available
 | A selected project needs to be decomposed into vertical task groups, dependencies, risk states, sequence, or appetite cuts | `dumplink` |
 | An implementation agent needs only the authoritative subset for one active slice or task group | `feed-planning-context` |
 | Implementation exists and may differ from accepted intent | `breadboard-reflection` |
+| Outcome evidence from actual use may support, weaken, or contradict Accepted requirements even when implementation matches intent | `breadboard-reflection` for realized fit |
 | Builders need a durable human-readable orientation reference after accepted artifacts converge | `kickoff-doc` |
 
 ## Routing rules

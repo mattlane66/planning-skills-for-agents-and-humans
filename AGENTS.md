@@ -95,7 +95,7 @@ Advanced moves are conditional, not a checklist:
 - `dumplink` when a selected project needs to be decomposed into vertical task groups with dependencies, risk, sequence, or cuts
 - `kickoff-doc` when builders need a durable orientation reference
 - `feed-planning-context` when an implementation agent needs only the authoritative subset
-- `breadboard-reflection` when implementation reality may have drifted from accepted intent
+- `breadboard-reflection` when implementation reality may have drifted from accepted intent or outcome evidence can test whether Accepted requirements were realized
 
 ## Human decision gates
 
@@ -127,8 +127,11 @@ Keep these distinctions intact:
 - current-state behavior versus candidate-shape evidence versus selected-design intent
 - accepted scope versus rejected or deferred ideas
 - planning truth versus implementation reality
+- implementation verification versus realized fit
 
 Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. A rough solution can be captured first and used to extract provisional requirements; that does not make its mechanisms requirements or make the shape selected.
+
+Treat an `R##` as a thread, not a stage. Preserve the same ID as evidence reveals it, humans promote it from candidate to Working to Accepted, selected mechanisms claim to embody it, implementation context carries it forward, and outcome evidence later tests it. Promotion changes authority, not identity; material meaning changes require a new ID or explicit supersession.
 
 Candidate breadboards are subordinate evidence about one possible shape. In collaborative mode they may use provisional R or Appetite; in all modes they cannot define accepted future behavior, feed implementation, or select themselves. A selected-design breadboard is normative only after explicit selection and reconciliation.
 
@@ -216,6 +219,8 @@ Planning drift found:
 ```
 
 Do not implement inside a drift check. Use `breadboard-reflection` when the conflict needs correction options and an explicit human decision.
+
+Implementation conformance is not realized fit. A build may match selected intent and still fail the requirement in reality. Mark realized fit only from outcome evidence such as actual user behavior, field observation, telemetry, support evidence, research, or experiments; absent evidence remains not assessed.
 
 ## Stable IDs
 

@@ -175,5 +175,6 @@ Pause for a human gate when a change would:
 - accept consequential visual deltas to selected intent
 - select or expand build scope
 - resolve planning drift by changing accepted truth
+- revise an Accepted requirement, frame, selected design, or bet because realized-fit evidence weakened or contradicted it
 
 Do **not** pause merely because the collaborative shaping loop moved from R to S, S to fit, fit to spike, spike to candidate breadboard, or back again.

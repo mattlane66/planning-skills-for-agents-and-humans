@@ -4,6 +4,10 @@ This document shows the complete planning-to-build system, including both the fl
 
 Use it when work is large enough that a coding agent should not jump directly from fuzzy or provisional intent to implementation.
 
+> **A requirement is a thread, not a stage:** evidence reveals it, humans accept it, Fit Check judges solutions against it, selected mechanisms embody it, implementation preserves it, and reality tests it.
+
+Authority may change as the work moves, but a stable `R##` keeps its identity unless its meaning materially changes. Implementation verification and realized fit remain separate: the first checks conformance to selected intent; the second requires outcome evidence from actual use.
+
 ## Two layers, not one conveyor belt
 
 ### Collaborative shaping layer
@@ -34,6 +38,8 @@ clear-enough problem boundary
 → human-selected slice
 → bounded context
 → implementation with drift checks
+→ implementation verification
+→ realized fit when outcome evidence exists
 ```
 
 These are promotion gates, not navigation locks.
@@ -147,3 +153,5 @@ A modern agent workflow is complete when:
 - drift checks use the strict output format
 - meaningful agent work leaves a run log
 - reflection preserves accepted intent and implementation reality separately, with an explicit decision governing any update
+- stable R IDs carry criterion lineage from evidence through selected mechanisms and implementation context
+- implementation verification is never treated as realized fit; realized-fit claims require outcome evidence from actual use

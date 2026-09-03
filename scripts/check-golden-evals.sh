@@ -44,12 +44,18 @@ require_text shaping/SKILL.md "### Start from S — shape first"
 require_text shaping/SKILL.md "These are promotion gates, not navigation locks."
 require_text shaping/SKILL.md "Do not dump or cluster implementation tasks, select committed slices, create a build sequence, or write production code inside shaping."
 require_text shaping/SKILL.md "A candidate breadboard does not automatically become authoritative"
+require_text shaping/SKILL.md "Identify the unknown before choosing the next move"
+require_text shaping/SKILL.md "Promotion from candidate to Working to Accepted changes authority, not identity."
+require_text shaping/SKILL.md "## Requirement coverage"
+require_text shaping/references/fit-checks.md "Coverage is not realized fit"
 forbid_text shaping/SKILL.md "## Kick-off: From selected shape to slices"
 require_text breadboarding/SKILL.md "### Current-state mapping (descriptive)"
 require_text breadboarding/SKILL.md "### Candidate-shape mapping (exploratory)"
 require_text breadboarding/SKILL.md "### Selected-design mapping (normative)"
 require_text breadboarding/SKILL.md "accepted requirements or appetite are **not prerequisites for exploratory candidate breadboarding**"
 require_text breadboarding/SKILL.md "Only an accepted selected-design breadboard can feed slice selection"
+require_text breadboarding/SKILL.md "requirement realization map"
+require_text templates/breadboard.md "## Requirement realization map — selected-design mode"
 require_text breadboarding/SKILL.md "Candidate-shape breadboarding is a shaping technique"
 require_text breadboarding/SKILL.md "entry → control path → decision or branch → state/data effect → observable consequence"
 require_text breadboarding/SKILL.md "reverse-trace each observable consequence"
@@ -64,6 +70,11 @@ require_text evals/workflow-behavior-cases.json '"id": "current-state-code-fidel
 require_text evals/workflow-behavior-cases.json '"id": "breadboard-causal-integrity"'
 require_text evals/workflow-behavior-cases.json '"id": "breadboard-reverse-reachability"'
 require_text evals/workflow-behavior-cases.json '"id": "selected-design-granularity"'
+require_text evals/workflow-behavior-cases.json '"id": "criterion-identity-survives-promotion"'
+require_text evals/workflow-behavior-cases.json '"id": "selected-shape-exposes-uncovered-accepted-r"'
+require_text evals/workflow-behavior-cases.json '"id": "implementation-conformance-is-not-realized-fit"'
+require_text evals/workflow-behavior-cases.json '"id": "reality-can-contradict-a-correct-implementation"'
+require_text evals/workflow-behavior-cases.json '"id": "realized-fit-supported-by-outcome-evidence"'
 require_text docs/skill-behavior-evals.md 'protocol is `blind-command-v1`'
 require_text scripts/run-skill-behavior-evals.py '"prompt": case["prompt"]'
 require_text templates/dumplink.md "## Vertical task groups"
@@ -83,6 +94,9 @@ require_text sketch-reconciliation/SKILL.md "observations before interpretations
 require_text sketch-reconciliation/SKILL.md "Stop at the reconciliation gate"
 require_text breadboard-reflection/SKILL.md "explicit drift decision"
 require_text breadboard-reflection/SKILL.md "Do not silently rewrite the accepted breadboard"
+require_text breadboard-reflection/SKILL.md "Implementation conformance is not realized-fit evidence."
+require_text templates/breadboard-reflection.md "## Realized fit"
+require_text templates/context-packet.md "## Criterion bindings"
 require_text docs/claude-design-workflow.md "## Entry path B — Start from S"
 require_text docs/claude-design-workflow.md "A beautiful candidate prototype remains a candidate."
 require_text docs/claude-design-workflow.md "## Hard promotion gate — select a shape"
