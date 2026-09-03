@@ -13,7 +13,7 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent is comparing implementation reality against accepted intent and preparing an explicit decision about what should change.
+An agent is comparing implementation reality against accepted intent, assessing realized fit from outcome evidence, or both.
 
 ## Must preserve
 - accepted intent and current implementation reality as separate records
@@ -21,7 +21,8 @@ An agent is comparing implementation reality against accepted intent and prepari
 - missing behavior
 - accidental behavior
 - proposed fixes
-- the authorized or still-needed drift decision
+- the authorized or still-needed drift decision when conformance differs
+- realized-fit evidence, status, and any required planning decision when outcome validity is in scope
 
 ## Ignore unless asked
 - speculative redesigns not grounded in inspected implementation evidence
@@ -89,9 +90,23 @@ Decision status:
 Artifacts or implementation allowed to change after this decision:
 - ...
 
+## Realized fit
+
+Use when realized fit is in scope. If outcome evidence from actual use is absent, record `NOT_ASSESSED`; implementation conformance alone is not realized-fit evidence.
+
+| Req | Accepted requirement | Embedded refs | Reality evidence | Status | Implication |
+|---|---|---|---|---|---|
+| R1 | ... | U2, N3 | ... | NOT_ASSESSED / SUPPORTED / WEAKENED / CONTRADICTED | ... |
+
+If reality weakens or contradicts accepted planning, preserve the evidence and propose the upstream delta; do not silently rewrite the requirement or frame. Stop at a `realized-fit-decision` before changing accepted planning.
+
+Realized-fit decision:
+- Not needed / Pending / authorized by current user instruction / decided by [name or record]
+
 ## Self-check
 - [ ] Implementation reality was inspected before critique.
 - [ ] Accepted intent and current reality remain separate.
 - [ ] Proposed fixes are grounded in concrete drift or smells.
 - [ ] Planning updates and implementation follow-ups are separated.
+- [ ] Realized-fit claims use outcome evidence from actual use; absent evidence remains NOT_ASSESSED.
 - [ ] No accepted artifact was rewritten before an explicit decision.

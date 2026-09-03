@@ -686,6 +686,101 @@
         "automatic accepted requirements",
         "automatic product scope"
       ]
+    },
+    {
+      "id": "criterion-identity-survives-promotion",
+      "prompt": "Framing already contains evidence-backed candidate R2. Promote that same criterion into shaping as Working and then Accepted without changing its meaning. Preserve its origin and evidence refs; do not create a new requirement ID.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "R2 preserved",
+        "promotion changes authority not identity",
+        "origin",
+        "evidence refs"
+      ],
+      "forbidden_evidence": [
+        "new requirement ID",
+        "renumbered criterion",
+        "production code"
+      ]
+    },
+    {
+      "id": "selected-shape-exposes-uncovered-accepted-r",
+      "prompt": "Shape A has been selected. Its parts A1 and A2 support R1 and R2, but Accepted R3 has no supporting part. Run the rotated fit check and inverse requirement coverage view without rescuing the shape by rewriting R3.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "Parts × Requirements",
+        "requirement coverage",
+        "R3 uncovered",
+        "realization question"
+      ],
+      "forbidden_evidence": [
+        "silent R3 rewrite",
+        "R3 treated as covered",
+        "production code"
+      ]
+    },
+    {
+      "id": "implementation-conformance-is-not-realized-fit",
+      "prompt": "Use breadboard reflection. The implementation exactly matches the selected-design refs for R2 and all implementation tests pass, but we have no user behavior, telemetry, field observation, research, or experiment evidence yet. Assess R2 without overclaiming.",
+      "expected_skill": "breadboard-reflection",
+      "expected_artifact_type": "breadboard-reflection",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": [
+        "implementation verified",
+        "realized fit",
+        "NOT_ASSESSED",
+        "outcome evidence absent"
+      ],
+      "forbidden_evidence": [
+        "SUPPORTED from tests alone",
+        "requirement proven by implementation",
+        "silent planning update"
+      ]
+    },
+    {
+      "id": "reality-can-contradict-a-correct-implementation",
+      "prompt": "Use breadboard reflection. The selected mechanism for R4 was implemented exactly as intended, but production observation shows users still perform the workaround R4 was meant to eliminate. Record the outcome evidence and prepare the planning decision without silently rewriting accepted intent.",
+      "expected_skill": "breadboard-reflection",
+      "expected_artifact_type": "breadboard-reflection",
+      "expected_gate": "realized-fit-decision",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "CONTRADICTED",
+        "outcome evidence",
+        "criterion revision proposal",
+        "human decision"
+      ],
+      "forbidden_evidence": [
+        "implementation failure assumed",
+        "silent requirement rewrite",
+        "automatic plan change"
+      ]
+    },
+    {
+      "id": "realized-fit-supported-by-outcome-evidence",
+      "prompt": "Use breadboard reflection. R1 says users can complete the core task without administrator help. The implementation matches selected intent, and a field study shows representative users completing the task unaided with no workaround. Record the realized-fit assessment while preserving the evidence basis.",
+      "expected_skill": "breadboard-reflection",
+      "expected_artifact_type": "breadboard-reflection",
+      "expected_gate": null,
+      "implementation_allowed": false,
+      "required_evidence": [
+        "R1",
+        "SUPPORTED",
+        "field study",
+        "outcome evidence"
+      ],
+      "forbidden_evidence": [
+        "implementation tests as sole proof",
+        "new requirement ID",
+        "production code"
+      ]
     }
   ]
 }

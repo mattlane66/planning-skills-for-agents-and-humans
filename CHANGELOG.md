@@ -4,6 +4,10 @@
 
 ### Added
 
+- Add stable criterion lineage from evidence-backed R candidates through Working/Accepted authority, selected mechanisms, implementation context, and realized-fit assessment.
+- Add inverse requirement coverage and selected-design requirement realization maps so every Accepted R can be traced to the concrete behavior that claims to embody it.
+- Separate implementation verification from realized fit, with outcome-evidence-only realized-fit statuses and regression cases for supported, unassessed, and contradicted criteria.
+- Add an explicit `x / y / f()` routing diagnostic so current-situation, desired-outcome, and solution uncertainty lead to different next moves.
 - Add semantic public-web need–solution mining as a complementary discovery lane while keeping popularity/interest metrics as discovery signals only.
 - Add independent discovery-branch coverage checks for pivotal needs and an optional enabler/discontinuity scan for high-altitude opportunity work.
 - Add explicit need transferability assessment as the sixth Concept Generation Gate check.

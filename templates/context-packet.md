@@ -74,6 +74,14 @@ The selected project governs outer scope. The selected Dumplink task group or ot
 ## Selected requirements
 - ...
 
+## Criterion bindings
+
+| Req | Selected-design refs | Implementation verification | Realization question |
+|---|---|---|---|
+| R1 | U2, N3 | ... | ... |
+
+Implementation verification proves conformance to selected intent. It does not prove realized fit; the realization question remains open until supported by outcome evidence from actual use.
+
 ## Relevant selected-design places / affordances / stores
 - ...
 

@@ -337,6 +337,21 @@ Do not let drift run silent.
 
 ---
 
+## The Criterion Thread
+
+A requirement is not a stage to pass through and forget.
+
+Evidence reveals it.  
+Humans decide whether to accept it.  
+Fit Check compares forms against it.  
+Selected mechanisms claim to embody it.  
+Implementation preserves that claim.  
+Reality tests whether it was actually true.
+
+Keep the same stable R identity while the meaning remains the same. Do not confuse a mechanism being implemented with the criterion being realized in use.
+
+---
+
 ## The Human Clause
 
 This is not a machine for controlling people.

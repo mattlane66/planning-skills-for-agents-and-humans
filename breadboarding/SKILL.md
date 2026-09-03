@@ -76,6 +76,8 @@ Require the human-selected shape and parts, accepted requirements, accepted Appe
 
 A candidate breadboard does not automatically become selected-design. Remove unselected mechanisms, reconcile surviving rows against the accepted shape and cuts, preserve unresolved gaps explicitly, and obtain acceptance.
 
+Selected-design must preserve the lineage from each Accepted requirement to the selected shape part(s) and the smallest set of breadboard IDs that embody it. Record the observable consequence when one exists. Do not tag every low-level affordance, store, or wire with an R merely for completeness; map only the concrete behavior that actually carries the requirement.
+
 Only an accepted selected-design breadboard can feed slice selection and downstream build artifacts.
 
 ### Combining current and proposed behavior
@@ -283,15 +285,16 @@ Examples:
 1. Confirm the human-selected shape, accepted requirements, accepted appetite, and cut line; declare `mode: selected-design`.
 2. If a candidate breadboard exists, reconcile it rather than promoting it automatically.
 3. List the selected mechanisms and explicit cuts.
-4. Translate each selected mechanism into UI and non-UI affordances.
-5. Identify whether each affordance belongs in an existing or new place.
-6. Add the stores and hidden consequences those affordances need.
-7. Wire the affordances together and trace every required behavior from entry to observable consequence.
-8. Add existing affordances the new ones must connect to, labeling current versus selected behavior.
-9. Make success, meaningful alternatives, failure, recovery, and persistence behavior explicit when relevant.
-10. Run forward and reverse graph-integrity checks and confirm that every selected mechanism is represented.
-11. Surface any shaping conflict and stop for an explicit decision.
-12. Obtain acceptance before slicing.
+4. Create a requirement realization map from each Accepted R to its selected shape part(s), breadboard IDs, and observable consequence when one exists.
+5. Translate each selected mechanism into UI and non-UI affordances.
+6. Identify whether each affordance belongs in an existing or new place.
+7. Add the stores and hidden consequences those affordances need.
+8. Wire the affordances together and trace every required behavior from entry to observable consequence.
+9. Add existing affordances the new ones must connect to, labeling current versus selected behavior.
+10. Make success, meaningful alternatives, failure, recovery, and persistence behavior explicit when relevant.
+11. Run forward and reverse graph-integrity checks and confirm that every selected mechanism and every Accepted R are represented or explicitly unresolved.
+12. Surface any shaping conflict and stop for an explicit decision.
+13. Obtain acceptance before slicing.
 
 ## Quality checks
 
@@ -302,6 +305,7 @@ Examples:
 - Provisional candidate evidence is not presented as final fit or appetite evidence.
 - Candidate evidence does not select a shape, feed slicing, or become build scope.
 - A selected-design breadboard cites the selected shape, accepted requirements, appetite, and cut line.
+- A selected-design breadboard maps each Accepted R to the selected shape part(s) and concrete breadboard IDs that embody it, or marks the requirement unresolved.
 - Candidate rows are explicitly reconciled before becoming selected-design rows.
 - Every required behavior has a trace from an entry to an observable consequence.
 - Every observable consequence reverse-traces through all incoming wires to valid entries or explicit gaps.

@@ -43,10 +43,10 @@ An agent and human need a shared shaping surface for requirements, solution shap
 
 ## Requirements
 
-| ID | Requirement | Status | Authority | Notes |
-|---|---|---|---|---|
-| R0 | ... | Core goal | Working | ... |
-| R1 | ... | Must-have | Working | ... |
+| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |
+|---|---|---|---|---|---|---|
+| R0 | ... | Core goal | Working | FROM_X | ... | ... |
+| R1 | ... | Must-have | Working | FROM_GAP | ... | ... |
 
 ## Appetite
 - Authority: Unset | Working | Accepted
@@ -97,6 +97,12 @@ An agent and human need a shared shaping surface for requirements, solution shap
 | Shape part | Mechanism | Requirement(s) served | Justified? |
 |---|---|---|:---:|
 | B1 | ... | R1 | ✅ |
+
+## Requirement coverage
+
+| Req | Supporting selected part(s) | Coverage | Realization question |
+|---|---|:---:|---|
+| R1 | B1 | ✅ | ... |
 
 ## Appetite fit
 
