@@ -94,7 +94,7 @@ require_text sketch-reconciliation/SKILL.md "observations before interpretations
 require_text sketch-reconciliation/SKILL.md "Stop at the reconciliation gate"
 require_text breadboard-reflection/SKILL.md "explicit drift decision"
 require_text breadboard-reflection/SKILL.md "Do not silently rewrite the accepted breadboard"
-require_text breadboard-reflection/SKILL.md "Implementation conformance is not realized-fit evidence."
+require_text breadboard-reflection/SKILL.md "Implementation conformance is not realized-fit evidence"
 require_text templates/breadboard-reflection.md "## Realized fit"
 require_text templates/context-packet.md "## Criterion bindings"
 require_text docs/claude-design-workflow.md "## Entry path B — Start from S"
