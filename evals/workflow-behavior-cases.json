@@ -749,7 +749,7 @@
       "prompt": "Use breadboard reflection. The selected mechanism for R4 was implemented exactly as intended, but production observation shows users still perform the workaround R4 was meant to eliminate. Record the outcome evidence and prepare the planning decision without silently rewriting accepted intent.",
       "expected_skill": "breadboard-reflection",
       "expected_artifact_type": "breadboard-reflection",
-      "expected_gate": "drift-decision",
+      "expected_gate": "realized-fit-decision",
       "implementation_allowed": false,
       "required_evidence": [
         "CONTRADICTED",

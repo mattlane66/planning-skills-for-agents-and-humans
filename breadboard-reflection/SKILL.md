@@ -10,7 +10,7 @@ Use this skill after a breadboard exists and implementation has started or alrea
 
 ## Goal
 
-Preserve accepted intent and implementation reality as two explicit views, identify the differences, and let a human decide which truth changes before rewriting authoritative artifacts.
+Preserve accepted intent and implementation reality as two explicit views, identify the differences, and let a human decide which truth changes before rewriting authoritative artifacts. When realized fit is in scope, separately assess whether outcome evidence from actual use supports the Accepted requirements.
 
 ## Reflection loop
 
@@ -75,17 +75,17 @@ Present these options when intent and reality disagree:
 
 Recommend a move with evidence, then stop for the human decision unless the user's current instruction already authorizes one option. After a decision, update only the chosen truth and any affected downstream artifacts; retain the reflection as the audit record.
 
-### 4. Assess realized fit when outcome evidence exists
+### 4. Assess realized fit separately
 
 This is separate from implementation drift. Drift asks whether the build matches accepted intent. Realized fit asks whether reality actually supports the Accepted requirement.
 
-Use real outcome evidence such as observed user behavior, field observation, telemetry, support evidence, research, or experiments. For each relevant R, preserve the Accepted requirement, its embedded selected-design refs, the evidence, and one status: `NOT_ASSESSED | SUPPORTED | WEAKENED | CONTRADICTED`.
+Use real outcome evidence such as observed user behavior, field observation, telemetry, support evidence, research, or experiments. For each relevant R, preserve the Accepted requirement, its embedded selected-design refs, the evidence, and one status: `NOT_ASSESSED | SUPPORTED | WEAKENED | CONTRADICTED`. If realized fit is being assessed but no outcome evidence exists, record `NOT_ASSESSED` explicitly.
 
-Implementation conformance is not realized-fit evidence. If no outcome evidence exists, leave the requirement `NOT_ASSESSED`; do not infer a pass from implementation tests. When reality weakens or contradicts an Accepted R, frame assumption, or desired outcome, preserve the evidence and propose the upstream delta. A human decides whether to change implementation, selected design, requirement, frame, or the bet.
+Implementation conformance is not realized-fit evidence; do not infer a pass from implementation tests. When reality weakens or contradicts an Accepted R, frame assumption, or desired outcome, preserve the evidence and propose the upstream delta. If that evidence would change accepted planning, stop at a `realized-fit-decision`. A human decides whether to change implementation, selected design, requirement, frame, or the bet.
 
 ## Output structure
 
-Use `templates/breadboard-reflection.md`. Include inputs, inspected reality, matches, drift, missing behavior, accidental behavior, design smells, proposed fixes, the drift decision needed or already authorized, and realized fit when outcome evidence exists.
+Use `templates/breadboard-reflection.md`. Include the conformance sections when drift is in scope, and include realized fit whenever outcome validity is being assessed—even if the status is `NOT_ASSESSED` because outcome evidence is absent.
 
 ## Rule
 
