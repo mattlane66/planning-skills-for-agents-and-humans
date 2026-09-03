@@ -56,9 +56,9 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## Criteria candidates (optional)
 
-| ID | Candidate criterion | Evidence or inference |
-|---|---|---|
-| R0 | ... | ... |
+| ID | Candidate criterion | Origin | Evidence refs |
+|---|---|---|---|
+| R0 | ... | FROM_X | ... |
 
 ## Open questions
 - ...

@@ -80,9 +80,11 @@ Use `Less about / More about` when people were clearly drawing a line around wha
 
 Capture preliminary standards only when the source clearly suggests what a good solution must achieve or avoid.
 
-Use IDs such as `R0`, `R1`, and `R2`, but mark the section as candidates rather than accepted requirements. The shaping step is responsible for testing, revising, prioritizing, or rejecting them.
+Use stable IDs such as `R0`, `R1`, and `R2`, but mark the section as candidates rather than accepted requirements. The shaping step is responsible for testing, revising, prioritizing, or rejecting them.
 
-Criteria candidates should unfold from the frame. When useful, tag each candidate as coming from `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`.
+A criterion that moves from framing into shaping keeps the same `R##` identity unless its meaning materially changes. Promotion changes authority, not identity: `evidence-backed candidate → Working R → Accepted R`. Do not mint a new requirement ID merely because a criterion was accepted, selected against, or later embedded in a solution.
+
+Criteria candidates should unfold from the frame. When useful, tag each candidate as coming from `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`, and preserve the evidence refs that justify it.
 
 Criteria candidates must:
 - describe needs, outcomes, or constraints rather than mechanisms
@@ -168,9 +170,9 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 ## Criteria candidates (optional)
 
-| ID | Candidate criterion | Evidence or inference |
-|---|---|---|
-| R0 | ... | ... |
+| ID | Candidate criterion | Origin | Evidence refs |
+|---|---|---|---|
+| R0 | ... | FROM_X | ... |
 ```
 
 ## Rules

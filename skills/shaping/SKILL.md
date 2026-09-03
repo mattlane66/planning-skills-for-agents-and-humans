@@ -166,7 +166,18 @@ When a frame is the judging basis, represent it as `x → f() → y`:
 - gap = what must change from x to y;
 - boundaries = constraints an acceptable f() must respect.
 
+### Identify the unknown before choosing the next move
+
+- If `x` is unclear, investigate the current situation.
+- If `y` is unclear, clarify the desired outcome.
+- If `f()` is unclear, shape candidate solutions.
+- When solving for `f()`, hold accepted `x` and `y` constant. Requirements constrain the acceptable solution space.
+
+Do not use solution exploration to compensate for an unclear current situation or desired outcome.
+
 Requirements may come `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`. Hold x and y constant during one comparative Fit Check. If discovery changes x or y materially, update the frame explicitly, invalidate the affected comparison, and rerun it rather than allowing a candidate shape to redefine its own judging conditions.
+
+When an R arrives from framing or another accepted upstream artifact, preserve its stable ID, origin, and evidence refs. Promotion from candidate to Working to Accepted changes authority, not identity. Create a new ID only when the requirement's meaning materially changes; do not mint a new ID because it was accepted, selected against, mapped to a mechanism, or carried into implementation.
 
 Use stable IDs such as `R0`, `R1`, and `R2`. Prefer no more than nine top-level requirements; use sub-requirements when needed.
 
@@ -264,6 +275,17 @@ Use binary `✅` or `❌` values for requirement fit. Unknown is not a pass. Put
 When requirements are still provisional, label the table **working fit check**. A working fit check may reveal missing requirements or bad mechanisms; it is not sufficient evidence for selection until the relevant requirements and appetite are accepted.
 
 The Rotated Fit Check is the existing reverse-fit discipline viewed as Parts × Requirements. It asks whether every mechanism is justified by at least one requirement and whether every accepted requirement has supporting parts. Remove, cut, or explicitly justify mechanisms that have no requirement. Also surface duplicated mechanisms and cases where one part carries disproportionate responsibility. When rotation reveals a genuine missing need, add it as a provisional R and rerun the check; do not silently rewrite accepted R to rescue the shape.
+
+For a selected shape, also record the inverse view so requirement coverage is explicit:
+
+```md
+| Req | Supporting selected part(s) | Coverage | Realization question |
+|---|---|:---:|---|
+| R1 | A1, A3 | ✅ | What would we observe if R1 is actually true in use? |
+| R2 | — | ❌ | ... |
+```
+
+Every Accepted R must have at least one selected part that claims to make it true. Coverage is not realized fit: it records the design's claimed support, not evidence that the requirement is true in use. When a requirement is meaningfully observable after implementation, state the realization question that later outcome evidence should answer; do not manufacture a metric for an unobservable requirement.
 
 Candidate breadboards and spike results may support the judgment, but they do not outrank the shaping document or decide which shape wins.
 
@@ -363,9 +385,9 @@ The machine-readable contract is in `.agent-orchestration.yaml`.
 - Existing interfaces or seams:
 
 ## Requirements
-| ID | Requirement | Status | Authority |
-|---|---|---|---|
-| R0 | ... | Core goal | Working |
+| ID | Requirement | Status | Authority | Origin | Evidence refs |
+|---|---|---|---|---|---|
+| R0 | ... | Core goal | Working | FROM_X | ... |
 
 ## Appetite
 - Authority: Unset | Working | Accepted
@@ -403,6 +425,11 @@ The machine-readable contract is in `.agent-orchestration.yaml`.
 | Shape part | Mechanism | Requirement(s) served | Justified? |
 |---|---|---|:---:|
 | A1 | ... | R0 | ✅ |
+
+## Requirement coverage
+| Req | Supporting selected part(s) | Coverage | Realization question |
+|---|---|:---:|---|
+| R0 | A1 | ✅ | ... |
 
 ## Appetite fit
 | Shape | Fits? | Required cuts | Uncertainty / spike |

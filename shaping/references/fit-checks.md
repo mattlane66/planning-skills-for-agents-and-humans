@@ -36,6 +36,17 @@ This is the **Rotated Fit Check / reverse fit — Parts × Requirements**. Check
 
 Rotation should also call out a requirement with no supporting part, duplicated mechanisms, and a part carrying disproportionate responsibility across requirements.
 
+For a selected shape, record the inverse requirement view as well:
+
+```md
+| Req | Supporting selected part(s) | Coverage | Realization question |
+|---|---|:---:|---|
+| R1 | B1, B3 | ✅ | What would we observe if R1 is actually true in use? |
+| R2 | — | ❌ | ... |
+```
+
+Every Accepted R must have at least one selected part that claims to make it true. Coverage is not realized fit; it is a design claim about support. Add a realization question only when the requirement is meaningfully observable after implementation.
+
 An unjustified part must be:
 
 - removed
