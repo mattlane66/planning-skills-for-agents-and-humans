@@ -1,0 +1,24 @@
+name: Snapshot repository
+
+on:
+  push:
+    branches:
+      - qa/browser-release-smoke
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create repository snapshot
+        run: zip -qr repo-snapshot.zip . -x '.git/*' 'repo-snapshot.zip'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: repo-snapshot
+          path: repo-snapshot.zip
+          if-no-files-found: error
+          retention-days: 1
