@@ -1,4 +1,7 @@
+import json
 import pathlib
+import subprocess
+import sys
 import unittest
 
 
@@ -47,6 +50,7 @@ class LeadUserPackageBoundaryTests(unittest.TestCase):
         self.assertIn("existing project R## / new Working R## / do not carry", template)
         self.assertIn("Phase F material = PRESENT and useful", template)
         self.assertIn("invoke `shaping` in collaborative mode", template)
+        self.assertIn("Do not invoke `framing-doc`, `shaping`", template)
 
     def test_decision_prompt_labels_phase_f_state_as_research_local(self):
         prompt = self.assert_mirrored("prompts/phase-g-decide.md")
@@ -69,6 +73,34 @@ class LeadUserPackageBoundaryTests(unittest.TestCase):
         self.assertIn("if Phase F did not produce useful planning material", readme)
         self.assertIn("route directly to collaborative `shaping`", readme)
         self.assertIn("namespaced research provenance", readme)
+
+    def test_controller_preserves_legacy_field_but_routes_phase_f_to_shaping(self):
+        script = CANONICAL / "scripts" / "next_research_move.py"
+        packaged_script = PACKAGED / "scripts" / "next_research_move.py"
+        self.assertEqual(
+            script.read_text(encoding="utf-8"),
+            packaged_script.read_text(encoding="utf-8"),
+        )
+        workspace = CANONICAL / "examples" / "reference-study"
+        completed = subprocess.run(
+            [sys.executable, str(script), str(workspace), "--json"],
+            check=True,
+            text=True,
+            capture_output=True,
+        )
+        move = json.loads(completed.stdout)
+        self.assertEqual("COMPLETE", move["state"])
+        self.assertEqual("framing-doc", move["conditional_next_skill"])
+        self.assertEqual("shaping", move["conditional_next_planning_skill"])
+
+        rendered = subprocess.run(
+            [sys.executable, str(script), str(workspace)],
+            check=True,
+            text=True,
+            capture_output=True,
+        ).stdout
+        self.assertIn("after explicit acceptance, shaping", rendered)
+        self.assertNotIn("after explicit acceptance, framing-doc", rendered)
 
 
 if __name__ == "__main__":
