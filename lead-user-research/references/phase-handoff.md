@@ -56,7 +56,7 @@ Rules:
   because they exist.
 - Every mode completes Phase H's final validation and canonical Decision Brief;
   proportionality controls only the extra derived formats.
-- Completion does not automatically invoke planning. Propose a research-to-planning
+- Completion does not automatically invoke framing or shaping. Propose a research-to-planning
   handoff and stop for explicit human acceptance.
 - After an accepted handoff, choose the smallest planning move rather than restarting
   the workflow mechanically: E-only evidence normally routes to `framing-doc`; useful
