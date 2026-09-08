@@ -68,7 +68,7 @@ The accepted research-to-planning handoff is the only promotion boundary. It rem
 Use the smallest downstream move:
 
 - **No Phase F:** if the study stops at evidence/interpretation, an accepted handoff normally routes to `framing-doc`.
-- **Phase F present:** if Phase F already produced a defensible transformation frame, research-local fit criteria, or candidate mechanisms, an accepted handoff normally routes directly to `shaping` in collaborative mode. Import those records as **Working** planning material with their research provenance intact rather than reconstructing them from scratch.
+- **Phase F present:** if Phase F material already includes a defensible transformation frame, research-local fit criteria, or candidate mechanisms, an accepted handoff normally routes directly to `shaping` in collaborative mode. Import those records as **Working** planning material with their research provenance intact rather than reconstructing them from scratch.
 
 Downstream planning must not ask the human to repeat a Phase F frame or mechanism decision merely because the package boundary was crossed. Revisit the decision only when a planning promotion gate is still unmet or a consequential planning input differs—for example, accepted project requirements, Appetite/cut line, project boundary, material evidence, or viable alternatives.
 

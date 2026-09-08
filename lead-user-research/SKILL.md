@@ -384,26 +384,13 @@ Use [prompts/phase-h-deliver.md](prompts/phase-h-deliver.md).
 
 ## Relationship to the planning workflow
 
-Use this as an optional upstream evidence move when a consequential decision needs
-future-facing trends, advanced users, pyramiding, or advanced analogs. It is not a
-mandatory predecessor to framing or a synonym for ordinary customer research. If
-the problem is already concrete, route directly to framing or shaping.
+Use this as an optional upstream evidence move when a consequential decision needs future-facing trends, advanced users, pyramiding, or advanced analogs. It is not a mandatory predecessor to framing or a synonym for ordinary customer research. If the problem is already concrete, route directly to framing or shaping.
 
-Research state is authoritative only for what the study found; it does not become
-planning truth. After Phase G/H, use
-[study-templates/research-to-frame-handoff.md](study-templates/research-to-frame-handoff.md)
-to propose evidence-backed planning inputs. A human must accept, reject, or revise
-the handoff before downstream planning proceeds; the research record remains cited
-evidence.
+Research state is authoritative only for what the study found; it does not become planning truth. After Phase G/H, use [study-templates/research-to-frame-handoff.md](study-templates/research-to-frame-handoff.md) to produce the **Research-to-Planning Handoff**: evidence-backed planning inputs with explicit provenance. The research record remains cited evidence.
 
-Choose the smallest downstream move after acceptance. An E-only study normally routes
-to `framing-doc`. When Phase F already produced useful research-local frame/criteria/
-mechanism material, route directly to collaborative `shaping` and import it as
-**Working** planning material with namespaced research provenance. Do not make the
-human reconstruct or reselect the same material solely because the package boundary
-was crossed. Revisit a decision when a planning promotion gate remains unmet or a
-consequential planning input differs, especially project requirements, Appetite/cut
-line, project boundary, material evidence, or viable alternatives.
+A human must accept, reject, or revise the handoff before downstream planning proceeds. For an E-only study, accept, reject, or revise it before invoking `framing-doc`; when Phase F already produced useful research-local frame/criteria/mechanism material, route directly to collaborative `shaping` after that same gate and import it as **Working** planning material with namespaced research provenance.
+
+Choose the smallest downstream move. Do not make the human reconstruct or reselect the same material solely because the package boundary was crossed. Revisit a decision when a planning promotion gate remains unmet or a consequential planning input differs, especially project requirements, Appetite/cut line, project boundary, material evidence, or viable alternatives.
 
 ## Hard methodological rules
 

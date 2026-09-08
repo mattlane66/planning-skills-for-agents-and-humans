@@ -134,7 +134,8 @@ actual CANDIDATE/SELECTED/REJECTED state plus human research-selection provenanc
 Never relabel a candidate as selected in prose.
 
 When Phase F ran, explicitly state that its `ACCEPTED`, research `R##`, and `SELECTED`
-states are research-local under `PACKAGE_BOUNDARY.md`. They are evidence and Working
+states are research-local under `PACKAGE_BOUNDARY.md`. A research-local mechanism selection is
+not a selected project shape and not a selected planning shape. They are evidence and Working
 planning inputs after an accepted handoff; they are not accepted product requirements,
 a selected project shape, selected-design intent, active scope, or build authorization.
 

@@ -289,7 +289,7 @@ def recommend(root: Path) -> dict[str, Any]:
             current_phase=current_phase,
             state="READY",
             next_phase="F",
-            reason="At least one supported need passed the Concept Generation Gate and requires an evidence-backed x → f() → y research concept-evaluation frame.",
+            reason="At least one supported need passed the Concept Generation Gate and requires an evidence-backed x → f() → y research shaping frame for concept evaluation.",
             blockers=[f"Passing need lacks a research concept-evaluation frame: {need_id}" for need_id in missing_frame],
         )
 
@@ -353,7 +353,7 @@ def recommend(root: Path) -> dict[str, Any]:
         current_phase=current_phase,
         state="COMPLETE",
         next_phase=None,
-        reason="The research study is complete. Its implications do not become accepted planning truth automatically.",
+        reason="The research study is complete. Its research shaping frame and implications do not become accepted planning truth automatically.",
         blockers=[],
         human_gate="Accept, reject, or revise the proposed research-to-planning implications before downstream planning.",
         # Keep the v1.x field stable for existing consumers; the new field is authoritative.
