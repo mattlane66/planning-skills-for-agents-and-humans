@@ -19,6 +19,8 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Install validation dependencies
+        run: python -m pip install -r requirements-dev.txt
       - uses: actions/setup-node@v5
         with:
           node-version: '22'
