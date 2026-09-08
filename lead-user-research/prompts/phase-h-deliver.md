@@ -10,22 +10,25 @@ The structured research state is the authoritative analytical record. The Markdo
 
 When file tools are available, regenerate the Decision Brief from `decision_outcome.json` with `scripts/render_decision_brief.py` before producing derived views.
 
-After delivery checks pass, set `manifest.phase` to `H`, `manifest.study_status` to
-`COMPLETE`, and `manifest.model_check` to `COMPLETED`. Regenerate the brief after final
-state changes and run deterministic validation again so its completion markers are
-current. COMPLETE does not imply human review; keep `human_review` separate.
+After delivery checks pass, explicitly record `manifest.deterministic_validation` as
+`PASSED`, set `manifest.phase` to `H`, `manifest.study_status` to `COMPLETE`, and
+`manifest.model_check` to `COMPLETED`. Regenerate the brief after final state changes
+and run deterministic validation again so its completion markers are current. The
+validator is read-only; if this last check fails, explicitly return validation status
+to `FAILED` before repair. COMPLETE does not imply human review; keep `human_review`
+separate.
 
 PDF and HTML are derived from the same research state and must not introduce new substantive claims.
 
 ## SCOUT
 
-Normally skip this phase.
-
-A Decision Brief is usually enough.
+Run the final validation and canonical Decision Brief delivery. Usually skip only
+the extra PDF/HTML formats.
 
 ## STANDARD
 
-Canonical Markdown + structured state are the default.
+Run the final validation and canonical Markdown delivery. Structured state and
+Markdown are the default.
 
 Generate PDF/HTML only when requested or clearly useful.
 

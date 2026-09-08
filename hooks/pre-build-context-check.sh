@@ -25,8 +25,14 @@ for candidate in \
 done
 
 looks_like_build=false
-if [[ "$tool_name" =~ ^(Write|Edit)$ ]] && [[ -n "$file_path" ]] && [[ ! "$file_path" =~ (^planning/|^docs/|\.md$) ]]; then
-  looks_like_build=true
+if [[ "$tool_name" =~ ^(Write|Edit)$ ]] && [[ -n "$file_path" ]]; then
+  is_planning_material=false
+  if [[ "$file_path" =~ (^|/)(planning|docs)(/|$) ]] || [[ "$file_path" == *.md ]]; then
+    is_planning_material=true
+  fi
+  if [[ "$is_planning_material" == false ]]; then
+    looks_like_build=true
+  fi
 fi
 
 if [[ "$tool_name" == "Bash" ]] && [[ "$command_text" =~ (npm[[:space:]]+(run|test|exec)|pnpm[[:space:]]+(run|test|exec)|yarn[[:space:]]+(run|test)|bun[[:space:]]+(run|test)|pytest|python[[:space:]]+-m[[:space:]]+pytest|cargo[[:space:]]+(build|test|run)|go[[:space:]]+(build|test|run)|make([[:space:]]|$)|gradle|mvn[[:space:]]+(test|package|verify)|swift[[:space:]]+(build|test)|xcodebuild|tsc([[:space:]]|$)|vite([[:space:]]|$)|next[[:space:]]+(build|dev)|rails[[:space:]]+(test|server)) ]]; then
@@ -34,16 +40,19 @@ if [[ "$tool_name" == "Bash" ]] && [[ "$command_text" =~ (npm[[:space:]]+(run|te
 fi
 
 if [[ "$looks_like_build" == true && "$has_context_packet" == false ]]; then
-  cat >&2 <<'MSG'
+  message="$(cat <<'MSG'
 Pre-build context check:
 - Implementation appears to be starting, but no compact context packet was found.
 - Create one with the feed-planning-context skill before build work when the task has shaped planning artifacts.
 - Expected paths include planning/context-packet.md, planning/agent-context-packet.md, planning/context.md, or .agent-context.md.
 - If this is a tiny unshaped change, continue intentionally.
 MSG
+  )"
   if [[ "${PLANNING_HOOK_STRICT:-0}" == "1" ]]; then
+    printf '%s\n' "$message" >&2
     exit 2
   fi
+  jq -cn --arg context "$message" '{hookSpecificOutput:{hookEventName:"PreToolUse",additionalContext:$context}}'
 fi
 
 exit 0

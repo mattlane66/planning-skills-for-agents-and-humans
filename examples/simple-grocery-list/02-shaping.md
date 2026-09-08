@@ -4,6 +4,13 @@ planning: true
 
 # Simple Grocery List — Shaping
 
+## Accepted transformation frame (x → f() → y)
+
+- x: Partners capture grocery items in messages, producing a list whose pending/bought state is difficult to recover.
+- f(): Replace message accumulation with a bounded, persistent grocery-state transformation.
+- y: Capture remains quick while the current needed/bought state is legible and reversible on the same device.
+- Gap and boundaries: Add state without accounts, sharing, categories, pricing, recipes, or store-specific behavior.
+
 ## Accepted Appetite
 
 Human acceptance recorded before shape selection.

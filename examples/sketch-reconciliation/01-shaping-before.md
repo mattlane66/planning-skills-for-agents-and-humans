@@ -1,5 +1,12 @@
 # Availability Board - Shaping Before Visual Review
 
+## Accepted transformation frame (x → f() → y)
+
+- x: A user changes locations or dates through natural language, but the date governing displayed hours can become unclear.
+- f(): Parse the request, update comparison state, and keep its effective date visible.
+- y: The user can compare hours and always tell which date the result represents.
+- Gap and boundaries: Clarify date state without adding a calendar UI, scheduling, saved sets, accounts, or time-zone conversion.
+
 ## Accepted Appetite and cut line
 
 - Appetite: one comparison surface with natural-language control and enough visible context to interpret the displayed hours

@@ -26,7 +26,17 @@ CLAUDE_KEYS = {
     "paths",
     "shell",
 }
-KNOWN_TOOLS = {"Read", "Write", "Edit", "Glob", "Grep", "Bash", "Skill"}
+KNOWN_TOOLS = {
+    "Read",
+    "Write",
+    "Edit",
+    "Glob",
+    "Grep",
+    "Bash",
+    "Skill",
+    "WebSearch",
+    "WebFetch",
+}
 MANUAL_COMMANDS = {
     "plan",
     "wayfind",

@@ -178,6 +178,11 @@ rationales intact for audit, keep `freeze.status = OPEN`, and return to Phase D 
 explicit reassessment. Do not self-declare the repaired dimension SUFFICIENT from
 Phase C.
 
+After the bounded evidence pass is genuinely complete, set
+`manifest.evidence_completion = COMPLETED`, including when the honest result contains
+zero source, evidence, or LU-episode records. Empty arrays alone do not prove that the
+pass ran. Set it back to `NOT_STARTED` before beginning a new evidence pass.
+
 Run deterministic validation after each batch when possible.
 
 Structural validation is not substantive proof.

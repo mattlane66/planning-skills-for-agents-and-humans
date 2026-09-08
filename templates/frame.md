@@ -40,6 +40,16 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Struggle or compromise:
 - Evidence and confidence:
 
+## Transformation frame (x → f() → y)
+
+- x — trigger/context:
+- x — current approach:
+- x — current result:
+- f() — current transformation or breakdown:
+- y — desired outcome:
+- Gap between x and y:
+- Boundaries that constrain a valid transformation:
+
 ## Problem
 - ...
 

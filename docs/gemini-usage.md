@@ -35,6 +35,7 @@ This repo includes Gemini-native wrappers for both fluid shaping moves and downs
 | Command | Purpose |
 |---|---|
 | `/plan` | Choose the smallest next planning move without forcing a fixed exploration order. |
+| `/frame` | Turn source material into a durable problem/outcome frame. |
 | `/lead-user` | Start or resume the next valid Lead User research phase from persisted state. |
 | `/lead-user-frame` | Phase A — establish or revise the research brief. |
 | `/lead-user-discover` | Phase B — trend-first discovery, pyramiding, candidates, and analogs. |
@@ -56,7 +57,10 @@ This repo includes Gemini-native wrappers for both fluid shaping moves and downs
 | `/reconcile-sketch` | Map a visual to planning IDs, surface proposed deltas, and apply only accepted changes. |
 | `/statechart` | Derive a transition table and Mermaid projection for selected stateful behavior. |
 | `/dumplink` | Turn a selected project into vertical task groups with dependency order, risk states, and scope cuts. |
+| `/kickoff` | Create a builder-facing reference from accepted planning artifacts. |
+| `/feed-context` | Package the active selected slice into a compact implementation context packet. |
 | `/check-drift` | Check implementation direction against selected planning artifacts and stop if drift is found. |
+| `/reflect-breadboard` | Compare accepted breadboard intent with implementation reality and surface a human drift decision. |
 
 These commands use Gemini's TOML command format and inject the files named by their `@{...}` includes. In this repository those paths are already correct; in a product repository, verify or adapt them before use.
 

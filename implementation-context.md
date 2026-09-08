@@ -42,16 +42,9 @@ The smallest user-visible path that proves the slice works.
 
 ## Authority order
 
-1. User's latest explicit instruction
-2. Selected project boundary
-3. Selected Dumplink task group or other selected slice, for active implementation scope
-4. Executable breadboard, when present
-5. Selected interface contract, for boundary-level input/output details
-6. Accepted selected-design breadboard
-7. Accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite/cut line, and cuts
-8. Kickoff doc, for builder orientation only
-9. Accepted frame / problem boundary
-10. Working shaping material, candidate evidence, raw notes, rejected alternatives, and brainstorming — discovery context only
+Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered for
+humans in `AGENTS.md`. Include only the entries relevant to this implementation
+context and keep their canonical relative order.
 
 A statechart is derived from the selected-design breadboard and never outranks it. The selected project governs outer scope; the selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. Working R/S/fit/Appetite and candidate breadboards are exploratory, not selected behavior. Existing code and tests are implementation evidence, not automatic authority to silently override selected product behavior. When reality conflicts with the packet, stop and use the drift protocol.
 

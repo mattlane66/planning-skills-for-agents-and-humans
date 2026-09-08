@@ -46,18 +46,10 @@ When working in an existing product repository, inspect the applicable `AGENTS.m
 
 ## Authority order
 
-Unless the user specifies otherwise:
-
-1. user's latest explicit instruction
-2. selected project boundary
-3. selected Dumplink task group or other selected slice, for active implementation scope
-4. executable breadboard, for expected examples and results within that scope
-5. selected interface contract, for its named boundary
-6. accepted selected-design breadboard
-7. accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite/cut line, and cuts
-8. kickoff document, for orientation only
-9. accepted frame / problem boundary
-10. Working shaping material, candidate evidence, raw notes, rejected alternatives, and brainstorming — discovery context only
+Use the canonical `authority_order` and `authority_labels` in
+`.agent-orchestration.yaml`. A context packet is a projection of that order,
+not a place to redefine it. Name only the entries that matter to the active
+task and preserve their canonical relative order.
 
 A statechart is derived from the selected-design breadboard and never outranks it. Candidate-shape breadboards never become implementation authority without explicit reconciliation into accepted shaping or selected-design artifacts. No lower artifact may expand the selected project or active slice.
 

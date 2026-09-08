@@ -62,6 +62,24 @@ This compact example carries its accepted inputs inline so the derived statechar
 - `N6`: timeout reached → `P3` failure result.
 - `U4`: retry starts a new attempt using `S1`.
 
+## Behavior traces
+
+| Scenario | Entry | Control path | Decision / branch | State / data effect | Observable consequence | Status |
+|---|---|---|---|---|---|---|
+| Reject invalid file | U1, U2 | U1 → S1; U2 → N1 | N1: invalid | no job created | N1 → P3 → U6 failure | supported |
+| Start and show progress | U1, U2 | U1 → S1; U2 → N1 → N2; N3 | N1: valid | N2/N3 → S2 | N3 → U5 in P2 | supported |
+| Complete import | N4 | N4 → S2, P3 | success or failure | terminal result stored in S2 | N4 → U6 | supported |
+| Cancel import | U3 | U3 → N5 → S2, P3 | cancellation confirmed | canceled state stored in S2 | N5 → U6 | supported |
+| Retry failure | U4 | U4 → N2 → S2, P2 | new attempt | new job state stored in S2 | later N3 → U5 or N4 → U6 | supported |
+| Time out import | N6 | N6 → S2, P3 | timeout reached | failed terminal state stored in S2 | N6 → U6 | supported |
+
+## Reverse-trace audit
+
+| Observable consequence | Direct incoming sources | Upstream entries / writers | Unresolved predecessors | Status |
+|---|---|---|---|---|
+| U5 progress | N3 | U2 via N1/N2, or U4 via N2 | none | supported |
+| U6 terminal result | N1, N4, N5, N6 | U2, U3, U4, active-job timer | none | supported |
+
 ## Selected slice
 
 | ID | Slice | Demo | Exclusions |

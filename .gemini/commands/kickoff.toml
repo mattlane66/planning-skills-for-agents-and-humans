@@ -1,0 +1,14 @@
+description = "Create a builder-facing reference from accepted planning artifacts without changing scope."
+
+prompt = """
+Use this repository's planning instructions and kickoff skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{kickoff-doc/SKILL.md}
+
+Command arguments / source context:
+{{args}}
+
+Create or update a builder-facing kickoff artifact organized by product or system territory. Use accepted planning artifacts as authority, preserve decisions, constraints, exclusions, and open questions, and keep raw notes subordinate. Do not turn the kickoff document into a build plan or expand the selected slice.
+"""

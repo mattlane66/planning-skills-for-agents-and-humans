@@ -70,6 +70,16 @@ If and only if `sufficiency.status = SUFFICIENT` and the evidence corpus is stru
 - refuse freeze while a decision-critical observability item remains OPEN;
 - refuse freeze when evidence depends on an AI analysis run whose sampled validation has not PASSED.
 
+For a file-backed study, perform the state mutation with:
+
+```bash
+python lead-user-research/scripts/freeze_evidence.py <workspace>
+```
+
+This records a content fingerprint across the decision-relative evidence state as
+well as the counts. Validation is read-only and will reject same-count evidence
+changes that do not match the recorded fingerprint.
+
 If not:
 
 - leave OPEN;
@@ -89,6 +99,11 @@ Later evidence may be added, but every post-freeze search must record:
 - why it was sought;
 - what interpretation/question triggered it;
 - what state changed as a result.
+
+For file-backed studies, make that authorization explicit with
+`scripts/record_post_freeze_evidence.py`, which records a `PF##` change and the
+resulting evidence fingerprint. Do not silently rerun the original freeze over
+changed evidence.
 
 ## Phase handoff
 

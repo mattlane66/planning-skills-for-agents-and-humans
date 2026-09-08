@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import re
-from urllib.parse import urlsplit
+from urllib.parse import unquote, urlsplit
 
 
 _MARKDOWN_SPECIAL = re.compile(r"([\\`*_{}\[\]()<>#!|~])")
@@ -28,6 +28,45 @@ def contains_private_identity(text: str, identity: str) -> bool:
     if not identity.strip():
         return False
     return identity_pattern(identity).search(text) is not None
+
+
+def sensitive_text_variants(value: str) -> set[str]:
+    """Return renderer-produced variants of sensitive source text."""
+    raw = value.strip()
+    if not raw:
+        return set()
+    variants = {raw, markdown_escape(raw)}
+    safe_url = safe_outward_url(raw)
+    if safe_url:
+        variants.add(safe_url)
+        variants.add(markdown_escape(safe_url))
+    return {variant for variant in variants if variant}
+
+
+def contains_sensitive_text(text: str, value: str) -> bool:
+    """Detect raw, Markdown-escaped, or percent-encoded sensitive text."""
+    if not value.strip():
+        return False
+    normalized_texts = {
+        text,
+        re.sub(r"\\([\\`*_{}\[\]()<>#!|~])", r"\1", text),
+        unquote(text),
+        unquote(re.sub(r"\\([\\`*_{}\[\]()<>#!|~])", r"\1", text)),
+    }
+    targets = sensitive_text_variants(value) | {value.strip(), unquote(value.strip())}
+    return any(
+        target.casefold() in candidate.casefold()
+        for candidate in normalized_texts
+        for target in targets
+        if target
+    )
+
+
+def redact_sensitive_text(text: str, value: str, replacement: str) -> str:
+    """Redact known renderer variants without exposing the original spelling."""
+    for variant in sorted(sensitive_text_variants(value), key=len, reverse=True):
+        text = re.sub(re.escape(variant), lambda _match: replacement, text, flags=re.IGNORECASE)
+    return text
 
 
 def safe_outward_url(value: object) -> str | None:

@@ -259,6 +259,7 @@ test('uses Statechart only when state-complexity signals are present', () => {
 
 test('routes implementation drift to reflection', () => {
   assert.deepEqual(recommendPlanningWorkflow('Compare the breadboard to implementation reality'), ['breadboard-reflection']);
+  assert.deepEqual(recommendPlanningWorkflow('Review realized fit against actual user telemetry'), ['breadboard-reflection']);
 });
 
 test('honors explicit skill exclusions in natural language and structured input', () => {
@@ -279,11 +280,22 @@ test('honors explicit skill exclusions in natural language and structured input'
     ['shaping'],
   );
   assert.deepEqual(
+    recommendPlanningWorkflow('Do not use lead-user research; refine the current problem frame.'),
+    ['framing-doc'],
+  );
+  assert.deepEqual(
     recommendPlanningWorkflow('Do not create an interface contract; continue shaping the options.'),
     ['shaping'],
   );
   assert.deepEqual(
     recommendPlanningWorkflow('Compare options and tradeoffs', { excludedSkills: ['shaping'] }),
+    ['planning-router'],
+  );
+});
+
+test('does not route a negated slice prerequisite as an implementation handoff', () => {
+  assert.deepEqual(
+    recommendPlanningWorkflow('There is no selected slice. Make an implementation plan for the first slice.'),
     ['planning-router'],
   );
 });

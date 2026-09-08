@@ -84,9 +84,9 @@ Use when the decision is approximately:
 
 Run:
 
-> A Frame → B Discover → bounded C Evidence → G Decide
+> A Frame → B Discover → bounded C Evidence → G Decide → H Deliver
 
-A SCOUT run may stop with a two-page Decision Brief. It does not require Evidence Freeze, concept generation, PDF, or interactive HTML.
+A SCOUT run may finish with a compact Decision Brief. It does not require Evidence Freeze, concept generation, PDF, or interactive HTML, but Phase H still performs final validation and canonical delivery.
 
 Typical outcome:
 
@@ -98,7 +98,7 @@ Use for a meaningful product or research decision.
 
 Run:
 
-> A → B → C → D → E → G
+> A → B → C → D → E → G → H
 
 Run F Shape only if at least one need passes the Concept Generation Gate.
 
@@ -373,7 +373,8 @@ Use [prompts/phase-g-decide.md](prompts/phase-g-decide.md).
 
 ### H — Deliver
 
-Only when proportionate and supported by the environment.
+Always for final validation and canonical Decision Brief delivery; extra formats only
+when proportionate and supported by the environment.
 
 Structured research state is the authoritative analytical record. The Markdown Decision Brief is the canonical human-facing report. PDF and interactive HTML are derived views, not independent analysis.
 

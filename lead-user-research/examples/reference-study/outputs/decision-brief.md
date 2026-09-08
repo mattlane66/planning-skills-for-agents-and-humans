@@ -90,7 +90,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Gap: Preserve consequential state across handoffs while reducing preparation and recovery effort versus manual reconstruction.
 - Boundaries: Do not make ongoing upkeep cost exceed recovery value.; Do not reinstate rejected choices.
 - Human acceptance: True
-- Acceptance note: Synthetic reference fixture models explicit human acceptance for validator coverage.
+- Acceptance note: ASSURANCE\_FIXTURE\_HUMAN\_DECISION\_V1 — synthetic reference fixture models the test author's explicit acceptance for validator coverage.
 
 **Passing fitness conditions**
 
@@ -103,7 +103,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 
 - Selection status: SELECTED
 - Selected by human: True
-- Selection note: The fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.
+- Selection note: ASSURANCE\_FIXTURE\_HUMAN\_DECISION\_V1 — the fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.
 - Rotation status: RUN
 - Requirements: R1, R2
 - Assumptions: The current workspace exposes enough structured state to generate an accurate packet; A short confirmation step costs less than manual reconstruction
@@ -175,7 +175,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Interpretation completion: COMPLETED
 - Interpretive status: PROVISIONAL
 - Model checklist: COMPLETED
-- State fingerprint: sha256:ba6ad32ad5e83f343edb310987fc48f169fabf3bcd91a6b4c8955fda1b1a8cb6
+- State fingerprint: sha256:17359d196d135aff8c3817929951963eb4710195d617dd54bd9bcfe1c3daf45e
 
 ## Evidence drill-down
 

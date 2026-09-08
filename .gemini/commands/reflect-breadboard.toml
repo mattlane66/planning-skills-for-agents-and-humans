@@ -1,0 +1,15 @@
+description = "Compare accepted breadboard intent with implementation reality and surface a human drift decision."
+
+prompt = """
+Use this repository's planning instructions and breadboard-reflection skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{breadboard-reflection/SKILL.md}
+@{templates/breadboard-reflection.md}
+
+Command arguments / source context:
+{{args}}
+
+First record implementation reality without rewriting accepted intent. Then compare reality with the accepted breadboard, identify concrete drift and design smells, and present correction options. Stop for a human decision unless the user already authorized a specific correction. Do not silently rewrite the breadboard or implementation.
+"""

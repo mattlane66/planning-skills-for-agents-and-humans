@@ -38,7 +38,6 @@ cp "$ROOT_DIR/hooks/"*.sh "$DIST_DIR/hooks/"
 cp -R "$ROOT_DIR/examples/." "$DIST_DIR/examples/"
 
 rewrite_args=(
-  -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
   -e 's#\.agent-orchestration\.yaml#${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml#g'
   -e 's#docs/agent-context-feeding\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md#g'
   -e 's#docs/agent-operating-reference\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-operating-reference.md#g'
@@ -79,7 +78,16 @@ for skill in "${SKILLS[@]}"; do
 
   mkdir -p "$target_dir"
   cp -R "$ROOT_DIR/$skill/." "$target_dir/"
-  sed "${rewrite_args[@]}" "$source_file" > "$target_dir/SKILL.md"
+  skill_rewrite_args=("${rewrite_args[@]}")
+  if [[ "$skill" == "wayfinding" ]]; then
+    skill_rewrite_args+=(
+      -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
+    )
+  fi
+  while IFS= read -r -d '' support_file; do
+    sed "${skill_rewrite_args[@]}" "$support_file" > "$support_file.rewritten"
+    mv "$support_file.rewritten" "$support_file"
+  done < <(find "$target_dir" -type f -name '*.md' -print0)
   python3 "$ROOT_DIR/scripts/annotate-claude-skill.py" "$target_dir/SKILL.md" "$skill"
 done
 
@@ -101,13 +109,25 @@ for command_file in "$ROOT_DIR"/.claude/commands/*.md; do
     continue
   fi
 
-  sed "${rewrite_args[@]}" "$command_file" > "$DIST_DIR/commands/$command_name.md"
+  command_rewrite_args=(
+    "${rewrite_args[@]}"
+    -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
+  )
+  sed "${command_rewrite_args[@]}" "$command_file" > "$DIST_DIR/commands/$command_name.md"
 done
+
+simple_example="$DIST_DIR/examples/simple-grocery-list/README.md"
+if [[ -f "$simple_example" ]]; then
+  sed 's#../../docs/start-here\.md#../../README.md#g' "$simple_example" > "$simple_example.rewritten"
+  mv "$simple_example.rewritten" "$simple_example"
+fi
 
 cat > "$DIST_DIR/README.md" <<'EOF'
 # Planning Skills Claude Code Plugin Bundle
 
 This generated bundle mirrors the canonical Planning Skills `SKILL.md` files from the repository root. Skills, command wrappers, and shared agent instructions use bundle-local references. The orchestration manifest, reusable docs, templates, hooks, and license they depend on are included.
+
+Use `/planning-skills:plan` when the next move is unclear. Use a canonical skill directly when the work is already routed, and use the shorter command wrappers for focused moves such as `/planning-skills:frame`, `/planning-skills:kickoff`, `/planning-skills:feed-context`, and `/planning-skills:reflect-breadboard`.
 
 Claude namespaces plugin skills and commands with the manifest name. For example:
 

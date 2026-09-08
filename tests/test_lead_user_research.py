@@ -193,6 +193,9 @@ class LeadUserResearchTests(unittest.TestCase):
                 "fieldwork_referrals": [],
             },
         )
+        manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+        manifest["evidence_completion"] = "COMPLETED"
+        self.write_json(workspace, "manifest.json", manifest)
         return episode
 
     def freeze_valid(self, workspace):
@@ -246,20 +249,32 @@ class LeadUserResearchTests(unittest.TestCase):
             },
         )
         manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+        manifest["evidence_completion"] = "COMPLETED"
         manifest["interpretation_completion"] = "COMPLETED"
         self.write_json(workspace, "manifest.json", manifest)
         self.write_json(
             workspace,
             "freeze.json",
             {
-                "status": "FROZEN",
-                "frozen_at": "2026-08-28T18:00:00+00:00",
-                "evidence_count": 1,
-                "qualified_lu_count": 1,
-                "independent_lineage_count": 1,
+                "status": "OPEN",
+                "frozen_at": None,
+                "evidence_count": 0,
+                "qualified_lu_count": 0,
+                "independent_lineage_count": 0,
+                "evidence_fingerprint": None,
                 "unresolved_gaps": ["Private enterprise coverage"],
                 "post_freeze_evidence": [],
             },
+        )
+        subprocess.run(
+            [
+                sys.executable,
+                str(LEAD / "scripts" / "freeze_evidence.py"),
+                str(workspace),
+            ],
+            check=True,
+            text=True,
+            capture_output=True,
         )
 
     def test_canonical_input_contract_is_visible_at_every_front_door(self):
@@ -318,7 +333,18 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual("1.7", manifest["protocol_version"])
             self.assertEqual("NONE", manifest["fixture_type"])
             self.assertEqual("NOT_STARTED", manifest["interpretation_completion"])
+            self.assertEqual("NOT_STARTED", manifest["evidence_completion"])
             self.assertEqual("DESK_RESEARCH", manifest["study_execution_level"])
+            self.assertEqual(
+                {
+                    "domain": "USER_SUPPLIED",
+                    "target_market": "USER_SUPPLIED",
+                    "what_to_understand": "USER_SUPPLIED",
+                    "decision": "USER_SUPPLIED",
+                    "innovation_altitude": "USER_SUPPLIED",
+                },
+                decision["brief_field_status"],
+            )
             self.assertTrue((workspace / "sufficiency.json").exists())
             self.assertTrue((workspace / "decision_outcome.json").exists())
             self.assertTrue((workspace / "hypotheses.json").exists())
@@ -352,6 +378,25 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(0, result.returncode, result.stderr)
             self.assertIn("structural validation passed", result.stdout.lower())
+
+    def test_validation_is_read_only(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            before = {
+                path.relative_to(workspace): path.read_bytes()
+                for path in workspace.rglob("*")
+                if path.is_file()
+            }
+            result = self.validate(workspace)
+            self.assertEqual(0, result.returncode, result.stderr)
+            after = {
+                path.relative_to(workspace): path.read_bytes()
+                for path in workspace.rglob("*")
+                if path.is_file()
+            }
+            self.assertEqual(before, after)
 
     def test_next_move_routes_from_brief_through_discovery_and_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -420,6 +465,34 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual("G", move["next_phase"])
             self.assertEqual("/lead-user-decide", move["recommended_command"])
             self.assertIn("bounded SCOUT", move["reason"])
+
+    def test_honest_empty_evidence_pass_can_advance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp, mode="scout")
+            self.write_json(workspace, "trends.json", [{"trend_id": "T1"}])
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "bounded search"}])
+
+            move = self.next_move(workspace)
+            self.assertEqual("C", move["next_phase"])
+
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["evidence_completion"] = "COMPLETED"
+            self.write_json(workspace, "manifest.json", manifest)
+            move = self.next_move(workspace)
+            self.assertEqual("G", move["next_phase"])
+            self.assertIn("bounded SCOUT", move["reason"])
+
+    def test_nonempty_evidence_still_requires_explicit_completion(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp, mode="scout")
+            self.write_valid_evidence_core(workspace)
+            self.write_json(workspace, "candidates.json", [{"candidate_id": "C1"}])
+            self.write_json(workspace, "search_log.json", [{"query": "bounded search"}])
+            manifest = json.loads((workspace / "manifest.json").read_text(encoding="utf-8"))
+            manifest["evidence_completion"] = "NOT_STARTED"
+            self.write_json(workspace, "manifest.json", manifest)
+            self.assertEqual("C", self.next_move(workspace)["next_phase"])
 
     def test_next_move_skips_shape_when_no_need_passes_gate(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -703,12 +776,31 @@ class LeadUserResearchTests(unittest.TestCase):
             sufficiency["dimensions"]["pyramid_coverage"] = []
             self.write_json(workspace, "sufficiency.json", sufficiency)
 
+            search_log = json.loads((workspace / "search_log.json").read_text(encoding="utf-8"))
+            search_log.append(None)
+            self.write_json(workspace, "search_log.json", search_log)
+            change_log = json.loads((workspace / "change_log.json").read_text(encoding="utf-8"))
+            change_log.append(None)
+            self.write_json(workspace, "change_log.json", change_log)
+            sources = json.loads((workspace / "sources.json").read_text(encoding="utf-8"))
+            sources[0]["coverage"] = {}
+            self.write_json(workspace, "sources.json", sources)
+
+            decision = json.loads((workspace / "decision.json").read_text(encoding="utf-8"))
+            decision["brief_field_status"]["domain"] = {}
+            self.write_json(workspace, "decision.json", decision)
+
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertNotIn("Traceback", result.stderr)
             self.assertIn("lu_id row", result.stderr)
             self.assertIn("requirement_ids must be a list", result.stderr)
             self.assertIn("dimensions.pyramid_coverage must be an object", result.stderr)
+            self.assertIn("search_log.json row", result.stderr)
+            self.assertIn("change_log.json row", result.stderr)
+            self.assertIn("invalid coverage", result.stderr)
+            self.assertIn("brief_field_status[domain] has invalid status", result.stderr)
+            self.assertEqual("A", self.next_move(workspace)["next_phase"])
 
     def test_starting_hypotheses_must_map_to_falsification_ledger(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -784,6 +876,27 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual(1, result.returncode)
             self.assertIn("both DERIVATIVE and INDEPENDENT", result.stderr)
 
+    def test_overlapping_independent_lineages_are_not_double_counted(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            lineage = json.loads((workspace / "lineage.json").read_text(encoding="utf-8"))
+            lineage.append(
+                {
+                    "lineage_id": "L4",
+                    "member_refs": ["LU1"],
+                    "relationship": "OTHER",
+                    "independence": "INDEPENDENT",
+                    "evidence_refs": ["E2"],
+                    "rationale": "Deliberately overlaps L1 for regression coverage.",
+                }
+            )
+            self.write_json(workspace, "lineage.json", lineage)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("L4 overlaps independent lineage L1", result.stderr)
+
     def test_freeze_requires_sufficiency_and_exact_counts(self):
         with tempfile.TemporaryDirectory() as tmp:
             workspace = self.init_workspace(tmp)
@@ -806,6 +919,18 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertIn("marginal_value", result.stderr)
+
+    def test_freeze_detects_same_count_evidence_mutation(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+            evidence = json.loads((workspace / "evidence.json").read_text(encoding="utf-8"))
+            evidence[0]["verbatim_excerpt"] = "Changed evidence text with the same record count"
+            self.write_json(workspace, "evidence.json", evidence)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("frozen evidence changed", result.stderr)
 
     def test_fit_requirement_pass_requires_all_checks(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1039,6 +1164,38 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertIn(r"Useful \]\(https://evil.invalid\) \#\# INJECTED", brief)
             self.assertIn("https://example.com/report%281%29", brief)
 
+    def test_withheld_url_is_redacted_after_markdown_escaping(self):
+        reference = LEAD / "examples" / "reference-study"
+        private_url = "https://private.example/confidential_(case)"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            sources = json.loads((workspace / "sources.json").read_text(encoding="utf-8"))
+            sources[0]["url"] = private_url
+            self.write_json(workspace, "sources.json", sources)
+            outcome = json.loads((workspace / "decision_outcome.json").read_text(encoding="utf-8"))
+            outcome["why"].append(f"Internal source: {private_url}")
+            self.write_json(workspace, "decision_outcome.json", outcome)
+
+            subprocess.run(
+                [sys.executable, str(LEAD / "scripts" / "render_decision_brief.py"), str(workspace)],
+                check=True,
+                text=True,
+                capture_output=True,
+            )
+            brief_path = workspace / "outputs" / "decision-brief.md"
+            brief = brief_path.read_text(encoding="utf-8")
+            self.assertNotIn(private_url, brief)
+            self.assertNotIn(r"https://private.example/confidential\_\(case\)", brief)
+
+            brief_path.write_text(
+                brief + r"Leaked: https://private.example/confidential\_\(case\)" + "\n",
+                encoding="utf-8",
+            )
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("exposes withheld URL for SRC1", result.stderr)
+
     def test_concept_gate_and_act_follow_transitive_evidence(self):
         reference = LEAD / "examples" / "reference-study"
         with tempfile.TemporaryDirectory() as tmp:
@@ -1236,6 +1393,21 @@ class LeadUserResearchTests(unittest.TestCase):
                 "agreement_or_error_summary": "Sampled extraction errors were within the study's accepted bound.",
             }
             self.write_json(workspace, "analysis_runs.json", analysis_runs)
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(LEAD / "scripts" / "record_post_freeze_evidence.py"),
+                    str(workspace),
+                    "--change-id", "PF1",
+                    "--sought-because", "Resolve a decision-critical observability gap.",
+                    "--trigger", "The frozen interpretation required a fieldwork referral and validated extraction.",
+                    "--state-change", "Recorded the fieldwork referral and its validated analysis run.",
+                    "--affected-interpretation-ref", "F1",
+                ],
+                check=True,
+                text=True,
+                capture_output=True,
+            )
             result = self.validate(workspace)
             self.assertEqual(0, result.returncode, result.stderr)
 
@@ -1350,6 +1522,19 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertEqual(1, result.returncode)
             self.assertIn("SELECTED requires selected_by_human=true", result.stderr)
             self.assertIn("SELECTED requires rotation_status RUN", result.stderr)
+
+    def test_selected_shape_cannot_claim_false_requirement_fit(self):
+        reference = LEAD / "examples" / "reference-study"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp) / "reference-study"
+            shutil.copytree(reference, workspace)
+            concepts = json.loads((workspace / "concepts.json").read_text(encoding="utf-8"))
+            concepts[0]["requirement_fit"]["R2"] = False
+            concepts[0]["requirement_ids"] = ["R1"]
+            self.write_json(workspace, "concepts.json", concepts)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("SELECTED requires true requirement_fit", result.stderr)
 
     def test_trace_frame_fit_contract_is_explicit(self):
         protocol = (LEAD / "PROTOCOL.md").read_text(encoding="utf-8")

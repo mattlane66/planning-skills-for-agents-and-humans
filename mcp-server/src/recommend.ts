@@ -38,7 +38,7 @@ const skillExclusionAliases: Record<SkillName, string[]> = {
   'kickoff-doc': ['kickoff doc', 'kickoff document', 'kickoff-doc'],
   'feed-planning-context': ['feed planning context', 'context packet', 'feed-planning-context'],
   'breadboard-reflection': ['breadboard reflection', 'breadboard-reflection', 'reflect on (?:this |the )?breadboard'],
-  'lead-user-research': ['lead user research', 'lead-user-research', 'lead user method', 'lead users'],
+  'lead-user-research': ['lead user research', 'lead-user research', 'lead-user-research', 'lead user method', 'lead users'],
 };
 
 function includesAny(value: string, terms: string[]): boolean {
@@ -124,11 +124,20 @@ export function recommendPlanningWorkflow(
   situation: string,
   options: RecommendationOptions = {},
 ): SkillName[] {
-  const normalized = stripExplicitlyUntrustedQuotedMaterial(situation).toLowerCase();
+  const trustedSituation = stripExplicitlyUntrustedQuotedMaterial(situation);
+  const normalized = trustedSituation.toLowerCase();
   const exclusions = explicitSkillExclusions(normalized);
   for (const skill of options.excludedSkills ?? []) exclusions.add(skill);
 
-  if (includesAnyAffirmed(normalized, ['planning drift', 'implementation reality', 'compare to implementation', 'reflect on the breadboard'])) {
+  if (includesAnyAffirmed(normalized, [
+    'planning drift',
+    'implementation reality',
+    'compare to implementation',
+    'reflect on the breadboard',
+    'realized fit',
+    'actual user telemetry',
+    'outcome evidence',
+  ])) {
     const route = allowedRoute(['breadboard-reflection'], exclusions);
     if (route.length > 0) return route;
   }
@@ -334,7 +343,7 @@ export function recommendPlanningWorkflow(
     /\b(?:add|update|revise)\s+r\d*\b/,
     /\b(?:update|revise)\s+shape\s+[a-z]\d*\b/,
     /\bput\s+.+\s+into\s+shape\s+[a-z]\d*\b/,
-  ]) || matches(situation, [
+  ]) || matches(trustedSituation, [
     /\b(?:[Uu]pdate|[Rr]evise)\s+(?:[Ss]hape\s+)?[A-Z]\d*\b/,
     /\b[Pp]ut\s+.+\s+into\s+(?:[Ss]hape\s+)?[A-Z]\d*\b/,
   ]));
@@ -373,7 +382,19 @@ export function recommendPlanningWorkflow(
     'plan the implementation',
     'plan implementation',
   ]);
+  const negatedBuildHandoff = matches(normalized, [
+    /\b(?:not|isn't|is\s+not)\s+ready\s+for\s+implementation\b/,
+    /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:is\s+not|isn't)\s+ready\b/,
+    /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:has\s+not|hasn't)\s+been\s+selected\b/,
+    /\b(?:do\s+not|don't|dont|without)\s+(?:have\s+)?(?:a\s+)?selected\s+slice\b/,
+    /\bno\s+(?:selected\s+)?slice\s+(?:has\s+been|is)\s+selected\b/,
+    /\b(?:do\s+not|don't|dont)\s+have\s+(?:a\s+)?context\s+packet\b/,
+    /\bwithout\s+(?:a\s+)?context\s+packet\b/,
+    /\bno\s+(?:selected\s+slice|context\s+packet)\b/,
+    /\bcontext\s+packet\s+(?:does\s+not|doesn't|doesnt)\s+exist\b/,
+  ]);
   const sliceImplementationPlan = implementationPlanning
+    && !negatedBuildHandoff
     && matches(normalized, [
       /\b(?:first|next|active|selected|current|this)\s+slice\b/,
       /\bslice\s+v?\d+\b/,
@@ -387,17 +408,6 @@ export function recommendPlanningWorkflow(
   const explicitSliceReference = matches(normalized, [
     /\b(?:first|next|active|selected|current|this)\s+slice\b/,
     /\bslice\s+v?\d+\b/,
-  ]);
-  const negatedBuildHandoff = matches(normalized, [
-    /\b(?:not|isn't|is\s+not)\s+ready\s+for\s+implementation\b/,
-    /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:is\s+not|isn't)\s+ready\b/,
-    /\b(?:selected|next|first|current|active|this)\s+slice\s+(?:has\s+not|hasn't)\s+been\s+selected\b/,
-    /\b(?:do\s+not|don't|dont|without)\s+(?:have\s+)?(?:a\s+)?selected\s+slice\b/,
-    /\bno\s+(?:selected\s+)?slice\s+(?:has\s+been|is)\s+selected\b/,
-    /\b(?:do\s+not|don't|dont)\s+have\s+(?:a\s+)?context\s+packet\b/,
-    /\bwithout\s+(?:a\s+)?context\s+packet\b/,
-    /\bno\s+(?:selected\s+slice|context\s+packet)\b/,
-    /\bcontext\s+packet\s+(?:does\s+not|doesn't|doesnt)\s+exist\b/,
   ]);
   const explicitBuildHandoff = !negatedBuildHandoff && (explicitSliceReference || includesAny(normalized, [
     'selected slice',

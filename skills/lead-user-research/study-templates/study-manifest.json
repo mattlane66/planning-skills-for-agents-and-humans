@@ -8,6 +8,7 @@
   "study_execution_basis": [],
   "human_review": "NOT_REVIEWED",
   "deterministic_validation": "NOT_RUN",
+  "evidence_completion": "NOT_STARTED",
   "interpretation_completion": "NOT_STARTED",
   "interpretive_status": "PROVISIONAL",
   "model_check": "NOT_RUN",

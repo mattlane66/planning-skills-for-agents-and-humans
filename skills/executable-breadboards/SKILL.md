@@ -82,7 +82,7 @@ Use whichever artifacts are available:
 
 | ID | Slice | Demo path | Produces | Explicit exclusions |
 |---|---|---|---|---|
-| SLICE-01 | ... | ... | ... | ... |
+| V1 | ... | ... | ... | ... |
 
 ## Relevant breadboard structure
 
@@ -109,7 +109,7 @@ Use whichever artifacts are available:
 
 ## Example runs
 
-### Run 1 — Happy path
+### RUN1 — Happy path
 
 Given:
 - ...

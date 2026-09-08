@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+### Fixed
+
+- Preserve product-repository `AGENTS.md` references in the Claude plugin, rewrite
+  nested support paths, and check all bundled Markdown links.
+- Surface default hook reminders as runtime-visible JSON and recognize absolute
+  planning/documentation paths without false build reminders.
+- Make Lead User validation read-only, support completed empty evidence passes and
+  explicit brief-field provenance, and require canonical Phase H delivery in all modes.
+- Bind Evidence Freeze to content, reject overlapping independent lineages and
+  selected concepts with failed requirement fit, and redact escaped withheld URLs.
+- Run assurance validation from integrity-checked host code; supply explicit trusted
+  synthetic human decisions and retain failed artifacts with bounded subprocesses.
+- Correct MCP routing at exclusion, realized-fit, and negated-scope boundaries; serve
+  bounded, skill-local support resources through MCP.
+- Reconcile artifact authority against the orchestration manifest, bring examples and
+  stable IDs up to the skill contracts, and complete the Gemini/Claude command surfaces.
+- Reject untrusted Host headers on the loopback viewer, align the site's Node floor
+  with its dependencies, test that floor in CI, and separate major dependency updates.
+
 ### Added
 
 - Add stable criterion lineage from evidence-backed R candidates through Working/Accepted authority, selected mechanisms, implementation context, and realized-fit assessment.

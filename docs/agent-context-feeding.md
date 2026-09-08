@@ -68,16 +68,8 @@ What the next implementation move should do.
 - Only the relevant accepted shaping decision, selected-design breadboard, slice, contract, executable-breadboard, Dumplink, kickoff, or accepted reconciliation artifacts.
 
 ## Authority order
-1. User's latest explicit instruction
-2. Selected project boundary
-3. Selected Dumplink task group or other selected slice, for active implementation scope
-4. Executable breadboard, when present
-5. Selected interface contract, for boundary-level details
-6. Accepted selected-design breadboard
-7. Accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite, cuts
-8. Kickoff doc, for builder orientation only
-9. Accepted frame / problem boundary
-10. Working shaping material, candidate evidence, raw notes, transcripts, rejected alternatives — discovery context only, never active build scope
+Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered in
+`AGENTS.md`. List only relevant entries and keep their canonical relative order.
 
 ## Use these sections first
 - ...
@@ -288,19 +280,9 @@ When feeding large planning material to an agent:
 
 ## Authority order
 
-When artifacts disagree, use this default authority order unless the user says otherwise:
-
-1. user's latest explicit instruction
-2. selected project boundary
-3. selected Dumplink task group or other selected slice
-4. executable breadboard
-5. selected interface contract for its named boundary
-6. accepted selected-design breadboard
-7. accepted shaping decisions: selected direction, Accepted R, Accepted Appetite, cuts
-8. kickoff document for orientation only
-9. accepted frame / problem boundary
-10. Working shaping material and candidate evidence for discovery only
-11. raw notes, transcripts, rejected alternatives, brainstorming
+Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered for
+humans in `AGENTS.md`. A context packet may omit irrelevant entries but must not
+change the relative order of the entries it includes.
 
 A statechart is derived from the selected-design breadboard and never outranks it.
 

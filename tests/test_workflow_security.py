@@ -90,6 +90,12 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertEqual(3, text.count("npm run check &&"))
         self.assertIn("npm audit --audit-level=moderate &&\n    git diff", text)
 
+    def test_dependabot_leaves_major_upgrades_out_of_routine_groups(self) -> None:
+        payload = yaml.safe_load((ROOT / ".github/dependabot.yml").read_text(encoding="utf-8"))
+        for update in payload["updates"]:
+            for group in update.get("groups", {}).values():
+                self.assertEqual({"minor", "patch"}, set(group["update-types"]))
+
 
 if __name__ == "__main__":
     unittest.main()

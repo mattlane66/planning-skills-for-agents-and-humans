@@ -5,6 +5,13 @@ argument-hint:
 - requested output format
 - or frame-handoff request
 disable-model-invocation: true
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+- Bash
 ---
 
 Read `lead-user-research/SKILL.md`,

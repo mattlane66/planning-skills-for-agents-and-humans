@@ -5,6 +5,15 @@ argument-hint:
 - discovery seeds
 - or search constraints
 disable-model-invocation: true
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+- Bash
+- WebSearch
+- WebFetch
 ---
 
 Read `lead-user-research/SKILL.md`,

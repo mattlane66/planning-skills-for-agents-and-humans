@@ -7,6 +7,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 EXPECTED = {
     "plan",
     "wayfind",
+    "frame",
     "shape",
     "criteria",
     "appetite",
@@ -18,7 +19,10 @@ EXPECTED = {
     "reconcile-sketch",
     "statechart",
     "dumplink",
+    "kickoff",
+    "feed-context",
     "check-drift",
+    "reflect-breadboard",
     "lead-user",
     "lead-user-frame",
     "lead-user-discover",
@@ -56,6 +60,10 @@ class GeminiCommandTests(unittest.TestCase):
         self.assertIn("vertical implementation slices", prompts["dumplink"])
         self.assertIn("do not implement", prompts["statechart"])
         self.assertIn("do not implement", prompts["check-drift"])
+        self.assertIn("source evidence", prompts["frame"])
+        self.assertIn("builder-facing", prompts["kickoff"])
+        self.assertIn("context packet", prompts["feed-context"])
+        self.assertIn("implementation reality", prompts["reflect-breadboard"])
         self.assertIn("one next move", prompts["lead-user"])
         self.assertIn("real sources", prompts["lead-user-evidence"])
         self.assertIn("human acceptance", prompts["lead-user-deliver"])

@@ -11,6 +11,7 @@ updates:
     groups:
       mcp-dependencies:
         patterns: ["*"]
+        update-types: [minor, patch]
     open-pull-requests-limit: 5
 
   - package-ecosystem: npm
@@ -23,6 +24,7 @@ updates:
     groups:
       visualizer-dependencies:
         patterns: ["*"]
+        update-types: [minor, patch]
     open-pull-requests-limit: 5
 
   - package-ecosystem: npm
@@ -35,6 +37,7 @@ updates:
     groups:
       site-dependencies:
         patterns: ["*"]
+        update-types: [minor, patch]
     open-pull-requests-limit: 5
 
   - package-ecosystem: pip
@@ -47,6 +50,7 @@ updates:
     groups:
       python-dependencies:
         patterns: ["*"]
+        update-types: [minor, patch]
     open-pull-requests-limit: 5
 
   - package-ecosystem: github-actions
@@ -59,4 +63,5 @@ updates:
     groups:
       workflow-actions:
         patterns: ["*"]
+        update-types: [minor, patch]
     open-pull-requests-limit: 5

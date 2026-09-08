@@ -3,8 +3,8 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
 import { z } from 'zod';
-import { readFile } from 'node:fs/promises';
-import { dirname, join, resolve } from 'node:path';
+import { readFile, realpath, stat } from 'node:fs/promises';
+import { dirname, extname, isAbsolute, join, relative, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { recommendPlanningWorkflow, skillNames, type SkillName } from './recommend.js';
 
@@ -68,6 +68,36 @@ const skills = Object.fromEntries(
   skillNames.map((name) => [name, { ...skillMetadata[name], path: `${name}/SKILL.md` }]),
 ) as Record<SkillName, SkillMetadataEntry & { path: string }>;
 
+const readableSkillResourceExtensions = new Set([
+  '.json',
+  '.md',
+  '.py',
+  '.sh',
+  '.txt',
+  '.yaml',
+  '.yml',
+]);
+
+async function readSkillResource(skill: SkillName, requestedResource: string): Promise<string> {
+  if (isAbsolute(requestedResource) || requestedResource.includes('\0')) {
+    throw new Error('resource must be a relative path inside the selected skill');
+  }
+  const skillRoot = await realpath(join(repoRoot, skill));
+  const target = await realpath(resolve(skillRoot, requestedResource));
+  const localPath = relative(skillRoot, target);
+  if (!localPath || localPath.startsWith('..') || isAbsolute(localPath)) {
+    throw new Error('resource must resolve inside the selected skill');
+  }
+  if (!readableSkillResourceExtensions.has(extname(target).toLowerCase())) {
+    throw new Error('resource must be a supported text file');
+  }
+  const metadata = await stat(target);
+  if (!metadata.isFile() || metadata.size > 1024 * 1024) {
+    throw new Error('resource must be a text file no larger than 1 MiB');
+  }
+  return readFile(target, 'utf8');
+}
+
 const artifactTemplates = {
   'wayfinding-map': 'templates/wayfinding-map.md',
   'wayfinding-ticket': 'templates/wayfinding-ticket.md',
@@ -116,6 +146,27 @@ server.tool(
     const skillInfo = skills[skill];
     const content = await readFile(join(repoRoot, skillInfo.path), 'utf8');
     return { content: [{ type: 'text', text: `# ${skillInfo.title}\n\n${content}` }] };
+  },
+);
+
+server.tool(
+  'get_skill_resource',
+  'Return a text support file referenced by a planning skill, constrained to that skill directory.',
+  {
+    skill: z.enum(Object.keys(skills) as [SkillName, ...SkillName[]]),
+    resource: z.string().min(1).describe('Relative path such as references/behavior-tracing-and-verification.md.'),
+  },
+  async ({ skill, resource }) => {
+    try {
+      const content = await readSkillResource(skill, resource);
+      return { content: [{ type: 'text' as const, text: content }] };
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'unknown resource error';
+      return {
+        isError: true,
+        content: [{ type: 'text' as const, text: `Cannot read skill resource: ${message}` }],
+      };
+    }
   },
 );
 

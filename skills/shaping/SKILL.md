@@ -50,14 +50,16 @@ When working in an existing product repository, first inspect the applicable pro
 
 ## Authority and document hierarchy
 
-From high to low:
+Use the repository-wide `authority_order` and `authority_labels` in
+`.agent-orchestration.yaml`. Do not restate a competing order inside a shaping
+artifact.
 
-1. latest explicit human instruction
-2. accepted frame and selected project boundary
-3. accepted shaping decisions — requirements, appetite, selected direction, cuts
-4. candidate-shape breadboards and focused spikes — exploratory evidence subordinate to their named question or candidate
-5. accepted selected-design breadboard or slices — concrete selected behavior and increments
-6. implementation plans — build detail
+For shaping decisions specifically, accepted selected-design behavior outranks
+accepted shaping decisions when judging the concrete behavior it records;
+accepted shaping decisions outrank Working material; and Working material
+outranks candidate-shape breadboards and focused spikes, which are evidence for
+their named candidate or question only. Active scope and concern-specific
+contracts still govern their own boundaries as defined by the canonical order.
 
 A lower-level discovery may require an upstream planning update. Do not silently rewrite a higher-authority accepted artifact.
 

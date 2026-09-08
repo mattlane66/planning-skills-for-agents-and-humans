@@ -61,11 +61,26 @@ An agent is implementing or checking the display-name settings flow.
 | STORE-02 | P-01 | Saved profile display name | Last confirmed value from the profile service. |
 | STORE-03 | P-02 | Save error | Error state shown when persistence fails. |
 
+## Behavior traces
+
+| Scenario | Entry | Control path | Decision / branch | State / data effect | Observable consequence | Status |
+|---|---|---|---|---|---|---|
+| Save display name | AFF-01, AFF-02 | AFF-01 → N-01; AFF-02 → N-02 → N-03 | N-03: success | N-01 → STORE-01; N-03 → STORE-02 | STORE-02 → AFF-03 | supported |
+| Show save failure | AFF-02 | AFF-02 → N-02 → N-03 | N-03: failure | N-03 → STORE-03; STORE-02 unchanged | STORE-03 → AFF-05 in P-02 | supported |
+| Retry failed save | AFF-04 | AFF-04 → N-02 → N-03 | success or failure | STORE-02 or STORE-03 updated | AFF-03 or AFF-05 | supported |
+
+## Reverse-trace audit
+
+| Observable consequence | Direct incoming sources | Upstream entries / writers | Unresolved predecessors | Status |
+|---|---|---|---|---|
+| AFF-03 saved preview | STORE-02 from N-03 | AFF-02 or AFF-04 via N-02 | none | supported |
+| AFF-05 save error | STORE-03 from N-03 | AFF-02 or AFF-04 via N-02 | none | supported |
+
 ## Selected Slice
 
 | ID | Slice | Demo | Produces | Exclusions |
 |---|---|---|---|---|
-| SLICE-01 | Display-name save with failure recovery | Edit name, save successfully, then simulate failed save and retry | A settings flow where success and failure states are visible and recoverable | Avatar upload, email change, profile visibility |
+| V1 | Display-name save with failure recovery | Edit name, save successfully, then simulate failed save and retry | A settings flow where success and failure states are visible and recoverable | Avatar upload, email change, profile visibility |
 
 ## Verification Target
 

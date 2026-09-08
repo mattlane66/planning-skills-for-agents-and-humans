@@ -4,6 +4,7 @@
   "evidence_count": 5,
   "qualified_lu_count": 1,
   "independent_lineage_count": 2,
+  "evidence_fingerprint": "sha256:114f41d23997b7738ce29c73df344688561355cf40445b3989200d18a9e00a08",
   "unresolved_gaps": [
     "All real-world prevalence, benefit, and feasibility questions remain outside this synthetic demonstration"
   ],

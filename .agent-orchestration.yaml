@@ -84,6 +84,22 @@ authority_order:
   - raw_notes_and_transcripts
   - rejected_alternatives_and_brainstorming
 
+authority_labels:
+  latest_user_instruction: user's latest explicit instruction
+  selected_project: selected project boundary, for the discrete unit of work Dumplink may decompose
+  active_scope: selected Dumplink task group or other selected slice, for active implementation scope
+  executable_breadboard: executable breadboard, for expected examples and results within that active scope
+  selected_interface_contract: selected interface contract, for its named boundary
+  selected_breadboard: accepted selected-design breadboard
+  accepted_shaping_decisions: "accepted shaping decisions: selected direction, accepted requirements, Appetite, and cuts"
+  working_shaping_material: "working shaping material: provisional R, S, fit checks, and Appetite"
+  candidate_breadboards_and_spikes_for_evidence_only: candidate-shape breadboards and focused spikes, for evidence about their named question only
+  kickoff_doc_for_orientation_only: kickoff document, for orientation only
+  framing_doc: framing document
+  accepted_research_to_frame_handoff_for_evidence_only: accepted research-to-frame handoff, for cited evidence input only
+  raw_notes_and_transcripts: raw notes and transcripts
+  rejected_alternatives_and_brainstorming: rejected alternatives and brainstorming
+
 modes:
   wayfind_chart:
     skill: wayfinding

@@ -7,6 +7,13 @@ argument-hint:
 - mode
 - or study workspace
 disable-model-invocation: true
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+- Bash
 ---
 
 Read `lead-user-research/SKILL.md`,

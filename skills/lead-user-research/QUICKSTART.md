@@ -129,8 +129,10 @@ python lead-user-research/scripts/render_decision_brief.py research/designer-ai-
 ```
 
 For a Phase H `COMPLETE` study, first obtain a passing deterministic validation while
-the study is `DECIDED`; then record the Phase H/model checklist state, regenerate the
-brief, and run the validator once more. COMPLETE remains separate from human review.
+the study is `DECIDED`; then explicitly record `deterministic_validation = PASSED`
+and the Phase H/model-check state, regenerate the brief, and run the read-only
+validator once more. If that final check fails, record `FAILED` before repair.
+COMPLETE remains separate from human review.
 
 No Python packages are required.
 

@@ -8,6 +8,7 @@ Gemini CLI users can also use project-local custom commands in `.gemini/commands
 
 - `/plan`
 - `/wayfind`
+- `/frame`
 - `/shape`
 - `/criteria`
 - `/appetite`
@@ -19,7 +20,19 @@ Gemini CLI users can also use project-local custom commands in `.gemini/commands
 - `/reconcile-sketch`
 - `/statechart`
 - `/dumplink`
+- `/kickoff`
+- `/feed-context`
 - `/check-drift`
+- `/reflect-breadboard`
+- `/lead-user`
+- `/lead-user-frame`
+- `/lead-user-discover`
+- `/lead-user-evidence`
+- `/lead-user-freeze`
+- `/lead-user-interpret`
+- `/lead-user-shape`
+- `/lead-user-decide`
+- `/lead-user-deliver`
 
 Default interactive shaping is collaborative: start from R, S, evidence, or the current uncertainty and move among R/S/fit/spikes/candidate breadboards as useful. Use the gated/orchestrated profile only when explicitly requested.
 

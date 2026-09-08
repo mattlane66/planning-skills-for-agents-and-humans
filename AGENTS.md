@@ -157,6 +157,11 @@ When routing or handing work to another agent, keep trusted user instructions se
 
 ## Artifact authority
 
+The canonical machine-readable order is `authority_order` in
+`.agent-orchestration.yaml`; this section is its human-readable rendering. If
+the two ever disagree, repair this rendering from the manifest rather than
+inventing another local order.
+
 Use this default order when artifacts disagree:
 
 1. user's latest explicit instruction
@@ -171,7 +176,8 @@ Use this default order when artifacts disagree:
 10. kickoff document, for orientation only
 11. framing document
 12. accepted research-to-frame handoff, for cited evidence input only
-13. raw notes, transcripts, rejected alternatives, and brainstorming
+13. raw notes and transcripts
+14. rejected alternatives and brainstorming
 
 Authority is concern-specific. Working material may be revised during exploration; accepted material cannot be silently rewritten. A candidate breadboard cannot define accepted future behavior, feed implementation, or outrank accepted shaping decisions. No lower artifact may expand the selected project or active slice.
 

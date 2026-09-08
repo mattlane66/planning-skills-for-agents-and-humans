@@ -35,15 +35,32 @@ STATE_FILES = (
     "concepts.json",
 )
 
+EVIDENCE_STATE_FILES = (
+    "decision.json",
+    "coverage.json",
+    "sufficiency.json",
+    "trends.json",
+    "candidates.json",
+    "sources.json",
+    "evidence.json",
+    "lu_episodes.json",
+    "lineage.json",
+    "search_log.json",
+    "hypotheses.json",
+    "observability.json",
+    "analysis_runs.json",
+    "change_log.json",
+)
+
 VALIDATOR_MANAGED_MANIFEST_FIELDS = {
     "deterministic_validation",
     "updated_at",
 }
 
 
-def _normalized_state(root: Path) -> dict[str, Any]:
+def _normalized_state(root: Path, filenames: tuple[str, ...]) -> dict[str, Any]:
     state: dict[str, Any] = {}
-    for filename in STATE_FILES:
+    for filename in filenames:
         path = root / filename
         if not path.exists():
             continue
@@ -60,7 +77,18 @@ def _normalized_state(root: Path) -> dict[str, Any]:
 
 def study_fingerprint(root: Path) -> str:
     canonical = json.dumps(
-        _normalized_state(root),
+        _normalized_state(root, STATE_FILES),
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    return f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+
+
+def evidence_fingerprint(root: Path) -> str:
+    """Fingerprint only the decision-relative evidence state frozen in Phase D."""
+    canonical = json.dumps(
+        _normalized_state(root, EVIDENCE_STATE_FILES),
         ensure_ascii=False,
         sort_keys=True,
         separators=(",", ":"),

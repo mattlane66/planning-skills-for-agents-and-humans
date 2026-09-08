@@ -1,0 +1,14 @@
+description = "Create a framing document from notes, messages, transcripts, or source files."
+
+prompt = """
+Use this repository's planning instructions and framing skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{framing-doc/SKILL.md}
+
+Command arguments / source context:
+{{args}}
+
+Create or update a framing artifact that separates source evidence from interpretation and makes the current situation, problem, outcome, and boundaries explicit. Preserve established product language and durable decisions. Do not move into shaping, breadboarding, or implementation unless the user explicitly asks after the frame is complete.
+"""
