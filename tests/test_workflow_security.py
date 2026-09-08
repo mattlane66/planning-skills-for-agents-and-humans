@@ -90,6 +90,26 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertEqual(3, text.count("npm run check &&"))
         self.assertIn("npm audit --audit-level=moderate &&\n    git diff", text)
 
+    def test_pages_deploys_only_from_trusted_main_without_pr_write_credentials(self) -> None:
+        text = (WORKFLOWS / "pages.yml").read_text(encoding="utf-8")
+        payload = yaml.load(text, Loader=yaml.BaseLoader)
+        self.assertNotIn("pull_request", payload["on"])
+        self.assertNotIn("pull_request_target", payload["on"])
+        self.assertEqual(["main"], payload["on"]["push"]["branches"])
+        self.assertEqual("read", payload["permissions"]["contents"])
+        self.assertEqual("write", payload["jobs"]["deploy"]["permissions"]["pages"])
+        self.assertEqual("write", payload["jobs"]["deploy"]["permissions"]["id-token"])
+        self.assertNotIn("actions/checkout@", "\n".join(str(step) for step in payload["jobs"]["deploy"]["steps"]))
+        self.assertIn("git diff --exit-code -- index.html", text)
+
+    def test_repo_health_retains_generated_portal_diff_without_write_permissions(self) -> None:
+        text = (WORKFLOWS / "repo-health.yml").read_text(encoding="utf-8")
+        self.assertIn("site-index.patch", text)
+        self.assertIn("regenerated-site-index", text)
+        payload = yaml.load(text, Loader=yaml.BaseLoader)
+        self.assertEqual("read", payload["permissions"]["contents"])
+        self.assertNotIn("pull_request_target", payload["on"])
+
     def test_dependabot_leaves_major_upgrades_out_of_routine_groups(self) -> None:
         payload = yaml.safe_load((ROOT / ".github/dependabot.yml").read_text(encoding="utf-8"))
         for update in payload["updates"]:
