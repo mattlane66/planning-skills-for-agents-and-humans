@@ -38,11 +38,13 @@ old = 'reason="The research study is complete. Its implications do not become ac
 new = 'reason="The research study is complete. Its research shaping frame and implications do not become accepted planning truth automatically.",'
 if old not in controller:
     raise SystemExit("Controller completion reason not found")
-controller_path.write_text(controller.replace(old, new, 1), encoding="utf-8")
+controller = controller.replace(old, new, 1)
+controller_path.write_text(controller, encoding="utf-8")
 
-package = Path("plugins/planning-skills-for-agents-and-humans/skills/lead-user-research")
+package = Path("skills/lead-user-research")
 (package / "SKILL.md").write_text(skill, encoding="utf-8")
 (package / "prompts/phase-g-decide.md").write_text(phase_g, encoding="utf-8")
+(package / "scripts/next_research_move.py").write_text(controller, encoding="utf-8")
 
 line_count = len(skill.splitlines())
 if line_count > 500:
