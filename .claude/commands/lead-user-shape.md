@@ -4,6 +4,13 @@ argument-hint:
 - study workspace
 - or passing need
 disable-model-invocation: true
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+- Bash
 ---
 
 Read `lead-user-research/SKILL.md`,

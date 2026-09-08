@@ -1,5 +1,12 @@
 # Availability Board - Shaping After Visual Review
 
+## Accepted transformation frame (x → f() → y)
+
+- x: Natural-language changes update locations or dates while the effective date can be visually ambiguous.
+- f(): Parse the request, update comparison state, and refresh a persistent date label.
+- y: The displayed hours and their governing date remain legible together.
+- Gap and boundaries: Accepted delta D1 closes date visibility without expanding the existing cut line.
+
 ## Accepted inputs unchanged
 
 - Requirements R0–R2 remain accepted.

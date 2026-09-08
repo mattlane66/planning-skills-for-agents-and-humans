@@ -31,7 +31,7 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 | Decision outcome and actions — Phase G | `lead-user-research` | `/lead-user-decide` | `/lead-user-decide` | “Use lead-user-research Phase G…” |
 | Delivery and proposed frame handoff — Phase H | `lead-user-research` | `/lead-user-deliver` | `/lead-user-deliver` | “Use lead-user-research Phase H…” |
 | Coordinate multi-session planning | `wayfinding/SKILL.md` | `/wayfind` | `/wayfind` | “Use Wayfinding to chart this bounded planning destination…” |
-| Frame when genuinely needed | `framing-doc/SKILL.md` | `/frame` | Prompt skill directly | “Use the framing-doc skill…” |
+| Frame when genuinely needed | `framing-doc/SKILL.md` | `/frame` | `/frame` | “Use the framing-doc skill…” |
 | Collaborative shaping from R, S, evidence, or uncertainty | `shaping/SKILL.md` | `/shape` | `/shape` | “Use the shaping skill in collaborative mode…” |
 | Work on requirements now | `shaping/SKILL.md` | `/criteria` | `/criteria` | “For this move, work on R; it may be extracted from existing S…” |
 | Work on Appetite now | `shaping/SKILL.md` + `templates/appetite-card.md` | `/appetite` | `/appetite` | “Set, revise, or accept Appetite and cut line…” |
@@ -46,10 +46,10 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 | Define boundary contracts | `interface-contracts/SKILL.md` | Prompt skill directly | Prompt skill directly | “Use interface-contracts…” |
 | Create build handoff | `executable-breadboards/SKILL.md` | Prompt skill directly | Prompt skill directly | “Use executable-breadboards…” |
 | Group and sequence work | `dumplink/SKILL.md` | `/dumplink` | `/dumplink` | “Use the dumplink skill…” |
-| Package build context | `feed-planning-context/SKILL.md` | `/feed-context` | Prompt skill directly | “Use feed-planning-context…” |
+| Package build context | `feed-planning-context/SKILL.md` | `/feed-context` | `/feed-context` | “Use feed-planning-context…” |
 | Check drift | `templates/drift-check.md` | `/check-drift` | `/check-drift` | “Run a strict drift check…” |
-| Reflect after implementation | `breadboard-reflection/SKILL.md` | `/reflect-breadboard` | Prompt skill directly | “Use breadboard-reflection…” |
-| Create kickoff reference | `kickoff-doc/SKILL.md` | `/kickoff` | Prompt skill directly | “Use kickoff-doc…” |
+| Reflect after implementation | `breadboard-reflection/SKILL.md` | `/reflect-breadboard` | `/reflect-breadboard` | “Use breadboard-reflection…” |
+| Create kickoff reference | `kickoff-doc/SKILL.md` | `/kickoff` | `/kickoff` | “Use kickoff-doc…” |
 
 ## Profile mapping
 

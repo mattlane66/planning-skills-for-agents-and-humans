@@ -15,6 +15,7 @@ This repo contains Claude-compatible `SKILL.md` files as the canonical source of
 - `kickoff-doc/SKILL.md`
 - `feed-planning-context/SKILL.md`
 - `breadboard-reflection/SKILL.md`
+- `lead-user-research/SKILL.md`
 
 Use this file when preparing the repo for Claude Code plugin submission or when creating a distributable plugin bundle.
 
@@ -81,7 +82,7 @@ Building first ensures that both canonical skills and command wrappers use Claud
 
 Claude namespaces installed plugin entries with the manifest name. For example, use `/planning-skills:shape` for the collaborative shaping wrapper, `/planning-skills:spike` for a focused spike, `/planning-skills:framing-doc` for the canonical Framing skill, or `/planning-skills:frame` for its shorter command wrapper. Exact-name flat wrappers for `statechart` and `dumplink` are omitted from the bundle because Claude gives the same-named directory skill precedence; invoke `/planning-skills:statechart` or `/planning-skills:dumplink` directly.
 
-The build rewrites support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. It includes the orchestration manifest, reusable docs, templates, hooks, and examples those instructions reference, so the plugin does not depend on same-named files in the target project.
+The build rewrites bundle-owned support paths in skills, commands, and the bundled `AGENTS.md` to `${CLAUDE_PLUGIN_ROOT}`. References that intentionally mean the consuming product repository's `AGENTS.md` stay project-relative. It includes the orchestration manifest, reusable docs, templates, hooks, and examples those instructions reference, so the plugin does not depend on same-named support files in the target project.
 
 ## Marketplace publication
 

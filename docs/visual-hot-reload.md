@@ -36,6 +36,7 @@ Replace the example path with any Markdown planning artifact that contains fence
 - watches files through a portable polling loop that survives editor atomic-save behavior
 - sends reload events to the browser without a page refresh
 - binds to localhost by default and uploads nothing
+- rejects non-loopback Host headers while using the default loopback binding
 - displays parse or rendering errors without stopping the watcher
 
 The Markdown tables remain authoritative. The viewer is a live visual projection for inspection and collaboration.

@@ -207,7 +207,7 @@ A cut may remove optional work while preserving the selected project's promised 
 
 | Cut option | Remove/defer | Preserved behavior | Cost of cutting | Later decision |
 |---|---|---|---|---|
-| C1 |  |  |  |  |
+| CUT1 |  |  |  |  |
 
 ### 8. Write acceptance checks
 

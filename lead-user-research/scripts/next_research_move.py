@@ -76,7 +76,17 @@ def recommend(root: Path) -> dict[str, Any]:
         "decision",
         "innovation_altitude",
     ]
-    missing_brief = [field for field in required_brief if not decision.get(field)] if isinstance(decision, dict) else required_brief
+    brief_status = decision.get("brief_field_status", {}) if isinstance(decision, dict) else {}
+    missing_brief = [
+        field
+        for field in required_brief
+        if (
+            not isinstance(decision, dict)
+            or not decision.get(field)
+            or not isinstance(brief_status, dict)
+            or brief_status.get(field) not in ("USER_SUPPLIED", "PROVISIONAL")
+        )
+    ]
     if missing_brief:
         return result(
             current_phase=current_phase,
@@ -144,13 +154,14 @@ def recommend(root: Path) -> dict[str, Any]:
         ]
         if not nonempty_list(value)
     ]
-    if missing_evidence:
+    if manifest.get("evidence_completion") != "COMPLETED":
         return result(
             current_phase=current_phase,
             state="READY",
             next_phase="C",
             reason="Inspect the next bounded evidence batch before judging sufficiency.",
-            blockers=[f"Phase C has not yet recorded {item}" for item in missing_evidence],
+            blockers=["Phase C has not been marked COMPLETED"]
+            + [f"Phase C has not yet recorded {item}" for item in missing_evidence],
         )
 
     if manifest.get("mode") == "SCOUT":

@@ -61,6 +61,27 @@ class SkillBehaviorEvalRunnerTests(unittest.TestCase):
         self.assertEqual(2, completed.returncode)
         self.assertIn("adapter command failed", completed.stderr)
 
+    def test_command_adapter_timeout_is_bounded(self):
+        completed = subprocess.run(
+            [
+                sys.executable,
+                str(RUNNER),
+                "--adapter",
+                "command",
+                "--adapter-command",
+                f"{sys.executable} -c 'import time; time.sleep(5)'",
+                "--adapter-timeout-seconds",
+                "0.05",
+            ],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=5,
+        )
+        self.assertEqual(2, completed.returncode)
+        self.assertIn("adapter command timed out", completed.stderr)
+
     def test_command_adapter_receives_only_public_case_in_isolated_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
             temp_root = pathlib.Path(tmp)
@@ -142,6 +163,50 @@ print(json.dumps({
             report = json.loads(report_path.read_text(encoding="utf-8"))
             self.assertEqual("blind-command-v1", report["protocol"])
             self.assertEqual({"passed": 1, "failed": 0, "total": 1}, report["summary"])
+
+    def test_command_adapter_can_retain_case_workspace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_root = pathlib.Path(tmp)
+            artifacts = temp_root / "artifacts"
+            adapter_path = temp_root / "adapter.py"
+            adapter_path.write_text(
+                """
+import json
+import pathlib
+
+json.load(__import__("sys").stdin)
+pathlib.Path("adapter-note.txt").write_text("retained", encoding="utf-8")
+print(json.dumps({
+    "selected_skill": "framing",
+    "artifact_type": "framing",
+    "stopped_at_gate": "frame-acceptance",
+    "implementation_attempted": False,
+    "evidence": [],
+    "model_output": "retained workspace fixture",
+}))
+""".lstrip(),
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNNER),
+                    "--case-id",
+                    "framing-preserves-evidence-and-stops",
+                    "--adapter",
+                    "command",
+                    "--adapter-command",
+                    f"{sys.executable} {adapter_path}",
+                    "--artifacts-dir",
+                    str(artifacts),
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertTrue((artifacts / "framing-preserves-evidence-and-stops" / "adapter-note.txt").is_file())
+            self.assertNotEqual(2, completed.returncode, completed.stderr)
 
     def test_unknown_case_filter_is_rejected(self):
         completed = subprocess.run(

@@ -46,7 +46,7 @@ Use status UNTESTED. Never use CONFIRMED.
 
 Create O## records in observability.json for facts or variables that could materially change the decision. Record whether each appears TRACE_OBSERVABLE, PARTIALLY_OBSERVABLE, NOT_OBSERVABLE, or UNKNOWN. Do not recommend fieldwork merely because an item is unknown.
 
-Do not silently collapse the learning objective into the decision. Preserve the user's wording for supplied fields. If a missing brief field can be drafted safely, label it PROVISIONAL; if it could materially change scope, leave it UNKNOWN or request clarification when appropriate.
+Do not silently collapse the learning objective into the decision. Preserve the user's wording for supplied fields. In `decision.brief_field_status`, mark each reusable brief field `USER_SUPPLIED`, `PROVISIONAL`, or `UNKNOWN`. A PROVISIONAL field must contain the surfaced draft; an UNKNOWN field stays empty. If a missing brief field could materially change scope, leave it UNKNOWN or request clarification when appropriate.
 
 Treat discovery seeds and candidate-profile hypotheses as starting directions, not qualification evidence or a closed search universe. Preserve explicit search constraints as hard boundaries. If a human supplies sources, people, communities, or candidate profiles without explicitly restricting the search to them, record them as seeds/hypotheses and allow Phase B to pyramid outward.
 

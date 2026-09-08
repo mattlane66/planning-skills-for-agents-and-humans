@@ -8,6 +8,7 @@ It reads root `SKILL.md` files and `templates/` at runtime. The server does not 
 
 - `list_planning_skills` — list every available planning skill and its purpose.
 - `get_planning_skill` — return the canonical instructions for one skill.
+- `get_skill_resource` — return a referenced text support file from inside one skill directory, with traversal and size checks.
 - `recommend_planning_workflow` — recommend the next skill or sequence while respecting prerequisites, explicit exclusions, input trust boundaries, and human decision gates.
 - `get_artifact_template` — return a canonical starter template from `templates/`.
 - `get_orchestration_manifest` — return `.agent-orchestration.yaml`.

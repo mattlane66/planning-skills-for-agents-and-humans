@@ -26,7 +26,7 @@
     },
     "selection_status": "SELECTED",
     "selected_by_human": true,
-    "selection_note": "The fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.",
+    "selection_note": "ASSURANCE_FIXTURE_HUMAN_DECISION_V1 — the fixture author explicitly selected M1 only as one arm of the fictional prototype comparison; this is not a production product selection.",
     "rotation_status": "RUN",
     "parts": [
       {

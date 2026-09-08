@@ -27,6 +27,6 @@
     ],
     "status": "ACCEPTED",
     "accepted_by_human": true,
-    "acceptance_note": "Synthetic reference fixture models explicit human acceptance for validator coverage."
+    "acceptance_note": "ASSURANCE_FIXTURE_HUMAN_DECISION_V1 — synthetic reference fixture models the test author's explicit acceptance for validator coverage."
   }
 ]

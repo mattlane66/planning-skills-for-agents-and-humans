@@ -1,4 +1,5 @@
 import pathlib
+import re
 import unittest
 
 import yaml
@@ -37,6 +38,16 @@ class OrchestrationScopeContractTests(unittest.TestCase):
         self.assertEqual(1, authority_order.count("active_scope"))
         self.assertNotIn("selected_slice", authority_order)
         self.assertNotIn("selected_dumplink_task_group", authority_order)
+
+    def test_human_authority_rendering_matches_canonical_order(self) -> None:
+        authority_order = self.manifest["authority_order"]
+        labels = self.manifest["authority_labels"]
+        self.assertEqual(set(authority_order), set(labels))
+
+        agents = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+        section = agents.split("## Artifact authority", 1)[1].split("\n## ", 1)[0]
+        rendered = re.findall(r"^\d+\. (.+)$", section, flags=re.MULTILINE)
+        self.assertEqual([labels[key] for key in authority_order], rendered)
 
 
 if __name__ == "__main__":

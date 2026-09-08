@@ -57,6 +57,23 @@ mode: selected-design
 | S2 | P1 | hideBought | Boolean controlling whether bought items are filtered from view |
 | S3 | P1 | itemDraft | Current text in the add-item input before submission |
 
+## Behavior traces
+
+| Scenario | Entry | Control path | Decision / branch | State / data effect | Observable consequence | Status |
+|---|---|---|---|---|---|---|
+| Add a new item | U1, U2 | U1 → S3; U2 → N1 → N2 → N3 → N7 → N5 → N8 | N2: not duplicate | N7 → S1; N7 → N9 | N8 → U5 shows the item | supported |
+| Reject a duplicate | U1, U2 | U1 → S3; U2 → N1 → N2 | N2: duplicate | S1 unchanged | P2 → U6 shows feedback | supported |
+| Mark bought or undo | U3 | U3 → N4 → N7 → N5 → N8 | bought boolean toggles | N7 → S1; N7 → N9 | N8 → U5 reflects state | supported |
+| Hide or reveal bought items | U4 | U4 → N6 → N7 → N5 → N8 | hideBought toggles | N7 → S2; N7 → N9 | N8 → U5 filters without deletion | supported |
+| Restore a prior session | N10 | N10 → S1, S2 → N7 → N5 → N8 | stored state exists or is empty | S1 and S2 restored | N8 → U5 shows restored state | supported |
+
+## Reverse-trace audit
+
+| Observable consequence | Direct incoming sources | Upstream entries / writers | Unresolved predecessors | Status |
+|---|---|---|---|---|
+| U5 visible list | N8 | U2 via N1–N7; U3 via N4/N7; U4 via N6/N7; N10 via restored S1/S2 | none | supported |
+| U6 duplicate feedback | P2 from N2 | U2 with S3 through N1 | none | supported |
+
 ## Mermaid diagram
 
 This diagram is a rendering of the tables above. The tables remain the source of truth.

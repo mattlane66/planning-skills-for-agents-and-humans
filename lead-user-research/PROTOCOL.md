@@ -99,7 +99,7 @@ Treat discovery seeds and candidate-profile hypotheses as starting directions, n
 
 Persist search constraints and surface any resulting coverage limitation. Do not silently convert a seed or candidate-profile hypothesis into a hard boundary.
 
-If a field is missing, Phase A may draft it only when doing so is low-risk. Any drafted field must be labeled **PROVISIONAL** rather than silently treated as user-provided. If the missing field could materially change the research boundary, retain it as UNKNOWN or request clarification when the environment permits.
+If a field is missing, Phase A may draft it only when doing so is low-risk. Record every reusable brief field in `brief_field_status` as `USER_SUPPLIED | PROVISIONAL | UNKNOWN`. Any drafted field must be labeled **PROVISIONAL** rather than silently treated as user-provided. UNKNOWN fields remain empty. If the missing field could materially change the research boundary, retain it as UNKNOWN or request clarification when the environment permits.
 
 ## Research purpose
 
@@ -418,8 +418,14 @@ The Evidence Freeze records:
 - source coverage;
 - unresolved gaps;
 - review/validation state.
+- a content fingerprint over the decision-relative evidence state.
 
-Post-freeze evidence is allowed only when its purpose is recorded.
+Phase C records explicit evidence completion after the bounded pass, including a
+supported empty result. Empty arrays alone do not prove collection ran.
+
+Post-freeze evidence is allowed only when its purpose, trigger, changed state, and
+resulting fingerprint are recorded under a stable `PF##` change ID. Overlapping
+member sets must not be counted as independent lineages.
 
 Phase E records explicit interpretation completion after considering the entire frozen
 corpus. This is required even for a supported negative result with no findings, needs,
@@ -756,6 +762,9 @@ has passed deterministic validation, produced a non-empty canonical Decision Bri
 reflects the final state, and completed the model checklist. The brief's deterministic
 state fingerprint must match the structured workspace. Completion does not imply human
 review.
+
+Every mode runs Phase H's final validation and canonical Markdown delivery. SCOUT
+and STANDARD normally omit only unsupported or unnecessary derived formats.
 
 ## Identity and privacy
 

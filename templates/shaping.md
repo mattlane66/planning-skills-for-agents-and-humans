@@ -36,10 +36,15 @@ An agent and human need a shared shaping surface for requirements, solution shap
 - Entry point: requirements | solution | evidence/prototype | existing artifact | other
 
 ## Frame reference
+- Transformation frame: x → f() → y
 - Frame artifact:
 - Frame authority: Working | Accepted | Intentionally lightweight
 - Outcome:
 - Non-goals:
+- x — trigger/context, current approach, and current result:
+- f() — current transformation or breakdown:
+- y — desired outcome:
+- Gap and boundaries:
 
 ## Requirements
 

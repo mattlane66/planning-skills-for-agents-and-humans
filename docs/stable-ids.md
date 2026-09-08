@@ -25,6 +25,14 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 | `D` | proposed reconciliation delta | `D3` |
 | `V` | vertical slice | `V1` |
 
+Lead User study files use a study-local namespace with `SRC`, `LU`, `F`, `N`, `SF`,
+`M`, `H`, `O`, `AR`, `Q`, `PY`, `CH`, and `PF`, plus local `C`, `T`, `E`, `SP`, and
+`R` records defined in `lead-user-research/references/state-contract.md`. The latter
+five overlap planning defaults by design but are scoped to one study workspace. When
+a handoff or combined artifact mixes research and planning records, qualify the
+research reference with the study path or a `research:` label; never infer identity
+from a bare colliding prefix.
+
 Use sub-identifiers such as `R3.1` or `P2.1` when grouping improves legibility.
 
 ## Preservation rules
@@ -36,6 +44,9 @@ Use sub-identifiers such as `R3.1` or `P2.1` when grouping improves legibility.
 - A requirement or criterion keeps the same `R##` from evidence-backed candidate through Working, Accepted, selected-mechanism mapping, implementation handoff, and realized-fit assessment; those transitions change authority or evidence state, not identity.
 - When meaning changes substantially, create a new ID or an explicit supersession record.
 - Derived views should retain source IDs so readers can trace them back to the authoritative table.
+- Use the canonical default form (`V1`, `RUN1`, `CUT1`) in new repository-owned
+  artifacts. Preserve imported conventions such as `SLICE-02` only when the source
+  project already established them.
 
 ## Imported conventions
 

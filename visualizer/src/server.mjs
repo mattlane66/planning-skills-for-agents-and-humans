@@ -8,6 +8,17 @@ import { viewerHtml } from './page.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const defaultVendorRoot = resolve(here, '..', 'node_modules', 'mermaid', 'dist');
+const loopbackHosts = new Set(['127.0.0.1', '::1', '[::1]', 'localhost']);
+
+function requestHostIsAllowed(header, boundHost) {
+  if (!loopbackHosts.has(boundHost.toLowerCase())) return true;
+  if (typeof header !== 'string' || !header) return false;
+  try {
+    return loopbackHosts.has(new URL(`http://${header}`).hostname.toLowerCase());
+  } catch {
+    return false;
+  }
+}
 
 function sendJson(response, statusCode, value) {
   response.writeHead(statusCode, {
@@ -89,6 +100,11 @@ export async function startViewer({
   };
 
   const server = createServer(async (request, response) => {
+    if (!requestHostIsAllowed(request.headers.host, host)) {
+      response.writeHead(421, { 'content-type': 'text/plain; charset=utf-8' });
+      response.end('Misdirected request');
+      return;
+    }
     let requestUrl;
     try {
       requestUrl = new URL(request.url || '/', `http://${request.headers.host || host}`);

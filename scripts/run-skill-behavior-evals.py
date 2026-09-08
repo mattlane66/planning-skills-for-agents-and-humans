@@ -156,6 +156,8 @@ def external_result(
     command: str,
     case: dict[str, Any],
     command_base_dir: pathlib.Path,
+    adapter_timeout_seconds: float,
+    artifacts_dir: pathlib.Path | None,
 ) -> dict[str, Any]:
     public_case = {
         "schema_version": 1,
@@ -173,15 +175,26 @@ def external_result(
         environment["PLANNING_SKILLS_EVAL_WORKSPACE"] = str(workspace)
         environment["PLANNING_SKILLS_EVAL_CASE_ID"] = case["id"]
         environment.pop("OLDPWD", None)
-        completed = subprocess.run(
-            command_args,
-            cwd=workspace,
-            env=environment,
-            input=json.dumps(public_case),
-            text=True,
-            capture_output=True,
-            check=False,
-        )
+        try:
+            completed = subprocess.run(
+                command_args,
+                cwd=workspace,
+                env=environment,
+                input=json.dumps(public_case),
+                text=True,
+                capture_output=True,
+                check=False,
+                timeout=adapter_timeout_seconds,
+            )
+        except subprocess.TimeoutExpired as exc:
+            if artifacts_dir is not None:
+                retain_workspace(workspace, artifacts_dir, safe_case_id)
+            raise RuntimeError(
+                f"adapter command timed out for {case['id']} after "
+                f"{adapter_timeout_seconds:g} seconds"
+            ) from exc
+        if artifacts_dir is not None:
+            retain_workspace(workspace, artifacts_dir, safe_case_id)
     if completed.returncode != 0:
         raise RuntimeError(
             f"adapter command failed for {case['id']} with exit {completed.returncode}: "
@@ -199,6 +212,18 @@ def external_result(
     if not isinstance(result["model_output"], str) or not result["model_output"].strip():
         raise RuntimeError(f"adapter result model_output must be non-empty for {case['id']}")
     return result
+
+
+def retain_workspace(
+    workspace: pathlib.Path,
+    artifacts_dir: pathlib.Path,
+    safe_case_id: str,
+) -> None:
+    destination = artifacts_dir / safe_case_id
+    if destination.exists():
+        raise RuntimeError(f"artifact retention target already exists: {destination}")
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copytree(workspace, destination, symlinks=True)
 
 
 def score_case(case: dict[str, Any], result: dict[str, Any]) -> CaseScore:
@@ -284,6 +309,8 @@ def main() -> int:
     )
     parser.add_argument("--adapter", choices=("fake", "command"), default="fake")
     parser.add_argument("--adapter-command")
+    parser.add_argument("--adapter-timeout-seconds", type=float, default=900.0)
+    parser.add_argument("--artifacts-dir", type=pathlib.Path)
     parser.add_argument("--runtime", default="fixture")
     parser.add_argument("--runtime-version", default="unknown")
     parser.add_argument("--model", default="unknown")
@@ -293,16 +320,31 @@ def main() -> int:
 
     if args.adapter == "command" and not args.adapter_command:
         parser.error("--adapter-command is required when --adapter command")
+    if args.adapter_timeout_seconds <= 0:
+        parser.error("--adapter-timeout-seconds must be greater than zero")
 
     try:
         cases = select_cases(load_cases(args.cases), args.case_id)
         command_base_dir = pathlib.Path.cwd()
         scores = []
+        execution_errors = False
         for case in cases:
             if args.adapter == "fake":
                 result = fake_result(case)
             else:
-                result = external_result(args.adapter_command, case, command_base_dir)
+                try:
+                    result = external_result(
+                        args.adapter_command,
+                        case,
+                        command_base_dir,
+                        args.adapter_timeout_seconds,
+                        args.artifacts_dir,
+                    )
+                except (OSError, ValueError, RuntimeError) as exc:
+                    print(str(exc), file=sys.stderr)
+                    execution_errors = True
+                    scores.append(CaseScore(case["id"], False, [str(exc)], {}))
+                    break
             scores.append(score_case(case, result))
     except (OSError, ValueError, RuntimeError) as exc:
         print(str(exc), file=sys.stderr)
@@ -322,6 +364,8 @@ def main() -> int:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(rendered, encoding="utf-8")
     print(rendered, end="")
+    if execution_errors:
+        return 2
     return 1 if report["summary"]["failed"] else 0
 
 

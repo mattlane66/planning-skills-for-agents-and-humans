@@ -94,7 +94,7 @@ Describe concrete records, users, objects, stores, or external responses the imp
 
 ## Example runs
 
-### Run 1 — Happy path
+### RUN1 — Happy path
 
 **Given**
 - ...
@@ -114,7 +114,7 @@ Describe concrete records, users, objects, stores, or external responses the imp
 **Expected side effects**
 - ...
 
-### Run 2 — Edge case
+### RUN2 — Edge case
 
 **Given**
 - ...

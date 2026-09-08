@@ -46,6 +46,7 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
         'get_artifact_template',
         'get_orchestration_manifest',
         'get_planning_skill',
+        'get_skill_resource',
         'list_planning_skills',
         'recommend_planning_workflow',
       ],
@@ -70,6 +71,23 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
       arguments: { skill: 'statechart' },
     });
     assert.match(textContent(skill), /breadboard tables remain the source of truth/i);
+
+    const supportResource = await client.callTool({
+      name: 'get_skill_resource',
+      arguments: {
+        skill: 'breadboarding',
+        resource: 'references/behavior-tracing-and-verification.md',
+      },
+    });
+    assert.equal(supportResource.isError, undefined);
+    assert.match(textContent(supportResource), /behavior trace/i);
+
+    const escapedResource = await client.callTool({
+      name: 'get_skill_resource',
+      arguments: { skill: 'breadboarding', resource: '../AGENTS.md' },
+    });
+    assert.equal(escapedResource.isError, true);
+    assert.match(textContent(escapedResource), /inside the selected skill/i);
 
     const template = await client.callTool({
       name: 'get_artifact_template',

@@ -26,6 +26,8 @@ Rules:
   evidence move with `sufficiency.repair_status = REQUIRED`. Phase B/C marks the
   bounded repair COMPLETED; the controller then returns to Phase D for reassessment
   instead of repeating the repair phase indefinitely.
+- Phase C records `manifest.evidence_completion = COMPLETED` after the bounded pass,
+  including an honest empty result. Empty arrays alone do not prove Phase C ran.
 - Do not enter Phase E before decision-relative sufficiency and Evidence Freeze.
 - Phase E records `manifest.interpretation_completion = COMPLETED` after considering
   the full frozen corpus, including when the supported result is an explicitly empty
@@ -43,6 +45,8 @@ Rules:
   provenance note. Output must distinguish selected mechanisms from candidates.
 - Phase H is proportionate. Do not create PDF, HTML, or other formats merely
   because they exist.
+- Every mode completes Phase H's final validation and canonical Decision Brief;
+  proportionality controls only the extra derived formats.
 - Completion does not automatically invoke framing. Propose a research-to-frame
   handoff and stop for explicit human acceptance.
 

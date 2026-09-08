@@ -34,6 +34,16 @@ planning: true
 - Adding items is lightweight, but the resulting list is not easy to use while shopping.
 - The current setup does not preserve a clean, reusable grocery list state on the same device.
 
+## Transformation frame (x → f() → y)
+
+- x — trigger/context: Grocery items arise at different moments and both partners later need a current list while shopping.
+- x — current approach: Send items through ad hoc text messages.
+- x — current result: Capture is quick, but pending and bought state becomes hard to recover and scan.
+- f() — current transformation or breakdown: Messages accumulate without a durable list-state transition.
+- y — desired outcome: Quickly capture items and later see a persistent, legible view of what is still needed.
+- Gap: Preserve low-friction capture while adding clear, reversible grocery state.
+- Boundaries: Same-device, small first version; no accounts, pricing, recipes, categories, or store logic.
+
 ## Outcome
 
 - A user can add grocery items quickly.

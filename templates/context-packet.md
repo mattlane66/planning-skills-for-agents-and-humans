@@ -18,16 +18,11 @@ What the next implementation move should do.
 Working shaping material and candidate-shape breadboards are not governing source artifacts for implementation. Restate only an implication that was explicitly accepted into shaping or the selected-design breadboard.
 
 ## Authority order
-1. User's latest explicit instruction
-2. Selected project boundary
-3. Selected Dumplink task group or other selected slice, for active implementation scope
-4. Executable breadboard, when present
-5. Selected interface contract, for boundary-level input/output details
-6. Accepted selected-design breadboard
-7. Accepted shaping decisions: selected direction, Accepted requirements, Accepted Appetite/cut line, and cuts
-8. Kickoff doc, for builder orientation only
-9. Accepted frame / problem boundary
-10. Working shaping material, candidate-shape breadboards, raw notes, rejected alternatives, and brainstorming — discovery context only, never active build scope
+Canonical source: `.agent-orchestration.yaml#authority_order` (human-readable
+rendering: `AGENTS.md`). List only the entries used by this packet, in their
+canonical relative order:
+
+1. ...
 
 A statechart is derived from the selected-design breadboard and never outranks it.
 The selected project governs outer scope. The selected Dumplink task group or other selected slice governs active implementation scope. Within that slice, the executable breadboard governs expected behavior and examples, and a contract governs its named exchange. The Dumplink plan governs project-wide grouping and order. None may expand the selected project or active slice. A kickoff doc is not build scope or sequence. Working R/S/fit/Appetite and candidate breadboards are exploratory, not selected behavior.

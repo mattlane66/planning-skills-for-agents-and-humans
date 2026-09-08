@@ -84,12 +84,19 @@ python scripts/run-skill-behavior-evals.py \
   --runtime-version "<version>" \
   --model "<model>" \
   --commit-sha "$(git rev-parse HEAD)" \
+  --adapter-timeout-seconds 900 \
+  --artifacts-dir evals/artifacts/claude-code \
   --report evals/reports/claude-code.json
 ```
 
 Repeat `--case-id` to run a focused set, or omit it to run the whole corpus. The runner executes the adapter once per case in a newly staged workspace and keeps expectations in the parent scorer process.
 
-Maintainers can also run `.github/workflows/behavior-evals.yml` manually. Supply a command that implements the same blind adapter protocol plus the runtime, runtime version, and model identifiers. If the adapter needs a credential, configure the repository secret `PLANNING_SKILLS_EVAL_API_KEY` and let the adapter translate that generic input for its runtime. The workflow has read-only repository permissions and retains the report as a bounded artifact.
+Each adapter invocation has a bounded timeout (900 seconds by default). When
+`--artifacts-dir` is set, the isolated case workspace is copied there before
+cleanup, including for a nonzero adapter exit or timeout. Use a fresh target
+directory for each run; the runner refuses to overwrite retained evidence.
+
+Maintainers can also run `.github/workflows/behavior-evals.yml` manually. Supply a command that implements the same blind adapter protocol plus the runtime, runtime version, and model identifiers. If the adapter needs a credential, configure the repository secret `PLANNING_SKILLS_EVAL_API_KEY` and let the adapter translate that generic input for its runtime. The workflow has read-only repository permissions and retains the report and isolated case workspaces as bounded artifacts.
 
 ## Failure categories
 

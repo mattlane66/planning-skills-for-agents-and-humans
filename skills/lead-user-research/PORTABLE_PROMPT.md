@@ -127,18 +127,19 @@ Use for:
 > Is this worth more investigation?
 
 Run:
-A Frame → B Discover → bounded C Evidence → G Decide
+A Frame → B Discover → bounded C Evidence → G Decide → H Deliver
 
 Stop when there is enough evidence to recommend:
 
 STOP | INVESTIGATE | ESCALATE
 
-Do not generate concepts, PDF, or an evidence explorer by default.
+Do not generate concepts, PDF, or an evidence explorer by default. Phase H still
+performs final validation and canonical Decision Brief delivery.
 
 ### STANDARD
 
 Run:
-A → B → C → D Freeze → E Interpret → G Decide
+A → B → C → D Freeze → E Interpret → G Decide → H Deliver
 
 Run F Shape only if a need passes the Concept Generation Gate.
 

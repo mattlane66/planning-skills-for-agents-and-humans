@@ -4,6 +4,13 @@
   "what_to_understand": "Whether advanced operators reveal a future-facing need for low-friction, verifiable work handoffs",
   "decision": "Should the fictional product team run a three-week prototype validation of a structured AI handoff capability?",
   "innovation_altitude": "workflow",
+  "brief_field_status": {
+    "domain": "USER_SUPPLIED",
+    "target_market": "USER_SUPPLIED",
+    "what_to_understand": "USER_SUPPLIED",
+    "decision": "USER_SUPPLIED",
+    "innovation_altitude": "USER_SUPPLIED"
+  },
   "starting_hypotheses": [
     "Advanced multi-agent operators receive unusually high benefit from preserving decision context across handoffs"
   ],

@@ -1,11 +1,22 @@
 import assert from 'node:assert/strict';
 import { mkdtemp, rm, writeFile } from 'node:fs/promises';
+import { get as httpGet } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import test from 'node:test';
 import { extractMermaidBlocks } from '../src/markdown.mjs';
 import { parseArgs } from '../src/cli.mjs';
 import { startViewer } from '../src/server.mjs';
+
+function statusWithHost(url, host) {
+  return new Promise((resolveStatus, reject) => {
+    const request = httpGet(url, { headers: { host } }, (response) => {
+      response.resume();
+      response.on('end', () => resolveStatus(response.statusCode));
+    });
+    request.on('error', reject);
+  });
+}
 
 test('extracts multiple Mermaid fences with their nearest headings', () => {
   const diagrams = extractMermaidBlocks(`# System\n\n\`\`\`mermaid\nflowchart LR\n A --> B\n\`\`\`\n\n## Retry\n\n~~~mermaid\nstateDiagram-v2\n A --> B\n~~~`, 'plan.md');
@@ -43,6 +54,8 @@ test('serves diagrams and broadcasts a reload when a watched file changes', asyn
     assert.match(homeHtml, /colorScheme\.matches \? 'dark' : 'default'/);
     assert.match(homeHtml, /colorScheme\.addEventListener\('change'/);
     assert.match(homeHtml, /JSON\.stringify\(error, null, 2\)/);
+
+    assert.equal(await statusWithHost(viewer.url, 'attacker.example'), 421);
 
     const first = await (await fetch(`${viewer.url}/api/diagrams`)).json();
     assert.equal(first.files[0].diagrams.length, 1);

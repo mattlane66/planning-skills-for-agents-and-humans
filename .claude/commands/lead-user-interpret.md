@@ -3,6 +3,13 @@ description: Run Lead User Research Phase E on frozen evidence to derive finding
 argument-hint:
 - study workspace
 disable-model-invocation: true
+allowed-tools:
+- Read
+- Write
+- Edit
+- Glob
+- Grep
+- Bash
 ---
 
 Read `lead-user-research/SKILL.md`,

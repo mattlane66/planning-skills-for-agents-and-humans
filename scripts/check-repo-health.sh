@@ -91,7 +91,8 @@ BUNDLED_CLAUDE_COMMANDS=(
 )
 
 GEMINI_COMMANDS=(
-  plan wayfind shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink check-drift
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink
+  kickoff feed-context check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
@@ -401,11 +402,32 @@ for executable in scripts/*.sh hooks/*.sh; do
     fail "Not executable: $executable"
   fi
 done
-hook_payload='{"tool_name":"Bash","tool_input":{"command":"npm run build"}}'
-if printf '%s' "$hook_payload" | hooks/pre-build-context-check.sh >/dev/null 2>&1; then
-  pass "Pre-build hook is non-blocking by default"
+if bash -n scripts/*.sh hooks/*.sh; then
+  pass "Shell scripts pass bash syntax validation"
 else
-  fail "Pre-build hook should be non-blocking by default"
+  fail "One or more shell scripts fail bash syntax validation"
+fi
+hook_payload='{"tool_name":"Bash","tool_input":{"command":"npm run build"}}'
+hook_output="$(printf '%s' "$hook_payload" | hooks/pre-build-context-check.sh 2>/dev/null)"
+if HOOK_OUTPUT="$hook_output" python3 - <<'PY'
+import json
+import os
+
+payload = json.loads(os.environ["HOOK_OUTPUT"])
+output = payload["hookSpecificOutput"]
+assert output["hookEventName"] == "PreToolUse"
+assert "Pre-build context check" in output["additionalContext"]
+PY
+then
+  pass "Pre-build hook emits Claude-visible JSON and remains non-blocking by default"
+else
+  fail "Pre-build hook should emit valid Claude-visible JSON in default mode"
+fi
+planning_payload='{"tool_name":"Write","tool_input":{"file_path":"/tmp/project/planning/execution-graph.yaml"}}'
+if [[ -z "$(printf '%s' "$planning_payload" | hooks/pre-build-context-check.sh 2>&1)" ]]; then
+  pass "Absolute planning paths do not trigger implementation reminders"
+else
+  fail "Absolute planning paths should not trigger implementation reminders"
 fi
 strict_status=0
 printf '%s' "$hook_payload" | PLANNING_HOOK_STRICT=1 hooks/pre-build-context-check.sh >/dev/null 2>&1 || strict_status=$?
@@ -465,7 +487,7 @@ import pathlib
 import re
 
 bundle = pathlib.Path("dist/claude-code-plugin")
-documents = [bundle / "AGENTS.md", *bundle.glob("skills/*/SKILL.md"), *bundle.glob("commands/*.md")]
+documents = sorted(bundle.rglob("*.md"))
 pattern = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9._/-]+)")
 missing = []
 for document in documents:
@@ -480,8 +502,9 @@ if missing:
 required_rewrites = {
     bundle / "AGENTS.md": ["${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml", "${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md", "${CLAUDE_PLUGIN_ROOT}/hooks/"],
     bundle / "skills/sketch-reconciliation/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/templates/sketch-reconciliation.md"],
-    bundle / "skills/feed-planning-context/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/AGENTS.md"],
+    bundle / "skills/wayfinding/SKILL.md": ["${CLAUDE_PLUGIN_ROOT}/AGENTS.md"],
     bundle / "commands/lead-user-interpret.md": ["${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/prompts/phase-e-interpret.md"],
+    bundle / "skills/lead-user-research/prompts/phase-g-decide.md": ["${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/scripts/render_decision_brief.py"],
 }
 for document, expected in required_rewrites.items():
     text = document.read_text(encoding="utf-8")
@@ -499,6 +522,34 @@ if bare_lead_user_refs:
         "Bare Lead User repository paths remain in bundled commands: "
         + ", ".join(bare_lead_user_refs)
     )
+
+for project_document in [
+    bundle / "AGENTS.md",
+    bundle / "skills/shaping/SKILL.md",
+    bundle / "skills/feed-planning-context/SKILL.md",
+]:
+    text = project_document.read_text(encoding="utf-8")
+    if "${CLAUDE_PLUGIN_ROOT}/AGENTS.md" in text:
+        raise SystemExit(f"Target-project AGENTS.md was incorrectly rebound in {project_document}")
+
+link_pattern = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
+broken_links = []
+for document in documents:
+    for raw_target in link_pattern.findall(document.read_text(encoding="utf-8")):
+        target = raw_target.strip().strip("<>")
+        if (
+            not target
+            or target.startswith(("http://", "https://", "mailto:", "#"))
+            or "${CLAUDE_PLUGIN_ROOT}" in target
+        ):
+            continue
+        target = target.split("#", 1)[0].split("?", 1)[0]
+        if target:
+            candidate = (document.parent / target).resolve()
+            if bundle.resolve() not in candidate.parents or not candidate.exists():
+                broken_links.append(f"{document.relative_to(bundle)} -> {raw_target}")
+if broken_links:
+    raise SystemExit("Broken bundled Markdown links: " + ", ".join(broken_links))
 PY
   then
     pass "Claude bundle support references are self-contained"

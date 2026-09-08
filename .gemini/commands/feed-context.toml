@@ -1,0 +1,15 @@
+description = "Package the accepted active slice into a compact implementation context packet."
+
+prompt = """
+Use this repository's planning instructions and context-feeding skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{feed-planning-context/SKILL.md}
+@{templates/context-packet.md}
+
+Command arguments / source context:
+{{args}}
+
+Produce or update the smallest context packet needed for the active implementation task. Preserve the authority order, selected slice, requirements, constraints, non-goals, contracts, expected behavior, and verification target. Inspect applicable product-repository instructions. Do not broaden scope or implement code.
+"""

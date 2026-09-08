@@ -4,6 +4,24 @@ The study state is deliberately plain JSON so any tool-using AI can read and wri
 
 The files, not chat memory, are authoritative when file tools are available.
 
+## Updating an existing v1.7 study
+
+The health-hardening update adds required provenance and integrity fields. Do not
+silently infer completion or a historical freeze digest for older studies:
+
+1. Set `manifest.evidence_completion` to `COMPLETED` only if the bounded Phase C
+   pass actually finished; otherwise use `NOT_STARTED` and resume that pass.
+2. Populate `decision.brief_field_status` for the five fields listed below from
+   their real provenance. Missing values remain `UNKNOWN`; surfaced drafts are
+   `PROVISIONAL`, not `USER_SUPPLIED`.
+3. If a legacy frozen study lacks `freeze.evidence_fingerprint`, preserve a copy
+   of the old state and obtain explicit approval to establish a new baseline.
+   Record that rebaseline in `change_log.json`, mark the freeze `OPEN`,
+   recheck sufficiency, and run `freeze_evidence.py`. The new fingerprint protects
+   future changes; it cannot prove that earlier evidence was unchanged.
+4. Rerender the canonical brief, validate, then explicitly record the resulting
+   validation status. Validation itself never changes state.
+
 ## Core files
 
 ### `manifest.json`
@@ -19,11 +37,14 @@ Tracks:
 - study execution basis;
 - human review;
 - deterministic validation;
+- evidence completion — `NOT_STARTED | COMPLETED`;
 - interpretation completion — `NOT_STARTED | COMPLETED`;
 - interpretive status;
 - model-check status;
 - timestamps.
 
+`evidence_completion` records whether the bounded Phase C pass actually finished and
+allows an honest empty result without treating empty arrays as missing work.
 `interpretation_completion` records whether the complete frozen corpus was considered;
 it is independent of whether that interpretation produced any findings, needs, or
 principles. `fixture_type = SYNTHETIC_REFERENCE` is reserved for clearly labeled test
@@ -39,6 +60,7 @@ Tracks:
 - what the research should understand;
 - human decision the research should inform;
 - innovation altitude;
+- `brief_field_status` for those five reusable fields — `USER_SUPPLIED | PROVISIONAL | UNKNOWN`;
 - starting hypotheses;
 - discovery seeds;
 - candidate-profile hypotheses;
@@ -49,7 +71,7 @@ Tracks:
 - disconfirming evidence;
 - out-of-scope questions.
 
-The learning objective (`what_to_understand`) and decision are separate fields and must not be silently merged.
+The learning objective (`what_to_understand`) and decision are separate fields and must not be silently merged. A `USER_SUPPLIED` or `PROVISIONAL` field has a non-empty value; an `UNKNOWN` field remains empty. Provisional values are surfaced drafts, not inferred user intent.
 
 `discovery_seeds`, `candidate_profile_hypotheses`, and `search_constraints` are arrays that preserve the human's supplied wording. Seeds and candidate-profile hypotheses guide discovery but do not count as LU1/LU2 evidence or close the search universe. Search constraints are the only one of these three fields that impose hard discovery boundaries.
 
@@ -163,8 +185,9 @@ means Phase H delivery is complete: deterministic validation passed, the model c
 is recorded, and a non-empty `outputs/decision-brief.md` reflects the final phase,
 status, decision, and actions. The rendered brief includes a deterministic state
 fingerprint; completion validation fails when structured state changes without a
-rerender. Validator-managed timestamps and validation status are excluded from the
-fingerprint. Human review remains separate and is not implied by completion.
+rerender. Timestamps and validation status are excluded from the fingerprint.
+Validation is read-only; Phase H records its result explicitly. Human review remains
+separate and is not implied by completion.
 
 ### `evidence.json`
 
@@ -394,8 +417,15 @@ For STANDARD/FULL, only after `sufficiency.status = SUFFICIENT`:
 - evidence counts;
 - qualified episode count;
 - independent lineage count;
+- evidence-state fingerprint;
 - unresolved gaps;
-- post-freeze evidence log.
+- post-freeze evidence log with `PF##`, purpose, triggering question/interpretation,
+  changed state, affected interpretation refs, and resulting fingerprint.
+
+Independent lineage rows must have disjoint member sets; overlapping rows do not
+create additional independent origins. The validator rejects any evidence-state
+change that neither matches the initial fingerprint nor the latest recorded
+post-freeze fingerprint.
 
 ### `findings.json`
 

@@ -114,7 +114,7 @@ The repository commits these hook files as executable. The `chmod` commands are 
 
 ## Optional strict mode
 
-By default the hooks print guidance and exit successfully. To make a matched reminder block with exit code 2, set `PLANNING_HOOK_STRICT=1` in the hook command environment. Use strict mode deliberately: a PreToolUse exit code 2 blocks the matched tool call.
+By default a matched hook emits a JSON `additionalContext` message on standard output and exits successfully, so Claude Code includes the reminder in the conversation. Unmatched hooks stay silent. To make a matched reminder block with exit code 2, set `PLANNING_HOOK_STRICT=1` in the hook command environment; strict mode writes the reason to standard error because Claude Code surfaces stderr for blocking hooks. Use strict mode deliberately: a PreToolUse exit code 2 blocks the matched tool call.
 
 ## Design principle
 

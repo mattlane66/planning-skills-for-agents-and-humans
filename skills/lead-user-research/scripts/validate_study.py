@@ -6,12 +6,12 @@ from __future__ import annotations
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
-from report_safety import contains_private_identity, safe_outward_url
-from study_fingerprint import study_fingerprint
+from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
+from study_fingerprint import evidence_fingerprint, study_fingerprint
 
 COVERAGE = {"FULL", "PARTIAL", "UNREADABLE", "UNKNOWN"}
 LU_STATUS = {"CANDIDATE", "QUALIFIED", "REJECTED"}
@@ -28,6 +28,8 @@ INTERPRETIVE_STATUS = {"STABLE", "PROVISIONAL"}
 MODEL_CHECK = {"COMPLETED", "NOT_RUN"}
 FIXTURE_TYPE = {"NONE", "SYNTHETIC_REFERENCE"}
 INTERPRETATION_COMPLETION = {"NOT_STARTED", "COMPLETED"}
+EVIDENCE_COMPLETION = {"NOT_STARTED", "COMPLETED"}
+BRIEF_FIELD_STATUS = {"USER_SUPPLIED", "PROVISIONAL", "UNKNOWN"}
 SUFFICIENCY_REPAIR = {"NOT_REQUIRED", "REQUIRED", "COMPLETED"}
 SOURCE_INSTRUCTION_RISK = {"NONE", "PRESENT", "UNKNOWN"}
 SOURCE_CONTENT_TRUST = {"UNTRUSTED_DATA"}
@@ -123,7 +125,10 @@ ID_PATTERNS = {
     "search_id": re.compile(r"^Q\d+$"),
     "pyramid_id": re.compile(r"^PY\d+$"),
     "change_id": re.compile(r"^CH\d+$"),
+    "post_freeze_change_id": re.compile(r"^PF\d+$"),
 }
+
+FINGERPRINT_PATTERN = re.compile(r"^sha256:[0-9a-f]{64}$")
 
 SUFFICIENCY_DIMENSIONS = [
     "trend_support",
@@ -188,6 +193,10 @@ def require_nonempty_string(row: dict[str, Any], field: str, owner: str, errors:
     value = row.get(field)
     if not isinstance(value, str) or not value.strip():
         errors.append(f"{owner} requires non-empty {field}")
+
+
+def valid_enum(value: Any, allowed: set[str]) -> bool:
+    return isinstance(value, str) and value in allowed
 
 
 def require_bool(row: dict[str, Any], field: str, owner: str, errors: list[str]) -> None:
@@ -378,6 +387,7 @@ def main() -> int:
     for index, row in enumerate(search_log):
         owner = f"search_log.json row {index}"
         if not isinstance(row, dict):
+            errors.append(f"{owner} must be an object")
             continue
         search_id = row.get("search_id")
         pyramid_id = row.get("pyramid_id")
@@ -453,6 +463,7 @@ def main() -> int:
     for index, row in enumerate(change_log):
         owner = f"change_log.json row {index}"
         if not isinstance(row, dict):
+            errors.append(f"{owner} must be an object")
             continue
         change_id = row.get("change_id")
         if not isinstance(change_id, str) or not ID_PATTERNS["change_id"].match(change_id):
@@ -517,9 +528,10 @@ def main() -> int:
         )
         if not has_url and not has_immutable_id:
             errors.append(f"{sid} requires url or immutable_identifier")
-        if source.get("coverage") not in COVERAGE:
-            errors.append(f"{sid} has invalid coverage {source.get('coverage')!r}")
-        if source.get("coverage") in {"PARTIAL", "UNREADABLE", "UNKNOWN"}:
+        source_coverage = source.get("coverage")
+        if not valid_enum(source_coverage, COVERAGE):
+            errors.append(f"{sid} has invalid coverage {source_coverage!r}")
+        if valid_enum(source_coverage, {"PARTIAL", "UNREADABLE", "UNKNOWN"}):
             require_nonempty_string(source, "coverage_note", sid, errors)
         access_date = source.get("access_date")
         if isinstance(access_date, str) and access_date.strip():
@@ -564,7 +576,7 @@ def main() -> int:
         sid = row.get("source_id")
         if not isinstance(sid, str) or sid not in source_ids:
             errors.append(f"{eid} references missing source_id: {sid}")
-        elif source_by_id[sid].get("coverage") not in {"FULL", "PARTIAL"}:
+        elif not valid_enum(source_by_id[sid].get("coverage"), {"FULL", "PARTIAL"}):
             errors.append(
                 f"{eid} cannot cite source {sid} with coverage "
                 f"{source_by_id[sid].get('coverage')!r}"
@@ -915,7 +927,7 @@ def main() -> int:
 
     valid_lineage_refs = source_ids | lu_ids
     independent_lineage_count = 0
-    independent_member_sets: set[frozenset[str]] = set()
+    independent_member_sets: list[tuple[str, frozenset[str]]] = []
     member_independence: dict[str, set[str]] = {}
     for row in lineage:
         if not isinstance(row, dict):
@@ -937,15 +949,24 @@ def main() -> int:
                     member_independence.setdefault(member_ref, set()).add(independence)
         require_nonempty_string(row, "rationale", lid, errors)
         if independence == "INDEPENDENT":
-            independent_lineage_count += 1
             if not row.get("evidence_refs"):
                 errors.append(f"{lid} is INDEPENDENT without direct lineage evidence refs")
             members = row.get("member_refs")
             if isinstance(members, list) and all(isinstance(ref, str) for ref in members):
                 member_set = frozenset(members)
-                if member_set in independent_member_sets:
-                    errors.append(f"{lid} duplicates an independent lineage member set")
-                independent_member_sets.add(member_set)
+                overlaps = [
+                    (prior_id, sorted(member_set & prior_members))
+                    for prior_id, prior_members in independent_member_sets
+                    if member_set & prior_members
+                ]
+                if overlaps:
+                    for prior_id, overlap in overlaps:
+                        errors.append(
+                            f"{lid} overlaps independent lineage {prior_id}: {overlap}"
+                        )
+                elif member_set:
+                    independent_lineage_count += 1
+                    independent_member_sets.append((str(lid), member_set))
         if independence == "DERIVATIVE" and not row.get("evidence_refs"):
             errors.append(f"{lid} is DERIVATIVE without direct lineage evidence refs")
         if relationship == "INDEPENDENT_REDISCOVERY" and independence != "INDEPENDENT":
@@ -1303,6 +1324,13 @@ def main() -> int:
                 errors.append(f"{mid} SELECTED requires rotation_status RUN")
             if not parts:
                 errors.append(f"{mid} SELECTED requires rotated parts")
+            failed_fit = sorted(
+                ref for ref in pass_requirements if requirement_fit.get(ref) is not True
+            )
+            if failed_fit:
+                errors.append(
+                    f"{mid} SELECTED requires true requirement_fit for every PASS requirement: {failed_fit}"
+                )
             missing_support = pass_requirements - served_by_parts
             if missing_support:
                 errors.append(f"{mid} SELECTED rotated fit leaves requirements unsupported: {sorted(missing_support)}")
@@ -1467,6 +1495,48 @@ def main() -> int:
             for field, expected in expected_counts.items():
                 if freeze.get(field) != expected:
                     errors.append(f"freeze {field}={freeze.get(field)!r} does not match actual {expected}")
+            base_fingerprint = freeze.get("evidence_fingerprint")
+            if not isinstance(base_fingerprint, str) or not FINGERPRINT_PATTERN.match(base_fingerprint):
+                errors.append("Evidence Freeze requires a sha256 evidence_fingerprint")
+            post_freeze = freeze.get("post_freeze_evidence")
+            expected_fingerprint = base_fingerprint
+            if not isinstance(post_freeze, list):
+                errors.append("freeze post_freeze_evidence must be a list")
+                post_freeze = []
+            post_freeze_ids: set[str] = set()
+            for index, change in enumerate(post_freeze):
+                owner = f"freeze post_freeze_evidence row {index}"
+                if not isinstance(change, dict):
+                    errors.append(f"{owner} must be an object")
+                    continue
+                change_id = change.get("change_id")
+                if (
+                    not isinstance(change_id, str)
+                    or not ID_PATTERNS["post_freeze_change_id"].match(change_id)
+                ):
+                    errors.append(f"{owner} has invalid change_id {change_id!r}")
+                elif change_id in post_freeze_ids:
+                    errors.append(f"duplicate post-freeze change_id: {change_id}")
+                else:
+                    post_freeze_ids.add(change_id)
+                for field in ["sought_because", "triggering_question_or_interpretation"]:
+                    require_nonempty_string(change, field, owner, errors)
+                require_string_list(change, "state_changes", owner, errors, nonempty=True)
+                require_string_list(change, "affected_interpretation_refs", owner, errors)
+                resulting = change.get("resulting_evidence_fingerprint")
+                if not isinstance(resulting, str) or not FINGERPRINT_PATTERN.match(resulting):
+                    errors.append(f"{owner} requires a sha256 resulting_evidence_fingerprint")
+                else:
+                    expected_fingerprint = resulting
+            try:
+                current_evidence_fingerprint = evidence_fingerprint(root)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                errors.append(f"cannot compute frozen evidence fingerprint: {exc}")
+            else:
+                if current_evidence_fingerprint != expected_fingerprint:
+                    errors.append(
+                        "frozen evidence changed without a matching post_freeze_evidence fingerprint"
+                    )
             open_critical = [
                 row.get("observability_id", "<unknown>")
                 for row in observability
@@ -1581,6 +1651,36 @@ def main() -> int:
     if not isinstance(decision, dict):
         errors.append("decision.json must contain a JSON object")
     else:
+        brief_fields = [
+            "domain",
+            "target_market",
+            "what_to_understand",
+            "decision",
+            "innovation_altitude",
+        ]
+        brief_status = decision.get("brief_field_status")
+        if not isinstance(brief_status, dict):
+            errors.append("decision.json brief_field_status must be an object")
+            brief_status = {}
+        if set(brief_status) != set(brief_fields):
+            errors.append("decision.json brief_field_status must cover every reusable brief field")
+        for field in brief_fields:
+            field_status = brief_status.get(field)
+            if not valid_enum(field_status, BRIEF_FIELD_STATUS):
+                errors.append(
+                    f"decision.json brief_field_status[{field}] has invalid status {field_status!r}"
+                )
+            value = decision.get(field)
+            if valid_enum(field_status, {"USER_SUPPLIED", "PROVISIONAL"}) and (
+                not isinstance(value, str) or not value.strip()
+            ):
+                errors.append(
+                    f"decision.json {field} must be non-empty when its status is {field_status}"
+                )
+            if field_status == "UNKNOWN" and isinstance(value, str) and value.strip():
+                errors.append(
+                    f"decision.json {field} has a value but brief_field_status is UNKNOWN"
+                )
         if not decision.get("domain"):
             errors.append("decision.json must contain a non-empty domain")
         if not decision.get("decision"):
@@ -1640,6 +1740,11 @@ def main() -> int:
                 "manifest has invalid interpretation_completion "
                 f"{manifest.get('interpretation_completion')!r}"
             )
+        if not valid_enum(manifest.get("evidence_completion"), EVIDENCE_COMPLETION):
+            errors.append(
+                "manifest has invalid evidence_completion "
+                f"{manifest.get('evidence_completion')!r}"
+            )
         if manifest.get("phase") not in PHASES:
             errors.append(f"manifest has invalid phase {manifest.get('phase')!r}")
         if study_status not in STUDY_STATUS:
@@ -1668,6 +1773,8 @@ def main() -> int:
                 errors.append("complete study must be in phase H")
             if manifest.get("model_check") != "COMPLETED":
                 errors.append("complete study requires model_check COMPLETED")
+            if manifest.get("evidence_completion") != "COMPLETED":
+                errors.append("complete study requires evidence_completion COMPLETED")
             if mode in {"STANDARD", "FULL"} and manifest.get("interpretation_completion") != "COMPLETED":
                 errors.append("complete STANDARD/FULL study requires interpretation_completion COMPLETED")
             decision_brief = root / "outputs" / "decision-brief.md"
@@ -1901,7 +2008,11 @@ def main() -> int:
             if not isinstance(source, dict) or source.get("outward_citation_allowed") is True:
                 continue
             url = source.get("url")
-            if isinstance(url, str) and url and url in decision_brief_text:
+            if (
+                isinstance(url, str)
+                and url
+                and contains_sensitive_text(decision_brief_text, url)
+            ):
                 errors.append(
                     f"complete Decision Brief exposes withheld URL for {source.get('source_id')}"
                 )
@@ -1918,17 +2029,6 @@ def main() -> int:
                     "complete Decision Brief reproduces raw excerpt for "
                     f"{evidence_row.get('evidence_id')}"
                 )
-
-    if isinstance(manifest, dict):
-        manifest["deterministic_validation"] = "FAILED" if errors else "PASSED"
-        manifest["updated_at"] = datetime.now(timezone.utc).isoformat()
-        try:
-            (root / "manifest.json").write_text(
-                json.dumps(manifest, indent=2, ensure_ascii=False) + "\n",
-                encoding="utf-8",
-            )
-        except Exception as exc:
-            warnings.append(f"could not update manifest validation status: {exc}")
 
     for warning in warnings:
         print(f"WARNING: {warning}", file=sys.stderr)

@@ -31,6 +31,13 @@ Nothing in this table is selected merely because it came from the human first.
 
 Ask what needs or constraints make those mechanisms seem useful.
 
+### Working transformation frame (x → f() → y)
+
+- x: A person repeatedly looks up local times and reconstructs a personally relevant city set.
+- f(): Keep that set, update current times, and support fast keyboard navigation and deliberate edits.
+- y: The person can compare the right locations at a glance across launches without a mouse-heavy workflow.
+- Gap and boundaries: The frame is provisional because this example intentionally began from S; it must be reviewed before promotion.
+
 | ID | Requirement | Status | Authority |
 |---|---|---|---|
 | R0 | A person can compare the current time in a small set of personally relevant locations at a glance. | Core goal | Working |

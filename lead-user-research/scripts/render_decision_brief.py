@@ -9,7 +9,12 @@ import re
 from pathlib import Path
 from typing import Any
 
-from report_safety import identity_pattern, markdown_escape, safe_outward_url
+from report_safety import (
+    identity_pattern,
+    markdown_escape,
+    redact_sensitive_text,
+    safe_outward_url,
+)
 from study_fingerprint import study_fingerprint
 
 
@@ -110,6 +115,23 @@ def redact_private_entities(rendered: str, episodes: list[dict[str, Any]]) -> st
                 lambda _match: replacement,
                 rendered,
             )
+    return rendered
+
+
+def redact_withheld_source_urls(rendered: str, sources: list[dict[str, Any]]) -> str:
+    """Remove withheld URLs even when a free-text field caused Markdown escaping."""
+    for source in sources:
+        if not isinstance(source, dict) or source.get("outward_citation_allowed") is True:
+            continue
+        url = source.get("url")
+        if not isinstance(url, str) or not url.strip():
+            continue
+        source_id = markdown_escape(source.get("source_id", "Source"))
+        rendered = redact_sensitive_text(
+            rendered,
+            url,
+            f"{source_id} (citation withheld)",
+        )
     return rendered
 
 
@@ -445,6 +467,7 @@ def main() -> int:
 
     rendered = "\n".join(lines).rstrip() + "\n"
     rendered = redact_private_entities(rendered, episodes)
+    rendered = redact_withheld_source_urls(rendered, sources)
     output = Path(args.output) if args.output else root / "outputs" / "decision-brief.md"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(rendered, encoding="utf-8")

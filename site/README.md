@@ -1,6 +1,6 @@
 # Planning Skills Lab
 
-`index.html` is the distributable, hands-on companion to the repository. Its primary experience lets the reader click through eight predetermined stages of the Simple Grocery List example. At each stage it shows what the human supplied or decided, what the planning agent did, the artifact that resulted, and the plan accumulated so far. A compact invocation layer shows the portable prompt and supported runtime shortcut for the current move; contextual optional branches show where the remaining skills would be useful without presenting all thirteen skills as a mandatory workflow. The walkthrough includes the accepted requirements matrix, two shaped paths that both pass fit before a human selects between their tradeoffs, a rendered selected-design breadboard, and a Dumplink-style view of tasks clustered into sequenced vertical groups. The handoff stage separates the resolved planning subset from the target-repository context that must be inspected before coding, then exposes the complete packet fields; the final stage shows how implementation drift returns to a human decision.
+`index.html` is the distributable, hands-on companion to the repository. Its primary experience lets the reader click through eight predetermined stages of the Simple Grocery List example. At each stage it shows what the human supplied or decided, what the planning agent did, the artifact that resulted, and the plan accumulated so far. A compact invocation layer shows the portable prompt and supported runtime shortcut for the current move; contextual optional branches show where the remaining skills would be useful without presenting all fourteen skills as a mandatory workflow. The walkthrough includes the accepted requirements matrix, two shaped paths that both pass fit before a human selects between their tradeoffs, a rendered selected-design breadboard, and a Dumplink-style view of tasks clustered into sequenced vertical groups. The handoff stage separates the resolved planning subset from the target-repository context that must be inspected before coding, then exposes the complete packet fields; the final stage shows how implementation drift returns to a human decision.
 
 This is a walkthrough, not a quiz. The Compass, Model, and Reference remain available behind it. The walkthrough teaches what the collaboration feels like and how its outputs compound; the Reference lets readers select any canonical skill and copy an accurate invocation. Portable natural-language prompts are primary. Claude Code and Gemini shortcuts appear only where the repository actually supplies them, and Codex is correctly described as plugin plus natural-language invocation rather than Claude-style slash commands.
 
@@ -15,7 +15,7 @@ The JavaScript bundle targets Safari 15.4 and newer. The responsive layout inclu
 
 ## Rebuild it
 
-Use Node.js 20 or newer:
+Use Node.js 20.19+, 22.13+, or 24+ (matching the committed dependency lock):
 
 ```bash
 cd site
