@@ -161,7 +161,15 @@ async function main() {
     // Exercise a real keyboard activation on the focused Next button.
     await evaluate('document.querySelector(\'[data-action="next-walkthrough-stage"]\').focus(); true');
     assert.equal(await evaluate('document.activeElement?.getAttribute("data-action")'), 'next-walkthrough-stage');
-    await client.call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
+    await client.call('Input.dispatchKeyEvent', {
+      type: 'keyDown',
+      key: 'Enter',
+      code: 'Enter',
+      text: '\r',
+      unmodifiedText: '\r',
+      windowsVirtualKeyCode: 13,
+      nativeVirtualKeyCode: 13,
+    });
     await client.call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
     await waitFor(
       () => evaluate('document.querySelector("#walkthrough-stage-title")?.textContent === "Separate the problem from the idea."'),
