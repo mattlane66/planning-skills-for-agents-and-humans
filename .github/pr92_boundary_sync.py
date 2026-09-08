@@ -66,4 +66,4 @@ subprocess.run(
     check=True,
 )
 subprocess.run(["npm", "--prefix", "site", "ci"], check=True)
-subprocess.run(["npm", "--prefix", "site", "run", "build:portal"], check=True)
+subprocess.run(["npm", "--prefix", "site", "run", "check"], check=True)
