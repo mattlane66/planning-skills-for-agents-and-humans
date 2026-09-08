@@ -74,6 +74,7 @@ class LeadUserPackageBoundaryTests(unittest.TestCase):
         self.assertIn("route directly to collaborative `shaping`", readme)
         self.assertIn("namespaced research provenance", readme)
 
+    # Keep the v1.x route field for compatibility while asserting the new planning route separately.
     def test_controller_preserves_legacy_field_but_routes_phase_f_to_shaping(self):
         script = CANONICAL / "scripts" / "next_research_move.py"
         packaged_script = PACKAGED / "scripts" / "next_research_move.py"
