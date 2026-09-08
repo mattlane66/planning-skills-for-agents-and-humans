@@ -20,6 +20,14 @@ Canonical skills live at the repository root. Their `skills/` counterparts are p
    bash scripts/check-repo-health.sh
    ```
 
+   This includes ShellCheck for all shell scripts and hooks, and actionlint for
+   GitHub Actions workflows (including embedded shell commands). For a focused check:
+
+   ```bash
+   shellcheck scripts/*.sh hooks/*.sh
+   actionlint
+   ```
+
 5. Open a pull request that explains the behavior change, authority impact, validation, and release impact.
 
 Real-runtime skill behavior reports are especially useful for routing, human-gate, or artifact-output changes. Follow `docs/skill-behavior-evals.md`; never include credentials, private source material, or hidden scorer expectations in an adapter or report.

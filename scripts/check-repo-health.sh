@@ -2,7 +2,7 @@
 set -uo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-cd "$ROOT_DIR"
+cd "$ROOT_DIR" || exit 1
 
 failures=0
 
@@ -401,11 +401,21 @@ for executable in scripts/*.sh hooks/*.sh; do
   else
     fail "Not executable: $executable"
   fi
+  if bash -n "$executable"; then
+    pass "Shell syntax: $executable"
+  else
+    fail "Shell syntax: $executable"
+  fi
 done
-if bash -n scripts/*.sh hooks/*.sh; then
-  pass "Shell scripts pass bash syntax validation"
+if shellcheck scripts/*.sh hooks/*.sh; then
+  pass "ShellCheck passes for scripts and hooks"
 else
-  fail "One or more shell scripts fail bash syntax validation"
+  fail "ShellCheck failed; install requirements-dev.txt and fix the diagnostics"
+fi
+if actionlint -color; then
+  pass "GitHub Actions workflows pass actionlint"
+else
+  fail "actionlint failed; install requirements-dev.txt and fix the diagnostics"
 fi
 hook_payload='{"tool_name":"Bash","tool_input":{"command":"npm run build"}}'
 hook_output="$(printf '%s' "$hook_payload" | hooks/pre-build-context-check.sh 2>/dev/null)"
@@ -450,6 +460,8 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   done
   for command in "${BUNDLED_CLAUDE_COMMANDS[@]}"; do
     check_claude_command_frontmatter "dist/claude-code-plugin/commands/$command.md"
+    # Match the installed plugin's literal runtime variable.
+    # shellcheck disable=SC2016
     if grep -q '\${CLAUDE_PLUGIN_ROOT}' "dist/claude-code-plugin/commands/$command.md"; then
       pass "Bundle-local references: commands/$command.md"
     else
@@ -572,6 +584,8 @@ fi
 echo
 echo "Checking interactive documentation portal..."
 if command -v npm >/dev/null 2>&1; then
+  # Each package intentionally gets an isolated subshell environment.
+  # shellcheck disable=SC2030,SC2031
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
     cd site &&
@@ -591,6 +605,8 @@ fi
 echo
 echo "Checking visual hot-reload viewer..."
 if command -v npm >/dev/null 2>&1; then
+  # Each package intentionally gets an isolated subshell environment.
+  # shellcheck disable=SC2030,SC2031
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
     cd visualizer &&
@@ -609,6 +625,8 @@ fi
 echo
 echo "Checking MCP server..."
 if command -v npm >/dev/null 2>&1; then
+  # Each package intentionally gets an isolated subshell environment.
+  # shellcheck disable=SC2030,SC2031
   if (
     export NPM_CONFIG_CACHE="${TMPDIR:-/tmp}/planning-skills-npm-cache"
     cd mcp-server &&

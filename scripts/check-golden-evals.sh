@@ -63,6 +63,8 @@ require_text breadboarding/SKILL.md "## Affordance and seam test"
 require_text breadboarding/references/behavior-tracing-and-verification.md "## Reverse-trace observable consequences"
 require_text breadboarding/references/behavior-tracing-and-verification.md "## Verify graph integrity"
 require_text breadboarding/references/notation-rendering-and-slicing.md "Mode: current-state | candidate-shape | selected-design"
+# Match literal Markdown code spans.
+# shellcheck disable=SC2016
 require_text templates/breadboard.md 'Mode: `current-state`, `candidate-shape`, or `selected-design`'
 require_text templates/breadboard.md "## Behavior traces"
 require_text templates/breadboard.md "## Reverse-trace audit"
@@ -75,6 +77,8 @@ require_text evals/workflow-behavior-cases.json '"id": "selected-shape-exposes-u
 require_text evals/workflow-behavior-cases.json '"id": "implementation-conformance-is-not-realized-fit"'
 require_text evals/workflow-behavior-cases.json '"id": "reality-can-contradict-a-correct-implementation"'
 require_text evals/workflow-behavior-cases.json '"id": "realized-fit-supported-by-outcome-evidence"'
+# Match literal Markdown code spans.
+# shellcheck disable=SC2016
 require_text docs/skill-behavior-evals.md 'protocol is `blind-command-v1`'
 require_text scripts/run-skill-behavior-evals.py '"prompt": case["prompt"]'
 require_text templates/dumplink.md "## Vertical task groups"
