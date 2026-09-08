@@ -19,38 +19,32 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-          fetch-depth: 2
 
-      - name: Recover, apply, and verify refactor
+      - name: Reconstruct and verify refactor
         shell: bash
         run: |
           set -euo pipefail
-          git show HEAD^:.github/workflows/apply-validator-refactor.yml > /tmp/previous-workflow.yml
-          python3 - <<'PY'
-          from pathlib import Path
-          lines = Path('/tmp/previous-workflow.yml').read_text(encoding='utf-8').splitlines()
-          start = next(i for i, line in enumerate(lines) if "cat > /tmp/validator-files.b64 <<'B64'" in line) + 1
-          end = next(i for i in range(start, len(lines)) if lines[i] == 'B64')
-          Path('/tmp/validator-files.b64').write_text('\n'.join(lines[start:end]) + '\n', encoding='ascii')
-          PY
-          base64 -d /tmp/validator-files.b64 > /tmp/validator-files.txz
+          cat .tmp-validator-payload/part* | base64 -d > /tmp/validator-files.txz
           tar -xJf /tmp/validator-files.txz
+          printf '%s  %s\n' \
+            c17da9e7561d1ac2015c97bd010b2400a2178af594edc24262bdc8d8053c14ea lead-user-research/scripts/validate_study.py \
+            1d72fbb881b8885ff0fc7fc9f2ee834bd13ff5caeac8af69b32805a35e5fd7e3 lead-user-research/scripts/validation_schema.py \
+            2bf490ec5dedfdfd4b8ba5dfd49df78c559017471fe103f9b3f9822180a4bf1b lead-user-research/scripts/validation_state.py \
+            c17da9e7561d1ac2015c97bd010b2400a2178af594edc24262bdc8d8053c14ea skills/lead-user-research/scripts/validate_study.py \
+            1d72fbb881b8885ff0fc7fc9f2ee834bd13ff5caeac8af69b32805a35e5fd7e3 skills/lead-user-research/scripts/validation_schema.py \
+            2bf490ec5dedfdfd4b8ba5dfd49df78c559017471fe103f9b3f9822180a4bf1b skills/lead-user-research/scripts/validation_state.py | sha256sum --check
           python -m unittest tests.test_lead_user_validation_schema
           python -m unittest tests.test_lead_user_hybrid_safeguards
           python lead-user-research/scripts/validate_study.py lead-user-research/examples/reference-study
 
-      - name: Commit verified files through GitHub API
+      - name: Commit verified refactor through GitHub API
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY'
-          import base64
-          import json
-          import pathlib
-          import subprocess
-
+          import base64, json, pathlib, subprocess
           repo = '${{ github.repository }}'
           branch = '${{ github.ref_name }}'
           paths = [
@@ -64,23 +58,21 @@ jobs:
               'tests/test_lead_user_validation_schema.py',
           ]
           for path in paths:
-              query = subprocess.run(
+              found = subprocess.run(
                   ['gh', 'api', f'repos/{repo}/contents/{path}?ref={branch}', '--jq', '.sha'],
-                  text=True,
-                  capture_output=True,
+                  text=True, capture_output=True,
               )
               payload = {
                   'message': 'Refactor Lead User validator schema and state checks',
                   'content': base64.b64encode(pathlib.Path(path).read_bytes()).decode('ascii'),
                   'branch': branch,
               }
-              if query.returncode == 0 and query.stdout.strip():
-                  payload['sha'] = query.stdout.strip()
-              tmp = pathlib.Path('/tmp/update.json')
+              if found.returncode == 0 and found.stdout.strip():
+                  payload['sha'] = found.stdout.strip()
+              tmp = pathlib.Path('/tmp/content-update.json')
               tmp.write_text(json.dumps(payload), encoding='utf-8')
               subprocess.run(
                   ['gh', 'api', '--method', 'PUT', f'repos/{repo}/contents/{path}', '--input', str(tmp)],
-                  check=True,
-                  stdout=subprocess.DEVNULL,
+                  check=True, stdout=subprocess.DEVNULL,
               )
           PY
