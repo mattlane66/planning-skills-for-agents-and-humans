@@ -31,6 +31,8 @@ python lead-user-research/scripts/next_research_move.py research/lead-user-study
 
 Read **[PROTOCOL.md](PROTOCOL.md)** for the canonical methodological specification, including Lead User qualification, pyramiding, advanced analogs, public-web need–solution mining, enabler/discontinuity scans, independent discovery-branch checks, falsification ledgers, contrastive cases, trace/event evidence, platform context, observability-gated fieldwork, transferability checks, evidence freeze, research sufficiency, interpretation, Fit Check, and decision delivery.
 
+Read **[PACKAGE_BOUNDARY.md](PACKAGE_BOUNDARY.md)** for the ownership split between Lead User Research and product planning, the planning meaning of Phase F `ACCEPTED` / research `R##` / `SELECTED` states, and the staged migration plan for a future separately versioned Lead User package.
+
 ## Minimum input
 
 You can start with only:
@@ -53,7 +55,7 @@ The human-facing output is a Decision Brief organized around:
 
 > decision → recommendation → why → decisive evidence → critical uncertainty → action now → what would change the decision
 
-The underlying research record remains evidence-traceable through trends, sources, atomic evidence, Lead User Need Episodes, lineage, hypothesis tests, observability decisions, AI analysis provenance, findings, needs, and—only when justified—Fit Check requirements and candidate mechanisms.
+The underlying research record remains evidence-traceable through trends, sources, atomic evidence, Lead User Need Episodes, lineage, hypothesis tests, observability decisions, AI analysis provenance, findings, needs, and—only when justified—research-local Fit Check criteria and candidate mechanisms.
 
 The initializer refuses non-empty workspaces. The validator also requires the
 hypothesis, observability, AI-analysis, candidate, search, and change registries even
@@ -84,9 +86,16 @@ needs, pyramiding, or advanced analogs. It is not required when the concrete
 problem is already understood.
 
 After Phase G/H, research implications may be proposed through
-[the research-to-frame handoff](study-templates/research-to-frame-handoff.md).
-That handoff is evidence input, not an accepted frame. A human must accept, reject,
-or revise it before `framing-doc` is invoked.
+[the research-to-planning handoff](study-templates/research-to-frame-handoff.md).
+That handoff is evidence input, not accepted product truth. A human must accept,
+reject, or revise it before downstream planning proceeds.
+
+Choose the smallest downstream planning move after acceptance:
+
+- if Phase F did not produce useful planning material, normally route to `framing-doc`;
+- if Phase F produced a useful research-local frame, fit criteria, or candidate mechanisms, normally route directly to collaborative `shaping` and import them as **Working** planning material with namespaced research provenance.
+
+Do not ask the human to reconstruct or reselect Phase F material solely because it crossed the package boundary. Revisit a decision when a planning promotion gate remains unmet or a consequential planning input changed, especially project requirements, Appetite/cut line, project boundary, material evidence, or viable alternatives.
 
 When the study establishes a consequential future-facing need but the remaining
 decision is **whether there is a sufficiently large, reachable, economically
@@ -108,7 +117,8 @@ The workflow may use public-web need–solution mining and interest signals to d
 
 For pivotal needs, STANDARD/FULL studies assess whether discovery crossed meaningfully independent branches rather than one referral clique or platform lineage. Before concept shaping, the workflow also checks whether the underlying need/principle plausibly transfers beyond the extreme user's special constraints. High-altitude studies should additionally scan for technological, scientific, regulatory, cost, infrastructure, or platform discontinuities that could change the feasible solution space.
 
-Downstream technical, economic, or safety rejection must identify the layer being rejected. Rejecting a mechanism or implementation part does not by itself invalidate the evidenced need, principle, or requirement.
+Downstream technical, economic, or safety rejection must identify the layer being rejected. Rejecting a mechanism or implementation part does not by itself invalidate the evidenced need, principle, or research-local fit criterion. An accepted project requirement follows the planning workflow's own change and lineage rules.
+
 ## Important boundary
 
 A public-source or AI-only run is **DESK_RESEARCH**, even when methodologically rigorous.

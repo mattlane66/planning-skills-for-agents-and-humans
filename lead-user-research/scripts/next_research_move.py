@@ -46,6 +46,7 @@ def result(
     blockers: list[str] | None = None,
     human_gate: str = "None",
     conditional_next_skill: str | None = None,
+    conditional_next_planning_skill: str | None = None,
 ) -> dict[str, Any]:
     return {
         "state": state,
@@ -56,7 +57,10 @@ def result(
         "reason": reason,
         "blockers": blockers or [],
         "human_gate": human_gate,
+        # v1.x compatibility: some consumers expect this field and assume framing-doc.
+        # New planning integrations should read conditional_next_planning_skill.
         "conditional_next_skill": conditional_next_skill,
+        "conditional_next_planning_skill": conditional_next_planning_skill,
     }
 
 
@@ -182,7 +186,7 @@ def recommend(root: Path) -> dict[str, Any]:
                 next_phase="H",
                 reason="The SCOUT decision is recorded; validate and render the compact supported deliverable.",
                 blockers=[],
-                human_gate="Choose whether a proposed research-to-frame handoff is useful.",
+                human_gate="Choose whether a proposed research-to-planning handoff is useful.",
             )
         return result(
             current_phase=current_phase,
@@ -190,8 +194,9 @@ def recommend(root: Path) -> dict[str, Any]:
             next_phase=None,
             reason="The SCOUT study is complete. Its implications do not become accepted planning truth automatically.",
             blockers=[],
-            human_gate="Accept, reject, or revise the proposed research-to-frame implications before invoking framing.",
+            human_gate="Accept, reject, or revise the proposed research-to-planning implications before downstream planning.",
             conditional_next_skill="framing-doc",
+            conditional_next_planning_skill="framing-doc",
         )
 
     sufficiency = load_json(root, "sufficiency.json", {})
@@ -284,8 +289,8 @@ def recommend(root: Path) -> dict[str, Any]:
             current_phase=current_phase,
             state="READY",
             next_phase="F",
-            reason="At least one supported need passed the Concept Generation Gate and requires an evidence-backed x → f() → y shaping frame.",
-            blockers=[f"Passing need lacks a shaping frame: {need_id}" for need_id in missing_frame],
+            reason="At least one supported need passed the Concept Generation Gate and requires an evidence-backed x → f() → y research shaping frame for concept evaluation.",
+            blockers=[f"Passing need lacks a research concept-evaluation frame: {need_id}" for need_id in missing_frame],
         )
 
     awaiting_frame_review = sorted(passing_need_ids & provisional_frame_need_ids)
@@ -294,9 +299,9 @@ def recommend(root: Path) -> dict[str, Any]:
             current_phase=current_phase,
             state="HUMAN_REVIEW",
             next_phase="F",
-            reason="Phase F constructed a provisional shaping frame; requirements cannot be frozen until a human accepts or revises x, y, the gap, and boundaries.",
-            blockers=[f"Human review required for provisional shaping frame: {need_id}" for need_id in awaiting_frame_review],
-            human_gate="Accept or revise the proposed x → f() → y frame. The model must not self-accept it.",
+            reason="Phase F constructed a provisional research concept-evaluation frame; research-local fit criteria cannot be frozen until a human accepts or revises x, y, the gap, and boundaries.",
+            blockers=[f"Human review required for provisional research concept-evaluation frame: {need_id}" for need_id in awaiting_frame_review],
+            human_gate="Accept or revise the proposed x → f() → y research frame. The model must not self-accept it.",
         )
 
     criteria = load_json(root, "fit_criteria.json", [])
@@ -313,8 +318,8 @@ def recommend(root: Path) -> dict[str, Any]:
             current_phase=current_phase,
             state="READY",
             next_phase="F",
-            reason="At least one accepted shaping frame still requires frozen requirements and candidate-shape Fit Check work.",
-            blockers=[f"Passing need lacks requirements or materially distinct mechanisms: {need_id}" for need_id in incomplete_shape],
+            reason="At least one accepted research concept-evaluation frame still requires frozen research-local fit criteria and candidate-mechanism Fit Check work.",
+            blockers=[f"Passing need lacks research-local criteria or materially distinct mechanisms: {need_id}" for need_id in incomplete_shape],
         )
 
     outcome = load_json(root, "decision_outcome.json", {})
@@ -326,7 +331,7 @@ def recommend(root: Path) -> dict[str, Any]:
             reason=(
                 "No need passed the Concept Generation Gate; return to the original decision without inventing concepts."
                 if not passing_need_ids
-                else "The evidence and any justified concept work are ready for a decision outcome."
+                else "The evidence and any justified research-local concept work are ready for a decision outcome."
             ),
             blockers=[],
             human_gate="The agent prepares decision-ready evidence; the human makes or authorizes the product decision.",
@@ -339,25 +344,30 @@ def recommend(root: Path) -> dict[str, Any]:
             next_phase="H",
             reason="The decision is recorded; render and verify only the proportionate supported deliverables.",
             blockers=[],
-            human_gate="Choose whether additional derived formats or a research-to-frame handoff are useful.",
+            human_gate="Choose whether additional derived formats or a research-to-planning handoff are useful.",
         )
 
+    has_phase_f_material = bool(shaping_frames or criteria or concepts)
+    next_planning_skill = "shaping" if has_phase_f_material else "framing-doc"
     return result(
         current_phase=current_phase,
         state="COMPLETE",
         next_phase=None,
-        reason="The research study is complete. Its implications do not become accepted planning truth automatically.",
+        reason="The research study is complete. Its research shaping frame and implications do not become accepted planning truth automatically.",
         blockers=[],
-        human_gate="Accept, reject, or revise the proposed research-to-frame implications before invoking framing.",
+        human_gate="Accept, reject, or revise the proposed research-to-planning implications before downstream planning.",
+        # Keep the v1.x field stable for existing consumers; the new field is authoritative.
         conditional_next_skill="framing-doc",
+        conditional_next_planning_skill=next_planning_skill,
     )
 
 
 def render_text(value: dict[str, Any]) -> str:
     blockers = value["blockers"] or ["None"]
     next_move = value["recommended_command"] or "None"
-    if value.get("conditional_next_skill"):
-        next_move = f"{next_move}; after explicit acceptance, {value['conditional_next_skill']}"
+    conditional = value.get("conditional_next_planning_skill") or value.get("conditional_next_skill")
+    if conditional:
+        next_move = f"{next_move}; after explicit acceptance, {conditional}"
     lines = [
         f"Research status: {value['state']}",
         f"Current phase: {value['current_phase']}",

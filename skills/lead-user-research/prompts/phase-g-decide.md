@@ -108,6 +108,7 @@ When an enabler/discontinuity scan materially affected the decision, summarize t
 ### Rejection-layer integrity
 
 If a mechanism or implementation part was rejected, state the rejection layer and rationale. Do not imply that a mechanism-level objection invalidates an evidenced need, principle, or requirement.
+
 ### Consequential unknowns
 
 The few uncertainties that could reverse the decision.
@@ -127,10 +128,16 @@ The rendered Decision Brief is derived from structured state and must not introd
 The brief must link decisive F## / LU## refs to privacy-safe E### / SRC## drill-down.
 Never fall back to internal `user_entity`, reproduce raw excerpts by default, or expose
 a source URL unless `outward_citation_allowed` is true and the URL is safe HTTP(S).
-Distinguish PASS fitness conditions from PROVISIONAL or FAIL criteria, show the
-accepted x → f() → y frame, and report each mechanism's actual
-CANDIDATE/SELECTED/REJECTED state plus human-selection provenance. Never relabel a
-candidate as selected in prose.
+Distinguish PASS research-local fitness conditions from PROVISIONAL or FAIL criteria,
+show the research concept-evaluation `x → f() → y` frame, and report each mechanism's
+actual CANDIDATE/SELECTED/REJECTED state plus human research-selection provenance.
+Never relabel a candidate as selected in prose.
+
+When Phase F ran, explicitly state that its `ACCEPTED`, research `R##`, and `SELECTED`
+states are research-local under `PACKAGE_BOUNDARY.md`. A research-local mechanism selection is
+not a selected project shape and not a selected planning shape. They are evidence and Working
+planning inputs after an accepted handoff; they are not accepted product requirements,
+a selected project shape, selected-design intent, active scope, or build authorization.
 
 ### Decision status
 
