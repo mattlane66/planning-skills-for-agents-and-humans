@@ -37,6 +37,8 @@ cp "$ROOT_DIR/templates/"*.yaml "$DIST_DIR/templates/"
 cp "$ROOT_DIR/hooks/"*.sh "$DIST_DIR/hooks/"
 cp -R "$ROOT_DIR/examples/." "$DIST_DIR/examples/"
 
+# Preserve the variable literally for expansion in the installed plugin.
+# shellcheck disable=SC2016
 rewrite_args=(
   -e 's#\.agent-orchestration\.yaml#${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml#g'
   -e 's#docs/agent-context-feeding\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md#g'
@@ -80,6 +82,8 @@ for skill in "${SKILLS[@]}"; do
   cp -R "$ROOT_DIR/$skill/." "$target_dir/"
   skill_rewrite_args=("${rewrite_args[@]}")
   if [[ "$skill" == "wayfinding" ]]; then
+    # Preserve the variable literally for expansion in the installed plugin.
+    # shellcheck disable=SC2016
     skill_rewrite_args+=(
       -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
     )
@@ -109,6 +113,8 @@ for command_file in "$ROOT_DIR"/.claude/commands/*.md; do
     continue
   fi
 
+  # Preserve the variable literally for expansion in the installed plugin.
+  # shellcheck disable=SC2016
   command_rewrite_args=(
     "${rewrite_args[@]}"
     -e 's#AGENTS\.md#${CLAUDE_PLUGIN_ROOT}/AGENTS.md#g'
