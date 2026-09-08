@@ -14,7 +14,7 @@ Read `../PACKAGE_BOUNDARY.md` for the package and authority boundary.
 - Decision Brief:
 - Phase F material: `NONE | PRESENT`
 
-Do not invoke a downstream planning skill from this handoff until the status is `ACCEPTED`.
+Do not invoke `framing-doc`, `shaping`, or another downstream planning skill from this handoff until the status is `ACCEPTED`.
 
 ## Decision the research informed
 
