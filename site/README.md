@@ -23,7 +23,11 @@ npm install
 npm run check
 ```
 
-`npm run check` regenerates the content index, rebuilds the standalone HTML, checks the walkthrough and promotion model against canonical repository rules, exercises the complete eight-stage collaboration, and crawls every generated route for heading, table-of-contents, embedded-link, search, semantic, accessibility, and mobile regressions.
+`npm run check` regenerates the content index, rebuilds the standalone HTML, checks the walkthrough and promotion model against canonical repository rules, exercises the complete eight-stage collaboration in JSDOM, and crawls every generated route for heading, table-of-contents, embedded-link, search, semantic, accessibility, and mobile regressions.
+
+CI also runs `npm run test:browser` under a real Chrome/Chromium process. That smoke opens the tracked `index.html` directly over `file://`, activates a focused control from the keyboard, waits for Mermaid to render an SVG, repeats the app at a 390 px viewport, and fails on browser runtime errors. It intentionally sits outside `npm run check` because Node 20 remains supported for deterministic build checks while the CDP smoke uses Node 22's built-in WebSocket client and a locally installed browser.
+
+The hosted deployment model is documented in [`../docs/site-deployment.md`](../docs/site-deployment.md). Pull-request validation is read-only; a failing portal-drift check uploads the regenerated `index.html` and patch as an artifact instead of granting PR code write credentials. GitHub Pages deploys only from a trusted `main` commit after the tracked standalone file is reproduced exactly.
 
 The tracked source is organized as follows:
 
@@ -33,7 +37,8 @@ The tracked source is organized as follows:
 - `scripts/generate-content.mjs` — canonical Markdown and asset indexing
 - `scripts/build-standalone.mjs` — single-file bundling
 - `scripts/validate-build.mjs` — standalone artifact checks
-- `scripts/test-interactions.mjs` — direct-open interaction checks
+- `scripts/test-interactions.mjs` — JSDOM interaction checks
+- `scripts/test-browser-smoke.mjs` — real Chrome/Chromium direct-file, keyboard, Mermaid, narrow-screen, and runtime-error smoke
 - `scripts/test-planning-model.mjs` — canonical sequencing and authority checks
 - `scripts/test-integrity.mjs` — full route, content, accessibility-semantic, search, and mobile-safeguard checks
 
