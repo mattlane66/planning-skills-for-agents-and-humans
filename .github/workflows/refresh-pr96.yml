@@ -1,0 +1,90 @@
+name: Refresh PR 96 artifacts
+
+on:
+  push:
+    branches: [qa/browser-release-smoke]
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Fix CDP Enter activation and rebuild portal
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('site/scripts/test-browser-smoke.mjs')
+          text = path.read_text(encoding='utf-8')
+          old = "    await client.call('Input.dispatchKeyEvent', { type: 'keyDown', key: 'Enter', code: 'Enter', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });\n"
+          new = """    await client.call('Input.dispatchKeyEvent', {
+                type: 'keyDown',
+                key: 'Enter',
+                code: 'Enter',
+                text: '\\r',
+                unmodifiedText: '\\r',
+                windowsVirtualKeyCode: 13,
+                nativeVirtualKeyCode: 13,
+              });
+          """
+          if old not in text:
+              raise SystemExit('expected CDP keyDown line not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
+          node --check site/scripts/test-browser-smoke.mjs
+          cd site
+          npm ci --ignore-scripts
+          npm run check
+
+      - name: Commit refreshed files through GitHub API
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64, json, pathlib, subprocess
+
+          repo = '${{ github.repository }}'
+          branch = '${{ github.ref_name }}'
+          for path, message in [
+              ('site/scripts/test-browser-smoke.mjs', 'Fix real-browser keyboard activation'),
+              ('site/index.html', 'Regenerate standalone documentation portal'),
+          ]:
+              sha = subprocess.check_output(
+                  ['gh', 'api', f'repos/{repo}/contents/{path}?ref={branch}', '--jq', '.sha'],
+                  text=True,
+              ).strip()
+              content = base64.b64encode(pathlib.Path(path).read_bytes()).decode('ascii')
+              payload = pathlib.Path('/tmp/content-update.json')
+              payload.write_text(json.dumps({
+                  'message': message,
+                  'content': content,
+                  'sha': sha,
+                  'branch': branch,
+              }), encoding='utf-8')
+              subprocess.run(
+                  ['gh', 'api', '--method', 'PUT', f'repos/{repo}/contents/{path}', '--input', str(payload)],
+                  check=True,
+                  stdout=subprocess.DEVNULL,
+              )
+          PY
