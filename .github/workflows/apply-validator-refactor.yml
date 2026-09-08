@@ -1,4 +1,4 @@
-name: Apply validator refactor
+name: Clean validator staging
 
 on:
   push:
@@ -8,71 +8,24 @@ permissions:
   contents: read
 
 jobs:
-  apply:
+  cleanup:
     if: github.actor != 'github-actions[bot]'
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 5
     steps:
-      - name: Check out repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          persist-credentials: false
-
-      - name: Reconstruct and verify refactor
-        shell: bash
-        run: |
-          set -euo pipefail
-          cat .tmp-validator-payload/part* | base64 -d > /tmp/validator-files.txz
-          tar -xJf /tmp/validator-files.txz
-          printf '%s  %s\n' \
-            c17da9e7561d1ac2015c97bd010b2400a2178af594edc24262bdc8d8053c14ea lead-user-research/scripts/validate_study.py \
-            1d72fbb881b8885ff0fc7fc9f2ee834bd13ff5caeac8af69b32805a35e5fd7e3 lead-user-research/scripts/validation_schema.py \
-            2bf490ec5dedfdfd4b8ba5dfd49df78c559017471fe103f9b3f9822180a4bf1b lead-user-research/scripts/validation_state.py \
-            c17da9e7561d1ac2015c97bd010b2400a2178af594edc24262bdc8d8053c14ea skills/lead-user-research/scripts/validate_study.py \
-            1d72fbb881b8885ff0fc7fc9f2ee834bd13ff5caeac8af69b32805a35e5fd7e3 skills/lead-user-research/scripts/validation_schema.py \
-            2bf490ec5dedfdfd4b8ba5dfd49df78c559017471fe103f9b3f9822180a4bf1b skills/lead-user-research/scripts/validation_state.py | sha256sum --check
-          python -m unittest tests.test_lead_user_validation_schema
-          python -m unittest tests.test_lead_user_hybrid_safeguards
-          python lead-user-research/scripts/validate_study.py lead-user-research/examples/reference-study
-
-      - name: Commit verified refactor through GitHub API
+      - name: Remove temporary payload files
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          import base64, json, pathlib, subprocess
-          repo = '${{ github.repository }}'
-          branch = '${{ github.ref_name }}'
-          paths = [
-              'lead-user-research/scripts/validate_study.py',
-              'lead-user-research/scripts/validation_schema.py',
-              'lead-user-research/scripts/validation_state.py',
-              'skills/lead-user-research/scripts/validate_study.py',
-              'skills/lead-user-research/scripts/validation_schema.py',
-              'skills/lead-user-research/scripts/validation_state.py',
-              'tests/test_lead_user_hybrid_safeguards.py',
-              'tests/test_lead_user_validation_schema.py',
-          ]
-          for path in paths:
-              found = subprocess.run(
-                  ['gh', 'api', f'repos/{repo}/contents/{path}?ref={branch}', '--jq', '.sha'],
-                  text=True, capture_output=True,
-              )
-              payload = {
-                  'message': 'Refactor Lead User validator schema and state checks',
-                  'content': base64.b64encode(pathlib.Path(path).read_bytes()).decode('ascii'),
-                  'branch': branch,
-              }
-              if found.returncode == 0 and found.stdout.strip():
-                  payload['sha'] = found.stdout.strip()
-              tmp = pathlib.Path('/tmp/content-update.json')
-              tmp.write_text(json.dumps(payload), encoding='utf-8')
-              subprocess.run(
-                  ['gh', 'api', '--method', 'PUT', f'repos/{repo}/contents/{path}', '--input', str(tmp)],
-                  check=True, stdout=subprocess.DEVNULL,
-              )
-          PY
+          for i in 00 01 02 03 04 05 06 07 08; do
+            path=".tmp-validator-payload/part${i}"
+            sha="$(gh api "repos/${{ github.repository }}/contents/${path}?ref=${{ github.ref_name }}" --jq .sha)"
+            gh api --method DELETE "repos/${{ github.repository }}/contents/${path}" \
+              -f message="Remove temporary validator payload" \
+              -f sha="$sha" \
+              -f branch="${{ github.ref_name }}" >/dev/null
+          done
