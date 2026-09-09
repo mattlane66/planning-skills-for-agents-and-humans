@@ -1,0 +1,162 @@
+version: 1
+purpose: >-
+  Machine-readable definitions for promotion-gate tokens, stable ID namespaces,
+  and structured execution-graph integrity. This file defines existing planning
+  semantics; it does not add new promotion gates or product-planning rules.
+
+gate_source: .agent-orchestration.yaml#hard_promotion_gates
+gate_definitions:
+  accepted_requirements:
+    kind: artifact_state
+    meaning: Requirements or criteria are explicitly Accepted planning material.
+  accepted_appetite:
+    kind: artifact_state
+    meaning: The fixed time or scope budget and cut line are explicitly Accepted.
+  decision_ready_fit:
+    kind: artifact_state
+    meaning: Comparative fit work is sufficient to support the human shape-selection decision.
+  explicit_human_selection:
+    kind: human_decision
+    meaning: A human explicitly selected the solution direction.
+  selected_direction:
+    kind: artifact_state
+    meaning: The human-selected solution direction is recorded as selected planning intent.
+  explicit_candidate_reconciliation:
+    kind: human_decision
+    meaning: Candidate evidence being promoted into selected design has been explicitly reconciled against selected intent.
+  accepted_selected_design_breadboard_or_equally_clear_behavior_boundary:
+    kind: artifact_state
+    meaning: The selected behavior boundary is accepted in a selected-design breadboard or an equally clear accepted representation.
+  explicit_human_slice_selection:
+    kind: human_decision
+    meaning: A human explicitly selected the implementation slice.
+  active_scope:
+    kind: scope_state
+    meaning: Exactly one human-selected implementation boundary is currently authorized for build work.
+  context_packet:
+    kind: build_input
+    meaning: The compact implementation context packet for the active scope exists.
+  execution_contract:
+    kind: build_input
+    meaning: The execution contract for the active scope exists.
+
+id_namespaces:
+  planning:
+    source: docs/stable-ids.md
+    defaults:
+      WF:
+        meaning: local Wayfinding ticket within one map
+        example: WF-003
+        pattern: '^WF-[0-9]{3,}$'
+      R:
+        meaning: requirement or criterion
+        example: R2
+        pattern: '^R[0-9]+(?:\.[0-9]+)*$'
+      P:
+        meaning: place
+        example: P1
+        pattern: '^P[0-9]+(?:\.[0-9]+)*$'
+      U:
+        meaning: user-facing affordance
+        example: U4
+        pattern: '^U[0-9]+(?:\.[0-9]+)*$'
+      N:
+        meaning: non-UI affordance or product-relevant hidden behavior
+        example: N3
+        pattern: '^N[0-9]+(?:\.[0-9]+)*$'
+      S:
+        meaning: store or state
+        example: S2
+        pattern: '^S[0-9]+(?:\.[0-9]+)*$'
+      ST:
+        meaning: state
+        example: ST1
+        pattern: '^ST[0-9]+(?:\.[0-9]+)*$'
+      TR:
+        meaning: transition
+        example: TR4
+        pattern: '^TR[0-9]+(?:\.[0-9]+)*$'
+      C:
+        meaning: interface contract
+        example: C2
+        pattern: '^C[0-9]+(?:\.[0-9]+)*$'
+      RUN:
+        meaning: example run
+        example: RUN1
+        pattern: '^RUN[0-9]+(?:\.[0-9]+)*$'
+      E:
+        meaning: edge case
+        example: E3
+        pattern: '^E[0-9]+(?:\.[0-9]+)*$'
+      SP:
+        meaning: spike
+        example: SP1
+        pattern: '^SP[0-9]+(?:\.[0-9]+)*$'
+      T:
+        meaning: task
+        example: T4
+        pattern: '^T[0-9]+(?:\.[0-9]+)*$'
+      TG:
+        meaning: task group
+        example: TG2
+        pattern: '^TG[0-9]+(?:\.[0-9]+)*$'
+      CUT:
+        meaning: explicit scope cut
+        example: CUT1
+        pattern: '^CUT[0-9]+(?:\.[0-9]+)*$'
+      OBS:
+        meaning: visual observation
+        example: OBS2
+        pattern: '^OBS[0-9]+(?:\.[0-9]+)*$'
+      D:
+        meaning: proposed reconciliation delta
+        example: D3
+        pattern: '^D[0-9]+(?:\.[0-9]+)*$'
+      V:
+        meaning: vertical slice
+        example: V1
+        pattern: '^V[0-9]+(?:\.[0-9]+)*$'
+
+  lead_user_study:
+    source: lead-user-research/references/state-contract.md
+    defaults:
+      SRC: { meaning: source record, example: SRC1, pattern: '^SRC[0-9]+$' }
+      LU: { meaning: Lead User need episode, example: LU1, pattern: '^LU[0-9]+$' }
+      F: { meaning: finding, example: F1, pattern: '^F[0-9]+$' }
+      N: { meaning: need, example: N1, pattern: '^N[0-9]+$' }
+      SF: { meaning: shaping frame, example: SF1, pattern: '^SF[0-9]+$' }
+      M: { meaning: concept or mechanism, example: M1, pattern: '^M[0-9]+$' }
+      H: { meaning: falsification-ledger hypothesis, example: H1, pattern: '^H[0-9]+$' }
+      O: { meaning: observability record, example: O1, pattern: '^O[0-9]+$' }
+      AR: { meaning: material AI analysis run, example: AR1, pattern: '^AR[0-9]+$' }
+      L: { meaning: lineage or independence assessment, example: L1, pattern: '^L[0-9]+$' }
+      Q: { meaning: search-log row, example: Q1, pattern: '^Q[0-9]+$' }
+      PY: { meaning: pyramiding chain, example: PY1, pattern: '^PY[0-9]+$' }
+      CH: { meaning: material change-log record, example: CH1, pattern: '^CH[0-9]+$' }
+      PF: { meaning: post-freeze evidence record, example: PF1, pattern: '^PF[0-9]+$' }
+      A: { meaning: decision action, example: A1, pattern: '^A[0-9]+$' }
+      C: { meaning: candidate, example: C1, pattern: '^C[0-9]+$' }
+      T: { meaning: trend, example: T1, pattern: '^T[0-9]+$' }
+      E: { meaning: atomic evidence, example: E001, pattern: '^E[0-9]+$' }
+      SP: { meaning: solution principle, example: SP1, pattern: '^SP[0-9]+$' }
+      R: { meaning: fit criterion or requirement, example: R1, pattern: '^R[0-9]+$' }
+    collisions_with_planning: [N, C, T, E, SP, R]
+    collision_rule: qualify_research_refs_with_study_path_or_research_label_when_namespaces_mix
+
+execution_graph:
+  source: templates/execution-graph.yaml
+  node_namespace: planning
+  node_prefix: TG
+  runtime_states: [active, ready, blocked, done, cut]
+  rules:
+    - node_ids_are_namespace_local_and_unique
+    - dependencies_reference_existing_nodes
+    - dependency_graph_is_acyclic
+    - dependency_edges_match_declared_dependencies
+    - runtime_state_refs_reference_existing_nodes
+    - runtime_states_are_disjoint
+    - active_count_does_not_exceed_max_active_groups
+
+orchestration_reference_groups:
+  - artifacts
+  - hooks
