@@ -42,6 +42,10 @@ class SkillBehaviorEvalRunnerTests(unittest.TestCase):
             self.assertEqual(report["summary"]["total"], report["summary"]["passed"])
             self.assertEqual("unit-test", report["runtime"])
             self.assertEqual("fixture-v1", report["protocol"])
+            self.assertIn(
+                "selected-design-breadboarding-reconciles-candidate-evidence",
+                report["staged_human_decision_cases"],
+            )
 
     def test_command_adapter_failure_is_reported(self):
         completed = subprocess.run(
@@ -123,6 +127,7 @@ assert not pathlib.Path("evals").exists()
 assert not pathlib.Path("tests").exists()
 assert not pathlib.Path("docs/skill-behavior-evals.md").exists()
 assert not pathlib.Path("docs/claude-design-skill-tests.md").exists()
+assert pathlib.Path("CLAUDE.md").is_file()
 assert pathlib.Path("skills/breadboarding/SKILL.md").is_file()
 assert pathlib.Path("templates/breadboard.md").is_file()
 
@@ -163,6 +168,95 @@ print(json.dumps({
             report = json.loads(report_path.read_text(encoding="utf-8"))
             self.assertEqual("blind-command-v1", report["protocol"])
             self.assertEqual({"passed": 1, "failed": 0, "total": 1}, report["summary"])
+            self.assertEqual([], report["staged_human_decision_cases"])
+
+    def test_command_adapter_receives_trusted_human_decision_without_hidden_expectations(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            temp_root = pathlib.Path(tmp)
+            cases_path = temp_root / "cases.json"
+            decisions_path = temp_root / "decisions.json"
+            report_path = temp_root / "report.json"
+            adapter_path = temp_root / "adapter.py"
+            cases_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "cases": [
+                            {
+                                "id": "staged-selection",
+                                "prompt": "Reconcile the selected direction into selected-design behavior.",
+                                "expected_skill": "breadboarding",
+                                "expected_artifact_type": "breadboard",
+                                "expected_gate": "breadboard-acceptance",
+                                "implementation_allowed": False,
+                                "required_evidence": ["explicit human selection"],
+                                "forbidden_evidence": ["implicit promotion"],
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            decisions_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": 1,
+                        "decisions": {
+                            "staged-selection": [
+                                "Human decision: Shape B is explicitly selected after review."
+                            ]
+                        },
+                    }
+                ),
+                encoding="utf-8",
+            )
+            adapter_path.write_text(
+                """
+import json
+import pathlib
+import sys
+
+payload = json.load(sys.stdin)
+assert set(payload) == {"schema_version", "id", "prompt", "staged_human_decisions"}
+assert payload["staged_human_decisions"] == ["Human decision: Shape B is explicitly selected after review."]
+assert "expected_skill" not in payload
+assert "expected_gate" not in payload
+assert "required_evidence" not in payload
+assert not pathlib.Path("evals").exists()
+print(json.dumps({
+    "selected_skill": "breadboarding",
+    "artifact_type": "breadboard",
+    "stopped_at_gate": "breadboard-acceptance",
+    "implementation_attempted": False,
+    "evidence": ["explicit human selection"],
+    "model_output": "Used only the supplied human selection fixture.",
+}))
+""".lstrip(),
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNNER),
+                    "--cases",
+                    str(cases_path),
+                    "--human-decisions",
+                    str(decisions_path),
+                    "--adapter",
+                    "command",
+                    "--adapter-command",
+                    f"{sys.executable} {adapter_path}",
+                    "--report",
+                    str(report_path),
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(0, completed.returncode, completed.stderr)
+            report = json.loads(report_path.read_text(encoding="utf-8"))
+            self.assertEqual(["staged-selection"], report["staged_human_decision_cases"])
 
     def test_command_adapter_can_retain_case_workspace(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -207,6 +301,28 @@ print(json.dumps({
             )
             self.assertTrue((artifacts / "framing-preserves-evidence-and-stops" / "adapter-note.txt").is_file())
             self.assertNotEqual(2, completed.returncode, completed.stderr)
+
+    def test_invalid_staged_human_decisions_are_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            decisions_path = pathlib.Path(tmp) / "decisions.json"
+            decisions_path.write_text(
+                json.dumps({"schema_version": 1, "decisions": {"case": []}}),
+                encoding="utf-8",
+            )
+            completed = subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNNER),
+                    "--human-decisions",
+                    str(decisions_path),
+                ],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+                check=False,
+            )
+            self.assertEqual(2, completed.returncode)
+            self.assertIn("non-empty list of strings", completed.stderr)
 
     def test_unknown_case_filter_is_rejected(self):
         completed = subprocess.run(
