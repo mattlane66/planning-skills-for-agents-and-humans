@@ -70,12 +70,22 @@ jobs:
           python3 scripts/release.py assets
           (cd dist/release && sha256sum --check SHA256SUMS)
 
+      - name: Exercise fresh install surfaces
+        run: |
+          set -euo pipefail
+          python3 scripts/check-release-install.py \
+            --assets-dir dist/release \
+            --release-tag "$RELEASE_TAG" \
+            --release-sha "$RELEASE_SHA" \
+            --report release-install-report.json
+
       - name: Upload validated release payload
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
           name: release-${{ inputs.release_tag || github.ref_name }}
           path: |
             release-notes.md
+            release-install-report.json
             dist/release/
           if-no-files-found: error
           retention-days: 7
