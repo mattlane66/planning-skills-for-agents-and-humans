@@ -2,7 +2,7 @@
 
 Use this guide when you are new to the repository and want the smallest planning move that will help.
 
-> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a focused subset; Codex users can use the equivalent natural-language prompts.
+**First make the skills available to your agent.** See [Install Planning Skills, then use them in your product repo](./install-and-use.md). Installation and invocation are separate: Claude Code's built plugin carries namespaced slash commands; Codex, uploaded Claude skills, and native Gemini Agent Skills can always invoke the same canonical skills by name in natural language. Gemini slash commands work only when the repo-local `.gemini/commands/` wrappers are actually present in the active project.
 
 Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
 

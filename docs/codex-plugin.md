@@ -19,6 +19,7 @@ The Codex plugin includes these skills:
 - `breadboard-reflection`
 - `kickoff-doc`
 - `feed-planning-context`
+- `lead-user-research`
 
 The repo also includes tool-neutral orchestration and harnessing docs:
 
@@ -55,26 +56,22 @@ That marketplace points Codex at this repository as a local plugin source.
 
 ## Install from GitHub
 
-After cloning or referencing the repository, add it as a Codex plugin marketplace source:
+### Codex CLI
+
+Add this repository as a marketplace source, then install the plugin explicitly:
 
 ```bash
 codex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main
+codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace
 ```
 
-Then open Codex and inspect available plugins:
+Start a new Codex task after installation so the skill inventory is rediscovered. You can also open `/plugins` inside Codex to inspect the installed marketplace and plugin. Then open the **product repository** where planning artifacts and implementation live and invoke the skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.
 
-```bash
-codex
-/plugins
-```
+### Codex app / managed workspace
 
-Look for:
+Eligible workspace admins can import this repository directly as a GitHub plugin marketplace from **Workspace settings → Plugins → Add → Import marketplace**. Use the repository URL as the source and leave **Path** blank because `.agents/plugins/marketplace.json` is at the repository root. After the plugin is installed for the relevant role or user, select it from **Sources → Use plugins** in a supported Codex task view.
 
-```text
-Planning Skills for Agents and Humans
-```
-
-Open the product repository where the planning artifacts and implementation live, then invoke the installed skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.
+The CLI marketplace command and managed-workspace import are two installation surfaces for the same packaged method; neither changes the product repository's own authority.
 
 ## Use
 

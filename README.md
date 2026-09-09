@@ -16,6 +16,21 @@ The portal includes the workflow explorer, searchable skills catalog, full guide
 
 If you would rather watch the method operate than read its parts, follow [How Planning Skills works in practice](./docs/how-it-works-in-practice.md). It takes one plain grocery-list idea from messy notes and a sketch through `/plan`, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, bounded build context, implementation, and reflection. It also shows when **not** to invoke an advanced skill. The walkthrough is illustrative, not a required sequence.
 
+## Get Planning Skills into your agent
+
+Do not paste this entire repository into every prompt. **Make the reusable skills available to your agent once, then do the real planning inside the product repository you are building.** Project-specific artifacts normally live under `planning/` beside the code they govern.
+
+The shortest current paths are:
+
+| Environment | Install / enable | Invoke in the product repo |
+| --- | --- | --- |
+| Claude Code | Build the self-contained plugin with `bash scripts/build-claude-plugin.sh`, then start Claude Code with `--plugin-dir .../dist/claude-code-plugin`. | `/planning-skills:plan` and the other namespaced plugin commands. |
+| Codex CLI | `codex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main`, then `codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace`. | Ask for `planning-router`, `shaping`, or another named skill in natural language. |
+| Gemini CLI | `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, then `/skills reload` if Gemini is already running. | Ask for the named skill in natural language. Repo-local `.gemini/commands/` wrappers are optional and are not installed by the skill manager. |
+| Claude / Claude Design | Build `dist/claude-skills/` with `python3 scripts/build_claude_skills.py`, upload the ZIPs under **Customize → Skills**, and enable them. | Ask Claude to use the named skill. |
+
+Codex workspaces can also import this repository as a GitHub plugin marketplace; other agents can consume the canonical `SKILL.md` files directly. See **[Install Planning Skills, then use them in your product repo](./docs/install-and-use.md)** for the complete setup and the distinction between installation, invocation, and project context.
+
 ## When should I use these skills?
 
 You do not have to begin your idea inside this repo.
@@ -164,7 +179,7 @@ It is designed to work across ChatGPT, Claude, Gemini, Codex, Cursor, and other 
 
 Lead User Research is an optional upstream evidence lane, not a mandatory stage before framing. Use it when the opportunity itself depends on future-facing trend and advanced-user evidence. After completion, its implications require explicit human acceptance before they feed `framing-doc`; the research record remains cited evidence rather than automatically becoming product-planning truth.
 
-Claude Code and Gemini CLI provide `/lead-user` to start or resume the smallest valid phase, plus `/lead-user-frame`, `/lead-user-discover`, `/lead-user-evidence`, `/lead-user-freeze`, `/lead-user-interpret`, `/lead-user-shape`, `/lead-user-decide`, and `/lead-user-deliver` for explicit phase control. Codex and other skill-capable agents invoke the same canonical skill and name the phase in natural language. Every phase ends by recommending exactly one next move, looping back when sufficiency fails and skipping concept generation when no need passes the gate.
+Claude Code provides namespaced Lead User command wrappers. Gemini exposes the same repo-local command aliases only when `.gemini/commands/` is present in the active project; a native Gemini skill install uses natural-language phase requests instead. Codex and other skill-capable agents likewise invoke the canonical skill and name the phase in natural language. Every phase ends by recommending exactly one next move, looping back when sufficiency fails and skipping concept generation when no need passes the gate.
 
 ## The core workflow
 
@@ -306,10 +321,10 @@ The method is tool-agnostic. Invocation differs by environment:
 
 | Environment | Recommended surface |
 | --- | --- |
-| Claude Code | Plugin skills plus `.claude/commands/` wrappers |
-| Codex | Codex plugin, `AGENTS.md`, and prompt recipes |
-| Gemini CLI | `GEMINI.md` plus `.gemini/commands/` wrappers |
-| Claude / Claude Design | Uploadable canonical skills; request collaborative or gated mode in natural language |
+| Claude Code | Self-contained plugin skills plus namespaced command wrappers |
+| Codex | Codex marketplace/plugin skills plus natural-language invocation |
+| Gemini CLI | Native Agent Skills; repo-local `.gemini/commands/` are optional convenience wrappers |
+| Claude / Claude Design | Uploadable canonical skills plus natural-language invocation |
 | MCP-compatible clients | The optional server under `mcp-server/` |
 | Cursor and other agents | `AGENTS.md`, canonical `SKILL.md` files, and templates |
 
@@ -334,13 +349,26 @@ See [Claude Code plugin guidance](./docs/claude-code-plugin.md) and [slash comma
 
 ### Codex
 
-Use the packaged skills through [`.codex-plugin/plugin.json`](./.codex-plugin/plugin.json), with `AGENTS.md` as the repo-level instruction surface.
+For Codex CLI, add this repository as a marketplace and install the plugin:
+
+```bash
+codex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main
+codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace
+```
+
+Start a new task in the product repository, then invoke skills by name in natural language. In managed workspaces, an eligible admin can instead import the repository from **Workspace settings → Plugins → Add → Import marketplace** and users can select the installed plugin from **Sources → Use plugins** in supported Codex task views.
 
 See [Codex plugin installation](./docs/codex-plugin.md) and [Codex prompt recipes](./docs/codex-usage.md).
 
 ### Gemini CLI
 
-For work on this Planning Skills repository, open it directly so `GEMINI.md` imports the shared agent instructions. For real product work, copy or symlink the needed skill folders into the product repository, or use the MCP adapter. The repo-local TOML commands are adapter examples: if you copy them, update their `@{...}` includes to the installed skill and support-file paths. Keep the product repository's own instructions authoritative.
+For real product work, prefer Gemini CLI's native Agent Skills manager:
+
+```bash
+gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans
+```
+
+Then open the product repository and invoke the installed skills by name. The `.gemini/commands/` files in this repository are repo-local convenience wrappers; native skill installation does not copy them into another project. Use those slash commands only when they are actually present, or intentionally copy/adapt them and verify their `@{...}` includes. Keep the product repository's own instructions authoritative.
 
 See [Gemini CLI usage](./docs/gemini-usage.md) and the [Gemini/MCP integration guide](./integrations/gemini/README.md).
 
