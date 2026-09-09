@@ -1,0 +1,79 @@
+name: Update usage model contract test
+
+on:
+  push:
+    branches:
+      - docs/usage-install-audit
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.head_commit.message == 'Update usage model contract test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up minimum supported Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "20.19.0"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Update canonical usage assertions
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          p = Path('site/scripts/test-planning-model.mjs')
+          text = p.read_text(encoding='utf-8')
+
+          old = "assert.match(invocationMatrix, /Codex \\| Codex plugin plus natural-language prompts \\| No Claude-style slash commands/i);\n"
+          new = """assert.match(invocationMatrix, /\\| Codex CLI \\| Codex marketplace\\/plugin plus natural-language prompts \\| No Claude-style slash commands \\|/i);\nassert.match(invocationMatrix, /\\| Codex app \\/ managed workspace \\| Imported or directory-installed plugin selected through/i);\nassert.match(invocationMatrix, /\\| Gemini CLI \\| Native Agent Skills \\| Only if `\\.gemini\\/commands\\/` is present in the active project \\|/i);\nassert.match(invocationMatrix, /installed Claude Code plugin[\\s\\S]*prefix them with `\\/planning-skills:`/i);\nassert.match(invocationMatrix, /native Gemini Agent Skills install[\\s\\S]*does not copy those commands into another project/i);\n"""
+          if old not in text:
+              raise SystemExit('stale invocation-matrix assertion not found')
+          text = text.replace(old, new, 1)
+
+          # Add the new canonical install guide to the source-backed contract checks.
+          old = """  invocationMatrix,\n  codexPluginGuide,\n  claudeSlashGuide,\n"""
+          new = """  invocationMatrix,\n  installGuide,\n  codexPluginGuide,\n  claudeSlashGuide,\n"""
+          if old not in text:
+              raise SystemExit('source variable block not found')
+          text = text.replace(old, new, 1)
+
+          old = """  readCanonical('docs/agent-invocation-matrix.md'),\n  readCanonical('docs/codex-plugin.md'),\n  readCanonical('docs/claude-slash-commands.md'),\n"""
+          new = """  readCanonical('docs/agent-invocation-matrix.md'),\n  readCanonical('docs/install-and-use.md'),\n  readCanonical('docs/codex-plugin.md'),\n  readCanonical('docs/claude-slash-commands.md'),\n"""
+          if old not in text:
+              raise SystemExit('source promise block not found')
+          text = text.replace(old, new, 1)
+
+          anchor = "assert.match(codexPluginGuide, /Install from GitHub/i);\n"
+          checks = """assert.match(installGuide, /Make the method available to your agent once/i);\nassert.match(installGuide, /Do \\*\\*not\\*\\* paste this entire repository into every prompt/i);\nassert.match(installGuide, /product repository remains authoritative/i);\nassert.match(installGuide, /gemini skills install https:\\/\\/github\\.com\\/mattlane66\\/planning-skills-for-agents-and-humans/i);\nassert.match(installGuide, /codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace/i);\n"""
+          if anchor not in text:
+              raise SystemExit('Codex guide assertion anchor not found')
+          text = text.replace(anchor, checks + anchor, 1)
+
+          p.write_text(text, encoding='utf-8')
+          PY
+
+      - name: Run portal model test on minimum Node
+        working-directory: site
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          npm run test:model
+
+      - name: Commit test update
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add site/scripts/test-planning-model.mjs
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update runtime usage contract assertions"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
