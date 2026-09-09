@@ -55,6 +55,8 @@ class LeadUserHybridSafeguardTests(unittest.TestCase):
             Path("prompts/phase-g-decide.md"),
             Path("references/state-contract.md"),
             Path("scripts/validate_study.py"),
+            Path("scripts/validation_schema.py"),
+            Path("scripts/validation_state.py"),
             Path("examples/reference-study/needs.json"),
             Path("study-templates/research-to-frame-handoff.md"),
         ):
