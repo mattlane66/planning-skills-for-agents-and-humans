@@ -8,15 +8,20 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 
 | Environment | Recommended invocation | Project commands | Notes |
 | --- | --- | --- | --- |
-| Claude Code | Plugin skills plus `.claude/commands/` | Yes | `/shape` is the broad collaborative front door; `/lead-user` starts or resumes the next valid research phase. Focused wrappers constrain the current move, not the whole exploration order. |
-| Codex | Codex plugin plus natural-language prompts | No Claude-style slash commands | Use collaborative or gated prompt recipes; the active product repository's own `AGENTS.md` remains authoritative. |
-| Gemini CLI | Skill folders plus adapted `.gemini/commands/` | Yes, using Gemini TOML commands | Supports `/shape`, `/spike`, and `/breadboard` in addition to focused shaping/gate commands. Preserve product instructions and adapt repo-local includes when installed paths differ. |
-| Claude / Claude Design | Uploaded canonical skills plus natural-language mode requests | No repo-local command wrappers | Start R-first, S-first, evidence-first, or uncertainty-first; use Claude Code to preserve repo-authoritative artifacts when needed. |
-| MCP-compatible clients | Tools exposed by `mcp-server/` | Client-dependent | The server reads canonical root skills and artifact templates at runtime; profile behavior comes from the canonical instructions/orchestration contract. |
-| Cursor and other agents | `AGENTS.md`, root `SKILL.md` files, and templates | Tool-dependent | Point the agent explicitly at the relevant canonical skill and profile. |
+| Claude Code | Built Planning Skills plugin | Yes | The self-contained plugin carries both canonical skills and namespaced command wrappers such as `/planning-skills:plan`. |
+| Codex CLI | Codex marketplace/plugin plus natural-language prompts | No Claude-style slash commands | Install the marketplace/plugin once, then invoke named skills from the product repository. |
+| Codex app / managed workspace | Imported or directory-installed plugin selected through **Sources → Use plugins** | Client-dependent | Workspace availability and installation policy apply; invoke the included skills by name. |
+| Gemini CLI | Native Agent Skills | Only if `.gemini/commands/` is present in the active project | `gemini skills install` installs/discovers skills, not this repo's project-local TOML command wrappers. Natural-language skill invocation is the portable default. |
+| Claude / Claude Design | Uploaded canonical skills plus natural-language requests | No repo-local command wrappers | Upload generated skill ZIPs and enable them; repository-authoritative changes should be written back through a repo-aware agent. |
+| MCP-compatible clients | Tools exposed by `mcp-server/` | Client-dependent | The server reads canonical root skills and artifact templates at runtime. |
+| Cursor and other agents | Canonical `SKILL.md` files, local instructions, and templates | Tool-dependent | Point the agent explicitly at the relevant skill and profile. |
 | Plain Markdown | Read the relevant root `SKILL.md` | No | Portable fallback with no plugin dependency. |
 
 ## Workflow mapping
+
+> **Claude column:** the table shows the short wrapper names. With the installed Claude Code plugin, prefix them with `/planning-skills:` (`/plan` → `/planning-skills:plan`, `/shape` → `/planning-skills:shape`).
+>
+> **Gemini column:** the slash commands below refer to this repository's `.gemini/commands/` wrappers. A native Gemini Agent Skills install by itself does not copy those commands into another project; use the Codex/plain-prompt wording unless you intentionally install/adapt the wrappers.
 
 | Planning move | Canonical skill or artifact | Claude | Gemini | Codex and plain prompt |
 | --- | --- | --- | --- | --- |
@@ -53,10 +58,10 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 
 ## Profile mapping
 
-| Profile | Claude / Gemini | Codex / other agents |
+| Profile | Claude Code / Gemini with project wrappers | Native Gemini / Codex / other agents |
 | --- | --- | --- |
-| Collaborative | Invoke `/shape` or canonical `shaping` and state collaborative mode; focused commands may be used in any useful order. | “Use collaborative shaping. Start from what is already concrete and keep Working material separate from Accepted intent.” |
-| Gated / orchestrated | Invoke `/shape` and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |
+| Collaborative | Invoke the shaping wrapper and state collaborative mode; focused wrappers may be used in any useful order. | “Use the shaping skill in collaborative mode. Start from what is already concrete and keep Working material separate from Accepted intent.” |
+| Gated / orchestrated | Invoke the shaping wrapper and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |
 
 Hard promotion gates are identical across profiles even when exploration order differs.
 

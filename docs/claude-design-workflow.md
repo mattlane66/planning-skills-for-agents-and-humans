@@ -39,7 +39,7 @@ The uploadable canonical skills are:
 - `feed-planning-context`
 - `breadboard-reflection`
 
-Claude Code also provides shorter command wrappers such as `/plan`, `/frame`, `/shape`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/spike`, `/select-shape`, `/breadboard`, and `/check-drift`. These wrappers expose focused moves within the canonical skills; they are not separate uploaded Claude skills.
+This repository provides short Claude Code wrappers such as `/plan`, `/frame`, `/shape`, `/criteria`, `/appetite`, `/sketch-shapes`, `/fit-check`, `/spike`, `/select-shape`, `/breadboard`, and `/check-drift`. Inside this repository those names are unqualified; with the installed Planning Skills plugin they are namespaced as `/planning-skills:<name>`. These wrappers expose focused moves within the canonical skills; they are not separate uploaded Claude skills.
 
 In Claude Design, request the corresponding canonical skill and mode in plain language.
 

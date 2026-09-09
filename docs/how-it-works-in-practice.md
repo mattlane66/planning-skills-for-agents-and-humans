@@ -12,7 +12,7 @@ The idea does not begin in Planning Skills.
 
 Maybe you have a note from a conversation with your partner, a few bullets in Slack, a quick Figma sketch, and a half-formed thought that this should be a tiny web page. Keep working there while the idea is cheap to change.
 
-When it becomes important enough to build deliberately, open the **product repository** in the agent you use for code. Planning Skills should already be installed, linked, uploaded, or otherwise available to that agent.
+When it becomes important enough to build deliberately, open the **product repository** in the agent you use for code. Planning Skills should already be installed, linked, uploaded, or otherwise available to that agent; see [Install Planning Skills, then use them in your product repo](./install-and-use.md).
 
 In Claude Code, start with:
 
@@ -20,7 +20,7 @@ In Claude Code, start with:
 /planning-skills:plan
 ```
 
-In Gemini, use `/plan`. In Codex, Claude, Cursor, or another agent, use the portable form:
+If `.gemini/commands/` is actually installed in the active Gemini project, `/plan` is the equivalent shortcut. A native Gemini skill install does not install those wrappers, so Gemini, Codex, Claude, Cursor, and other agents can always use the portable form:
 
 ```text
 Use the planning-router skill on these notes, sketch, prototype, and relevant code. Recommend exactly one smallest useful next move, including no planning skill if appropriate.

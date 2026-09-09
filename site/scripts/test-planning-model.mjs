@@ -27,6 +27,7 @@ const [
   contextSource,
   readmeSource,
   invocationMatrix,
+  installGuide,
   codexPluginGuide,
   claudeSlashGuide,
   exampleShaping,
@@ -40,6 +41,7 @@ const [
   readCanonical('feed-planning-context/SKILL.md'),
   readCanonical('README.md'),
   readCanonical('docs/agent-invocation-matrix.md'),
+  readCanonical('docs/install-and-use.md'),
   readCanonical('docs/codex-plugin.md'),
   readCanonical('docs/claude-slash-commands.md'),
   readCanonical('examples/simple-grocery-list/02-shaping.md'),
@@ -54,7 +56,16 @@ assert.match(dumplinkSource, /project is the discrete unit of work Dumplink inge
 assert.match(kickoffSource, /Start with the accepted frame, selected shape, accepted breadboard, selected slice/i);
 assert.match(kickoffSource, /Do not organize by build sequence/i);
 assert.match(contextSource, /kickoff document, for orientation only/i);
-assert.match(invocationMatrix, /Codex \| Codex plugin plus natural-language prompts \| No Claude-style slash commands/i);
+assert.match(invocationMatrix, /\| Codex CLI \| Codex marketplace\/plugin plus natural-language prompts \| No Claude-style slash commands \|/i);
+assert.match(invocationMatrix, /\| Codex app \/ managed workspace \| Imported or directory-installed plugin selected through/i);
+assert.match(invocationMatrix, /\| Gemini CLI \| Native Agent Skills \| Only if `\.gemini\/commands\/` is present in the active project \|/i);
+assert.match(invocationMatrix, /installed Claude Code plugin[\s\S]*prefix them with `\/planning-skills:`/i);
+assert.match(invocationMatrix, /native Gemini Agent Skills install[\s\S]*does not copy those commands into another project/i);
+assert.match(installGuide, /Make the method available to your agent once/i);
+assert.match(installGuide, /Do \*\*not\*\* paste this entire repository into every prompt/i);
+assert.match(installGuide, /product repository remains authoritative/i);
+assert.match(installGuide, /gemini skills install https:\/\/github\.com\/mattlane66\/planning-skills-for-agents-and-humans/i);
+assert.match(installGuide, /codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace/i);
 assert.match(codexPluginGuide, /Install from GitHub/i);
 assert.match(codexPluginGuide, /invoke the installed skills there/i);
 assert.match(claudeSlashGuide, /namespaces entries as `\/planning-skills:<name>`/i);

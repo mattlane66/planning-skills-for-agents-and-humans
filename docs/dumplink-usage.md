@@ -19,22 +19,24 @@ If no project is selected or its boundary is missing, return to framing, shaping
 
 ## Command forms
 
-Claude Code:
+Claude Code with the installed plugin:
+
+```text
+/planning-skills:dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
+```
+
+When the repo-local `.gemini/commands/` wrappers are present, Gemini CLI can use:
 
 ```text
 /dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
 ```
 
-Gemini CLI:
-
-```text
-/dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
-```
+A native Gemini Agent Skills install does not install that wrapper. In that case, use the same natural-language skill request shown for Codex below.
 
 Codex prompt:
 
 ```text
-Use AGENTS.md and dumplink/SKILL.md.
+Use the installed `dumplink` skill and follow this product repository's own instructions.
 Turn this selected project into a Dumplink plan.
 Dump the work, create vertical task groups, mark risk states, map dependencies, sequence the build, define appetite-based cuts, and write acceptance checks.
 Preserve the project boundary, exclusions, outcome, and non-goals. Treat every task group as a judgeable vertical slice of the project.

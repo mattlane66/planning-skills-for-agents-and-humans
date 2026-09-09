@@ -4,7 +4,9 @@ When maintaining this repository, Gemini CLI should use `GEMINI.md` as its proje
 
 This repo includes a root `GEMINI.md` that imports `AGENTS.md`, so Gemini gets the same tool-neutral planning instructions as Claude Code, Codex, and other agents.
 
-For product work, prefer Gemini CLI's native skill management. Install from Git with `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, or link a local checkout with `gemini skills link /path/to/planning-skills-for-agents-and-humans`. Use `gemini skills list`, `enable`, `disable`, and `/skills reload` to inspect or refresh discovery. Copying folders or using the MCP adapter remains a fallback. Preserve the product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files.
+For product work, prefer Gemini CLI's native Agent Skills manager. Install from Git with `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, or link a local checkout with `gemini skills link /path/to/planning-skills-for-agents-and-humans`. Gemini recursively discovers the valid `SKILL.md` folders in this repository. Use `gemini skills list`, `enable`, `disable`, and `/skills reload` to inspect or refresh discovery. Preserve the product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files.
+
+**Native skill installation and project commands are separate.** `gemini skills install` makes the canonical skills available, but it does not copy this repository's `.gemini/commands/` files into an unrelated product repository. After native installation, the portable default is natural language such as `Use the planning-router skill...`. Use `/plan`, `/shape`, and the command table below only while working in this repository or after intentionally copying/adapting those TOML wrappers into the active project and verifying their `@{...}` includes.
 
 ## Default shaping behavior
 

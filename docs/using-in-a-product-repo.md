@@ -1,6 +1,6 @@
 # Using Planning Skills in a product repository
 
-Use this guide after installing or referencing the Planning Skills and before starting real project work.
+Use this guide after making Planning Skills available to your agent and before starting real project work. If that setup is not done yet, start with [Install Planning Skills, then use them in your product repo](./install-and-use.md).
 
 ## The basic setup
 
