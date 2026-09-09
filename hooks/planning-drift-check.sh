@@ -1,12 +1,22 @@
 #!/bin/bash
 set -euo pipefail
 
+if ! command -v jq >/dev/null 2>&1; then
+  message="Planning drift hook is unavailable because jq is not installed. Install jq before relying on this guardrail."
+  if [[ "${PLANNING_HOOK_STRICT:-0}" == "1" ]]; then
+    printf '%s\n' "$message" >&2
+    exit 2
+  fi
+  printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"Planning drift hook is unavailable because jq is not installed. Install jq before relying on this guardrail."}}'
+  exit 0
+fi
+
 payload="$(cat 2>/dev/null || true)"
 tool_name=""
 file_path=""
 command_text=""
 
-if command -v jq >/dev/null 2>&1 && [[ -n "$payload" ]]; then
+if [[ -n "$payload" ]]; then
   tool_name="$(printf '%s' "$payload" | jq -r '.tool_name // empty' 2>/dev/null || true)"
   file_path="$(printf '%s' "$payload" | jq -r '.tool_input.file_path // .tool_input.path // empty' 2>/dev/null || true)"
   command_text="$(printf '%s' "$payload" | jq -r '.tool_input.command // empty' 2>/dev/null || true)"
