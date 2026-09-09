@@ -12,6 +12,10 @@ The repository includes a self-contained documentation portal at [`site/index.ht
 
 The portal includes the workflow explorer, searchable skills catalog, full guide reader, canonical skill references and templates, and example artifact trails. Its content is generated from this repository's canonical Markdown files and works offline after download. See [`site/README.md`](./site/README.md) for browser support, rebuild, and validation commands.
 
+## See it work in practice
+
+If you would rather watch the method operate than read its parts, follow [How Planning Skills works in practice](./docs/how-it-works-in-practice.md). It takes one plain grocery-list idea from messy notes and a sketch through `/plan`, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, bounded build context, implementation, and reflection. It also shows when **not** to invoke an advanced skill. The walkthrough is illustrative, not a required sequence.
+
 ## When should I use these skills?
 
 You do not have to begin your idea inside this repo.
