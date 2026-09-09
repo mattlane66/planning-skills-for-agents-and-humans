@@ -3,20 +3,20 @@ name: Real runtime behavior evaluations
 on:
   workflow_dispatch:
     inputs:
-      adapter_command:
-        description: Command that implements the blind adapter protocol
-        required: true
-        type: string
       runtime:
-        description: Runtime name
+        description: Supported runtime to exercise
         required: true
-        type: string
+        type: choice
+        options:
+          - claude-code
+          - codex
+          - gemini-cli
       runtime_version:
-        description: Runtime version
+        description: Exact CLI package version to install
         required: true
         type: string
       model:
-        description: Model identifier
+        description: Model identifier to exercise
         required: true
         type: string
 
@@ -24,7 +24,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: behavior-evals-${{ github.ref }}
+  group: behavior-evals-${{ github.ref }}-${{ inputs.runtime }}
   cancel-in-progress: false
 
 jobs:
@@ -42,18 +42,52 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - name: Install exact runtime CLI
+        env:
+          EVAL_RUNTIME: ${{ inputs.runtime }}
+          EVAL_RUNTIME_VERSION: ${{ inputs.runtime_version }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          case "$EVAL_RUNTIME" in
+            claude-code)
+              package="@anthropic-ai/claude-code"
+              binary="claude"
+              ;;
+            codex)
+              package="@openai/codex"
+              binary="codex"
+              ;;
+            gemini-cli)
+              package="@google/gemini-cli"
+              binary="gemini"
+              ;;
+            *)
+              echo "Unsupported runtime: $EVAL_RUNTIME" >&2
+              exit 2
+              ;;
+          esac
+          npm install --global "${package}@${EVAL_RUNTIME_VERSION}"
+          "$binary" --version | tee runtime-version.txt
+          test -s runtime-version.txt
+
       - name: Run blind behavior matrix
         env:
-          ADAPTER_COMMAND: ${{ inputs.adapter_command }}
           EVAL_RUNTIME: ${{ inputs.runtime }}
           EVAL_RUNTIME_VERSION: ${{ inputs.runtime_version }}
           EVAL_MODEL: ${{ inputs.model }}
           PLANNING_SKILLS_EVAL_API_KEY: ${{ secrets.PLANNING_SKILLS_EVAL_API_KEY }}
+        shell: bash
         run: |
           set -euo pipefail
           python3 scripts/run-skill-behavior-evals.py \
             --adapter command \
-            --adapter-command "$ADAPTER_COMMAND" \
+            --adapter-command "python3 adapters/runtime_case_adapter.py" \
             --runtime "$EVAL_RUNTIME" \
             --runtime-version "$EVAL_RUNTIME_VERSION" \
             --model "$EVAL_MODEL" \
@@ -66,8 +100,9 @@ jobs:
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: behavior-eval-${{ github.run_id }}
+          name: behavior-eval-${{ inputs.runtime }}-${{ github.run_id }}
           path: |
+            runtime-version.txt
             evals/reports/runtime-report.json
             evals/artifacts/runtime/
           if-no-files-found: warn
