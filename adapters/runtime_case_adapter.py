@@ -46,7 +46,6 @@ REQUIRED_MODEL_KEYS = {
     "artifact_type",
     "stopped_at_gate",
     "implementation_attempted",
-    "evidence",
     "answer",
 }
 FENCE = re.compile(r"^```(?:json)?\s*(.*?)\s*```$", re.DOTALL | re.IGNORECASE)
@@ -111,10 +110,9 @@ Return exactly one JSON object and no Markdown fence. The object must have:
 - artifact_type: a concise canonical artifact type or direct-change
 - stopped_at_gate: the human gate where you stopped, or null when no gate applies
 - implementation_attempted: true only if you actually attempted production implementation; otherwise false
-- evidence: a list of concise phrases describing the behavior or reasoning visible in your answer
 - answer: the complete answer you would give the user
 
-Do not mention evaluator expectations, required evidence, forbidden evidence, or scoring; none are available to you.
+The evaluator derives behavioral evidence from `answer` itself. Do not add a separate evidence or scoring field, and do not mention evaluator expectations, required evidence, forbidden evidence, or scoring; none are available to you.
 """
 
 
@@ -132,6 +130,11 @@ def parse_model_payload(text: str) -> dict[str, Any]:
     missing = REQUIRED_MODEL_KEYS - set(payload)
     if missing:
         raise AdapterError("runtime final answer is missing keys: " + ", ".join(sorted(missing)))
+    unexpected = set(payload) - REQUIRED_MODEL_KEYS
+    if unexpected:
+        raise AdapterError(
+            "runtime final answer contains unsupported keys: " + ", ".join(sorted(unexpected))
+        )
 
     selected_skill = payload["selected_skill"]
     if selected_skill is not None and (
@@ -148,11 +151,6 @@ def parse_model_payload(text: str) -> dict[str, Any]:
         raise AdapterError("stopped_at_gate must be a non-empty string or null")
     if not isinstance(payload["implementation_attempted"], bool):
         raise AdapterError("implementation_attempted must be boolean")
-    evidence = payload["evidence"]
-    if not isinstance(evidence, list) or not all(
-        isinstance(item, str) and item.strip() for item in evidence
-    ):
-        raise AdapterError("evidence must be a list of non-empty strings")
     if not isinstance(payload["answer"], str) or not payload["answer"].strip():
         raise AdapterError("answer must be a non-empty string")
     return payload
@@ -420,12 +418,13 @@ def run_provider(
         "artifact_type": payload["artifact_type"],
         "stopped_at_gate": payload["stopped_at_gate"],
         "implementation_attempted": payload["implementation_attempted"],
-        "evidence": payload["evidence"],
+        "evidence": [payload["answer"]],
         "model_output": model_output,
         "runtime_metadata": {
             "provider": provider,
             "model": model,
             "runtime_version_output": version,
+            "evidence_source": "answer",
         },
     }
 
