@@ -18,6 +18,7 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "evals" / "workflow-behavior-cases.json"
+DEFAULT_HUMAN_DECISIONS = ROOT / "evals" / "staged-human-decisions.json"
 
 PUBLIC_WORKSPACE_ENTRIES = (
     ".agent-orchestration.yaml",
@@ -27,6 +28,7 @@ PUBLIC_WORKSPACE_ENTRIES = (
     ".codex-plugin",
     ".gemini",
     "AGENTS.md",
+    "CLAUDE.md",
     "GEMINI.md",
     "LICENSE",
     "docs/agent-context-feeding.md",
@@ -103,6 +105,27 @@ def load_cases(path: pathlib.Path) -> list[dict[str, Any]]:
     return cases
 
 
+def load_staged_human_decisions(path: pathlib.Path) -> dict[str, list[str]]:
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != 1:
+        raise ValueError("staged human decisions must use schema_version 1")
+    decisions = payload.get("decisions")
+    if not isinstance(decisions, dict):
+        raise ValueError("staged human decisions must contain a decisions object")
+    normalized: dict[str, list[str]] = {}
+    for case_id, entries in decisions.items():
+        if not isinstance(case_id, str) or not case_id:
+            raise ValueError("staged human decision case ids must be non-empty strings")
+        if not isinstance(entries, list) or not entries or not all(
+            isinstance(item, str) and item.strip() for item in entries
+        ):
+            raise ValueError(
+                f"staged human decisions for {case_id} must be a non-empty list of strings"
+            )
+        normalized[case_id] = [item.strip() for item in entries]
+    return normalized
+
+
 def fake_result(case: dict[str, Any]) -> dict[str, Any]:
     return {
         "selected_skill": case["expected_skill"],
@@ -155,15 +178,19 @@ def stage_public_workspace(destination: pathlib.Path) -> None:
 def external_result(
     command: str,
     case: dict[str, Any],
+    staged_human_decisions: dict[str, list[str]],
     command_base_dir: pathlib.Path,
     adapter_timeout_seconds: float,
     artifacts_dir: pathlib.Path | None,
 ) -> dict[str, Any]:
-    public_case = {
+    public_case: dict[str, Any] = {
         "schema_version": 1,
         "id": case["id"],
         "prompt": case["prompt"],
     }
+    case_decisions = staged_human_decisions.get(case["id"])
+    if case_decisions:
+        public_case["staged_human_decisions"] = list(case_decisions)
     command_args = resolve_command(command, command_base_dir)
     safe_case_id = "".join(char if char.isalnum() or char in "-_" else "-" for char in case["id"])
 
@@ -264,6 +291,8 @@ def score_case(case: dict[str, Any], result: dict[str, Any]) -> CaseScore:
 
 def build_report(
     cases_path: pathlib.Path,
+    human_decisions_path: pathlib.Path,
+    staged_human_decisions: dict[str, list[str]],
     adapter: str,
     runtime: str,
     runtime_version: str,
@@ -271,10 +300,13 @@ def build_report(
     commit_sha: str,
     scores: list[CaseScore],
 ) -> dict[str, Any]:
+    scored_ids = {score.case_id for score in scores}
     return {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "cases_file": str(cases_path),
+        "staged_human_decisions_file": str(human_decisions_path),
+        "staged_human_decision_cases": sorted(scored_ids & set(staged_human_decisions)),
         "adapter": adapter,
         "protocol": "fixture-v1" if adapter == "fake" else "blind-command-v1",
         "runtime": runtime,
@@ -302,6 +334,12 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cases", type=pathlib.Path, default=DEFAULT_CASES)
     parser.add_argument(
+        "--human-decisions",
+        type=pathlib.Path,
+        default=DEFAULT_HUMAN_DECISIONS,
+        help="trusted public human decisions staged into matching real-runtime cases",
+    )
+    parser.add_argument(
         "--case-id",
         action="append",
         default=[],
@@ -325,6 +363,7 @@ def main() -> int:
 
     try:
         cases = select_cases(load_cases(args.cases), args.case_id)
+        staged_human_decisions = load_staged_human_decisions(args.human_decisions)
         command_base_dir = pathlib.Path.cwd()
         scores = []
         execution_errors = False
@@ -336,6 +375,7 @@ def main() -> int:
                     result = external_result(
                         args.adapter_command,
                         case,
+                        staged_human_decisions,
                         command_base_dir,
                         args.adapter_timeout_seconds,
                         args.artifacts_dir,
@@ -352,6 +392,8 @@ def main() -> int:
 
     report = build_report(
         args.cases,
+        args.human_decisions,
+        staged_human_decisions,
         args.adapter,
         args.runtime,
         args.runtime_version,
