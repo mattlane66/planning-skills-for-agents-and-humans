@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   patch:
-    if: github.event.head_commit.message == 'Update usage model contract test'
+    if: github.event.head_commit.message == 'Retry usage model contract update'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -39,7 +39,6 @@ jobs:
               raise SystemExit('stale invocation-matrix assertion not found')
           text = text.replace(old, new, 1)
 
-          # Add the new canonical install guide to the source-backed contract checks.
           old = """  invocationMatrix,\n  codexPluginGuide,\n  claudeSlashGuide,\n"""
           new = """  invocationMatrix,\n  installGuide,\n  codexPluginGuide,\n  claudeSlashGuide,\n"""
           if old not in text:
@@ -57,8 +56,15 @@ jobs:
           if anchor not in text:
               raise SystemExit('Codex guide assertion anchor not found')
           text = text.replace(anchor, checks + anchor, 1)
-
           p.write_text(text, encoding='utf-8')
+
+          p = Path('docs/codex-plugin.md')
+          text = p.read_text(encoding='utf-8')
+          old = 'Then open the **product repository** where planning artifacts and implementation live and invoke the skills there.'
+          new = 'Then open the **product repository** where planning artifacts and implementation live and invoke the installed skills there.'
+          if old not in text:
+              raise SystemExit('Codex product-repo invocation sentence not found')
+          p.write_text(text.replace(old, new, 1), encoding='utf-8')
           PY
 
       - name: Run portal model test on minimum Node
@@ -68,11 +74,15 @@ jobs:
           npm ci --ignore-scripts
           npm run test:model
 
-      - name: Commit test update
+      - name: Rebuild portal after canonical doc wording change
+        working-directory: site
+        run: npm run build
+
+      - name: Commit test and doc update
         shell: bash
         run: |
           set -euo pipefail
-          git add site/scripts/test-planning-model.mjs
+          git add site/scripts/test-planning-model.mjs docs/codex-plugin.md site/index.html
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -m "Update runtime usage contract assertions"
