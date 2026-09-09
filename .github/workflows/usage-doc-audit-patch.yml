@@ -1,4 +1,4 @@
-name: Apply usage documentation audit
+name: Apply usage documentation follow-up
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   patch:
-    if: github.event.head_commit.message == 'Run usage documentation audit patch'
+    if: github.event.head_commit.message == 'Run usage docs follow-up patch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -24,130 +24,46 @@ jobs:
           cache: npm
           cache-dependency-path: site/package-lock.json
 
-      - name: Reconcile usage documentation
+      - name: Apply final usage-doc consistency fixes
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          import re
 
-          def write(path, text):
-              Path(path).write_text(text, encoding='utf-8')
-
-          def replace_once(text, old, new, label):
+          def replace_once(path, old, new, label):
+              p = Path(path)
+              text = p.read_text(encoding='utf-8')
               if old not in text:
                   raise SystemExit(f'missing expected text: {label}')
-              return text.replace(old, new, 1)
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
 
-          # README: make installation a first-class step and remove stale runtime guidance.
-          path = Path('README.md')
-          text = path.read_text(encoding='utf-8')
-          marker = '## When should I use these skills?\n'
-          install = '''## Get Planning Skills into your agent\n\nDo not paste this entire repository into every prompt. **Make the reusable skills available to your agent once, then do the real planning inside the product repository you are building.** Project-specific artifacts normally live under `planning/` beside the code they govern.\n\nThe shortest current paths are:\n\n| Environment | Install / enable | Invoke in the product repo |\n| --- | --- | --- |\n| Claude Code | Build the self-contained plugin with `bash scripts/build-claude-plugin.sh`, then start Claude Code with `--plugin-dir .../dist/claude-code-plugin`. | `/planning-skills:plan` and the other namespaced plugin commands. |\n| Codex CLI | `codex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main`, then `codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace`. | Ask for `planning-router`, `shaping`, or another named skill in natural language. |\n| Gemini CLI | `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, then `/skills reload` if Gemini is already running. | Ask for the named skill in natural language. Repo-local `.gemini/commands/` wrappers are optional and are not installed by the skill manager. |\n| Claude / Claude Design | Build `dist/claude-skills/` with `python3 scripts/build_claude_skills.py`, upload the ZIPs under **Customize → Skills**, and enable them. | Ask Claude to use the named skill. |\n\nCodex workspaces can also import this repository as a GitHub plugin marketplace; other agents can consume the canonical `SKILL.md` files directly. See **[Install Planning Skills, then use them in your product repo](./docs/install-and-use.md)** for the complete setup and the distinction between installation, invocation, and project context.\n\n'''
-          text = replace_once(text, marker, install + marker, 'README install section')
-
-          text = replace_once(
-              text,
-              '| Claude Code | Plugin skills plus `.claude/commands/` wrappers |\n| Codex | Codex plugin, `AGENTS.md`, and prompt recipes |\n| Gemini CLI | `GEMINI.md` plus `.gemini/commands/` wrappers |\n| Claude / Claude Design | Uploadable canonical skills; request collaborative or gated mode in natural language |',
-              '| Claude Code | Self-contained plugin skills plus namespaced command wrappers |\n| Codex | Codex marketplace/plugin skills plus natural-language invocation |\n| Gemini CLI | Native Agent Skills; repo-local `.gemini/commands/` are optional convenience wrappers |\n| Claude / Claude Design | Uploadable canonical skills plus natural-language invocation |',
-              'README runtime table',
+          replace_once(
+              'docs/start-here.md',
+              "**First make the skills available to your agent.** See [Install Planning Skills, then use them in your product repo](./install-and-use.md). Installation and invocation are separate: Claude Code's built plugin carries namespaced slash commands; Codex, uploaded Claude skills, and native Gemini Agent Skills can always invoke the same canonical skills by name in natural language. Gemini slash commands work only when the repo-local `.gemini/commands/` wrappers are actually present in the active project.",
+              "**First make the skills available to your agent.** See [Install Planning Skills, then use them in your product repo](./install-and-use.md). Installation and invocation are separate: Claude Code's built plugin carries namespaced slash commands; Codex, uploaded Claude skills, and native Gemini Agent Skills can always invoke the same canonical skills by name in natural language. Gemini slash commands work only when the repo-local `.gemini/commands/` wrappers are actually present in the active project. This guide uses short wrapper names such as `/plan` and `/shape` for readability; with the installed Claude Code plugin, prefix them with `/planning-skills:` (for example, `/planning-skills:plan` and `/planning-skills:shape`).",
+              'Start Here command namespace',
           )
 
-          text = re.sub(
-              r'### Codex\n\nUse the packaged skills through \[`.codex-plugin/plugin.json`\]\(\./\.codex-plugin/plugin.json\), with `AGENTS.md` as the repo-level instruction surface\.\n\nSee \[Codex plugin installation\]\(\./docs/codex-plugin.md\) and \[Codex prompt recipes\]\(\./docs/codex-usage.md\)\.',
-              '''### Codex\n\nFor Codex CLI, add this repository as a marketplace and install the plugin:\n\n```bash\ncodex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main\ncodex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace\n```\n\nStart a new task in the product repository, then invoke skills by name in natural language. In managed workspaces, an eligible admin can instead import the repository from **Workspace settings → Plugins → Add → Import marketplace** and users can select the installed plugin from **Sources → Use plugins** in supported Codex task views.\n\nSee [Codex plugin installation](./docs/codex-plugin.md) and [Codex prompt recipes](./docs/codex-usage.md).''',
-              text,
-              count=1,
+          replace_once(
+              'docs/agent-invocation-matrix.md',
+              "> **Gemini column:** the slash commands below refer to this repository's `.gemini/commands/` wrappers. A native Gemini Agent Skills install by itself does not copy those commands into another project; use the Codex/plain-prompt wording unless you intentionally install/adapt the wrappers.\n",
+              "> **Claude column:** the table shows the short wrapper names. With the installed Claude Code plugin, prefix them with `/planning-skills:` (`/plan` → `/planning-skills:plan`, `/shape` → `/planning-skills:shape`).\n>\n> **Gemini column:** the slash commands below refer to this repository's `.gemini/commands/` wrappers. A native Gemini Agent Skills install by itself does not copy those commands into another project; use the Codex/plain-prompt wording unless you intentionally install/adapt the wrappers.\n",
+              'Invocation matrix command namespace',
           )
 
-          old_gemini = '''### Gemini CLI\n\nFor work on this Planning Skills repository, open it directly so `GEMINI.md` imports the shared agent instructions. For real product work, copy or symlink the needed skill folders into the product repository, or use the MCP adapter. The repo-local TOML commands are adapter examples: if you copy them, update their `@{...}` includes to the installed skill and support-file paths. Keep the product repository's own instructions authoritative.\n\nSee [Gemini CLI usage](./docs/gemini-usage.md) and the [Gemini/MCP integration guide](./integrations/gemini/README.md).'''
-          new_gemini = '''### Gemini CLI\n\nFor real product work, prefer Gemini CLI's native Agent Skills manager:\n\n```bash\ngemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans\n```\n\nThen open the product repository and invoke the installed skills by name. The `.gemini/commands/` files in this repository are repo-local convenience wrappers; native skill installation does not copy them into another project. Use those slash commands only when they are actually present, or intentionally copy/adapt them and verify their `@{...}` includes. Keep the product repository's own instructions authoritative.\n\nSee [Gemini CLI usage](./docs/gemini-usage.md) and the [Gemini/MCP integration guide](./integrations/gemini/README.md).'''
-          text = replace_once(text, old_gemini, new_gemini, 'README Gemini section')
+          replace_once(
+              'docs/agent-invocation-matrix.md',
+              '| Profile | Claude / Gemini | Codex / other agents |\n| --- | --- | --- |\n| Collaborative | Invoke `/shape` or canonical `shaping` and state collaborative mode; focused commands may be used in any useful order. | “Use collaborative shaping. Start from what is already concrete and keep Working material separate from Accepted intent.” |\n| Gated / orchestrated | Invoke `/shape` and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |',
+              '| Profile | Claude Code / Gemini with project wrappers | Native Gemini / Codex / other agents |\n| --- | --- | --- |\n| Collaborative | Invoke the shaping wrapper and state collaborative mode; focused wrappers may be used in any useful order. | “Use the shaping skill in collaborative mode. Start from what is already concrete and keep Working material separate from Accepted intent.” |\n| Gated / orchestrated | Invoke the shaping wrapper and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |',
+              'Invocation matrix profile mapping',
+          )
 
-          text = replace_once(
-              text,
-              'Claude Code and Gemini CLI provide `/lead-user` to start or resume the smallest valid phase, plus `/lead-user-frame`, `/lead-user-discover`, `/lead-user-evidence`, `/lead-user-freeze`, `/lead-user-interpret`, `/lead-user-shape`, `/lead-user-decide`, and `/lead-user-deliver` for explicit phase control. Codex and other skill-capable agents invoke the same canonical skill and name the phase in natural language.',
-              'Claude Code provides namespaced Lead User command wrappers. Gemini exposes the same repo-local command aliases only when `.gemini/commands/` is present in the active project; a native Gemini skill install uses natural-language phase requests instead. Codex and other skill-capable agents likewise invoke the canonical skill and name the phase in natural language.',
-              'README Lead User invocation',
+          replace_once(
+              'docs/codex-plugin.md',
+              'feed-planning-context/       -> skills/feed-planning-context/\n```',
+              'feed-planning-context/       -> skills/feed-planning-context/\nlead-user-research/          -> skills/lead-user-research/\n```',
+              'Codex maintenance inventory',
           )
-          write(path, text)
-
-          # Start Here: point users to installation first and explain slash-command scope.
-          path = Path('docs/start-here.md')
-          text = path.read_text(encoding='utf-8')
-          text = replace_once(
-              text,
-              'Use this guide when you are new to the repository and want the smallest planning move that will help.\n\n> **Invocation note:** Commands beginning with `/` are Claude-oriented shorthand unless the [invocation matrix](./agent-invocation-matrix.md) shows support for your environment. Gemini supports a focused subset; Codex users can use the equivalent natural-language prompts.\n\nRun the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).',
-              'Use this guide when you are new to the repository and want the smallest planning move that will help.\n\n**First make the skills available to your agent.** See [Install Planning Skills, then use them in your product repo](./install-and-use.md). Installation and invocation are separate: Claude Code\'s built plugin carries namespaced slash commands; Codex, uploaded Claude skills, and native Gemini Agent Skills can always invoke the same canonical skills by name in natural language. Gemini slash commands work only when the repo-local `.gemini/commands/` wrappers are actually present in the active project.\n\nRun the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).',
-              'Start Here preamble',
-          )
-          write(path, text)
-
-          # Operational walkthrough: stop implying native Gemini install also installs /plan.
-          path = Path('docs/how-it-works-in-practice.md')
-          text = path.read_text(encoding='utf-8')
-          text = replace_once(
-              text,
-              'When it becomes important enough to build deliberately, open the **product repository** in the agent you use for code. Planning Skills should already be installed, linked, uploaded, or otherwise available to that agent.',
-              'When it becomes important enough to build deliberately, open the **product repository** in the agent you use for code. Planning Skills should already be installed, linked, uploaded, or otherwise available to that agent; see [Install Planning Skills, then use them in your product repo](./install-and-use.md).',
-              'walkthrough install link',
-          )
-          text = replace_once(
-              text,
-              'In Gemini, use `/plan`. In Codex, Claude, Cursor, or another agent, use the portable form:',
-              'If `.gemini/commands/` is actually installed in the active Gemini project, `/plan` is the equivalent shortcut. A native Gemini skill install does not install those wrappers, so Gemini, Codex, Claude, Cursor, and other agents can always use the portable form:',
-              'walkthrough Gemini invocation',
-          )
-          write(path, text)
-
-          # Product-repo guide: make install path explicit.
-          path = Path('docs/using-in-a-product-repo.md')
-          text = path.read_text(encoding='utf-8')
-          text = replace_once(
-              text,
-              'Use this guide after installing or referencing the Planning Skills and before starting real project work.',
-              'Use this guide after making Planning Skills available to your agent and before starting real project work. If that setup is not done yet, start with [Install Planning Skills, then use them in your product repo](./install-and-use.md).',
-              'product repo install link',
-          )
-          write(path, text)
-
-          # Gemini guide: native skills are the default; command wrappers are a separate optional layer.
-          path = Path('docs/gemini-usage.md')
-          text = path.read_text(encoding='utf-8')
-          old = '''For product work, prefer Gemini CLI's native skill management. Install from Git with `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, or link a local checkout with `gemini skills link /path/to/planning-skills-for-agents-and-humans`. Use `gemini skills list`, `enable`, `disable`, and `/skills reload` to inspect or refresh discovery. Copying folders or using the MCP adapter remains a fallback. Preserve the product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files.'''
-          new = '''For product work, prefer Gemini CLI's native Agent Skills manager. Install from Git with `gemini skills install https://github.com/mattlane66/planning-skills-for-agents-and-humans`, or link a local checkout with `gemini skills link /path/to/planning-skills-for-agents-and-humans`. Gemini recursively discovers the valid `SKILL.md` folders in this repository. Use `gemini skills list`, `enable`, `disable`, and `/skills reload` to inspect or refresh discovery. Preserve the product repository's own `GEMINI.md`, `AGENTS.md`, and other local instructions instead of replacing them with this repository's files.\n\n**Native skill installation and project commands are separate.** `gemini skills install` makes the canonical skills available, but it does not copy this repository's `.gemini/commands/` files into an unrelated product repository. After native installation, the portable default is natural language such as `Use the planning-router skill...`. Use `/plan`, `/shape`, and the command table below only while working in this repository or after intentionally copying/adapting those TOML wrappers into the active project and verifying their `@{...}` includes.'''
-          text = replace_once(text, old, new, 'Gemini native install clarification')
-          write(path, text)
-
-          # Codex guide: add the missing skill and document both current CLI and managed-workspace paths.
-          path = Path('docs/codex-plugin.md')
-          text = path.read_text(encoding='utf-8')
-          text = replace_once(
-              text,
-              '- `feed-planning-context`\n',
-              '- `feed-planning-context`\n- `lead-user-research`\n',
-              'Codex skill inventory',
-          )
-          text = re.sub(
-              r'## Install from GitHub\n.*?\n## Use\n',
-              '''## Install from GitHub\n\n### Codex CLI\n\nAdd this repository as a marketplace source, then install the plugin explicitly:\n\n```bash\ncodex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --ref main\ncodex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace\n```\n\nStart a new Codex task after installation so the skill inventory is rediscovered. You can also open `/plugins` inside Codex to inspect the installed marketplace and plugin. Then open the **product repository** where planning artifacts and implementation live and invoke the skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.\n\n### Codex app / managed workspace\n\nEligible workspace admins can import this repository directly as a GitHub plugin marketplace from **Workspace settings → Plugins → Add → Import marketplace**. Use the repository URL as the source and leave **Path** blank because `.agents/plugins/marketplace.json` is at the repository root. After the plugin is installed for the relevant role or user, select it from **Sources → Use plugins** in a supported Codex task view.\n\nThe CLI marketplace command and managed-workspace import are two installation surfaces for the same packaged method; neither changes the product repository's own authority.\n\n## Use\n''',
-              text,
-              count=1,
-              flags=re.S,
-          )
-          write(path, text)
-
-          # Invocation matrix: make availability vs wrapper commands explicit.
-          path = Path('docs/agent-invocation-matrix.md')
-          text = path.read_text(encoding='utf-8')
-          text = re.sub(
-              r'## Support matrix\n\n.*?\n## Workflow mapping\n',
-              '''## Support matrix\n\n| Environment | Recommended invocation | Project commands | Notes |\n| --- | --- | --- | --- |\n| Claude Code | Built Planning Skills plugin | Yes | The self-contained plugin carries both canonical skills and namespaced command wrappers such as `/planning-skills:plan`. |\n| Codex CLI | Codex marketplace/plugin plus natural-language prompts | No Claude-style slash commands | Install the marketplace/plugin once, then invoke named skills from the product repository. |\n| Codex app / managed workspace | Imported or directory-installed plugin selected through **Sources → Use plugins** | Client-dependent | Workspace availability and installation policy apply; invoke the included skills by name. |\n| Gemini CLI | Native Agent Skills | Only if `.gemini/commands/` is present in the active project | `gemini skills install` installs/discovers skills, not this repo's project-local TOML command wrappers. Natural-language skill invocation is the portable default. |\n| Claude / Claude Design | Uploaded canonical skills plus natural-language requests | No repo-local command wrappers | Upload generated skill ZIPs and enable them; repository-authoritative changes should be written back through a repo-aware agent. |\n| MCP-compatible clients | Tools exposed by `mcp-server/` | Client-dependent | The server reads canonical root skills and artifact templates at runtime. |\n| Cursor and other agents | Canonical `SKILL.md` files, local instructions, and templates | Tool-dependent | Point the agent explicitly at the relevant skill and profile. |\n| Plain Markdown | Read the relevant root `SKILL.md` | No | Portable fallback with no plugin dependency. |\n\n## Workflow mapping\n\n> **Gemini column:** the slash commands below refer to this repository's `.gemini/commands/` wrappers. A native Gemini Agent Skills install by itself does not copy those commands into another project; use the Codex/plain-prompt wording unless you intentionally install/adapt the wrappers.\n''',
-              text,
-              count=1,
-              flags=re.S,
-          )
-          write(path, text)
           PY
 
       - name: Rebuild standalone documentation portal
@@ -157,15 +73,15 @@ jobs:
           npm ci --ignore-scripts
           npm run build
 
-      - name: Commit reconciled documentation
+      - name: Commit final documentation fixes
         shell: bash
         run: |
           set -euo pipefail
-          git add README.md docs site/index.html
+          git add docs site/index.html
           if git diff --cached --quiet; then
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git commit -m "Reconcile agent installation and usage docs"
+          git commit -m "Finish usage documentation reconciliation"
           git push origin "HEAD:${GITHUB_REF_NAME}"
