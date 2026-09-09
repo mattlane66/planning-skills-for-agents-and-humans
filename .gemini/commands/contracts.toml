@@ -1,0 +1,15 @@
+description = "Define plain-language interface contracts for meaningful boundaries in the selected slice."
+
+prompt = """
+Use this repository's planning instructions and interface-contract skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{interface-contracts/SKILL.md}
+@{templates/interface-contracts.md}
+
+Command arguments / source context:
+{{args}}
+
+Define only the meaningful boundary contracts needed by the selected slice. Preserve stable IDs and accepted planning authority. Make known inputs, outputs, required/optional fields, nullability, enum values, branches, errors, and open decisions explicit. Flag missing product decisions instead of inventing them. Do not create production schemas or implementation code unless explicitly requested.
+"""
