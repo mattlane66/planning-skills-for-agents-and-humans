@@ -2,6 +2,12 @@
 set -euo pipefail
 
 if ! command -v jq >/dev/null 2>&1; then
+  message="Planning ripple hook is unavailable because jq is not installed. Install jq before relying on this guardrail."
+  if [[ "${PLANNING_HOOK_STRICT:-0}" == "1" ]]; then
+    printf '%s\n' "$message" >&2
+    exit 2
+  fi
+  printf '%s\n' '{"hookSpecificOutput":{"hookEventName":"PostToolUse","additionalContext":"Planning ripple hook is unavailable because jq is not installed. Install jq before relying on this guardrail."}}'
   exit 0
 fi
 
