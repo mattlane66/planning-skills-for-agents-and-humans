@@ -201,6 +201,16 @@ server.tool(
 );
 
 server.tool(
+  'get_artifact_contracts',
+  'Return the machine-readable minimum planning artifact contracts and their promotion-gate mappings for host-side validation.',
+  {},
+  async () => {
+    const content = await readFile(join(repoRoot, 'contracts', 'artifact-contracts.yaml'), 'utf8');
+    return { content: [{ type: 'text', text: content }] };
+  },
+);
+
+server.tool(
   'get_orchestration_manifest',
   'Return the tool-neutral orchestration manifest, including collaborative/gated profiles and hard promotion gates, for planning harnesses.',
   {},
