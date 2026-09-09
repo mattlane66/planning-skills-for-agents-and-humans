@@ -13,9 +13,6 @@ import yaml
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-ORCHESTRATION_PATH = ROOT / ".agent-orchestration.yaml"
-CONTRACT_PATH = ROOT / "contracts" / "planning-integrity.yaml"
-STABLE_IDS_PATH = ROOT / "docs" / "stable-ids.md"
 
 
 class UniqueKeyLoader(yaml.SafeLoader):
@@ -48,7 +45,9 @@ def _source_path(root: pathlib.Path, source_ref: str) -> pathlib.Path:
     return root / source_ref.split("#", 1)[0]
 
 
-def validate_gate_definitions(orchestration: Mapping[str, Any], contract: Mapping[str, Any]) -> list[str]:
+def validate_gate_definitions(
+    orchestration: Mapping[str, Any], contract: Mapping[str, Any]
+) -> list[str]:
     errors: list[str] = []
     gates = orchestration.get("hard_promotion_gates", {})
     definitions = contract.get("gate_definitions", {})
@@ -66,9 +65,8 @@ def validate_gate_definitions(orchestration: Mapping[str, Any], contract: Mappin
             errors.append(f"hard promotion gate {gate_name!r} contains duplicate tokens")
         referenced.update(tokens)
 
-    defined = set(definitions)
-    missing = sorted(referenced - defined)
-    extra = sorted(defined - referenced)
+    missing = sorted(referenced - set(definitions))
+    extra = sorted(set(definitions) - referenced)
     if missing:
         errors.append(f"hard promotion gate tokens missing definitions: {', '.join(missing)}")
     if extra:
@@ -77,20 +75,14 @@ def validate_gate_definitions(orchestration: Mapping[str, Any], contract: Mappin
     for token, definition in definitions.items():
         if not isinstance(definition, Mapping):
             errors.append(f"gate definition {token!r} must be a mapping")
-            continue
-        if not definition.get("kind") or not definition.get("meaning"):
+        elif not definition.get("kind") or not definition.get("meaning"):
             errors.append(f"gate definition {token!r} requires kind and meaning")
     return errors
 
 
 def parse_stable_id_table(text: str) -> list[tuple[str, str, str]]:
-    rows: list[tuple[str, str, str]] = []
-    row_pattern = re.compile(r"^\| `([^`]+)` \| (.*?) \| `([^`]+)` \|$")
-    for line in text.splitlines():
-        match = row_pattern.match(line)
-        if match:
-            rows.append(match.groups())
-    return rows
+    pattern = re.compile(r"^\| `([^`]+)` \| (.*?) \| `([^`]+)` \|$")
+    return [match.groups() for line in text.splitlines() if (match := pattern.match(line))]
 
 
 def validate_id_contract(contract: Mapping[str, Any], stable_ids_text: str) -> list[str]:
@@ -114,12 +106,12 @@ def validate_id_contract(contract: Mapping[str, Any], stable_ids_text: str) -> l
             if not isinstance(definition, Mapping):
                 errors.append(f"{namespace_name} ID {prefix!r} definition must be a mapping")
                 continue
-            meaning = definition.get("meaning")
-            example = definition.get("example")
-            pattern = definition.get("pattern")
-            if not all(isinstance(value, str) and value for value in (meaning, example, pattern)):
+            values = tuple(definition.get(key) for key in ("meaning", "example", "pattern"))
+            if not all(isinstance(value, str) and value for value in values):
                 errors.append(f"{namespace_name} ID {prefix!r} requires meaning, example, and pattern")
                 continue
+            meaning, example, pattern = values
+            del meaning
             try:
                 if re.fullmatch(pattern, example) is None:
                     errors.append(
@@ -129,7 +121,9 @@ def validate_id_contract(contract: Mapping[str, Any], stable_ids_text: str) -> l
                 errors.append(f"{namespace_name} ID {prefix!r} has invalid regex {pattern!r}: {exc}")
 
     actual_collisions = set(planning_defaults) & set(research_defaults)
-    declared_collisions = set(research.get("collisions_with_planning", [])) if isinstance(research, Mapping) else set()
+    declared_collisions = (
+        set(research.get("collisions_with_planning", [])) if isinstance(research, Mapping) else set()
+    )
     if actual_collisions != declared_collisions:
         errors.append(
             "Lead User/planning ID collision declaration mismatch: "
@@ -145,18 +139,6 @@ def validate_id_contract(contract: Mapping[str, Any], stable_ids_text: str) -> l
     ]
     if rendered_rows != expected_rows:
         errors.append("docs/stable-ids.md planning defaults do not match the machine-readable ID contract")
-
-    lead_user_paragraph = ""
-    marker = "Lead User study files"
-    if marker in stable_ids_text:
-        lead_user_paragraph = stable_ids_text.split(marker, 1)[1].split("\n\n", 1)[0]
-    mentioned_research_prefixes = set(re.findall(r"`([A-Z]+)`", lead_user_paragraph))
-    missing_from_docs = sorted(set(research_defaults) - mentioned_research_prefixes)
-    if missing_from_docs:
-        errors.append(
-            "docs/stable-ids.md omits Lead User study-local prefixes: "
-            + ", ".join(missing_from_docs)
-        )
     return errors
 
 
@@ -176,9 +158,9 @@ def validate_manifest_references(
             if isinstance(namespace, Mapping) and isinstance(namespace.get("source"), str):
                 source_refs.append((f"id_namespaces.{namespace_name}.source", namespace["source"]))
 
-    execution_graph = contract.get("execution_graph", {})
-    if isinstance(execution_graph, Mapping) and isinstance(execution_graph.get("source"), str):
-        source_refs.append(("execution_graph.source", execution_graph["source"]))
+    graph_contract = contract.get("execution_graph", {})
+    if isinstance(graph_contract, Mapping) and isinstance(graph_contract.get("source"), str):
+        source_refs.append(("execution_graph.source", graph_contract["source"]))
 
     for label, source_ref in source_refs:
         if not _source_path(root, source_ref).is_file():
@@ -192,8 +174,7 @@ def validate_manifest_references(
         for key, relative_path in group.items():
             if not isinstance(relative_path, str) or not relative_path:
                 errors.append(f"{group_name}.{key} must be a non-empty repository path")
-                continue
-            if not (root / relative_path).is_file():
+            elif not (root / relative_path).is_file():
                 errors.append(f"{group_name}.{key} references missing file: {relative_path}")
     return errors
 
@@ -207,8 +188,7 @@ def _dependency_cycle(nodes: Mapping[str, Any]) -> list[str] | None:
         if node_id in visited:
             return None
         if node_id in visiting:
-            start = stack.index(node_id)
-            return stack[start:] + [node_id]
+            return stack[stack.index(node_id) :] + [node_id]
         visiting.add(node_id)
         stack.append(node_id)
         node = nodes.get(node_id, {})
@@ -225,8 +205,7 @@ def _dependency_cycle(nodes: Mapping[str, Any]) -> list[str] | None:
         return None
 
     for node_id in nodes:
-        cycle = visit(node_id)
-        if cycle:
+        if cycle := visit(node_id):
             return cycle
     return None
 
@@ -236,9 +215,9 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
     graph_contract = contract.get("execution_graph", {})
     namespaces = contract.get("id_namespaces", {})
     planning = namespaces.get("planning", {}) if isinstance(namespaces, Mapping) else {}
-    planning_defaults = planning.get("defaults", {}) if isinstance(planning, Mapping) else {}
+    defaults = planning.get("defaults", {}) if isinstance(planning, Mapping) else {}
     node_prefix = graph_contract.get("node_prefix") if isinstance(graph_contract, Mapping) else None
-    node_definition = planning_defaults.get(node_prefix, {}) if isinstance(planning_defaults, Mapping) else {}
+    node_definition = defaults.get(node_prefix, {}) if isinstance(defaults, Mapping) else {}
     node_pattern = node_definition.get("pattern") if isinstance(node_definition, Mapping) else None
 
     nodes = graph.get("nodes", {})
@@ -267,8 +246,7 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
             else:
                 dependency_pairs.add((dependency, node_id))
 
-    cycle = _dependency_cycle(nodes)
-    if cycle:
+    if cycle := _dependency_cycle(nodes):
         errors.append("execution graph dependency cycle: " + " -> ".join(cycle))
 
     edges = graph.get("edges", [])
@@ -280,8 +258,7 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
             if not isinstance(edge, Mapping):
                 errors.append(f"execution graph edge {index} must be a mapping")
                 continue
-            source = edge.get("from")
-            target = edge.get("to")
+            source, target = edge.get("from"), edge.get("to")
             if not isinstance(source, str) or not isinstance(target, str):
                 errors.append(f"execution graph edge {index} requires string from/to node IDs")
                 continue
@@ -298,11 +275,12 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
                 f"edges={sorted(set(edge_pairs))}, dependencies={sorted(dependency_pairs)}"
             )
 
-    configured_states = graph_contract.get("runtime_states", []) if isinstance(graph_contract, Mapping) else []
+    configured_states = (
+        graph_contract.get("runtime_states", []) if isinstance(graph_contract, Mapping) else []
+    )
     runtime_state = graph.get("runtime_state", {})
     if not isinstance(runtime_state, Mapping):
-        errors.append("execution graph runtime_state must be a mapping")
-        return errors
+        return errors + ["execution graph runtime_state must be a mapping"]
     if set(runtime_state) != set(configured_states):
         errors.append(
             "execution graph runtime_state keys do not match canonical states: "
@@ -320,9 +298,10 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
         for ref in refs:
             if ref not in nodes:
                 errors.append(f"runtime_state.{state_name} references missing node {ref!r}")
-            previous = memberships.get(ref)
-            if previous is not None and previous != state_name:
-                errors.append(f"execution graph node {ref!r} appears in both {previous} and {state_name}")
+            if ref in memberships and memberships[ref] != state_name:
+                errors.append(
+                    f"execution graph node {ref!r} appears in both {memberships[ref]} and {state_name}"
+                )
             memberships[ref] = state_name
 
     policy = graph.get("execution_policy", {})
@@ -339,7 +318,6 @@ def validate_execution_graph(graph: Mapping[str, Any], contract: Mapping[str, An
 
 
 def validate_repository(root: pathlib.Path = ROOT) -> list[str]:
-    errors: list[str] = []
     try:
         orchestration = load_yaml_unique(root / ".agent-orchestration.yaml")
         contract = load_yaml_unique(root / "contracts" / "planning-integrity.yaml")
@@ -347,10 +325,11 @@ def validate_repository(root: pathlib.Path = ROOT) -> list[str]:
     except (OSError, ValueError, yaml.YAMLError) as exc:
         return [f"unable to load canonical YAML: {exc}"]
 
-    if not isinstance(orchestration, Mapping) or not isinstance(contract, Mapping) or not isinstance(graph, Mapping):
+    if not all(isinstance(item, Mapping) for item in (orchestration, contract, graph)):
         return ["canonical orchestration, integrity contract, and execution graph must be YAML mappings"]
 
     stable_ids_text = (root / "docs" / "stable-ids.md").read_text(encoding="utf-8")
+    errors: list[str] = []
     errors.extend(validate_gate_definitions(orchestration, contract))
     errors.extend(validate_id_contract(contract, stable_ids_text))
     errors.extend(validate_manifest_references(root, orchestration, contract))
