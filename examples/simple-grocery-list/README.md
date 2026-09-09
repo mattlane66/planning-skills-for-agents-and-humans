@@ -6,7 +6,7 @@ This example shows the foundational Frame → Shape → Breadboard workflow on a
 
 The point is not the app itself. The point is to make the workflow obvious.
 
-For a more operational, cross-tool walkthrough of this same idea—showing when to invoke the router, framing, shaping, a code spike, candidate breadboarding, sketch reconciliation, selected-design promotion, context packaging, build, and reflection—see [How Planning Skills works in practice](../../docs/how-it-works-in-practice.md). That walkthrough is illustrative, not a required sequence.
+For a more operational, cross-tool walkthrough of this same idea—showing when to invoke the router, framing, shaping, a code spike, candidate breadboarding, sketch reconciliation, selected-design promotion, context packaging, build, and reflection—see [How Planning Skills works in practice](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/docs/how-it-works-in-practice.md). That walkthrough is illustrative, not a required sequence.
 
 It intentionally stops short of the advanced interface-contract, executable-breadboard, Dumplink, context-packet, drift-check, and run-log steps. It also skips Statechart because this small flow is already legible in the breadboard wiring. Use [`docs/start-here.md`](../../docs/start-here.md) to choose those moves when a larger project needs them.
 
