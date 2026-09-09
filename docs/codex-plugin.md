@@ -157,6 +157,7 @@ dumplink/                     -> skills/dumplink/
 breadboard-reflection/        -> skills/breadboard-reflection/
 kickoff-doc/                  -> skills/kickoff-doc/
 feed-planning-context/        -> skills/feed-planning-context/
+lead-user-research/          -> skills/lead-user-research/
 ```
 
 The root folders are canonical. `skill-inventory.txt` defines the complete packaged set, and the `skills/` folder is the generated form Codex reads through `.codex-plugin/plugin.json`.

@@ -19,6 +19,8 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 
 ## Workflow mapping
 
+> **Claude column:** the table shows the short wrapper names. With the installed Claude Code plugin, prefix them with `/planning-skills:` (`/plan` → `/planning-skills:plan`, `/shape` → `/planning-skills:shape`).
+>
 > **Gemini column:** the slash commands below refer to this repository's `.gemini/commands/` wrappers. A native Gemini Agent Skills install by itself does not copy those commands into another project; use the Codex/plain-prompt wording unless you intentionally install/adapt the wrappers.
 
 | Planning move | Canonical skill or artifact | Claude | Gemini | Codex and plain prompt |
@@ -56,10 +58,10 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 
 ## Profile mapping
 
-| Profile | Claude / Gemini | Codex / other agents |
+| Profile | Claude Code / Gemini with project wrappers | Native Gemini / Codex / other agents |
 | --- | --- | --- |
-| Collaborative | Invoke `/shape` or canonical `shaping` and state collaborative mode; focused commands may be used in any useful order. | “Use collaborative shaping. Start from what is already concrete and keep Working material separate from Accepted intent.” |
-| Gated / orchestrated | Invoke `/shape` and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |
+| Collaborative | Invoke the shaping wrapper and state collaborative mode; focused wrappers may be used in any useful order. | “Use the shaping skill in collaborative mode. Start from what is already concrete and keep Working material separate from Accepted intent.” |
+| Gated / orchestrated | Invoke the shaping wrapper and explicitly request the gated profile; wrappers enforce `.agent-orchestration.yaml` prerequisites. | “Use the gated/orchestrated profile and enforce `.agent-orchestration.yaml` prerequisites.” |
 
 Hard promotion gates are identical across profiles even when exploration order differs.
 
