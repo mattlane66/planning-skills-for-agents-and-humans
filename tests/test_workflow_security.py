@@ -110,6 +110,31 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertEqual("read", payload["permissions"]["contents"])
         self.assertNotIn("pull_request_target", payload["on"])
 
+    def test_behavior_eval_uses_only_checked_in_adapter_and_exact_runtime_choice(self) -> None:
+        text = (WORKFLOWS / "behavior-evals.yml").read_text(encoding="utf-8")
+        payload = yaml.load(text, Loader=yaml.BaseLoader)
+        inputs = payload["on"]["workflow_dispatch"]["inputs"]
+        self.assertNotIn("adapter_command", inputs)
+        self.assertEqual("choice", inputs["runtime"]["type"])
+        self.assertEqual(
+            ["claude-code", "codex", "gemini-cli"],
+            inputs["runtime"]["options"],
+        )
+        self.assertIn(
+            '--adapter-command "python3 adapters/runtime_case_adapter.py"',
+            text,
+        )
+        self.assertEqual(1, text.count("PLANNING_SKILLS_EVAL_API_KEY"))
+        install_step = next(
+            step
+            for step in payload["jobs"]["evaluate"]["steps"]
+            if step.get("name") == "Install exact runtime CLI"
+        )
+        self.assertNotIn("PLANNING_SKILLS_EVAL_API_KEY", install_step.get("env", {}))
+        self.assertIn('npm install --global "${package}@${EVAL_RUNTIME_VERSION}"', install_step["run"])
+        self.assertNotIn("--yolo", text)
+        self.assertNotIn("dangerously-skip", text)
+
     def test_dependabot_leaves_major_upgrades_out_of_routine_groups(self) -> None:
         payload = yaml.safe_load((ROOT / ".github/dependabot.yml").read_text(encoding="utf-8"))
         for update in payload["updates"]:
