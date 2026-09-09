@@ -23,7 +23,7 @@ Gemini CLI project command:
 Codex or another agent:
 
 ```text
-Use AGENTS.md and sketch-reconciliation/SKILL.md.
+Use the installed `sketch-reconciliation` skill and follow this product repository's own instructions.
 Reconcile this attached sketch with path/to/shaping.md and path/to/breadboard.md.
 Separate observations from interpretations, map observations to stable IDs, and show proposed deltas.
 Do not change selected behavior or scope until I accept the deltas.

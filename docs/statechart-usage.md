@@ -38,7 +38,7 @@ A native Gemini Agent Skills install does not install that wrapper. In that case
 Codex or another agent:
 
 ```text
-Use AGENTS.md and statechart/SKILL.md.
+Use the installed `statechart` skill and follow this product repository's own instructions.
 Derive a statechart for [selected scope] from [accepted breadboard].
 Preserve source breadboard IDs, mark unsupported behavior as inferred or missing,
 and propose breadboard updates for gaps. Do not implement code.

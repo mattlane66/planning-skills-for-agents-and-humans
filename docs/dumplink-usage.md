@@ -36,7 +36,7 @@ A native Gemini Agent Skills install does not install that wrapper. In that case
 Codex prompt:
 
 ```text
-Use AGENTS.md and dumplink/SKILL.md.
+Use the installed `dumplink` skill and follow this product repository's own instructions.
 Turn this selected project into a Dumplink plan.
 Dump the work, create vertical task groups, mark risk states, map dependencies, sequence the build, define appetite-based cuts, and write acceptance checks.
 Preserve the project boundary, exclusions, outcome, and non-goals. Treat every task group as a judgeable vertical slice of the project.
