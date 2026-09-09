@@ -6,6 +6,8 @@ Use this guide when you are new to the repository and want the smallest planning
 
 Run the workflow from the product repository you are planning or building. Keep this repository separate unless you are contributing to the skills themselves. See [Using Planning Skills in a product repository](./using-in-a-product-repo.md).
 
+**Want to see the whole loop before reading the rules?** [How Planning Skills works in practice](./how-it-works-in-practice.md) follows one grocery-list idea from messy notes through routing, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, context packaging, build, and reflection. It is illustrative, not a required sequence.
+
 If a consequential opportunity decision depends on future-facing trends,
 advanced users, unusually high-benefit needs, pyramiding, or advanced analogs,
 start with [Lead User Research](../lead-user-research/README.md). It is an optional
