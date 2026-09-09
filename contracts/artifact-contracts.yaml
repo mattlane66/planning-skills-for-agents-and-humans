@@ -1,0 +1,141 @@
+version: 1
+purpose: >-
+  Minimum machine-verifiable contracts for planning artifacts that cross important
+  handoff or promotion boundaries. These contracts validate structural sufficiency;
+  they do not replace human judgment, semantic fit checks, or the skill self-checks.
+
+placeholder_values: ['', '...', '—', '-', 'TBD', 'TODO', '[...]']
+
+gate_usage:
+  select_shape: [selected_shaping]
+  promote_selected_design: [selected_design_breadboard]
+  select_slice: [selected_design_breadboard]
+  build: [context_packet]
+
+artifacts:
+  frame:
+    template: templates/frame.md
+    required_headings:
+      - '## Source'
+      - '## Current situation'
+      - '## Transformation frame (x → f() → y)'
+      - '## Problem'
+      - '## Outcome'
+      - '## Boundaries'
+
+  shaping:
+    template: templates/shaping.md
+    required_headings:
+      - '## Working mode'
+      - '## Requirements'
+      - '## Appetite'
+      - '## Shapes'
+      - '## Fit check'
+      - '## Reverse fit check'
+      - '## Decision'
+
+  selected_shaping:
+    template: templates/shaping.md
+    required_headings:
+      - '## Requirements'
+      - '## Appetite'
+      - '## Fit check'
+      - '## Reverse fit check'
+      - '## Decision'
+    required_patterns:
+      - pattern: '(?mi)^-\s*Status:\s*selected\s*$'
+        message: 'Decision status must be selected.'
+      - pattern: '(?mi)^-\s*Chosen direction:\s*(?!\.\.\.\s*$|$).+'
+        message: 'Chosen direction must be recorded.'
+      - pattern: '(?mi)^-\s*Authority:\s*Accepted\s*$'
+        message: 'At least one explicit Accepted authority marker is required.'
+
+  selected_design_breadboard:
+    template: templates/breadboard.md
+    required_headings:
+      - '## Mode and authority'
+      - '## Shape reference'
+      - '## Requirement realization map — selected-design mode'
+      - '## Places'
+      - '## UI affordances'
+      - '## Non-UI affordances'
+      - '## Stores'
+      - '## Behavior traces'
+      - '## Reverse-trace audit'
+      - '## Selected-design reconciliation'
+    required_patterns:
+      - pattern: '(?mi)^source_of_truth:\s*true\s*$'
+        message: 'Accepted selected-design breadboard must set source_of_truth: true.'
+      - pattern: '(?mi)^-\s*Mode:\s*`?selected-design`?\s*$'
+        message: 'Breadboard mode must be selected-design.'
+      - pattern: '(?mi)^-\s*Requirements authority:\s*`?Accepted`?\s*$'
+        message: 'Requirements authority must be Accepted.'
+      - pattern: '(?mi)^-\s*Appetite authority:\s*`?Accepted`?\s*$'
+        message: 'Appetite authority must be Accepted.'
+    required_nonempty_labels:
+      - '- Candidate or selected shape:'
+      - '- Reconciliation status for selected-design mode:'
+
+  context_packet:
+    template: templates/context-packet.md
+    required_headings:
+      - '## Task'
+      - '## Source artifacts'
+      - '## Authority order'
+      - '## Do not use as build scope'
+      - '## Must preserve'
+      - '## Current slice'
+      - '## Execution contract'
+      - '## Open questions'
+      - '## Verification target'
+    required_nonempty_labels:
+      - '- Goal condition:'
+      - '- Required checks:'
+      - '- Allowed files / areas:'
+      - '- Out-of-scope changes:'
+      - '- Return-to-planning conditions:'
+
+  interface_contracts:
+    template: templates/interface-contracts.md
+    required_headings:
+      - '## Source references'
+      - '## Contract summary'
+      - '## Contracts'
+    required_patterns:
+      - pattern: '(?m)^###\s+C[0-9]+\b'
+        message: 'At least one stable C## contract must be present.'
+
+  executable_breadboard:
+    template: templates/executable-breadboard.md
+    required_headings:
+      - '## Selected slice'
+      - '## Relevant breadboard structure'
+      - '## Interface contracts'
+      - '## Example starting data / fixtures'
+      - '## Example runs'
+      - '## Edge cases'
+      - '## Acceptance tests'
+      - '## Verification target'
+      - '## Open decisions the agent must not invent'
+    required_patterns:
+      - pattern: '(?m)^###\s+RUN[0-9]+\b'
+        message: 'At least one stable RUN## example run must be present.'
+
+  dumplink:
+    template: templates/dumplink.md
+    required_headings:
+      - '## Project boundary'
+      - '## Task dump'
+      - '## Vertical task groups'
+      - '## Dependency map'
+      - '## Build sequence'
+      - '## Scope cuts'
+      - '## Acceptance checks'
+      - '## Task-group approval gate'
+    required_nonempty_labels:
+      - '- Selected project:'
+      - '- Appetite:'
+      - '- Project boundary:'
+    required_patterns:
+      - pattern: '(?m)^\|\s*TG[0-9]+\s*\|'
+        message: 'At least one stable TG## vertical task group must be present.'
