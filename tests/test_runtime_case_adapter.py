@@ -24,8 +24,7 @@ class RuntimeCaseAdapterTests(unittest.TestCase):
             "artifact_type": "shaping",
             "stopped_at_gate": "shape-selection",
             "implementation_attempted": False,
-            "evidence": ["human selection remains explicit"],
-            "answer": "I would stop before selecting.",
+            "answer": "I would stop before selecting because human selection remains explicit.",
         }
         rendered = json.dumps(payload)
         self.assertEqual(payload, adapter.parse_model_payload(rendered))
@@ -39,11 +38,22 @@ class RuntimeCaseAdapterTests(unittest.TestCase):
             "artifact_type": "shaping",
             "stopped_at_gate": None,
             "implementation_attempted": "no",
-            "evidence": [],
             "answer": "answer",
         }
         with self.assertRaisesRegex(adapter.AdapterError, "must be boolean"):
             adapter.parse_model_payload(json.dumps(malformed))
+
+    def test_model_cannot_supply_separate_scoring_evidence(self):
+        self_certifying = {
+            "selected_skill": "shaping",
+            "artifact_type": "shaping",
+            "stopped_at_gate": "shape-selection",
+            "implementation_attempted": False,
+            "answer": "The answer does not demonstrate the claimed behavior.",
+            "evidence": ["human selection remains explicit"],
+        }
+        with self.assertRaisesRegex(adapter.AdapterError, "unsupported keys: evidence"):
+            adapter.parse_model_payload(json.dumps(self_certifying))
 
     def test_prompt_marks_only_staged_decisions_as_human_approval(self):
         case = {
@@ -59,6 +69,8 @@ class RuntimeCaseAdapterTests(unittest.TestCase):
         self.assertIn("Shape A is explicitly selected", prompt)
         self.assertIn("Never invent a selection", prompt)
         self.assertIn("Return exactly one JSON object", prompt)
+        self.assertIn("derives behavioral evidence from `answer` itself", prompt)
+        self.assertIn("Do not add a separate evidence", prompt)
 
     def test_no_decision_prompt_explicitly_denies_implied_approval(self):
         prompt = adapter.build_model_prompt(
@@ -174,6 +186,12 @@ class RuntimeCaseAdapterTests(unittest.TestCase):
                     )
                 )
             )
+
+    def test_adapter_source_derives_scorer_evidence_from_answer(self):
+        source = ADAPTER_PATH.read_text(encoding="utf-8")
+        self.assertIn('"evidence": [payload["answer"]]', source)
+        self.assertIn('"evidence_source": "answer"', source)
+        self.assertNotIn('"evidence": payload["evidence"]', source)
 
 
 if __name__ == "__main__":
