@@ -65,7 +65,7 @@ codex plugin marketplace add mattlane66/planning-skills-for-agents-and-humans --
 codex plugin add planning-skills-for-agents-and-humans@planning-skills-marketplace
 ```
 
-Start a new Codex task after installation so the skill inventory is rediscovered. You can also open `/plugins` inside Codex to inspect the installed marketplace and plugin. Then open the **product repository** where planning artifacts and implementation live and invoke the skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.
+Start a new Codex task after installation so the skill inventory is rediscovered. You can also open `/plugins` inside Codex to inspect the installed marketplace and plugin. Then open the **product repository** where planning artifacts and implementation live and invoke the installed skills there. Preserve that repository's existing `AGENTS.md`; do not copy this repository's root instructions over product-specific build, test, security, or architecture rules.
 
 ### Codex app / managed workspace
 
