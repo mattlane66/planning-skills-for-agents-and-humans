@@ -132,6 +132,8 @@ class WorkflowSecurityTests(unittest.TestCase):
             if step.get("name") == "Install exact runtime CLI"
         )
         self.assertNotIn("PLANNING_SKILLS_EVAL_API_KEY", install_step.get("env", {}))
+        self.assertIn("runtime_version must be an exact npm package version", install_step["run"])
+        self.assertIn("not a tag or range", install_step["run"])
         self.assertIn('npm install --global "${package}@${EVAL_RUNTIME_VERSION}"', install_step["run"])
         self.assertNotIn("--yolo", text)
         self.assertNotIn("dangerously-skip", text)
