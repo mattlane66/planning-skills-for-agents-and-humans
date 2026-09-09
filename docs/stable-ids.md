@@ -4,6 +4,8 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 
 ## Defaults
 
+`contracts/planning-integrity.yaml` is the machine-readable source for repository-owned planning ID defaults. The table below is its human-readable rendering.
+
 | Prefix | Meaning | Example |
 |---|---|---|
 | `WF` | local Wayfinding ticket within one map | `WF-003` |
@@ -26,12 +28,16 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 | `V` | vertical slice | `V1` |
 
 Lead User study files use a study-local namespace with `SRC`, `LU`, `F`, `N`, `SF`,
-`M`, `H`, `O`, `AR`, `Q`, `PY`, `CH`, and `PF`, plus local `C`, `T`, `E`, `SP`, and
-`R` records defined in `lead-user-research/references/state-contract.md`. The latter
-five overlap planning defaults by design but are scoped to one study workspace. When
-a handoff or combined artifact mixes research and planning records, qualify the
-research reference with the study path or a `research:` label; never infer identity
-from a bare colliding prefix.
+`M`, `H`, `O`, `AR`, `L`, `Q`, `PY`, `CH`, `PF`, and `A`, plus local `C`, `T`,
+`E`, `SP`, and `R` records defined in `lead-user-research/references/state-contract.md`.
+The planning collisions are `N`, `C`, `T`, `E`, `SP`, and `R`. Those collisions are
+intentional and scoped to one study workspace. When a handoff or combined artifact
+mixes research and planning records, qualify the research reference with the study path
+or a `research:` label; never infer identity from a bare colliding prefix.
+
+`contracts/planning-integrity.yaml` mirrors the Lead User prefixes for namespace and
+collision validation. The Lead User state contract remains authoritative for the
+meaning and lifecycle of those research records.
 
 Use sub-identifiers such as `R3.1` or `P2.1` when grouping improves legibility.
 
