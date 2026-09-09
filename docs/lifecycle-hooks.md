@@ -112,6 +112,18 @@ chmod +x ~/.claude/hooks/planning-drift-check.sh
 
 The repository commits these hook files as executable. The `chmod` commands are only a fallback for filesystems or copy operations that discard executable modes.
 
+## Runtime dependency
+
+The lifecycle hooks require `jq` to parse Claude Code hook payloads and emit structured hook output.
+
+Check it before relying on the hooks:
+
+```bash
+command -v jq
+```
+
+If `jq` is missing, the hooks do not silently no-op: in default mode they emit a visible hook-context warning that the guardrail is unavailable. In strict mode they block with exit code 2 until the dependency is installed.
+
 ## Optional strict mode
 
 By default a matched hook emits a JSON `additionalContext` message on standard output and exits successfully, so Claude Code includes the reminder in the conversation. Unmatched hooks stay silent. To make a matched reminder block with exit code 2, set `PLANNING_HOOK_STRICT=1` in the hook command environment; strict mode writes the reason to standard error because Claude Code surfaces stderr for blocking hooks. Use strict mode deliberately: a PreToolUse exit code 2 blocks the matched tool call.
