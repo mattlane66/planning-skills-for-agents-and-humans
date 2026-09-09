@@ -19,17 +19,19 @@ If no project is selected or its boundary is missing, return to framing, shaping
 
 ## Command forms
 
-Claude Code:
+Claude Code with the installed plugin:
+
+```text
+/planning-skills:dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
+```
+
+When the repo-local `.gemini/commands/` wrappers are present, Gemini CLI can use:
 
 ```text
 /dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
 ```
 
-Gemini CLI:
-
-```text
-/dumplink planning/shaping.md planning/breadboard.md "Project: accepted onboarding project; Appetite: 4 weeks"
-```
+A native Gemini Agent Skills install does not install that wrapper. In that case, use the same natural-language skill request shown for Codex below.
 
 Codex prompt:
 

@@ -70,7 +70,7 @@ Rules:
 
 Cross-platform invocation:
 
-- Claude Code and Gemini CLI: name the corresponding `/lead-user-*` command.
-- Codex and skill-capable agents: name `lead-user-research`, the next phase, and
-  the workspace.
+- Claude Code with the installed Planning Skills plugin: use the corresponding namespaced `/planning-skills:lead-user-*` command.
+- Gemini CLI: use `/lead-user-*` only when the repo-local `.gemini/commands/` wrappers are present; a native Agent Skills install should name `lead-user-research`, the next phase, and the workspace in natural language.
+- Codex and other skill-capable agents: name `lead-user-research`, the next phase, and the workspace.
 - Plain chat: name the phase and provide the portable prompt continuation.

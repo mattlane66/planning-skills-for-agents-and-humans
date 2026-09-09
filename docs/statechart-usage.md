@@ -21,17 +21,19 @@ The transition table is primary. Mermaid is a visual projection. The accepted br
 
 ## Invocation
 
-Claude Code:
+Claude Code with the installed plugin:
+
+```text
+/planning-skills:statechart planning/breadboard.md "Scope: V2 retry and cancellation"
+```
+
+When the repo-local `.gemini/commands/` wrappers are present, Gemini CLI can use:
 
 ```text
 /statechart planning/breadboard.md "Scope: V2 retry and cancellation"
 ```
 
-Gemini CLI:
-
-```text
-/statechart planning/breadboard.md "Scope: V2 retry and cancellation"
-```
+A native Gemini Agent Skills install does not install that wrapper. In that case, use the same natural-language skill request shown for Codex or another agent below.
 
 Codex or another agent:
 
