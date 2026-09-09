@@ -215,6 +215,29 @@ def validate_codex_source_install(
     }
 
 
+def _stage_gemini_command_includes(root: Path, installed: Path, commands: list[Path]) -> int:
+    includes: set[str] = set()
+    for command in commands:
+        payload = tomllib.loads(command.read_text(encoding="utf-8"))
+        prompt = payload.get("prompt")
+        if not isinstance(prompt, str) or not prompt.strip():
+            raise InstallCheckError(f"Gemini command has no prompt: {command.name}")
+        for include in GEMINI_INCLUDE.findall(prompt):
+            if "{{" in include or "}}" in include:
+                continue
+            includes.add(include)
+
+    for include in sorted(includes):
+        source = root / include
+        if not source.is_file():
+            raise InstallCheckError(f"Gemini command references missing source include: {include}")
+        target = installed / include
+        if not target.is_file():
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, target)
+    return len(includes)
+
+
 def validate_gemini_source_install(root: Path, skills: list[str]) -> dict[str, Any]:
     with tempfile.TemporaryDirectory(prefix="release-gemini-") as temporary:
         installed = Path(temporary) / "checkout"
@@ -237,22 +260,19 @@ def validate_gemini_source_install(root: Path, skills: list[str]) -> dict[str, A
         commands = sorted((installed / ".gemini" / "commands").glob("*.toml"))
         if not commands:
             raise InstallCheckError("Gemini source install contains no command wrappers")
-        resolved_includes = 0
+        resolved_includes = _stage_gemini_command_includes(root, installed, commands)
+        if resolved_includes == 0:
+            raise InstallCheckError("Gemini command smoke resolved no static repository includes")
         for command in commands:
             payload = tomllib.loads(command.read_text(encoding="utf-8"))
-            prompt = payload.get("prompt")
-            if not isinstance(prompt, str) or not prompt.strip():
-                raise InstallCheckError(f"Gemini command has no prompt: {command.name}")
+            prompt = payload["prompt"]
             for include in GEMINI_INCLUDE.findall(prompt):
                 if "{{" in include or "}}" in include:
                     continue
                 if not (installed / include).is_file():
                     raise InstallCheckError(
-                        f"Gemini command {command.name} has missing include: {include}"
+                        f"Gemini command {command.name} has missing include after install: {include}"
                     )
-                resolved_includes += 1
-        if resolved_includes == 0:
-            raise InstallCheckError("Gemini command smoke resolved no static repository includes")
     return {
         "runtime": "gemini-cli",
         "install_source": "release SHA Git/native skill install",
@@ -274,8 +294,9 @@ def run_checks(
         raise InstallCheckError(f"release tag must be exact stable SemVer: {release_tag}")
     if not re.fullmatch(r"[0-9a-f]{40}", release_sha):
         raise InstallCheckError("release SHA must be a full 40-character lowercase Git SHA")
+    assets_dir = assets_dir.resolve()
     skills = load_inventory(root)
-    checksums = validate_checksums(assets_dir.resolve())
+    checksums = validate_checksums(assets_dir)
     surfaces = [
         validate_claude_uploads(assets_dir, skills),
         validate_claude_code_plugin(assets_dir, release_tag, skills),
