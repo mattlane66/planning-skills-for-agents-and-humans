@@ -124,7 +124,8 @@ class WorkflowSecurityTests(unittest.TestCase):
             '--adapter-command "python3 adapters/runtime_case_adapter.py"',
             text,
         )
-        self.assertEqual(1, text.count("PLANNING_SKILLS_EVAL_API_KEY"))
+        self.assertEqual(1, text.count("PLANNING_SKILLS_EVAL_API_KEY:"))
+        self.assertEqual(1, text.count("secrets.PLANNING_SKILLS_EVAL_API_KEY"))
         install_step = next(
             step
             for step in payload["jobs"]["evaluate"]["steps"]
