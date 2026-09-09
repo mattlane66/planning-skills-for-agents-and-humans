@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   patch:
-    if: github.event.head_commit.message == 'Run usage docs follow-up patch'
+    if: github.event.head_commit.message == 'Retry usage docs follow-up patch'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -29,6 +29,7 @@ jobs:
         run: |
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           def replace_once(path, old, new, label):
               p = Path(path)
@@ -58,12 +59,17 @@ jobs:
               'Invocation matrix profile mapping',
           )
 
-          replace_once(
-              'docs/codex-plugin.md',
-              'feed-planning-context/       -> skills/feed-planning-context/\n```',
-              'feed-planning-context/       -> skills/feed-planning-context/\nlead-user-research/          -> skills/lead-user-research/\n```',
-              'Codex maintenance inventory',
+          p = Path('docs/codex-plugin.md')
+          text = p.read_text(encoding='utf-8')
+          text, n = re.subn(
+              r'(feed-planning-context/\s+-> skills/feed-planning-context/\n)(```)',
+              r'\1lead-user-research/          -> skills/lead-user-research/\n\2',
+              text,
+              count=1,
           )
+          if n != 1:
+              raise SystemExit('missing expected text: Codex maintenance inventory')
+          p.write_text(text, encoding='utf-8')
           PY
 
       - name: Rebuild standalone documentation portal
