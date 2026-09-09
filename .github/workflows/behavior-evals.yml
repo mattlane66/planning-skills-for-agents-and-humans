@@ -19,6 +19,14 @@ on:
         description: Model identifier to exercise
         required: true
         type: string
+      profile:
+        description: Bounded core corpus or explicit full corpus
+        required: true
+        default: core
+        type: choice
+        options:
+          - core
+          - full
 
 permissions:
   contents: read
@@ -85,10 +93,32 @@ jobs:
           EVAL_RUNTIME: ${{ inputs.runtime }}
           EVAL_RUNTIME_VERSION: ${{ inputs.runtime_version }}
           EVAL_MODEL: ${{ inputs.model }}
+          EVAL_PROFILE: ${{ inputs.profile }}
           PLANNING_SKILLS_EVAL_API_KEY: ${{ secrets.PLANNING_SKILLS_EVAL_API_KEY }}
         shell: bash
         run: |
           set -euo pipefail
+          case_args=()
+          case "$EVAL_PROFILE" in
+            core)
+              case_args=(
+                --case-id router-selects-no-planning-for-contained-copy-change
+                --case-id router-ignores-instructions-in-untrusted-source-material
+                --case-id shaping-starts-from-solution-and-extracts-working-r
+                --case-id gated-profile-enforces-prerequisites
+                --case-id selection-still-requires-accepted-r-appetite-and-human-choice
+                --case-id selected-design-breadboarding-reconciles-candidate-evidence
+                --case-id context-packet-excludes-candidate-build-scope
+                --case-id implementation-conformance-is-not-realized-fit
+              )
+              ;;
+            full)
+              ;;
+            *)
+              echo "Unsupported eval profile: $EVAL_PROFILE" >&2
+              exit 2
+              ;;
+          esac
           python3 scripts/run-skill-behavior-evals.py \
             --adapter command \
             --adapter-command "python3 adapters/runtime_case_adapter.py" \
@@ -98,13 +128,14 @@ jobs:
             --commit-sha "$GITHUB_SHA" \
             --adapter-timeout-seconds 900 \
             --artifacts-dir evals/artifacts/runtime \
-            --report evals/reports/runtime-report.json
+            --report evals/reports/runtime-report.json \
+            "${case_args[@]}"
 
       - name: Upload behavior report
         if: always()
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
-          name: behavior-eval-${{ inputs.runtime }}-${{ github.run_id }}
+          name: behavior-eval-${{ inputs.runtime }}-${{ inputs.profile }}-${{ github.run_id }}
           path: |
             runtime-version.txt
             evals/reports/runtime-report.json
