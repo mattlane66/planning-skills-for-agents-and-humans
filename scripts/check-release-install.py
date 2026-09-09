@@ -118,9 +118,16 @@ def validate_claude_code_plugin(
     with tempfile.TemporaryDirectory(prefix="release-claude-code-") as temporary:
         root = Path(temporary)
         safe_extract(package, root)
-        top_levels = {path.parts[0] for path in (PurePosixPath(p) for p in zipfile.ZipFile(package).namelist()) if path.parts}
+        with zipfile.ZipFile(package) as archive:
+            top_levels = {
+                path.parts[0]
+                for path in (PurePosixPath(name) for name in archive.namelist())
+                if path.parts
+            }
         if top_levels != {"claude-code-plugin"}:
-            raise InstallCheckError(f"Claude Code plugin must have one claude-code-plugin/ root: {sorted(top_levels)}")
+            raise InstallCheckError(
+                f"Claude Code plugin must have one claude-code-plugin/ root: {sorted(top_levels)}"
+            )
         installed = root / "claude-code-plugin"
         manifest_path = installed / ".claude-plugin" / "plugin.json"
         manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -132,7 +139,9 @@ def validate_claude_code_plugin(
                 raise InstallCheckError(f"Claude Code plugin cannot discover skill {skill}")
         if not (installed / "commands" / "plan.md").is_file():
             raise InstallCheckError("Claude Code plugin is missing commands/plan.md")
-        if not (installed / "AGENTS.md").is_file() or not (installed / ".agent-orchestration.yaml").is_file():
+        if not (installed / "AGENTS.md").is_file() or not (
+            installed / ".agent-orchestration.yaml"
+        ).is_file():
             raise InstallCheckError("Claude Code plugin is missing shared orchestration context")
     return {
         "runtime": "claude-code",
@@ -156,7 +165,9 @@ def _copy_source_install(root: Path, destination: Path, paths: list[str]) -> Non
             raise InstallCheckError(f"source-install path is missing: {relative}")
 
 
-def validate_codex_source_install(root: Path, release_tag: str, skills: list[str]) -> dict[str, Any]:
+def validate_codex_source_install(
+    root: Path, release_tag: str, skills: list[str]
+) -> dict[str, Any]:
     version = release_tag.removeprefix("v")
     with tempfile.TemporaryDirectory(prefix="release-codex-") as temporary:
         installed = Path(temporary) / "checkout"
@@ -171,13 +182,15 @@ def validate_codex_source_install(root: Path, release_tag: str, skills: list[str
                 ".agent-orchestration.yaml",
             ],
         )
-        manifest = json.loads((installed / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8"))
+        manifest = json.loads(
+            (installed / ".codex-plugin" / "plugin.json").read_text(encoding="utf-8")
+        )
         if manifest.get("version") != version:
             raise InstallCheckError("Codex plugin manifest version does not match release tag")
         skills_path = manifest.get("skills")
         if not isinstance(skills_path, str):
             raise InstallCheckError("Codex plugin manifest does not declare a skills path")
-        skill_root = (installed / ".codex-plugin" / skills_path).resolve()
+        skill_root = (installed / skills_path).resolve()
         if skill_root != (installed / "skills").resolve():
             raise InstallCheckError("Codex plugin skills path does not resolve to installed skills/")
         discovered = []
@@ -186,9 +199,13 @@ def validate_codex_source_install(root: Path, release_tag: str, skills: list[str
             if not skill_file.is_file() or parse_skill_name(skill_file) != skill:
                 raise InstallCheckError(f"Codex source install cannot discover skill {skill}")
             discovered.append(skill)
-        marketplace = json.loads((installed / ".agents/plugins/marketplace.json").read_text(encoding="utf-8"))
+        marketplace = json.loads(
+            (installed / ".agents/plugins/marketplace.json").read_text(encoding="utf-8")
+        )
         plugins = marketplace.get("plugins", [])
-        if not any(item.get("name") == manifest.get("name") for item in plugins if isinstance(item, dict)):
+        if not any(
+            item.get("name") == manifest.get("name") for item in plugins if isinstance(item, dict)
+        ):
             raise InstallCheckError("Codex marketplace does not expose the installed plugin")
     return {
         "runtime": "codex",
@@ -230,7 +247,9 @@ def validate_gemini_source_install(root: Path, skills: list[str]) -> dict[str, A
                 if "{{" in include or "}}" in include:
                     continue
                 if not (installed / include).is_file():
-                    raise InstallCheckError(f"Gemini command {command.name} has missing include: {include}")
+                    raise InstallCheckError(
+                        f"Gemini command {command.name} has missing include: {include}"
+                    )
                 resolved_includes += 1
         if resolved_includes == 0:
             raise InstallCheckError("Gemini command smoke resolved no static repository includes")
@@ -239,7 +258,12 @@ def validate_gemini_source_install(root: Path, skills: list[str]) -> dict[str, A
         "install_source": "release SHA Git/native skill install",
         "skill_count": len(skills),
         "command_count": len(commands),
-        "checks": ["fresh source layout", "canonical skill discovery", "TOML parse", "static include resolution"],
+        "checks": [
+            "fresh source layout",
+            "canonical skill discovery",
+            "TOML parse",
+            "static include resolution",
+        ],
     }
 
 
@@ -250,9 +274,8 @@ def run_checks(
         raise InstallCheckError(f"release tag must be exact stable SemVer: {release_tag}")
     if not re.fullmatch(r"[0-9a-f]{40}", release_sha):
         raise InstallCheckError("release SHA must be a full 40-character lowercase Git SHA")
-    assets_dir = assets_dir.resolve()
     skills = load_inventory(root)
-    checksums = validate_checksums(assets_dir)
+    checksums = validate_checksums(assets_dir.resolve())
     surfaces = [
         validate_claude_uploads(assets_dir, skills),
         validate_claude_code_plugin(assets_dir, release_tag, skills),
@@ -283,7 +306,13 @@ def main() -> int:
 
     try:
         report = run_checks(args.assets_dir, args.release_tag, args.release_sha)
-    except (InstallCheckError, OSError, json.JSONDecodeError, tomllib.TOMLDecodeError, zipfile.BadZipFile) as exc:
+    except (
+        InstallCheckError,
+        OSError,
+        json.JSONDecodeError,
+        tomllib.TOMLDecodeError,
+        zipfile.BadZipFile,
+    ) as exc:
         raise SystemExit(f"Release install check failed: {exc}") from exc
     args.report.parent.mkdir(parents=True, exist_ok=True)
     args.report.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
