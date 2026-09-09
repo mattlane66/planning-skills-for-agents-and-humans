@@ -43,6 +43,7 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
     assert.deepEqual(
       listed.tools.map((tool) => tool.name).sort(),
       [
+        'get_artifact_contracts',
         'get_artifact_template',
         'get_orchestration_manifest',
         'get_planning_skill',
@@ -95,6 +96,15 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
     });
     assert.match(textContent(template), /## Transition table/);
     assert.match(textContent(template), /stateDiagram-v2/);
+
+    const artifactContracts = await client.callTool({
+      name: 'get_artifact_contracts',
+      arguments: {},
+    });
+    assert.match(textContent(artifactContracts), /^version: 1/m);
+    assert.match(textContent(artifactContracts), /gate_usage:/);
+    assert.match(textContent(artifactContracts), /selected_design_breadboard:/);
+    assert.match(textContent(artifactContracts), /context_packet:/);
 
     const sketchSkill = await client.callTool({
       name: 'get_planning_skill',
