@@ -120,6 +120,9 @@ class WorkflowSecurityTests(unittest.TestCase):
             ["claude-code", "codex", "gemini-cli"],
             inputs["runtime"]["options"],
         )
+        self.assertEqual("choice", inputs["profile"]["type"])
+        self.assertEqual("core", inputs["profile"]["default"])
+        self.assertEqual(["core", "full"], inputs["profile"]["options"])
         self.assertIn(
             '--adapter-command "python3 adapters/runtime_case_adapter.py"',
             text,
@@ -135,6 +138,25 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertIn("runtime_version must be an exact npm package version", install_step["run"])
         self.assertIn("not a tag or range", install_step["run"])
         self.assertIn('npm install --global "${package}@${EVAL_RUNTIME_VERSION}"', install_step["run"])
+        matrix_step = next(
+            step
+            for step in payload["jobs"]["evaluate"]["steps"]
+            if step.get("name") == "Run blind behavior matrix"
+        )
+        core_cases = (
+            "router-selects-no-planning-for-contained-copy-change",
+            "router-ignores-instructions-in-untrusted-source-material",
+            "shaping-starts-from-solution-and-extracts-working-r",
+            "gated-profile-enforces-prerequisites",
+            "selection-still-requires-accepted-r-appetite-and-human-choice",
+            "selected-design-breadboarding-reconciles-candidate-evidence",
+            "context-packet-excludes-candidate-build-scope",
+            "implementation-conformance-is-not-realized-fit",
+        )
+        self.assertEqual(8, matrix_step["run"].count("--case-id "))
+        for case_id in core_cases:
+            self.assertIn(f"--case-id {case_id}", matrix_step["run"])
+        self.assertIn('"${case_args[@]}"', matrix_step["run"])
         self.assertNotIn("--yolo", text)
         self.assertNotIn("dangerously-skip", text)
 
