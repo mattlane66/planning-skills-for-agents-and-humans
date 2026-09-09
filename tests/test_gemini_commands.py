@@ -19,6 +19,8 @@ EXPECTED = {
     "reconcile-sketch",
     "statechart",
     "dumplink",
+    "contracts",
+    "executable-breadboard",
     "kickoff",
     "feed-context",
     "check-drift",

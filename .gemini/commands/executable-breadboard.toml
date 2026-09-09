@@ -1,0 +1,15 @@
+description = "Prepare the selected slice as a concrete behavioral build handoff with fixtures, example runs, edge cases, and tests."
+
+prompt = """
+Use this repository's planning instructions and executable-breadboard skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{executable-breadboards/SKILL.md}
+@{templates/executable-breadboard.md}
+
+Command arguments / source context:
+{{args}}
+
+Prepare only the selected slice for implementation. Include the relevant accepted breadboard structure, interface contracts, concrete starting fixtures, example runs, expected visible results and state changes, edge cases, acceptance tests, open decisions, and verification target. Do not expand scope or invent missing fields, states, error cases, or expected results. Stop after the build handoff unless implementation is explicitly requested.
+"""
