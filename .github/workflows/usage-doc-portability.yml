@@ -1,0 +1,74 @@
+name: Final usage portability cleanup
+
+on:
+  push:
+    branches:
+      - docs/usage-install-audit
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: github.event.head_commit.message == 'Run final usage portability cleanup'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - name: Remove source-repo assumptions from portable prompts
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              'docs/dumplink-usage.md': (
+                  'Use AGENTS.md and dumplink/SKILL.md.\nTurn this selected project into a Dumplink plan.',
+                  'Use the installed `dumplink` skill and follow this product repository\'s own instructions.\nTurn this selected project into a Dumplink plan.'
+              ),
+              'docs/statechart-usage.md': (
+                  'Use AGENTS.md and statechart/SKILL.md.\nDerive a statechart for [selected scope] from [accepted breadboard].',
+                  'Use the installed `statechart` skill and follow this product repository\'s own instructions.\nDerive a statechart for [selected scope] from [accepted breadboard].'
+              ),
+              'docs/sketch-reconciliation.md': (
+                  'Use AGENTS.md and sketch-reconciliation/SKILL.md.\nReconcile this attached sketch with path/to/shaping.md and path/to/breadboard.md.',
+                  'Use the installed `sketch-reconciliation` skill and follow this product repository\'s own instructions.\nReconcile this attached sketch with path/to/shaping.md and path/to/breadboard.md.'
+              ),
+          }
+
+          for name, (old, new) in replacements.items():
+              p = Path(name)
+              text = p.read_text(encoding='utf-8')
+              if old not in text:
+                  raise SystemExit(f'missing expected text in {name}')
+              p.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Rebuild standalone documentation portal
+        working-directory: site
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          npm run build
+
+      - name: Commit portability cleanup
+        shell: bash
+        run: |
+          set -euo pipefail
+          git add docs site/index.html
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Remove source-repo assumptions from usage prompts"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
