@@ -29,6 +29,8 @@ jobs:
     name: Build trusted Pages artifact
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    outputs:
+      pages_enabled: ${{ steps.pages_status.outputs.enabled }}
     steps:
       - name: Check out trusted main commit
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -50,15 +52,45 @@ jobs:
           npm run check
           git diff --exit-code -- index.html
 
+      - name: Check whether GitHub Pages is enabled
+        id: pages_status
+        shell: bash
+        run: |
+          set -euo pipefail
+          status="$(curl --silent --show-error --location \
+            --output /tmp/pages-status.json \
+            --write-out '%{http_code}' \
+            -H 'Accept: application/vnd.github+json' \
+            -H 'X-GitHub-Api-Version: 2026-03-10' \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages")"
+
+          case "$status" in
+            200)
+              echo "enabled=true" >> "$GITHUB_OUTPUT"
+              ;;
+            404)
+              echo "enabled=false" >> "$GITHUB_OUTPUT"
+              echo "::notice::GitHub Pages is not enabled for this public repository. Portal checks passed; deployment is skipped until Pages is enabled with GitHub Actions as the source."
+              ;;
+            *)
+              cat /tmp/pages-status.json >&2 || true
+              echo "::error::Unable to determine GitHub Pages status (HTTP $status)."
+              exit 1
+              ;;
+          esac
+
       - name: Configure Pages
+        if: steps.pages_status.outputs.enabled == 'true'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
       - name: Stage exact tracked portal
+        if: steps.pages_status.outputs.enabled == 'true'
         run: |
           mkdir -p /tmp/planning-skills-pages
           cp site/index.html /tmp/planning-skills-pages/index.html
 
       - name: Upload Pages artifact
+        if: steps.pages_status.outputs.enabled == 'true'
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
           path: /tmp/planning-skills-pages
@@ -66,6 +98,7 @@ jobs:
   deploy:
     name: Deploy trusted Pages artifact
     needs: build
+    if: needs.build.outputs.pages_enabled == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:
