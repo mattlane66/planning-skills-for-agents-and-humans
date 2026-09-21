@@ -129,6 +129,19 @@ class BehaviorReportValidationTests(unittest.TestCase):
             ):
                 validator.validate_report(report)
 
+
+    def test_rejects_declared_runtime_version_that_does_not_match_observed_cli(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            payload = make_report()
+            payload["runtime_version"] = "9.9.9"
+            report = self.write_report(root, payload)
+            with self.assertRaisesRegex(
+                validator.ReportValidationError,
+                "observed runtime version does not contain declared runtime_version",
+            ):
+                validator.validate_report(report)
+
     def test_rejects_retained_evidence_that_does_not_match_report(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
