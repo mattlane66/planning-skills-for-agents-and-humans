@@ -210,9 +210,10 @@ def default_presentation(package):
     bb = package["breadboard"]
     selected = next(
         (s for s in package["shaping"]["shapes"] if s["id"] == package["shaping"]["selected_shape"]),
-        package["shaping"]["shapes"][0] if package["shaping"]["shapes"] else {"parts": []},
+        None,
     )
-    notes = [{"ref": p.get("Part", ""), "text": p.get("Mechanism", "")} for p in selected["parts"][:6] if p.get("Part")]
+    parts = selected["parts"] if selected else []
+    notes = [{"ref": p.get("Part", ""), "text": p.get("Mechanism", "")} for p in parts[:6] if p.get("Part")]
     return {
         "schema_version": 1,
         "hero_place": bb["places"][0].get("ID", "") if bb["places"] else "",
@@ -244,13 +245,29 @@ def build_package(planning_dir, frame_path=None, shaping_path=None, breadboard_p
     shaping_path = Path(shaping_path or discover(directory, "shaping")).resolve()
     breadboard_path = Path(breadboard_path or discover(directory, "breadboard")).resolve()
     shaping, shaping_text = parse_shaping(shaping_path)
+    frame = parse_frame(frame_path)
+    breadboard = parse_breadboard(breadboard_path)
+
+    def portable_source(path):
+        try:
+            return str(path.relative_to(directory))
+        except ValueError:
+            return path.name
+
+    frame["source"] = portable_source(frame_path)
+    shaping["source"] = portable_source(shaping_path)
+    breadboard["source"] = portable_source(breadboard_path)
     package = {
         "schema_version": SCHEMA_VERSION,
         "kind": "PlanningPackage",
-        "frame": parse_frame(frame_path),
+        "frame": frame,
         "shaping": shaping,
-        "breadboard": parse_breadboard(breadboard_path),
-        "sources": {"frame": str(frame_path), "shaping": str(shaping_path), "breadboard": str(breadboard_path)},
+        "breadboard": breadboard,
+        "sources": {
+            "frame": portable_source(frame_path),
+            "shaping": portable_source(shaping_path),
+            "breadboard": portable_source(breadboard_path),
+        },
     }
     package["title"] = shaping["title"] or package["frame"]["title"] or package["breadboard"]["title"]
     req_auth = {row.get("Authority", "") for row in shaping["requirements"] if row.get("Authority")}
@@ -292,7 +309,8 @@ def mock_surface(package):
         else:
             kind = "button"
         controls.append(f'<div class="wire {kind}"{data_id(rid)}><b>{esc(rid)}</b><span>{esc(label)}</span></div>')
-    return f'<div class="mock"{data_id(hero)}><header><b>{esc(hero)}</b>{esc(place.get("Place","Primary place"))}<small>selected shape</small></header><div class="mock-body">{"".join(controls)}</div></div>'
+    authority = "selected design" if bb["mode"] == "selected-design" else (bb["mode"] or "derived view")
+    return f'<div class="mock"{data_id(hero)}><header><b>{esc(hero)}</b>{esc(place.get("Place","Primary place"))}<small>{esc(authority)}</small></header><div class="mock-body">{"".join(controls)}</div></div>'
 
 
 def render_html(package):
@@ -345,7 +363,7 @@ def render_html(package):
 """
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{esc(package["title"])} · Shaped Work</title><style>{css}</style></head><body>
 <main class="page"><header class="mast"><div><div class="eyebrow">Planning Publisher · canonical artifacts → human view</div><h1>{esc(package["title"])}</h1></div><p>Derived projection. Canonical planning Markdown remains authoritative. Click a labeled element to trace its stable ID.</p></header>
-<section class="summary"><article class="card"><h2>Problem</h2>{esc(problem)}</article><article class="card"><h2>Outcome</h2>{esc(outcome)}</article><article class="card"><h2>Appetite</h2>{esc(appetite.get("Time budget",""))}<p><b>Cut:</b> {esc(appetite.get("Cut line",""))}</p></article><article class="card"><h2>Selected shape</h2><b>{esc(package["shaping"]["selected_shape"])} · {esc(shape.get("name",""))}</b></article></section>
+<section class="summary"><article class="card"><h2>Problem</h2>{esc(problem)}</article><article class="card"><h2>Outcome</h2>{esc(outcome)}</article><article class="card"><h2>Appetite</h2>{esc(appetite.get("Time budget",""))}<p><b>Cut:</b> {esc(appetite.get("Cut line",""))}</p></article><article class="card"><h2>{'Selected shape' if package["shaping"]["selected_shape"] else 'Shape status'}</h2><b>{esc((package["shaping"]["selected_shape"] + " · " + shape.get("name","")) if package["shaping"]["selected_shape"] else "No human-selected shape")}</b></article></section>
 <section class="panel"><div class="panel-head"><div><div class="eyebrow">Composite shape board</div><h2>See the behavior, not just the Markdown.</h2></div><p>Journey first. Selected surface in the center. Mechanisms annotate the product. Hidden behavior stays on a secondary rail.</p></div><div class="board"><div class="journey">{journey}</div><div class="board-main"><div class="notes">{note_html(notes[:midpoint])}</div>{mock_surface(package)}<div class="notes">{note_html(notes[midpoint:])}</div></div><small>System rail · hidden consequences and stores</small><div class="rail">{rail}</div></div></section>
 <section class="panel"><div class="eyebrow">Decision record</div><h2>Shapes and selected direction</h2><div class="grid">{shape_cards}</div></section>
 <section class="panel"><div class="eyebrow">Judging criteria</div><h2>Requirements × shapes</h2><div class="table"><table><thead><tr><th>ID</th><th>Requirement</th><th>Authority</th>{heads}</tr></thead><tbody>{req_rows}</tbody></table></div></section>
