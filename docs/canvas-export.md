@@ -79,18 +79,6 @@ Breadboard Markdown tables
 
 The normalized breadboard model is an in-memory typed graph derived from the tables. It may be serialized as JSON when a downstream tool needs machine-readable graph data, but JSON is not a required planning artifact.
 
-For the **whole shaped-work package**, use [Planning Publisher](./planning-publisher.md). It extends the same separation across frame, shaping, selected-design breadboard, decision evidence, and slice state:
-
-```text
-Canonical planning Markdown
-  -> normalized PlanningPackage
-  -> validated presentation model
-  -> standalone shaped-work HTML
-  -> future SVG / PNG / canvas adapters
-```
-
-The `PlanningPackage` is useful to agents; the HTML is the human projection. Optional `presentation.json` may choose what to foreground, but every referenced stable ID is validated against canonical planning artifacts and cannot create new behavior or authority.
-
 Target adapters may include:
 
 - TLDraw adapter
