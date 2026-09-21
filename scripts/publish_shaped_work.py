@@ -5,9 +5,16 @@ import argparse
 import html
 import json
 import re
+import sys
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from planning_publisher_ext import augment_package, render_enhanced_html, write_svg_assets, render_with_cairosvg
+
+SCHEMA_VERSION = 2
 
 
 class PublisherError(ValueError):
@@ -224,8 +231,8 @@ def default_presentation(package):
 
 
 def validate_presentation(package, payload):
-    if payload.get("schema_version", 1) != 1:
-        raise PublisherError("Only presentation schema_version 1 is supported")
+    if payload.get("schema_version", 1) not in (1, 2):
+        raise PublisherError("Only presentation schema_version 1 or 2 is supported")
     refs = [payload.get("hero_place", "")] + payload.get("featured_ids", [])
     refs += [item.get("ref", "") for item in payload.get("annotations", [])]
     unknown = sorted({ref for ref in refs if ref and ref not in known_ids(package)})
@@ -282,7 +289,7 @@ def build_package(planning_dir, frame_path=None, shaping_path=None, breadboard_p
     if presentation_path is None and (directory / "presentation.json").is_file():
         presentation_path = directory / "presentation.json"
     package["presentation"] = load_presentation(Path(presentation_path) if presentation_path else None, package)
-    return package
+    return augment_package(package, directory)
 
 
 def esc(value):
@@ -373,6 +380,9 @@ const box=document.getElementById('inspector');document.addEventListener('click'
 </script></body></html>"""
 
 
+render_html = render_enhanced_html
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--planning-dir", type=Path, default=Path("planning"))
@@ -382,11 +392,14 @@ def main(argv=None):
     parser.add_argument("--presentation", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--json-output", type=Path)
+    parser.add_argument("--svg-dir", type=Path)
+    parser.add_argument("--png-dir", type=Path)
+    parser.add_argument("--pdf-output", type=Path)
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
     package = build_package(args.planning_dir, args.frame, args.shaping, args.breadboard, args.presentation)
     if args.check:
-        print(f"PlanningPackage OK: {len(package['shaping']['requirements'])} requirements, {len(package['shaping']['shapes'])} shapes, {len(package['breadboard']['behavior_traces'])} behavior traces.")
+        print(f"PlanningPackage OK: {len(package['shaping']['requirements'])} requirements, {len(package['shaping']['shapes'])} shapes, {len(package['breadboard']['behavior_traces'])} behavior traces, {len(package['artifacts'])} optional artifacts.")
         return 0
     output = args.output or args.planning_dir / "shaped-work.html"
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -394,7 +407,14 @@ def main(argv=None):
     if args.json_output:
         args.json_output.parent.mkdir(parents=True, exist_ok=True)
         args.json_output.write_text(json.dumps(package, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+    svg_paths = []
+    if args.svg_dir or args.png_dir or args.pdf_output:
+        svg_dir = args.svg_dir or output.parent / "shaped-work-assets"
+        svg_paths = write_svg_assets(package, svg_dir)
+        render_with_cairosvg(svg_paths, args.png_dir, args.pdf_output)
     print(output)
+    if svg_paths:
+        print(f"Wrote {len(svg_paths)} SVG board(s) to {svg_paths[0].parent}")
     return 0
 
 
