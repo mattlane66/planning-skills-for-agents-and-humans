@@ -153,6 +153,10 @@ def validate_report(
             raise ReportValidationError(
                 f"{case_id}: runtime version output does not prove an available runtime"
             )
+        if runtime_version not in observed_version:
+            raise ReportValidationError(
+                f"{case_id}: observed runtime version does not contain declared runtime_version {runtime_version!r}"
+            )
 
         if artifacts_dir is not None:
             evidence_dir = artifacts_dir / case_id / ".runtime-eval"
