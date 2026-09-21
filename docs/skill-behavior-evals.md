@@ -96,6 +96,26 @@ Each adapter invocation has a bounded timeout (900 seconds by default). When
 cleanup, including for a nonzero adapter exit or timeout. Use a fresh target
 directory for each run; the runner refuses to overwrite retained evidence.
 
+Before treating a command-adapter report as publishable real-runtime evidence,
+validate the report and its retained per-case runtime evidence:
+
+```bash
+python3 scripts/validate-behavior-report.py \
+  evals/reports/claude-code.json \
+  --artifacts-dir evals/artifacts/claude-code \
+  --expected-runtime claude-code \
+  --expected-model "<model>" \
+  --expected-commit "$(git rev-parse HEAD)"
+```
+
+The validator rejects fixture reports, unknown runtime/model identifiers,
+non-full commit SHAs, inconsistent pass/fail counts, missing model output,
+missing or mismatched runtime metadata, unavailable runtime-version evidence,
+and missing retained `.runtime-eval` files. It verifies provenance structure;
+it does not prove that the provider authenticated successfully beyond the
+runtime evidence retained by the adapter, and it does not turn a failing
+behavior score into a passing one.
+
 Maintainers can also run `.github/workflows/behavior-evals.yml` manually. Supply a command that implements the same blind adapter protocol plus the runtime, runtime version, and model identifiers. If the adapter needs a credential, configure the repository secret `PLANNING_SKILLS_EVAL_API_KEY` and let the adapter translate that generic input for its runtime. The workflow has read-only repository permissions and retains the report and isolated case workspaces as bounded artifacts.
 
 ## Failure categories
@@ -135,4 +155,4 @@ Do not treat one client or model result as universal. Re-run after changing:
 
 Credential-free schema and scorer tests belong in ordinary CI. Real runtime runs may be manual or scheduled because credentials, model availability, and client versions vary. A runtime regression should be recorded with the failing case and environment rather than hidden by weakening the shared case.
 
-Before calling a command-adapter report blind, confirm its protocol is `blind-command-v1`. Reports from `fixture-v1` validate only the corpus and scorer.
+Before calling a command-adapter report blind, confirm its protocol is `blind-command-v1`. Reports from `fixture-v1` validate only the corpus and scorer. The manual GitHub Actions workflow runs `scripts/validate-behavior-report.py` before uploading retained evidence so an artifact cannot be presented as a valid real-runtime report merely because the runner produced JSON.
