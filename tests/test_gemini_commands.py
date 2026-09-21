@@ -23,6 +23,7 @@ EXPECTED = {
     "executable-breadboard",
     "kickoff",
     "feed-context",
+    "present-plan",
     "check-drift",
     "reflect-breadboard",
     "lead-user",
@@ -65,6 +66,8 @@ class GeminiCommandTests(unittest.TestCase):
         self.assertIn("source evidence", prompts["frame"])
         self.assertIn("builder-facing", prompts["kickoff"])
         self.assertIn("context packet", prompts["feed-context"])
+        self.assertIn("derived projection", prompts["present-plan"])
+        self.assertIn("do not select a shape", prompts["present-plan"])
         self.assertIn("implementation reality", prompts["reflect-breadboard"])
         self.assertIn("one next move", prompts["lead-user"])
         self.assertIn("real sources", prompts["lead-user-evidence"])
