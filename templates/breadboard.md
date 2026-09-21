@@ -118,6 +118,33 @@ Scan every table row for incoming `Wires Out` and `Returns To` references to eac
 |---|---|---|---|---|
 | U3 | S1, N4 | U1 via N1; restore event via N3 | N4 has no traced entry | supported / gap / conflict |
 
+## Visual breadboard
+
+For nontrivial interactive work, add a deliberate spatial projection of the canonical tables.
+
+- Primary scenario:
+- Visual surface: SVG / HTML-canvas / Excalidraw / TLDraw / FigJam / Miro / Mermaid fallback / other
+- Finger-trace result: pass / needs revision / not applicable
+- Visual file or embedded view:
+- Composition notes:
+  - primary journey:
+  - visible-place stacks:
+  - hidden system rail:
+  - local branches:
+  - unresolved annotations:
+
+The visual is derived. It may rearrange or duplicate labeled references for legibility, but it may not introduce behavior absent from the canonical tables.
+
+## Targeted sketches
+
+Use only where spatial detail materially changes comprehension. Raise fidelity locally, not globally.
+
+| Sketch | Elaborates | Question resolved | States / controls shown | Status |
+|---|---|---|---|---|
+| SK1 | P3 / U7 / U8 / S2 | ... | ... | needed / resolved / remove |
+
+A targeted sketch must map to canonical breadboard IDs and cannot introduce new behavior by itself.
+
 ## Candidate-shape findings
 
 Use only in `candidate-shape` mode.
@@ -196,6 +223,12 @@ Once a selected-design breadboard is accepted and a slice is selected, convert t
 - [ ] Stores exist for meaningful side effects.
 - [ ] Product-relevant branches are explicit and each has an observable consequence.
 - [ ] Every selected mechanism is represented; current-state claims cite evidence or remain unresolved.
-- [ ] Any Mermaid diagram is a faithful rendering of the tables, with no diagram-only behavior.
+- [ ] A nontrivial interactive flow has a deliberate visual breadboard rather than only an auto-layout dependency graph.
+- [ ] The primary scenario passes the finger-trace test.
+- [ ] User-visible places and affordances dominate the visual hierarchy; hidden behavior supports them.
+- [ ] Branches stay near their causal decision and avoid unnecessary crossing wires.
+- [ ] Every targeted sketch has an `SK#` ID and maps to canonical breadboard IDs.
+- [ ] The visual projection and targeted sketches contain no behavior absent from the tables.
+- [ ] Any Mermaid fallback is a faithful rendering of the tables, with no diagram-only behavior.
 - [ ] Only accepted selected-design behavior produces interface contracts or slice candidates.
 - [ ] Any shaping conflict is surfaced rather than silently absorbed.

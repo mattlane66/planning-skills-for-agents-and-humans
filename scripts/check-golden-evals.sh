@@ -63,6 +63,13 @@ require_text breadboarding/SKILL.md "## Affordance and seam test"
 require_text breadboarding/references/behavior-tracing-and-verification.md "## Reverse-trace observable consequences"
 require_text breadboarding/references/behavior-tracing-and-verification.md "## Verify graph integrity"
 require_text breadboarding/references/notation-rendering-and-slicing.md "Mode: current-state | candidate-shape | selected-design"
+require_text breadboarding/SKILL.md "## Producing a visual breadboard"
+require_text breadboarding/SKILL.md "## Targeted sketches"
+require_text breadboarding/SKILL.md "Finger-trace test"
+require_text breadboarding/references/notation-rendering-and-slicing.md "## Producing a visual breadboard"
+require_text breadboarding/references/notation-rendering-and-slicing.md "Raise fidelity locally, not globally."
+require_text templates/breadboard.md "## Visual breadboard"
+require_text templates/breadboard.md "## Targeted sketches"
 # Match literal Markdown code spans.
 # shellcheck disable=SC2016
 require_text templates/breadboard.md 'Mode: `current-state`, `candidate-shape`, or `selected-design`'
@@ -70,6 +77,7 @@ require_text templates/breadboard.md "## Behavior traces"
 require_text templates/breadboard.md "## Reverse-trace audit"
 require_text evals/workflow-behavior-cases.json '"id": "current-state-code-fidelity"'
 require_text evals/workflow-behavior-cases.json '"id": "breadboard-causal-integrity"'
+require_text evals/workflow-behavior-cases.json '"id": "visual-breadboard-mixed-fidelity"'
 require_text evals/workflow-behavior-cases.json '"id": "breadboard-reverse-reachability"'
 require_text evals/workflow-behavior-cases.json '"id": "selected-design-granularity"'
 require_text evals/workflow-behavior-cases.json '"id": "criterion-identity-survives-promotion"'
@@ -123,6 +131,8 @@ require_text evals/golden/context-packet-execution-contract.md "Execution contra
 require_text evals/golden/dumplink-vertical-groups.md "cluster by judgeable"
 require_text evals/golden/statechart-derived-authority.md "breadboard remains authoritative"
 require_text evals/golden/sketch-reconciliation-authority.md "Record visible observations before interpretations"
+require_text evals/golden/visual-breadboard-mixed-fidelity.md "Fidelity is raised locally, not globally."
+require_text evals/golden/visual-breadboard-mixed-fidelity.md "secondary system rail"
 require_text evals/golden/drift-check-strict-output.md "No planning drift found"
 
 if [[ "$missing" -gt 0 ]]; then

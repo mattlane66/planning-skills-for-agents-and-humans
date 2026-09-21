@@ -27,12 +27,13 @@ Derived views can include:
 - Miro boards
 - exported SVG or PNG diagrams
 
-Mermaid is the portable visual projection. Canvas tools are review and collaboration surfaces.
+The **visual breadboard** is the primary human projection for nontrivial interactive work. It should use deliberate spatial composition and may include targeted sketches. Mermaid remains a useful compact fallback when automatic layout is sufficient.
 
 ```text
-Tables = canonical model
-Mermaid = portable visual projection
-Canvas = review / collaboration surface
+Canonical tables = planning model
+Visual breadboard = primary human projection
+Mermaid = compact / portable fallback
+Canvas or SVG = preferred deliberate rendering surface
 ```
 
 ## Included live viewer
@@ -52,8 +53,12 @@ This closes the live visual review loop without making the browser view authorit
 To support reliable export into canvas tools:
 
 - Keep stable IDs in node labels: `P1`, `U1`, `N1`, `S1`.
-- Group nodes by place.
+- Group visible affordances by place and preserve the place-as-stack composition.
 - Preserve diagram labels from headings.
+- Preserve targeted-sketch IDs and their mappings to canonical breadboard IDs.
+- Keep the representative user journey visually dominant.
+- Keep hidden logic and stores on a secondary system rail when possible.
+- Keep branches local to the decision that causes them and minimize wire crossings.
 - Use solid arrows for control flow / `Wires Out`.
 - Use dashed arrows for returns, data flow, and visible consequences.
 - Do not add behavior to a diagram that is missing from the tables.
@@ -67,8 +72,9 @@ A canvas exporter should be structured as adapters around a shared pipeline:
 ```text
 Breadboard Markdown tables
   -> normalized breadboard model
-  -> Mermaid or canvas-neutral diagram objects
-  -> Target adapter
+  -> visual-composition objects (places, rails, branches, notes, SK# sketches)
+  -> target adapter
+  -> optional Mermaid fallback
 ```
 
 The normalized breadboard model is an in-memory typed graph derived from the tables. It may be serialized as JSON when a downstream tool needs machine-readable graph data, but JSON is not a required planning artifact.
@@ -84,20 +90,21 @@ The target adapter should not own the planning logic. It should only project the
 
 ## Static image export
 
-The simplest adapter renders Mermaid to SVG or PNG and places that image on the canvas.
+The simplest deliberate renderer produces an SVG or HTML-canvas visual breadboard directly from the normalized model and its composition hints. Mermaid-to-SVG remains acceptable as a fallback for flows that do not need local fidelity or deliberate placement.
 
 Pros:
 
-- easy to support across tools
-- preserves Markdown and Mermaid as the source pipeline
+- portable and easy to review
+- supports explicit placement, whitespace, annotations, and targeted-sketch regions
+- preserves the canonical tables as the planning source
 - good for pan, zoom, walkthrough, and review
 
 Cons:
 
-- not editable as individual canvas objects
-- canvas edits do not automatically flow back into the breadboard tables
+- not editable as individual canvas objects unless the target supports semantic objects
+- visual edits do not automatically flow back into the breadboard tables
 
-Use this first.
+Start with direct SVG/HTML rendering when the interaction benefits from spatial composition; use Mermaid when auto-layout is genuinely sufficient.
 
 ## Semantic object export
 
@@ -129,6 +136,6 @@ Canvas export should not make the diagram more authoritative than the breadboard
 
 Use this rule:
 
-> Tables first. Mermaid second. Canvas third.
+> Canonical model first. Human-readable visual second. Target canvas third.
 
-A canvas is useful because it makes the system easier to inspect. It is not a substitute for a well-formed breadboard.
+Mermaid may serve as the visual layer when it is clear enough, but it should not force an interaction into a generic dependency-graph layout. A canvas is useful because it makes the system easier to inspect; it is not a substitute for a well-formed breadboard.

@@ -1,6 +1,6 @@
 # Breadboarding notation, rendering, and slicing reference
 
-Load this reference only when the work needs the complete element catalog, chunking rules, output template, Mermaid conventions, or selected-design slicing procedure.
+Load this reference only when the work needs the complete element catalog, chunking rules, output template, visual composition grammar, targeted sketches, Mermaid fallback conventions, or selected-design slicing procedure.
 
 ## Contents
 
@@ -8,6 +8,8 @@ Load this reference only when the work needs the complete element catalog, chunk
 - [Chunking](#chunking)
 - [Recommended output structure](#recommended-output-structure)
 - [Reading a whiteboard breadboard](#reading-a-whiteboard-breadboard)
+- [Producing a visual breadboard](#producing-a-visual-breadboard)
+- [Targeted sketches and mixed fidelity](#targeted-sketches-and-mixed-fidelity)
 - [Mermaid diagrams](#mermaid-diagrams)
 - [Transition to slicing](#transition-to-slicing)
 - [Slicing](#slicing)
@@ -81,6 +83,12 @@ shaping: true
 ## Behavior traces
 [table]
 
+## Visual breadboard
+[derived spatial projection for nontrivial interactive work]
+
+## Targeted sketches
+[SK# mappings only where spatial interaction needs more fidelity]
+
 ## Notes
 - [important constraints, open questions, or assumptions]
 ```
@@ -111,13 +119,104 @@ Read one by:
 
 If the visual may change accepted behavior or scope, use `sketch-reconciliation` first and translate only accepted deltas.
 
+## Producing a visual breadboard
+
+A visual breadboard is a **spatial explanation of behavior**, not a generic graph rendering.
+
+The canonical tables answer "what exists and how is it wired?" The visual should answer "how does a person experience this sequence, and where do consequential system decisions intervene?"
+
+For nontrivial interactive work, compose the visual after the canonical model is structurally sound.
+
+### Composition grammar
+
+Default to these rules unless the product's interaction suggests a clearer arrangement:
+
+1. **Primary journey left to right.** Put the representative entry on the left and its observable consequence to the right.
+2. **Places as loose stacks.** Put a place/context label at the top, with its visible affordances immediately below. A place need not be boxed if whitespace communicates containment more clearly.
+3. **Visible layer above, system rail below.** Keep user-facing controls, content, and states visually dominant. Put validation, stores, APIs, background work, and external systems beneath or between the visible places they explain.
+4. **Local branches.** Let a branch leave from the decision that causes it. Keep its consequence nearby and rejoin the primary path only when the behavior actually rejoins.
+5. **Consequences near causes.** Avoid sending a wire across the entire board merely to reach a visible outcome that can be shown locally.
+6. **Whitespace before boxes.** Group with spacing and alignment first. Use containing boxes only for real boundaries.
+7. **Few crossings.** Reroute, reorder, or duplicate a clearly labeled reference rather than accepting a thicket of crossing lines.
+8. **Annotations at the point of uncertainty.** Put a short note beside the decision, risk, cut, or unresolved behavior it describes.
+9. **Stable IDs remain visible.** Every place, affordance, store, system action, and targeted sketch should remain traceable to the canonical model.
+10. **Do not optimize for compactness.** Optimize for play-through clarity.
+
+The visual may be SVG, HTML/canvas, Excalidraw, TLDraw, FigJam, Miro, or another surface that supports deliberate placement.
+
+### Finger-trace test
+
+Before calling the visual done, ask:
+
+> Can a reviewer trace the representative scenario with a finger, see each meaningful branch and visible state change, and understand why the next step happens without reading every table row?
+
+If not, change the composition. Do not solve a visual-composition problem by adding more boxes.
+
+### Visual hierarchy
+
+A useful visual hierarchy generally reads in this order:
+
+1. place or screen context
+2. user-facing affordance or visible state
+3. causal movement / branch
+4. hidden system consequence
+5. store or external boundary
+6. annotation
+
+If stores and internal actions become the most visually prominent objects, the breadboard has drifted toward a service graph.
+
+## Targeted sketches and mixed fidelity
+
+Breadboards should not have uniform fidelity.
+
+Use this principle:
+
+> **Use the lowest fidelity that resolves the question. Raise fidelity locally, not globally.**
+
+Add a targeted sketch when a textual affordance label does not make the important interaction legible because the behavior depends on:
+
+- spatial arrangement or hierarchy
+- what remains visible while a local state changes
+- selection, editing, comparison, or before/after state
+- direct manipulation such as drag/drop
+- interaction among several controls in one place
+- a dense control whose action would otherwise be ambiguous
+
+A targeted sketch should:
+
+- cover the smallest region needed to explain the behavior
+- remain rough enough that reviewers focus on mechanism rather than styling
+- carry a stable `SK#` identifier
+- name the canonical IDs it elaborates
+- show only states or controls already represented in the canonical model
+
+Example:
+
+`SK1 → P3 / U7 / U8 / S2`
+
+Do not sketch an entire product merely because one interaction needs clarification. Do not introduce hidden persistence, validation, navigation, or new actions in a sketch unless they are first added to the canonical tables through the appropriate planning authority.
+
+### Mixed-fidelity composition
+
+One board may legitimately combine:
+
+- a low-detail place stack for routine navigation
+- explicit hidden logic for a consequential branch
+- a tiny wireframe for a difficult editor or merge interaction
+- a store or API marker where persistence materially changes later behavior
+- short handwritten-style rationale or risk notes
+
+That mixture is a feature. Fidelity should follow uncertainty, not visual consistency.
+
 ## Mermaid diagrams
 
-A Mermaid diagram is optional. The tables are the source of truth.
+Mermaid remains a useful compact or machine-portable fallback. It is not the preferred visual language when deliberate spatial composition or targeted sketches materially improve comprehension.
+
+The tables remain the source of truth.
 
 ### Diagram rules
 
-If you add a diagram:
+If you add a Mermaid diagram:
 - group nodes by place first
 - make affordances under each place visible
 - keep IDs consistent with the tables

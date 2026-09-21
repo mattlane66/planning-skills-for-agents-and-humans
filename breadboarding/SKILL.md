@@ -24,7 +24,7 @@ Every breadboard must declare one mode:
 - `candidate-shape` — exploratory evidence about one unselected shape
 - `selected-design` — normative accepted future intent
 
-The tables are the source of truth within the authority of the declared mode. Mermaid diagrams are optional visualizations for humans.
+The canonical tables remain the source of truth within the authority of the declared mode. For nontrivial interactive product work, also produce a **visual breadboard** as the primary human-readable projection of that model. Mermaid is an optional compact fallback, not the target visual language.
 
 ## Causal story
 
@@ -115,6 +115,49 @@ Apply only an explicit human decision before continuing.
 ## Reading a whiteboard breadboard
 
 Translate hand-drawn or whiteboard stacks into the same canonical tables. If a visual may change an accepted shape or breadboard, use `sketch-reconciliation` first and translate only accepted deltas. Read the notation reference for visual conventions and the compact reading procedure.
+
+## Producing a visual breadboard
+
+For a nontrivial interactive flow, do not stop at tables or an automatically laid-out dependency graph. Compose a spatial breadboard that makes the behavior easy for a person to play through.
+
+Use the canonical tables to determine what exists, then arrange the visual deliberately:
+
+- make the primary user journey read left to right when that matches the interaction
+- render each major place as a loose vertical stack: place/context at the top, visible affordances immediately beneath it
+- keep the happy path visually dominant and let branches leave locally from the decision that causes them
+- put hidden behavior, validation, stores, APIs, background work, and external systems on a secondary system rail beneath or between the visible places they explain
+- keep user-visible consequences close to the action or branch that produces them
+- prefer whitespace and spatial grouping over containing every element in boxes
+- minimize line crossings; duplicate a labeled reference when that is clearer than a long crossing wire
+- annotate consequential unknowns, cuts, and decisions beside the relevant part of the flow
+- preserve the canonical breadboard IDs in labels so every visual object can be traced back to the tables
+
+Use this quality test:
+
+> **Finger-trace test:** can a reviewer follow the primary scenario through the board with a finger, understand what changes, and see why, without reading every table row?
+
+A visually complete board that fails this test is not finished.
+
+## Targeted sketches
+
+Use the lowest fidelity that resolves the question. Raise fidelity **locally, not globally**.
+
+Add a targeted sketch when the behavior depends materially on:
+
+- spatial arrangement or hierarchy
+- what remains visible while something else changes
+- a selection, editing, comparison, or before/after state
+- drag/drop or other direct manipulation
+- a dense control whose affordance is ambiguous in words
+- the interaction among several controls inside one place
+
+Sketch only the smallest region needed to make that behavior legible. Do not turn the breadboard into a polished mockup or invent decorative UI detail.
+
+Assign each targeted sketch a stable `SK#` ID and map it back to the breadboard elements it elaborates, for example:
+
+`SK1 → P3 / U7 / U8 / S2`
+
+The sketch cannot introduce behavior that is absent from the canonical tables. If the sketch reveals missing behavior, update the tables first (or use `sketch-reconciliation` when accepted intent would change), then regenerate the visual.
 
 ## What breadboarding is
 
@@ -264,7 +307,8 @@ Examples:
 7. Record the causal trace by ID, including meaningful branches and state effects.
 8. Cite evidence for non-obvious claims and mark unresolved links instead of guessing.
 9. Run forward and reverse graph-integrity checks and confirm that every visible effect reaches all of its actual sources.
-10. Stop before treating the map as selected future behavior or slicing it.
+10. For a nontrivial interactive flow, compose the visual breadboard and add only the targeted sketches needed to make the inspected behavior legible.
+11. Stop before treating the map as selected future behavior or slicing it.
 
 ### Candidate-shape mapping
 
@@ -277,8 +321,9 @@ Examples:
 7. Add current-state elements only when needed and keep them visibly descriptive.
 8. Identify unsupported mechanisms, rabbit holes, appetite risks when appetite is known, and spike candidates.
 9. Verify the mapped paths without expanding into unrelated design detail.
-10. Return proposed R/S changes plus fit and reverse-fit implications to shaping; state when an implication is provisional because R or appetite is not accepted.
-11. Stop when the question is clear enough for the next shaping move; do not slice or prepare implementation.
+10. When spatial interaction is part of the uncertainty, compose only the visual region and targeted sketch needed to judge that candidate; do not polish the whole product.
+11. Return proposed R/S changes plus fit and reverse-fit implications to shaping; state when an implication is provisional because R or appetite is not accepted.
+12. Stop when the question is clear enough for the next shaping move; do not slice or prepare implementation.
 
 ### Selected-design mapping
 
@@ -293,8 +338,9 @@ Examples:
 9. Add existing affordances the new ones must connect to, labeling current versus selected behavior.
 10. Make success, meaningful alternatives, failure, recovery, and persistence behavior explicit when relevant.
 11. Run forward and reverse graph-integrity checks and confirm that every selected mechanism and every Accepted R are represented or explicitly unresolved.
-12. Surface any shaping conflict and stop for an explicit decision.
-13. Obtain acceptance before slicing.
+12. For nontrivial interactive behavior, compose the visual breadboard, apply the finger-trace test, and add targeted sketches only where spatial detail is necessary.
+13. Surface any shaping conflict and stop for an explicit decision.
+14. Obtain acceptance before slicing.
 
 ## Quality checks
 
@@ -316,6 +362,12 @@ Examples:
 - Every selected mechanism is represented; every current-state claim is supported by evidence or marked unresolved.
 - Important user-visible consequences and branches are first-class.
 - Product-facing hidden behavior is preferred over abstract service decomposition.
+- A nontrivial interactive breadboard has a deliberate spatial visual projection rather than only an auto-layout dependency graph.
+- The primary scenario passes the finger-trace test.
+- Visible places and affordances dominate the visual hierarchy; hidden system behavior supports rather than overwhelms them.
+- Branches appear near the decision that causes them, and wire crossings are minimized.
+- Targeted sketches appear only where spatial behavior materially needs them and each `SK#` maps to canonical breadboard IDs.
+- No behavior exists only in the visual projection or targeted sketches.
 
 ## Affordance and seam test
 
@@ -346,7 +398,9 @@ Read [the notation, rendering, and slicing reference](references/notation-render
 - the complete element and relationship catalog
 - chunking rules
 - the recommended output template
-- Mermaid rendering conventions
+- visual breadboard composition grammar
+- targeted-sketch and mixed-fidelity rules
+- Mermaid fallback rendering conventions
 - selected-design slice creation, sequencing, exit conditions, and appetite cuts
 
 Do not load that reference for a simple current-state or candidate-shape map that stops before slicing.

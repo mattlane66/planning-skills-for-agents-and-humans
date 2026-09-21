@@ -340,6 +340,29 @@
       ]
     },
     {
+      "id": "visual-breadboard-mixed-fidelity",
+      "prompt": "Produce the selected-design breadboard for an interactive import-and-merge flow. The canonical behavior is already known. Render a human-readable visual where the main journey is easy to trace, keep persistence and validation on a secondary system rail, and add a small targeted sketch only for the merge chooser because its spatial comparison matters. Do not turn the whole product into a wireframe or add behavior that is not in the canonical model.",
+      "expected_skill": "breadboarding",
+      "expected_artifact_type": "breadboard",
+      "expected_gate": "breadboard-acceptance",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "visual breadboard",
+        "finger-trace",
+        "primary journey",
+        "secondary system rail",
+        "targeted sketch",
+        "SK# mapping",
+        "raise fidelity locally"
+      ],
+      "forbidden_evidence": [
+        "whole-product wireframe",
+        "diagram-only behavior",
+        "invented interaction",
+        "production code"
+      ]
+    },
+    {
       "id": "breadboard-causal-integrity",
       "prompt": "Verify this breadboard before acceptance. It contains a wire to missing N9, a displayed result with no source, and a rejected branch with no observable consequence. Identify each structural defect and stop rather than filling the gaps by assumption.",
       "expected_skill": "breadboarding",
