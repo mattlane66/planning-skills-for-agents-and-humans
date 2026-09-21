@@ -226,7 +226,7 @@ async function main() {
       'Planning Publisher shaped-work page',
     );
     assert.ok(
-      await evaluate('Boolean(document.querySelector('[data-plan-id="SK1"]'))'),
+      await evaluate('Boolean(document.querySelector(\'[data-plan-id="SK1"]\'))'),
       'Targeted sketch did not render with its stable ID.',
     );
     assert.equal(
@@ -235,9 +235,9 @@ async function main() {
       'Unselected candidate should be collapsed by default.',
     );
 
-    await evaluate('document.querySelector('[data-plan-id="U1"]').click(); true');
+    await evaluate('document.querySelector(\'[data-plan-id="U1"]\').click(); true');
     await waitFor(
-      () => evaluate('document.querySelectorAll('[data-plan-id="U1"].hit').length > 0'),
+      () => evaluate('document.querySelectorAll(\'[data-plan-id="U1"].hit\').length > 0'),
       'stable-ID inspector highlight',
     );
     assert.ok(
@@ -245,7 +245,7 @@ async function main() {
       'Stable-ID inspector did not open.',
     );
 
-    await evaluate('document.querySelector('[data-scope="V1"]').click(); true');
+    await evaluate('document.querySelector(\'[data-scope="V1"]\').click(); true');
     await waitFor(
       () => evaluate('document.body.classList.contains("scope-mode")'),
       'slice isolation mode',
@@ -254,7 +254,7 @@ async function main() {
       await evaluate('document.querySelectorAll("[data-plan-id].dim").length > 0'),
       'Slice isolation did not dim out-of-scope planning elements.',
     );
-    await evaluate('document.querySelector('[data-scope=""]').click(); true');
+    await evaluate('document.querySelector(\'[data-scope=""]\').click(); true');
     await waitFor(
       () => evaluate('!document.body.classList.contains("scope-mode")'),
       'full-system restoration',
