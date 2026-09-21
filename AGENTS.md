@@ -275,6 +275,8 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Research-to-frame handoff — proposed evidence-backed framing inputs that require explicit human acceptance before `framing-doc`
 - PlanningPackage / shaped-work HTML — derived publisher outputs for agent consumption and human review; never an authority layer and never allowed to promote Working, candidate, rejected, or deferred material
 
+When a human-readable final package is useful, use `PLANNING-PUBLISHER.md` and `scripts/publish-shaped-work.py` after the relevant planning artifacts exist. Publishing does not cross a decision gate.
+
 ## Completion standard
 
 Planning is complete enough for the next move when:
