@@ -1,3 +1,4 @@
+import copy
 import importlib.util
 import json
 import pathlib
@@ -32,6 +33,9 @@ class PlanningPublisherTests(unittest.TestCase):
         self.assertEqual("V1", package["breadboard"]["active_slice"])
         self.assertEqual("Accepted", package["authority"]["requirements"])
         self.assertEqual("Selected", package["authority"]["shape"])
+        self.assertEqual("01-frame.md", package["sources"]["frame"])
+        self.assertEqual("02-shaping.md", package["sources"]["shaping"])
+        self.assertEqual("03-breadboard.md", package["sources"]["breadboard"])
 
     def test_visual_is_derived_from_canonical_ids_and_self_contained(self):
         rendered = publisher.render_html(self.package)
@@ -42,6 +46,18 @@ class PlanningPublisherTests(unittest.TestCase):
         self.assertIn("System rail", rendered)
         self.assertNotIn("<script src=", rendered)
         self.assertNotIn("<link rel=", rendered)
+
+    def test_working_material_is_not_visually_promoted(self):
+        package = copy.deepcopy(self.package)
+        package["shaping"]["selected_shape"] = ""
+        for shape in package["shaping"]["shapes"]:
+            shape["selected"] = False
+        package["breadboard"]["mode"] = "candidate-shape"
+        package["presentation"] = publisher.default_presentation(package)
+        self.assertEqual([], package["presentation"]["annotations"])
+        rendered = publisher.render_html(package)
+        self.assertIn("No human-selected shape", rendered)
+        self.assertIn("<small>candidate-shape</small>", rendered)
 
     def test_presentation_spec_cannot_invent_planning_truth(self):
         with self.assertRaisesRegex(publisher.PublisherError, "absent from canonical"):
