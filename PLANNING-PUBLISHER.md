@@ -16,6 +16,8 @@ The publisher can emit:
 
 The HTML embeds the complete `PlanningPackage`, keeps stable planning IDs clickable, exposes authority state, collapses unselected candidates by default, and lets a reviewer isolate a slice on the full system board.
 
+The package also contains a renderer-neutral `visual_model` derived from the canonical model plus validated presentation hints. That model is the handoff point for future semantic canvas adapters; individual renderers do not own product-planning logic.
+
 ## Architecture
 
 ```text
@@ -86,6 +88,7 @@ Supported presentation hints include:
 - `annotations` — terse callouts tied to stable IDs
 - `visual_hints` — optional `kind`, `region`, and `order` for places or affordances
 - `slice_scopes` — stable IDs to foreground for each canonical slice
+- `sketch_assets` — optional relative SVG/PNG/JPEG/WebP files for canonical `SK#` targeted sketches; assets must stay inside the planning directory and are embedded into the self-contained HTML
 
 Example:
 
@@ -99,6 +102,9 @@ Example:
   },
   "slice_scopes": {
     "V1": ["P1", "U1", "U2", "N1", "S1"]
+  },
+  "sketch_assets": {
+    "SK1": "sketches/add-item.svg"
   }
 }
 ```
