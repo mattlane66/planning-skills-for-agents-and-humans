@@ -75,6 +75,7 @@ sed "${rewrite_args[@]}" "$ROOT_DIR/PLANNING-PUBLISHER.md" > "$DIST_DIR/PLANNING
 cp "$ROOT_DIR/scripts/publish-shaped-work.py" "$DIST_DIR/scripts/publish-shaped-work.py"
 cp "$ROOT_DIR/scripts/publish_shaped_work.py" "$DIST_DIR/scripts/publish_shaped_work.py"
 cp "$ROOT_DIR/scripts/planning_publisher_ext.py" "$DIST_DIR/scripts/planning_publisher_ext.py"
+cp "$ROOT_DIR/scripts/planning_publisher_contract.py" "$DIST_DIR/scripts/planning_publisher_contract.py"
 
 for skill in "${SKILLS[@]}"; do
   source_file="$ROOT_DIR/$skill/SKILL.md"
