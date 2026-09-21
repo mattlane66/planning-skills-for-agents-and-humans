@@ -133,6 +133,7 @@ check_file_exists scripts/release.py
 check_file_exists scripts/publish-shaped-work.py
 check_file_exists scripts/publish_shaped_work.py
 check_file_exists scripts/planning_publisher_ext.py
+check_file_exists scripts/planning_publisher_contract.py
 check_file_exists .github/dependabot.yml
 check_file_exists .github/pull_request_template.md
 check_file_exists .github/ISSUE_TEMPLATE/bug.yml
@@ -483,6 +484,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/scripts/publish-shaped-work.py
   check_file_exists dist/claude-code-plugin/scripts/publish_shaped_work.py
   check_file_exists dist/claude-code-plugin/scripts/planning_publisher_ext.py
+  check_file_exists dist/claude-code-plugin/scripts/planning_publisher_contract.py
   check_file_exists dist/claude-code-plugin/LICENSE
   check_file_exists dist/claude-code-plugin/.agent-orchestration.yaml
   check_file_exists dist/claude-code-plugin/docs/agent-context-feeding.md

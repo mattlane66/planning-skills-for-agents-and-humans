@@ -91,6 +91,29 @@ async function waitFor(predicate, description, timeoutMs = 12_000) {
 async function main() {
   const chrome = findChrome();
   const userDataDir = await mkdtemp(path.join(tmpdir(), 'planning-skills-browser-smoke-'));
+  const publisherDir = await mkdtemp(path.join(tmpdir(), 'planning-publisher-browser-smoke-'));
+  const publisherHtml = path.join(publisherDir, 'shaped-work.html');
+  const publisherSvgDir = path.join(publisherDir, 'boards');
+  const repositoryRoot = path.resolve(siteDirectory, '..');
+  const publisherRun = spawnSync(
+    'python3',
+    [
+      path.join(repositoryRoot, 'scripts', 'publish-shaped-work.py'),
+      '--planning-dir',
+      path.join(repositoryRoot, 'tests', 'fixtures', 'planning-publisher-current-contract'),
+      '--output',
+      publisherHtml,
+      '--svg-dir',
+      publisherSvgDir,
+    ],
+    { encoding: 'utf8' },
+  );
+  assert.equal(
+    publisherRun.status,
+    0,
+    `Planning Publisher fixture generation failed:\n${publisherRun.stderr || publisherRun.stdout}`,
+  );
+  const publisherUrl = pathToFileURL(publisherHtml).href;
   const targetUrl = process.env.PORTAL_SMOKE_URL || pathToFileURL(htmlPath).href;
   const requiresDirectFile = !process.env.PORTAL_SMOKE_URL;
   const args = [
@@ -195,9 +218,67 @@ async function main() {
     assert.ok(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), 'Phone viewport has document-level horizontal overflow.');
     assert.equal(await evaluate('window.innerWidth'), 390);
 
+    // Exercise the generated Planning Publisher artifact in the same real browser.
+    await client.call('Emulation.clearDeviceMetricsOverride');
+    await client.call('Page.navigate', { url: publisherUrl });
+    await waitFor(
+      () => evaluate('document.title === "Checkout Assist · Shaped Work"'),
+      'Planning Publisher shaped-work page',
+    );
+    assert.ok(
+      await evaluate('Boolean(document.querySelector(\'[data-plan-id="SK1"]\'))'),
+      'Targeted sketch did not render with its stable ID.',
+    );
+    assert.equal(
+      await evaluate('document.querySelector("details.shape-alt")?.open'),
+      false,
+      'Unselected candidate should be collapsed by default.',
+    );
+
+    await evaluate('document.querySelector(\'[data-plan-id="U1"]\').click(); true');
+    await waitFor(
+      () => evaluate('document.querySelectorAll(\'[data-plan-id="U1"].hit\').length > 0'),
+      'stable-ID inspector highlight',
+    );
+    assert.ok(
+      await evaluate('document.querySelector("#inspector")?.classList.contains("show")'),
+      'Stable-ID inspector did not open.',
+    );
+
+    await evaluate('document.querySelector(\'[data-scope="V1"]\').click(); true');
+    await waitFor(
+      () => evaluate('document.body.classList.contains("scope-mode")'),
+      'slice isolation mode',
+    );
+    assert.ok(
+      await evaluate('document.querySelectorAll("[data-plan-id].dim").length > 0'),
+      'Slice isolation did not dim out-of-scope planning elements.',
+    );
+    await evaluate('document.querySelector(\'[data-scope=""]\').click(); true');
+    await waitFor(
+      () => evaluate('!document.body.classList.contains("scope-mode")'),
+      'full-system restoration',
+    );
+
+    await client.call('Emulation.setDeviceMetricsOverride', {
+      width: 390,
+      height: 844,
+      deviceScaleFactor: 1,
+      mobile: true,
+    });
+    await client.call('Page.reload', { ignoreCache: true });
+    await waitFor(
+      () => evaluate('document.readyState === "complete" && document.title === "Checkout Assist · Shaped Work"'),
+      'mobile Planning Publisher readiness',
+    );
+    assert.ok(
+      await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+      'Planning Publisher phone viewport has document-level horizontal overflow.',
+    );
+
     assert.deepEqual(runtimeErrors, [], `Real browser reported runtime errors:\n${runtimeErrors.join('\n')}`);
     console.log(`PASS real-browser smoke: ${chrome.version}`);
-    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}keyboard focus/activation, Mermaid SVG, 390px viewport, runtime console`);
+    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal interactions + generated Planning Publisher stable-ID/slice/mobile interactions`);
   } finally {
     client?.close();
     processHandle.kill('SIGTERM');
@@ -206,6 +287,7 @@ async function main() {
       new Promise((resolve) => setTimeout(resolve, 2_000)),
     ]);
     await rm(userDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
+    await rm(publisherDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   }
 }
 

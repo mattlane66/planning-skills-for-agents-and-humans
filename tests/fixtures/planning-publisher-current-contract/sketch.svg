@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="220" viewBox="0 0 420 220">
+  <rect x="12" y="12" width="396" height="196" rx="14" fill="white" stroke="black"/>
+  <text x="28" y="42" font-family="sans-serif" font-size="14">SK1 · checkout workspace</text>
+  <rect x="28" y="62" width="260" height="34" rx="5" fill="none" stroke="black"/>
+  <text x="38" y="84" font-family="sans-serif" font-size="12">U1 order fields</text>
+  <rect x="28" y="112" width="120" height="36" rx="5" fill="none" stroke="black"/>
+  <text x="38" y="135" font-family="sans-serif" font-size="12">U2 submit</text>
+  <text x="28" y="178" font-family="sans-serif" font-size="12">U3 invalid total stays local</text>
+</svg>
