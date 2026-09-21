@@ -19,7 +19,8 @@ mkdir -p \
   "$DIST_DIR/docs" \
   "$DIST_DIR/templates" \
   "$DIST_DIR/hooks" \
-  "$DIST_DIR/examples"
+  "$DIST_DIR/examples" \
+  "$DIST_DIR/scripts"
 
 cp "$ROOT_DIR/.claude-plugin/plugin.json" "$DIST_DIR/.claude-plugin/plugin.json"
 cp "$ROOT_DIR/LICENSE" "$DIST_DIR/LICENSE"
@@ -49,6 +50,8 @@ rewrite_args=(
   -e 's#docs/lifecycle-hooks\.md#${CLAUDE_PLUGIN_ROOT}/docs/lifecycle-hooks.md#g'
   -e 's#docs/loop-prompting\.md#${CLAUDE_PLUGIN_ROOT}/docs/loop-prompting.md#g'
   -e 's#docs/stable-ids\.md#${CLAUDE_PLUGIN_ROOT}/docs/stable-ids.md#g'
+  -e 's#PLANNING-PUBLISHER\.md#${CLAUDE_PLUGIN_ROOT}/PLANNING-PUBLISHER.md#g'
+  -e 's#scripts/publish-shaped-work\.py#${CLAUDE_PLUGIN_ROOT}/scripts/publish-shaped-work.py#g'
   -e 's#\(^\|[^A-Za-z0-9_-]\)templates/#\1${CLAUDE_PLUGIN_ROOT}/templates/#g'
   -e 's#hooks/#${CLAUDE_PLUGIN_ROOT}/hooks/#g'
   -e 's#lead-user-research/prompts/#${CLAUDE_PLUGIN_ROOT}/skills/lead-user-research/prompts/#g'
@@ -68,6 +71,10 @@ for skill in "${SKILLS[@]}"; do
 done
 
 sed "${rewrite_args[@]}" "$ROOT_DIR/AGENTS.md" > "$DIST_DIR/AGENTS.md"
+sed "${rewrite_args[@]}" "$ROOT_DIR/PLANNING-PUBLISHER.md" > "$DIST_DIR/PLANNING-PUBLISHER.md"
+cp "$ROOT_DIR/scripts/publish-shaped-work.py" "$DIST_DIR/scripts/publish-shaped-work.py"
+cp "$ROOT_DIR/scripts/publish_shaped_work.py" "$DIST_DIR/scripts/publish_shaped_work.py"
+cp "$ROOT_DIR/scripts/planning_publisher_ext.py" "$DIST_DIR/scripts/planning_publisher_ext.py"
 
 for skill in "${SKILLS[@]}"; do
   source_file="$ROOT_DIR/$skill/SKILL.md"
@@ -133,13 +140,14 @@ cat > "$DIST_DIR/README.md" <<'EOF'
 
 This generated bundle mirrors the canonical Planning Skills `SKILL.md` files from the repository root. Skills, command wrappers, and shared agent instructions use bundle-local references. The orchestration manifest, reusable docs, templates, hooks, and license they depend on are included.
 
-Use `/planning-skills:plan` when the next move is unclear. Use a canonical skill directly when the work is already routed, and use the shorter command wrappers for focused moves such as `/planning-skills:frame`, `/planning-skills:kickoff`, `/planning-skills:feed-context`, and `/planning-skills:reflect-breadboard`.
+Use `/planning-skills:plan` when the next move is unclear. Use a canonical skill directly when the work is already routed, and use the shorter command wrappers for focused moves such as `/planning-skills:frame`, `/planning-skills:kickoff`, `/planning-skills:feed-context`, `/planning-skills:present-plan`, and `/planning-skills:reflect-breadboard`.
 
 Claude namespaces plugin skills and commands with the manifest name. For example:
 
 - `/planning-skills:framing-doc` invokes the canonical Framing skill.
 - `/planning-skills:frame` invokes the shorter framing command wrapper.
 - `/planning-skills:statechart` invokes the canonical Statechart skill.
+- `/planning-skills:present-plan` compiles existing planning artifacts into the agent JSON and human visual package without changing planning truth.
 
 Canonical source repo:
 https://github.com/mattlane66/planning-skills-for-agents-and-humans
