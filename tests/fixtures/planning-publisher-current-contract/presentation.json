@@ -1,0 +1,24 @@
+{
+  "schema_version": 2,
+  "hero_place": "P1",
+  "journey_scenarios": ["Submit valid checkout", "Stop invalid total"],
+  "featured_ids": ["A1", "A2", "A3"],
+  "annotations": [
+    {"ref": "A1", "kind": "decision", "text": "Keep order context on one workspace."},
+    {"ref": "A2", "kind": "decision", "text": "Stop invalid totals locally before payment."},
+    {"ref": "A3", "kind": "note", "text": "Show completion as an explicit visible state."}
+  ],
+  "visual_hints": {
+    "P1": {"kind": "screen", "order": 1},
+    "P2": {"kind": "state", "order": 2},
+    "P3": {"kind": "boundary", "order": 3},
+    "U1": {"kind": "input", "region": "body", "order": 1},
+    "U2": {"kind": "button", "region": "footer", "order": 2},
+    "U3": {"kind": "display", "region": "footer", "order": 3},
+    "U4": {"kind": "display", "region": "body", "order": 1}
+  },
+  "slice_scopes": {
+    "V1": ["P1", "U1", "U2", "U3", "N1", "S1"],
+    "V2": ["P1", "P2", "P3", "U2", "U4", "N1", "N2", "N3", "S1", "S2"]
+  }
+}
