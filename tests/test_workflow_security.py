@@ -110,6 +110,31 @@ class WorkflowSecurityTests(unittest.TestCase):
         self.assertEqual("read", payload["permissions"]["contents"])
         self.assertNotIn("pull_request_target", payload["on"])
 
+
+    def test_main_required_check_names_are_stable(self) -> None:
+        repo_health = yaml.load(
+            (WORKFLOWS / "repo-health.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        names = {
+            job_name: job.get("name", job_name)
+            for job_name, job in repo_health["jobs"].items()
+        }
+        self.assertEqual("health", names["health"])
+        self.assertEqual("Release install smoke", names["release-install-smoke"])
+        self.assertEqual("Site on minimum supported Node", names["site-node-floor"])
+        self.assertEqual("Real browser smoke", names["browser-smoke"])
+
+        codeql = yaml.load(
+            (WORKFLOWS / "codeql.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        self.assertEqual("Analyze ${{ matrix.language }}", codeql["jobs"]["analyze"]["name"])
+        self.assertEqual(
+            ["javascript-typescript", "python"],
+            codeql["jobs"]["analyze"]["strategy"]["matrix"]["language"],
+        )
+
     def test_behavior_eval_uses_only_checked_in_adapter_and_exact_runtime_choice(self) -> None:
         text = (WORKFLOWS / "behavior-evals.yml").read_text(encoding="utf-8")
         payload = yaml.load(text, Loader=yaml.BaseLoader)
@@ -157,6 +182,17 @@ class WorkflowSecurityTests(unittest.TestCase):
         for case_id in core_cases:
             self.assertIn(f"--case-id {case_id}", matrix_step["run"])
         self.assertIn('"${case_args[@]}"', matrix_step["run"])
+        validation_step = next(
+            step
+            for step in payload["jobs"]["evaluate"]["steps"]
+            if step.get("name") == "Validate retained real-runtime evidence"
+        )
+        self.assertEqual("always()", validation_step["if"])
+        self.assertIn("scripts/validate-behavior-report.py", validation_step["run"])
+        self.assertIn("--artifacts-dir evals/artifacts/runtime", validation_step["run"])
+        self.assertIn('--expected-runtime "$EVAL_RUNTIME"', validation_step["run"])
+        self.assertIn('--expected-model "$EVAL_MODEL"', validation_step["run"])
+        self.assertIn('--expected-commit "$GITHUB_SHA"', validation_step["run"])
         self.assertNotIn("--yolo", text)
         self.assertNotIn("dangerously-skip", text)
 
