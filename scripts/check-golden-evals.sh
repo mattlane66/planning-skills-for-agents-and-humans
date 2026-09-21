@@ -67,7 +67,7 @@ require_text breadboarding/SKILL.md "## Producing a visual breadboard"
 require_text breadboarding/SKILL.md "## Targeted sketches"
 require_text breadboarding/SKILL.md "Finger-trace test"
 require_text breadboarding/references/notation-rendering-and-slicing.md "## Producing a visual breadboard"
-require_text breadboarding/references/notation-rendering-and-slicing.md "Raise fidelity **locally, not globally**"
+require_text breadboarding/references/notation-rendering-and-slicing.md "Raise fidelity locally, not globally."
 require_text templates/breadboard.md "## Visual breadboard"
 require_text templates/breadboard.md "## Targeted sketches"
 # Match literal Markdown code spans.
