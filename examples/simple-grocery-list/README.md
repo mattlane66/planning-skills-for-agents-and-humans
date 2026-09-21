@@ -24,6 +24,7 @@ It also includes one important shaping lesson: some early solution ideas belong 
 - `03-breadboard.md` — accepted selected-design output of the `breadboarding` skill
 - `04-kickoff.md` — optional handoff output of the `kickoff-doc` skill after slice selection
 - `05-breadboard-reflection.md` — post-implementation example of the `breadboard-reflection` skill
+- `presentation.json` — optional non-authoritative hints for the Planning Publisher human view
 
 ## Core workflow
 
@@ -33,6 +34,19 @@ It also includes one important shaping lesson: some early solution ideas belong 
 4. Choose a direction that fits the appetite.
 5. Breadboard the chosen shape.
 6. Reflect only after implementation exists.
+
+## Optional publishing step
+
+Compile the accepted planning artifacts into one visual package for humans and one normalized package for agents:
+
+```bash
+python3 scripts/publish_shaped_work.py \
+  --planning-dir examples/simple-grocery-list \
+  --output /tmp/grocery-shaped-work.html \
+  --json-output /tmp/grocery-planning-package.json
+```
+
+The included `presentation.json` only controls emphasis and layout hints. It cannot add behavior or change the selected shape or slice.
 
 ## Optional handoff step
 
