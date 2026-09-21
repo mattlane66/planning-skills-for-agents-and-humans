@@ -26,7 +26,7 @@ Resolve the planning directory from the arguments. If none is supplied and `plan
 Run the deterministic publisher from the installed plugin:
 
 ```bash
-python3 "${CLAUDE_PLUGIN_ROOT}/scripts/publish-shaped-work.py" \
+python3 "scripts/publish-shaped-work.py" \
   --planning-dir "<planning-dir>" \
   --output "<planning-dir>/shaped-work.html" \
   --json-output "<planning-dir>/planning-package.json" \
