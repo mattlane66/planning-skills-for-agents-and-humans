@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "hero_place": "P1",
+  "journey_scenarios": [
+    "Add a new item",
+    "Mark bought or undo",
+    "Hide or reveal bought items",
+    "Restore a prior session"
+  ],
+  "featured_ids": ["A1", "A2", "A3", "A4", "A5", "A6"],
+  "annotations": [
+    {"ref": "A1", "text": "Keep capture on the main surface so remembering an item stays cheap."},
+    {"ref": "A3", "text": "Bought state changes inline and can be undone without changing place."},
+    {"ref": "A4", "text": "Filtering changes visibility, not the underlying item state."},
+    {"ref": "A2", "text": "One item model keeps needed/bought state in one place."},
+    {"ref": "A5", "text": "Same-device persistence restores the list without introducing accounts."},
+    {"ref": "A6", "text": "Duplicate handling stays local to the add path and remains cuttable."}
+  ]
+}
