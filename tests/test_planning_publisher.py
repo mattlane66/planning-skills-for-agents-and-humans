@@ -41,6 +41,10 @@ class PlanningPublisherTests(unittest.TestCase):
         self.assertIn("slice_scopes", package["presentation"])
         self.assertIn("P1", package["presentation"]["visual_hints"])
         self.assertIn("V1", package["presentation"]["slice_scopes"])
+        self.assertIn("visual_model", package)
+        self.assertEqual("P1", package["visual_model"]["places"][0]["id"])
+        self.assertTrue(package["visual_model"]["places"][0]["hero"])
+        self.assertEqual("selected-build-scope", package["visual_model"]["slices"][0]["authority"])
 
     def test_visual_is_derived_from_canonical_ids_and_self_contained(self):
         rendered = publisher.render_html(self.package)
@@ -54,6 +58,7 @@ class PlanningPublisherTests(unittest.TestCase):
         self.assertIn("Unselected candidate · collapsed by default", rendered)
         self.assertIn("Accepted selected-design", rendered)
         self.assertIn('data-scope="V1"', rendered)
+        self.assertIn('data-jump-id="U1"', rendered)
         self.assertNotIn("<script src=", rendered)
         self.assertNotIn("<link rel=", rendered)
 
