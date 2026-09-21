@@ -37,6 +37,39 @@ bash scripts/check-repo-health.sh
 
 Use the workflow's **Run workflow** control when an explicit GitHub-hosted verification is needed without a new code change.
 
+## Main-branch protection contract
+
+Repository administration should require the stable checks below before changes
+land on `main`. These names are part of the repository's governance contract
+and are regression-tested so a workflow refactor cannot silently invalidate an
+existing ruleset:
+
+- Repo Health: `health`
+- Repo Health: `Real browser smoke`
+- Repo Health: `Release install smoke`
+- Repo Health: `Site on minimum supported Node`
+- CodeQL: `Analyze javascript-typescript`
+- CodeQL: `Analyze python`
+
+The branch ruleset should target the default/`main` branch, block deletion and
+non-fast-forward updates, and require those checks. A mandatory pull-request
+review rule is a maintainer policy choice rather than an assumed project
+requirement.
+
+The workflow files can define and test this contract, but enabling a GitHub
+repository ruleset is an administrative setting outside repository contents.
+After changing repository settings, verify that the ruleset is active and that
+all six contexts above appear as required checks before treating `main` as
+protected.
+
+## External documentation availability
+
+`.github/workflows/external-links.yml` is intentionally separate from
+deterministic PR health. It runs weekly and on manual dispatch, retries/rate
+limits network checks, and retains its report. A successful scheduled run proves
+the scheduler and live-link path have executed; external availability can still
+change later and is not a reason to make ordinary PR validation network-dependent.
+
 After a successful push-triggered Repo health run on `main`, the auto-tag workflow validates the coordinated package version and matching changelog section and creates that version tag only when it does not already exist. It then calls the reusable release workflow directly; manually pushed tags invoke the same workflow. The release path reruns the full health suite before publication, accepts only exact stable SemVer tags whose commit is on `main`, requires version parity and an exact changelog section, builds deterministic Claude skill and plugin ZIPs, writes `SHA256SUMS`, and publishes only the validated payload.
 
 Preview a release payload without publishing it:
