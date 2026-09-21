@@ -273,9 +273,6 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Breadboard reflection — explicit comparison of accepted intent and implementation reality
 - Lead User research record — authoritative evidence and interpretation for its named research decision; never accepted product-planning intent by itself
 - Research-to-frame handoff — proposed evidence-backed framing inputs that require explicit human acceptance before `framing-doc`
-- PlanningPackage / shaped-work HTML — derived publisher outputs for agent consumption and human review; never an authority layer and never allowed to promote Working, candidate, rejected, or deferred material
-
-When a human-readable final package is useful, use `PLANNING-PUBLISHER.md` and `scripts/publish-shaped-work.py` after the relevant planning artifacts exist. Publishing does not cross a decision gate.
 
 ## Completion standard
 
