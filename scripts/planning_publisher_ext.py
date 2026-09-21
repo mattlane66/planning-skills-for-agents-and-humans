@@ -17,6 +17,7 @@ OPTIONAL_ARTIFACTS = {
     "context_packet": ("context-packet", "context_packet"),
 }
 TYPED_TABLES = {
+    "slices": {"inventory": "Slice inventory"},
     "statechart": {"states": "State inventory", "transitions": "Transition table"},
     "interface_contracts": {"contracts": "Contract summary"},
     "executable_breadboard": {"selected_slice": "Selected slice", "contracts": "Interface contracts", "edge_cases": "Edge cases"},
@@ -83,14 +84,37 @@ def _portable(path, directory):
 
 
 def _discover_optional(directory, excluded):
+    """Prefer canonical artifact_type metadata, then fall back to filenames."""
     found = {}
+    metadata_names = {
+        "appetite": {"appetite"},
+        "slices": {"slices"},
+        "statechart": {"statechart"},
+        "interface_contracts": {"interface-contracts", "interface_contracts"},
+        "executable_breadboard": {"executable-breadboard", "executable_breadboard"},
+        "dumplink": {"dumplink"},
+        "kickoff": {"kickoff"},
+        "context_packet": {"context-packet", "context_packet"},
+    }
+    candidates = []
+    for path in sorted(directory.glob("*.md")):
+        if path.resolve() in excluded:
+            continue
+        meta, _ = _frontmatter(path.read_text(encoding="utf-8"))
+        candidates.append((path, str(meta.get("artifact_type", "")).strip().lower()))
+
     for kind, tokens in OPTIONAL_ARTIFACTS.items():
-        for path in sorted(directory.glob("*.md")):
-            if path.resolve() in excluded:
-                continue
-            if any(token in path.stem.lower() for token in tokens):
-                found[kind] = path.resolve()
-                break
+        typed = [
+            path for path, artifact_type in candidates
+            if artifact_type in metadata_names.get(kind, set())
+        ]
+        named = [
+            path for path, _ in candidates
+            if any(token in path.stem.lower() for token in tokens)
+        ]
+        match = (typed or named)
+        if match:
+            found[kind] = match[0].resolve()
     return found
 
 
@@ -183,6 +207,10 @@ def _default_scopes(package):
     traces = package["breadboard"]["behavior_traces"]
     primary = package["breadboard"]["places"][0].get("ID", "") if package["breadboard"]["places"] else ""
     for item in package["breadboard"]["slices"]:
+        explicit = set(item.get("scope_refs", []))
+        if explicit:
+            scopes[item["id"]] = sorted(explicit)
+            continue
         words = set(re.findall(r"[a-z0-9]+", (item["name"] + " " + " ".join(item["demo"])).lower()))
         refs = {primary} if primary else set()
         for trace in traces:
