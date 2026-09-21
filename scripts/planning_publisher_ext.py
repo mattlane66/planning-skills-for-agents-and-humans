@@ -267,9 +267,10 @@ def _affordance(package, row):
     ref = row.get("ID", "")
     hint = _hint(package, ref)
     kind = hint.get("kind", _kind(row))
+    wire_meta = " · ".join(value for value in (row.get("Control",""), row.get("Wires Out",""), row.get("Returns To","")) if value and value != "—")
     return (
         f'<div class="wire {_e(kind)}"{_data(ref)}><b>{_e(ref)}</b>'
-        f'<span>{_e(row.get("Affordance"))}</span><small>{_e(row.get("Control"))}</small></div>'
+        f'<span>{_e(row.get("Affordance"))}</span><small>{_e(wire_meta)}</small></div>'
     )
 
 
@@ -308,7 +309,9 @@ def _system_board(package, scope=None):
         system = [row for row in system if row.get("ID") in scope]
         stores = [row for row in stores if row.get("ID") in scope]
     rail = "".join(
-        f'<span{_data(row.get("ID",""))}><b>{_e(row.get("ID"))}</b>{_e(row.get("Affordance"))}</span>' for row in system[:12]
+        f'<span{_data(row.get("ID",""))}><b>{_e(row.get("ID"))}</b>{_e(row.get("Affordance"))}'
+        + (f'<small>{_e(row.get("Wires Out",""))}</small>' if row.get("Wires Out") and row.get("Wires Out") != "—" else "")
+        + '</span>' for row in system[:12]
     ) + "".join(
         f'<span class="store"{_data(row.get("ID",""))}><b>{_e(row.get("ID"))}</b>{_e(row.get("Store"))}</span>' for row in stores[:8]
     )
@@ -368,10 +371,10 @@ CSS = r"""
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}.page{max-width:1480px;margin:auto;padding:28px clamp(14px,4vw,56px) 80px}
 .mast{display:flex;justify-content:space-between;gap:20px;align-items:end}.mast h1{font-size:clamp(32px,5vw,56px);letter-spacing:-.055em;line-height:.95;margin:4px 0}.eyebrow,small{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800}.eyebrow{color:var(--accent)}
 .authority-strip{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 4px}.authority-chip{border:1px solid var(--line);background:white;border-radius:999px;padding:6px 9px;font-size:11px}.authority-chip b{margin-right:5px}.authority-chip.accepted,.authority-chip.selected{background:#dcefe4;border-color:#9ab9a5}.authority-chip.working,.authority-chip.candidate-shape{background:#fff3b7;border-color:#dcca75}.authority-chip.unselected{background:#ecece7;color:#626a64}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 24px}.card,.panel,.shape,.slice-detail,.artifact-card{background:var(--card);border:1px solid var(--line);border-radius:16px}.card,.shape,.artifact-card{padding:15px}.panel{padding:clamp(15px,2.5vw,28px);margin-top:14px}.panel h2{font-size:clamp(22px,3vw,34px);margin:4px 0 18px}.panel-head,.slice-detail>header{display:flex;justify-content:space-between;gap:20px;align-items:start}
-.board,.slice-board{background:#eeede6;border:1px solid #d2d1c7;border-radius:16px;padding:14px}.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.journey article{background:white;border:1px solid var(--line);border-radius:10px;padding:10px}.journey strong,.journey small{display:block}.journey small{text-transform:none;letter-spacing:0}
+.board,.slice-board{background:#eeede6;border:1px solid #d2d1c7;border-radius:16px;padding:14px}.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.journey article{background:white;border:1px solid var(--line);border-radius:10px;padding:10px}.journey strong,.journey small{display:block}.journey small{text-transform:none;letter-spacing:0}.path-ribbon{display:flex;gap:4px;align-items:center;flex-wrap:wrap;margin-top:7px}.path-ribbon button{font:inherit;font-size:10px;border:1px solid #b9c1bb;background:#f7f9f7;border-radius:999px;padding:3px 6px;cursor:pointer}.path-ribbon i{font-style:normal;color:var(--muted);font-size:10px}
 .annotation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.note{background:var(--note);border:1px solid #dcca75;padding:10px;border-radius:9px}.note.decision{background:#dcefe4}.note.unknown,.note.rabbit-hole{background:#ffe1d8}.note.cut{background:#e7e4f4}.note b{display:block;font-size:10px}
 .place-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}.place-card{background:white;border:1px solid #abb2ac;border-radius:14px;overflow:hidden;min-height:210px}.place-card:first-child{grid-column:span 2;border:2px solid #31443a}.place-card header{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.place-card header b{color:var(--accent);margin-right:8px}.place-card>p{font-size:12px;color:var(--muted);padding:0 12px}.place-body,.place-region{display:grid;gap:8px}.place-body{padding:12px}.region-header{border-bottom:1px dashed #c9cdc8;padding-bottom:8px}.region-footer{border-top:1px dashed #c9cdc8;padding-top:8px}
-.wire{border:1px solid #7e8881;border-radius:8px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px}.wire.button{background:#183f2f;color:white}.wire b{font-size:10px}.wire small{text-transform:none;letter-spacing:0}.rail-label{margin-top:14px;font-size:10px;text-transform:uppercase;color:var(--muted)}.rail{border-top:1px dashed #999f99;padding-top:10px;display:flex;gap:7px;flex-wrap:wrap}.rail span{background:white;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:12px}.rail .store{background:#e7f0e7}.rail b{color:var(--accent);margin-right:5px;font-size:10px}
+.wire{border:1px solid #7e8881;border-radius:8px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px}.wire.button{background:#183f2f;color:white}.wire b{font-size:10px}.wire small{text-transform:none;letter-spacing:0}.rail-label{margin-top:14px;font-size:10px;text-transform:uppercase;color:var(--muted)}.rail{border-top:1px dashed #999f99;padding-top:10px;display:flex;gap:7px;flex-wrap:wrap}.rail span{background:white;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:12px}.rail span small{display:block;text-transform:none;letter-spacing:0;margin-left:25px}.rail .store{background:#e7f0e7}.rail b{color:var(--accent);margin-right:5px;font-size:10px}
 .sketch-grid,.grid,.artifact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sketch{border:1px dashed #727970;background:#fffef6;border-radius:10px;padding:12px}.sketch b,.sketch span,.sketch small{display:block}.sketch img{display:block;width:100%;max-height:360px;object-fit:contain;margin:8px 0;border:1px solid var(--line);background:white;border-radius:8px}.shape.selected,.slice-detail.active{border:2px solid var(--accent);background:#fbfffb}.shape li b{display:inline-block;min-width:28px;color:var(--accent);font-size:10px}.shape-alt{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0}.shape-alt summary{padding:15px;cursor:pointer;font-weight:700}.shape-alt .shape-body{padding:0 15px 15px}.shape-alt small{display:block;margin-bottom:5px}
 .table{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:700px;background:white}th,td{padding:10px;border-bottom:1px solid #e5e6e0;text-align:left}th{font-size:10px;text-transform:uppercase;color:var(--muted)}
 .slice-stack{display:grid;gap:14px}.slice-detail{padding:16px}.slice-board .place-card:first-child{grid-column:span 1}.slice-traces{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0;list-style:none}.slice-traces li{border:1px solid var(--line);border-radius:9px;padding:9px}.slice-traces b,.slice-traces span{display:block}.scope-button{border:1px solid var(--accent);background:white;color:var(--accent);border-radius:999px;padding:8px 11px;font-weight:700;cursor:pointer}.scope-button.active{background:var(--accent);color:white}
@@ -390,10 +393,28 @@ def render_enhanced_html(package):
     label = selected + " · " + shape.get("name", "") if selected else "No human-selected shape"
     desired = package["presentation"].get("journey_scenarios", [])
     traces = [row for row in package["breadboard"]["behavior_traces"] if row.get("Scenario") in desired] or package["breadboard"]["behavior_traces"][:4]
-    journey = "".join(
-        f'<article><b>{i:02d}</b><strong>{_e(row.get("Scenario"))}</strong><small>{_e(row.get("Entry"))} → {_e(row.get("Observable consequence"))}</small></article>'
-        for i, row in enumerate(traces, 1)
-    )
+    journey_parts = []
+    for i, row in enumerate(traces, 1):
+        path_text = " ".join(
+            value for value in (
+                row.get("Entry",""),
+                row.get("Control path",""),
+                row.get("State / data effect",""),
+                row.get("Observable consequence",""),
+            ) if value
+        )
+        ordered = []
+        for ref in re.findall(r"\b(?:P|U|N|S)\d+(?:\.\d+)?\b", path_text):
+            if not ordered or ordered[-1] != ref:
+                ordered.append(ref)
+        ribbon = '<div class="path-ribbon">' + '<i>→</i>'.join(
+            f'<button type="button" data-jump-id="{_e(ref)}">{_e(ref)}</button>' for ref in ordered[:12]
+        ) + '</div>'
+        journey_parts.append(
+            f'<article><b>{i:02d}</b><strong>{_e(row.get("Scenario"))}</strong>'
+            f'<small>{_e(row.get("Entry"))} → {_e(row.get("Observable consequence"))}</small>{ribbon}</article>'
+        )
+    journey = "".join(journey_parts)
     annotations = "".join(
         f'<article class="note {_e(item.get("kind","note"))}"{_data(item.get("ref",""))}><b>{_e(item.get("ref"))}</b>{_e(item.get("text"))}</article>'
         for item in package["presentation"].get("annotations", [])
@@ -444,7 +465,7 @@ def render_enhanced_html(package):
 const pkg=JSON.parse(document.getElementById('planning-package').textContent),box=document.getElementById('inspector');
 function clearScope(){{document.body.classList.remove('scope-mode');document.querySelectorAll('[data-plan-id]').forEach(x=>x.classList.remove('dim'));document.querySelectorAll('.scope-button').forEach(x=>x.classList.remove('active'))}}
 function applyScope(id,b){{clearScope();if(!id)return;const s=new Set(pkg.presentation.slice_scopes[id]||[]);s.add(id);document.body.classList.add('scope-mode');document.querySelectorAll('[data-plan-id]').forEach(x=>{{if(!s.has(x.dataset.planId))x.classList.add('dim')}});b?.classList.add('active');document.querySelector('.board')?.scrollIntoView({{behavior:'smooth',block:'start'}})}}
-document.addEventListener('click',e=>{{const b=e.target.closest('.scope-button');if(b){{applyScope(b.dataset.scope||'',b);return}}const t=e.target.closest('[data-plan-id]');document.querySelectorAll('.hit').forEach(x=>x.classList.remove('hit'));if(!t){{box.classList.remove('show');return}}const id=t.dataset.planId;document.querySelectorAll('[data-plan-id="'+CSS.escape(id)+'"]').forEach(x=>x.classList.add('hit'));box.textContent=id+' · stable planning ID. Edit canonical planning truth, then regenerate.';box.classList.add('show')}});
+document.addEventListener('click',e=>{{const b=e.target.closest('.scope-button');if(b){{applyScope(b.dataset.scope||'',b);return}}const jump=e.target.closest('[data-jump-id]');if(jump){{const id=jump.dataset.jumpId;document.querySelectorAll('.hit').forEach(x=>x.classList.remove('hit'));const nodes=[...document.querySelectorAll('[data-plan-id="'+CSS.escape(id)+'"]')];nodes.forEach(x=>x.classList.add('hit'));nodes[0]?.scrollIntoView({{behavior:'smooth',block:'center'}});box.textContent=id+' · traced from representative behavior.';box.classList.add('show');return}}const t=e.target.closest('[data-plan-id]');document.querySelectorAll('.hit').forEach(x=>x.classList.remove('hit'));if(!t){{box.classList.remove('show');return}}const id=t.dataset.planId;document.querySelectorAll('[data-plan-id="'+CSS.escape(id)+'"]').forEach(x=>x.classList.add('hit'));box.textContent=id+' · stable planning ID. Edit canonical planning truth, then regenerate.';box.classList.add('show')}});
 </script></body></html>"""
 
 
