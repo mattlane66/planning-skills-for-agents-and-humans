@@ -159,12 +159,6 @@ Assign each targeted sketch a stable `SK#` ID and map it back to the breadboard 
 
 The sketch cannot introduce behavior that is absent from the canonical tables. If the sketch reveals missing behavior, update the tables first (or use `sketch-reconciliation` when accepted intent would change), then regenerate the visual.
 
-## Publishing shaped work
-
-When a selected-design breadboard exists, a separate publisher may compile it together with its frame and shaping artifacts into a normalized package for agents and a richer visual package for humans. Publishing is a **derived projection**, not another planning step or authority level.
-
-A publisher may choose layout, emphasis, collapsed detail, and targeted visual regions. It must preserve stable IDs and authority state, must not make an unselected candidate look selected, and must not introduce behavior that is absent from the canonical artifacts. If visual review reveals a real product change, update or reconcile the owning planning artifact first, then regenerate.
-
 ## What breadboarding is
 
 Breadboarding is a lightweight behavioral mapping notation for interactive products, operator workflows, APIs, CLIs, and background processes.
