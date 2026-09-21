@@ -103,7 +103,7 @@ TEMPLATES=(
 )
 
 DOCS=(
-  README.md AGENTS.md GEMINI.md PLANNING-PUBLISHER.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
+  README.md AGENTS.md GEMINI.md PLANNING-PUBLISHER.md ASSURANCE.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
   site/README.md site/index.html site/package.json site/package-lock.json
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
@@ -134,6 +134,7 @@ check_file_exists scripts/publish-shaped-work.py
 check_file_exists scripts/publish_shaped_work.py
 check_file_exists scripts/planning_publisher_ext.py
 check_file_exists scripts/planning_publisher_contract.py
+check_file_exists scripts/validate-behavior-report.py
 check_file_exists .github/dependabot.yml
 check_file_exists .github/pull_request_template.md
 check_file_exists .github/ISSUE_TEMPLATE/bug.yml
