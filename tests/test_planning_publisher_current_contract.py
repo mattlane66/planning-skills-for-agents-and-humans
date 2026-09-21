@@ -132,7 +132,6 @@ shaping: true
 artifact_type: breadboard
 status: accepted
 source_of_truth: true
-mode: selected-design
 ---
 
 # Current Contract — Breadboard
@@ -207,16 +206,20 @@ class CurrentCanonicalContractTests(unittest.TestCase):
     def tearDown(self):
         self.temp.cleanup()
 
-    def test_publisher_accepts_current_shaping_contract(self):
+    def test_publisher_accepts_current_frame_and_shaping_contract(self):
         package = publisher.build_package(self.root)
+        self.assertEqual(["broad automation"], package["frame"]["less_about"])
+        self.assertEqual(["one clear flow"], package["frame"]["more_about"])
         self.assertEqual(["R0", "R1"], [row["ID"] for row in package["shaping"]["requirements"]])
         self.assertEqual("Accepted", package["authority"]["requirements"])
         self.assertEqual("Accepted", package["authority"]["appetite"])
         self.assertEqual("A", package["shaping"]["selected_shape"])
         self.assertEqual("Selected", package["authority"]["shape"])
 
-    def test_publisher_accepts_current_breadboard_slice_and_sketch_tables(self):
+    def test_publisher_accepts_current_breadboard_authority_slice_and_sketch_tables(self):
         package = publisher.build_package(self.root)
+        self.assertEqual("selected-design", package["breadboard"]["mode"])
+        self.assertEqual("Accepted selected-design", package["authority"]["breadboard"])
         self.assertEqual(["V1"], [row["id"] for row in package["breadboard"]["slices"]])
         self.assertEqual(["SK1"], [row["id"] for row in package["breadboard"]["targeted_sketches"]])
         rendered = publisher.render_html(package)
