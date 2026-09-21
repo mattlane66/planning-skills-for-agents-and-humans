@@ -12,19 +12,6 @@ The repository includes a self-contained documentation portal at [`site/index.ht
 
 The portal includes the workflow explorer, searchable skills catalog, full guide reader, canonical skill references and templates, and example artifact trails. Its content is generated from this repository's canonical Markdown files and works offline after download. See [`site/README.md`](./site/README.md) for browser support, rebuild, and validation commands.
 
-## Publish shaped work for agents and humans
-
-Once planning artifacts exist, **Planning Publisher** can compile the canonical Markdown into both a normalized `PlanningPackage` JSON object for agents and a self-contained responsive `shaped-work.html` for human review:
-
-```bash
-python3 scripts/publish_shaped_work.py \
-  --planning-dir planning \
-  --output planning/shaped-work.html \
-  --json-output planning/planning-package.json
-```
-
-The publisher is a derived projection, not another authority layer. It preserves stable planning IDs, human selection and build-scope state, and can use optional validated presentation hints without letting the visual invent product behavior. See [Planning Publisher](./docs/planning-publisher.md).
-
 ## See it work in practice
 
 If you would rather watch the method operate than read its parts, follow [How Planning Skills works in practice](./docs/how-it-works-in-practice.md). It takes one plain grocery-list idea from messy notes and a sketch through `/plan`, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, bounded build context, implementation, and reflection. It also shows when **not** to invoke an advanced skill. The walkthrough is illustrative, not a required sequence.
