@@ -65,6 +65,11 @@ class PlanningPublisherCanonicalContractTests(unittest.TestCase):
         self.assertEqual("selected-build-scope", slices["V1"]["authority"])
         self.assertEqual("deferred-accepted", slices["V2"]["authority"])
         self.assertEqual(["SK1"], [item["id"] for item in model["sketches"]])
+        self.assertTrue(
+            self.package["presentation"]["embedded_sketch_assets"]["SK1"].startswith(
+                "data:image/svg+xml;base64,"
+            )
+        )
         self.assertGreaterEqual(len(model["journey"]), 2)
 
     def test_current_contract_renders_human_and_svg_views(self):
@@ -74,6 +79,7 @@ class PlanningPublisherCanonicalContractTests(unittest.TestCase):
         self.assertIn('data-scope="V1"', rendered)
         self.assertIn("Accepted selected-design", rendered)
         self.assertIn("Unselected candidate · collapsed by default", rendered)
+        self.assertIn("data:image/svg+xml;base64,", rendered)
         with tempfile.TemporaryDirectory() as temporary:
             svg_dir = pathlib.Path(temporary)
             paths = publisher.write_svg_assets(self.package, svg_dir)
