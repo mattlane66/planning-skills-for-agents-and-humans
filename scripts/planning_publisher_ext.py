@@ -1,5 +1,6 @@
 """Normalization and visual rendering helpers for publish_shaped_work.py."""
 
+import base64
 import html
 import json
 import re
@@ -110,12 +111,27 @@ def _parse_optional(path, kind, directory):
 def _targeted_sketches(path):
     _, text = _frontmatter(path.read_text(encoding="utf-8"))
     block = _section(text, "Targeted sketches")
+    rows = _first_table(block)
+    if rows:
+        return [
+            {
+                "id": row.get("Sketch", ""),
+                "refs": re.findall(r"\b(?:P|U|N|S)\d+(?:\.\d+)?\b", row.get("Elaborates", "")),
+                "label": row.get("Question resolved", "") or row.get("Elaborates", ""),
+                "states_controls": row.get("States / controls shown", ""),
+                "status": row.get("Status", ""),
+            }
+            for row in rows
+            if re.fullmatch(r"SK\d+", row.get("Sketch", ""))
+        ]
     output = []
     for match in re.finditer(r"^\s*(SK\d+)\s*(?:→|->|:)\s*(.+)$", block, re.M):
         output.append({
             "id": match.group(1),
             "refs": re.findall(r"\b(?:P|U|N|S)\d+(?:\.\d+)?\b", match.group(2)),
             "label": match.group(2).strip(),
+            "states_controls": "",
+            "status": "",
         })
     return output
 
@@ -192,11 +208,34 @@ def augment_package(package, planning_dir):
     presentation.setdefault("annotations", [])
     presentation.setdefault("featured_ids", [])
     presentation.setdefault("journey_scenarios", [])
+    presentation.setdefault("sketch_assets", {})
+
+    embedded_assets = {}
+    for sketch_id, relative in presentation["sketch_assets"].items():
+        candidate = (directory / relative).resolve()
+        if directory not in (candidate, *candidate.parents):
+            raise ValueError(f"Sketch asset for {sketch_id} must stay inside the planning directory")
+        if not candidate.is_file():
+            raise ValueError(f"Sketch asset for {sketch_id} does not exist: {relative}")
+        suffix = candidate.suffix.lower()
+        mime = {
+            ".svg": "image/svg+xml",
+            ".png": "image/png",
+            ".jpg": "image/jpeg",
+            ".jpeg": "image/jpeg",
+            ".webp": "image/webp",
+        }.get(suffix)
+        if not mime:
+            raise ValueError(f"Unsupported sketch asset type for {sketch_id}: {suffix}")
+        payload = base64.b64encode(candidate.read_bytes()).decode("ascii")
+        embedded_assets[sketch_id] = f"data:{mime};base64,{payload}"
+    presentation["embedded_sketch_assets"] = embedded_assets
 
     known = _all_ids(package)
     refs = [presentation.get("hero_place", "")] + list(presentation.get("featured_ids", []))
     refs += [item.get("ref", "") for item in presentation.get("annotations", [])]
     refs += list(presentation["visual_hints"].keys())
+    refs += list(presentation["sketch_assets"].keys())
     for hint in presentation["visual_hints"].values():
         if not isinstance(hint, dict):
             raise ValueError("Every visual hint must be an object")
@@ -276,9 +315,13 @@ def _system_board(package, scope=None):
     sketches = package["breadboard"].get("targeted_sketches", [])
     if scope:
         sketches = [item for item in sketches if set(item["refs"]) & scope]
+    assets = package["presentation"].get("embedded_sketch_assets", {})
     sketch_html = "".join(
-        f'<article class="sketch"{_data(item["id"])}><b>{_e(item["id"])}</b><span>{_e(item["label"])}</span>'
-        f'<small>{" · ".join(_e(ref) for ref in item["refs"])}</small></article>' for item in sketches
+        f'<article class="sketch"{_data(item["id"])}><b>{_e(item["id"])}</b>'
+        + (f'<img src="{assets[item["id"]]}" alt="{_e(item["id"])} targeted sketch">' if item["id"] in assets else "")
+        + f'<span>{_e(item["label"])}</span><small>{" · ".join(_e(ref) for ref in item["refs"])}</small>'
+        + (f'<small>{_e(item.get("states_controls",""))}</small>' if item.get("states_controls") else "")
+        + '</article>' for item in sketches
     )
     return (
         f'<div class="place-grid">{cards}</div><div class="rail-label">System rail · hidden consequences and stores</div>'
@@ -329,7 +372,7 @@ CSS = r"""
 .annotation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.note{background:var(--note);border:1px solid #dcca75;padding:10px;border-radius:9px}.note.decision{background:#dcefe4}.note.unknown,.note.rabbit-hole{background:#ffe1d8}.note.cut{background:#e7e4f4}.note b{display:block;font-size:10px}
 .place-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}.place-card{background:white;border:1px solid #abb2ac;border-radius:14px;overflow:hidden;min-height:210px}.place-card:first-child{grid-column:span 2;border:2px solid #31443a}.place-card header{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.place-card header b{color:var(--accent);margin-right:8px}.place-card>p{font-size:12px;color:var(--muted);padding:0 12px}.place-body,.place-region{display:grid;gap:8px}.place-body{padding:12px}.region-header{border-bottom:1px dashed #c9cdc8;padding-bottom:8px}.region-footer{border-top:1px dashed #c9cdc8;padding-top:8px}
 .wire{border:1px solid #7e8881;border-radius:8px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px}.wire.button{background:#183f2f;color:white}.wire b{font-size:10px}.wire small{text-transform:none;letter-spacing:0}.rail-label{margin-top:14px;font-size:10px;text-transform:uppercase;color:var(--muted)}.rail{border-top:1px dashed #999f99;padding-top:10px;display:flex;gap:7px;flex-wrap:wrap}.rail span{background:white;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:12px}.rail .store{background:#e7f0e7}.rail b{color:var(--accent);margin-right:5px;font-size:10px}
-.sketch-grid,.grid,.artifact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sketch{border:1px dashed #727970;background:#fffef6;border-radius:10px;padding:12px}.sketch b,.sketch span,.sketch small{display:block}.shape.selected,.slice-detail.active{border:2px solid var(--accent);background:#fbfffb}.shape li b{display:inline-block;min-width:28px;color:var(--accent);font-size:10px}.shape-alt{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0}.shape-alt summary{padding:15px;cursor:pointer;font-weight:700}.shape-alt .shape-body{padding:0 15px 15px}.shape-alt small{display:block;margin-bottom:5px}
+.sketch-grid,.grid,.artifact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sketch{border:1px dashed #727970;background:#fffef6;border-radius:10px;padding:12px}.sketch b,.sketch span,.sketch small{display:block}.sketch img{display:block;width:100%;max-height:360px;object-fit:contain;margin:8px 0;border:1px solid var(--line);background:white;border-radius:8px}.shape.selected,.slice-detail.active{border:2px solid var(--accent);background:#fbfffb}.shape li b{display:inline-block;min-width:28px;color:var(--accent);font-size:10px}.shape-alt{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0}.shape-alt summary{padding:15px;cursor:pointer;font-weight:700}.shape-alt .shape-body{padding:0 15px 15px}.shape-alt small{display:block;margin-bottom:5px}
 .table{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:700px;background:white}th,td{padding:10px;border-bottom:1px solid #e5e6e0;text-align:left}th{font-size:10px;text-transform:uppercase;color:var(--muted)}
 .slice-stack{display:grid;gap:14px}.slice-detail{padding:16px}.slice-board .place-card:first-child{grid-column:span 1}.slice-traces{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0;list-style:none}.slice-traces li{border:1px solid var(--line);border-radius:9px;padding:9px}.slice-traces b,.slice-traces span{display:block}.scope-button{border:1px solid var(--accent);background:white;color:var(--accent);border-radius:999px;padding:8px 11px;font-weight:700;cursor:pointer}.scope-button.active{background:var(--accent);color:white}
 [data-plan-id]{cursor:pointer;transition:opacity .15s}[data-plan-id].hit{outline:3px solid #d39f13;outline-offset:2px}body.scope-mode [data-plan-id].dim{opacity:.18;filter:grayscale(1)}.inspector{position:fixed;right:14px;bottom:14px;background:#102018;color:white;padding:10px 12px;border-radius:10px;display:none;max-width:350px;z-index:5}.inspector.show{display:block}
