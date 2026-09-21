@@ -80,19 +80,19 @@ done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
-  kickoff feed-context check-drift reflect-breadboard
+  kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
-  kickoff feed-context check-drift reflect-breadboard
+  kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 GEMINI_COMMANDS=(
   plan wayfind frame shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink
-  kickoff feed-context check-drift reflect-breadboard
+  kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
@@ -103,7 +103,7 @@ TEMPLATES=(
 )
 
 DOCS=(
-  README.md AGENTS.md GEMINI.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
+  README.md AGENTS.md GEMINI.md PLANNING-PUBLISHER.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
   site/README.md site/index.html site/package.json site/package-lock.json
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
@@ -130,6 +130,9 @@ DOCS=(
 
 check_file_exists requirements-dev.txt
 check_file_exists scripts/release.py
+check_file_exists scripts/publish-shaped-work.py
+check_file_exists scripts/publish_shaped_work.py
+check_file_exists scripts/planning_publisher_ext.py
 check_file_exists .github/dependabot.yml
 check_file_exists .github/pull_request_template.md
 check_file_exists .github/ISSUE_TEMPLATE/bug.yml
@@ -476,6 +479,10 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
     fi
   done
   check_file_exists dist/claude-code-plugin/AGENTS.md
+  check_file_exists dist/claude-code-plugin/PLANNING-PUBLISHER.md
+  check_file_exists dist/claude-code-plugin/scripts/publish-shaped-work.py
+  check_file_exists dist/claude-code-plugin/scripts/publish_shaped_work.py
+  check_file_exists dist/claude-code-plugin/scripts/planning_publisher_ext.py
   check_file_exists dist/claude-code-plugin/LICENSE
   check_file_exists dist/claude-code-plugin/.agent-orchestration.yaml
   check_file_exists dist/claude-code-plugin/docs/agent-context-feeding.md

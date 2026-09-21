@@ -1,0 +1,20 @@
+description = "Compile canonical planning artifacts into a normalized PlanningPackage and responsive shaped-work package."
+
+prompt = """
+Use this repository's Planning Publisher.
+
+Primary instructions:
+@{AGENTS.md}
+@{PLANNING-PUBLISHER.md}
+
+Command arguments / source context:
+{{args}}
+
+Publishing is a derived projection only. Do not select a shape, accept requirements, promote candidate behavior, change build scope, or edit canonical planning artifacts merely to make the visual package pass.
+
+Resolve the planning directory from the arguments, defaulting to planning/ only when it exists. Run:
+
+python3 scripts/publish-shaped-work.py --planning-dir "<planning-dir>" --output "<planning-dir>/shaped-work.html" --json-output "<planning-dir>/planning-package.json" --svg-dir "<planning-dir>/shaped-work-assets"
+
+Pass optional PNG/PDF flags only when requested. Surface publisher validation failures rather than inventing missing planning truth.
+"""

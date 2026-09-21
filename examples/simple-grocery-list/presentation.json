@@ -1,0 +1,34 @@
+{
+  "schema_version": 2,
+  "hero_place": "P1",
+  "journey_scenarios": [
+    "Add a new item",
+    "Mark bought or undo",
+    "Hide or reveal bought items",
+    "Restore a prior session"
+  ],
+  "featured_ids": ["A1", "A2", "A3", "A4", "A5", "A6"],
+  "annotations": [
+    {"ref": "A1", "kind": "decision", "text": "Keep capture on the main surface so remembering an item stays cheap."},
+    {"ref": "A3", "kind": "decision", "text": "Bought state changes inline and can be undone without changing place."},
+    {"ref": "A4", "kind": "decision", "text": "Filtering changes visibility, not the underlying item state."},
+    {"ref": "A2", "kind": "note", "text": "One item model keeps needed/bought state in one place."},
+    {"ref": "A5", "kind": "cut", "text": "Same-device persistence restores the list without introducing accounts."},
+    {"ref": "A6", "kind": "cut", "text": "Duplicate handling stays local to the add path and remains cuttable."}
+  ],
+  "visual_hints": {
+    "P1": {"kind": "screen", "order": 1},
+    "P2": {"kind": "state", "order": 2},
+    "P3": {"kind": "boundary", "order": 3},
+    "U1": {"kind": "input", "region": "header", "order": 1},
+    "U2": {"kind": "button", "region": "header", "order": 2},
+    "U4": {"kind": "toggle", "region": "header", "order": 3},
+    "U5": {"kind": "display", "region": "body", "order": 4},
+    "U3": {"kind": "toggle", "region": "body", "order": 5},
+    "U6": {"kind": "display", "region": "body", "order": 1}
+  },
+  "slice_scopes": {
+    "V1": ["P1", "P2", "P3", "U1", "U2", "U5", "U6", "N1", "N2", "N3", "N5", "N7", "N8", "N9", "N10", "S1", "S3"],
+    "V2": ["P1", "P3", "U3", "U4", "U5", "N4", "N5", "N6", "N7", "N8", "N9", "S1", "S2"]
+  }
+}
