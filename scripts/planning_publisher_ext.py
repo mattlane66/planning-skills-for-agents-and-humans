@@ -324,12 +324,12 @@ CSS = r"""
 :root{--ink:#132018;--muted:#68736c;--paper:#f6f5ee;--card:#fffef9;--line:#d6d7ce;--accent:#245b43;--note:#fff3b7}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:15px/1.45 Inter,system-ui,sans-serif}.page{max-width:1480px;margin:auto;padding:28px clamp(14px,4vw,56px) 80px}
 .mast{display:flex;justify-content:space-between;gap:20px;align-items:end}.mast h1{font-size:clamp(32px,5vw,56px);letter-spacing:-.055em;line-height:.95;margin:4px 0}.eyebrow,small{font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);font-weight:800}.eyebrow{color:var(--accent)}
-.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:24px 0}.card,.panel,.shape,.slice-detail,.artifact-card{background:var(--card);border:1px solid var(--line);border-radius:16px}.card,.shape,.artifact-card{padding:15px}.panel{padding:clamp(15px,2.5vw,28px);margin-top:14px}.panel h2{font-size:clamp(22px,3vw,34px);margin:4px 0 18px}.panel-head,.slice-detail>header{display:flex;justify-content:space-between;gap:20px;align-items:start}
+.authority-strip{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0 4px}.authority-chip{border:1px solid var(--line);background:white;border-radius:999px;padding:6px 9px;font-size:11px}.authority-chip b{margin-right:5px}.authority-chip.accepted,.authority-chip.selected{background:#dcefe4;border-color:#9ab9a5}.authority-chip.working,.authority-chip.candidate-shape{background:#fff3b7;border-color:#dcca75}.authority-chip.unselected{background:#ecece7;color:#626a64}.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:18px 0 24px}.card,.panel,.shape,.slice-detail,.artifact-card{background:var(--card);border:1px solid var(--line);border-radius:16px}.card,.shape,.artifact-card{padding:15px}.panel{padding:clamp(15px,2.5vw,28px);margin-top:14px}.panel h2{font-size:clamp(22px,3vw,34px);margin:4px 0 18px}.panel-head,.slice-detail>header{display:flex;justify-content:space-between;gap:20px;align-items:start}
 .board,.slice-board{background:#eeede6;border:1px solid #d2d1c7;border-radius:16px;padding:14px}.journey{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px}.journey article{background:white;border:1px solid var(--line);border-radius:10px;padding:10px}.journey strong,.journey small{display:block}.journey small{text-transform:none;letter-spacing:0}
 .annotation-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}.note{background:var(--note);border:1px solid #dcca75;padding:10px;border-radius:9px}.note.decision{background:#dcefe4}.note.unknown,.note.rabbit-hole{background:#ffe1d8}.note.cut{background:#e7e4f4}.note b{display:block;font-size:10px}
 .place-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;align-items:start}.place-card{background:white;border:1px solid #abb2ac;border-radius:14px;overflow:hidden;min-height:210px}.place-card:first-child{grid-column:span 2;border:2px solid #31443a}.place-card header{padding:10px 12px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}.place-card header b{color:var(--accent);margin-right:8px}.place-card>p{font-size:12px;color:var(--muted);padding:0 12px}.place-body,.place-region{display:grid;gap:8px}.place-body{padding:12px}.region-header{border-bottom:1px dashed #c9cdc8;padding-bottom:8px}.region-footer{border-top:1px dashed #c9cdc8;padding-top:8px}
 .wire{border:1px solid #7e8881;border-radius:8px;padding:10px;display:grid;grid-template-columns:auto 1fr auto;gap:8px}.wire.button{background:#183f2f;color:white}.wire b{font-size:10px}.wire small{text-transform:none;letter-spacing:0}.rail-label{margin-top:14px;font-size:10px;text-transform:uppercase;color:var(--muted)}.rail{border-top:1px dashed #999f99;padding-top:10px;display:flex;gap:7px;flex-wrap:wrap}.rail span{background:white;border:1px solid var(--line);border-radius:999px;padding:6px 9px;font-size:12px}.rail .store{background:#e7f0e7}.rail b{color:var(--accent);margin-right:5px;font-size:10px}
-.sketch-grid,.grid,.artifact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sketch{border:1px dashed #727970;background:#fffef6;border-radius:10px;padding:12px}.sketch b,.sketch span,.sketch small{display:block}.shape.selected,.slice-detail.active{border:2px solid var(--accent);background:#fbfffb}.shape li b{display:inline-block;min-width:28px;color:var(--accent);font-size:10px}
+.sketch-grid,.grid,.artifact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.sketch{border:1px dashed #727970;background:#fffef6;border-radius:10px;padding:12px}.sketch b,.sketch span,.sketch small{display:block}.shape.selected,.slice-detail.active{border:2px solid var(--accent);background:#fbfffb}.shape li b{display:inline-block;min-width:28px;color:var(--accent);font-size:10px}.shape-alt{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:0}.shape-alt summary{padding:15px;cursor:pointer;font-weight:700}.shape-alt .shape-body{padding:0 15px 15px}.shape-alt small{display:block;margin-bottom:5px}
 .table{overflow:auto;border:1px solid var(--line);border-radius:12px}table{width:100%;border-collapse:collapse;min-width:700px;background:white}th,td{padding:10px;border-bottom:1px solid #e5e6e0;text-align:left}th{font-size:10px;text-transform:uppercase;color:var(--muted)}
 .slice-stack{display:grid;gap:14px}.slice-detail{padding:16px}.slice-board .place-card:first-child{grid-column:span 1}.slice-traces{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:0;list-style:none}.slice-traces li{border:1px solid var(--line);border-radius:9px;padding:9px}.slice-traces b,.slice-traces span{display:block}.scope-button{border:1px solid var(--accent);background:white;color:var(--accent);border-radius:999px;padding:8px 11px;font-weight:700;cursor:pointer}.scope-button.active{background:var(--accent);color:white}
 [data-plan-id]{cursor:pointer;transition:opacity .15s}[data-plan-id].hit{outline:3px solid #d39f13;outline-offset:2px}body.scope-mode [data-plan-id].dim{opacity:.18;filter:grayscale(1)}.inspector{position:fixed;right:14px;bottom:14px;background:#102018;color:white;padding:10px 12px;border-radius:10px;display:none;max-width:350px;z-index:5}.inspector.show{display:block}
@@ -355,11 +355,18 @@ def render_enhanced_html(package):
         f'<article class="note {_e(item.get("kind","note"))}"{_data(item.get("ref",""))}><b>{_e(item.get("ref"))}</b>{_e(item.get("text"))}</article>'
         for item in package["presentation"].get("annotations", [])
     )
-    shapes = "".join(
-        f'<article class="shape {"selected" if item["selected"] else ""}"><small>Shape {_e(item["id"])} · {"Selected" if item["selected"] else "Unselected"}</small><h3>{_e(item["name"])}</h3><ul>'
-        + "".join(f'<li{_data(part.get("Part",""))}><b>{_e(part.get("Part"))}</b>{_e(part.get("Mechanism"))}</li>' for part in item["parts"])
-        + "</ul></article>" for item in package["shaping"]["shapes"]
-    )
+    shape_blocks = []
+    for item in package["shaping"]["shapes"]:
+        parts = "".join(f'<li{_data(part.get("Part",""))}><b>{_e(part.get("Part"))}</b>{_e(part.get("Mechanism"))}</li>' for part in item["parts"])
+        if item["selected"]:
+            shape_blocks.append(
+                f'<article class="shape selected"><small>Shape {_e(item["id"])} · Selected</small><h3>{_e(item["name"])}</h3><ul>{parts}</ul></article>'
+            )
+        else:
+            shape_blocks.append(
+                f'<details class="shape-alt"><summary>Shape {_e(item["id"])} · {_e(item["name"])}</summary><div class="shape-body"><small>Unselected candidate · collapsed by default</small><ul>{parts}</ul></div></details>'
+            )
+    shapes = "".join(shape_blocks)
     fit = {row.get("Req",""): row for row in package["shaping"]["fit"]}
     heads = "".join(f"<th>{_e(item['id'])}</th>" for item in package["shaping"]["shapes"])
     requirements = "".join(
@@ -368,10 +375,23 @@ def render_enhanced_html(package):
         for row in package["shaping"]["requirements"]
     )
     optional = _optional_cards(package)
+    authority = package.get("authority", {})
+    authority_items = [
+        ("Frame", authority.get("frame", "Unknown")),
+        ("Requirements", authority.get("requirements", "Unknown")),
+        ("Shape", authority.get("shape", "Unknown")),
+        ("Breadboard", authority.get("breadboard", "Unknown")),
+        ("Slice", authority.get("slice", "Unknown")),
+    ]
+    authority_html = "".join(
+        f'<span class="authority-chip {_e(value.lower().replace(" ","-"))}"><b>{_e(name)}</b>{_e(value)}</span>'
+        for name, value in authority_items
+    )
     embedded = json.dumps(package, ensure_ascii=False).replace("</", "<\\/")
     optional_section = f'<section class="panel"><div class="eyebrow">Supporting artifacts</div><h2>Downstream shaped-work context</h2><div class="artifact-grid">{optional}</div></section>' if optional else ""
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{_e(package["title"])} · Shaped Work</title><style>{CSS}</style></head><body>
 <main class="page"><header class="mast"><div><div class="eyebrow">Planning Publisher · canonical artifacts → human view</div><h1>{_e(package["title"])}</h1></div><p>Derived projection. Canonical planning Markdown remains authoritative. Click stable IDs or isolate a slice.</p></header>
+<div class="authority-strip">{authority_html}</div>
 <section class="summary"><article class="card"><small>Problem</small><p>{_e(problem)}</p></article><article class="card"><small>Outcome</small><p>{_e(outcome)}</p></article><article class="card"><small>Appetite</small><p>{_e(appetite.get("Time budget",""))}</p><p><b>Cut:</b> {_e(appetite.get("Cut line",""))}</p></article><article class="card"><small>Selected shape</small><p><b>{_e(label)}</b></p></article></section>
 <section class="panel"><div class="panel-head"><div><div class="eyebrow">Composite shape board</div><h2>See the shaped behavior as one system.</h2></div><button class="scope-button" data-scope="">Show full system</button></div><div class="board"><div class="journey">{journey}</div><div class="annotation-grid">{annotations}</div>{_system_board(package)}</div></section>
 <section class="panel"><div class="eyebrow">Decision record</div><h2>Shapes and selected direction</h2><div class="grid">{shapes}</div></section>
