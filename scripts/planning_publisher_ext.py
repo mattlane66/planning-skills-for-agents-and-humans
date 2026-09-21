@@ -192,6 +192,65 @@ def _default_scopes(package):
     return scopes
 
 
+def _visual_model(package):
+    presentation = package["presentation"]
+    places = []
+    for place in package["breadboard"]["places"]:
+        pid = place.get("ID", "")
+        hint = presentation.get("visual_hints", {}).get(pid, {})
+        affordances = []
+        for row in package["breadboard"]["ui"]:
+            if row.get("Place") != pid:
+                continue
+            ref = row.get("ID", "")
+            ui_hint = presentation.get("visual_hints", {}).get(ref, {})
+            affordances.append({
+                "id": ref,
+                "kind": ui_hint.get("kind", _kind(row)),
+                "region": ui_hint.get("region", "body"),
+                "order": ui_hint.get("order", 999),
+            })
+        places.append({
+            "id": pid,
+            "kind": hint.get("kind", "screen"),
+            "order": hint.get("order", 999),
+            "hero": pid == presentation.get("hero_place"),
+            "affordances": sorted(affordances, key=lambda item: (item["order"], item["id"])),
+        })
+    slices = []
+    active = package["breadboard"]["active_slice"]
+    for item in package["breadboard"]["slices"]:
+        slices.append({
+            "id": item["id"],
+            "name": item["name"],
+            "scope": presentation.get("slice_scopes", {}).get(item["id"], []),
+            "authority": "selected-build-scope" if item["id"] == active else "deferred-accepted",
+        })
+    journey = []
+    desired = set(presentation.get("journey_scenarios", []))
+    for row in package["breadboard"]["behavior_traces"]:
+        if desired and row.get("Scenario") not in desired:
+            continue
+        journey.append({
+            "scenario": row.get("Scenario", ""),
+            "refs": list(dict.fromkeys(re.findall(
+                r"\b(?:P|U|N|S)\d+(?:\.\d+)?\b",
+                " ".join(str(value) for value in row.values()),
+            ))),
+        })
+    return {
+        "schema_version": 1,
+        "places": sorted(places, key=lambda item: (0 if item["hero"] else 1, item["order"], item["id"])),
+        "system_rail": [
+            row.get("ID", "") for row in package["breadboard"]["non_ui"] + package["breadboard"]["stores"] if row.get("ID")
+        ],
+        "journey": journey,
+        "annotations": presentation.get("annotations", []),
+        "sketches": package["breadboard"].get("targeted_sketches", []),
+        "slices": slices,
+    }
+
+
 def augment_package(package, planning_dir):
     directory = Path(planning_dir).resolve()
     core = {directory / source for source in package["sources"].values() if isinstance(source, str)}
@@ -248,6 +307,7 @@ def augment_package(package, planning_dir):
     unknown = sorted({ref for ref in refs if ref and ref not in known})
     if unknown:
         raise ValueError("Presentation references IDs absent from canonical planning artifacts: " + ", ".join(unknown))
+    package["visual_model"] = _visual_model(package)
     return package
 
 
