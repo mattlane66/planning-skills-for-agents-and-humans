@@ -199,7 +199,7 @@ def parse_shaping(path):
         shape["selected"] = shape["id"] == picked
 
     appetite = key_values(appetite_block)
-    operating_model = key_values(section(text, r"Operating model[^\\n]*"))
+    operating_model = key_values(section(text, r"Operating model[^\n]*"))
     requirements = first_table(requirement_block)
     req_auth = {clean_value(row.get("Authority")) for row in requirements if clean_value(row.get("Authority"))}
     appetite_authority = clean_value(appetite.get("Authority"))
