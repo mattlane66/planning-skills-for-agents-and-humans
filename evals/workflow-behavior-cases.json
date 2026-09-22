@@ -804,6 +804,64 @@
         "new requirement ID",
         "production code"
       ]
+    },
+    {
+      "id": "operating-model-remains-separate-from-candidate-theory",
+      "prompt": "Use shaping. The accepted frame has x and y, plus an operating fact that the downstream service rejects invalid totals. Record that fact in M, derive a requirement from it, and compare candidate shapes without treating M as proof that any candidate will work.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "operating model",
+        "FROM_M",
+        "candidate-specific",
+        "design conformance"
+      ],
+      "forbidden_evidence": [
+        "M proves Shape A",
+        "automatic selection",
+        "production code"
+      ]
+    },
+    {
+      "id": "reflection-separates-realized-conformance-from-effect",
+      "prompt": "Use breadboard reflection. The implementation matches selected intent and direct build evidence shows the built artifact satisfies the accepted requirements under the current operating model, but production outcome evidence shows users still do not reach the desired outcome. Diagnose this without calling it an implementation failure by default.",
+      "expected_skill": "breadboard-reflection",
+      "expected_artifact_type": "breadboard-reflection",
+      "expected_gate": "effect-decision",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "realized conformance",
+        "CONFORMS",
+        "effect",
+        "CONTRADICTED",
+        "backward diagnosis"
+      ],
+      "forbidden_evidence": [
+        "implementation failure assumed",
+        "effect inferred from conformance",
+        "silent requirement rewrite"
+      ]
+    },
+    {
+      "id": "generation-omission-is-not-a-passing-test",
+      "prompt": "Use shaping. Every candidate currently passes the requirements, but A, B, and C are cosmetic variations of the same mechanism family. Assess whether the comparison is decision-ready without inventing weak alternatives or selecting for me.",
+      "expected_skill": "shaping",
+      "expected_artifact_type": "shaping",
+      "expected_gate": "shape-selection",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "generation omission",
+        "materially different",
+        "omission risk",
+        "no quota"
+      ],
+      "forbidden_evidence": [
+        "candidate set is complete because all rows pass",
+        "automatic selection",
+        "weak alternatives"
+      ]
     }
   ]
 }
