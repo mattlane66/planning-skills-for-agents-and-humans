@@ -149,8 +149,8 @@ modes:
 
   frame:
     skill: framing-doc
-    purpose: Name the current situation, problem, outcome, forces, and boundaries when those are genuinely unclear.
-    allowed_outputs: [frame, current_situation, current_approach, current_result, problem, outcome, boundaries, criteria_candidates, criteria_provenance]
+    purpose: Name the current situation, problem, outcome, material operating model, forces, and boundaries when those are genuinely unclear.
+    allowed_outputs: [frame, current_situation, current_approach, current_result, problem, outcome, operating_model, boundaries, criteria_candidates, criteria_provenance]
     forbidden: [production_code, selected_shape]
     exit_gate: frame_accepted_or_intentionally_left_provisional
 
@@ -328,10 +328,10 @@ modes:
 
   reflect:
     skill: breadboard-reflection
-    purpose: Compare implementation reality to accepted intent, assess realized fit when in scope, and prepare any required human correction decision.
+    purpose: Compare implementation reality to accepted intent, assess realized conformance and effect separately, diagnose surprising effect backward, and prepare any required human correction decision.
     requires: [implementation_exists, selected_breadboard]
-    allowed_outputs: [implementation_reality_record, matches, drift, missing_behavior, accidental_behavior, design_smells, correction_options, drift_decision_status, realized_fit_assessment, criterion_revision_proposals, authorized_planning_updates, authorized_implementation_followups]
-    forbidden: [critique_before_recording_reality, silent_breadboard_rewrite, accepted_intent_replaced_without_decision, realized_fit_claim_without_outcome_evidence, silent_requirement_rewrite]
+    allowed_outputs: [implementation_reality_record, matches, drift, missing_behavior, accidental_behavior, design_smells, correction_options, drift_decision_status, realized_conformance_assessment, effect_assessment, backward_diagnosis, operating_model_revision_proposals, criterion_revision_proposals, authorized_planning_updates, authorized_implementation_followups]
+    forbidden: [critique_before_recording_reality, silent_breadboard_rewrite, accepted_intent_replaced_without_decision, effect_claim_without_outcome_evidence, effect_inferred_from_conformance, silent_requirement_rewrite]
     exit_gate: reflection_recorded_and_required_human_decision_decided_or_pending
 
 artifacts:
