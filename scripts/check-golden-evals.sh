@@ -49,7 +49,7 @@ require_text shaping/SKILL.md "Promotion from candidate to Working to Accepted c
 require_text shaping/SKILL.md "## Requirement coverage"
 require_text shaping/references/fit-checks.md "Coverage is design-conformance evidence only"
 require_text shaping/SKILL.md "Candidate generation has a special failure mode"
-require_text shaping/SKILL.md "`FROM_M`"
+require_text shaping/SKILL.md '`FROM_M`'
 require_text framing-doc/SKILL.md "Operating model (M, optional)"
 forbid_text shaping/SKILL.md "## Kick-off: From selected shape to slices"
 require_text breadboarding/SKILL.md "### Current-state mapping (descriptive)"
