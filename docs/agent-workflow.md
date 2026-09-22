@@ -116,6 +116,7 @@ Outputs:
 - current approach and result
 - problem
 - outcome
+- optional operating model M when material
 - boundaries and non-goals
 - criteria candidates
 
@@ -181,7 +182,7 @@ Run fit and reverse-fit checks whenever they would clarify the work.
 
 Outputs:
 
-- Working or Decision-ready fit check
+- Working or Decision-ready design-conformance fit check
 - reverse fit check
 - Appetite fit when Appetite exists
 - failed requirements
@@ -453,8 +454,11 @@ Outputs:
 
 - implementation reality recorded separately from accepted intent
 - drift, missing behavior, accidental behavior, and design smells
+- realized-conformance assessment against Accepted R under the relevant M
+- effect assessment from outcome evidence, when available
+- backward diagnosis from surprising effect through conformance, implementation, selection, R, M, and x/y
 - planning-update and implementation-follow-up options
-- human drift decision or clearly pending decision
+- human drift/effect decision or clearly pending decision
 
 Use `breadboard-reflection`.
 

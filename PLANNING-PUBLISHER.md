@@ -64,7 +64,7 @@ PNG/PDF export requires the optional `cairosvg` Python package. HTML, JSON, and 
 
 The compiler discovers a frame, shaping artifact, and breadboard from the planning directory. It prefers canonical frontmatter such as `artifact_type`, `source_of_truth`, and accepted selected-design authority, then falls back to legacy filename conventions. Explicit `--frame`, `--shaping`, and `--breadboard` paths override discovery.
 
-Current canonical templates are the primary contract. The publisher also retains backward compatibility with the older accepted headings and prose slice format used by existing examples. A separate canonical `artifact_type: slices` artifact overrides embedded slice candidates when present and supplies the selected build slice.
+Current canonical templates are the primary contract. The publisher normalizes the transformation frame and the optional operating model `M`, preserves requirement provenance such as `FROM_M`, and surfaces M in the human view when present. The publisher also retains backward compatibility with the older accepted headings and prose slice format used by existing examples. A separate canonical `artifact_type: slices` artifact overrides embedded slice candidates when present and supplies the selected build slice.
 
 When present, it also discovers supporting shaped-work artifacts such as:
 
@@ -83,7 +83,7 @@ Supporting artifacts are surfaced as context. They do not change the canonical a
 
 `--check` is fail-closed for selected current-contract work. It refuses publication when a selected shaping artifact loses its Accepted requirements or Appetite, when the selected direction cannot be resolved to a declared shape, when a current selected-design breadboard lacks accepted authority or canonical places/behavior traces, or when behavior references unknown stable IDs.
 
-This matters because a visually plausible but incomplete package is worse than an explicit failure. Contract drift should stop publication and name the source artifact that needs repair; the publisher must never silently drop planning truth.
+This matters because a visually plausible but incomplete package is worse than an explicit failure. Contract drift should stop publication and name the source artifact that needs repair; the publisher must never silently drop planning truth. Operating-model fields are derived from canonical frame/shaping artifacts; the publisher never invents assumptions or turns candidate-specific success claims into M.
 
 ## Presentation model
 

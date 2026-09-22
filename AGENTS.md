@@ -127,9 +127,9 @@ Keep these distinctions intact:
 - current-state behavior versus candidate-shape evidence versus selected-design intent
 - accepted scope versus rejected or deferred ideas
 - planning truth versus implementation reality
-- implementation verification versus realized fit
+- design conformance versus realized conformance versus effect (legacy term: realized fit)
 
-Requirements describe needs, outcomes, constraints, and quality bars. Shapes describe mechanisms. A rough solution can be captured first and used to extract provisional requirements; that does not make its mechanisms requirements or make the shape selected.
+Requirements describe needs, outcomes, constraints, operating requirements derived from M, and quality bars. Shapes describe mechanisms. M records relevant operating conditions and causal assumptions, not candidate-specific success claims. A rough solution can be captured first and used to extract provisional requirements; that does not make its mechanisms requirements or make the shape selected.
 
 Treat an `R##` as a thread, not a stage. Preserve the same ID as evidence reveals it, humans promote it from candidate to Working to Accepted, selected mechanisms claim to embody it, implementation context carries it forward, and outcome evidence later tests it. Promotion changes authority, not identity; material meaning changes require a new ID or explicit supersession.
 
@@ -226,7 +226,7 @@ Planning drift found:
 
 Do not implement inside a drift check. Use `breadboard-reflection` when the conflict needs correction options and an explicit human decision.
 
-Implementation conformance is not realized fit. A build may match selected intent and still fail the requirement in reality. Mark realized fit only from outcome evidence such as actual user behavior, field observation, telemetry, support evidence, research, or experiments; absent evidence remains not assessed.
+Keep the evaluation altitudes separate. **Design conformance** asks whether a proposed shape plausibly satisfies R under M. **Realized conformance** asks whether the built artifact actually satisfies R under the relevant M. **Effect** (legacy routing/search term: realized fit) asks whether outcome evidence supports that deployment moved reality from x toward y. A pass at one altitude is not proof of the next; absent effect evidence remains not assessed.
 
 ## Stable IDs
 

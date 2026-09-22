@@ -539,12 +539,23 @@ def render_enhanced_html(package):
         f'<span class="authority-chip {_e(value.lower().replace(" ","-"))}"><b>{_e(name)}</b>{_e(value)}</span>'
         for name, value in authority_items
     )
+    operating_model = package["shaping"].get("operating_model") or package["frame"].get("operating_model", {})
+    operating_items = "".join(
+        f"<li><b>{_e(key)}</b> {_e(value)}</li>"
+        for key, value in operating_model.items()
+        if value and value not in {"...", "—", "-", "Not needed"}
+    )
+    operating_section = (
+        f'<section class="panel"><div class="eyebrow">Operating model</div><h2>Conditions and assumptions shaping the bet</h2><ul>{operating_items}</ul></section>'
+        if operating_items else ""
+    )
     embedded = json.dumps(package, ensure_ascii=False).replace("</", "<\\/")
     optional_section = f'<section class="panel"><div class="eyebrow">Supporting artifacts</div><h2>Downstream shaped-work context</h2><div class="artifact-grid">{optional}</div></section>' if optional else ""
     return f"""<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{_e(package["title"])} · Shaped Work</title><style>{CSS}</style></head><body>
 <main class="page"><header class="mast"><div><div class="eyebrow">Planning Publisher · canonical artifacts → human view</div><h1>{_e(package["title"])}</h1></div><p>Derived projection. Canonical planning Markdown remains authoritative. Click stable IDs or isolate a slice.</p></header>
 <div class="authority-strip">{authority_html}</div>
 <section class="summary"><article class="card"><small>Problem</small><p>{_e(problem)}</p></article><article class="card"><small>Outcome</small><p>{_e(outcome)}</p></article><article class="card"><small>Appetite</small><p>{_e(appetite.get("Time budget",""))}</p><p><b>Cut:</b> {_e(appetite.get("Cut line",""))}</p></article><article class="card"><small>Selected shape</small><p><b>{_e(label)}</b></p></article></section>
+{operating_section}
 <section class="panel"><div class="panel-head"><div><div class="eyebrow">Composite shape board</div><h2>See the shaped behavior as one system.</h2></div><button class="scope-button" data-scope="">Show full system</button></div><div class="board"><div class="journey">{journey}</div><div class="annotation-grid">{annotations}</div>{_system_board(package)}</div></section>
 <section class="panel"><div class="eyebrow">Decision record</div><h2>Shapes and selected direction</h2><div class="grid">{shapes}</div></section>
 <section class="panel"><div class="eyebrow">Judging criteria</div><h2>Requirements × shapes</h2><div class="table"><table><thead><tr><th>ID</th><th>Requirement</th><th>Authority</th>{heads}</tr></thead><tbody>{requirements}</tbody></table></div></section>

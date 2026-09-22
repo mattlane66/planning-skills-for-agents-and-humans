@@ -65,7 +65,7 @@ A statechart is derived from the selected-design breadboard and never outranks i
 8. Include relevant statechart rows, contracts, examples, edge cases, acceptance tests, or task-group details only when present and needed.
 9. Exclude Working R/S/Appetite/fit, rejected alternatives, candidate breadboards as build scope, raw transcripts, pending visual deltas, and unrelated planning history.
 10. Flag missing field-level, example-level, terminology, or authority decisions instead of inventing them.
-11. Bind relevant Accepted R IDs to selected-design refs, implementation verification, and realization questions when those questions are meaningfully observable.
+11. Bind relevant Accepted R IDs to selected-design refs, realized-conformance checks, and effect questions when those questions are meaningfully observable. Include material M assumptions that the implementation or later effect inference depends on.
 12. Add an execution contract and verification target.
 13. Stop after writing the context packet.
 
@@ -125,7 +125,7 @@ At minimum include:
 - Verification caveats:
 
 ## Criterion bindings
-| Req | Selected-design refs | Implementation verification | Realization question |
+| Req | Selected-design refs | Realized-conformance check | Effect question |
 |---|---|---|---|
 | R1 | U2, N3 | ... | ... |
 
@@ -138,7 +138,7 @@ At minimum include:
 
 ## Verification semantics
 
-**Implementation verification** asks whether the selected mechanism was built and behaves as intended. **Realized fit** asks whether outcome evidence from actual use supports the requirement. Passing implementation tests must never be represented as proof of realized fit; successful implementation makes the requirement testable in reality.
+**Design conformance** is the pre-build judgment that a selected mechanism can satisfy R under M. **Realized conformance** asks whether the built artifact actually satisfies R under the relevant M. **Effect** (legacy term: realized fit) asks whether outcome evidence from actual use supports movement from x toward y. Passing implementation tests or realized conformance must never be represented as proof of effect.
 
 ## Project language rules
 

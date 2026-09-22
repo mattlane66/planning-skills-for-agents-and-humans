@@ -42,9 +42,16 @@ An agent and human need a shared shaping surface for requirements, solution shap
 - Outcome:
 - Non-goals:
 - x — trigger/context, current approach, and current result:
-- f() — current transformation or breakdown:
+- f() — solution / shape variable: intentionally unspecified at the frame level
 - y — desired outcome:
 - Gap and boundaries:
+
+## Operating model (M, optional)
+- Authority: Working | Accepted | Not needed
+- Relevant operating conditions:
+- Causal assumptions / projected dynamics:
+- Evidence refs:
+- Revisit conditions:
 
 ## Requirements
 
@@ -52,6 +59,7 @@ An agent and human need a shared shaping surface for requirements, solution shap
 |---|---|---|---|---|---|---|
 | R0 | ... | Core goal | Working | FROM_X | ... | ... |
 | R1 | ... | Must-have | Working | FROM_GAP | ... | ... |
+| R2 | ... | Must-have | Working | FROM_M | ... | ... |
 
 ## Appetite
 - Authority: Unset | Working | Accepted
@@ -91,6 +99,7 @@ An agent and human need a shared shaping surface for requirements, solution shap
 
 ## Fit check
 - Authority: Working | Decision-ready
+- Evaluation altitude: Design conformance
 
 | Req | Requirement | Status | CURRENT | A | B |
 |---|---|---|:---:|:---:|:---:|
@@ -105,7 +114,7 @@ An agent and human need a shared shaping surface for requirements, solution shap
 
 ## Requirement coverage
 
-| Req | Supporting selected part(s) | Coverage | Realization question |
+| Req | Supporting selected part(s) | Coverage | Realized-conformance question |
 |---|---|:---:|---|
 | R1 | B1 | ✅ | ... |
 
@@ -115,6 +124,12 @@ An agent and human need a shared shaping surface for requirements, solution shap
 |---|---|:---:|---|---|
 | A | provisional | ... | ... | ... |
 | B | decision-ready | ... | ... | ... |
+
+## Generation omission check
+- Materially different mechanism families considered:
+- Plausible family not yet shaped:
+- Omission risk: low | material | unknown
+- Why this candidate set is sufficient for the current decision:
 
 ## Decision
 - Status: exploring | decision-ready | selected | stopped
@@ -135,6 +150,7 @@ An agent and human need a shared shaping surface for requirements, solution shap
 Choose the move that resolves the current uncertainty; this is not a checklist.
 
 - [ ] Revise requirements (R)
+- [ ] Revisit operating model (M)
 - [ ] Revise or sketch a shape (S)
 - [ ] Run or rerun fit / reverse-fit
 - [ ] Set, revise, or accept Appetite

@@ -68,7 +68,7 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 |---|---|---|---|:---:|
 | R1 | A1 | U2, N3, S1 | ... | ✅ |
 
-Map only the smallest set of behavior IDs that actually embody each Accepted requirement. Coverage here is a design claim, not realized-fit evidence.
+Map only the smallest set of behavior IDs that actually embody each Accepted requirement. Coverage here is a design-conformance claim, not realized-conformance or effect evidence.
 
 ## Places
 

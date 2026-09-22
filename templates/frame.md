@@ -21,6 +21,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - current approach and current result
 - problem/outcome distinction
 - explicit boundaries and non-goals
+- operating model M when one is material
 
 ## Ignore unless asked
 - rejected option details beyond the brief option landscape
@@ -44,11 +45,18 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 
 - x — trigger/context:
 - x — current approach:
-- x — current result:
-- f() — current transformation or breakdown:
+- x — current result / breakdown:
+- f() — solution / shape variable: intentionally unspecified
 - y — desired outcome:
 - Gap between x and y:
 - Boundaries that constrain a valid transformation:
+
+## Operating model (M, optional)
+- Authority: Working | Accepted | Not needed
+- Relevant operating conditions:
+- Causal assumptions / projected dynamics:
+- Evidence refs / confidence:
+- Revisit conditions:
 
 ## Problem
 - ...
@@ -69,6 +77,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 | ID | Candidate criterion | Origin | Evidence refs |
 |---|---|---|---|
 | R0 | ... | FROM_X | ... |
+| R1 | ... | FROM_M | ... |
 
 ## Open questions
 - ...
@@ -78,5 +87,6 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - [ ] Trigger, current approach, and current result are explicit or marked unknown.
 - [ ] Problem lines are traceable to source or marked as inference.
 - [ ] Outcome lines describe effects, not mechanisms.
+- [ ] If M is material, it records operating conditions/assumptions rather than candidate-specific success claims.
 - [ ] Boundaries prevent likely wrong directions without over-constraining the solution.
 - [ ] Criteria candidates, when present, are traceable, mechanism-free, and clearly preliminary.

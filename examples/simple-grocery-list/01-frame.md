@@ -38,11 +38,18 @@ planning: true
 
 - x — trigger/context: Grocery items arise at different moments and both partners later need a current list while shopping.
 - x — current approach: Send items through ad hoc text messages.
-- x — current result: Capture is quick, but pending and bought state becomes hard to recover and scan.
-- f() — current transformation or breakdown: Messages accumulate without a durable list-state transition.
+- x — current result / breakdown: Capture is quick, but messages accumulate without a durable pending/bought state that is easy to recover and scan.
+- f() — solution / shape variable: intentionally unspecified
 - y — desired outcome: Quickly capture items and later see a persistent, legible view of what is still needed.
 - Gap: Preserve low-friction capture while adding clear, reversible grocery state.
 - Boundaries: Same-device, small first version; no accounts, pricing, recipes, categories, or store logic.
+
+## Operating model (M, optional)
+- Authority: Accepted
+- Relevant operating conditions: the first version runs on one device with local state available between ordinary sessions
+- Causal assumptions / projected dynamics: same-device state remains available across ordinary returns unless storage is explicitly cleared or unavailable
+- Evidence refs / confidence: product constraint plus ordinary local-runtime behavior; verify during implementation
+- Revisit conditions: cross-device use, accounts, or a runtime without dependable local persistence enters scope
 
 ## Outcome
 

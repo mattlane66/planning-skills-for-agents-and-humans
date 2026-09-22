@@ -41,7 +41,7 @@ Use sub-identifiers such as `R3.1` or `P2.1` when grouping improves legibility.
 - Do not renumber items merely to remove gaps.
 - Do not rename IDs for style consistency.
 - When wording changes but meaning remains, retain the ID and record the edit when material.
-- A requirement or criterion keeps the same `R##` from evidence-backed candidate through Working, Accepted, selected-mechanism mapping, implementation handoff, and realized-fit assessment; those transitions change authority or evidence state, not identity.
+- A requirement or criterion keeps the same `R##` from evidence-backed candidate through Working, Accepted, selected-mechanism mapping, implementation handoff, realized-conformance assessment, and effect diagnosis; those transitions change authority or evidence state, not identity.
 - When meaning changes substantially, create a new ID or an explicit supersession record.
 - Derived views should retain source IDs so readers can trace them back to the authoritative table.
 - Use the canonical default form (`V1`, `RUN1`, `CUT1`) in new repository-owned

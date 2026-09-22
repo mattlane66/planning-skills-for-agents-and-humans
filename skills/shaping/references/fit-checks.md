@@ -4,7 +4,7 @@ Load this reference when comparing shapes, checking appetite, resolving a failed
 
 ## Requirements against shapes
 
-This is the primary **Fit Check — Requirements × Shapes**. Use one matrix with the full requirement text and binary values. Hold the accepted x and y constant while comparing candidate shapes; if the frame changes materially, invalidate the affected matrix and rerun it.
+This is the primary **Fit Check — Requirements × Shapes** and the repository's design-conformance check. Use one matrix with the full requirement text and binary values. Hold accepted x, y, and material M assumptions stable while comparing candidate shapes; if the frame or operating model changes materially, invalidate the affected matrix and rerun it.
 
 ```md
 | Req | Requirement | Status | CURRENT | A | B |
@@ -39,13 +39,13 @@ Rotation should also call out a requirement with no supporting part, duplicated 
 For a selected shape, record the inverse requirement view as well:
 
 ```md
-| Req | Supporting selected part(s) | Coverage | Realization question |
+| Req | Supporting selected part(s) | Coverage | Realized-conformance question |
 |---|---|:---:|---|
-| R1 | B1, B3 | ✅ | What would we observe if R1 is actually true in use? |
+| R1 | B1, B3 | ✅ | What would we inspect after implementation to verify the built artifact still satisfies R1? |
 | R2 | — | ❌ | ... |
 ```
 
-Every Accepted R must have at least one selected part that claims to make it true. Coverage is not realized fit; it is a design claim about support. Add a realization question only when the requirement is meaningfully observable after implementation.
+Every Accepted R must have at least one selected part that claims to make it true. Coverage is design-conformance evidence only. It does not prove realized conformance of the built artifact and does not prove effect after deployment. Add a realized-conformance question only when the requirement can be meaningfully inspected after implementation.
 
 An unjustified part must be:
 

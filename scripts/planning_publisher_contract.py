@@ -168,7 +168,8 @@ def parse_frame(path):
         "title": title(text, " — Frame"),
         "problem": bullets(section(text, r"Problem")),
         "outcome": bullets(section(text, r"Outcome")),
-        "transformation": key_values(section(text, r"Transformation frame.*")),
+        "transformation": key_values(section(text, r"Transformation frame[^\n]*")),
+        "operating_model": key_values(section(text, r"Operating model[^\n]*")),
         "less_about": bullets(less),
         "more_about": bullets(more),
         "meta": meta,
@@ -198,6 +199,7 @@ def parse_shaping(path):
         shape["selected"] = shape["id"] == picked
 
     appetite = key_values(appetite_block)
+    operating_model = key_values(section(text, r"Operating model[^\n]*"))
     requirements = first_table(requirement_block)
     req_auth = {clean_value(row.get("Authority")) for row in requirements if clean_value(row.get("Authority"))}
     appetite_authority = clean_value(appetite.get("Authority"))
@@ -216,6 +218,7 @@ def parse_shaping(path):
         "title": title(text, " — Shaping"),
         "appetite": appetite,
         "appetite_authority": appetite_authority or "Unknown",
+        "operating_model": operating_model,
         "requirements": requirements,
         "requirements_authority": "Accepted" if req_auth == {"Accepted"} else ("Mixed" if req_auth else "Unknown"),
         "shapes": shape_list,

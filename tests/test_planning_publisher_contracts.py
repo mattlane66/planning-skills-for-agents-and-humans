@@ -35,6 +35,13 @@ class PlanningPublisherCanonicalContractTests(unittest.TestCase):
         self.assertEqual("V1", package["breadboard"]["active_slice"])
         self.assertEqual("Selected build scope", package["authority"]["slice"])
         self.assertEqual(["SK1"], [row["id"] for row in package["breadboard"]["targeted_sketches"]])
+        self.assertEqual(
+            "intentionally unspecified",
+            package["frame"]["transformation"]["f() — solution / shape variable"],
+        )
+        self.assertIn("Relevant operating conditions", package["frame"]["operating_model"])
+        self.assertEqual("Accepted", package["shaping"]["operating_model"]["Authority"])
+        self.assertEqual("FROM_M", package["shaping"]["requirements"][2]["Origin"])
 
     def test_nested_frame_boundaries_survive_normalization(self):
         self.assertEqual(
@@ -80,6 +87,8 @@ class PlanningPublisherCanonicalContractTests(unittest.TestCase):
         self.assertIn("Accepted selected-design", rendered)
         self.assertIn("Unselected candidate · collapsed by default", rendered)
         self.assertIn("data:image/svg+xml;base64,", rendered)
+        self.assertIn("Operating model", rendered)
+        self.assertIn("existing downstream system", rendered)
         with tempfile.TemporaryDirectory() as temporary:
             svg_dir = pathlib.Path(temporary)
             paths = publisher.write_svg_assets(self.package, svg_dir)

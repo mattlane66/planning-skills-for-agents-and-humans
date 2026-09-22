@@ -47,7 +47,10 @@ require_text shaping/SKILL.md "A candidate breadboard does not automatically bec
 require_text shaping/SKILL.md "Identify the unknown before choosing the next move"
 require_text shaping/SKILL.md "Promotion from candidate to Working to Accepted changes authority, not identity."
 require_text shaping/SKILL.md "## Requirement coverage"
-require_text shaping/references/fit-checks.md "Coverage is not realized fit"
+require_text shaping/references/fit-checks.md "Coverage is design-conformance evidence only"
+require_text shaping/SKILL.md "Candidate generation has a special failure mode"
+require_text shaping/SKILL.md "\`FROM_M\`"
+require_text framing-doc/SKILL.md "Operating model (M, optional)"
 forbid_text shaping/SKILL.md "## Kick-off: From selected shape to slices"
 require_text breadboarding/SKILL.md "### Current-state mapping (descriptive)"
 require_text breadboarding/SKILL.md "### Candidate-shape mapping (exploratory)"
@@ -85,6 +88,9 @@ require_text evals/workflow-behavior-cases.json '"id": "selected-shape-exposes-u
 require_text evals/workflow-behavior-cases.json '"id": "implementation-conformance-is-not-realized-fit"'
 require_text evals/workflow-behavior-cases.json '"id": "reality-can-contradict-a-correct-implementation"'
 require_text evals/workflow-behavior-cases.json '"id": "realized-fit-supported-by-outcome-evidence"'
+require_text evals/workflow-behavior-cases.json '"id": "operating-model-remains-separate-from-candidate-theory"'
+require_text evals/workflow-behavior-cases.json '"id": "reflection-separates-realized-conformance-from-effect"'
+require_text evals/workflow-behavior-cases.json '"id": "generation-omission-is-not-a-passing-test"'
 # Match literal Markdown code spans.
 # shellcheck disable=SC2016
 require_text docs/skill-behavior-evals.md 'protocol is `blind-command-v1`'
@@ -106,8 +112,10 @@ require_text sketch-reconciliation/SKILL.md "observations before interpretations
 require_text sketch-reconciliation/SKILL.md "Stop at the reconciliation gate"
 require_text breadboard-reflection/SKILL.md "explicit drift decision"
 require_text breadboard-reflection/SKILL.md "Do not silently rewrite the accepted breadboard"
-require_text breadboard-reflection/SKILL.md "Implementation conformance is not realized-fit evidence"
-require_text templates/breadboard-reflection.md "## Realized fit"
+require_text breadboard-reflection/SKILL.md "Realized conformance does not prove effect"
+require_text breadboard-reflection/SKILL.md "Diagnose backward when effect is surprising"
+require_text templates/breadboard-reflection.md "## Realized conformance"
+require_text templates/breadboard-reflection.md "## Effect (realized fit)"
 require_text templates/context-packet.md "## Criterion bindings"
 require_text docs/claude-design-workflow.md "## Entry path B — Start from S"
 require_text docs/claude-design-workflow.md "A beautiful candidate prototype remains a candidate."

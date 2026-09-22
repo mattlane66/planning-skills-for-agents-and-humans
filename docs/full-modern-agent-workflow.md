@@ -6,7 +6,7 @@ Use it when work is large enough that a coding agent should not jump directly fr
 
 > **A requirement is a thread, not a stage:** evidence reveals it, humans accept it, Fit Check judges solutions against it, selected mechanisms embody it, implementation preserves it, and reality tests it.
 
-Authority may change as the work moves, but a stable `R##` keeps its identity unless its meaning materially changes. Implementation verification and realized fit remain separate: the first checks conformance to selected intent; the second requires outcome evidence from actual use.
+Authority may change as the work moves, but a stable `R##` keeps its identity unless its meaning materially changes. Design conformance, realized conformance, and effect remain separate: design conformance judges a proposed solution against R under M; realized conformance checks the built artifact against R under the relevant M; effect requires outcome evidence from actual use to judge movement from x toward y.
 
 ## Two layers, not one conveyor belt
 
@@ -38,8 +38,8 @@ clear-enough problem boundary
 → human-selected slice
 → bounded context
 → implementation with drift checks
-→ implementation verification
-→ realized fit when outcome evidence exists
+→ realized conformance
+→ effect when outcome evidence exists
 ```
 
 These are promotion gates, not navigation locks.
@@ -154,4 +154,4 @@ A modern agent workflow is complete when:
 - meaningful agent work leaves a run log
 - reflection preserves accepted intent and implementation reality separately, with an explicit decision governing any update
 - stable R IDs carry criterion lineage from evidence through selected mechanisms and implementation context
-- implementation verification is never treated as realized fit; realized-fit claims require outcome evidence from actual use
+- realized conformance is never treated as proof of effect; effect claims require outcome evidence from actual use

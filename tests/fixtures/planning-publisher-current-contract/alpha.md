@@ -21,11 +21,18 @@ source_of_truth: true
 ## Transformation frame (x → f() → y)
 - x — trigger/context: customer is ready to check out
 - x — current approach: copy order details
-- x — current result: slow, error-prone checkout
-- f() — current transformation or breakdown: repeated re-entry
+- x — current result / breakdown: slow, error-prone checkout caused by repeated re-entry
+- f() — solution / shape variable: intentionally unspecified
 - y — desired outcome: one clear checkout flow
 - Gap between x and y: remove repeated handling
 - Boundaries that constrain a valid transformation: no account migration
+
+## Operating model (M, optional)
+- Authority: Accepted
+- Relevant operating conditions: checkout submits into an existing downstream system that remains outside this bet
+- Causal assumptions / projected dynamics: invalid totals are rejected downstream and require correction before successful completion
+- Evidence refs / confidence: observed workflow; high confidence for the current checkout path
+- Revisit conditions: downstream validation or submission behavior changes
 
 ## Problem
 - Re-entering order details makes checkout slow and increases mistakes.

@@ -166,18 +166,20 @@ When a frame is the judging basis, represent it as `x → f() → y`:
 - `f()` = the solution/shape variable being explored;
 - `y` = desired outcome;
 - gap = what must change from x to y;
-- boundaries = constraints an acceptable f() must respect.
+- boundaries = constraints an acceptable f() must respect;
+- `M` = optional operating model: relevant conditions and causal dynamics the solution will act within, including material assumptions about how they may behave. M is not a candidate-specific claim that a particular shape will work.
 
 ### Identify the unknown before choosing the next move
 
 - If `x` is unclear, investigate the current situation.
 - If `y` is unclear, clarify the desired outcome.
+- If `M` is materially uncertain, investigate the operating conditions or causal assumptions that could change the requirements or judgment.
 - If `f()` is unclear, shape candidate solutions.
-- When solving for `f()`, hold accepted `x` and `y` constant. Requirements constrain the acceptable solution space.
+- When solving for `f()`, hold accepted `x`, `y`, and material `M` assumptions stable enough for an honest comparison. Requirements constrain the acceptable solution space.
 
 Do not use solution exploration to compensate for an unclear current situation or desired outcome.
 
-Requirements may come `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`. Hold x and y constant during one comparative Fit Check. If discovery changes x or y materially, update the frame explicitly, invalidate the affected comparison, and rerun it rather than allowing a candidate shape to redefine its own judging conditions.
+Requirements may come `FROM_X`, `FROM_Y`, `FROM_GAP`, `FROM_M`, or `FROM_BOUNDARY`. Use `FROM_M` only when an operating condition or causal assumption independently implies the requirement. Hold x, y, and material M assumptions stable during one comparative Fit Check. If discovery changes x, y, or M materially, update the frame explicitly, invalidate the affected comparison, and rerun it rather than allowing a candidate shape to redefine its own judging conditions.
 
 When an R arrives from framing or another accepted upstream artifact, preserve its stable ID, origin, and evidence refs. Promotion from candidate to Working to Accepted changes authority, not identity. Create a new ID only when the requirement's meaning materially changes; do not mint a new ID because it was accepted, selected against, mapped to a mechanism, or carried into implementation.
 
@@ -245,6 +247,8 @@ Candidate breadboards may be partial and may differ in depth. Do not add detail 
 
 Do not create nominal variations that differ only in cosmetic detail.
 
+Candidate generation has a special failure mode: a materially better candidate can be absent without causing any fit row to fail, because it was never generated. Before treating the candidate set as decision-ready, ask whether the search produced materially different mechanism families or merely elaborated one answer. Do not invent weak alternatives to satisfy a quota; if only one credible family exists, say so and make the omission risk explicit.
+
 ## Candidate evidence without selection
 
 For each candidate, identify the smallest unanswered question that could change its fit, viability, or appetite implications.
@@ -268,9 +272,11 @@ A candidate breadboard is subordinate to its named shape. It cannot select itsel
 
 Run these checks whenever they would clarify the work; they are not reserved for the end of shaping.
 
-1. **Fit Check — Requirements × Shapes:** which overall candidate shape satisfies the accepted requirements?
+1. **Fit Check — Requirements × Shapes:** design conformance — which overall candidate shape plausibly satisfies the accepted requirements under the current operating model?
 2. **Rotated Fit Check / reverse fit — Parts × Requirements:** why does each part of a selected or deeply examined shape exist?
 3. each viable shape against appetite, when appetite exists
+
+Design conformance is a pre-build judgment. It does not establish that implementation will realize the selected design, that the built artifact will still satisfy R under M, or that deployment will move reality toward y.
 
 Use binary `✅` or `❌` values for requirement fit. Unknown is not a pass. Put explanations below the table rather than weakening the cells with prose.
 
@@ -281,13 +287,13 @@ The Rotated Fit Check is the existing reverse-fit discipline viewed as Parts × 
 For a selected shape, also record the inverse view so requirement coverage is explicit:
 
 ```md
-| Req | Supporting selected part(s) | Coverage | Realization question |
+| Req | Supporting selected part(s) | Coverage | Realized-conformance question |
 |---|---|:---:|---|
-| R1 | A1, A3 | ✅ | What would we observe if R1 is actually true in use? |
+| R1 | A1, A3 | ✅ | What would we inspect after implementation to verify the built artifact still satisfies R1? |
 | R2 | — | ❌ | ... |
 ```
 
-Every Accepted R must have at least one selected part that claims to make it true. Coverage is not realized fit: it records the design's claimed support, not evidence that the requirement is true in use. When a requirement is meaningfully observable after implementation, state the realization question that later outcome evidence should answer; do not manufacture a metric for an unobservable requirement.
+Every Accepted R must have at least one selected part that claims to make it true. Coverage is design-conformance evidence only: it is not proof that the built artifact realizes the selected design or still satisfies R under M, and it is not evidence of effect in reality. Preserve a realized-conformance question when post-build inspection can test the requirement. Questions about whether deployment actually moved reality toward y belong to effect evaluation, not this coverage table.
 
 Candidate breadboards and spike results may support the judgment, but they do not outrank the shaping document or decide which shape wins.
 
@@ -315,6 +321,13 @@ When substantial, record it with `templates/spike.md` and return the result to t
 - remaining uncertainty
 
 ## Human selection
+
+Before calling the comparison decision-ready, perform a generation-omission check:
+- Are the viable candidates materially different mechanism families rather than cosmetic variants?
+- Did spikes, breadboards, or evidence reveal another plausible family that was never shaped?
+- If only one credible family exists, is that an evidence-backed conclusion rather than an artifact of stopping search early?
+
+A missing candidate produces no red test. Record material omission risk instead of treating the surviving set as proof that the search was complete.
 
 When the work is decision-ready, present the comparison and ask the human to:
 

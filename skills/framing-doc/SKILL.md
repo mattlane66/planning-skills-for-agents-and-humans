@@ -10,14 +10,14 @@ Use this skill when people have talked about a problem but the team still needs 
 
 ## Goal
 
-Create a framing document with five main parts:
+Create a framing document with five core parts:
 - source
 - current situation
 - problem
 - outcome
 - boundaries
 
-When the source already suggests standards by which a solution should be judged, also capture optional criteria candidates for the shaping step.
+When relevant operating conditions or causal dynamics materially affect what can work, also capture an optional operating model `M`. When the source already suggests standards by which a solution should be judged, capture optional criteria candidates for the shaping step.
 
 When the source material includes multiple options or directions, make clear why this frame is being chosen now instead of the others.
 
@@ -60,7 +60,20 @@ Describe the real moment before describing what should change:
 
 Keep the current approach separate from the proposed future solution. If the source does not establish part of the current situation, mark it as unknown rather than filling the gap.
 
-When the frame will feed shaping, make the transformation explicit as `x → f() → y`. Define `x` from the trigger/context, current approach, current result, and where it breaks down. Leave `f()` unspecified: it is the solution/shape variable, not part of the problem statement. Define `y` as the desired outcome, then state the x→y gap and the boundaries an acceptable f() must respect.
+When the frame will feed shaping, make the transformation explicit as `x → f() → y`. Define `x` from the trigger/context, current approach, current result, and where it breaks down. Leave `f()` unspecified: it is the solution/shape variable, not the current breakdown and not part of the problem statement. Define `y` as the desired outcome, then state the x→y gap and the boundaries an acceptable f() must respect.
+
+### Operating model (M, optional)
+
+Use `M` when success depends on relevant operating conditions or causal dynamics that are not already captured by x, y, or an imposed boundary.
+
+`M` may include:
+- material facts about the environment in which a solution will operate
+- assumptions about how those conditions are likely to behave over the relevant period
+- evidence, confidence, and conditions that would make the model stale
+
+`M` must not contain candidate-specific success claims such as “Shape A will reduce abandonment.” Those claims belong to the candidate's theory of action and must be tested through conformance and effect evaluation.
+
+If no operating assumption is material to the decision, omit `M` rather than manufacturing one.
 
 ### Problem
 
@@ -84,7 +97,7 @@ Use stable IDs such as `R0`, `R1`, and `R2`, but mark the section as candidates 
 
 A criterion that moves from framing into shaping keeps the same `R##` identity unless its meaning materially changes. Promotion changes authority, not identity: `evidence-backed candidate → Working R → Accepted R`. Do not mint a new requirement ID merely because a criterion was accepted, selected against, or later embedded in a solution.
 
-Criteria candidates should unfold from the frame. When useful, tag each candidate as coming from `FROM_X`, `FROM_Y`, `FROM_GAP`, or `FROM_BOUNDARY`, and preserve the evidence refs that justify it.
+Criteria candidates should unfold from the frame. When useful, tag each candidate as coming from `FROM_X`, `FROM_Y`, `FROM_GAP`, `FROM_M`, or `FROM_BOUNDARY`, and preserve the evidence refs that justify it. Use `FROM_M` only when an operating condition or causal assumption independently implies the requirement.
 
 Criteria candidates must:
 - describe needs, outcomes, or constraints rather than mechanisms
@@ -136,6 +149,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - current approach and current result
 - problem/outcome distinction
 - explicit boundaries and non-goals
+- the operating model M when one is material
 
 ## Ignore unless asked
 - rejected option details beyond the brief option landscape
@@ -156,6 +170,13 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Frame equation: x → f() → y, with f() intentionally unspecified
 - Gap from x to y: ...
 
+## Operating model (M, optional)
+- Authority: Working | Accepted | Not needed
+- Relevant operating conditions: ...
+- Causal assumptions / projected dynamics: ...
+- Evidence refs / confidence: ...
+- Revisit conditions: ...
+
 ## Problem
 - ...
 
@@ -173,6 +194,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 | ID | Candidate criterion | Origin | Evidence refs |
 |---|---|---|---|
 | R0 | ... | FROM_X | ... |
+| R1 | ... | FROM_M | ... |
 ```
 
 ## Rules
@@ -190,6 +212,7 @@ An agent is deciding whether later shaping, breadboarding, or implementation sti
 - Source material is separate from interpretation.
 - The trigger, current approach, current result, and breakdowns are explicit or marked unknown.
 - When shaping will follow, x and y are explicit, f() remains unspecified, and the x→y gap and boundaries are visible.
+- When M is material, relevant operating conditions and assumptions are explicit, evidence-backed or labeled as assumptions, and free of candidate-specific success claims.
 - Every problem and outcome claim is traceable to source material or explicitly marked as an inference.
 - Outcome lines describe effects, not mechanisms.
 - Boundaries prevent likely wrong directions without over-constraining the solution space.
