@@ -7,9 +7,16 @@ planning: true
 ## Accepted transformation frame (x → f() → y)
 
 - x: Partners capture grocery items in messages, producing a list whose pending/bought state is difficult to recover.
-- f(): Replace message accumulation with a bounded, persistent grocery-state transformation.
+- f(): intentionally unspecified solution/shape variable
 - y: Capture remains quick while the current needed/bought state is legible and reversible on the same device.
 - Gap and boundaries: Add state without accounts, sharing, categories, pricing, recipes, or store-specific behavior.
+
+## Operating model (M)
+- Authority: Accepted
+- Relevant operating conditions: one-device runtime with local state available between ordinary sessions
+- Causal assumptions / projected dynamics: local state remains available across ordinary returns unless storage is cleared or unavailable
+- Evidence refs: 01-frame.md
+- Revisit conditions: cross-device use, accounts, or a runtime without dependable local persistence enters scope
 
 ## Accepted Appetite
 
