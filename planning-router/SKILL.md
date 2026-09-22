@@ -32,7 +32,8 @@ When a frame can be expressed as `x → f() → y`, identify which variable is a
 
 - unclear `x` → investigate or frame the current situation;
 - unclear `y` → clarify the desired outcome;
-- clear `x` and `y`, unclear `f()` → shape candidate solutions.
+- materially unclear `M` → investigate operating conditions or causal assumptions before treating R or fit as stable;
+- clear `x`, `y`, and material `M`, unclear `f()` → shape candidate solutions.
 
 Do not route to solution exploration merely because a solution idea is available when the current situation or desired outcome is still too unclear for honest judgment.
 
@@ -58,7 +59,7 @@ Do not route to solution exploration merely because a solution idea is available
 | A selected project needs to be decomposed into vertical task groups, dependencies, risk states, sequence, or appetite cuts | `dumplink` |
 | An implementation agent needs only the authoritative subset for one active slice or task group | `feed-planning-context` |
 | Implementation exists and may differ from accepted intent | `breadboard-reflection` |
-| Outcome evidence from actual use may support, weaken, or contradict Accepted requirements even when implementation matches intent | `breadboard-reflection` for realized fit |
+| Outcome evidence from actual use may support, weaken, or contradict the intended outcome even when implementation and requirements conform | `breadboard-reflection` for effect (legacy term: realized fit) |
 | Builders need a durable human-readable orientation reference after accepted artifacts converge | `kickoff-doc` |
 
 ## Routing rules
