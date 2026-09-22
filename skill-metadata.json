@@ -49,7 +49,7 @@
   },
   "breadboard-reflection": {
     "title": "Breadboard Reflection",
-    "description": "Compare accepted intent with implementation reality when code or a prototype exists, preserve both separately, surface drift and design smells, and prepare an explicit correction decision."
+    "description": "Compare accepted intent with implementation reality, assess realized conformance and effect separately, diagnose failures backward, and prepare explicit correction decisions."
   },
   "lead-user-research": {
     "title": "Lead User Research",
