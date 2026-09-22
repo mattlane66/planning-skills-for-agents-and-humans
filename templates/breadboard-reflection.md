@@ -13,24 +13,28 @@ feeds:
 # Context Card
 
 ## Use this when
-An agent is comparing implementation reality against accepted intent, assessing realized fit from outcome evidence, or both.
+An agent is comparing implementation reality against accepted intent, checking realized conformance, assessing effect from outcome evidence, or diagnosing a surprising result.
 
 ## Must preserve
 - accepted intent and current implementation reality as separate records
-- observed drift
-- missing behavior
-- accidental behavior
-- proposed fixes
-- the authorized or still-needed drift decision when conformance differs
-- realized-fit evidence, status, and any required planning decision when outcome validity is in scope
+- observed drift, missing behavior, and accidental behavior
+- the authorized or still-needed drift decision
+- realized-conformance evidence and status
+- effect evidence and status
+- backward diagnosis when effect is surprising
+- the operating model M when it affects interpretation
 
 ## Ignore unless asked
-- speculative redesigns not grounded in inspected implementation evidence
+- speculative redesigns not grounded in inspected implementation or outcome evidence
 
 ## Inputs
+- Frame artifact:
+- Shaping artifact:
+- Operating model M:
 - Breadboard artifact:
 - Implementation files or system notes:
 - Selected slice:
+- Outcome evidence:
 
 ## Current implementation reality
 
@@ -78,7 +82,7 @@ Record what the system does now and cite the inspected evidence. Do not rewrite 
 
 Options:
 1. Update code to match the plan.
-2. Update the plan because the original assumption was wrong.
+2. Update the plan because an original assumption was wrong.
 3. Split the slice and defer the conflicting part.
 
 Recommended move:
@@ -90,23 +94,49 @@ Decision status:
 Artifacts or implementation allowed to change after this decision:
 - ...
 
-## Realized fit
+## Realized conformance
 
-Use when realized fit is in scope. If outcome evidence from actual use is absent, record `NOT_ASSESSED`; implementation conformance alone is not realized-fit evidence.
+Use direct implementation/runtime evidence to judge whether the built artifact satisfies each relevant Accepted R under the relevant M.
 
-| Req | Accepted requirement | Embedded refs | Reality evidence | Status | Implication |
+| Req | Accepted requirement | Selected-design refs | Build/runtime evidence | Status | Implication |
 |---|---|---|---|---|---|
-| R1 | ... | U2, N3 | ... | NOT_ASSESSED / SUPPORTED / WEAKENED / CONTRADICTED | ... |
+| R1 | ... | U2, N3 | ... | NOT_ASSESSED / CONFORMS / UNCERTAIN / DOES_NOT_CONFORM | ... |
 
-If reality weakens or contradicts accepted planning, preserve the evidence and propose the upstream delta; do not silently rewrite the requirement or frame. Stop at a `realized-fit-decision` before changing accepted planning.
+If M may have changed during implementation, revisit it before declaring conformance.
 
-Realized-fit decision:
-- Not needed / Pending / authorized by current user instruction / decided by [name or record]
+## Effect (realized fit)
+
+Use outcome evidence from actual use to judge whether deployment moved reality from x toward y. If outcome evidence is absent, record `NOT_ASSESSED`; realized conformance alone is not effect evidence.
+
+- x baseline:
+- y desired outcome:
+- Evidence window / comparison:
+- Effect status: NOT_ASSESSED / SUPPORTED / WEAKENED / CONTRADICTED
+- Interpretation:
+- Attribution assumptions from M:
+
+If effect evidence would change accepted planning, stop at an `effect-decision` before changing accepted truth.
+
+## Backward diagnosis
+
+Complete when effect is weakened, contradicted, or unexpectedly successful.
+
+| Check | Evidence | Finding | Proposed correction, if any |
+|---|---|---|---|
+| Effect inference | ... | sound / uncertain / wrong | ... |
+| Realized conformance | ... | conforms / uncertain / does not conform | ... |
+| Implementation realized selected design | ... | yes / partly / no | ... |
+| Design conformance / selection | ... | sound / uncertain / wrong | ... |
+| Requirements R | ... | adequate / incomplete / wrong | ... |
+| Operating model M | ... | adequate / stale / wrong | ... |
+| Frame x / y | ... | adequate / stale / wrong | ... |
 
 ## Self-check
 - [ ] Implementation reality was inspected before critique.
 - [ ] Accepted intent and current reality remain separate.
-- [ ] Proposed fixes are grounded in concrete drift or smells.
+- [ ] Drift, realized conformance, and effect are separate judgments.
+- [ ] Realized conformance uses build/runtime evidence and the relevant M.
+- [ ] Effect uses outcome evidence from actual use; absent evidence remains NOT_ASSESSED.
+- [ ] Surprising effect triggers backward diagnosis before upstream rewriting.
 - [ ] Planning updates and implementation follow-ups are separated.
-- [ ] Realized-fit claims use outcome evidence from actual use; absent evidence remains NOT_ASSESSED.
 - [ ] No accepted artifact was rewritten before an explicit decision.
