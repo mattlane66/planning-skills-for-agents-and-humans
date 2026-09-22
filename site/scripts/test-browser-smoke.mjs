@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -88,6 +88,44 @@ async function waitFor(predicate, description, timeoutMs = 12_000) {
   throw new Error(`Timed out waiting for ${description}`);
 }
 
+async function readDevToolsActivePort(userDataDir) {
+  try {
+    const activePort = await readFile(path.join(userDataDir, 'DevToolsActivePort'), 'utf8');
+    const [port, browserPath] = activePort.trim().split(/\r?\n/);
+    if (!/^\d+$/.test(port || '') || !browserPath?.startsWith('/')) return '';
+    return `ws://127.0.0.1:${port}${browserPath}`;
+  } catch (error) {
+    if (error?.code === 'ENOENT') return '';
+    throw error;
+  }
+}
+
+async function waitForChromeDevTools(processHandle, userDataDir, getStderr, timeoutMs = 30_000) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    const activePortUrl = await readDevToolsActivePort(userDataDir);
+    if (activePortUrl) return activePortUrl;
+
+    const stderr = getStderr();
+    const loggedEndpoint = stderr.match(/DevTools listening on (ws:\/\/[^\s]+)/)?.[1];
+    if (loggedEndpoint) return loggedEndpoint;
+
+    if (processHandle.exitCode !== null || processHandle.signalCode !== null) {
+      throw new Error(
+        `Chrome exited before exposing DevTools (exit=${processHandle.exitCode ?? 'null'}, signal=${processHandle.signalCode ?? 'null'}).\n` +
+        `Chrome stderr:\n${stderr.trim() || '(empty)'}`,
+      );
+    }
+    await new Promise((resolve) => setTimeout(resolve, 100));
+  }
+
+  const stderr = getStderr();
+  throw new Error(
+    `Timed out waiting for Chrome DevTools endpoint after ${timeoutMs}ms.\n` +
+    `Chrome stderr:\n${stderr.trim() || '(empty)'}`,
+  );
+}
+
 async function main() {
   const chrome = findChrome();
   const userDataDir = await mkdtemp(path.join(tmpdir(), 'planning-skills-browser-smoke-'));
@@ -134,18 +172,15 @@ async function main() {
   ];
   const processHandle = spawn(chrome.executable, args, { stdio: ['ignore', 'ignore', 'pipe'] });
   let stderr = '';
-  let debuggingUrl = '';
   processHandle.stderr.setEncoding('utf8');
   processHandle.stderr.on('data', (chunk) => {
     stderr += chunk;
-    const match = stderr.match(/DevTools listening on (ws:\/\/[^\s]+)/);
-    if (match) debuggingUrl = match[1];
   });
 
   let client;
   const runtimeErrors = [];
   try {
-    await waitFor(() => debuggingUrl, 'Chrome DevTools endpoint');
+    const debuggingUrl = await waitForChromeDevTools(processHandle, userDataDir, () => stderr);
     const endpoint = new URL(debuggingUrl);
     const targets = await fetch(`http://${endpoint.host}/json/list`).then((response) => response.json());
     const page = targets.find((target) => target.type === 'page' && target.url === targetUrl) || targets.find((target) => target.type === 'page');
@@ -281,11 +316,13 @@ async function main() {
     console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal interactions + generated Planning Publisher stable-ID/slice/mobile interactions`);
   } finally {
     client?.close();
-    processHandle.kill('SIGTERM');
-    await Promise.race([
-      new Promise((resolve) => processHandle.once('exit', resolve)),
-      new Promise((resolve) => setTimeout(resolve, 2_000)),
-    ]);
+    if (processHandle.exitCode === null && processHandle.signalCode === null) {
+      processHandle.kill('SIGTERM');
+      await Promise.race([
+        new Promise((resolve) => processHandle.once('exit', resolve)),
+        new Promise((resolve) => setTimeout(resolve, 2_000)),
+      ]);
+    }
     await rm(userDataDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
     await rm(publisherDir, { recursive: true, force: true, maxRetries: 5, retryDelay: 100 });
   }
