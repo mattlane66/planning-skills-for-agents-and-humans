@@ -22,7 +22,7 @@ Examples:
 - Avoid: `Use a local LLM for commands.`
 - Prefer: `People can change the active configuration through natural-language input.`
 
-A requirement may contain a hard external constraint, such as compatibility with an existing API or legal rule. State the constraint directly and cite its source.
+A requirement may contain a hard external constraint, such as compatibility with an existing API or legal rule. State the constraint directly and cite its source. A requirement may also come from the operating model `M` when a material fact or causal assumption about the environment independently implies something an acceptable solution must handle. Keep candidate-specific success claims out of M.
 
 ## Requirement structure
 
@@ -74,6 +74,8 @@ Weak titles hide the distinction:
 
 - `A: Option one`
 - `B: Better workflow`
+
+Before selection, check generation omission as well as visible fit. A missing materially better candidate cannot fail a requirement because it never entered the comparison. Ask whether the candidate set spans genuinely different mechanism families; do not manufacture weak variants merely to create a larger set.
 
 ## CURRENT as baseline
 
