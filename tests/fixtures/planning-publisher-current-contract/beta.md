@@ -20,13 +20,20 @@ source_of_truth: true
 - Outcome: one clear checkout flow
 - Non-goals: account migration
 
+## Operating model (M, optional)
+- Authority: Accepted
+- Relevant operating conditions: checkout submits into the existing downstream system
+- Causal assumptions / projected dynamics: invalid totals are rejected downstream and require correction before successful completion
+- Evidence refs: alpha.md
+- Revisit conditions: downstream validation or submission behavior changes
+
 ## Requirements
 
 | ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |
 |---|---|---|---|---|---|---|
 | R0 | Staff can complete checkout from one visible flow. | Core goal | Accepted | FROM_GAP | alpha | — |
 | R1 | Staff see a clear confirmation after submission. | Must-have | Accepted | FROM_Y | alpha | — |
-| R2 | Invalid totals are stopped before submission. | Must-have | Accepted | FROM_X | alpha | — |
+| R2 | Invalid totals are stopped before submission. | Must-have | Accepted | FROM_M | alpha | — |
 
 ## Appetite
 - Authority: Accepted
