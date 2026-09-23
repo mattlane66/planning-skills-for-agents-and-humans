@@ -53,6 +53,19 @@ test('serves the canonical skill inventory and orchestration templates over MCP'
       ],
     );
 
+    for (const tool of listed.tools) {
+      assert.deepEqual(
+        tool.annotations,
+        {
+          readOnlyHint: true,
+          destructiveHint: false,
+          openWorldHint: false,
+          idempotentHint: true,
+        },
+        `${tool.name} should advertise the public-plugin safety contract`,
+      );
+    }
+
     const inventory = (await readFile(resolve('..', 'skill-inventory.txt'), 'utf8'))
       .split(/\r?\n/)
       .map((line) => line.trim())
