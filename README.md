@@ -381,7 +381,14 @@ npm run check
 npm start
 ```
 
-See the [MCP server README](./mcp-server/README.md) for client configuration and exposed tools.
+For a hosted Streamable HTTP endpoint suitable for an OpenAI MCP-backed Plugin:
+
+```bash
+npm run build
+npm run start:http
+```
+
+See the [MCP server README](./mcp-server/README.md) for local client configuration, the hosted `/mcp` endpoint, deployment, tool annotations, and OpenAI Plugin packaging.
 
 ### Live Mermaid viewer
 
