@@ -463,6 +463,10 @@ The machine-readable contract is in `.agent-orchestration.yaml`.
 - revise R | revise S | fit-check | spike | candidate-breadboard | set/revisit appetite | select | stop
 ```
 
+## MCP-backed canonical planning data
+
+When this repository's MCP tools are available, use `get_artifact_template` for the canonical `shaping`, `spike`, or `appetite-card` starter structure and use `get_artifact_contracts` or `get_orchestration_manifest` when checking promotion readiness. These tools provide canonical structure and gates only; they do not choose a shape, accept working material, or make a human decision.
+
 ## Guardrails
 
 - Start where the useful thinking already is: R, S, evidence, or prototype.
