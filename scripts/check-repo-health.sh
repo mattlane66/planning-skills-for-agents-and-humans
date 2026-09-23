@@ -236,7 +236,7 @@ for skill in inventory:
     if fields.get("description") != entry["description"]:
         raise SystemExit(f"Frontmatter description drift for {skill}")
 
-mcp_source = (root / "mcp-server/src/index.ts").read_text(encoding="utf-8")
+mcp_source = (root / "mcp-server/src/server.ts").read_text(encoding="utf-8")
 if "skill-metadata.json" not in mcp_source:
     raise SystemExit("MCP server does not load canonical skill metadata")
 PY
@@ -250,6 +250,10 @@ if bash scripts/sync-packaged-skills.sh --check; then
 else
   fail "One or more packaged skills differ from their canonical root skills"
 fi
+
+echo
+echo "Checking portable plugin manifest..."
+check_json "plugin.json"
 
 echo
 echo "Checking command wrappers..."
@@ -280,7 +284,7 @@ paths = re.findall(r"^  [a-z_]+:\s+([^\s]+)$", artifacts, flags=re.MULTILINE)
 missing = [path for path in paths if not pathlib.Path(path).is_file()]
 if missing:
     raise SystemExit("Missing orchestration artifacts: " + ", ".join(missing))
-mcp_source = pathlib.Path("mcp-server/src/index.ts").read_text(encoding="utf-8")
+mcp_source = pathlib.Path("mcp-server/src/server.ts").read_text(encoding="utf-8")
 not_exposed = [path for path in paths if path not in mcp_source]
 if not_exposed:
     raise SystemExit("Orchestration artifacts missing from MCP: " + ", ".join(not_exposed))
@@ -305,7 +309,7 @@ for required in "docs/start-here.md" "dumplink" "MIT"; do
 done
 if grep -q "statechart" AGENTS.md \
   && grep -q "skill: statechart" .agent-orchestration.yaml \
-  && grep -q "templates/statechart.md" mcp-server/src/index.ts \
+  && grep -q "templates/statechart.md" mcp-server/src/server.ts \
   && grep -q "statechart" .codex-plugin/plugin.json \
   && grep -q "statechart" skill-inventory.txt; then
   pass "Statechart is discoverable across canonical consumer surfaces"
@@ -314,7 +318,7 @@ else
 fi
 if grep -q "sketch-reconciliation" AGENTS.md \
   && grep -q "skill: sketch-reconciliation" .agent-orchestration.yaml \
-  && grep -q "templates/sketch-reconciliation.md" mcp-server/src/index.ts \
+  && grep -q "templates/sketch-reconciliation.md" mcp-server/src/server.ts \
   && grep -q "sketch-reconciliation" .codex-plugin/plugin.json \
   && grep -q "sketch-reconciliation" skill-inventory.txt \
   && grep -q "reconcile-sketch" docs/claude-slash-commands.md; then
@@ -324,7 +328,7 @@ else
 fi
 if grep -q "wayfinding" AGENTS.md \
   && grep -q "skill: wayfinding" .agent-orchestration.yaml \
-  && grep -q "templates/wayfinding-map.md" mcp-server/src/index.ts \
+  && grep -q "templates/wayfinding-map.md" mcp-server/src/server.ts \
   && grep -q "wayfinding" .codex-plugin/plugin.json \
   && grep -q "wayfinding" skill-inventory.txt \
   && grep -q "/wayfind" docs/claude-slash-commands.md; then
@@ -334,7 +338,7 @@ else
 fi
 if grep -q "Appetite card" AGENTS.md \
   && grep -q "^  appetite:" .agent-orchestration.yaml \
-  && grep -q "templates/appetite-card.md" mcp-server/src/index.ts \
+  && grep -q "templates/appetite-card.md" mcp-server/src/server.ts \
   && grep -q "appetite-card.md" shaping/SKILL.md \
   && grep -q "/appetite" docs/claude-slash-commands.md \
   && grep -q "/appetite" docs/gemini-usage.md \
@@ -373,6 +377,8 @@ echo "Checking version parity..."
 if python3 - <<'PY'
 import json
 
+with open("plugin.json", encoding="utf-8") as f:
+    portable = json.load(f)["version"]
 with open(".claude-plugin/plugin.json", encoding="utf-8") as f:
     claude = json.load(f)["version"]
 with open(".codex-plugin/plugin.json", encoding="utf-8") as f:
@@ -383,9 +389,9 @@ with open("mcp-server/package-lock.json", encoding="utf-8") as f:
     mcp_lock_payload = json.load(f)
 mcp_lock = mcp_lock_payload["version"]
 mcp_lock_root = mcp_lock_payload["packages"][""]["version"]
-if len({claude, codex, mcp, mcp_lock, mcp_lock_root}) != 1:
+if len({portable, claude, codex, mcp, mcp_lock, mcp_lock_root}) != 1:
     raise SystemExit(
-        f"Version mismatch: Claude={claude}, Codex={codex}, MCP={mcp}, "
+        f"Version mismatch: Portable={portable}, Claude={claude}, Codex={codex}, MCP={mcp}, "
         f"MCP lock={mcp_lock}, MCP lock root={mcp_lock_root}"
     )
 PY
