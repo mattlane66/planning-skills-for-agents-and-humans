@@ -1,0 +1,96 @@
+name: Remote MCP Smoke
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "mcp.json"
+      - "mcp-server/**"
+      - ".github/workflows/remote-mcp-smoke.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "mcp.json"
+      - "mcp-server/**"
+      - ".github/workflows/remote-mcp-smoke.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: remote-mcp-smoke-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: mcp-server/package-lock.json
+
+      - name: Install MCP client dependencies
+        working-directory: mcp-server
+        run: npm ci --ignore-scripts
+
+      - name: Verify public health and MCP tool discovery
+        working-directory: mcp-server
+        env:
+          MCP_URL: https://planning-skills-mcp-production.up.railway.app/mcp
+          HEALTH_URL: https://planning-skills-mcp-production.up.railway.app/healthz
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { Client } from '@modelcontextprotocol/sdk/client/index.js';
+          import { StreamableHTTPClientTransport } from '@modelcontextprotocol/sdk/client/streamableHttp.js';
+
+          const expectedTools = [
+            'get_artifact_contracts',
+            'get_artifact_template',
+            'get_orchestration_manifest',
+            'get_planning_skill',
+            'get_skill_resource',
+            'list_planning_skills',
+            'recommend_planning_workflow',
+          ];
+
+          const health = await fetch(process.env.HEALTH_URL);
+          assert.equal(health.status, 200, `healthcheck returned ${health.status}`);
+          const healthBody = await health.json();
+          assert.equal(healthBody.status, 'ok');
+          assert.equal(healthBody.transport, 'streamable-http');
+
+          const client = new Client({ name: 'planning-skills-remote-smoke', version: '1.0.0' });
+          const transport = new StreamableHTTPClientTransport(new URL(process.env.MCP_URL));
+
+          try {
+            await client.connect(transport);
+            const listed = await client.listTools();
+            assert.deepEqual(
+              listed.tools.map((tool) => tool.name).sort(),
+              expectedTools,
+            );
+
+            for (const tool of listed.tools) {
+              assert.equal(tool.annotations?.readOnlyHint, true, `${tool.name} readOnlyHint`);
+              assert.equal(tool.annotations?.destructiveHint, false, `${tool.name} destructiveHint`);
+              assert.equal(tool.annotations?.openWorldHint, false, `${tool.name} openWorldHint`);
+              assert.equal(tool.annotations?.idempotentHint, true, `${tool.name} idempotentHint`);
+            }
+          } finally {
+            await client.close();
+          }
+
+          console.log('Remote MCP smoke passed.');
+          NODE
