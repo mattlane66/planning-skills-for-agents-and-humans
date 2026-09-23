@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "planning-skills-for-agents-and-humans",
+  "version": "1.4.0",
+  "description": "Planning workflows with evidence-gated research, fluid collaborative shaping, explicit promotion gates, breadboarding, bounded implementation handoffs, and reflection.",
+  "author": {
+    "name": "Matt Lane",
+    "url": "https://github.com/mattlane66"
+  },
+  "homepage": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+  "repository": "https://github.com/mattlane66/planning-skills-for-agents-and-humans",
+  "license": "MIT",
+  "keywords": [
+    "planning",
+    "product-development",
+    "shaping",
+    "breadboarding",
+    "agent-skills",
+    "mcp"
+  ]
+}
