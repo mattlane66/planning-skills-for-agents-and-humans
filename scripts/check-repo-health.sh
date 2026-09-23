@@ -254,6 +254,7 @@ fi
 echo
 echo "Checking portable plugin manifest..."
 check_json "plugin.json"
+check_json "mcp.json"
 
 echo
 echo "Checking command wrappers..."
