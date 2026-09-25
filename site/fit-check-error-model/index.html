@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="An interactive visual guide to the Fit Check Error Model: framing, conformance, effect, Fit Checks, Reverse Fit, and backward diagnosis.">
+<link rel="canonical" href="https://mattlane66.github.io/planning-skills-for-agents-and-humans/fit-check-error-model/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Fit Check Error Model">
+<meta property="og:description" content="An interactive visual guide to framing, conformance, effect, Fit Checks, Reverse Fit, and diagnosing design errors backward from reality.">
+<meta property="og:url" content="https://mattlane66.github.io/planning-skills-for-agents-and-humans/fit-check-error-model/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="The Fit Check Error Model">
+<meta name="twitter:description" content="Build forward. Verify locally. Diagnose backward. Correct against reality.">
+<title>The Fit Check Error Model</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Serif:ital,wght@0,500;0,600;1,500&display=swap">
+<link rel="stylesheet" href="./styles.css">
+
+<style>[hidden]{display:none!important}img{max-width:100%}</style>
+</head>
+<body>
+<header class="hero" id="top">
+  <p class="eyebrow">A visual introduction</p>
+  <p class="formula" aria-label="x, f of, y"><span class="fx">x</span><span class="ar"> → </span><span class="ff">f()</span><span class="ar"> → </span><span class="fy">y</span></p>
+  <h1>A design can pass every test we give it and still fail to produce the change we wanted.</h1>
+  <p class="lede">The Fit Check Error Model makes the chain from framing to outcome inspectable, one idea at a time, with one example all the way through. Scroll, or tap Next.</p>
+  <p class="by">Based on the article by Matt Lane · <a href="https://prodsense.substack.com/p/design-as-funtions" target="_blank" rel="noopener noreferrer">prodsense.substack.com/p/design-as-funtions ↗</a></p>
+  <button type="button" class="start" id="start">Start <small>25 short steps</small></button>
+</header>
+
+<section class="story" id="story" aria-label="The Fit Check, step by step">
+  <div class="player" id="player">
+    <div class="topbar">
+      <div class="segs" id="segs" role="group" aria-label="Jump to a part"></div>
+      <div class="meta"><span id="meta-part"><b>Part 1</b> · The claim</span><span class="count" id="meta-count">1 / 25</span></div>
+    </div>
+
+    <div class="stagebox" id="stagebox" aria-hidden="true">
+      <div class="art" id="art">
+        <div class="a-top">
+          <div class="clock fade" id="clock"><b>45 min</b><span>per batch, today</span></div>
+          <div class="bracket fade" id="bracket"><span>a claim to test</span></div>
+          <div class="node nx fade" id="nx"><b>x</b><small id="sub-x">45 min a batch</small></div>
+          <i class="arrow a1 fade" id="ar1"></i>
+          <div class="node nf fade" id="nf"><b>f()</b><small id="sub-f">what they’ll build</small></div>
+          <i class="arrow a2 fade" id="ar2"></i>
+          <div class="node ny fade" id="ny"><b>y</b><small id="sub-y">right, with less work</small></div>
+          <div class="badges" aria-hidden="true">
+            <span class="badge fitb fade" id="fitb">fit <span class="sym">✓</span> meets R</span>
+            <span class="badge effb fade" id="effb">effect: only partly</span>
+          </div>
+        </div>
+
+        <div class="a-detail">
+          <div class="pnl fade" id="p-tiles">
+            <div class="tiles" id="tiles"></div>
+            <p class="cap">the same change, 200 times</p>
+          </div>
+
+          <div class="pnl fade" id="p-rm">
+            <div class="box rbox" id="rbox">
+              <h4><span>R · requirements</span></h4>
+              <div class="rc"><span>Change the right items</span><span class="src">from y</span><span class="ck">✓</span></div>
+              <div class="rc"><span>Leave the rest alone</span><span class="src">from x</span><span class="ck">✓</span></div>
+              <div class="rc" id="r3"><span>200 items in 10 min or less</span><span class="src">from the gap</span><span class="ck">✓</span></div>
+              <div class="rc hide" id="r4"><span>Keep the import format</span><span class="src">imposed</span><span class="ck"></span></div>
+              <div class="rc slot hide" id="slot"><span id="slot-t"><span class="q">?</span>nothing yet</span><span class="src">from M</span><span class="ck"></span></div>
+            </div>
+            <div class="side">
+              <div class="box fade" id="meterbox">
+                <h4><span>Effect</span><span>did reality move?</span></h4>
+                <div class="meter" id="meter"><div class="trk"></div><div class="goal"></div><div class="mkr"><span id="mk-t">45 min</span></div></div>
+                <div class="ends"><span>45 min today</span><span>goal: 10 min</span></div>
+              </div>
+              <div class="box fade" id="srcbox">
+                <ul class="srclist" aria-label="Where requirements come from">
+                  <li><b>from x</b>the situation</li>
+                  <li><b>from y</b>the outcome</li>
+                  <li><b>from the gap</b>what the change needs</li>
+                  <li><b>imposed</b>a contract or policy</li>
+                  <li class="m"><b>from M</b>how the world works</li>
+                </ul>
+              </div>
+              <div class="box mbox fade" id="mbox">
+                <h4><span>M · how the world works</span></h4>
+                <p class="belief">Editors avoid bulk changes they can’t undo.</p>
+                <p class="mnote" id="mnote">This never made it into R.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pnl fade" id="p-frame">
+            <div class="fc good" id="fc-good">
+              <span class="fc-lab" id="lab-good">One way to write it</span>
+              <q>The same edit across 200 items takes 45 minutes.</q>
+              <div class="chips fade" id="chips-good"><span class="chip">multi-select</span><span class="chip">reusable rule</span><span class="chip">import</span></div>
+              <p class="note fade" id="note-good">The reason is kept. Every option is still open.</p>
+            </div>
+            <div class="fc bad" id="fc-bad">
+              <span class="fc-lab" id="lab-bad">Another way</span>
+              <q>We need bulk editing.</q>
+              <div class="chips fade" id="chips-bad"><span class="chip">multi-select</span><span class="chip x">reusable rule</span><span class="chip x">import</span></div>
+              <p class="note fade" id="note-bad">The reason is gone. Other options are ruled out unseen.</p>
+            </div>
+          </div>
+
+          <div class="pnl fade" id="p-grid">
+            <div class="og fade" id="og"><div class="grid" id="grid"></div><p class="note2">R1 to R4 are must-haves · R5 is a nice-to-have</p></div>
+            <div class="rot-wrap fade" id="rot">
+              <p class="rot-title"><span class="turn">↻</span>B, turned: its parts × the requirements</p>
+              <div class="rot" id="rotgrid"></div>
+              <p class="note2">Each column needs a part doing the work. Each row needs a reason.</p>
+            </div>
+          </div>
+
+          <div class="pnl fade" id="p-chart">
+            <svg id="chart" viewBox="0 0 400 290" width="400" height="290"></svg>
+          </div>
+
+          <div class="pnl fade" id="p-diag">
+            <p class="qs-head"><span>Walk backward</span><span>start at 1</span></p>
+            <ol class="qs" id="qs">
+              <li><b>1</b><strong>Verdict</strong><span>Was the conclusion sound?</span></li>
+              <li><b>2</b><strong>Evidence</strong><span>Did we measure the right things?</span></li>
+              <li><b>3</b><strong>Realized fit</strong><span>Did the built thing conform to R?</span></li>
+              <li class="bld"><b>4</b><strong>Build</strong><span>Was it built as designed?</span></li>
+              <li><b>5</b><strong>Choice</strong><span>Was picking B justified?</span></li>
+              <li><b>6</b><strong>Design fit</strong><span>Was design conformance accepted too easily?</span></li>
+              <li><b>7</b><strong>Options</strong><span>What never got considered?</span></li>
+              <li><b>8</b><strong>Requirements</strong><span>Anything missing or wrong?</span></li>
+              <li><b>9</b><strong>Frame</strong><span>Are x, y and M still right?</span></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="textpanel">
+      <div class="tp-body" id="tp-body" aria-live="polite"></div>
+      <div class="nav">
+        <button type="button" class="back" id="back" aria-label="Previous step">←</button>
+        <span class="keys">or use ← → keys</span>
+        <button type="button" class="next" id="next">Next <span aria-hidden="true">→</span></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="recap" id="recap">
+  <h2>What to remember</h2>
+  <ol class="rlist">
+    <li><span class="glyph">x→f()→y</span><span><b>It’s a claim.</b> Test it; don’t assume it.</span></li>
+    <li><span class="glyph"><span>E<sup>c</sup></span><span>·</span><span>E<sup>e</sup></span></span><span><b>Two different judgments.</b> Conformance asks whether the design—and later the built thing—meets R under M. Effect asks whether reality moved toward y and what supports attribution.</span></li>
+    <li><span class="glyph">x · y · M → R</span><span><b>Frame without the answer.</b> Keep the reason, model the operating world explicitly, and give every requirement a source.</span></li>
+    <li><span class="glyph"><span class="sym">✓ ✗ ?</span></span><span><b>Compare real options.</b> An unknown isn’t a pass, a missed must-have can’t be averaged away, and conformance alone does not choose the investment.</span></li>
+    <li><span class="glyph">vs.</span><span><b>Judge effect against a comparison</b>, and check who got measured.</span></li>
+    <li><span class="glyph">← ← ←</span><span><b>Diagnose backward</b> before you blame the build.</span></li>
+  </ol>
+  <p class="loop"><span>Build forward.</span> Verify locally. <span>Diagnose backward.</span> Correct against reality.</p>
+  <div class="links">
+    <a class="primary" href="#workbench">Run a Fit Check</a>
+    <a href="https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/shaping/SKILL.md#fit-and-reverse-fit-checks" target="_blank" rel="noopener">Use the full shaping skill</a>
+    <a href="https://claude.ai/artifact/AYYMNzdbwNNw7jaPTpByVb" target="_blank" rel="noopener">Practice with flash cards</a>
+  </div>
+  <button type="button" class="again" id="again">Start the story again</button>
+  <p class="fine">The catalog example and its numbers are made up to illustrate the model.</p>
+</section>
+
+<section class="lab" id="break-model" aria-labelledby="break-title">
+  <div class="lab-head">
+    <p class="kicker">Interactive diagnosis</p>
+    <h2 id="break-title">Break the model on purpose.</h2>
+    <p class="lab-lede">The visible failure arrives at the end. Its origin may be much earlier. Pick the first thing that went wrong and watch the consequence travel downstream.</p>
+  </div>
+  <div class="fault-controls" id="fault-controls" role="tablist" aria-label="Choose an error origin">
+    <button type="button" role="tab" data-fault="intent">Wrong y</button>
+    <button type="button" role="tab" data-fault="model">Wrong M</button>
+    <button type="button" role="tab" data-fault="requirements" aria-selected="true">Missing R</button>
+    <button type="button" role="tab" data-fault="choice">Missing option</button>
+    <button type="button" role="tab" data-fault="build">Build drift</button>
+    <button type="button" role="tab" data-fault="observation">Bad observation</button>
+    <button type="button" role="tab" data-fault="inference">Bad inference</button>
+  </div>
+  <div class="fault-shell">
+    <div class="fault-flow" id="fault-flow" aria-label="Reasoning chain">
+      <div class="fault-node" data-node="frame"><b>x / y</b><span>frame and intent</span></div>
+      <div class="fault-node" data-node="model"><b>M</b><span>operating model</span></div>
+      <div class="fault-node" data-node="requirements"><b>R</b><span>requirements</span></div>
+      <div class="fault-node" data-node="choice"><b>choice</b><span>S → selected f()</span></div>
+      <div class="fault-node" data-node="build"><b>built f*</b><span>realization</span></div>
+      <div class="fault-node" data-node="observation"><b>evidence</b><span>what we observed</span></div>
+      <div class="fault-node" data-node="verdict"><b>Eᵉ</b><span>effect judgment</span></div>
+    </div>
+    <div class="fault-explain" aria-live="polite">
+      <div class="fx-card"><b>What you see</b><p id="fault-symptom"></p></div>
+      <div class="fx-card origin"><b>Where it began</b><p id="fault-origin"></p></div>
+      <div class="fx-card repair"><b>Repair</b><p id="fault-repair"></p></div>
+    </div>
+  </div>
+</section>
+
+<section class="workbench" id="workbench" aria-labelledby="wb-title">
+  <div class="wb-head">
+    <p class="kicker">Use the model</p>
+    <h2 id="wb-title">Run a Fit Check.</h2>
+    <p class="wb-lede"><b>First: which path fits?</b> Hold the frame and requirements constant while you compare whole candidate paths. <b>Then rotate the selected path:</b> open it into parts and ask how it actually fits.</p>
+  </div>
+  <div class="wb-shell">
+    <div class="wb-inputs">
+      <div class="wb-field"><label for="wb-x"><span>x</span> · Current situation</label><input id="wb-x" value="The same edit across 200 items takes 45 minutes."></div>
+      <div class="wb-field"><label for="wb-y"><span>y</span> · Desired outcome</label><input id="wb-y" value="Complete intended updates accurately with far less repetitive effort."></div>
+      <div class="wb-field"><label for="wb-m"><span>M</span> · Operating model</label><input id="wb-m" value="Editors avoid bulk changes they cannot undo."></div>
+      <div class="wb-field"><label for="wb-r"><span>R</span> · Requirements · one per line</label><textarea id="wb-r">Change the right items
+Leave the rest alone
+200 items in 10 min or less
+Keep the import format
+A batch can be undone</textarea></div>
+      <div class="wb-field wb-fit-only"><label for="wb-c"><span>S</span> · Candidate paths · one per line</label><textarea id="wb-c">CURRENT · edit one by one
+A · multi-select + batch action
+B · reusable rule + preview
+C · validated import</textarea></div>
+      <div class="wb-field wb-rotate-only" hidden><label for="wb-selected"><span>f*</span> · Selected path to rotate</label><select id="wb-selected"></select></div>
+      <div class="wb-field wb-rotate-only" hidden><label for="wb-p"><span>parts</span> · Meaningful parts of selected path</label><textarea id="wb-p">Rule builder
+Preview of matches
+One-step apply
+Import adapter
+Undo
+Share rules</textarea></div>
+      <p class="wb-note wb-fit-only">This first matrix is <b>R × S</b>: requirements as rows, candidate paths as columns. Compare the paths under the same frame. <b>?</b> means not judged yet.</p>
+      <p class="wb-note wb-rotate-only" hidden>The rotated matrix is <b>Parts × R</b>. A dot is a claimed contribution, not proof that the requirement is satisfied. Empty rows expose parts with no current justification.</p>
+    </div>
+    <div class="wb-matrix-card">
+      <div class="wb-matrix-head">
+        <div><h3 id="wb-matrix-title">Requirements × candidate paths</h3><p id="wb-matrix-desc">Hold x, y, M, and R fixed. Compare materially different ways to get from x toward y.</p></div>
+        <div class="wb-legend" id="wb-legend">tap: ? → ✕ → ○ → ✓</div>
+      </div>
+      <div class="wb-phase" role="tablist" aria-label="Fit Check phase">
+        <button type="button" id="wb-fit" role="tab" data-wb-mode="fit" aria-selected="true"><small>Phase 1 · R × S</small><b>Which path fits?</b><span>Requirements × candidate paths</span></button>
+        <span class="wb-phase-arrow" aria-hidden="true">→</span>
+        <button type="button" id="wb-rotate" role="tab" data-wb-mode="rotate" aria-selected="false"><small>Phase 2 · Parts × R</small><b>How does it fit?</b><span>Rotate the selected path</span></button>
+      </div>
+      <div class="wb-readout"><b id="wb-mode-title">Fit Check</b><span id="wb-mode-help">Requirements run down the side. Candidate paths run across the top.</span></div>
+      <div class="wb-scroll" id="wb-scroll"></div>
+      <div class="wb-diag" id="wb-diag" aria-live="polite"></div>
+      <div class="wb-foot">
+        <p id="wb-footnote"><b>Do not decompose your favorite answer first.</b> Compare whole candidate paths under the same requirements; only then open the selected path for deeper analysis.</p>
+        <div class="wb-actions"><button type="button" id="wb-reset">Reset example</button><button type="button" class="copy" id="wb-copy">Copy snapshot</button></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="./app.js"></script>
+</body>
+</html>
