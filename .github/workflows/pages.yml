@@ -83,11 +83,13 @@ jobs:
         if: steps.pages_status.outputs.enabled == 'true'
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
-      - name: Stage exact tracked portal
+      - name: Stage exact tracked site
         if: steps.pages_status.outputs.enabled == 'true'
         run: |
+          set -euo pipefail
           mkdir -p /tmp/planning-skills-pages
           cp site/index.html /tmp/planning-skills-pages/index.html
+          cp -R site/fit-check-error-model /tmp/planning-skills-pages/fit-check-error-model
 
       - name: Upload Pages artifact
         if: steps.pages_status.outputs.enabled == 'true'
@@ -109,6 +111,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Deploy to GitHub Pages
+      - name: Deploy trusted Pages artifact
         id: deployment
         uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
