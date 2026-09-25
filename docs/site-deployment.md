@@ -1,10 +1,9 @@
 # Documentation portal deployment and trust model
 
-The documentation site has two tracked outputs with different jobs:
+The documentation portal has two outputs with different jobs:
 
-- `site/index.html` is the generated, self-contained Planning Skills Lab artifact. It must be reproducible from canonical repository content and `site/src/`.
-- `site/fit-check-error-model/` is a tracked static interactive companion for the Fit Check Error Model. Its HTML, CSS, and JavaScript are deployed as committed.
-- GitHub Pages hosts those trusted tracked outputs. It is a deployment surface, not a second source of truth.
+- `site/index.html` is the tracked, self-contained offline artifact. It must be reproducible from canonical repository content and `site/src/`.
+- GitHub Pages is a hosted copy of that exact tracked artifact. It is a deployment surface, not a second source of truth.
 
 ## Pull requests: build with read-only authority
 
@@ -27,17 +26,14 @@ Do **not** replace this with `pull_request_target` that executes dependency code
 2. installs the locked site dependencies with lifecycle scripts disabled;
 3. runs the deterministic site checks;
 4. rejects the deployment if rebuilding changes tracked `site/index.html`;
-5. stages the reproduced `site/index.html` plus the tracked `site/fit-check-error-model/` companion;
-6. uploads only those staged files as the Pages artifact;
-7. gives `pages: write` and `id-token: write` only to the final deploy job.
+5. uploads only the reproduced standalone file as the Pages artifact;
+6. gives `pages: write` and `id-token: write` only to the final deploy job.
 
 The build job has read-only repository authority. The deploy job never checks out or executes repository code. This keeps publication credentials out of untrusted build contexts.
 
 Repository settings should configure **Pages → Build and deployment → Source: GitHub Actions**. The workflow's `github-pages` environment can additionally require environment protection if desired.
 
 ## Local verification
-
-For the generated Planning Skills Lab:
 
 ```bash
 cd site
@@ -46,6 +42,4 @@ npm run check
 CHROME_BIN=/path/to/chrome npm run test:browser
 ```
 
-The real-browser smoke uses Chrome DevTools Protocol against the self-contained Lab file and checks direct `file://` opening, keyboard activation/focus, Mermaid SVG rendering, a 390 px viewport, and browser runtime errors.
-
-The Fit Check Error Model companion is ordinary tracked static content under `site/fit-check-error-model/`; Pages copies that directory without transforming it.
+The real-browser smoke uses Chrome DevTools Protocol against the self-contained file and checks direct `file://` opening, keyboard activation/focus, Mermaid SVG rendering, a 390 px viewport, and browser runtime errors.
