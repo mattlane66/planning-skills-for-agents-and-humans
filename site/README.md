@@ -10,7 +10,7 @@ The repository also publishes an interactive visual companion to Matt Lane's art
 
 - source: `site/fit-check-error-model/`
 - public route: `/planning-skills-for-agents-and-humans/fit-check-error-model/`
-- canonical method: [`shaping/SKILL.md#fit-and-reverse-fit-checks`](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/shaping/SKILL.md#fit-and-reverse-fit-checks)
+- canonical method: `shaping/SKILL.md`, section “Fit and reverse-fit checks”
 
 The explainer teaches the chain from framing through conformance and effect, then lets readers compare candidate paths with an R × S Fit Check and rotate a selected path into Parts × R for Reverse Fit. It is intentionally maintained as tracked static HTML, CSS, and JavaScript rather than being generated into the main Planning Skills Lab bundle.
 
