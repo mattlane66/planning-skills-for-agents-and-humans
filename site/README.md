@@ -4,6 +4,16 @@
 
 This is a walkthrough, not a quiz. The Compass, Model, and Reference remain available behind it. The walkthrough teaches what the collaboration feels like and how its outputs compound; the Reference lets readers select any canonical skill and copy an accurate invocation. Portable natural-language prompts are primary. Claude Code and Gemini shortcuts appear only where the repository actually supplies them, and Codex is correctly described as plugin plus natural-language invocation rather than Claude-style slash commands.
 
+## Fit Check Error Model
+
+The repository also publishes an interactive visual companion to Matt Lane's article [Design as Functions](https://prodsense.substack.com/p/design-as-funtions):
+
+- source: `site/fit-check-error-model/`
+- public route: `/planning-skills-for-agents-and-humans/fit-check-error-model/`
+- canonical method: [`shaping/SKILL.md#fit-and-reverse-fit-checks`](../shaping/SKILL.md#fit-and-reverse-fit-checks)
+
+The explainer teaches the chain from framing through conformance and effect, then lets readers compare candidate paths with an R × S Fit Check and rotate a selected path into Parts × R for Reverse Fit. It is intentionally maintained as tracked static HTML, CSS, and JavaScript rather than being generated into the main Planning Skills Lab bundle.
+
 ## Open it
 
 1. Download `site/index.html`, or clone the repository.
@@ -34,6 +44,7 @@ The tracked source is organized as follows:
 - `src/app.js` — portal routes and interactions
 - `src/planning-model.js` — walkthrough stages, concise skill roles, promotion gates, map order, and example story
 - `src/styles.css` — responsive visual system
+- `fit-check-error-model/` — standalone interactive Fit Check Error Model companion
 - `scripts/generate-content.mjs` — canonical Markdown and asset indexing
 - `scripts/build-standalone.mjs` — single-file bundling
 - `scripts/validate-build.mjs` — standalone artifact checks
