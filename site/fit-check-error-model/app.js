@@ -319,7 +319,7 @@ let wbMode='fit';
 let wbSelected=2;
 let wbFitState={};
 let wbRotState={};
-const esc=v=>String(v).replace(/[&<>\"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
+const esc=v=>String(v).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const wbLines=s=>$(s).value.split(/\n+/).map(v=>v.trim()).filter(Boolean);
 const fitKey=(ri,ci)=>ri+'␟'+ci;
 const rotKey=(pi,ri)=>pi+'␟'+ri;
