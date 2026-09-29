@@ -496,6 +496,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/LICENSE
   check_file_exists dist/claude-code-plugin/.agent-orchestration.yaml
   check_file_exists dist/claude-code-plugin/docs/agent-context-feeding.md
+  check_file_exists dist/claude-code-plugin/docs/agent-execution-appetite.md
   check_file_exists dist/claude-code-plugin/docs/agent-run-records.md
   check_file_exists dist/claude-code-plugin/docs/human-decision-gates.md
   check_file_exists dist/claude-code-plugin/docs/lifecycle-hooks.md
