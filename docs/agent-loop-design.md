@@ -110,9 +110,9 @@ Pause the loop and repair the artifact when:
 
 ## Record meaningful runs
 
-For meaningful agent loops, write a concise record under `planning/runs/` using `templates/run-record.md`.
+For meaningful agent loops, write a concise record under `planning/runs/` using `templates/agent-run-log.md`.
 
-Record realized human attention, optional runtime-specific resource evidence, what was verified or cut, where effort went (`figuring it out` versus `executing down`), and the shaping signal. A run record is audit evidence, not product truth.
+Record realized human attention, optional runtime-specific resource evidence, what was verified or cut, where effort went (`figuring it out` versus `executing down`), and the shaping signal. A run log is audit evidence, not product truth.
 
 Do not invent universal token, dollar, turn, or uphill/downhill targets. Calibrate from comparable real runs.
 
@@ -122,4 +122,4 @@ See `docs/agent-execution-appetite.md`.
 
 Use loops for execution pressure, not for deciding what the product should be.
 
-The planning stack should define the boundaries. The Execution Appetite should bound the run. The loop should work inside both, and the run record should return evidence for better shaping next time.
+The planning stack should define the boundaries. The Execution Appetite should bound the run. The loop should work inside both, and the run log should return evidence for better shaping next time.
