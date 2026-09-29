@@ -46,6 +46,9 @@ Plans are guesses. Real use teaches the team what the plan could not know.
 **Using AI to preserve intent and execute bounded work.**  
 AI should help carry context, structure working material, expose contradictions, spike unknowns, and execute selected slices. It should not silently invent strategy or promote exploration into commitment.
 
+**Protecting human attention.**  
+Model prices, token accounting, and runtime controls will change. Human attention remains scarce. Shape agent runs around what the outcome is worth in steering, waiting, reviewing, and deciding; treat machine budgets as replaceable guardrails.
+
 ---
 
 ## The shaping loop
@@ -241,7 +244,17 @@ They are not automatically part of the current version.
 
 Keep clear buckets for blocker, fix, enhancement, later bet, and discard.
 
-### 14. Treat drift as information.
+### 14. Shape the run before executing it.
+
+A selected slice still needs an execution appetite.
+
+Name what the run is worth in human attention, when the result is needed, what MUST be protected, what NICE scope can be cut, and when the agent must stop or return to planning.
+
+Work to the outcome, not to exhaustion. A larger execution appetite is a new bet, not an automatic extension.
+
+For meaningful runs, record what happened so future shaping can learn from actual execution.
+
+### 15. Treat drift as information.
 
 When implementation no longer matches accepted intent, choose explicitly:
 
