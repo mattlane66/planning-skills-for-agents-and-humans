@@ -85,6 +85,7 @@ artifacts:
       - '## Do not use as build scope'
       - '## Must preserve'
       - '## Current slice'
+      - '## Execution appetite'
       - '## Execution contract'
       - '## Open questions'
       - '## Verification target'
