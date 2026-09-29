@@ -125,9 +125,9 @@ A runtime or harness may translate that policy into whatever controls it support
 
 ## Learn from runs
 
-Meaningful agent runs should leave a concise record under `planning/runs/` using `templates/run-record.md`.
+Meaningful agent runs should leave a concise record under `planning/runs/` using `templates/agent-run-log.md`.
 
-The run record is evidence, not product truth. It should answer:
+The run log is evidence, not product truth. It should answer:
 
 - Did the run clear the quality floor?
 - How much human attention did it consume?
