@@ -26,7 +26,7 @@ class OrchestrationScopeContractTests(unittest.TestCase):
 
     def test_build_and_supporting_modes_use_the_canonical_scope_name(self) -> None:
         self.assertEqual(
-            ["active_scope", "context_packet", "execution_contract"],
+            ["active_scope", "context_packet", "execution_appetite", "execution_contract"],
             self.manifest["hard_promotion_gates"]["build"],
         )
         for mode in ("interface_contract", "executable_breadboard", "kickoff", "feed_context", "build"):

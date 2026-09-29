@@ -36,6 +36,9 @@ gate_definitions:
   context_packet:
     kind: build_input
     meaning: The compact implementation context packet for the active scope exists.
+  execution_appetite:
+    kind: build_input
+    meaning: The run-level execution appetite exists, including human-attention worth, protected scope, cut-first scope, and stop conditions.
   execution_contract:
     kind: build_input
     meaning: The execution contract for the active scope exists.

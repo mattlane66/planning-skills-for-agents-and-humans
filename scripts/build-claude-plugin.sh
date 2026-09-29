@@ -26,6 +26,7 @@ cp "$ROOT_DIR/.claude-plugin/plugin.json" "$DIST_DIR/.claude-plugin/plugin.json"
 cp "$ROOT_DIR/LICENSE" "$DIST_DIR/LICENSE"
 cp "$ROOT_DIR/.agent-orchestration.yaml" "$DIST_DIR/.agent-orchestration.yaml"
 cp "$ROOT_DIR/docs/agent-context-feeding.md" "$DIST_DIR/docs/agent-context-feeding.md"
+cp "$ROOT_DIR/docs/agent-execution-appetite.md" "$DIST_DIR/docs/agent-execution-appetite.md"
 cp "$ROOT_DIR/docs/agent-operating-reference.md" "$DIST_DIR/docs/agent-operating-reference.md"
 cp "$ROOT_DIR/docs/agent-run-records.md" "$DIST_DIR/docs/agent-run-records.md"
 cp "$ROOT_DIR/docs/execution-graph.md" "$DIST_DIR/docs/execution-graph.md"
@@ -43,6 +44,7 @@ cp -R "$ROOT_DIR/examples/." "$DIST_DIR/examples/"
 rewrite_args=(
   -e 's#\.agent-orchestration\.yaml#${CLAUDE_PLUGIN_ROOT}/.agent-orchestration.yaml#g'
   -e 's#docs/agent-context-feeding\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-context-feeding.md#g'
+  -e 's#docs/agent-execution-appetite\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-execution-appetite.md#g'
   -e 's#docs/agent-operating-reference\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-operating-reference.md#g'
   -e 's#docs/agent-run-records\.md#${CLAUDE_PLUGIN_ROOT}/docs/agent-run-records.md#g'
   -e 's#docs/execution-graph\.md#${CLAUDE_PLUGIN_ROOT}/docs/execution-graph.md#g'
