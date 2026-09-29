@@ -104,7 +104,7 @@ Pause the loop and repair the artifact when:
 
 ## After the loop
 
-For meaningful agent runs, write a lightweight record under `planning/runs/` using `templates/run-record.md`. Record human cost, verified outcome, cuts, where effort went (`figuring-it-out` versus `executing-down`), and any shaping signal. Runtime-specific spend or token data is optional evidence, not the planning model.
+For meaningful agent runs, write a lightweight record under `planning/runs/` using `templates/agent-run-log.md`. Record human cost, verified outcome, cuts, where effort went (`figuring-it-out` versus `executing-down`), and any shaping signal. Runtime-specific spend or token data is optional evidence, not the planning model.
 
 See [Agent Execution Appetite](./agent-execution-appetite.md).
 
