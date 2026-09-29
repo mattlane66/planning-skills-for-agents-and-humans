@@ -90,6 +90,10 @@ artifacts:
       - '## Open questions'
       - '## Verification target'
     required_nonempty_labels:
+      - '- Worth:'
+      - '- Protect:'
+      - '- Cut first:'
+      - '- Stop when:'
       - '- Goal condition:'
       - '- Required checks:'
       - '- Allowed files / areas:'
