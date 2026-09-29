@@ -24,11 +24,19 @@ class ArtifactContractTests(unittest.TestCase):
     def test_context_packet_requires_filled_execution_contract(self) -> None:
         template = (ROOT / "templates" / "context-packet.md").read_text(encoding="utf-8")
         errors = validate_artifact_text("context_packet", template, self.contracts)
+        self.assertTrue(any("Worth" in error for error in errors), errors)
+        self.assertTrue(any("Protect" in error for error in errors), errors)
+        self.assertTrue(any("Cut first" in error for error in errors), errors)
+        self.assertTrue(any("Stop when" in error for error in errors), errors)
         self.assertTrue(any("Goal condition" in error for error in errors), errors)
         self.assertTrue(any("Required checks" in error for error in errors), errors)
 
         completed = template
         replacements = {
+            "- Worth:": "- Worth: no more than 15 minutes of human review",
+            "- Protect:": "- Protect: selected MUST behavior and acceptance checks",
+            "- Cut first:": "- Cut first: optional polish and NICE scope",
+            "- Stop when:": "- Stop when: verification passes or the accepted boundary cannot be preserved",
             "- Goal condition:": "- Goal condition: selected slice behaves as accepted",
             "- Required checks:": "- Required checks: unit and integration tests",
             "- Allowed files / areas:": "- Allowed files / areas: src/checkout and tests/checkout",
