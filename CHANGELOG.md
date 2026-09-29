@@ -7,7 +7,7 @@
 ### Fixed
 
 - Complete the execution-appetite orchestration contract by defining its hard-gate semantics, updating contract tests, and bundling the referenced guide in the Claude plugin.
-- Refresh transitive npm locks to patched releases for newly disclosed `undici`, `fast-uri`, and `ip-address` advisories before publishing v1.5.0.
+- Refresh transitive npm locks for newly disclosed `undici`, `fast-uri`, and `ip-address` advisories, including moving the existing `fast-uri` override to patched `3.1.8`, before publishing v1.5.0.
 
 - Preserve product-repository `AGENTS.md` references in the Claude plugin, rewrite
   nested support paths, and check all bundled Markdown links.
