@@ -39,6 +39,7 @@ Produce or update a context packet that includes, as applicable:
 - Active Dumplink task group, dependencies, risk, and cuts, when present
 - Current slice
 - Open questions
+- Execution Appetite: Worth, Needed by, Protect, Cut first, Stop when, plus an optional runtime-specific machine ceiling
 - Execution contract, including allowed areas and return-to-planning conditions
 - Required behavior for the implementation agent
 - Verification target
