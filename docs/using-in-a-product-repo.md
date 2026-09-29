@@ -55,7 +55,7 @@ planning/
   kickoff.md
   context-packet.md
   spikes/
-  runs/                # lightweight agent run records for empirical shaping feedback
+  runs/                # lightweight agent run logs for empirical shaping feedback
 ```
 
 This is a default convention, not a required schema. Small projects may need only a shaping document, accepted behavior boundary, selected slice, and context packet. A separate frame is useful when the actual problem boundary is unclear, not merely because it appears first in a diagram.
@@ -133,7 +133,7 @@ A project may use more than one. Their jobs are different:
 - the executable breadboard is the behavioral and test contract for a selected slice
 - Dumplink turns the selected project into vertical task groups with dependencies, risk, sequence, and cuts; a human-selected group becomes the active implementation slice
 - the context packet packages only accepted material needed for the active build pass
-- a run record captures what one meaningful agent execution actually cost in human attention, what it verified or cut, and what it taught the next shaping decision
+- a run log captures what one meaningful agent execution actually cost in human attention, what it verified or cut, and what it taught the next shaping decision
 
 ## Typical handoff sequence after selection
 
@@ -175,7 +175,7 @@ Before a meaningful agent implementation run, derive a compact execution appetit
 - stop / return-to-planning conditions
 - optional runtime-specific machine-resource ceiling
 
-Do not make token pricing or one vendor's controls part of the durable planning model. After the run, record what happened under `planning/runs/` using `templates/run-record.md`.
+Do not make token pricing or one vendor's controls part of the durable planning model. After the run, record what happened under `planning/runs/` using `templates/agent-run-log.md`.
 
 See [Agent Execution Appetite](./agent-execution-appetite.md).
 
