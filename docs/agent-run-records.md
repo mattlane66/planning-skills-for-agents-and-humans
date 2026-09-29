@@ -40,11 +40,16 @@ A useful run log should include:
 - source artifacts used
 - authority order
 - selected slice, if any
+- execution appetite and quality floor
 - files inspected
 - files changed
 - decisions made
 - drift checks
 - verification run
+- human attention and review cost
+- optional runtime evidence
+- figuring-it-out versus executing-down effort
+- shaping signals and next decision
 - handoff notes
 
 ## Relationship to planning artifacts
@@ -70,6 +75,8 @@ The run log should point to the artifact that needs updating; it should not sile
 Use a run log during or immediately after a run.
 
 Use breadboard reflection when implementation exists and needs to be compared back to the breadboard.
+
+A good run log is also the empirical feedback loop for execution appetite. It records actual human cost and shaping signals without requiring any particular token or pricing model.
 
 A good run log can make reflection easier by recording:
 
