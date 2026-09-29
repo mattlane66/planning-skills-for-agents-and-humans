@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.5.0 — Execution appetite and calibrated agent runs — 2026-09-29
+
 ### Fixed
 
 - Preserve product-repository `AGENTS.md` references in the Claude plugin, rewrite
@@ -22,6 +24,11 @@
   with its dependencies, test that floor in CI, and separate major dependency updates.
 
 ### Added
+
+- Add a runtime-neutral Agent Execution Appetite guide that makes human attention the durable scarcity, treats latency as conditional, and keeps tokens, dollars, credits, turns, and compute as replaceable runtime-specific guardrails.
+- Add Execution Appetite to implementation context packets and agent-loop guidance with the human-facing contract: Worth, Needed by, Protect, Cut first, and Stop when.
+- Extend the existing agent run log to capture realized human cost, optional runtime evidence, figuring-it-out versus executing-down effort, shaping signals, and the next continue / reshape / new-bet / stop decision.
+- Add structural and golden-eval checks so build handoffs cannot silently omit the Execution Appetite.
 
 - Add stable criterion lineage from evidence-backed R candidates through Working/Accepted authority, selected mechanisms, implementation context, and realized-fit assessment.
 - Add inverse requirement coverage and selected-design requirement realization maps so every Accepted R can be traced to the concrete behavior that claims to embody it.
