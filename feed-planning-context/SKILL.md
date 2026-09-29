@@ -1,6 +1,6 @@
 ---
 name: feed-planning-context
-description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution contract, non-goals, and verification target for one active task group or slice.
+description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution appetite, execution contract, non-goals, and verification target for one active task group or slice.
 license: MIT
 ---
 
@@ -20,6 +20,7 @@ Create a compact context packet that tells the next agent:
 - what selected behavior and boundaries matter
 - what is out of scope
 - which exploratory material must not be treated as build scope
+- what execution appetite and stopping behavior apply
 - when to return to planning
 - what proves the task is complete
 
@@ -66,8 +67,9 @@ A statechart is derived from the selected-design breadboard and never outranks i
 9. Exclude Working R/S/Appetite/fit, rejected alternatives, candidate breadboards as build scope, raw transcripts, pending visual deltas, and unrelated planning history.
 10. Flag missing field-level, example-level, terminology, or authority decisions instead of inventing them.
 11. Bind relevant Accepted R IDs to selected-design refs, realized-conformance checks, and effect questions when those questions are meaningfully observable. Include material M assumptions that the implementation or later effect inference depends on.
-12. Add an execution contract and verification target.
-13. Stop after writing the context packet.
+12. Add a runtime-neutral execution appetite: human attention first, latency when relevant, an optional machine-resource ceiling, MUST scope to protect, NICE scope to cut first, and a stop condition.
+13. Add an execution contract and verification target.
+14. Stop after writing the context packet.
 
 ## Output
 
@@ -114,6 +116,14 @@ At minimum include:
 - Contracts, when present:
 - Fixtures, runs, edge cases, and acceptance tests, when present:
 - Active task group and dependencies, when present:
+
+## Execution appetite
+- Worth:
+- Needed by:
+- Machine-resource ceiling (optional / runtime-specific):
+- Protect:
+- Cut first:
+- Stop when:
 
 ## Execution contract
 - Goal condition:
@@ -166,6 +176,25 @@ When present, preserve only the relevant subset:
 
 Do not activate deferred groups or fill missing details with guesses.
 
+## Execution appetite
+
+Execution Appetite governs one implementation run; it does not replace the Accepted Product Appetite or expand the active slice.
+
+Keep the human-facing contract small:
+
+- **Worth** — human attention the run deserves, including steering, review, correction, and decision time
+- **Needed by** — a latency or deadline boundary only when delay matters
+- **Machine-resource ceiling** — optional and runtime-specific; the harness may express this as dollars, tokens, credits, compute, turns, or another meter
+- **Protect** — MUST scope and the quality floor
+- **Cut first** — explicitly optional scope
+- **Stop when** — the condition that ends execution or returns it to planning
+
+Do not invent universal token, turn, dollar, session, or uphill/downhill thresholds. Runtime adapters may translate the accepted appetite into controls available in that environment.
+
+As the appetite narrows, protect MUST scope, cut NICE scope, checkpoint verified state, and land cleanly. At the stop condition, stop. Another run requires a reshaped execution plan or an explicit new bet.
+
+See `docs/agent-execution-appetite.md`.
+
 ## Execution contract
 
 The execution contract must name:
@@ -187,8 +216,8 @@ The execution contract must name:
 - a field, enum, nullability, unit, error case, fixture, expected result, or acceptance test is missing
 - product terminology or an architectural decision is materially ambiguous
 - implementation evidence disproves a planning assumption
-- the work no longer fits the Accepted Appetite
+- the work no longer fits the Accepted Product Appetite or the current Execution Appetite
 
 ## Completion criterion
 
-The packet is complete when the next agent can act without loading the entire planning stack, can distinguish Working/exploratory evidence from accepted selected-design intent, can identify every governing source, can preserve the product repository's language and seams, and knows exactly when to stop and return to planning.
+The packet is complete when the next agent can act without loading the entire planning stack, can distinguish Working/exploratory evidence from accepted selected-design intent, can identify every governing source, can preserve the product repository's language and seams, and knows the execution appetite, quality boundary, stop condition, and when to return to planning.
