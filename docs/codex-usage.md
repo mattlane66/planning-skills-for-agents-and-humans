@@ -238,7 +238,7 @@ Stop for approval and active task-group selection.
 ```text
 Use the installed `feed-planning-context` skill.
 Create a compact context packet for implementing [selected slice].
-Include only accepted requirements, selected direction, accepted Appetite/cuts, relevant selected-design rows, optional contracts/examples/task group, non-goals, execution contract, and verification target.
+Include only accepted requirements, selected direction, accepted Appetite/cuts, relevant selected-design rows, optional contracts/examples/task group, non-goals, a runtime-neutral Execution Appetite, execution contract, and verification target.
 Exclude Working alternatives and candidate breadboards as active build scope.
 Do not implement yet.
 ```
