@@ -93,8 +93,8 @@ A practical workflow is:
 4. Accept requirements and Appetite when they are good enough to constrain a real decision.
 5. Make the human decisions about direction and scope.
 6. Reconcile the selected direction into accepted behavior.
-7. Give the coding agent a bounded slice and compact context packet.
-8. Check drift as implementation evolves.
+7. Give the coding agent a bounded slice, compact context packet, and runtime-neutral Execution Appetite.
+8. For meaningful runs, record what actually happened and use drift/reflection to improve the next shape.
 
 For example, you might begin in Claude Design with a rough interface or in Claude Code with a solution idea. Capture that as candidate Shape A, extract provisional requirements from it, run a working fit check, spike the uncertain parts, breadboard only the behavior that is still hard to judge, then accept the judging criteria and Appetite before choosing a direction.
 
@@ -135,7 +135,7 @@ planning/
   kickoff.md
   context-packet.md
   spikes/
-  runs/
+  runs/               # optional audit evidence from meaningful agent runs
 ```
 
 This is a convention, not a requirement. Keep one clearly active artifact for each authoritative planning level unless the project intentionally versions them. Candidate breadboards remain subordinate to their named candidate and shaping artifact. Preserve rejected alternatives in shaping, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
@@ -151,9 +151,10 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
 | **Dumplink plan** | A selected project decomposed into sequenced vertical task groups, with risk, dependencies, and appetite-based cuts. |
-| **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent. |
+| **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent, including the Execution Appetite that bounds the run. |
+| **Agent run log** | Audit evidence about what a meaningful run consumed, verified, cut, and taught the next shaping decision. |
 
-A common **controlled** path is: accepted criteria and Appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape and project boundary → accepted selected-design breadboard → optional Dumplink to create sequenced vertical task groups → human-selected active task group or other demoable slice → interface contracts and executable breadboard when needed → optional kickoff reference → context packet → implementation.
+A common **controlled** path is: accepted criteria and Appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape and project boundary → accepted selected-design breadboard → optional Dumplink to create sequenced vertical task groups → human-selected active task group or other demoable slice → interface contracts and executable breadboard when needed → optional kickoff reference → context packet + Execution Appetite → implementation → run log when meaningful.
 
 That path is useful for automation and teams that want stronger ceremony. Collaborative shaping may enter and move among R, S, fit, spikes, and candidate breadboards before those judging inputs are accepted. The same promotion gates apply before selection and build.
 
@@ -162,6 +163,8 @@ Set Appetite before selecting a shape. Use the `Appetite` section in the [shapin
 An estimate is not a prediction made before the work. It is the output of preliminary design work.
 First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
 You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
+
+For implementation agents, apply the same move one level down with [Agent Execution Appetite](./docs/agent-execution-appetite.md): decide how much human attention and delay one run is worth, preserve MUST scope and the quality floor, cut NICE scope first, and treat machine-specific token/dollar/compute limits as runtime adapters rather than the method itself.
 
 ## Opportunity underwriting
 
@@ -256,7 +259,7 @@ Start there. Add the advanced moves only when the work needs them.
 | [`executable-breadboards`](./executable-breadboards/SKILL.md) | A slice needs fixtures, example runs, edge cases, and acceptance tests before build handoff. | A buildable, testable slice contract. |
 | [`dumplink`](./dumplink/SKILL.md) | A selected project needs to be decomposed into vertical task groups with dependency-aware sequencing, risk states, or appetite-based cuts. | A project-wide task-group plan; after human selection, one active group becomes the bounded implementation slice. |
 | [`kickoff-doc`](./kickoff-doc/SKILL.md) | Builders need a durable orientation reference after selected artifacts converge. | A builder-facing map that does not replace build scope or sequence. |
-| [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the authoritative planning stack. | A compact context packet with an execution contract and verification target; working alternatives and candidate breadboards are excluded as build scope. |
+| [`feed-planning-context`](./feed-planning-context/SKILL.md) | An implementation agent needs the exact relevant subset of the authoritative planning stack. | A compact context packet with a runtime-neutral Execution Appetite, execution contract, and verification target; working alternatives and candidate breadboards are excluded as build scope. |
 | [`breadboard-reflection`](./breadboard-reflection/SKILL.md) | Implementation exists and may differ from accepted intent. | Separate intent/reality records, drift evidence, design smells, and an explicit correction decision. |
 
 See the [sketch reconciliation guide](./docs/sketch-reconciliation.md) for the visual-to-plan procedure and command examples.
