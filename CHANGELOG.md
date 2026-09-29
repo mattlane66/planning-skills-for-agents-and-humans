@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v1.5.1 — Explicit execution-appetite authority — 2026-09-29
+
+### Fixed
+
+- Require explicit human acceptance of every run-level execution appetite before implementation can begin; agents may propose the appetite but cannot approve or silently enlarge their own bet.
+- Make that acceptance machine-verifiable in the orchestration/integrity contracts and context packet, with regression coverage for the build gate.
+- Document how the portable execution-appetite method compiles into runtime-specific controls, using current Claude Messages API, Agent SDK, and Managed Agents mechanisms only as non-canonical examples.
+
 ## v1.5.0 — Inference appetite and bounded agent execution — 2026-09-29
 
 ### Fixed
