@@ -124,6 +124,7 @@ Realized conformance verifies the built artifact against Accepted R under the re
 - Worth:
 - Needed by:
 - Machine-resource ceiling: optional / runtime-specific
+- Human acceptance:
 - Protect:
 - Cut first:
 - Stop when:
@@ -149,8 +150,9 @@ Realized conformance verifies the built artifact against Accepted R under the re
 6. If implementation reality changes the plan, propose a planning update instead of silently drifting.
 7. Flag missing authority decisions, field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
 8. Work toward the goal condition, run the required checks, and report incomplete verification directly.
-9. Work to the outcome, not to exhaustion: protect MUST scope, cut NICE scope first, and do not silently extend the execution appetite.
-10. If the accepted quality floor cannot be reached inside the execution appetite, preserve verified state and return to planning rather than auto-extending.
+9. Do not begin implementation until the execution appetite carries explicit human acceptance; an agent may propose the appetite but cannot approve it.
+10. Work to the outcome, not to exhaustion: protect MUST scope, cut NICE scope first, and do not silently extend the execution appetite.
+11. If the accepted quality floor cannot be reached inside the execution appetite, preserve verified state and return to planning rather than auto-extending.
 
 ## Verification target
 - ...
