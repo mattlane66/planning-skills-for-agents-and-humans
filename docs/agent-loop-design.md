@@ -6,6 +6,10 @@ A loop is useful when the agent has a bounded goal, clear checks, and enough con
 
 ## Loop inputs
 
+Before starting a loop, feed the agent an execution appetite and the bounded implementation contract.
+
+Execution appetite should say what the run is worth in human attention, when the result is needed if latency matters, which MUST scope to protect, which NICE scope to cut first, and when to stop. Machine-resource ceilings are optional runtime-specific guardrails.
+
 Before starting a loop, feed the agent:
 
 - selected slice
@@ -18,6 +22,7 @@ Before starting a loop, feed the agent:
 - return-to-planning conditions
 - checkpoint cadence
 - verification caveats to report
+- execution appetite: worth, needed by, protect, cut first, stop when
 
 ## Good loop
 
@@ -97,8 +102,16 @@ Pause the loop and repair the artifact when:
 - a missing fixture, expected output, edge case, or field-level decision would require invention
 - the implementation suggests the selected shape was wrong
 
+## After the loop
+
+For meaningful agent runs, write a lightweight record under `planning/runs/` using `templates/agent-run-log.md`. Record human cost, verified outcome, cuts, where effort went (`figuring-it-out` versus `executing-down`), and any shaping signal. Runtime-specific spend or token data is optional evidence, not the planning model.
+
+See [Agent Execution Appetite](./agent-execution-appetite.md).
+
 ## Core rule
 
 Use loops for execution pressure, not for deciding what the product should be.
+
+> **Work to the outcome, not to exhaustion.**
 
 The planning stack should define the boundaries. The loop should work inside them.

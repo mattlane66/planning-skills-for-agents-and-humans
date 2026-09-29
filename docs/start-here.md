@@ -167,7 +167,7 @@ A candidate breadboard does not automatically become selected-design. After sele
 | A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | A selected slice needs fixtures, example runs, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable behavioral handoff. |
 | A selected project needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A project-wide plan whose task groups are judgeable vertical slices; one becomes active after human selection. |
-| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution contract, and verification target. |
+| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution appetite, execution contract, and verification target. |
 | Implementation may have drifted from accepted intent | `/check-drift` or `/reflect-breadboard` | A no-drift result or an explicit comparison and correction decision. |
 | Builders need a durable orientation reference | `/kickoff` or `kickoff-doc/SKILL.md` | A human-readable map of accepted product territory, not build scope or sequence. |
 
@@ -187,7 +187,7 @@ planning/
   spikes/
 ```
 
-Add an Appetite card, reconciliation record, statechart, interface contract, executable breadboard, Dumplink plan, kickoff document, or reflection only when its triggering complexity exists.
+Add an Appetite card, reconciliation record, statechart, interface contract, executable breadboard, Dumplink plan, kickoff document, run record, or reflection only when its triggering complexity exists.
 
 ## Before asking an agent to build
 
@@ -204,7 +204,7 @@ Check that you have:
 - only the advanced detail the active implementation slice actually requires
 - canonical project terms and relevant architectural decisions
 - compact context packet
-- execution contract and verification target
+- execution appetite, execution contract, and verification target
 - human decision on current scope
 
 ## Default collaborative prompt

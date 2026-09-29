@@ -21,6 +21,8 @@ Create a compact context packet that tells the next agent:
 - what is out of scope
 - which exploratory material must not be treated as build scope
 - when to return to planning
+- what the active run is worth in human attention and useful-by time
+- what optional scope to cut first as the execution appetite narrows
 - what proves the task is complete
 
 ## Inputs
@@ -66,8 +68,9 @@ A statechart is derived from the selected-design breadboard and never outranks i
 9. Exclude Working R/S/Appetite/fit, rejected alternatives, candidate breadboards as build scope, raw transcripts, pending visual deltas, and unrelated planning history.
 10. Flag missing field-level, example-level, terminology, or authority decisions instead of inventing them.
 11. Bind relevant Accepted R IDs to selected-design refs, realized-conformance checks, and effect questions when those questions are meaningfully observable. Include material M assumptions that the implementation or later effect inference depends on.
-12. Add an execution contract and verification target.
-13. Stop after writing the context packet.
+12. Add a compact execution appetite: worth, useful-by time when relevant, optional runtime-specific machine ceiling, protected MUST scope, cut-first NICE scope, and stop conditions.
+13. Add an execution contract and verification target.
+14. Stop after writing the context packet.
 
 ## Output
 
@@ -114,6 +117,14 @@ At minimum include:
 - Contracts, when present:
 - Fixtures, runs, edge cases, and acceptance tests, when present:
 - Active task group and dependencies, when present:
+
+## Execution appetite
+- Worth:
+- Needed by:
+- Machine-resource ceiling: optional / runtime-specific
+- Protect:
+- Cut first:
+- Stop when:
 
 ## Execution contract
 - Goal condition:
@@ -166,6 +177,12 @@ When present, preserve only the relevant subset:
 
 Do not activate deferred groups or fill missing details with guesses.
 
+## Execution appetite
+
+Execution appetite is the run-level boundary derived from the accepted product bet. Keep human attention and useful-by time primary; machine budgets are optional runtime-specific guardrails. Protect MUST scope and the quality floor, name NICE scope to cut first, and never silently increase the appetite. A larger appetite requires an explicit new bet.
+
+See `docs/agent-execution-appetite.md`.
+
 ## Execution contract
 
 The execution contract must name:
@@ -187,7 +204,7 @@ The execution contract must name:
 - a field, enum, nullability, unit, error case, fixture, expected result, or acceptance test is missing
 - product terminology or an architectural decision is materially ambiguous
 - implementation evidence disproves a planning assumption
-- the work no longer fits the Accepted Appetite
+- the work no longer fits the Accepted Appetite or active execution appetite
 
 ## Completion criterion
 

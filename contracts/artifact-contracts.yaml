@@ -85,6 +85,7 @@ artifacts:
       - '## Do not use as build scope'
       - '## Must preserve'
       - '## Current slice'
+      - '## Execution appetite'
       - '## Execution contract'
       - '## Open questions'
       - '## Verification target'
@@ -94,6 +95,19 @@ artifacts:
       - '- Allowed files / areas:'
       - '- Out-of-scope changes:'
       - '- Return-to-planning conditions:'
+
+  agent_run_log:
+    template: templates/agent-run-log.md
+    required_headings:
+      - '## Task'
+      - '## Selected slice'
+      - '## Execution appetite'
+      - '## Verification run'
+      - '## Human cost'
+      - '## Runtime evidence'
+      - '## Where the work went'
+      - '## Shaping signal'
+      - '## Next decision'
 
   interface_contracts:
     template: templates/interface-contracts.md

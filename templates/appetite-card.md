@@ -45,3 +45,7 @@ Date:
 
 ## Revisit when
 - ...
+
+## Downstream execution note
+
+This card records the product bet. Individual implementation runs may derive a smaller execution appetite for human attention, useful-by time, protected MUST scope, cut-first NICE scope, and optional runtime-specific machine limits. A run-level appetite does not silently enlarge this product Appetite.

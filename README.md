@@ -135,7 +135,7 @@ planning/
   kickoff.md
   context-packet.md
   spikes/
-  runs/
+  runs/                # lightweight agent run logs for empirical shaping feedback
 ```
 
 This is a convention, not a requirement. Keep one clearly active artifact for each authoritative planning level unless the project intentionally versions them. Candidate breadboards remain subordinate to their named candidate and shaping artifact. Preserve rejected alternatives in shaping, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
@@ -151,7 +151,8 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 | **Kickoff document** | A durable, human-readable map of the shaped product territory. It is not the build sequence. |
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
 | **Dumplink plan** | A selected project decomposed into sequenced vertical task groups, with risk, dependencies, and appetite-based cuts. |
-| **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent. |
+| **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent, including its run-level execution appetite. |
+| **Run log** | A lightweight empirical record of one meaningful agent run: outcome, human cost, cuts, runtime evidence, and shaping signals. |
 
 A common **controlled** path is: accepted criteria and Appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape and project boundary → accepted selected-design breadboard → optional Dumplink to create sequenced vertical task groups → human-selected active task group or other demoable slice → interface contracts and executable breadboard when needed → optional kickoff reference → context packet → implementation.
 
@@ -162,6 +163,16 @@ Set Appetite before selecting a shape. Use the `Appetite` section in the [shapin
 An estimate is not a prediction made before the work. It is the output of preliminary design work.
 First, decide how much the problem or opportunity is worth pursuing. That determines the time budget. Then dig into the problem, reduce the important unknowns, and shape a solution whose scope is commensurate with that budget.
 You do not first estimate the ideal solution and then decide whether you can afford it. You decide what the opportunity is worth, then design the best solution that fits within that constraint.
+
+## Agent execution appetite
+
+Product Appetite answers how much human/team time the product bet is worth. For a meaningful implementation run, derive a smaller **execution appetite** that answers: what is this run worth in human attention, when is it needed, what MUST be protected, what NICE scope should be cut first, and when should the agent stop or return to planning?
+
+Keep model pricing, token accounting, turns, and vendor-specific breakers under the hood as optional runtime guardrails. After meaningful runs, capture a lightweight record under `planning/runs/` so future shaping can learn from actual execution rather than estimates.
+
+See [Agent Execution Appetite](./docs/agent-execution-appetite.md) and [the run-record template](./templates/agent-run-log.md).
+
+> **Shape the product before you build it. Shape the run before you execute it. Learn from both.**
 
 ## Opportunity underwriting
 

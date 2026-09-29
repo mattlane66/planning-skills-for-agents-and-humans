@@ -23,6 +23,16 @@ Record any authority order used or deviations from `AGENTS.md`.
 
 The selected slice, if implementation happened.
 
+## Execution appetite
+
+- Worth:
+- Needed by:
+- Machine-resource ceiling: optional / runtime-specific
+- Quality floor:
+- Protect:
+- Cut first:
+- Stop / return conditions:
+
 ## Files inspected
 
 | File | Why inspected |
@@ -52,6 +62,40 @@ The selected slice, if implementation happened.
 
 | Check | Result | Notes |
 | --- | --- | --- |
+
+## Human cost
+
+- Steering / intervention required:
+- Review required:
+- Useful result available after:
+
+## Runtime evidence
+
+Optional and runtime-specific. Record only what the harness can measure reliably.
+
+- Machine resource consumed:
+- Sessions / calls:
+- Context / compaction / handoff events:
+- Other runtime notes:
+
+## Where the work went
+
+- Figuring it out:
+- Executing down:
+- Unexpected uncertainty:
+
+## Shaping signal
+
+- Necessary discovery:
+- Avoidable rediscovery:
+- Missing context or decision:
+- Incorrect assumption:
+- Scope too large:
+- Execution-architecture issue:
+
+## Next decision
+
+No change / continue inside accepted bet / reshape / new bet / abandon.
 
 ## Handoff notes
 
