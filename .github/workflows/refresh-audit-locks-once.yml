@@ -1,0 +1,52 @@
+name: One-shot dependency audit refresh
+
+on:
+  push:
+    branches:
+      - feature/execution-appetite-v1.5.0
+    paths:
+      - .github/workflows/refresh-audit-locks-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out branch
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: feature/execution-appetite-v1.5.0
+
+      - name: Set up Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - name: Refresh audited lockfiles and remove helper
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          pushd site
+          npm audit fix --package-lock-only --ignore-scripts
+          npm audit --audit-level=moderate --package-lock-only
+          popd
+
+          pushd mcp-server
+          SAFE_FAST_URI="$(npm view fast-uri version)"
+          npm pkg set "overrides.fast-uri=$SAFE_FAST_URI"
+          npm install --package-lock-only --ignore-scripts
+          npm audit fix --package-lock-only --ignore-scripts
+          npm audit --audit-level=moderate --package-lock-only
+          popd
+
+          rm .github/workflows/refresh-audit-locks-once.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/package-lock.json mcp-server/package.json mcp-server/package-lock.json .github/workflows/refresh-audit-locks-once.yml
+          git diff --cached --quiet && exit 0
+          git commit -m "Refresh audited npm lockfiles"
+          git push origin HEAD:feature/execution-appetite-v1.5.0
