@@ -168,7 +168,7 @@ You do not first estimate the ideal solution and then decide whether you can aff
 
 Product Appetite answers how much human/team time the product bet is worth. For a meaningful implementation run, derive a smaller **execution appetite** that answers: what is this run worth in human attention, when is it needed, what MUST be protected, what NICE scope should be cut first, and when should the agent stop or return to planning?
 
-Keep model pricing, token accounting, turns, and vendor-specific breakers under the hood as optional runtime guardrails. After meaningful runs, capture a lightweight record under `planning/runs/` so future shaping can learn from actual execution rather than estimates.
+An agent may propose that run-level appetite, but a human must explicitly accept it before implementation begins. Keep model pricing, token accounting, turns, and vendor-specific breakers under the hood as optional runtime guardrails. After meaningful runs, capture a lightweight record under `planning/runs/` so future shaping can learn from actual execution rather than estimates.
 
 See [Agent Execution Appetite](./docs/agent-execution-appetite.md) and [the run-record template](./templates/agent-run-log.md).
 
