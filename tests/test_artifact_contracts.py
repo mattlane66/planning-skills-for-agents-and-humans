@@ -29,6 +29,7 @@ class ArtifactContractTests(unittest.TestCase):
 
         completed = template
         replacements = {
+            "- Human acceptance:": "- Human acceptance: approved by human for this run",
             "- Goal condition:": "- Goal condition: selected slice behaves as accepted",
             "- Required checks:": "- Required checks: unit and integration tests",
             "- Allowed files / areas:": "- Allowed files / areas: src/checkout and tests/checkout",
