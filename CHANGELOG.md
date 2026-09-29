@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.5.0 — Inference appetite and bounded agent execution — 2026-09-29
+
 ### Fixed
 
 - Preserve product-repository `AGENTS.md` references in the Claude plugin, rewrite
