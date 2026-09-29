@@ -33,8 +33,9 @@ A good context packet tells the agent:
 4. which Working/exploratory sections must be ignored unless needed for a named unresolved decision
 5. what constraints, IDs, Accepted Appetite, cut line, and non-goals must be preserved
 6. which slice is current and which executable breadboard or interface contracts must be preserved, when present
-7. what execution contract governs the build loop
-8. what verification target proves the work stayed aligned
+7. what execution appetite governs human attention, useful-by time, protected MUST scope, cut-first NICE scope, and stop conditions
+8. what execution contract governs the build loop
+9. what verification target proves the work stayed aligned
 
 ## Artifact roles
 
@@ -116,6 +117,14 @@ Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered in
 - Produces:
 - Exclusions:
 
+## Execution appetite
+- Worth:
+- Needed by:
+- Machine-resource ceiling: optional / runtime-specific
+- Protect:
+- Cut first:
+- Stop when:
+
 ## Execution contract
 - Goal condition:
 - Required checks:
@@ -140,6 +149,8 @@ Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered in
 ## Verification target
 - ...
 ```
+
+Execution appetite is derived from the accepted product bet. Treat human attention and useful-by time as durable constraints; keep model pricing, tokens, turns, and other runtime meters as replaceable guardrails. See [Agent Execution Appetite](./agent-execution-appetite.md).
 
 ## Standard context card
 
