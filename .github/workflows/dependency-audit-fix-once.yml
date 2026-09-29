@@ -33,7 +33,6 @@ jobs:
 
           (
             cd site
-            npm ci --ignore-scripts
             npm audit fix --package-lock-only
             npm ci --ignore-scripts
             npm audit --audit-level=moderate
@@ -41,7 +40,7 @@ jobs:
 
           (
             cd mcp-server
-            npm ci --ignore-scripts
+            npm install --package-lock-only --ignore-scripts
             npm audit fix --package-lock-only
             npm ci --ignore-scripts
             npm audit --audit-level=moderate
