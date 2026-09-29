@@ -55,7 +55,7 @@ planning/
   kickoff.md
   context-packet.md
   spikes/
-  runs/
+  runs/               # optional audit evidence from meaningful agent runs
 ```
 
 This is a default convention, not a required schema. Small projects may need only a shaping document, accepted behavior boundary, selected slice, and context packet. A separate frame is useful when the actual problem boundary is unclear, not merely because it appears first in a diagram.
@@ -126,13 +126,15 @@ A polished prototype never becomes selected intent merely because it is concrete
 | Exactly how should this selected slice behave and be verified? | Executable breadboard |
 | How should this selected project be divided into vertical implementation slices, sequenced, de-risked, and cut to fit the Appetite? | Dumplink plan |
 | What exact subset should this implementation agent receive now? | Context packet |
+| What did a meaningful run actually consume, verify, cut, and teach us? | Agent run log |
 
 A project may use more than one. Their jobs are different:
 
 - the kickoff document is a durable human reference, not a task sequence
 - the executable breadboard is the behavioral and test contract for a selected slice
 - Dumplink turns the selected project into vertical task groups with dependencies, risk, sequence, and cuts; a human-selected group becomes the active implementation slice
-- the context packet packages only accepted material needed for the active build pass
+- the context packet packages only accepted material needed for the active build pass and states the Execution Appetite for the run
+- the agent run log records realized execution evidence without becoming product truth
 
 ## Typical handoff sequence after selection
 
@@ -145,8 +147,9 @@ accepted R + Appetite
   -> human-selected active task group or other demoable slice
   -> optional kickoff reference
   -> executable breadboard and contracts when needed
-  -> compact context packet
+  -> compact context packet + Execution Appetite
   -> implementation with drift checks
+  -> agent run log when the run is meaningful
 ```
 
 Do not create every artifact automatically. Use the smallest set that removes consequential ambiguity.
@@ -171,3 +174,10 @@ The top-level skill folders in this repository are canonical. Do not hand-edit g
 bash scripts/sync-packaged-skills.sh
 bash scripts/check-repo-health.sh
 ```
+
+
+## Bound meaningful agent runs
+
+Before a meaningful implementation loop, use the context packet to state a runtime-neutral Execution Appetite: **Worth, Needed by, Protect, Cut first, Stop when**. Human attention is the durable scarcity; latency matters when delay matters; tokens, dollars, credits, turns, or compute are optional runtime-specific ceilings. See [Agent Execution Appetite](./agent-execution-appetite.md).
+
+After the run, write `planning/runs/YYYY-MM-DD-short-task.md` from [the agent run log template](../templates/agent-run-log.md) when the work was consequential enough to teach the next shape. Record actual human attention, verification, cuts, necessary discovery, avoidable rediscovery, and the next decision. Do not convert the run log into product authority.

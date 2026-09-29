@@ -92,7 +92,7 @@ When the bounded planning route itself spans multiple sessions, Wayfinding wraps
 | Interface contracts | Define boundary-crossing exchanges before agents guess field-level details. | `planning/interface-contracts.md` |
 | Executable breadboard | Add fixtures, examples, expected outputs, edge cases, and acceptance tests. | `planning/executable-breadboard.md` |
 | Kickoff, optional | Create a durable human-readable orientation map after selected artifacts converge; not build scope or sequence. | `planning/kickoff.md` |
-| Context packet | Feed only the authoritative context relevant to the implementation agent; exclude Working alternatives and candidate breadboards as active scope. | `planning/context-packet.md` |
+| Context packet | Feed only the authoritative context relevant to the implementation agent; include the runtime-neutral Execution Appetite and exclude Working alternatives and candidate breadboards as active scope. | `planning/context-packet.md` |
 | Drift check | Keep implementation inside the selected slice and active task group. | strict drift-check output |
 | Run log | Leave a durable audit trail after meaningful agent work. | `planning/runs/YYYY-MM-DD-short-task.md` |
 | Reflection | Compare implementation reality to accepted intent and prepare/apply the explicit human drift decision. | `planning/breadboard-reflection.md` |
@@ -114,6 +114,7 @@ Candidate breadboards cannot select themselves, produce slices, govern implement
 - current selected slice
 - relevant statechart rows, contracts, executable examples, and Dumplink task group when present
 - explicit non-goals
+- Execution Appetite: Worth, Needed by, Protect, Cut first, Stop when
 - execution contract
 - verification target
 
@@ -149,9 +150,9 @@ A modern agent workflow is complete when:
 - statecharts remain traceable to the selected-design breadboard when present
 - boundary contracts and executable examples exist where needed
 - Dumplink task groups are vertical and risk-aware
-- context packets exclude Working/candidate material as build scope and include an execution contract
+- context packets exclude Working/candidate material as build scope and include a runtime-neutral Execution Appetite plus an execution contract
 - drift checks use the strict output format
-- meaningful agent work leaves a run log
+- meaningful agent work leaves a run log with realized human cost, verification, cuts, and shaping signals
 - reflection preserves accepted intent and implementation reality separately, with an explicit decision governing any update
 - stable R IDs carry criterion lineage from evidence through selected mechanisms and implementation context
 - realized conformance is never treated as proof of effect; effect claims require outcome evidence from actual use

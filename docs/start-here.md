@@ -109,7 +109,7 @@ Require:
 
 - accepted selected-design behavior or an equally clear accepted behavior boundary
 - explicit human slice selection
-- bounded context and verification target before build
+- bounded context, a runtime-neutral Execution Appetite, and a verification target before build
 
 These are promotion gates, not navigation locks.
 
@@ -167,7 +167,7 @@ A candidate breadboard does not automatically become selected-design. After sele
 | A selected slice crosses a meaningful boundary and field-level ambiguity could cause rework | `interface-contracts/SKILL.md` | Plain-language inputs, outputs, branches, errors, and open decisions. |
 | A selected slice needs fixtures, example runs, expected outputs, edge cases, or tests | `executable-breadboards/SKILL.md` | A buildable, testable behavioral handoff. |
 | A selected project needs vertical task groups, dependencies, risk, sequence, or scope cuts | `/dumplink` or `dumplink/SKILL.md` | A project-wide plan whose task groups are judgeable vertical slices; one becomes active after human selection. |
-| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, execution contract, and verification target. |
+| An implementation agent has too much planning context | `/feed-context` or `feed-planning-context/SKILL.md` | A compact context packet with authority order, Execution Appetite, execution contract, and verification target. |
 | Implementation may have drifted from accepted intent | `/check-drift` or `/reflect-breadboard` | A no-drift result or an explicit comparison and correction decision. |
 | Builders need a durable orientation reference | `/kickoff` or `kickoff-doc/SKILL.md` | A human-readable map of accepted product territory, not build scope or sequence. |
 
@@ -185,6 +185,7 @@ planning/
   slices.md
   context-packet.md
   spikes/
+  runs/               # optional audit evidence from meaningful agent runs
 ```
 
 Add an Appetite card, reconciliation record, statechart, interface contract, executable breadboard, Dumplink plan, kickoff document, or reflection only when its triggering complexity exists.
@@ -204,6 +205,7 @@ Check that you have:
 - only the advanced detail the active implementation slice actually requires
 - canonical project terms and relevant architectural decisions
 - compact context packet
+- Execution Appetite: Worth, Needed by, Protect, Cut first, Stop when
 - execution contract and verification target
 - human decision on current scope
 
@@ -227,3 +229,8 @@ Use this repository's gated/orchestrated planning profile.
 Enforce the prerequisites in .agent-orchestration.yaml and stop at every human promotion gate.
 Do not relax the sequence unless I explicitly switch back to collaborative mode.
 ```
+
+
+## When an agent is about to run
+
+Do not estimate a universal token budget. Set a small, human-readable [Execution Appetite](./agent-execution-appetite.md): what the run is worth in human attention, when the result is needed, what MUST be protected, what NICE scope gets cut first, and when to stop. Add a machine-resource ceiling only when the current runtime needs one. Meaningful runs should leave an [agent run log](./agent-run-records.md) so future appetites are calibrated from evidence rather than theory.

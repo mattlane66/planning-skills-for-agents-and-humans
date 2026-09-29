@@ -199,10 +199,13 @@ Before implementation, provide a compact context packet containing only what the
 - relevant selected-design places, affordances, stores, and wires
 - relevant statechart rows, contracts, examples, or task group when present
 - canonical project terms and relevant architectural decisions
+- execution appetite: Worth, Needed by, Protect, Cut first, Stop when, plus an optional runtime-specific machine ceiling
 - execution contract
 - verification target
 
-Do not include working alternatives or candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
+Do not include working alternatives or candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol and `docs/agent-execution-appetite.md` for the runtime-neutral run boundary.
+
+For meaningful implementation runs, protect MUST scope and the quality floor, cut NICE scope first, and stop at the declared boundary rather than silently extending the bet. Record realized execution evidence in the agent run log; run logs remain audit records, not product truth.
 
 ## Drift
 
@@ -269,7 +272,8 @@ Runtime wrappers are adapters to the canonical skills. Keep the product reposito
 - Executable breadboard — selected behavior plus fixtures, examples, expected results, and tests
 - Dumplink — decomposition of one selected project into sequenced vertical task groups that become implementation slices
 - Kickoff document — human-readable orientation, not build scope
-- Context packet — exact subset handed to the implementation agent
+- Context packet — exact subset handed to the implementation agent, including the Execution Appetite for the run
+- Agent run log — audit evidence about what a meaningful run consumed, verified, cut, and taught the next shaping decision
 - Breadboard reflection — explicit comparison of accepted intent and implementation reality
 - Lead User research record — authoritative evidence and interpretation for its named research decision; never accepted product-planning intent by itself
 - Research-to-frame handoff — proposed evidence-backed framing inputs that require explicit human acceptance before `framing-doc`
@@ -285,4 +289,4 @@ Planning is complete enough for the next move when:
 - any Wayfinding resolution is reflected in its canonical artifact rather than living only in the tracker
 - human promotion gates have not been crossed implicitly
 - advanced artifacts exist only when their triggering complexity is present
-- the next agent receives bounded context and a verification target
+- the next agent receives bounded context, a runtime-neutral Execution Appetite, and a verification target

@@ -2,7 +2,7 @@
 
 Compatibility template for handing one selected Dumplink task group or other selected slice to an implementation agent.
 
-Prefer [`templates/context-packet.md`](./templates/context-packet.md) for new work. This file uses the same authority order and execution-contract rules so older links do not create a competing source of truth.
+Prefer [`templates/context-packet.md`](./templates/context-packet.md) for new work. This file uses the same authority order, Execution Appetite, and execution-contract rules so older links do not create a competing source of truth.
 
 ## When to use this
 
@@ -98,6 +98,15 @@ Do not invent missing field names, nullability, enum values, units, or error beh
 
 | Check ID | Proves | How to verify |
 | --- | --- | --- |
+
+## Execution appetite
+
+- Worth:
+- Needed by:
+- Machine-resource ceiling (optional / runtime-specific):
+- Protect:
+- Cut first:
+- Stop when:
 
 ## Execution contract
 

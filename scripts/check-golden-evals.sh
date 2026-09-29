@@ -28,7 +28,10 @@ forbid_text() {
   fi
 }
 
+require_text templates/context-packet.md "## Execution appetite"
 require_text templates/context-packet.md "## Execution contract"
+require_text templates/agent-run-log.md "## Execution appetite"
+require_text docs/agent-execution-appetite.md "Shape the product before you build it. Shape the run before you execute it. Learn from both."
 require_text templates/wayfinding-map.md "## Not yet specified"
 require_text templates/wayfinding-map.md "source_of_truth: false"
 require_text templates/wayfinding-ticket.md "blocked_by"

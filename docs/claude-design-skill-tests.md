@@ -133,7 +133,7 @@ Expected: durable orientation, not new scope or a task plan.
 ## `feed-planning-context`
 
 ```text
-Use my feed-planning-context skill. Prepare the smallest context packet an implementation agent needs for this selected slice, including authority order, execution contract, non-goals, and verification target. Exclude Working shapes and candidate breadboards as active build scope.
+Use my feed-planning-context skill. Prepare the smallest context packet an implementation agent needs for this selected slice, including authority order, a runtime-neutral Execution Appetite, execution contract, non-goals, and verification target. Exclude Working shapes and candidate breadboards as active build scope.
 ```
 
 Expected: compact accepted context with exploratory history omitted from active scope.

@@ -179,7 +179,7 @@
     },
     "feed-planning-context": {
       "positive": [
-        "Package the authoritative planning subset, execution contract, non-goals, and verification target for this implementation task.",
+        "Package the authoritative planning subset, runtime-neutral execution appetite, execution contract, non-goals, and verification target for this implementation task.",
         "Give the build agent only the context needed for the selected slice and active task group."
       ],
       "negative": [

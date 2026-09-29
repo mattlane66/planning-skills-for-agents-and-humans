@@ -84,7 +84,7 @@ Recommended outcomes are:
 
 The graph and the loop solve different problems.
 
-The graph determines **where work may go next**. The execution contract and agent loop determine **how one active node keeps working until it reaches a verifiable outcome**.
+The graph determines **where work may go next**. The Execution Appetite, execution contract, and agent loop determine **how one active node works inside a bounded bet until it reaches a verifiable outcome or must stop**.
 
 A typical flow is:
 
@@ -93,11 +93,16 @@ approved planning
   -> execution graph
   -> human-selected active group
   -> context packet
+  -> execution appetite
   -> execution contract
   -> agent loop
-  -> verification
+  -> verification or clean stop
+  -> agent run log
   -> graph state update
   -> next ready group, block, or return to planning
 ```
 
 Use `templates/execution-graph.yaml` as the runtime-neutral starter artifact.
+
+
+Execution Appetite is runtime-neutral. A harness may translate it into current model/runtime controls, but those controls do not become planning authority. See `docs/agent-execution-appetite.md`.

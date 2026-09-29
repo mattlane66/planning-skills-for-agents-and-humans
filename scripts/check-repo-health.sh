@@ -106,7 +106,7 @@ DOCS=(
   README.md AGENTS.md GEMINI.md PLANNING-PUBLISHER.md ASSURANCE.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
   site/README.md site/index.html site/package.json site/package-lock.json
   docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
-  docs/agent-loop-design.md docs/full-modern-agent-workflow.md
+  docs/agent-execution-appetite.md docs/agent-loop-design.md docs/full-modern-agent-workflow.md
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
   docs/claude-code-plugin.md docs/codex-plugin.md docs/codex-usage.md
   docs/agent-invocation-matrix.md docs/agent-run-records.md docs/using-in-a-product-repo.md
@@ -496,6 +496,7 @@ if ./scripts/build-claude-plugin.sh >/dev/null; then
   check_file_exists dist/claude-code-plugin/LICENSE
   check_file_exists dist/claude-code-plugin/.agent-orchestration.yaml
   check_file_exists dist/claude-code-plugin/docs/agent-context-feeding.md
+  check_file_exists dist/claude-code-plugin/docs/agent-execution-appetite.md
   check_file_exists dist/claude-code-plugin/docs/agent-run-records.md
   check_file_exists dist/claude-code-plugin/docs/human-decision-gates.md
   check_file_exists dist/claude-code-plugin/docs/lifecycle-hooks.md

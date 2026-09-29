@@ -120,6 +120,14 @@ Realized conformance verifies the built artifact against Accepted R under the re
 - Produces:
 - Exclusions:
 
+## Execution appetite
+- Worth:
+- Needed by:
+- Machine-resource ceiling (optional / runtime-specific):
+- Protect:
+- Cut first:
+- Stop when:
+
 ## Execution contract
 - Goal condition:
 - Required checks:
@@ -137,10 +145,12 @@ Realized conformance verifies the built artifact against Accepted R under the re
 2. Confirm that no Working shaping material or candidate-shape breadboard is being treated as build scope.
 3. Identify implementation implications and existing seams.
 4. Ask at most 3 blocking questions.
-5. Propose a plan before editing code.
-6. If implementation reality changes the plan, propose a planning update instead of silently drifting.
-7. Flag missing authority decisions, field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
-8. Work toward the goal condition, run the required checks, and report incomplete verification directly.
+5. Confirm the execution appetite: protect MUST scope and the quality floor; identify what gets cut first.
+6. Propose a plan before editing code.
+7. If implementation reality changes the plan, propose a planning update instead of silently drifting.
+8. Flag missing authority decisions, field names, nullability, enum values, error cases, fixtures, expected outputs, acceptance tests, or durable terminology decisions instead of inventing them.
+9. Work toward the goal condition using the smallest reliable execution shape. As the appetite narrows, cut optional scope and preserve verified state.
+10. At the stop condition, land coherently and report rather than silently increasing the appetite or continuing into another run.
 
 ## Verification target
 - ...

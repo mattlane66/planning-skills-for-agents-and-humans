@@ -72,7 +72,7 @@ Before build work starts, these dimensions should score `2`:
 - verification target
 - human gates
 
-For agent implementation, the optional Context packet check must also score `2`; build mode requires a compact packet with an execution contract.
+For agent implementation, the optional Context packet check must also score `2`; build mode requires a compact packet with a runtime-neutral Execution Appetite and an execution contract.
 
 ## Quick review prompt
 
