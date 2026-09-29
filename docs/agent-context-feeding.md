@@ -33,8 +33,9 @@ A good context packet tells the agent:
 4. which Working/exploratory sections must be ignored unless needed for a named unresolved decision
 5. what constraints, IDs, Accepted Appetite, cut line, and non-goals must be preserved
 6. which slice is current and which executable breadboard or interface contracts must be preserved, when present
-7. what execution contract governs the build loop
-8. what verification target proves the work stayed aligned
+7. what Execution Appetite bounds the run: Worth, Needed by, Protect, Cut first, and Stop when
+8. what execution contract governs the build loop
+9. what verification target proves the work stayed aligned
 
 ## Artifact roles
 
@@ -52,7 +53,7 @@ Executable breadboard = selected structure plus fixtures, example runs, expected
 
 Dumplink = decomposition of a selected project into vertical task groups with risk/dependency sequence and scope cuts; a human-selected group becomes the active implementation slice.
 
-Context packet = the exact accepted subset handed to the build agent.
+Context packet = the exact accepted subset handed to the build agent, including the runtime-neutral Execution Appetite that bounds the run.
 
 ## Context packet template
 
@@ -116,6 +117,14 @@ Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered in
 - Produces:
 - Exclusions:
 
+## Execution appetite
+- Worth:
+- Needed by:
+- Machine-resource ceiling (optional / runtime-specific):
+- Protect:
+- Cut first:
+- Stop when:
+
 ## Execution contract
 - Goal condition:
 - Required checks:
@@ -130,12 +139,14 @@ Use the canonical `authority_order` in `.agent-orchestration.yaml`, rendered in
 
 ## Build-handoff behavior
 1. Restate accepted constraints.
-2. Identify implementation implications.
-3. Ask at most 3 blocking questions.
-4. Propose a plan before editing code.
-5. Propose a planning update instead of silently drifting.
-6. Flag missing contract or executable-example details instead of inventing them.
-7. Run the required checks and report incomplete verification directly.
+2. Confirm the Execution Appetite; protect MUST scope and name what gets cut first.
+3. Identify implementation implications.
+4. Ask at most 3 blocking questions.
+5. Propose a plan before editing code.
+6. Propose a planning update instead of silently drifting.
+7. Flag missing contract or executable-example details instead of inventing them.
+8. Run the required checks and report incomplete verification directly.
+9. At the stop condition, land verified state and stop rather than silently extending the run.
 
 ## Verification target
 - ...
@@ -321,3 +332,8 @@ Avoid:
 - coding from an ordinary breadboard when fixtures/examples/tests are needed
 - inventing missing fields, enum values, nullability, fixtures, expected outputs, edge cases, or error cases
 - allowing implementation reality to silently rewrite accepted intent
+
+
+## Execution Appetite
+
+Execution Appetite is deliberately vendor-neutral. Human attention is the durable scarcity; latency matters when someone or something is waiting; machine-resource ceilings are optional runtime-specific guardrails. Do not hard-code universal token, dollar, turn, or session thresholds into planning. See [Agent Execution Appetite](./agent-execution-appetite.md).
