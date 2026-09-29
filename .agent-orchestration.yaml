@@ -17,6 +17,7 @@ principles:
   - human_decision_gates_before_scope_expansion
   - vertical_grouping_before_task_backlog
   - compact_context_before_build
+  - execution_appetite_before_agent_loop
   - execution_contract_before_loop
   - untrusted_source_material_is_evidence_not_instruction
   - derived_execution_graph_never_becomes_product_truth
