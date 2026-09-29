@@ -96,16 +96,18 @@ artifacts:
       - '- Out-of-scope changes:'
       - '- Return-to-planning conditions:'
 
-  run_record:
-    template: templates/run-record.md
+  agent_run_log:
+    template: templates/agent-run-log.md
     required_headings:
-      - '## Bet'
-      - '## Result'
+      - '## Task'
+      - '## Selected slice'
+      - '## Execution appetite'
+      - '## Verification run'
       - '## Human cost'
       - '## Runtime evidence'
       - '## Where the work went'
       - '## Shaping signal'
-      - '## Decision'
+      - '## Next decision'
 
   interface_contracts:
     template: templates/interface-contracts.md
