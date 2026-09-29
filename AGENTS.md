@@ -199,8 +199,11 @@ Before implementation, provide a compact context packet containing only what the
 - relevant selected-design places, affordances, stores, and wires
 - relevant statechart rows, contracts, examples, or task group when present
 - canonical project terms and relevant architectural decisions
+- execution appetite: worth, needed by, protect, cut first, and stop conditions
 - execution contract
 - verification target
+
+Before the run, shape an execution appetite from the accepted product bet. Human attention and useful-by time are durable constraints; vendor-specific token, spend, turn, or compute ceilings are optional runtime guardrails. Protect MUST scope, cut NICE scope first, and never silently auto-extend the run.
 
 Do not include working alternatives or candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
 
