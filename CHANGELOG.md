@@ -6,6 +6,9 @@
 
 ### Fixed
 
+- Complete the execution-appetite orchestration contract by defining its hard-gate semantics, updating contract tests, and bundling the referenced guide in the Claude plugin.
+- Refresh transitive npm locks to patched releases for newly disclosed `undici`, `fast-uri`, and `ip-address` advisories before publishing v1.5.0.
+
 - Preserve product-repository `AGENTS.md` references in the Claude plugin, rewrite
   nested support paths, and check all bundled Markdown links.
 - Surface default hook reminders as runtime-visible JSON and recognize absolute
