@@ -135,7 +135,7 @@ planning/
   kickoff.md
   context-packet.md
   spikes/
-  runs/                # lightweight agent run records for empirical shaping feedback
+  runs/                # lightweight agent run logs for empirical shaping feedback
 ```
 
 This is a convention, not a requirement. Keep one clearly active artifact for each authoritative planning level unless the project intentionally versions them. Candidate breadboards remain subordinate to their named candidate and shaping artifact. Preserve rejected alternatives in shaping, keep tables authoritative over generated diagrams, and treat run logs as audit records rather than product truth.
@@ -152,7 +152,7 @@ This is a convention, not a requirement. Keep one clearly active artifact for ea
 | **Executable breadboard** | The behavioral and test contract for one selected slice. |
 | **Dumplink plan** | A selected project decomposed into sequenced vertical task groups, with risk, dependencies, and appetite-based cuts. |
 | **Context packet** | The exact subset of authoritative planning material handed to the active implementation agent, including its run-level execution appetite. |
-| **Run record** | A lightweight empirical record of one meaningful agent run: outcome, human cost, cuts, runtime evidence, and shaping signals. |
+| **Run log** | A lightweight empirical record of one meaningful agent run: outcome, human cost, cuts, runtime evidence, and shaping signals. |
 
 A common **controlled** path is: accepted criteria and Appetite → candidate shapes ↔ candidate breadboards or focused spikes when needed → human-selected shape and project boundary → accepted selected-design breadboard → optional Dumplink to create sequenced vertical task groups → human-selected active task group or other demoable slice → interface contracts and executable breadboard when needed → optional kickoff reference → context packet → implementation.
 
@@ -170,7 +170,7 @@ Product Appetite answers how much human/team time the product bet is worth. For 
 
 Keep model pricing, token accounting, turns, and vendor-specific breakers under the hood as optional runtime guardrails. After meaningful runs, capture a lightweight record under `planning/runs/` so future shaping can learn from actual execution rather than estimates.
 
-See [Agent Execution Appetite](./docs/agent-execution-appetite.md) and [the run-record template](./templates/run-record.md).
+See [Agent Execution Appetite](./docs/agent-execution-appetite.md) and [the run-record template](./templates/agent-run-log.md).
 
 > **Shape the product before you build it. Shape the run before you execute it. Learn from both.**
 
