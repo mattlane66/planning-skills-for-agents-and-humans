@@ -1,6 +1,6 @@
 ---
 name: feed-planning-context
-description: Prepare a compact context packet when an implementation agent needs the authoritative planning subset, execution appetite, execution contract, non-goals, and verification target for one active task group or slice.
+description: Prepare compact implementation context with accepted scope, execution appetite, contract, non-goals, and verification for one active slice.
 license: MIT
 ---
 
