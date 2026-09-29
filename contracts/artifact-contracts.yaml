@@ -85,6 +85,7 @@ artifacts:
       - '## Do not use as build scope'
       - '## Must preserve'
       - '## Current slice'
+      - '## Execution appetite'
       - '## Execution contract'
       - '## Open questions'
       - '## Verification target'
@@ -94,6 +95,17 @@ artifacts:
       - '- Allowed files / areas:'
       - '- Out-of-scope changes:'
       - '- Return-to-planning conditions:'
+
+  run_record:
+    template: templates/run-record.md
+    required_headings:
+      - '## Bet'
+      - '## Result'
+      - '## Human cost'
+      - '## Runtime evidence'
+      - '## Where the work went'
+      - '## Shaping signal'
+      - '## Decision'
 
   interface_contracts:
     template: templates/interface-contracts.md
