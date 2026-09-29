@@ -21,7 +21,7 @@ class ArtifactContractTests(unittest.TestCase):
     def test_contract_definitions_match_repository_templates(self) -> None:
         self.assertEqual([], validate_contract_definitions(self.contracts, ROOT))
 
-    def test_context_packet_requires_filled_execution_contract(self) -> None:
+    def test_context_packet_requires_filled_execution_appetite_and_contract(self) -> None:
         template = (ROOT / "templates" / "context-packet.md").read_text(encoding="utf-8")
         errors = validate_artifact_text("context_packet", template, self.contracts)
         self.assertTrue(any("Worth" in error for error in errors), errors)
