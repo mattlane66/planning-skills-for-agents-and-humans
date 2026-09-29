@@ -408,12 +408,15 @@ Outputs:
 - accepted requirements, Appetite, cut line, and non-goals
 - selected slice
 - relevant selected-design rows and supporting contracts/examples
+- runtime-neutral Execution Appetite
 - execution contract
 - verification target
 
 Exclude Working alternatives and candidate breadboards as active build scope.
 
 ## 14. Build
+
+Before a meaningful agent loop, state the Execution Appetite in the context packet: **Worth, Needed by, Protect, Cut first, Stop when**. Treat machine-specific dollar/token/compute controls as runtime adapters. See `docs/agent-execution-appetite.md`.
 
 Rules:
 
@@ -422,7 +425,7 @@ Rules:
 - keep stable IDs intact
 - map work back to accepted artifacts
 - propose a planning update if implementation reality conflicts with the plan
-- create an agent run log for meaningful runs
+- create an agent run log for meaningful runs, recording realized human attention, verification, cuts, figuring-it-out versus executing-down effort, and shaping signals
 
 ## 15. Check drift
 
@@ -478,7 +481,7 @@ Before a **promotion** step, ask:
 - Are rejected alternatives and non-goals visible?
 - Are stable IDs preserved?
 - Were consequential visuals reconciled explicitly?
-- Does the build step have bounded context and a verification target?
+- Does the build step have bounded context, a runtime-neutral Execution Appetite, and a verification target?
 
 Do not use this checklist to prevent ordinary movement among R, S, fit, spikes, or candidate breadboards during collaborative exploration.
 
