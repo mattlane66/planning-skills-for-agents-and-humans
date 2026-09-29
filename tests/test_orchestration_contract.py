@@ -14,6 +14,9 @@ class OrchestrationScopeContractTests(unittest.TestCase):
         cls.manifest = yaml.safe_load(
             (ROOT / ".agent-orchestration.yaml").read_text(encoding="utf-8")
         )
+        cls.integrity = yaml.safe_load(
+            (ROOT / "contracts" / "planning-integrity.yaml").read_text(encoding="utf-8")
+        )
 
     def test_active_scope_has_two_explicit_sources(self) -> None:
         active_scope = self.manifest["scope_contract"]["active_scope"]
@@ -26,8 +29,22 @@ class OrchestrationScopeContractTests(unittest.TestCase):
 
     def test_build_and_supporting_modes_use_the_canonical_scope_name(self) -> None:
         self.assertEqual(
-            ["active_scope", "context_packet", "execution_appetite", "execution_contract"],
+            [
+                "active_scope",
+                "context_packet",
+                "execution_appetite",
+                "explicit_human_execution_appetite_acceptance",
+                "execution_contract",
+            ],
             self.manifest["hard_promotion_gates"]["build"],
+        )
+        self.assertEqual(
+            "human_decision",
+            self.integrity["gate_definitions"]["explicit_human_execution_appetite_acceptance"]["kind"],
+        )
+        self.assertIn(
+            "explicit_human_execution_appetite_acceptance",
+            self.manifest["modes"]["build"]["requires"],
         )
         for mode in ("interface_contract", "executable_breadboard", "kickoff", "feed_context", "build"):
             self.assertIn("active_scope", self.manifest["modes"][mode]["requires"], mode)
