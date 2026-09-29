@@ -25,6 +25,10 @@
 
 ### Added
 
+- Add a future-proof Agent Execution Appetite model that keeps human attention and useful-by time primary while treating tokens, spend, turns, and compute as replaceable runtime guardrails.
+- Extend context packets and orchestration with run-level `Worth / Needed by / Protect / Cut first / Stop when` boundaries so agents work to outcomes rather than exhaustion.
+- Extend canonical agent run logs with actual human cost, runtime evidence, figuring-it-out versus executing-down effort, shaping signals, and explicit continue/reshape/new-bet decisions.
+
 - Add stable criterion lineage from evidence-backed R candidates through Working/Accepted authority, selected mechanisms, implementation context, and realized-fit assessment.
 - Add inverse requirement coverage and selected-design requirement realization maps so every Accepted R can be traced to the concrete behavior that claims to embody it.
 - Separate implementation verification from realized fit, with outcome-evidence-only realized-fit statuses and regression cases for supported, unassessed, and contradicted criteria.
