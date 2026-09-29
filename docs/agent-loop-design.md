@@ -8,7 +8,7 @@ A loop is useful when the agent has a bounded goal, clear checks, and enough con
 
 Before starting a loop, feed the agent an execution appetite and the bounded implementation contract.
 
-Execution appetite should say what the run is worth in human attention, when the result is needed if latency matters, which MUST scope to protect, which NICE scope to cut first, and when to stop. Machine-resource ceilings are optional runtime-specific guardrails.
+Execution appetite should say what the run is worth in human attention, when the result is needed if latency matters, which MUST scope to protect, which NICE scope to cut first, and when to stop. The agent may propose it, but a human must explicitly accept it before the loop begins. Machine-resource ceilings are optional runtime-specific guardrails.
 
 Before starting a loop, feed the agent:
 
