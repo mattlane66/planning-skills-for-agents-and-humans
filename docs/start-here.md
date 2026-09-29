@@ -205,6 +205,7 @@ Check that you have:
 - canonical project terms and relevant architectural decisions
 - compact context packet
 - execution appetite, execution contract, and verification target
+- explicit human acceptance of the run-level execution appetite
 - human decision on current scope
 
 ## Default collaborative prompt

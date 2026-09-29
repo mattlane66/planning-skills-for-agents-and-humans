@@ -174,8 +174,9 @@ Before a meaningful agent implementation run, derive a compact execution appetit
 - NICE scope to cut first
 - stop / return-to-planning conditions
 - optional runtime-specific machine-resource ceiling
+- explicit human acceptance before implementation begins
 
-Do not make token pricing or one vendor's controls part of the durable planning model. After the run, record what happened under `planning/runs/` using `templates/agent-run-log.md`.
+The agent may propose this run-level appetite, but it may not approve or enlarge its own bet. Do not make token pricing or one vendor's controls part of the durable planning model. After the run, record what happened under `planning/runs/` using `templates/agent-run-log.md`.
 
 See [Agent Execution Appetite](./agent-execution-appetite.md).
 

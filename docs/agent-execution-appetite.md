@@ -33,6 +33,8 @@ What did the run teach us about the shape?
 
 A larger appetite is allowed only as an explicit new bet.
 
+An agent may propose an execution appetite, but it cannot approve its own appetite. A human must explicitly accept the run-level appetite before build begins. Resuming after the accepted stop condition, adding another session, or enlarging a machine ceiling requires the same human authority unless the accepted appetite already authorized that behavior.
+
 ## What an execution appetite contains
 
 Keep the human-facing contract small:

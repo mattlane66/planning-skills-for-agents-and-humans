@@ -39,6 +39,9 @@ gate_definitions:
   execution_appetite:
     kind: build_input
     meaning: The run-level execution appetite exists, including human-attention worth, protected scope, cut-first scope, and stop conditions.
+  explicit_human_execution_appetite_acceptance:
+    kind: human_decision
+    meaning: A human explicitly accepted the run-level execution appetite before build; an agent may propose an appetite but cannot approve, enlarge, resume, or replace it on its own.
   execution_contract:
     kind: build_input
     meaning: The execution contract for the active scope exists.

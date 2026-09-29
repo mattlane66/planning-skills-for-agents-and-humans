@@ -36,7 +36,7 @@ const state = {
 const requestedGuideGroups = [
   { label: 'Start here', slugs: ['start-here', 'repository-overview', 'manifesto'] },
   { label: 'Core workflow', slugs: ['agent-workflow', 'full-modern-agent-workflow', 'human-decision-gates', 'plan-quality-rubric'] },
-  { label: 'Use with agents', slugs: ['codex-usage', 'claude-code-plugin', 'gemini-usage', 'runtime-adapters'] },
+  { label: 'Use with agents', slugs: ['agent-execution-appetite', 'codex-usage', 'claude-code-plugin', 'gemini-usage', 'runtime-adapters'] },
   { label: 'Implementation', slugs: ['using-in-a-product-repo', 'agent-context-feeding', 'interface-contracts', 'executable-breadboards', 'dumplink-usage', 'statechart-usage', 'sketch-reconciliation', 'agent-run-records'] },
   { label: 'Tooling', slugs: ['visual-hot-reload', 'canvas-export', 'ci-health-workflow', 'skill-behavior-evals', 'lifecycle-hooks'] },
 ];

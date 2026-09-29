@@ -122,6 +122,7 @@ At minimum include:
 - Worth:
 - Needed by:
 - Machine-resource ceiling: optional / runtime-specific
+- Human acceptance:
 - Protect:
 - Cut first:
 - Stop when:
@@ -179,7 +180,7 @@ Do not activate deferred groups or fill missing details with guesses.
 
 ## Execution appetite
 
-Execution appetite is the run-level boundary derived from the accepted product bet. Keep human attention and useful-by time primary; machine budgets are optional runtime-specific guardrails. Protect MUST scope and the quality floor, name NICE scope to cut first, and never silently increase the appetite. A larger appetite requires an explicit new bet.
+Execution appetite is the run-level boundary derived from the accepted product bet. Keep human attention and useful-by time primary; machine budgets are optional runtime-specific guardrails. Protect MUST scope and the quality floor, name NICE scope to cut first, and never silently increase the appetite. An agent may propose this appetite, but a human must explicitly accept it before the packet is build-ready. A larger appetite requires an explicit new bet.
 
 See `docs/agent-execution-appetite.md`.
 

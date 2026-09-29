@@ -90,6 +90,7 @@ artifacts:
       - '## Open questions'
       - '## Verification target'
     required_nonempty_labels:
+      - '- Human acceptance:'
       - '- Goal condition:'
       - '- Required checks:'
       - '- Allowed files / areas:'

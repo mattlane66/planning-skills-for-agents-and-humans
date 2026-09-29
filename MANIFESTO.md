@@ -250,6 +250,8 @@ A selected slice still needs an execution appetite.
 
 Name what the run is worth in human attention, when the result is needed, what MUST be protected, what NICE scope can be cut, and when the agent must stop or return to planning.
 
+The agent may propose that appetite. A human accepts it.
+
 Work to the outcome, not to exhaustion. A larger execution appetite is a new bet, not an automatic extension.
 
 For meaningful runs, record what happened so future shaping can learn from actual execution.

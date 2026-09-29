@@ -109,6 +109,8 @@ Agents may gather facts, expose alternatives, update working material, and prepa
 - whether candidate evidence is reconciled into selected-design intent
 - which project is selected and bounded
 - which Dumplink task-group plan is approved and which task group or other slice is active
+- what execution appetite an implementation run deserves; agents may propose it, but a human must explicitly accept it before build
+- whether a larger execution appetite is justified as a new bet rather than an automatic continuation
 - whether drift changes the code, the plan, or the scope
 
 Do not infer a decision from enthusiasm, recency, visual polish, or the fact that one option has more detail.
@@ -203,7 +205,7 @@ Before implementation, provide a compact context packet containing only what the
 - execution contract
 - verification target
 
-Before the run, shape an execution appetite from the accepted product bet. Human attention and useful-by time are durable constraints; vendor-specific token, spend, turn, or compute ceilings are optional runtime guardrails. Protect MUST scope, cut NICE scope first, and never silently auto-extend the run.
+Before the run, shape an execution appetite from the accepted product bet. Human attention and useful-by time are durable constraints; vendor-specific token, spend, turn, or compute ceilings are optional runtime guardrails. An agent may propose the run-level appetite, but a human must explicitly accept it before build begins. Protect MUST scope, cut NICE scope first, and never silently auto-extend the run.
 
 Do not include working alternatives or candidate breadboards as active build scope. Keep raw notes and rejected alternatives out unless the task is discovery or reconstruction. Use `docs/agent-context-feeding.md` for the detailed context packaging protocol.
 

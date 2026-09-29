@@ -28,6 +28,7 @@ The selected slice, if implementation happened.
 - Worth:
 - Needed by:
 - Machine-resource ceiling: optional / runtime-specific
+- Human acceptance:
 - Quality floor:
 - Protect:
 - Cut first:
