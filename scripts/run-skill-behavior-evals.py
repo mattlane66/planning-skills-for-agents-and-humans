@@ -32,6 +32,7 @@ PUBLIC_WORKSPACE_ENTRIES = (
     "GEMINI.md",
     "LICENSE",
     "docs/agent-context-feeding.md",
+    "docs/agent-execution-appetite.md",
     "docs/agent-operating-reference.md",
     "docs/agent-run-records.md",
     "docs/execution-graph.md",
