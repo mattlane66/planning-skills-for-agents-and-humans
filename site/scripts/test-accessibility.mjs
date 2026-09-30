@@ -67,6 +67,21 @@ for (const [index, label] of [[2, 'requirements matrix'], [3, 'shape comparison'
   assert.equal(stageResult.violations.length, 0, `${label} has automated accessibility violations: ${JSON.stringify(stageResult.violations.map((item) => item.id))}`);
 }
 
+document.querySelector('[data-action="select-walkthrough-stage"][data-stage-index="3"]').click();
+await wait(20);
+document.querySelector('[data-action="toggle-reverse-fit"]').click();
+await wait(20);
+document.querySelector('.discovery-replay > summary').click();
+await wait(20);
+for (const candidate of ['a', 'b']) {
+  document.querySelector(`[data-action="inspect-shape"][data-shape="${candidate}"]`).click();
+  await wait(20);
+  assert.equal(document.querySelector('#reverse-fit-panel').hidden, false);
+  assert.equal(document.querySelector('.discovery-replay').open, true);
+  const expandedResult = await window.axe.run(document, { rules: { 'color-contrast': { enabled: false } } });
+  assert.equal(expandedResult.violations.length, 0, `Expanded Shape ${candidate.toUpperCase()} reverse fit and discovery replay have automated accessibility violations: ${JSON.stringify(expandedResult.violations.map((item) => item.id))}`);
+}
+
 window.location.hash = '#/';
 await wait(25);
 document.querySelector('#search-trigger').click();
@@ -83,4 +98,4 @@ assert.equal(dialogResult.violations.length, 0, `Search dialog has automated acc
 })), null, 2)}`);
 
 dom.window.close();
-console.log(`Automated accessibility validation passed (${scenarios.length} routes plus search dialog; color contrast covered by deterministic token checks).`);
+console.log(`Automated accessibility validation passed (${scenarios.length} routes, expanded candidate panels, and search dialog; color contrast covered by deterministic token checks).`);

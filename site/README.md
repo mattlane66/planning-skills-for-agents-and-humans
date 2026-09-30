@@ -4,6 +4,8 @@
 
 This is a walkthrough, not a quiz. The Compass, Model, and Reference remain available behind it. The walkthrough teaches what the collaboration feels like and how its outputs compound; the Reference lets readers select any canonical skill and copy an accurate invocation. Portable natural-language prompts are primary. Claude Code and Gemini shortcuts appear only where the repository actually supplies them, and Codex is correctly described as plugin plus natural-language invocation rather than Claude-style slash commands.
 
+The progress rail is labeled **One example path**. In Shape, each inspected candidate has its own collapsed **Reverse fit** view: parts × requirements plus the inverse coverage check. Switching candidates updates that view without changing the recorded selection. A separate optional replay shows how comparison fixtures exposed ambiguous duplicate semantics, how the human accepted R5 revision 2, and how fit was rechecked. The handoff leaves the run-level execution appetite pending human acceptance before build, alongside the repository-context gaps. The final reality check stays within V1; missing V2 controls are explicitly not drift.
+
 ## Open it
 
 1. Download `site/index.html`, or clone the repository.

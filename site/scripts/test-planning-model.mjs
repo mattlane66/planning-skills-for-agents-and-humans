@@ -208,7 +208,7 @@ assert.deepEqual(walkthrough('handoff').packet.assembly.inputs.map((input) => in
 assert.equal(walkthrough('handoff').packet.assembly.result.id, 'complete');
 assert.deepEqual(
   walkthrough('handoff').packet.details.map((section) => section.id),
-  ['scope-authority', 'preserve', 'repository-context', 'execution-verification'],
+  ['scope-authority', 'preserve', 'repository-context', 'execution-appetite', 'execution-verification'],
 );
 assert.ok(
   walkthrough('handoff').packet.details.find((section) => section.id === 'repository-context').rows.every((row) => row.status === 'unresolved'),
@@ -218,13 +218,38 @@ assert.match(walkthrough('handoff').output, /complete repository context before 
 assert.match(walkthrough('handoff').exchange.find((turn) => turn.role === 'builder')?.text || '', /inspect the target repository/i);
 assert.doesNotMatch(walkthrough('handoff').exchange.map((turn) => turn.text).join(' '), /single-store design/i);
 assert.match(walkthrough('handoff').packet.sections.find((section) => section.label === 'Return to planning if').items.join(' '), /split across collections/i);
-for (const field of ['Task', 'Source artifacts', 'Authority order', 'Do not use as build scope', 'Must preserve', 'Project language and decisions', 'Relevant behavior', 'Execution contract', 'Open questions', 'Verification target']) {
+for (const field of ['Task', 'Source artifacts', 'Authority order', 'Do not use as build scope', 'Must preserve', 'Project language and decisions', 'Relevant behavior', 'Execution appetite', 'Execution contract', 'Open questions', 'Verification target']) {
   assert.match(contextSource, new RegExp(`## ${field}`, 'i'), `The handoff model must remain grounded in the canonical ${field} field.`);
 }
 assert.deepEqual(walkthrough('handoff').exchange.map((turn) => turn.role), ['agent', 'human', 'builder']);
 assert.match(exampleReflection, /recorded without changing the accepted breadboard/i);
 assert.match(walkthrough('reality').exchange.find((turn) => turn.role === 'human')?.text || '', /Keep reality separate/i);
-assert.match(walkthrough('reality').output, /restore one items store/i);
+assert.match(walkthrough('reality').output, /restore V1 save-and-reload[\s\S]*R5 revision 2/i);
+assert.match(exampleReflection, /only human-selected V1/i);
+assert.match(exampleReflection, /V2 was never selected[\s\S]*Their absence is not drift/i);
+assert.match(exampleShaping, /Superseded revision 1[\s\S]*Accepted revision 2[\s\S]*Human decision before selection/i);
+assert.match(walkthrough('handoff').output, /human acceptance of the execution appetite before build/i);
+const runAppetite = walkthrough('handoff').packet.details.find((section) => section.id === 'execution-appetite');
+assert.equal(runAppetite.rows.find((row) => row.label === 'Human acceptance').status, 'unresolved');
+assert.match(runAppetite.rows.find((row) => row.label === 'Cut first').values.join(' '), /human scope decision/i);
+assert.match(runAppetite.rows.find((row) => row.label === 'Stop when').values.join(' '), /do not silently extend/i);
+assert.match(exampleBreadboard, /Accepted N2 behavior \(R5 revision 2\)[\s\S]*lower case/i);
+assert.match(JSON.stringify(walkthrough('handoff').packet), /R5 revision 2[\s\S]*Oat milk/i);
+assert.match(walkthrough('shape').visual.discovery.caption, /before acceptance and selection/i);
+assert.equal(walkthrough('shape').visual.discovery.steps.length, 4);
+assert.match(walkthrough('shape').visual.discovery.consequence, /did not authorize a build/i);
+for (const candidate of groceryShapePaths) {
+  const prefix = candidate.id.toUpperCase();
+  for (const part of candidate.parts) {
+    assert.ok(part.id.startsWith(prefix), `${part.id} belongs to the inspected candidate.`);
+    const canonicalRow = exampleShaping.split('\n').find((line) => line.startsWith(`| ${part.id} `) && /\| (Yes|No)/.test(line));
+    assert.ok(canonicalRow, `${part.id} must have a canonical reverse-fit row.`);
+    assert.deepEqual(part.requirements, canonicalRow.split('|')[2].trim().split(/,\s*/), `${part.id} coverage must match the canonical example.`);
+  }
+  for (const requirement of groceryRequirements) {
+    assert.ok(candidate.parts.some((part) => part.requirements.includes(requirement.id)), `${candidate.label} must account for ${requirement.id}.`);
+  }
+}
 
 const modeledSkills = new Set(Object.keys(skillModel));
 const groupedSkills = skillGroups.flatMap((group) => group.skills);

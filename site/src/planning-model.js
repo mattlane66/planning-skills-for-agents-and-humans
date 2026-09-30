@@ -8,7 +8,7 @@ export const groceryRequirements = [
   { id: 'R2', priority: 'Must-have', text: 'See what is still needed at a glance.' },
   { id: 'R3', priority: 'Must-have', text: 'Hide bought items without deleting them.' },
   { id: 'R4', priority: 'Must-have', text: 'Restore the list on the same device.' },
-  { id: 'R5', priority: 'Nice-to-have', text: 'Prevent exact duplicates or make them obvious.' },
+  { id: 'R5', priority: 'Nice-to-have', text: 'Treat names that differ only by case or surrounding spaces as duplicates.' },
 ];
 
 export const groceryShapePaths = [
@@ -18,7 +18,15 @@ export const groceryShapePaths = [
     name: 'Single list + filter',
     status: 'Human selected',
     selected: true,
-    mechanisms: ['One items store', '`bought` boolean', 'Display-only hide-bought filter', 'Local persistence', 'Duplicate check at add time'],
+    mechanisms: ['Quick-add input', 'One items store with a `bought` boolean', 'Bought / undo checkbox', 'Display-only hide-bought filter', 'Local persistence', 'Normalized duplicate check at add time'],
+    parts: [
+      { id: 'A1', name: 'Quick-add input', requirements: ['R0'], why: 'One place to capture an item quickly.' },
+      { id: 'A2', name: 'Single item store', requirements: ['R1', 'R2', 'R3', 'R4'], why: 'One model keeps bought state, visibility, and saved items consistent.' },
+      { id: 'A3', name: 'Bought / undo checkbox', requirements: ['R1'], why: 'Changes bought state in either direction.' },
+      { id: 'A4', name: 'Hide-bought filter', requirements: ['R2', 'R3'], why: 'Shows needed items without deleting bought ones.' },
+      { id: 'A5', name: 'Local persistence', requirements: ['R4'], why: 'Saves and restores the same-device list.' },
+      { id: 'A6', name: 'Normalized duplicate check', requirements: ['R5'], why: 'Compares trimmed, lower-case names; cuttable only through a scope decision.' },
+    ],
     tradeoff: 'Simpler state model for the first version.',
   },
   {
@@ -27,10 +35,29 @@ export const groceryShapePaths = [
     name: 'Needed + Bought sections',
     status: 'Viable, not selected',
     selected: false,
-    mechanisms: ['Quick-add input', 'Needed section', 'Bought section', 'Collapsible bought section', 'Local persistence', 'Duplicate check at add time'],
+    mechanisms: ['Quick-add input', 'Move items between Needed and Bought sections', 'Collapsible bought section', 'Local persistence', 'Normalized duplicate check at add time'],
+    parts: [
+      { id: 'B1', name: 'Quick-add input', requirements: ['R0'], why: 'One place to capture an item quickly.' },
+      { id: 'B2', name: 'Needed ↔ Bought sections', requirements: ['R1', 'R2'], why: 'Moving an item either way supports bought / undo and separates needed items.' },
+      { id: 'B3', name: 'Collapse Bought', requirements: ['R2', 'R3'], why: 'Hides bought items without deleting them.' },
+      { id: 'B4', name: 'Local persistence', requirements: ['R4'], why: 'Saves and restores the section state.' },
+      { id: 'B5', name: 'Normalized duplicate check', requirements: ['R5'], why: 'Compares trimmed, lower-case names; cuttable only through a scope decision.' },
+    ],
     tradeoff: 'Stronger visual separation, with more structure to manage.',
   },
 ];
+
+export const groceryDiscoveryLoop = {
+  title: 'How a discovery changed this plan',
+  caption: 'Optional replay before acceptance and selection. These illustrative fixtures explain the decision; they are not user-research findings.',
+  steps: [
+    { label: 'Question', status: 'Working R5 · revision 1', text: '“Exact duplicates” leaves a gap: should Milk, milk, and a name with surrounding spaces count as one item?' },
+    { label: 'Focused check', status: 'SP1 · comparison fixtures', text: 'Raw equality treats all three inputs as different. Trimming surrounding spaces and comparing lower-case names treats them as one; Oat milk still stays different.' },
+    { label: 'Revise', status: 'Proposed R5 · revision 2', text: 'Treat names that differ only by case or surrounding spaces as duplicates. A6 and B5 now need a normalized comparison. Fuzzy matching and synonyms stay out.' },
+    { label: 'Accept and recheck', status: 'Human decision', text: 'The human accepts R5 revision 2, preserving revision 1 as superseded. Fit and reverse fit are rerun for A and B; both pass. Shape selection remains a separate decision.' },
+  ],
+  consequence: 'The question returned to the requirement and candidate mechanisms. It did not authorize a build. The matrix above shows the accepted result of this loop.',
+};
 
 export const groceryShapeDecision = {
   gateTitle: 'Fit is a gate, not a score.',
@@ -92,7 +119,7 @@ export const grocerySlicePlan = {
         { id: 'T3', text: 'Save and restore items on this device' },
       ],
       produces: 'A reload-safe list with clear duplicate handling.',
-      check: 'Add Milk, reject a second Milk, reload, and see the saved item.',
+      check: 'Add Milk; reject Milk, milk, and “ milk ” visibly; reload and see one saved item. Oat milk remains distinct.',
     },
     {
       id: 'TG2',
@@ -254,7 +281,7 @@ export const walkthroughSteps = [
     input: ['Accepted frame', 'Need for fast capture and clear in-store use', 'Small-project boundary'],
     exchange: [
       { role: 'agent', text: 'I’ve separated six requirements from possible mechanisms: quick add, bought and undo, needed-at-a-glance, hide without delete, same-device persistence, and obvious duplicate handling.' },
-      { role: 'human', text: 'Accept R0–R5. The Appetite is a few focused days for one builder. Cut accounts, sharing, categories, pricing, recipes, and store logic.' },
+      { role: 'human', text: 'Accept R0–R5, including the clarified case-and-space duplicate rule. The Appetite is a few focused days for one builder. Cut accounts, sharing, categories, pricing, recipes, and store logic.' },
       { role: 'agent', text: 'Recorded before shape selection. Those accepted needs and cuts will judge each direction rather than being rewritten to fit a favorite idea.' },
     ],
     artifact: { title: 'Requirements + Appetite', summary: 'R0–R5, time budget, and cut line', status: 'Accepted criteria' },
@@ -298,6 +325,7 @@ export const walkthroughSteps = [
       requirements: groceryRequirements,
       paths: groceryShapePaths,
       decision: groceryShapeDecision,
+      discovery: groceryDiscoveryLoop,
     },
   },
   {
@@ -310,7 +338,7 @@ export const walkthroughSteps = [
     input: ['Human-selected shape A', 'Accepted R0–R5', 'Accepted Appetite and cut line'],
     exchange: [
       { role: 'agent', text: 'I’m using selected-design mode. Item input flows through duplicate checking into one items store, persistence, and the visible list. The hide-bought control changes display, not item state.' },
-      { role: 'human', text: 'Accept that behavior. Preserve one items store and keep duplicate feedback visible to the user.' },
+      { role: 'human', text: 'Accept that behavior. Preserve one items store. Compare trimmed, lower-case names and reject duplicates with visible feedback; keep the original name for display.' },
       { role: 'agent', text: 'Accepted behavior recorded. Because this map is reconciled to the selected shape and accepted inputs, it can now feed slice selection.' },
     ],
     artifact: { title: 'Accepted breadboard', summary: 'Places, affordances, stores, branches, and wiring', status: 'Accepted behavior' },
@@ -362,13 +390,13 @@ export const walkthroughSteps = [
     inputTitle: 'Input to this step',
     input: ['Human-selected V1', 'Relevant accepted behavior', 'Verification targets and return conditions'],
     exchange: [
-      { role: 'agent', text: 'I’ll send V1’s authoritative planning subset and mark the target-repository fields that still require inspection.' },
+      { role: 'agent', text: 'I’ll send V1’s authoritative planning subset, mark the repository fields that still require inspection, and leave the execution appetite pending human acceptance.' },
       { role: 'human', text: 'Yes. Keep V2 deferred and return if implementation would split items across collections or the repository does not provide a required seam.' },
-      { role: 'builder', text: 'The product decisions are bounded. I’ll inspect the target repository for its instructions, seams, allowed areas, and verification commands before coding—and return rather than guess.' },
+      { role: 'builder', text: 'The product decisions are bounded. I’ll inspect the target repository for its instructions, seams, allowed areas, and verification commands before coding. I’ll propose the run’s execution appetite for human acceptance, then return if it no longer fits.' },
     ],
     artifact: { title: 'Context packet', summary: 'Planning truth plus explicit repository gaps', status: 'Planning subset ready' },
-    output: 'The builder receives a resolved planning subset plus an explicit instruction to complete repository context before coding.',
-    why: 'Compact planning context prevents re-deciding the product; explicit repository gaps prevent invented files, seams, and commands.',
+    output: 'The builder receives a resolved planning subset plus an explicit instruction to complete repository context before coding and obtain human acceptance of the execution appetite before build.',
+    why: 'Compact planning context preserves product decisions; repository inspection and human acceptance of the run boundary complete the handoff.',
     sourceFile: '03-breadboard.md',
     humanMove: 'Confirmed scope and return conditions',
     agentMove: 'Packaged authoritative context',
@@ -376,13 +404,13 @@ export const walkthroughSteps = [
       active: 'V1: Add and persist grocery items',
       assembly: {
         title: 'A complete handoff has two sources.',
-        caption: 'Planning answers what and why. The target repository answers where and how.',
+        caption: 'Planning answers what and why. The target repository answers where and how. A human must also accept the run’s execution appetite before build.',
         inputs: [
           {
             id: 'planning',
             title: 'Planning context',
             status: 'Resolved here',
-            items: ['Selected V1 and explicit exclusions', 'Accepted behavior to preserve', 'Cuts, checks, and return conditions'],
+            items: ['Selected V1 and explicit exclusions', 'Accepted behavior to preserve', 'Cuts, checks, and return conditions', 'Execution appetite still needs human acceptance'],
           },
           {
             id: 'repository',
@@ -394,15 +422,15 @@ export const walkthroughSteps = [
         result: {
           id: 'complete',
           title: 'Complete build-agent packet',
-          status: 'Ready when combined',
-          items: ['Authoritative scope', 'Executable constraints', 'Verifiable finish line'],
+          status: 'Ready after context and acceptance',
+          items: ['Authoritative scope', 'Executable constraints', 'Human-accepted execution appetite', 'Verifiable finish line'],
         },
       },
       sections: [
-        { label: 'Build', tone: 'agent', items: ['Add an item', 'Reject exact duplicates visibly', 'Restore the list after reload'] },
+        { label: 'Build', tone: 'agent', items: ['Add an item', 'Reject duplicates visibly after trimming surrounding spaces and comparing lower-case names', 'Restore the list after reload'] },
         { label: 'Preserve', tone: 'accepted', items: ['One items store', 'Selected shape A', 'Accepted same-device boundary'] },
         { label: 'Do not build yet', tone: 'human', items: ['Bought/unbought toggle', 'Hide-bought filter', 'Cut-line features: accounts, sharing, categories, pricing, recipes, and store logic'] },
-        { label: 'Verify', tone: 'agent', items: ['Saved items return after reload', 'Duplicate attempts do not create a second item'] },
+        { label: 'Verify', tone: 'agent', items: ['Saved items return after reload', 'Milk, milk, and “ milk ” produce one item with duplicate feedback; Oat milk remains distinct'] },
         { label: 'Return to planning if', tone: 'agent', items: ['Items must be split across collections', 'Persistence changes the agreed boundary', 'Repository instructions conflict with accepted behavior'] },
       ],
       details: [
@@ -423,9 +451,9 @@ export const walkthroughSteps = [
           title: 'Behavior to preserve',
           summary: 'Only the accepted behavior relevant to V1',
           rows: [
-            { label: 'Active criteria', values: ['R0 quick add', 'R4 same-device persistence', 'R5 visible exact-duplicate handling'] },
+            { label: 'Active criteria', values: ['R0 quick add', 'R4 same-device persistence', 'R5 revision 2: case-and-space duplicate handling'] },
             { label: 'Relevant breadboard subset', values: ['P1, P2, P3', 'U1, U2, U5, U6', 'N1, N2, N3, N7, N8, N9, N10', 'S1 items and S3 itemDraft'] },
-            { label: 'Must preserve', values: ['One items store', 'Visible duplicate rejection', 'Same-device persistence boundary'] },
+            { label: 'Must preserve', values: ['One items store', 'Visible duplicate rejection using trimmed, lower-case comparison; preserve the original display name', 'Same-device persistence boundary'] },
             { label: 'Deferred and non-goals', values: ['R1–R3 remain accepted but belong to V2', 'No accounts, sharing, categories, prices, recipes, or store-specific logic'] },
           ],
         },
@@ -441,12 +469,26 @@ export const walkthroughSteps = [
           ],
         },
         {
+          id: 'execution-appetite',
+          title: 'Execution appetite',
+          summary: 'A run-level human decision, derived from the accepted product bet',
+          rows: [
+            { label: 'Worth', status: 'unresolved', resolveLabel: 'Human decision before build', values: ['Propose how much human attention this V1 run deserves; do not infer it from the product’s few-days Appetite.'] },
+            { label: 'Needed by', status: 'unresolved', resolveLabel: 'Human decision before build', values: ['No useful-by time is supplied in this example. Confirm whether one constrains the run.'] },
+            { label: 'Machine-resource ceiling', values: ['Optional and runtime-specific; none is invented here.'] },
+            { label: 'Human acceptance', status: 'unresolved', resolveLabel: 'Human decision before build', values: ['A human explicitly accepts the proposed execution appetite before build begins.'] },
+            { label: 'Protect', values: ['R0 quick capture, R4 same-device persistence, the quality floor, and the selected V1 boundary.'] },
+            { label: 'Cut first', values: ['R5 duplicate handling is NICE scope: propose it first if the appetite narrows. Deferring it still requires a human scope decision.'] },
+            { label: 'Stop when', values: ['The run no longer fits its accepted appetite, repository authority conflicts with behavior, or V1 checks cannot be met. Return for a decision; do not silently extend the run.'] },
+          ],
+        },
+        {
           id: 'execution-verification',
           title: 'Execution and verification',
           summary: 'How the builder knows when to act, stop, or return',
           rows: [
-            { label: 'Goal condition', values: ['A user can add an item, sees visible feedback for an exact duplicate, and gets the saved item back after reload.'] },
-            { label: 'Required checks', values: ['Add Milk', 'Attempt a second Milk and confirm no duplicate is created', 'Reload and confirm Milk returns'] },
+            { label: 'Goal condition', values: ['A user can add an item, sees visible feedback for a duplicate under the accepted case-and-space rule, and gets the saved item back after reload.'] },
+            { label: 'Required checks', values: ['Add Milk', 'Attempt Milk, milk, and “ milk ”; each is rejected with visible feedback', 'Add Oat milk and confirm it remains distinct', 'Reload and confirm the saved items return'] },
             { label: 'Out-of-scope changes', values: ['Do not implement V2 or broaden the accepted project boundary.'] },
             { label: 'Return to planning', values: ['Items must be split across collections', 'Persistence changes the same-device boundary', 'Required behavior or repository authority is missing or conflicting'] },
             { label: 'Checkpoint cadence', status: 'unresolved', values: ['Agree with the implementation agent if repository inspection reveals multi-step or higher-risk work.'] },
@@ -464,14 +506,14 @@ export const walkthroughSteps = [
     skill: 'Breadboard Reflection',
     skillSlug: 'breadboard-reflection',
     inputTitle: 'Input to this step',
-    input: ['Accepted breadboard', 'Built implementation', 'Observed split-store and duplicate-normalization drift'],
+    input: ['Accepted breadboard and human-selected V1', 'V1 implementation after repository context and human acceptance of the execution appetite; V2 remains deferred', 'Observed reload and duplicate-normalization drift'],
     exchange: [
-      { role: 'agent', text: 'Current reality differs from accepted intent: bought items moved into a separate array, the display-only filter disappeared, and Milk and milk can both be added.' },
-      { role: 'human', text: 'Keep reality separate from the accepted plan. Restore one items store and normalize duplicate checks.' },
-      { role: 'builder', text: 'I’ll correct the implementation. The accepted breadboard does not change.' },
+      { role: 'agent', text: 'We built only V1. Adding works, but reload loses the list, and Milk and milk can both be added. Those fail R4 and the accepted R5 revision 2. Bought controls and filtering are correctly absent: V2 is still deferred.' },
+      { role: 'human', text: 'Keep reality separate from the accepted plan. Restore save-and-reload behavior and the agreed normalized duplicate check. Keep V2 deferred.' },
+      { role: 'builder', text: 'I’ll correct V1 and rerun its acceptance checks. The accepted breadboard does not change.' },
     ],
     artifact: { title: 'Drift decision', summary: 'Implementation changes; accepted intent stays', status: 'Human correction' },
-    output: 'Decision: restore one items store, the display-only filter, and normalized duplicate comparison. Keep current reality recorded until the correction is verified.',
+    output: 'Decision: restore V1 save-and-reload behavior and normalized duplicate comparison. Verify the correction against R4 and R5 revision 2. V2 remains deferred; the accepted plan stays unchanged.',
     why: 'Implementation evidence informs the decision without silently overwriting accepted intent.',
     sourceFile: '05-breadboard-reflection.md',
     humanMove: 'Chose which truth changes',
@@ -594,8 +636,8 @@ export const walkthroughStageInvocations = {
         slug: 'executable-breadboards',
         label: 'If examples must become a testable contract',
         trigger: 'Use when the selected slice needs fixtures, difficult cases, expected outputs, edge cases, or acceptance tests before implementation.',
-        fit: 'Useful if “exact duplicate” needs fixture-level precision; otherwise the packet’s two acceptance checks are sufficient.',
-        prompt: 'Use the installed executable-breadboards skill on grocery-list V1. Add fixtures for Milk, a second Milk, reload, and any agreed normalization case; keep the examples inside the selected slice.',
+        fit: 'Useful if more fixture detail is needed; the packet already specifies case-and-space duplicates, distinct names, and reload.',
+        prompt: 'Use the installed executable-breadboards skill on grocery-list V1. Add fixtures for Milk, milk, surrounding spaces, Oat milk, and reload under accepted R5 revision 2; keep the examples inside the selected slice.',
         claude: null,
         gemini: null,
       },
@@ -933,7 +975,7 @@ export const simpleExampleModel = {
     '02-shaping.md': ['Requirements describe needs', 'R and Appetite are accepted before selection', 'The selected direction is explicit'],
     '03-breadboard.md': ['Mode is selected-design', 'Selected shape and accepted inputs are cited', 'V1 is selected only after behavior is mapped'],
     '04-kickoff.md': ['Breadboard and selected V1 already exist', 'This is orientation, not build scope', 'It sits beside the handoff—not in the required path'],
-    '05-breadboard-reflection.md': ['Implementation happened between planning and reflection', 'Reality is recorded separately', 'A person decides which truth changes'],
+    '05-breadboard-reflection.md': ['Implementation happened between planning and reflection: only V1 was authorized and built', 'V2 remains deferred; its missing controls are not drift', 'A person decides which truth changes'],
   },
 };
 

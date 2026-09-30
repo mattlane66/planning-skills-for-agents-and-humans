@@ -4185,6 +4185,94 @@ kbd {
   line-height: 1.4;
 }
 
+/* Progressive disclosure for the example path, candidate coverage, and discovery. */
+.walkthrough-path-note {
+  max-width: 960px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.walkthrough-path-note strong { color: var(--ink); }
+.walkthrough-path-note a { display: inline-block; margin-left: 5px; }
+
+.reverse-fit { margin-top: 14px; }
+.detail-disclosure {
+  display: flex;
+  width: 100%;
+  min-height: 52px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 6px;
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+}
+.detail-disclosure strong,
+.detail-disclosure small { display: block; }
+.detail-disclosure strong { font-size: 14px; }
+.detail-disclosure small { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.detail-disclosure svg { flex: 0 0 auto; }
+.detail-disclosure[aria-expanded="true"] svg { transform: rotate(90deg); }
+#reverse-fit-panel[hidden] { display: none; }
+#reverse-fit-panel { padding-top: 10px; }
+#reverse-fit-panel h5 { margin: 12px 0 6px; font-size: 14px; }
+.reverse-fit-note { color: var(--muted); font-size: 13px; line-height: 1.5; }
+.reverse-fit-scroll { max-width: 100%; border-radius: 4px; }
+.reverse-fit-matrix {
+  width: 100%;
+  min-width: 580px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.reverse-fit-matrix caption { padding: 8px 0; color: var(--muted); text-align: left; }
+.reverse-fit-matrix th,
+.reverse-fit-matrix td { padding: 10px 8px; border: 1px solid var(--rule); }
+.reverse-fit-matrix thead th { background: var(--verification-soft); }
+.reverse-fit-matrix th:first-child { min-width: 240px; text-align: left; }
+.reverse-fit-matrix th:not(:first-child),
+.reverse-fit-matrix td { min-width: 48px; text-align: center; }
+.reverse-fit-matrix tbody th { background: var(--surface); font-weight: 600; }
+.reverse-fit-matrix tbody th > strong { color: var(--verification); }
+.reverse-fit-matrix th small { display: block; max-width: 320px; margin-top: 4px; color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.45; }
+.reverse-fit-mark { color: var(--evidence); font-size: 18px; font-weight: 800; }
+.reverse-fit-empty { color: var(--muted); }
+.reverse-coverage { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.reverse-coverage li { display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 10px; font-size: 13px; }
+.reverse-coverage li > strong { color: var(--verification); }
+.reverse-coverage small { display: block; color: var(--muted); font-size: 12px; }
+
+.discovery-replay { margin: 16px; border: 1px solid var(--rule-strong); border-radius: 6px; background: var(--planning-soft); }
+.discovery-replay > summary { min-height: 52px; padding: 13px 16px; cursor: pointer; }
+.discovery-replay > summary > span { display: inline-block; vertical-align: middle; }
+.discovery-replay > summary strong,
+.discovery-replay > summary small { display: block; }
+.discovery-replay > summary strong { font-size: 14px; }
+.discovery-replay > summary small { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.discovery-body { padding: 0 16px 16px; }
+.discovery-body > p { font-size: 13px; line-height: 1.5; }
+.discovery-steps { display: grid; gap: 12px; margin: 16px 0; padding: 0; list-style: none; }
+.discovery-steps li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; }
+.discovery-number { display: grid; width: 28px; height: 28px; place-items: center; border: 1px solid var(--planning); border-radius: 50%; color: var(--planning-strong); font-size: 12px; font-weight: 750; }
+.discovery-steps h4 { margin: 0; font-size: 15px; }
+.discovery-steps small { color: var(--planning-strong); font-size: 12px; }
+.discovery-steps p { margin: 5px 0 0; font-size: 14px; line-height: 1.5; }
+.discovery-consequence { padding-top: 12px; border-top: 1px solid var(--rule-strong); }
+.discovery-body > a { min-height: 44px; font-size: 13px; }
+
+@media (max-width: 600px) {
+  .walkthrough-path-note { font-size: 13px; }
+  .discovery-replay { margin: 12px; }
+  .discovery-replay > summary { padding: 12px; }
+  .discovery-replay > summary > span { max-width: calc(100% - 22px); }
+  .discovery-body { padding: 0 12px 12px; }
+  .reverse-fit-matrix th:first-child { min-width: 220px; }
+}
+
 /* Applied artifact views inside the walkthrough */
 .walkthrough-stage-visual {
   min-width: 0;
