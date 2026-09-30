@@ -36,6 +36,8 @@ mode: selected-design
 
 ## Non-UI Affordances
 
+**Accepted N2 behavior (R5 revision 2):** compare item names after trimming surrounding spaces and converting to lower case. `Milk`, `milk`, and ` milk ` match; `Oat milk` remains distinct. Reject matching add attempts with visible U6 feedback and keep S1 unchanged. Preserve the original name for display. Fuzzy matching and synonyms are out of scope.
+
 | ID | Place | Component | Affordance | Control | Wires Out | Returns To |
 |----|-------|-----------|------------|---------|-----------|------------|
 | N1 | P1 | add-form | submit add request | call | → N2 | ← S3 |
@@ -172,8 +174,10 @@ flowchart LR
 ### V1 — Add and persist grocery items
 Demo:
 - user can add an item
-- duplicate add attempts show feedback instead of silently creating a second copy
+- duplicate add attempts under accepted R5 revision 2 show feedback instead of creating a second copy
 - list restores after reload
+
+Acceptance checks: add `Milk`; attempt `Milk`, `milk`, and ` milk ` and see visible duplicate feedback with one stored item; add `Oat milk` as a distinct item; reload and confirm both saved items return.
 
 Produces:
 - persistent item list on the same device

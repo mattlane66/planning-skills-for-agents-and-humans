@@ -22,6 +22,8 @@ const state = {
   walkthroughStep: 0,
   walkthroughPanels: { input: false, output: false, ledger: false },
   inspectedShape: 'a',
+  reverseFitOpen: false,
+  discoveryOpen: false,
   selectedEntry: 'fuzzy',
   selectedMapStage: 'selected-design',
   skillCategory: 'all',
@@ -425,6 +427,44 @@ function inlineCode(value) {
   return escapeHtml(value).replace(/`([^`]+)`/g, '<code>$1</code>');
 }
 
+function reverseFitView(path, requirements) {
+  const coverage = requirements.map((requirement) => ({
+    ...requirement,
+    parts: path.parts.filter((part) => part.requirements.includes(requirement.id)).map((part) => part.id),
+  }));
+  return `<div class="reverse-fit">
+    <button id="reverse-fit-toggle" class="detail-disclosure" type="button" data-action="toggle-reverse-fit" aria-expanded="${state.reverseFitOpen}" aria-controls="reverse-fit-panel">
+      <span><strong>Reverse fit for ${escapeHtml(path.label)}</strong><small>Open this candidate: parts × requirements</small></span>${icon('arrow', 18)}
+    </button>
+    <section id="reverse-fit-panel" data-shape="${path.id}" aria-labelledby="reverse-fit-title" ${state.reverseFitOpen ? '' : 'hidden'}>
+      <h5 id="reverse-fit-title">${escapeHtml(path.label)} · Parts × Requirements</h5>
+      <p class="reverse-fit-note">Each mark claims a contribution to a requirement. Coverage does not prove sufficiency, realized conformance, or effect. Inspecting a candidate does not select it.</p>
+      <div class="walkthrough-table-scroll reverse-fit-scroll" tabindex="0" role="region" aria-label="${escapeHtml(path.label)} reverse-fit matrix, scroll horizontally if needed">
+        <table class="reverse-fit-matrix">
+          <caption>Which accepted requirements justify each ${escapeHtml(path.label)} part?</caption>
+          <thead><tr><th scope="col">Part</th>${requirements.map((requirement) => `<th scope="col" aria-label="${escapeHtml(`${requirement.id}: ${requirement.text}`)}"><abbr title="${escapeHtml(requirement.text)}">${escapeHtml(requirement.id)}</abbr></th>`).join('')}</tr></thead>
+          <tbody>${path.parts.map((part) => `<tr><th scope="row"><strong>${escapeHtml(part.id)}</strong> ${escapeHtml(part.name)}<small>${escapeHtml(part.why)}</small></th>${requirements.map((requirement) => `<td>${part.requirements.includes(requirement.id) ? `<span class="reverse-fit-mark" aria-label="${part.id} contributes to ${requirement.id}">✓</span>` : `<span class="reverse-fit-empty" aria-label="No claimed contribution from ${part.id} to ${requirement.id}">—</span>`}</td>`).join('')}</tr>`).join('')}</tbody>
+        </table>
+      </div>
+      <h5>Check coverage in the other direction</h5>
+      <ul class="reverse-coverage">${coverage.map((requirement) => `<li><strong>${escapeHtml(requirement.id)}</strong><span>${escapeHtml(requirement.text)}<small>Supported by ${requirement.parts.length ? escapeHtml(requirement.parts.join(', ')) : 'no part — gap to resolve'}</small></span></li>`).join('')}</ul>
+      <p class="reverse-fit-note">${path.id === 'a' ? 'A2 carries four requirements: inspect that shared responsibility in the breadboard. ' : ''}No part is currently unjustified. R5 is a nice-to-have, but its part is included in this bet; cutting it requires a scope decision.</p>
+    </section>
+  </div>`;
+}
+
+function discoveryReplay(discovery) {
+  return `<details class="discovery-replay" data-disclosure="discovery" ${state.discoveryOpen ? 'open' : ''}>
+    <summary><span><strong>${escapeHtml(discovery.title)}</strong><small>Optional · replay one exploration loop</small></span></summary>
+    <div class="discovery-body">
+      <p>${escapeHtml(discovery.caption)}</p>
+      <ol class="discovery-steps">${discovery.steps.map((step, index) => `<li><span class="discovery-number" aria-hidden="true">${index + 1}</span><div><h4>${escapeHtml(step.label)}</h4><small>${escapeHtml(step.status)}</small><p>${escapeHtml(step.text)}</p></div></li>`).join('')}</ol>
+      <p class="discovery-consequence">${escapeHtml(discovery.consequence)}</p>
+      <a class="text-link" href="#/examples/simple-grocery-list?file=02-shaping.md">Read the recorded change ${icon('arrow', 15)}</a>
+    </div>
+  </details>`;
+}
+
 function shapeFitVisual(visual) {
   const inspected = visual.paths.find((path) => path.id === state.inspectedShape) || visual.paths[0];
   const { decision } = visual;
@@ -453,8 +493,10 @@ function shapeFitVisual(visual) {
     <article id="shape-path-detail" class="shape-path-detail ${inspected.selected ? 'is-selected' : ''}" aria-live="polite">
       <header><span>${escapeHtml(inspected.label)}</span><div><h4>${escapeHtml(inspected.name)}</h4><p>${escapeHtml(inspected.tradeoff)}</p></div></header>
       <ul>${inspected.mechanisms.map((item) => `<li>${inlineCode(item)}</li>`).join('')}</ul>
+      ${reverseFitView(inspected, visual.requirements)}
       <p class="shape-authority">${inspected.selected ? 'Recorded authority: selected by the human.' : 'Authority: viable evidence only—not build scope.'}</p>
     </article>
+    ${discoveryReplay(visual.discovery)}
   </section>`;
 }
 
@@ -546,11 +588,11 @@ function handoffAssembly(step) {
 
 function fullContextPacket(step) {
   return `<section class="full-context-packet" aria-labelledby="full-packet-title">
-    <header><div><h2 id="full-packet-title">What the complete packet must contain</h2><p>Planning fields are filled. Repository-specific fields stay visibly unresolved until the target codebase is inspected.</p></div><span>${icon('target', 21)} Inspectable handoff</span></header>
+    <header><div><h2 id="full-packet-title">What the complete packet must contain</h2><p>Product decisions are filled. Repository context and human acceptance of the execution appetite remain explicit before-build gaps.</p></div><span>${icon('target', 21)} Inspectable handoff</span></header>
     <div class="packet-details">
       ${step.packet.details.map((section, index) => `<details class="packet-detail" data-packet-section="${escapeHtml(section.id)}" ${section.open ? 'open' : ''}>
         <summary><span>${index + 1}</span><div><strong>${escapeHtml(section.title)}</strong><small>${escapeHtml(section.summary)}</small></div>${icon('arrow', 18)}</summary>
-        <div class="packet-detail-body"><dl>${section.rows.map((row) => `<div class="${row.status === 'unresolved' ? 'is-unresolved' : ''}"><dt>${escapeHtml(row.label)}${row.status === 'unresolved' ? '<span>Resolve in target repo</span>' : ''}</dt><dd><ul>${row.values.map((value) => `<li>${escapeHtml(value)}</li>`).join('')}</ul></dd></div>`).join('')}</dl></div>
+        <div class="packet-detail-body"><dl>${section.rows.map((row) => `<div class="${row.status === 'unresolved' ? 'is-unresolved' : ''}"><dt>${escapeHtml(row.label)}${row.status === 'unresolved' ? `<span>${escapeHtml(row.resolveLabel || 'Resolve in target repo')}</span>` : ''}</dt><dd><ul>${row.values.map((value) => `<li>${escapeHtml(value)}</li>`).join('')}</ul></dd></div>`).join('')}</dl></div>
       </details>`).join('')}
     </div>
   </section>`;
@@ -563,12 +605,13 @@ function walkthroughPage() {
   const reality = step.id === 'reality';
   const heading = handoff ? 'The planning handoff is ready.' : reality ? 'Compare the plan with reality.' : 'Watch a plan take shape.';
   const subheading = handoff
-    ? 'Planning resolved the product decisions. Target-repository context completes the build-agent packet.'
+    ? 'Product decisions are resolved. Complete repository context and human acceptance of the execution appetite before build.'
     : reality
-      ? 'After implementation, the same accepted artifacts make drift visible and decidable.'
+      ? 'After V1 implementation, compare the build with its accepted scope. V2 remains deferred.'
       : 'Follow one human and one planning agent from messy notes to a build-ready slice.';
   return `<main id="main-content" class="walkthrough-page ${handoff ? 'is-handoff' : ''}">
     <header class="walkthrough-intro"><h1 tabindex="-1">${heading}</h1><p>${subheading}</p><div><strong>Simple Grocery List</strong><span>${index + 1} of ${walkthroughSteps.length}</span></div></header>
+    <p class="walkthrough-path-note"><strong>One example path.</strong> Start from what you have; exploration can loop. Human acceptance controls what becomes build scope. <a href="#/compass">Find your next move</a></p>
     ${walkthroughProgress()}
     ${handoff ? `${handoffAssembly(step)}<section class="handoff-workspace">${contextPacket(step)}${provenanceLedger()}</section>${fullContextPacket(step)}` : `
       <header class="walkthrough-stage-heading"><span>${index + 1}</span><div><h2 id="walkthrough-stage-title" tabindex="-1">${escapeHtml(step.title)}</h2><p><strong>Human:</strong> ${escapeHtml(step.humanMove)} <i aria-hidden="true">·</i> <strong>Agent:</strong> ${escapeHtml(step.agentMove)}</p></div></header>
@@ -577,7 +620,7 @@ function walkthroughPage() {
       </section>`}
     ${walkthroughInvocation(step)}
     ${walkthroughControls(step, index)}
-    ${handoff ? '<p class="handoff-note">Planning resolves the slice. Repository inspection completes the execution context.</p>' : ''}
+    ${handoff ? '<p class="handoff-note">Planning resolves the slice. Repository inspection and a human-accepted execution appetite complete the run boundary.</p>' : ''}
   </main>`;
 }
 
@@ -1089,6 +1132,9 @@ document.addEventListener('click', (event) => {
   if (action === 'reset-walkthrough') {
     state.walkthroughStep = 0;
     state.walkthroughPanels = { input: false, output: false, ledger: false };
+    state.inspectedShape = 'a';
+    state.reverseFitOpen = false;
+    state.discoveryOpen = false;
     render();
     focusWalkthroughStage();
   }
@@ -1104,6 +1150,11 @@ document.addEventListener('click', (event) => {
     state.inspectedShape = actionTarget.dataset.shape === 'b' ? 'b' : 'a';
     render({ preserveScroll: true });
     requestAnimationFrame(() => document.querySelector(`[data-action="inspect-shape"][data-shape="${state.inspectedShape}"]`)?.focus());
+  }
+  if (action === 'toggle-reverse-fit') {
+    state.reverseFitOpen = !state.reverseFitOpen;
+    render({ preserveScroll: true });
+    requestAnimationFrame(() => document.getElementById('reverse-fit-toggle')?.focus({ preventScroll: true }));
   }
   if (action === 'select-entry') {
     state.selectedEntry = actionTarget.dataset.entry;
@@ -1139,6 +1190,12 @@ document.addEventListener('click', (event) => {
   if (action === 'copy-text') copyText(actionTarget.dataset.copy || '');
   if (event.target.closest('.primary-nav a, .site-brand')) state.mobileMenuOpen = false;
 });
+
+document.addEventListener('toggle', (event) => {
+  if (event.target.matches?.('details[data-disclosure="discovery"]') && event.target.isConnected) {
+    state.discoveryOpen = event.target.open;
+  }
+}, true);
 
 document.addEventListener('input', (event) => {
   if (event.target.id === 'skill-search') {

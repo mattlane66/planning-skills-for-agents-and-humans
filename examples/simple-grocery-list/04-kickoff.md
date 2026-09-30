@@ -41,7 +41,7 @@ This document orients the builder to the full selected product territory. It doe
 ### Item state changes
 - Each item can be toggled between bought and unbought inline.
 - Bought items are not deleted when hidden.
-- Duplicate prevention happens when the user tries to add an exact duplicate item name.
+- Duplicate prevention uses accepted R5 revision 2: trim surrounding spaces and compare lower-case names, reject matches with visible feedback, and preserve the original display name. `Milk`, `milk`, and ` milk ` match; `Oat milk` remains distinct.
 
 ### Visibility control
 - A hide-bought toggle controls whether bought items remain visible.

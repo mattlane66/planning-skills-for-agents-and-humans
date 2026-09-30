@@ -145,7 +145,7 @@ assert.match(document.querySelector('.dumplink-context')?.textContent || '', /op
 await click('[data-action="select-walkthrough-stage"][data-stage-index="6"]');
 assert.match(document.querySelector('.handoff-assembly')?.textContent || '', /Planning context[\s\S]*Target-repository context[\s\S]*Complete build-agent packet/i);
 assert.match(document.querySelector('.context-packet')?.textContent || '', /What planning contributes[\s\S]*Do not build yet[\s\S]*Return to planning if/i);
-assert.deepEqual([...document.querySelectorAll('.packet-detail summary strong')].map((item) => item.textContent), ['Scope and authority', 'Behavior to preserve', 'Target-repository context', 'Execution and verification']);
+assert.deepEqual([...document.querySelectorAll('.packet-detail summary strong')].map((item) => item.textContent), ['Scope and authority', 'Behavior to preserve', 'Target-repository context', 'Execution appetite', 'Execution and verification']);
 assert.match(document.querySelector('[data-packet-section="repository-context"]')?.textContent || '', /Resolve in target repo/i);
 assert.match(document.querySelector('.provenance-ledger')?.textContent || '', /Human selected shape A[\s\S]*Planning agent packaged context/i);
 

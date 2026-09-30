@@ -127,8 +127,10 @@ Example prompt:
 
 ```text
 Use the breadboard-reflection skill on examples/simple-grocery-list/03-breadboard.md.
-Assume the implementation drifted from the chosen shape.
-First sync the artifact to reality, then identify smells and propose fixes.
+Compare only the human-selected V1 slice; V2 remains deferred.
+Assume reload loses saved items and the duplicate check misses case-and-space matches.
+Record current implementation reality separately from accepted intent, then identify
+smells and propose correction options for a human decision.
 ```
 
 Compare your output to `05-breadboard-reflection.md`.
