@@ -431,6 +431,12 @@ The fixtures under `evals/` include structural contracts and deterministic behav
 
 See [Contributing](./CONTRIBUTING.md) for the development and review workflow. Report vulnerabilities through the private process in the [Security Policy](./SECURITY.md), not through a public issue.
 
+## Policies and support
+
+- [Privacy Policy](./PRIVACY.md)
+- [Terms of Service](./TERMS.md)
+- [Support / issue tracker](https://github.com/mattlane66/planning-skills-for-agents-and-humans/issues)
+
 ## License
 
 Released under the [MIT License](./LICENSE).
