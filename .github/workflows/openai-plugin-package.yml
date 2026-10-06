@@ -1,0 +1,68 @@
+name: OpenAI Plugin Package
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - "plugin.json"
+      - "mcp.json"
+      - ".codex-plugin/plugin.json"
+      - "skills/**"
+      - "templates/**"
+      - "docs/**"
+      - "AGENTS.md"
+      - ".agent-orchestration.yaml"
+      - "LICENSE"
+      - "scripts/build-openai-plugin.sh"
+      - ".github/workflows/openai-plugin-package.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "plugin.json"
+      - "mcp.json"
+      - ".codex-plugin/plugin.json"
+      - "skills/**"
+      - "templates/**"
+      - "docs/**"
+      - "AGENTS.md"
+      - ".agent-orchestration.yaml"
+      - "LICENSE"
+      - "scripts/build-openai-plugin.sh"
+      - ".github/workflows/openai-plugin-package.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openai-plugin-package-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Build upload ZIP
+        run: ./scripts/build-openai-plugin.sh
+
+      - name: Inspect archive
+        run: |
+          unzip -l dist/openai-plugin/*.zip
+          cat dist/openai-plugin/*.sha256
+
+      - name: Upload OpenAI plugin package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: openai-plugin-package
+          path: |
+            dist/openai-plugin/*.zip
+            dist/openai-plugin/*.sha256
+          if-no-files-found: error
+          retention-days: 14
