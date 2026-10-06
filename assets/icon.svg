@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Planning Skills</title>
+  <rect width="512" height="512" rx="112" fill="#2F6B45"/>
+  <g fill="none" stroke="#FFFFFF" stroke-width="28" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M256 116v68"/>
+    <path d="M184 256h-54v92"/>
+    <path d="M328 256h54v92"/>
+    <path d="M256 328v68"/>
+    <rect x="210" y="82" width="92" height="92" rx="28"/>
+    <path d="M256 198l58 58-58 58-58-58z"/>
+    <rect x="84" y="348" width="92" height="82" rx="24"/>
+    <rect x="336" y="348" width="92" height="82" rx="24"/>
+    <rect x="210" y="382" width="92" height="48" rx="20"/>
+  </g>
+</svg>
