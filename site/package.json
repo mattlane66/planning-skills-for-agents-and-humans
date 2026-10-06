@@ -18,13 +18,17 @@
     "test:browser": "node scripts/test-browser-smoke.mjs"
   },
   "dependencies": {
-    "dompurify": "^3.2.6",
+    "dompurify": "^3.4.16",
     "marked": "^15.0.12",
-    "mermaid": "^11.6.0"
+    "mermaid": "^11.17.2"
   },
   "devDependencies": {
     "axe-core": "^4.10.3",
     "esbuild": "^0.25.5",
     "jsdom": "^29.1.1"
+  },
+  "overrides": {
+    "source-map-js": "1.2.2",
+    "katex": "0.18.10"
   }
 }
