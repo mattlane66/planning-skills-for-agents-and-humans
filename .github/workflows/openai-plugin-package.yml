@@ -50,7 +50,7 @@ jobs:
           persist-credentials: false
 
       - name: Build upload ZIP
-        run: ./scripts/build-openai-plugin.sh
+        run: bash scripts/build-openai-plugin.sh
 
       - name: Inspect archive
         run: |
