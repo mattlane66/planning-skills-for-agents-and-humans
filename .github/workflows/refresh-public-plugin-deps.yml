@@ -1,0 +1,54 @@
+name: Refresh Public Plugin Dependencies
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/refresh-public-plugin-deps.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+
+      - name: Refresh MCP dependencies
+        working-directory: mcp-server
+        run: |
+          set -euo pipefail
+          npm install @modelcontextprotocol/sdk@^1.32.1
+          npm pkg set "overrides.proxy-addr=2.0.8"
+          npm install
+          npm run check
+          npm audit --audit-level=high
+
+      - name: Refresh portal dependencies
+        working-directory: site
+        run: |
+          set -euo pipefail
+          npm install dompurify@^3.4.16 mermaid@^11.17.2
+          npm pkg set "overrides.source-map-js=1.2.2" "overrides.katex=0.18.10"
+          npm install
+          npm run check
+          npm audit --audit-level=high
+
+      - name: Upload refreshed manifests
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: refreshed-public-plugin-deps
+          path: |
+            mcp-server/package.json
+            mcp-server/package-lock.json
+            site/package.json
+            site/package-lock.json
+          if-no-files-found: error
+          retention-days: 7
