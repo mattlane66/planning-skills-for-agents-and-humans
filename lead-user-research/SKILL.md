@@ -419,6 +419,12 @@ Choose the smallest downstream move. Do not make the human reconstruct or resele
 - `FULL` run mode does not by itself mean a full classical Lead User project. Keep `study_execution_level` honest: `DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT`.
 - Never represent AI-only concept shaping from public evidence as equivalent to collaborative Lead User/expert concept development.
 
+## Behavioral Simulation handoff
+
+Use **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** when Lead User research has established enough real evidence about a need and the remaining uncertainty is counterfactual: how a defined person, population, or interacting system might respond if a product, price, policy, message, interface, rule, or other condition changed.
+
+Behavioral Simulation is a sibling evidence method, not a Lead User evidence shortcut. Its generated responses remain `SIMULATED_ESTIMATE` and cannot establish LU1/LU2, observed human behavior, need importance, propagation, or prevalence. Use it to explore plausible reactions, compare concept probes, identify edge cases, rank real-world tests, or—only when independently grounded, held-out validated, and calibrated—supply bounded model-derived estimates.
+
 ## Coverage-bias rule
 
 AI-plus-search systematically favors what is public and indexable.
