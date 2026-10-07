@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Planning Skills — Reviewer Walkthrough</title>
+  <meta name="description" content="Reviewer-accessible walkthrough of the Planning Skills plugin, packaged skills, and live production MCP tools.">
+  <style>
+    :root{color-scheme:dark;--bg:#0b0f14;--panel:#121821;--text:#f5f7fa;--muted:#aab4c0;--accent:#5ee2a0;--line:#263241}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    main{width:min(1040px,calc(100% - 32px));margin:56px auto 80px}.eyebrow{color:var(--accent);font-weight:700;letter-spacing:.04em;text-transform:uppercase;font-size:.78rem}
+    h1{font-size:clamp(2rem,5vw,4rem);line-height:1.05;margin:.4rem 0 1rem}p{color:var(--muted);max-width:78ch}
+    .card{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:18px;margin:28px 0}
+    video{display:block;width:100%;border-radius:14px;background:#000}.meta{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0}.pill{border:1px solid #24533e;background:#123225;color:var(--accent);border-radius:999px;padding:7px 12px;font-weight:650;font-size:.9rem}
+    h2{margin-top:2.2rem}li{margin:.45rem 0;color:var(--muted)}code{color:#9fc9ff}
+    a{color:#9fc9ff} footer{border-top:1px solid var(--line);margin-top:48px;padding-top:20px;color:var(--muted);font-size:.92rem}
+  </style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">OpenAI plugin review demo</div>
+  <h1>Planning Skills</h1>
+  <p>This reviewer walkthrough demonstrates the plugin’s main use cases using the live production MCP endpoint and the packaged planning methods. It is intentionally a technical walkthrough rather than a simulated ChatGPT interface.</p>
+  <div class="meta">
+    <span class="pill">14 packaged skills</span>
+    <span class="pill">7 production MCP tools</span>
+    <span class="pill">Universal MCP URL</span>
+    <span class="pill">No user authentication</span>
+  </div>
+  <section class="card">
+    <video controls preload="metadata">
+      <source src="./planning-skills-review-demo.mp4" type="video/mp4">
+      Your browser does not support embedded video.
+    </video>
+  </section>
+  <h2>What the walkthrough demonstrates</h2>
+  <ol>
+    <li><strong>Smallest next move:</strong> a live <code>recommend_planning_workflow</code> call routes a fuzzy request without forcing the full planning process.</li>
+    <li><strong>Canonical shaping method:</strong> <code>get_planning_skill</code> returns the packaged Shaping method and preserves the distinction between exploration and commitment.</li>
+    <li><strong>Implementation gates:</strong> <code>get_orchestration_manifest</code> and <code>get_artifact_contracts</code> expose the explicit human and structural prerequisites before selection or build.</li>
+  </ol>
+  <h2>Production endpoint</h2>
+  <p><code>https://planning-skills-mcp-production.up.railway.app/mcp</code></p>
+  <footer>Planning Skills for Agents and Humans · Matt Lane · Generated for plugin review from the production MCP configuration.</footer>
+</main>
+</body>
+</html>

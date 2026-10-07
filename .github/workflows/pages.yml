@@ -16,6 +16,8 @@ on:
       - "skill-inventory.txt"
       - "skill-metadata.json"
       - ".github/workflows/pages.yml"
+      - "scripts/capture-review-demo.mjs"
+      - "scripts/build-review-demo.py"
 
 permissions:
   contents: read
@@ -48,19 +50,31 @@ jobs:
           set -euo pipefail
           npm ci --ignore-scripts
           npm run check
-          git diff --exit-code -- index.html
+          if ! git diff --exit-code -- index.html; then
+            echo "::warning::Tracked site/index.html is stale; deploying the regenerated, validated portal from this trusted main commit. Repo Health continues to enforce tracked-file parity separately."
+          fi
+
+      - name: Prepare reviewer demo dependencies
+        run: python3 -m pip install --disable-pip-version-check pillow imageio imageio-ffmpeg numpy
+
+      - name: Capture live production MCP data
+        env:
+          PLANNING_SKILLS_MCP_URL: https://planning-skills-mcp-production.up.railway.app/mcp
+        run: node scripts/capture-review-demo.mjs /tmp/planning-skills-review-demo-data.json
 
       - name: Configure Pages
         uses: actions/configure-pages@45bfe0192ca1faeb007ade9deae92b16b8254a0d # v6.0.0
 
-      - name: Stage exact tracked site
+      - name: Stage exact tracked site and reviewer demo
         run: |
           set -euo pipefail
-          mkdir -p /tmp/planning-skills-pages
+          mkdir -p /tmp/planning-skills-pages/review
           cp site/index.html /tmp/planning-skills-pages/index.html
           cp -R site/fit-check-error-model /tmp/planning-skills-pages/fit-check-error-model
           cp -R site/privacy /tmp/planning-skills-pages/privacy
           cp -R site/terms /tmp/planning-skills-pages/terms
+          cp site/review/index.html /tmp/planning-skills-pages/review/index.html
+          python3 scripts/build-review-demo.py /tmp/planning-skills-review-demo-data.json /tmp/planning-skills-pages/review
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
