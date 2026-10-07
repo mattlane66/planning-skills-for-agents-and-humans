@@ -24,6 +24,11 @@ def render_behavior(model: dict) -> str:
     lines += [f"- {item}" for item in product.get("problem", [])] or ["- Not recorded."]
     lines += ["", "## Intended outcome"]
     lines += [f"- {item}" for item in product.get("outcome", [])] or ["- Not recorded."]
+    lines += ["", "## Capabilities"]
+    for cap in model.get("selected_design", {}).get("capabilities", []):
+        lines.append(f"- **{cap['id']}** — {cap.get('statement', '')}")
+    if not model.get("selected_design", {}).get("capabilities"):
+        lines.append("- None explicitly recorded.")
     lines += ["", "## Requirements"]
     for req in model.get("requirements", []):
         lines.append(f"- **{req['id']}** — {req.get('statement', '')}")
