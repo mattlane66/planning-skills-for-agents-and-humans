@@ -70,6 +70,16 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 
 Map only the smallest set of behavior IDs that actually embody each Accepted requirement. Coverage here is a design-conformance claim, not realized-conformance or effect evidence.
 
+## Product invariants — selected-design mode
+
+Use an invariant only for behavior or a constraint that future implementers could plausibly remove while still producing locally reasonable code. Preserve product semantics, not framework choices.
+
+| ID | Invariant | Severity | Protects | Reopen when | Verification |
+|---|---|---|---|---|---|
+| INV1 | ... | must / should | R1, U2, N3, S1 | ... | RUN1 / acceptance test / runtime check |
+
+An invariant must point to stable product IDs. A material product change may revise or retire an invariant through an explicit decision; implementation alone may not silently erase it.
+
 ## Places
 
 | ID | Authority | Shape part | Place | Description |
@@ -223,6 +233,8 @@ Once a selected-design breadboard is accepted and a slice is selected, convert t
 - [ ] Stores exist for meaningful side effects.
 - [ ] Product-relevant branches are explicit and each has an observable consequence.
 - [ ] Every selected mechanism is represented; current-state claims cite evidence or remain unresolved.
+- [ ] Must-preserve behavior that could be accidentally simplified away is captured as an INV# with a verification path.
+- [ ] Invariants protect product behavior or constraints, not incidental framework or code structure.
 - [ ] A nontrivial interactive flow has a deliberate visual breadboard rather than only an auto-layout dependency graph.
 - [ ] The primary scenario passes the finger-trace test.
 - [ ] User-visible places and affordances dominate the visual hierarchy; hidden behavior supports them.
