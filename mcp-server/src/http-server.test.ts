@@ -36,6 +36,23 @@ test('serves the planning tools over Streamable HTTP with explicit read-only ann
     transport: 'streamable-http',
   });
 
+  const priorChallengeToken = process.env.OPENAI_APPS_CHALLENGE_TOKEN;
+  process.env.OPENAI_APPS_CHALLENGE_TOKEN = 'verification-test-token';
+  try {
+    const challenge = await fetch(
+      `http://127.0.0.1:${address.port}/.well-known/openai-apps-challenge`,
+    );
+    assert.equal(challenge.status, 200);
+    assert.equal(challenge.headers.get('content-type'), 'text/plain; charset=utf-8');
+    assert.equal(await challenge.text(), 'verification-test-token');
+  } finally {
+    if (priorChallengeToken === undefined) {
+      delete process.env.OPENAI_APPS_CHALLENGE_TOKEN;
+    } else {
+      process.env.OPENAI_APPS_CHALLENGE_TOKEN = priorChallengeToken;
+    }
+  }
+
   const client = new Client({ name: 'planning-skills-http-test', version: '1.0.0' });
   const transport = new StreamableHTTPClientTransport(
     new URL(`http://127.0.0.1:${address.port}/mcp`),

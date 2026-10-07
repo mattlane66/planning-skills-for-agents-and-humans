@@ -29,6 +29,15 @@ function sendJson(res: ServerResponse, status: number, body: unknown): void {
   res.end(JSON.stringify(body));
 }
 
+function sendText(res: ServerResponse, status: number, body: string): void {
+  if (res.headersSent) return;
+  res.writeHead(status, {
+    'content-type': 'text/plain; charset=utf-8',
+    'cache-control': 'no-store',
+  });
+  res.end(body);
+}
+
 function sendJsonRpcError(res: ServerResponse, status: number, message: string): void {
   sendJson(res, status, {
     jsonrpc: '2.0',
@@ -79,6 +88,16 @@ export function createPlanningSkillsHttpServer(): PlanningSkillsHttpServer {
         service: 'planning-skills-for-agents-and-humans',
         transport: 'streamable-http',
       });
+      return;
+    }
+
+    if (req.method === 'GET' && url.pathname === '/.well-known/openai-apps-challenge') {
+      const token = process.env.OPENAI_APPS_CHALLENGE_TOKEN?.trim();
+      if (!token) {
+        sendJson(res, 404, { error: 'Verification token not configured' });
+        return;
+      }
+      sendText(res, 200, token);
       return;
     }
 
