@@ -290,6 +290,24 @@ QUALIFIED LU episodes with atomic LU1/LU2 support.
 
 Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are **never human evidence**. They may generate rival hypotheses, search terms, edge cases, or test questions, but they cannot establish LU1, LU2, human behavior, need importance, motivation, propagation, or prevalence.
 
+### Behavioral Simulation handoff
+
+Once a need, constraint, or mechanism is supported by real Lead User evidence, a different question may become decision-critical:
+
+> **What might this person or population do if a relevant condition changed?**
+
+Route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)** rather than stretching Lead User evidence into a counterfactual prediction.
+
+Behavioral Simulation may consume namespaced Lead User findings as grounding and return:
+- plausibility-space scenarios and edge cases;
+- individual-proxy estimates grounded in real person-level evidence;
+- population predictions when real population data support them;
+- multi-agent dynamics when interactions over time matter;
+- validation/calibration results and a recommended next real-world test.
+
+The handoff does not change evidence type. A SIMULATED_ESTIMATE, even when held-out validated or calibrated, is still model-derived evidence. It cannot establish or retroactively strengthen LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence. If simulation conflicts with decisive human evidence, preserve the conflict and investigate it; do not silently replace the observation with the model.
+
+
 Repository assurance may use an explicitly labeled SYNTHETIC_REFERENCE fixture to
 exercise validators and renderers. Its output must say that it is non-empirical, and
 blind/runtime evaluation must reject that fixture mode.
