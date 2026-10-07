@@ -72,6 +72,14 @@ An agent or engineer is ready to implement a selected slice and needs concrete e
 |---|---|---|---|
 | S1 | ... | ... | ... |
 
+## Product invariants in this slice
+
+| ID | Must remain true | Protected refs | Verification |
+|---|---|---|---|
+| INV1 | ... | R1, U2, N3, S1 | RUN1 / acceptance test |
+
+Carry only invariants relevant to the selected slice. Do not weaken or reinterpret them during implementation.
+
 ## Rules for this slice
 
 - ...
