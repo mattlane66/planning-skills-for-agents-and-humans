@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mattlane66/planning-skills-for-agents-and-humans/product-intent/schema.json",
+  "title": "ProductIntentModel",
+  "type": "object",
+  "required": ["schema_version", "kind", "product", "authority", "requirements", "decisions", "selected_design", "invariants", "implementation_bindings", "verification", "sources"],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "kind": { "const": "ProductIntentModel" },
+    "product": {
+      "type": "object",
+      "required": ["title", "problem", "outcome"],
+      "properties": {
+        "title": { "type": "string" },
+        "problem": { "type": "array", "items": { "type": "string" } },
+        "outcome": { "type": "array", "items": { "type": "string" } },
+        "operating_model": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "authority": { "type": "object" },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "authority"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^R[0-9]+(?:\\.[0-9]+)?$" },
+          "statement": { "type": "string" },
+          "authority": { "type": "string" },
+          "status": { "type": "string" },
+          "origin": { "type": "string" },
+          "evidence_refs": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "status", "selected", "rejected"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^DEC[0-9]+$" },
+          "status": { "type": "string" },
+          "selected": { "type": "string" },
+          "rationale": { "type": "array", "items": { "type": "string" } },
+          "rejected": { "type": "array", "items": { "type": "string" } },
+          "reopen_when": { "type": "string" },
+          "supersedes": { "type": "array", "items": { "type": "string" } }
+        },
+        "additionalProperties": true
+      }
+    },
+    "selected_design": {
+      "type": "object",
+      "required": ["shape", "places", "ui_affordances", "non_ui_affordances", "stores", "behavior_traces"],
+      "properties": {
+        "shape": { "type": "string" },
+        "places": { "type": "array", "items": { "type": "object" } },
+        "ui_affordances": { "type": "array", "items": { "type": "object" } },
+        "non_ui_affordances": { "type": "array", "items": { "type": "object" } },
+        "stores": { "type": "array", "items": { "type": "object" } },
+        "behavior_traces": { "type": "array", "items": { "type": "object" } },
+        "active_slice": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "severity", "protects"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^INV[0-9]+$" },
+          "statement": { "type": "string" },
+          "severity": { "enum": ["must", "should"] },
+          "protects": { "type": "array", "items": { "type": "string" } },
+          "reopen_when": { "type": "string" },
+          "verification": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "implementation_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "intent_refs", "paths"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^BIND[0-9]+$" },
+          "intent_refs": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "paths": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "symbols": { "type": "array", "items": { "type": "string" } },
+          "tests": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "verification": {
+      "type": "object",
+      "required": ["acceptance_tests"],
+      "properties": {
+        "acceptance_tests": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": true
+    },
+    "sources": { "type": "object" }
+  },
+  "additionalProperties": true
+}
