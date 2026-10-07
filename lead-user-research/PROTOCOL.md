@@ -137,6 +137,19 @@ That sibling methodology owns business-level cruxes and fatal gates, bottom-up T
 
 The handoff is bidirectional. If Market Opportunity Underwriting identifies a load-bearing uncertainty about future-facing needs, advanced users, emerging workarounds, or transferability, it may invoke Lead User Research as the evidence method for that crux. Neither methodology is a mandatory predecessor of the other, and neither automatically promotes evidence into accepted product-planning truth.
 
+## Behavioral Simulation handoff
+
+When the supported Lead User evidence has made the need or mechanism concrete enough and the next uncertainty is **counterfactual human response under a changed condition**, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
+
+Appropriate uses include:
+
+- exploring a breadth of plausible reactions or emergent failure modes before fieldwork;
+- comparing concept probes to decide which deserves real-world testing;
+- estimating a person- or population-level response only when the simulation method's grounding and validation requirements are met;
+- routing the highest-value next empirical test.
+
+Simulation outputs remain model-derived evidence. They cannot establish LU1, LU2, observed behavior, need importance, propagation, prevalence, or fieldwork completion. Even a held-out validated or calibrated simulation does not retroactively become a human observation.
+
 ## Hypothesis falsification ledger
 
 Treat every starting hypothesis as a claim to challenge, not a proposition to confirm.
