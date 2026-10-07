@@ -42,20 +42,26 @@ class ProductIntentTests(unittest.TestCase):
             breadboard = target / "03-breadboard.md"
             text = breadboard.read_text(encoding="utf-8")
             marker = "## Places"
+            capability = (
+                "## Product capabilities — selected-design mode\n\n"
+                "| ID | Capability | Requirement refs | Realized by | Observable result |\n"
+                "|---|---|---|---|---|\n"
+                "| CAP1 | Keep a grocery list across visits. | R3 | U5, S1 | Returning users see saved items. |\n\n"
+            )
             invariant = (
                 "## Product invariants — selected-design mode\n\n"
                 "| ID | Invariant | Severity | Protects | Reopen when | Verification |\n"
                 "|---|---|---|---|---|---|\n"
                 "| INV1 | Saved items survive reload. | must | R3, S1 | Product intentionally becomes session-only. | RUN1 |\n\n"
             )
-            breadboard.write_text(text.replace(marker, invariant + marker), encoding="utf-8")
+            breadboard.write_text(text.replace(marker, capability + invariant + marker), encoding="utf-8")
 
             (target / "implementation-bindings.json").write_text(
                 json.dumps({
                     "schema_version": 1,
                     "bindings": [{
                         "id": "BIND1",
-                        "intent_refs": ["R3", "S1", "INV1"],
+                        "intent_refs": ["CAP1", "R3", "S1", "INV1"],
                         "paths": ["src/items/**"],
                         "symbols": ["itemsStore"],
                         "tests": ["tests/items.spec.ts"],
@@ -66,6 +72,7 @@ class ProductIntentTests(unittest.TestCase):
             )
 
             model = product_intent.compile_model(target)
+            self.assertEqual("CAP1", model["selected_design"]["capabilities"][0]["id"])
             self.assertEqual("INV1", model["invariants"][0]["id"])
             self.assertEqual(["R3", "S1"], model["invariants"][0]["protects"])
             self.assertEqual("BIND1", model["implementation_bindings"][0]["id"])
