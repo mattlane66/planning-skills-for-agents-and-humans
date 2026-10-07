@@ -101,6 +101,22 @@ class ProductIntentTests(unittest.TestCase):
         self.assertEqual("ProductIntentModel", payload["title"])
         self.assertEqual("ProductIntentModel", payload["properties"]["kind"]["const"])
 
+    def test_projections_are_derived_from_same_model(self):
+        render_spec = importlib.util.spec_from_file_location(
+            "render_product_intent", ROOT / "scripts" / "render_product_intent.py"
+        )
+        renderer = importlib.util.module_from_spec(render_spec)
+        assert render_spec.loader is not None
+        render_spec.loader.exec_module(renderer)
+        model = product_intent.compile_model(EXAMPLE)
+        outputs = renderer.render_all(model)
+        self.assertEqual(
+            {"product-behavior.md", "qa-plan.md", "agent-context.md", "support-reference.md"},
+            set(outputs),
+        )
+        self.assertIn("ProductIntentModel", outputs["product-behavior.md"])
+        self.assertIn("Accepted requirements", outputs["agent-context.md"])
+
 
 if __name__ == "__main__":
     unittest.main()
