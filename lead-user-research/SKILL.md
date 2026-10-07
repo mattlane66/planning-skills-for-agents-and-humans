@@ -35,6 +35,9 @@ Do not optimize for a persuasive story. Optimize for traceable evidence and a be
 
 Treat starting hypotheses as falsifiable claims: define observable predictions and a strongest plausible refuter before broad discovery when possible, seek contrastive cases and rival explanations, and never label a hypothesis CONFIRMED. Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are never human evidence; AI may analyze real human evidence but does not become the sample. Prefer trace evidence over default interviews when a decision-critical variable is observable, and escalate only unresolved consequential variables to targeted fieldwork.
 
+If Lead User evidence is already sufficient for the need/mechanism question and the active uncertainty becomes **what might people do under a changed condition**, hand the supported evidence to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)**. Use simulation for counterfactual scenario exploration, candidate-intervention comparison, edge cases, or prioritizing real-world tests. Treat every returned simulation as model-derived evidence under its own evidence grade; never use it to establish Lead User qualification or to overwrite contradictory human evidence.
+
+
 ## Research brief — canonical input
 
 The reusable research brief preserves the input contract from the canonical prompt:
