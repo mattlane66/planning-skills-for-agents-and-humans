@@ -99,6 +99,9 @@ def render_agent_context(model: dict) -> str:
     for inv in model.get("invariants", []):
         if inv.get("severity") == "must":
             lines.append(f"- {inv['id']}: {inv.get('statement', '')}")
+    lines += ["", "## Product capabilities"]
+    for cap in model.get("selected_design", {}).get("capabilities", []):
+        lines.append(f"- {cap['id']}: {cap.get('statement', '')}")
     lines += ["", "## Accepted requirements"]
     for req in model.get("requirements", []):
         lines.append(f"- {req['id']}: {req.get('statement', '')}")
