@@ -88,6 +88,17 @@ When importing Phase F criteria:
 
 This keeps the planning lifecycle's stable requirement identity without pretending a research registry already owns the project's ID namespace.
 
+## Sibling evidence methods
+
+Lead User Research does not own behavioral simulation. When a study has established enough real evidence to frame a counterfactual question about how a defined person, population, or interacting system might respond to a changed condition, that question may be handed to **[Behavioral Simulation for Agents and Humans](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)**.
+
+The handoff preserves provenance and evidence type:
+
+- Lead User records remain Lead User evidence;
+- simulation outputs remain `SIMULATED_ESTIMATE`;
+- behavioral simulation cannot establish or backfill LU1/LU2, observed behavior, propagation, prevalence, or need importance;
+- validated/calibrated simulation may inform a later decision only within its demonstrated scope.
+
 ## Separate-package migration plan
 
 Lead User Research should become separately versioned only after the integration contract is stable enough that extraction is mechanical rather than a redesign.
