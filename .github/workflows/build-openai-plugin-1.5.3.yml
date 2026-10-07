@@ -1,0 +1,30 @@
+name: Build OpenAI Plugin 1.5.3
+
+on:
+  pull_request:
+    paths:
+      - "scripts/build-openai-plugin-1.5.3.sh"
+      - ".github/workflows/build-openai-plugin-1.5.3.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Build package
+        run: bash scripts/build-openai-plugin-1.5.3.sh
+      - name: Upload package
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: openai-plugin-package-1.5.3
+          path: |
+            dist/openai-plugin/*.zip
+            dist/openai-plugin/*.sha256
+          if-no-files-found: error
+          retention-days: 7
