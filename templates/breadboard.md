@@ -62,6 +62,16 @@ An agent is mapping current behavior, clarifying one unselected candidate during
 - Decision-relevant uncertainty for candidate-shape mode:
 - Reconciliation status for selected-design mode:
 
+## Product capabilities — selected-design mode
+
+Use capabilities to name what the product lets a user or external actor accomplish without freezing the mechanism.
+
+| ID | Capability | Requirement refs | Realized by | Observable result |
+|---|---|---|---|---|
+| CAP1 | ... | R1 | U2, N3, S1 | ... |
+
+Capabilities sit above code and below broad outcomes. They should remain true across refactors unless an explicit product decision changes them.
+
 ## Requirement realization map — selected-design mode
 
 | Req | Selected shape part(s) | Breadboard IDs | Observable consequence | Embedded? |
