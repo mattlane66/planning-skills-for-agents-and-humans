@@ -57,6 +57,6 @@
   },
   "product-intent": {
     "title": "Product Intent",
-    "description": "Compile accepted planning into a machine-readable product intent model, bootstrap intent for an existing codebase, bind intent to implementation, and detect drift without letting code silently redefine the product."
+    "description": "Compile accepted planning into a machine-readable product intent model, bootstrap existing code, bind intent to implementation, and detect drift without letting code silently redefine the product."
   }
 }
