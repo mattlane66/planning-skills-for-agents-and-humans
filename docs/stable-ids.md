@@ -23,6 +23,9 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 | `CUT` | explicit scope cut | `CUT1` |
 | `OBS` | visual observation | `OBS2` |
 | `D` | proposed reconciliation delta | `D3` |
+| `DEC` | accepted product decision | `DEC1` |
+| `INV` | product invariant | `INV2` |
+| `BIND` | implementation binding | `BIND3` |
 | `V` | vertical slice | `V1` |
 
 Lead User study files use a study-local namespace with `SRC`, `LU`, `F`, `N`, `SF`,
@@ -43,6 +46,9 @@ Use sub-identifiers such as `R3.1` or `P2.1` when grouping improves legibility.
 - When wording changes but meaning remains, retain the ID and record the edit when material.
 - A requirement or criterion keeps the same `R##` from evidence-backed candidate through Working, Accepted, selected-mechanism mapping, implementation handoff, realized-conformance assessment, and effect diagnosis; those transitions change authority or evidence state, not identity.
 - When meaning changes substantially, create a new ID or an explicit supersession record.
+- `DEC#` records preserve consequential choices, rejected alternatives, and reopening conditions; do not recycle a decision ID for a different choice.
+- `INV#` records preserve behavior that must survive implementation changes; do not use invariants to freeze incidental code structure.
+- `BIND#` records may move as implementation moves, but their intent references must remain explicit.
 - Derived views should retain source IDs so readers can trace them back to the authoritative table.
 - Use the canonical default form (`V1`, `RUN1`, `CUT1`) in new repository-owned
   artifacts. Preserve imported conventions such as `SLICE-02` only when the source
