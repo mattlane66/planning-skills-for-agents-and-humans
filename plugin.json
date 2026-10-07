@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "planning-skills-for-agents-and-humans",
-  "version": "1.5.2",
+  "version": "1.5.3",
   "description": "Planning workflows with evidence-gated research, fluid collaborative shaping, explicit promotion gates, breadboarding, bounded implementation handoffs, and reflection.",
   "author": {
     "name": "Matt Lane",
@@ -95,10 +95,11 @@
           ]
         },
         "commerce": false,
-        "commerce_description": "This plugin does not sell products, process payments, or facilitate commerce."
+        "commerce_description": "This plugin does not sell products, process payments, or facilitate commerce.",
+        "demo_recording_url": "https://mattlane66.github.io/planning-skills-for-agents-and-humans/review/"
       },
       "publication": {
-        "release_notes": "Public-listing metadata update with project-owned support, privacy, and terms URLs; three starter prompts; and a primary app icon."
+        "release_notes": "Adds a reviewer-accessible walkthrough URL for the public MCP plugin submission and keeps the project-owned support, privacy, terms, starter prompts, and app icon metadata current."
       }
     }
   }
