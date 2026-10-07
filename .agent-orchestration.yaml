@@ -2,7 +2,7 @@ version: 1
 name: planning-skills-for-agents-and-humans
 purpose: >-
   Tool-neutral orchestration contract for using this repository as a planning
-  and harness layer around agentic implementation work.
+  product-intent, and harness layer around agentic implementation work.
 
 principles:
   - exploration_is_fluid_commitment_is_gated
@@ -26,6 +26,8 @@ principles:
   - stable_requirement_identity_across_lifecycle
   - implementation_verification_is_not_realized_fit
   - reflection_after_implementation
+  - compiled_product_intent_is_derived_from_accepted_authority
+  - code_may_not_silently_redefine_product_intent
 
 profiles:
   collaborative:
@@ -125,6 +127,14 @@ modes:
     allowed_outputs: [source_notes, current_state_summary, provisional_requirements, provisional_shapes, open_questions, relevant_files_or_artifacts, risks_and_unknowns]
     forbidden: [production_code, selected_direction, implementation_plan]
     exit_gate: source_material_understood_or_next_shaping_move_clear
+
+  product_intent:
+    skill: product-intent
+    purpose: Compile accepted product intent for agents and CI, bootstrap evidence-labeled intent from an existing codebase, maintain implementation bindings, and detect possible drift.
+    requires: [accepted_selected_design_breadboard_or_equally_clear_behavior_boundary]
+    allowed_outputs: [product_intent_model, product_invariants, implementation_bindings, affected_intent_ids, drift_classification, bootstrap_proposal]
+    forbidden: [hand_edited_generated_intent, code_as_automatic_normative_intent, silent_intent_change, implementation_specific_invariants]
+    exit_gate: intent_compiled_or_drift_decision_required
 
   lead_user_research:
     skill: lead-user-research
