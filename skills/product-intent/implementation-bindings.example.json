@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "bindings": [
+    {
+      "id": "BIND1",
+      "intent_refs": ["R1", "U2", "S1", "INV1"],
+      "paths": ["src/items/**", "tests/items/**"],
+      "symbols": ["addItem", "itemsStore"],
+      "tests": ["tests/items/add-item.spec.ts"],
+      "notes": "Example only: maps the add-item behavior to its current implementation."
+    }
+  ]
+}
