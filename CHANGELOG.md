@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## v1.5.2 — Public plugin listing readiness — 2026-10-06
+
+### Fixed
+
+- Move OpenAI public-listing metadata into the portable root manifest, with a 30-character-safe name and subtitle, three bounded conversation starters, and a primary app icon.
+- Publish project-owned Privacy Policy and Terms of Service pages through the Planning Skills GitHub Pages site, and use the repository Issues page for support.
+- Add the required initial MCP review test cases and declare that the plugin does not support commerce.
+
 ## v1.5.1 — Explicit execution-appetite authority — 2026-09-29
 
 ### Fixed

@@ -90,6 +90,8 @@ jobs:
           mkdir -p /tmp/planning-skills-pages
           cp site/index.html /tmp/planning-skills-pages/index.html
           cp -R site/fit-check-error-model /tmp/planning-skills-pages/fit-check-error-model
+          cp -R site/privacy /tmp/planning-skills-pages/privacy
+          cp -R site/terms /tmp/planning-skills-pages/terms
 
       - name: Upload Pages artifact
         if: steps.pages_status.outputs.enabled == 'true'
