@@ -1,6 +1,6 @@
 # Agent Instructions
 
-Use this repository to preserve product intent from unclear evidence through bounded implementation.
+Use this repository to preserve product intent from unclear evidence through bounded implementation, compile accepted intent into a machine-readable product model, and detect implementation drift without allowing code to silently redefine the product.
 
 These instructions are tool-neutral and apply across Claude Code, Codex, Gemini CLI, Cursor, Claude Design when the skills are available, and other agent environments. Load the active skill for detailed procedure instead of loading the whole planning stack.
 
@@ -96,6 +96,19 @@ Advanced moves are conditional, not a checklist:
 - `kickoff-doc` when builders need a durable orientation reference
 - `feed-planning-context` when an implementation agent needs only the authoritative subset
 - `breadboard-reflection` when implementation reality may have drifted from accepted intent or outcome evidence can test whether Accepted requirements were realized
+- `product-intent` when accepted planning should compile into a machine-readable ProductIntentModel, an existing codebase needs an evidence-labeled intent bootstrap, implementation bindings are needed, or a code diff should be checked for possible intent drift
+
+## Product intent runtime contract
+
+Accepted planning artifacts remain the human-authored authority. A generated `product-intent.json` is a deterministic projection of that authority for agents and CI.
+
+- Never hand-edit generated product intent to make implementation appear conformant.
+- `DEC#` records preserve consequential choices, rejected alternatives, and conditions for reopening them.
+- `INV#` records preserve product behavior or constraints that must survive implementation changes.
+- `BIND#` records map stable intent IDs to the files, symbols, and tests that currently realize them; bindings may move as code moves.
+- A static diff can identify affected intent and require review; it cannot prove semantic conformance by itself.
+- If generated intent conflicts with an owning accepted artifact, fix the compiler or the owning artifact and regenerate.
+- If implementation conflicts with accepted intent, stop and make an explicit decision about whether code or intent should change.
 
 ## Human decision gates
 
