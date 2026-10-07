@@ -106,6 +106,15 @@ reachability, unit economics when knowable, and business-level fatal gates. Lead
 User evidence may inform those questions, but it does not itself establish
 prevalence, TAM, willingness to pay, unit economics, or an investment/build decision.
 
+When the supported need is clear but the unresolved question is **how a defined
+person or population might respond if a product, price, policy, message, interface,
+or other condition changed**, the appropriate next method may be
+**[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)**.
+That sibling method owns simulation mode, model-derived evidence semantics,
+held-out validation, calibration, subgroup error, and freshness/drift. Its outputs
+remain `SIMULATED_ESTIMATE`: they cannot establish LU1/LU2, observed behavior,
+need importance, propagation, or prevalence.
+
 The handoff is reciprocal: Market Opportunity Underwriting may route a
 load-bearing future-facing need uncertainty back to Lead User Research. Neither
 method is a mandatory predecessor of the other, and neither automatically promotes
