@@ -8,6 +8,7 @@ Stable IDs keep decisions, deltas, diagrams, contracts, examples, and implementa
 |---|---|---|
 | `WF` | local Wayfinding ticket within one map | `WF-003` |
 | `R` | requirement or criterion | `R2` |
+| `CAP` | user-meaningful product capability | `CAP1` |
 | `P` | place | `P1` |
 | `U` | user-facing affordance | `U4` |
 | `N` | non-UI affordance or product-relevant hidden behavior | `N3` |
