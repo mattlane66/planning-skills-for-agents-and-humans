@@ -17,7 +17,7 @@ from planning_publisher_contract import clean_value, first_table, key_values, se
 from publish_shaped_work import build_package
 
 SCHEMA_VERSION = 1
-ID_RE = re.compile(r"\\b(?:R|P|U|N|S|ST|TR|C|RUN|E|SP|TG|CUT|V|SK|DEC|INV|BIND)\\d+(?:\\.\\d+)?\\b")
+ID_RE = re.compile(r"\\b(?:R|CAP|P|U|N|S|ST|TR|C|RUN|E|SP|TG|CUT|V|SK|DEC|INV|BIND)\\d+(?:\\.\\d+)?\\b")
 
 
 class ProductIntentError(ValueError):
@@ -85,6 +85,23 @@ def _decision(package: dict, shaping_text: str) -> list[dict]:
         "reopen_when": clean_value(values.get("Reopen when")),
         "supersedes": _split_refs(clean_value(values.get("Supersedes"))),
     }]
+
+
+def _capabilities(breadboard_text: str) -> list[dict]:
+    rows = first_table(section(breadboard_text, r"Product capabilities.*"))
+    output = []
+    for row in rows:
+        cap_id = clean_value(row.get("ID"))
+        if not cap_id:
+            continue
+        output.append({
+            "id": cap_id,
+            "statement": clean_value(row.get("Capability")),
+            "requirement_refs": _split_refs(clean_value(row.get("Requirement refs"))),
+            "realized_by": _split_refs(clean_value(row.get("Realized by"))),
+            "observable_result": clean_value(row.get("Observable result")),
+        })
+    return output
 
 
 def _invariants(breadboard_text: str) -> list[dict]:
@@ -160,8 +177,17 @@ def _known_ids(model: dict) -> set[str]:
     ids = {row["id"] for row in model["requirements"]}
     ids.update(row["id"] for row in model["invariants"])
     ids.update(row["id"] for row in model["decisions"])
+    design = model["selected_design"]
+    ids.update(row["id"] for row in design.get("capabilities", []))
     for key in ("places", "ui_affordances", "non_ui_affordances", "stores"):
-        ids.update(clean_value(row.get("ID")) for row in model["selected_design"][key])
+        ids.update(clean_value(row.get("ID")) for row in design.get(key, []))
+    ids.update(clean_value(row.get("id")) for row in design.get("slices", []))
+    for row in design.get("statechart", {}).get("states", []):
+        ids.add(clean_value(row.get("State ID") or row.get("ID")))
+    for row in design.get("statechart", {}).get("transitions", []):
+        ids.add(clean_value(row.get("Transition ID") or row.get("ID")))
+    for row in design.get("interface_contracts", []):
+        ids.add(clean_value(row.get("ID") or row.get("Contract") or row.get("Contract ID")))
     return {value for value in ids if value}
 
 
@@ -196,6 +222,17 @@ def compile_model(planning_dir: Path) -> dict:
     shaping_text = _read_source(planning_dir, package["sources"]["shaping"])
     breadboard_text = _read_source(planning_dir, package["sources"]["breadboard"])
     bindings, bindings_source = _bindings(planning_dir)
+    artifacts = package.get("artifacts", {})
+    selected_shape = next(
+        (
+            shape
+            for shape in package["shaping"].get("shapes", [])
+            if shape.get("id") == package["shaping"].get("selected_shape")
+        ),
+        {},
+    )
+    statechart = artifacts.get("statechart", {})
+    interface_contracts = artifacts.get("interface_contracts", {})
 
     model = {
         "schema_version": SCHEMA_VERSION,
@@ -215,11 +252,19 @@ def compile_model(planning_dir: Path) -> dict:
         "decisions": _decision(package, shaping_text),
         "selected_design": {
             "shape": package["shaping"].get("selected_shape", ""),
+            "selected_mechanisms": selected_shape.get("parts", []),
+            "capabilities": _capabilities(breadboard_text),
             "places": package["breadboard"].get("places", []),
             "ui_affordances": package["breadboard"].get("ui", []),
             "non_ui_affordances": package["breadboard"].get("non_ui", []),
             "stores": package["breadboard"].get("stores", []),
             "behavior_traces": package["breadboard"].get("behavior_traces", []),
+            "statechart": {
+                "states": statechart.get("states", []),
+                "transitions": statechart.get("transitions", []),
+            },
+            "interface_contracts": interface_contracts.get("contracts", []),
+            "slices": package["breadboard"].get("slices", []),
             "active_slice": package["breadboard"].get("active_slice", ""),
         },
         "invariants": _invariants(breadboard_text),
