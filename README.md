@@ -182,6 +182,9 @@ Its first canonical skill, **Market Opportunity Underwriting**, uses crux-first 
 
 The relationship is bidirectional rather than a conveyor belt. Opportunity Underwriting may invoke Lead User Research when a load-bearing uncertainty concerns future-facing needs, advanced users, emerging workarounds, or transferability. Lead User Research may in turn hand off to Opportunity Underwriting when it establishes an important need but the remaining question is whether that need constitutes a sufficiently large, reachable, economically attractive market. Neither research method automatically promotes its conclusions into accepted product-planning truth.
 
+A third sibling method, **[Behavioral Simulation for Agents and Humans](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)**, owns counterfactual behavioral simulation: what an evidence-grounded individual, population, or interacting system might do if a relevant condition changed. Lead User Research may route supported needs into simulation; Opportunity Underwriting may use appropriately validated simulation for scenario analysis or test prioritization. Simulation outputs remain model-derived evidence and never automatically become observed human evidence, market truth, or accepted product intent.
+
+
 ## Lead User research
 
 For future-facing opportunity discovery, use **[Lead User Research](./lead-user-research/README.md)**. It applies Eric von Hippel's Lead User Method through a lightweight, phase-gated research workflow with persistent evidence state, pyramiding, advanced analogs, coverage-bias controls, and proportionate SCOUT / STANDARD / FULL modes.
