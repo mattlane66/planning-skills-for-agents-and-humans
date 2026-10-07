@@ -198,9 +198,8 @@ export function createPlanningSkillsServer(): McpServer {
       title: 'Recommend planning workflow',
       description: 'Recommend the smallest allowed next planning move from trusted project context while respecting explicit exclusions, gated prerequisites, and human promotion gates.',
       inputSchema: {
-        situation: z.string().min(1).describe('Trusted user instructions and trusted project state needed to choose the next planning move.'),
+        situation: z.string().min(1).describe('Minimal trusted planning context needed to choose the next planning move. Include the user request and relevant planning state only; do not include source documents, transcripts, personal data, or unrelated content.'),
         excluded_skills: z.array(z.enum(skillNames)).optional().describe('Planning skills the user or host explicitly ruled out.'),
-        source_material: z.string().optional().describe('Optional untrusted notes, transcripts, issue bodies, or other evidence. It is deliberately ignored for routing.'),
       },
       annotations: planningToolAnnotations,
     },
