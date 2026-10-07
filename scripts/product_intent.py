@@ -17,7 +17,7 @@ from planning_publisher_contract import clean_value, first_table, key_values, se
 from publish_shaped_work import build_package
 
 SCHEMA_VERSION = 1
-ID_RE = re.compile(r"\\b(?:R|CAP|P|U|N|S|ST|TR|C|RUN|E|SP|TG|CUT|V|SK|DEC|INV|BIND)\\d+(?:\\.\\d+)?\\b")
+ID_RE = re.compile(r"\b(?:R|CAP|P|U|N|S|ST|TR|C|RUN|E|SP|TG|CUT|V|SK|DEC|INV|BIND)\d+(?:\.\d+)?\b")
 
 
 class ProductIntentError(ValueError):
@@ -74,7 +74,7 @@ def _decision(package: dict, shaping_text: str) -> list[dict]:
     ]
     explicit_rejected = clean_value(values.get("Rejected directions"))
     if explicit_rejected:
-        found = re.findall(r"\\b[A-Z][A-Z0-9_-]*\\b", explicit_rejected)
+        found = re.findall(r"\b[A-Z][A-Z0-9_-]*\b", explicit_rejected)
         rejected = [item for item in found if item not in {"CURRENT", chosen}] or rejected
     return [{
         "id": decision_id,
@@ -145,7 +145,7 @@ def _bindings(planning_dir: Path) -> tuple[list[dict], str | None]:
             "tests": list(row.get("tests") or []),
             "notes": str(row.get("notes", "")).strip(),
         }
-        if not re.fullmatch(r"BIND\\d+", binding["id"]):
+        if not re.fullmatch(r"BIND\d+", binding["id"]):
             raise ProductIntentError(f"Invalid binding id: {binding['id']!r}")
         if not binding["intent_refs"] or not binding["paths"]:
             raise ProductIntentError(f"{binding['id']}: intent_refs and paths are required")
