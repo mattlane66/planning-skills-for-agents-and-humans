@@ -115,6 +115,7 @@ DOCS=(
   docs/canvas-export.md docs/ci-health-workflow.md docs/claude-design-skill-tests.md
   docs/claude-design-workflow.md docs/claude-skills-installation.md
   docs/executable-breadboards.md docs/interface-contracts.md docs/loop-prompting.md
+  docs/product-intent-layer.md product-intent/README.md
   docs/runtime-adapters.md docs/skill-activation-testing.md docs/skill-behavior-evals.md
   integrations/gemini/README.md
   implementation-context.md skill-inventory.txt skill-metadata.json
@@ -134,6 +135,12 @@ check_file_exists scripts/publish-shaped-work.py
 check_file_exists scripts/publish_shaped_work.py
 check_file_exists scripts/planning_publisher_ext.py
 check_file_exists scripts/planning_publisher_contract.py
+check_file_exists scripts/product_intent.py
+check_file_exists scripts/check_intent_drift.py
+check_file_exists scripts/render_product_intent.py
+check_json product-intent/schema.json
+check_json product-intent/implementation-bindings.example.json
+check_file_exists integrations/github-actions/product-intent.yml
 check_file_exists scripts/validate-behavior-report.py
 check_file_exists .github/dependabot.yml
 check_file_exists .github/pull_request_template.md

@@ -1,10 +1,12 @@
 # Planning Skills for Agents and Humans
 
-Turn a fuzzy feature into a selected, testable, vertically sliced implementation packet—without letting the agent invent scope.
+Preserve what a product is supposed to do from fuzzy idea through implementation—and catch when humans or agents accidentally change it.
 
-These skills help product and engineering teams preserve intent from raw evidence through implementation. They are most useful for strategically important feature work with a bounded appetite, usually a 2–6 week bet for a small launch team.
+Planning Skills helps product and engineering teams turn evidence into explicit decisions, selected behavior, executable handoffs, and a compiled **ProductIntentModel**. The model sits above code, stays traceable to accepted planning, and can be used by agents and CI to detect possible intent drift.
 
-**New here? Start with the [10-minute guide](./docs/start-here.md).**
+For strategically important feature work, the existing shaping workflow still turns a fuzzy feature into a selected, testable, vertically sliced implementation packet without letting the agent invent scope.
+
+**New here? Start with the [10-minute guide](./docs/start-here.md).** If your main problem is preserving behavior across AI-generated changes, see **[Product intent layer](./docs/product-intent-layer.md)**.
 
 ## Interactive documentation portal
 
@@ -50,6 +52,8 @@ That usually happens when:
 - important requirements, boundaries, or decisions could easily be forgotten
 - you need to hand the work from exploration into implementation
 - implementation may be drifting away from the original intent
+- an agent can make locally reasonable changes that undo a deliberate product decision
+- you need one machine-readable representation of accepted product behavior for agents and CI
 
 ### The core principle
 

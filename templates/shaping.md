@@ -132,10 +132,13 @@ An agent and human need a shared shaping surface for requirements, solution shap
 - Why this candidate set is sufficient for the current decision:
 
 ## Decision
+- Decision ID: DEC1
 - Status: exploring | decision-ready | selected | stopped
 - Chosen direction:
 - Why:
 - Rejected directions:
+- Reopen when:
+- Supersedes:
 - Cuts / non-goals:
 - Remaining unknowns:
 - Candidate evidence to reconcile:

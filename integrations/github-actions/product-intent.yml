@@ -1,0 +1,37 @@
+# Copy this file into a consuming product repository as .github/workflows/product-intent.yml.
+# The Planning Skills scripts must be present or installed at the paths used below.
+name: Product intent
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  intent:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify compiled intent is current
+        run: |
+          python3 scripts/product_intent.py \
+            --planning-dir planning \
+            --output planning/product-intent.json \
+            --check
+
+      - name: Check diff against product intent
+        run: |
+          git fetch origin "${{ github.base_ref }}" --depth=1
+          python3 scripts/check_intent_drift.py \
+            --intent planning/product-intent.json \
+            --base-ref "origin/${{ github.base_ref }}" \
+            --head-ref HEAD \
+            --json
