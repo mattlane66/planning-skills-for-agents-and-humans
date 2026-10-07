@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Planning Skills icon">
+  <rect width="512" height="512" rx="112" fill="#161616"/>
+  <path d="M144 176h96M272 176h96M192 208v96M320 208v96M224 336h64" fill="none" stroke="#fff" stroke-width="28" stroke-linecap="round"/>
+  <circle cx="128" cy="176" r="34" fill="#fff"/>
+  <circle cx="256" cy="176" r="34" fill="#fff"/>
+  <circle cx="384" cy="176" r="34" fill="#fff"/>
+  <circle cx="192" cy="336" r="34" fill="#fff"/>
+  <circle cx="320" cy="336" r="34" fill="#fff"/>
+</svg>
