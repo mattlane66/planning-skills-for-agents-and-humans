@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+## v1.5.3 — Reviewer walkthrough metadata — 2026-10-07
+
+### Fixed
+
+- Add the reviewer-accessible walkthrough URL required for OpenAI public MCP plugin review.
+- Keep the portable, Claude, Codex, MCP package, and MCP lockfile versions synchronized for the 1.5.3 release.
+
 ## v1.5.2 — Public plugin listing readiness — 2026-10-06
 
 ### Fixed
