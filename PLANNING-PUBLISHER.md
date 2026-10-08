@@ -4,8 +4,6 @@ Planning Publisher compiles canonical planning artifacts into a single normalize
 
 The planning Markdown remains authoritative. Every published file is a derived projection.
 
-When `planning/product-intent.json` exists, the publisher also compiles a typed `product_intent` section into `PlanningPackage`. Canonical requirements, selected mechanisms and breadboard entities are taken directly from accepted planning, not re-entered into the extension. New invariants and decisions may link to those typed IDs. Missing, ambiguous or unaccepted links fail publication. See [Product Intent Layer](./product-intent/README.md).
-
 ## Outputs
 
 The publisher can emit:
