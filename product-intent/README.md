@@ -5,7 +5,7 @@ This is an **opt-in, machine-readable extension of Planning Skills**. Existing a
 ## The four working pieces
 
 1. **One compiled model.** Put `product-intent.json` beside the frame, shaping and breadboard files in a product's `planning/` directory. Then run the usual Planning Publisher. The resulting `PlanningPackage` includes `product_intent`, typed, source-tagged planning objects, extensions and bindings. Unknown references, references to rejected candidates, and ambiguous IDs fail compilation. Existing projects without that opt-in file are unchanged.
-2. **Binding proposals.** `mapping.py` scans bounded Python/JS/TS source. Python declaration locations come from the AST; JS/TS suggestions use declaration patterns. Candidate links include line numbers and lexical evidence, and **never** become confirmed without review. By default only accepted intent is considered; `--include-working` explicitly opts in provisional records while labeling their authority. It does not construct a call graph or prove execution.
+2. **Binding proposals.** `mapping.py` scans bounded Python/JS/TS source. Python declaration locations come from the AST; JS/TS suggestions use declaration patterns. Candidate links include line numbers and lexical evidence, and **never** become confirmed without review. It does not construct a call graph or prove execution.
 3. **Executable scenarios.** `behaviors.py` runs trusted, human-approved input/output examples from a manifest against a code checkout. It runs real Python application functions in subprocesses, compares outputs, and reports PASS/REVIEW/DRIFT. A failed or incomplete test does not become PASS. Running Python application code is **not sandboxed**; use isolated CI runners and trusted manifests.
 
 4. **Change-impact PR gate.** `gate.py` uses compiled code bindings to select trusted scenarios and compares accepted source truth to a protected baseline. It cannot return PASS for missing baseline, unconfirmed mapping, unverified scenario, or unmapped changed code.
@@ -18,8 +18,6 @@ Create `planning/product-intent.json` based on [example.json](example.json), kee
 python3 scripts/publish-shaped-work.py --planning-dir planning --check
 python3 scripts/publish-shaped-work.py --planning-dir planning --json-output /tmp/planning-package.json --output /tmp/shaped-work.html
 python3 product-intent/mapping.py --package /tmp/planning-package.json --code-root . --out /tmp/binding-proposals.json
-# For retrospective models whose decisions are still provisional:
-python3 product-intent/mapping.py --package /tmp/planning-package.json --code-root . --include-working --out /tmp/working-proposals.json
 python3 product-intent/behaviors.py --trusted-manifest ../trusted-base/accepted-scenarios.json --code-root . --intent-id INV-1
 python3 product-intent/gate.py --base-package /tmp/base-planning-package.json --candidate-package /tmp/planning-package.json --trusted-manifest ../trusted-base/accepted-scenarios.json --code-root . --changed src/profile.py
 python3 -m unittest discover -s product-intent -p 'test_*.py'
