@@ -64,27 +64,30 @@ def eligible_files(root, max_files=1000, max_bytes=300_000):
             count += 1
             yield path.relative_to(root).as_posix(), path, source
 
-def _nodes(package):
+def _nodes(package, include_working=False):
     model = package.get("product_intent")
     if not isinstance(model, dict):
         raise ValueError("compile PlanningPackage with planning/product-intent.json first")
     results = []
+    allowed = {"accepted", "working"} if include_working else {"accepted"}
     for record in model.get("extension_records", []):
-        if record["status"] == "accepted":
+        if record["status"] in allowed:
             results.append({"id": record["id"], "uid": record["uid"],
+                            "authority": record["status"],
                             "text": record["title"] + " " + record["statement"]})
     for record in model.get("planning_records", []):
-        if record["status"] == "accepted":
+        if record["status"] in allowed:
             raw = record.get("data", {})
             results.append({"id": record["id"], "uid": record["uid"],
+                            "authority": record["status"],
                             "text": " ".join(str(x) for x in raw.values() if isinstance(x, str))})
     return results
 
-def propose(package, code_root, max_files=1000):
+def propose(package, code_root, max_files=1000, include_working=False):
     root = pathlib.Path(code_root).resolve()
     if not root.is_dir():
         raise ValueError("code-root is not a directory")
-    targets = _nodes(package)
+    targets = _nodes(package, include_working=include_working)
     proposals = []
     for relpath, path, source in eligible_files(root, max_files=max_files):
         location_words = words(relpath)
@@ -101,6 +104,7 @@ def propose(package, code_root, max_files=1000):
                 proposals.append({
                     "intent_uid": target["uid"],
                     "intent_id": target["id"],
+                    "intent_authority": target["authority"],
                     "candidate_path": relpath,
                     "candidate_symbol": symbol["name"],
                     "line": symbol["line"],
@@ -115,6 +119,7 @@ def propose(package, code_root, max_files=1000):
     return {
         "kind": "IntentBindingProposals", "schema_version": 1,
         "proposals": proposals,
+        "include_working": include_working,
         "unmapped_intent_uids": sorted(t["uid"] for t in targets if t["uid"] not in covered),
         "disclaimer": "Lexical proposals do not establish execution paths, correct behavior, or human approval.",
     }
@@ -124,8 +129,10 @@ def main():
     ap.add_argument("--package", required=True, help="PlanningPackage JSON with product_intent")
     ap.add_argument("--code-root", required=True)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--include-working", action="store_true",
+                    help="Suggest code links for provisional Working intent, always requiring review")
     args = ap.parse_args()
-    result = propose(json.loads(pathlib.Path(args.package).read_text(encoding="utf-8")), args.code_root)
+    result = propose(json.loads(pathlib.Path(args.package).read_text(encoding="utf-8")), args.code_root, include_working=args.include_working)
     pathlib.Path(args.out).write_text(json.dumps(result, indent=2) + "\n", encoding="utf-8")
     print(f"{len(result['proposals'])} candidate bindings; {len(result['unmapped_intent_uids'])} unlinked records")
 if __name__ == "__main__":
