@@ -26,3 +26,5 @@ mcp-server/dist/
 mcp-server/node_modules/
 visualizer/node_modules/
 __pycache__/
+
+evals/reports/

@@ -432,6 +432,8 @@ The health check verifies packaged-skill parity, manifest and artifact reference
 
 The fixtures under `evals/` include structural contracts and deterministic behavior-runner checks; real model runs remain runtime-specific evaluations rather than universal benchmarks.
 
+For empirical testing, [Outcome Evaluation](./evals/EVALUATION.md) adds 12 blind, file-graded tasks and paired baseline-versus-Planning-Skills comparisons. This measures actual artifacts and protected decisions, not just model-reported evidence; no universal benefit is claimed without real runtime observations.
+
 See [Contributing](./CONTRIBUTING.md) for the development and review workflow. Report vulnerabilities through the private process in the [Security Policy](./SECURITY.md), not through a public issue.
 
 ## License
