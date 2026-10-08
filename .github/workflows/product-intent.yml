@@ -1,0 +1,20 @@
+name: Product Intent
+on:
+  push:
+    paths:
+      - 'product-intent/**'
+      - '.github/workflows/product-intent.yml'
+  pull_request:
+    paths:
+      - 'product-intent/**'
+      - '.github/workflows/product-intent.yml'
+jobs:
+  unit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python3 -m unittest discover -s product-intent -p 'test_*.py' -v
+      - run: python3 product-intent/intent.py validate product-intent/example.json

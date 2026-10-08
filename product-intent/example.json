@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "product": "Example profile editor",
+  "planning_package": "planning/planning-package.json",
+  "records": [
+    {
+      "id": "INV-1",
+      "kind": "invariant",
+      "title": "Draft isolation",
+      "status": "accepted",
+      "statement": "Editing a draft never changes the saved profile until Save succeeds.",
+      "refs": [
+        "R3",
+        "U7",
+        "S4"
+      ],
+      "evidence": [
+        "Approved selected-design breadboard"
+      ],
+      "approved_by": "Example product owner",
+      "approved_at": "2026-10-07",
+      "verification": [
+        "Open profile and edit a field; persisted profile remains unchanged until successful save."
+      ]
+    },
+    {
+      "id": "DEC-1",
+      "kind": "decision",
+      "title": "Separate persisted and draft state",
+      "status": "accepted",
+      "statement": "Use separate draft and persisted values.",
+      "refs": [
+        "INV-1"
+      ],
+      "evidence": [
+        "Tradeoff review"
+      ],
+      "approved_by": "Example product owner",
+      "approved_at": "2026-10-07",
+      "alternatives": [
+        {
+          "name": "Single shared object",
+          "disposition": "rejected",
+          "reason": "A failed save would show unpersisted values as saved."
+        },
+        {
+          "name": "Separate draft store",
+          "disposition": "chosen",
+          "reason": "Protects INV-1."
+        }
+      ],
+      "reopen_when": "A new architecture proves equivalent save failure behavior"
+    }
+  ],
+  "bindings": [
+    {
+      "intent_id": "INV-1",
+      "paths": [
+        "src/profile/**"
+      ],
+      "symbols": [
+        "draftProfileStore"
+      ],
+      "tests": [
+        "tests/profile-save.spec.ts"
+      ],
+      "confidence": "confirmed",
+      "evidence": [
+        "Developer-reviewed mapping"
+      ]
+    }
+  ]
+}
