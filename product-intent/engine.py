@@ -115,9 +115,19 @@ def compile_into_package(package, planning_dir):
                 target = by_uid[ref]
                 if target.get("status") in ("working", "candidate", "inferred", "rejected", "superseded"):
                     raise IntentCompileError(f"{record['id']}: accepted intent depends on unaccepted {ref}")
+    normalized_bindings = []
     for binding in overlay.get("bindings", []):
-        if binding["intent_id"] not in by_raw:
-            raise IntentCompileError(f"Unknown binding target {binding['intent_id']}")
+        target = binding["intent_id"]
+        if target in by_uid:
+            uid = target
+        else:
+            options = by_raw.get(target, [])
+            if len(options) != 1:
+                raise IntentCompileError(f"Binding target {target!r} is missing or ambiguous; use typed UID")
+            uid = options[0]
+        entry = dict(binding)
+        entry["resolved_intent_uid"] = uid
+        normalized_bindings.append(entry)
     approved = [r for r in extension if r["status"] == "accepted"]
     referenced = {ref for r in approved for ref in r["resolved_refs"]}
     uncovered = [r["uid"] for r in planner if r["kind"]=="requirement" and r["status"]=="accepted"
@@ -130,7 +140,7 @@ def compile_into_package(package, planning_dir):
         "source": overlay_file.name,
         "planning_records": planner,
         "extension_records": extension,
-        "bindings": overlay.get("bindings", []),
+        "bindings": normalized_bindings,
         "unlinked_accepted_requirements": sorted(uncovered),
     }
     payload["content_sha256"] = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",",":")).encode("utf-8")).hexdigest()

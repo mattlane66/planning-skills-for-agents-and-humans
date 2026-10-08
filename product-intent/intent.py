@@ -93,7 +93,10 @@ def validate(model):
             continue
         if set(b) - BINDING_FIELDS:
             errors.append(f"{loc}: unknown fields")
-        if b.get("intent_id") not in ids:
+        target = b.get("intent_id")
+        typed_planning_id = isinstance(target, str) and bool(re.fullmatch(
+            r"(?:requirement|shape|place|affordance|non_ui_affordance|store|state|transition|interface):[A-Za-z][A-Za-z0-9.]*", target))
+        if target not in ids and not typed_planning_id:
             errors.append(f"{loc}: unknown intent ID")
         if b.get("confidence") not in ("inferred", "confirmed"):
             errors.append(f"{loc}: invalid confidence")
@@ -130,7 +133,8 @@ def review(model, changed, previous=None, evidence=None):
     records = {r["id"]: r for r in model["records"]}
     findings = []
     for ident, paths in mapping.items():
-        r = records[ident]
+        # Canonical PlanningPackage IDs have typed targets, not extension records.
+        r = records.get(ident, {"kind": "canonical_planning_record", "status": "accepted"})
         checks = [b for b in model.get("bindings", []) if b["intent_id"] == ident]
         validated = bool(evidence and ident in evidence and evidence[ident].get("result") == "pass"
                          and evidence[ident].get("tests") and
