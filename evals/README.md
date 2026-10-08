@@ -56,3 +56,9 @@ The fake adapter validates schema and scorer plumbing only. See [Skill Behavior 
 `lead-user-assurance-cases.json` is scored differently: the runtime must write a complete
 study workspace, and the scorer independently inspects and validates those artifacts.
 See [Lead User v1.7 Assurance Evaluations](../lead-user-research/references/assurance-evals.md).
+
+## Outcome benchmark (new)
+
+The [outcome evaluation guide](./EVALUATION.md) describes a 12-case, hidden-artifact graded comparison of the same agent **with and without Planning Skills**. It measures safe task completion, accepted-invariant preservation, critical violations, elapsed time, and externally recorded human review effort. The [offline scorecard generator](./render_report.py) renders an inspectable JSON report. Real model results are not asserted by fixture runs.
+
+Validate the new corpus without credentials with `python3 evals/compare.py --validate`; run the graders' unit tests with `python3 -m unittest discover -s tests -p 'test_outcome_benchmarks.py'`. Real comparisons require a trusted write-capable runtime adapter and isolated execution. This is separate from the read-only skill-behavior evals.
