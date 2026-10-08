@@ -97,7 +97,7 @@ class IntegrationTests(unittest.TestCase):
         root = pathlib.Path(self.tmp.name)/"code"
         (root/"src"/"grocery").mkdir(parents=True)
         (root/"src"/"grocery"/"items.py").write_text(
-            "def edit_grocery_item(item):\n    return item\n", encoding="utf-8")
+            "def preserve_saved_list(item):\n    return item\n", encoding="utf-8")
         package = publisher.build_package(self.directory)
         report = mapping.propose(package, root)
         proposals = [p for p in report["proposals"] if p["intent_id"]=="INV-1"]
