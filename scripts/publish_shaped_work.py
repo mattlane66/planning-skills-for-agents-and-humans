@@ -2,6 +2,7 @@
 """Compile canonical planning artifacts into agent JSON and human shaped-work views."""
 
 import argparse
+import importlib.util
 import json
 import sys
 from pathlib import Path
@@ -193,6 +194,18 @@ def build_package(
     except ValueError as exc:
         raise PublisherError(str(exc)) from exc
     validate_package(package)
+    # Optional typed product-wide intent extension: accepted Markdown keeps authority.
+    if (directory / "product-intent.json").is_file():
+        intent_path = Path(__file__).resolve().parents[1] / "product-intent" / "engine.py"
+        if not intent_path.is_file():
+            raise PublisherError("product-intent engine is missing from this installation")
+        spec = importlib.util.spec_from_file_location("product_intent_engine", intent_path)
+        engine = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(engine)
+        try:
+            package = engine.compile_into_package(package, directory)
+        except engine.IntentCompileError as exc:
+            raise PublisherError(str(exc)) from exc
     return package
 
 

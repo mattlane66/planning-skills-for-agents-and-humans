@@ -1,0 +1,40 @@
+# Example for a product repo. Copy to .github/workflows only after adapting paths.
+# Requires the tools in protected main and approved planning/approved-scenarios.json.
+name: Product Intent Gate (example)
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  intent:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: trusted
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: candidate
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+      - name: Compile base and candidate with protected tooling
+        run: |
+          python3 trusted/scripts/publish-shaped-work.py --planning-dir trusted/planning --output /tmp/base.html --json-output /tmp/base.json
+          python3 trusted/scripts/publish-shaped-work.py --planning-dir candidate/planning --output /tmp/head.html --json-output /tmp/head.json
+      - name: Check trusted behavioral scenarios against changed implementation
+        shell: bash
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          git -C candidate diff --name-only "$BASE_SHA" HEAD > /tmp/changed-paths
+          if [[ ! -s /tmp/changed-paths ]]; then exit 0; fi
+          mapfile -t changed < /tmp/changed-paths
+          python3 trusted/product-intent/gate.py --base-package /tmp/base.json --candidate-package /tmp/head.json --trusted-manifest trusted/planning/approved-scenarios.json --code-root candidate --changed "${changed[@]}"

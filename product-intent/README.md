@@ -1,42 +1,58 @@
-# Product Intent Layer (initial implementation)
+# Product Intent Layer
 
-This is an **opt-in, backward-compatible extension** of Planning Skills. It does not supersede accepted shaping, selected-design breadboards, interface contracts, or the existing Planning Publisher. The existing Markdown artifacts remain authoritative for human decisions; this typed overlay is a validated product-wide index, and derived documentation is not independent truth.
+This is an **opt-in, machine-readable extension of Planning Skills**. Existing accepted Markdown planning is authoritative. The publisher compiles existing requirements, selected shapes, breadboards, states and contracts together with the extra product-intent records. It never promotes a candidate or inferred behavior to accepted intent.
 
-## What it does now
+## The four working pieces
 
-- JSON Schema for typed capabilities, requirements, places, actions, states, transitions, rules, interfaces, invariants, decisions and non-goals.
-- Stable IDs, acceptance evidence and human approval, rejected alternatives, supersession metadata, reopening conditions.
-- Mappings from intent IDs to implementation paths, symbols and test names.
-- Conservative diff-impact analysis (PASS, REVIEW, DRIFT) and optional strict exit for CI.
-- Projections for agent context, QA, human product descriptions and decision history.
-- A deliberately conservative existing-repository bootstrapper: inventory likely tests, then require humans to observe and approve intent.
+1. **One compiled model.** Put `product-intent.json` beside the frame, shaping and breadboard files in a product's `planning/` directory. Then run the usual Planning Publisher. The resulting `PlanningPackage` includes `product_intent`, typed, source-tagged planning objects, extensions and bindings. Unknown references, references to rejected candidates, and ambiguous IDs fail compilation. Existing projects without that opt-in file are unchanged.
+2. **Binding proposals.** `mapping.py` scans bounded Python/JS/TS source. Python declaration locations come from the AST; JS/TS suggestions use declaration patterns. Candidate links include line numbers and lexical evidence, and **never** become confirmed without review. It does not construct a call graph or prove execution.
+3. **Executable scenarios.** `behaviors.py` runs trusted, human-approved input/output examples from a manifest against a code checkout. It runs real Python application functions in subprocesses, compares outputs, and reports PASS/REVIEW/DRIFT. A failed or incomplete test does not become PASS. Running Python application code is **not sandboxed**; use isolated CI runners and trusted manifests.
 
-## Use
+4. **Change-impact PR gate.** `gate.py` uses compiled code bindings to select trusted scenarios and compares accepted source truth to a protected baseline. It cannot return PASS for missing baseline, unconfirmed mapping, unverified scenario, or unmapped changed code.
 
-Python 3.10+, no dependencies for the CLI:
+## Quick start
 
-    python3 product-intent/intent.py validate product-intent/example.json
-    python3 product-intent/intent.py init planning/product-intent.json --product "Your product"
-    python3 product-intent/intent.py check planning/product-intent.json --changed src/profile/Edit.tsx --strict
-    python3 product-intent/intent.py project planning/product-intent.json --out planning/generated
-    python3 product-intent/intent.py bootstrap --source . --out /tmp/intent-bootstrap-candidates.json
-    python3 -m unittest discover -s product-intent -p 'test_*.py'
+Create `planning/product-intent.json` based on [example.json](example.json), keeping IDs for new invariants/decisions distinct from planning-owned IDs:
 
-Use \`--before old-intent.json\` to detect unauthorized changes to accepted records; capture the previous version from the PR base (for example via \`git show\`). The \`--evidence evidence.json\` option accepts evidence keyed by intent ID, with a \`result: pass\` and \`tests\` array. Evidence should come from an actual independent test runner; this CLI cannot establish that a submitted report is truthful.
+```bash
+python3 scripts/publish-shaped-work.py --planning-dir planning --check
+python3 scripts/publish-shaped-work.py --planning-dir planning --json-output /tmp/planning-package.json --output /tmp/shaped-work.html
+python3 product-intent/mapping.py --package /tmp/planning-package.json --code-root . --out /tmp/binding-proposals.json
+python3 product-intent/behaviors.py --trusted-manifest ../trusted-base/accepted-scenarios.json --code-root . --intent-id INV-1
+python3 product-intent/gate.py --base-package /tmp/base-planning-package.json --candidate-package /tmp/planning-package.json --trusted-manifest ../trusted-base/accepted-scenarios.json --code-root . --changed src/profile.py
+python3 -m unittest discover -s product-intent -p 'test_*.py'
+```
 
-## Important limitations
+The intent extension's `refs` can use a bare ID if unique or a qualified UID such as `requirement:R0`, `shape:A`, `affordance:U1`, `store:S1`. Reusing a planning-owned ID as the ID of a new extension record is forbidden. Bindings may refer to a new extension ID (`INV-1`) or a qualified planning UID (`requirement:R0`).
 
-This is **not yet** a complete semantic drift engine. A path match only identifies possibly impacted behavior; it does not prove behavior changed. A PASS only means the declared mappings and supplied evidence passed, and can miss unmodeled behavior. Unknown files deliberately result in REVIEW. Strict mode blocks review or drift; make strict mandatory only after useful coverage is established. Do not treat a test-file inventory as auto-discovered accepted intent.
+Example trusted scenario file:
 
-Approval is metadata, not cryptographic authorization. For enforced human approval, use branch protection / CODEOWNERS and signed or otherwise trusted CI attestations. Integration with PlanningPackage is intentionally a reference, not a second editable copy of its accepted objects. Generated files are projections; regenerate rather than edit them.
+```json
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "SC-1",
+      "adapter": "python_function",
+      "module": "profile.py",
+      "function": "update_profile",
+      "intent_ids": ["INV-1"],
+      "cases": [
+        {"id": "failed-save", "args": [{"name": "Old"}, {"name": "New"}, false], "expected": {"name": "Old"}}
+      ]
+    }
+  ]
+}
+```
 
-## Next production-hardening milestones
+See [CI integration example](ci-example.yml). It intentionally uses the base checkout's *trusted tooling* as well as its approved scenarios. Adapt the paths before enabling it in any application repository.
 
-- Reconcile stable IDs and authority against actual PlanningPackage compiler output, reject contradictory accepted values.
-- Real repo-specific symbol/call-graph bindings and runtime traces with confidence/provenance.
-- Verified checks executed by CI, not self-reported by the agent; detect test disabling and stale model coverage.
-- PR-base-aware intent migrations, human approval verification, and decision supersession workflow.
-- Behavior-level scenarios and adapters for browser/API tests; measure false negatives on seeded regressions.
-- Incremental bootstrap from actual observed behavior, never assuming implementation equals intent.
+The trusted scenario manifest should be loaded from the protected *base branch*, **not** the changed PR branch. Do not let the coding agent amend approved expectations, disable a test, or rewrite the approved intent model to make a regression pass. Human acceptance metadata in JSON is not authorization; enforce CODEOWNERS and branch protection.
 
-These milestones are intentionally not claimed as complete in this initial PR.
+## Verified scope vs remaining work
+
+- **Working today:** structural compilation, authority/reference validation, traceable IDs, lexical/AST mapping proposals, Python function-level behavioral regression checks, generated agent/QA/product projections.
+- **Not established:** automatic high-confidence linking for all languages, browser/API/stateful user-journey adapters, complete semantic equivalence, execution-trace mapping, deployment of the example CI baseline checkout wiring, prevention of malicious test reports, and reliable coverage of every real-world behavior.
+- **Safe rollout:** keep the gate advisory while coverage is low. Make checks mandatory only for accepted, explicitly covered behaviors and use REVIEW when the change is insufficiently observed.
+
+The original `intent.py` standalone CLI and `schema.json` remain supported. The compiled model intentionally stays a derived view of existing planning decisions plus separately approved new invariants, not another editable duplicate of those decisions.

@@ -20,7 +20,8 @@ mkdir -p \
   "$DIST_DIR/templates" \
   "$DIST_DIR/hooks" \
   "$DIST_DIR/examples" \
-  "$DIST_DIR/scripts"
+  "$DIST_DIR/scripts" \
+  "$DIST_DIR/product-intent"
 
 cp "$ROOT_DIR/.claude-plugin/plugin.json" "$DIST_DIR/.claude-plugin/plugin.json"
 cp "$ROOT_DIR/LICENSE" "$DIST_DIR/LICENSE"
@@ -78,6 +79,10 @@ cp "$ROOT_DIR/scripts/publish-shaped-work.py" "$DIST_DIR/scripts/publish-shaped-
 cp "$ROOT_DIR/scripts/publish_shaped_work.py" "$DIST_DIR/scripts/publish_shaped_work.py"
 cp "$ROOT_DIR/scripts/planning_publisher_ext.py" "$DIST_DIR/scripts/planning_publisher_ext.py"
 cp "$ROOT_DIR/scripts/planning_publisher_contract.py" "$DIST_DIR/scripts/planning_publisher_contract.py"
+cp "$ROOT_DIR/product-intent/"*.py "$DIST_DIR/product-intent/"
+cp "$ROOT_DIR/product-intent/"*.json "$DIST_DIR/product-intent/"
+cp "$ROOT_DIR/product-intent/README.md" "$DIST_DIR/product-intent/README.md"
+cp "$ROOT_DIR/product-intent/ci-example.yml" "$DIST_DIR/product-intent/ci-example.yml"
 
 for skill in "${SKILLS[@]}"; do
   source_file="$ROOT_DIR/$skill/SKILL.md"
