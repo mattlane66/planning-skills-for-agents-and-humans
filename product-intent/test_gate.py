@@ -45,6 +45,14 @@ class GateTests(unittest.TestCase):
     def test_unknown_change(self):
         result=self.check(base=pkg(),paths=["src/unknown.py"])
         self.assertEqual("REVIEW",result["verdict"])
+    def test_altered_bindings_need_review(self):
+        altered=pkg()
+        altered["product_intent"]["bindings"][0]["paths"]=["src/*.py"]
+        self.assertEqual("REVIEW",self.check(head=altered,base=pkg())["verdict"])
+    def test_altered_accepted_decision_metadata_needs_review(self):
+        altered=pkg()
+        altered["product_intent"]["extension_records"][0]["reopen_when"]="anytime"
+        self.assertEqual("REVIEW",self.check(head=altered,base=pkg())["verdict"])
     def test_base_is_required(self):
         self.assertEqual("REVIEW",self.check()["verdict"])
 

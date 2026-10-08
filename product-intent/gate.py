@@ -10,10 +10,11 @@ import sys
 def accepted(pkg):
     model=pkg.get("product_intent") or {}
     records=model.get("planning_records",[])+model.get("extension_records",[])
-    return {r["uid"]:{"kind":r["kind"],"status":r["status"],
-                      "facts":r.get("data",r.get("statement")),
-                      "refs":r.get("resolved_refs",[])}
-            for r in records if r.get("status")=="accepted"}
+    return {r["uid"]:r for r in records if r.get("status")=="accepted"}
+
+def binding_contract(pkg):
+    model=pkg.get("product_intent") or {}
+    return sorted(json.dumps(b,sort_keys=True) for b in model.get("bindings",[]))
 
 def run_scenarios(manifest, root, affected):
     path=Path(__file__).with_name("behaviors.py")
@@ -39,17 +40,20 @@ def gate(candidate, changed, root, manifest, base=None):
             item["confirmed"] &= binding.get("confidence")=="confirmed"
     no_baseline=base is None or not isinstance(base.get("product_intent"),dict)
     accepted_changes=[]
+    bindings_changed=False
     if not no_baseline:
         a,b=accepted(base),accepted(candidate)
         accepted_changes=sorted(k for k in set(a)|set(b) if a.get(k)!=b.get(k))
+        bindings_changed=binding_contract(base)!=binding_contract(candidate)
     checks=run_scenarios(manifest,root,impacted) if impacted else {
         "verdict":"REVIEW" if changed else "PASS","results":[],"uncovered_intent_ids":[]}
     verdict="DRIFT" if checks["verdict"]=="DRIFT" else (
-        "REVIEW" if no_baseline or accepted_changes or unmapped or
+        "REVIEW" if no_baseline or accepted_changes or bindings_changed or unmapped or
         any(not x["confirmed"] for x in impacted.values()) or checks["verdict"]!="PASS"
         else "PASS")
     return {"verdict":verdict,"affected":impacted,"unmapped_changed_paths":unmapped,
-            "accepted_contract_changes":accepted_changes,"trusted_baseline_missing":no_baseline,
+            "accepted_contract_changes":accepted_changes,
+            "bindings_changed":bindings_changed,"trusted_baseline_missing":no_baseline,
             "behavior_checks":checks,
             "limitation":"PASS covers only confirmed bindings and approved scenarios."}
 
