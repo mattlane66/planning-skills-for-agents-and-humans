@@ -6,6 +6,10 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
+### Product intent layer (opt-in)
+
+Beyond feature shaping, this repository can compile accepted planning into a [typed product intent model](./product-intent/README.md), propose links to code, and check accepted behavioral examples against real implementations. The compiler preserves the existing planning authority hierarchy: inferred mappings are review candidates, never proof. This is an early foundation for semantic drift detection, not a guarantee that every regression can be found.
+
 ## Interactive documentation portal
 
 The repository includes a self-contained documentation portal at [`site/index.html`](./site/index.html). Download that one file and open it in a modern browser; it does not need a web server, package install, or network connection at runtime.
