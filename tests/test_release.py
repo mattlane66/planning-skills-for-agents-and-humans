@@ -35,7 +35,7 @@ class ReleaseTests(unittest.TestCase):
                     str(SCRIPT),
                     "preflight",
                     "--tag",
-                    "v1.5.3",
+                    release.coordinated_tag(),
                     "--notes-output",
                     str(notes),
                 ],
