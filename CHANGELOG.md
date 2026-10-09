@@ -2,6 +2,20 @@
 
 ## Unreleased
 
+## v1.5.4 — Product ontology viewer — 2026-10-09
+
+### Added
+
+- Add an optional self-contained, read-only product ontology view generated from the existing accepted PlanningPackage with `--ontology-output`; no additional product authority, code execution, or source of truth.
+- Show accepted and working requirements, explicit selected-design rationale, declared verification targets, and missing coverage without falsely claiming the product passed checks.
+- Publish a grocery-list example derived from the canonical accepted planning example through GitHub Pages, with a discoverable README entry.
+- Extend the real-browser smoke tests to exercise the compiled six-requirement example, decision reasoning, filtering, keyboard interaction, and mobile layout.
+
+### Scope
+
+- This is an optional product-intent **viewer**, not live GitHub drift monitoring, a separate product engine, or an alerting service. The existing protected-baseline product-intent gate remains responsible for behavioral assessments.
+- Keep portable, Claude, Codex, and MCP package versions synchronized for the 1.5.4 release.
+
 ## v1.5.3 — Reviewer walkthrough metadata — 2026-10-07
 
 ### Fixed
