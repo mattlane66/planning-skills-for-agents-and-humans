@@ -159,13 +159,3 @@ presentation -> planning truth
 ```
 
 Semantic FigJam, Figma, Excalidraw, TLDraw, and Miro adapters can be added later against the same `PlanningPackage` without moving planning logic into those tools.
-
-## Optional product ontology view
-
-Generate a separate [read-only ontology interface](docs/product-ontology-view.md) from the **same PlanningPackage**:
-
-```bash
-python3 scripts/publish-shaped-work.py --planning-dir planning --ontology-output planning/product-ontology.html
-```
-
-This view does not change planning authority or replace the protected behavioral gate. It distinguishes declared verification targets from actual passing checks.
