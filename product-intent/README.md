@@ -56,13 +56,3 @@ The trusted scenario manifest should be loaded from the protected *base branch*,
 - **Safe rollout:** keep the gate advisory while coverage is low. Make checks mandatory only for accepted, explicitly covered behaviors and use REVIEW when the change is insufficiently observed.
 
 The original `intent.py` standalone CLI and `schema.json` remain supported. The compiled model intentionally stays a derived view of existing planning decisions plus separately approved new invariants, not another editable duplicate of those decisions.
-
-## Product ontology interface (optional)
-
-The product intent layer has a [read-only ontology view](../docs/product-ontology-view.md) generated from the **same compiled PlanningPackage**. It shows accepted requirements, selected design, the decisions behind them, and declared verification coverage—without treating a listed test as proof that the product works.
-
-```bash
-python3 scripts/publish-shaped-work.py --planning-dir planning --ontology-output planning/product-ontology.html
-```
-
-The page is self-contained and offline. No GitHub OAuth, notification service or second product ontology is created by this flag.
