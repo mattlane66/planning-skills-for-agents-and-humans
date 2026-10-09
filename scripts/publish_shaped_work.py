@@ -221,6 +221,7 @@ def main(argv=None):
     parser.add_argument("--presentation", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--json-output", type=Path)
+    parser.add_argument("--ontology-output", type=Path, help="Write read-only product ontology HTML from the compiled PlanningPackage")
     parser.add_argument("--svg-dir", type=Path)
     parser.add_argument("--png-dir", type=Path)
     parser.add_argument("--pdf-output", type=Path)
@@ -257,6 +258,16 @@ def main(argv=None):
                 encoding="utf-8",
             )
 
+        if args.ontology_output:
+            view_path = SCRIPT_DIR.parent / "product-intent" / "ontology_view.py"
+            if not view_path.is_file():
+                raise PublisherError("product ontology viewer is missing from this installation")
+            spec = importlib.util.spec_from_file_location("product_intent_ontology_view", view_path)
+            viewer = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(viewer)
+            args.ontology_output.parent.mkdir(parents=True, exist_ok=True)
+            args.ontology_output.write_text(viewer.render_html(package), encoding="utf-8")
+
         svg_paths = []
         if args.svg_dir or args.png_dir or args.pdf_output:
             svg_dir = args.svg_dir or output.parent / "shaped-work-assets"
@@ -264,6 +275,8 @@ def main(argv=None):
             render_with_cairosvg(svg_paths, args.png_dir, args.pdf_output)
 
         print(output)
+        if args.ontology_output:
+            print(args.ontology_output)
         if svg_paths:
             print(f"Wrote {len(svg_paths)} SVG board(s) to {svg_paths[0].parent}")
         return 0
