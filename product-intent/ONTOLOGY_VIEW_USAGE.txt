@@ -1,0 +1,34 @@
+PRODUCT ONTOLOGY VIEW (OPTIONAL, READ-ONLY)
+
+This browser interface is a derived projection of the existing PlanningPackage.
+It does not introduce another ontology, approval authority, or verification engine.
+
+Generate an ontology page alongside the shaped-work output:
+
+  python3 scripts/publish-shaped-work.py \
+    --planning-dir planning \
+    --json-output planning/planning-package.json \
+    --ontology-output planning/product-ontology.html
+
+Open planning/product-ontology.html in your browser. It is self-contained and offline.
+
+Or render any already-compiled PlanningPackage:
+
+  python3 product-intent/ontology_view.py \
+    --package planning/planning-package.json \
+    --output planning/product-ontology.html
+
+The view shows:
+  - accepted versus working requirements and product rules
+  - selected design and active build slice
+  - reasons and rejected alternatives for decisions (when recorded)
+  - confirmed versus inferred code bindings, and declared verification targets
+
+It does NOT claim the live product meets requirements; a listed test is not a
+passing test result. It does NOT monitor GitHub changes or deliver alerts.
+
+Existing source of truth:
+  canonical planning Markdown -> compiled PlanningPackage -> this read-only view
+
+Existing verification authority:
+  product-intent/gate.py + trusted behavior scenarios from protected base.
