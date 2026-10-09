@@ -30,6 +30,19 @@ class OntologyViewTest(unittest.TestCase):
         self.assertIn(r'\u003cscript\u003e', rendered)
         self.assertIn('Result not provided', rendered)
 
+    def test_recorded_selection_is_visible_without_inventing_rejections(self):
+        payload = {**BASE, 'shaping': {
+            **BASE['shaping'],
+            'decision_status': 'selected',
+            'decision_rationale': ['Smaller state model', 'Fits the appetite'],
+        }}
+        data = view.project_package(payload)
+        decision = next(r for r in data['records'] if r['kind'] == 'decision')
+        self.assertEqual('accepted', decision['status'])
+        self.assertIn('Smaller state model', decision['statement'])
+        self.assertEqual([], decision['alternatives'])
+        self.assertEqual('shaping.md', decision['source'])
+
     def test_opt_in_overlay_preserves_authority_and_mappings(self):
         model = {**BASE, 'product_intent': {
             'kind': 'ProductIntentModel',
