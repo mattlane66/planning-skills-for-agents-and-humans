@@ -25,10 +25,10 @@ const p=JSON.parse(document.getElementById('ontology-data').textContent);
 const $=id=>document.getElementById(id);
 const selected={tab:'promises',id:null,search:''};
 const models=p.records||[];
-const kinds={requirement:'Requirement',invariant:'Product rule',rule:'Rule',affordance:'Interaction',place:'Screen / place',state:'State',transition:'Transition',interface:'Interface',non_goal:'Out of scope',decision:'Decision',shape:'Design direction'};
+const kinds={requirement:'Requirement',invariant:'Product rule',rule:'Rule',affordance:'Interaction',place:'Screen / place',state:'State',transition:'Transition',interface:'Interface',non_goal:'Out of scope',capability:'Capability',store:'Stored information',non_ui_affordance:'System behavior',decision:'Decision',shape:'Design direction'};
 function el(tag, cls, value){const x=document.createElement(tag);if(cls)x.className=cls;if(value!==undefined)x.textContent=String(value);return x;}
 function statusClass(s){return /accepted|selected/i.test(s)?'accepted':/working|candidate|inferred|derived/i.test(s)?'working':'neutral';}
-function requirement(r){return ['requirement','invariant','rule','affordance','state','transition','interface'].includes(r.kind);}
+function requirement(r){return ['requirement','invariant','rule','affordance','non_ui_affordance','store','place','capability','state','transition','interface'].includes(r.kind);}
 function filtered(){let result=models.filter(r=>selected.tab==='decisions' ? ['decision','shape','non_goal'].includes(r.kind) : selected.tab==='coverage' ? requirement(r) : requirement(r));
  if(selected.tab==='coverage')result=result.filter(r=>r.verification.length||p.bindings.some(b=>b.intent_id===r.id||b.resolved_intent_uid===r.uid));
  if(selected.search){const t=selected.search.toLowerCase();result=result.filter(r=>(r.title+' '+r.statement+' '+r.id+' '+r.kind).toLowerCase().includes(t));}
