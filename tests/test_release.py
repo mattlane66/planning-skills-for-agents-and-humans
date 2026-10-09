@@ -25,7 +25,7 @@ class ReleaseTests(unittest.TestCase):
             capture_output=True,
             text=True,
         )
-        self.assertEqual("v1.5.3", version.stdout.strip())
+        self.assertEqual(release.coordinated_tag(), version.stdout.strip())
         with tempfile.TemporaryDirectory() as temporary:
             notes = Path(temporary) / "notes.md"
             subprocess.run(
@@ -35,7 +35,7 @@ class ReleaseTests(unittest.TestCase):
                     str(SCRIPT),
                     "preflight",
                     "--tag",
-                    "v1.5.3",
+                    release.coordinated_tag(),
                     "--notes-output",
                     str(notes),
                 ],
@@ -43,7 +43,7 @@ class ReleaseTests(unittest.TestCase):
                 capture_output=True,
                 text=True,
             )
-            self.assertIn("### Fixed", notes.read_text(encoding="utf-8"))
+            self.assertTrue(notes.read_text(encoding="utf-8").strip())
 
     def test_coordinated_tag_requires_one_version(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:

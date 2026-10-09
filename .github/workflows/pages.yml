@@ -68,8 +68,13 @@ jobs:
       - name: Stage exact tracked site and reviewer demo
         run: |
           set -euo pipefail
-          mkdir -p /tmp/planning-skills-pages/review
+          mkdir -p /tmp/planning-skills-pages/review /tmp/planning-skills-pages/product-ontology
           cp site/index.html /tmp/planning-skills-pages/index.html
+          # Derived from accepted canonical example on trusted main, not hand-written demo state.
+          python3 scripts/publish-shaped-work.py \
+            --planning-dir examples/simple-grocery-list \
+            --output /tmp/planning-skills-pages/product-ontology/shaped-work.html \
+            --ontology-output /tmp/planning-skills-pages/product-ontology/index.html
           cp -R site/fit-check-error-model /tmp/planning-skills-pages/fit-check-error-model
           cp -R site/privacy /tmp/planning-skills-pages/privacy
           cp -R site/terms /tmp/planning-skills-pages/terms

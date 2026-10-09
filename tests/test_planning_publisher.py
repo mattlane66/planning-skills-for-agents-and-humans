@@ -107,6 +107,23 @@ class PlanningPublisherTests(unittest.TestCase):
             self.assertEqual("P1", payload["presentation"]["hero_place"])
             self.assertEqual(2, payload["schema_version"])
 
+    def test_cli_can_emit_read_only_ontology_view(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            out = pathlib.Path(temporary) / "shaped-work.html"
+            ontology = pathlib.Path(temporary) / "product-ontology.html"
+            status = publisher.main([
+                "--planning-dir", str(EXAMPLE),
+                "--output", str(out),
+                "--ontology-output", str(ontology),
+            ])
+            self.assertEqual(0, status)
+            self.assertTrue(out.is_file())
+            self.assertTrue(ontology.is_file())
+            rendered = ontology.read_text(encoding="utf-8")
+            self.assertIn('id="ontology-data"', rendered)
+            self.assertIn("No product-intent extension yet", rendered)
+            self.assertNotIn("<script src=", rendered)
+
     def test_cli_can_emit_svg_overview_and_slice_boards(self):
         with tempfile.TemporaryDirectory() as temporary:
             out = pathlib.Path(temporary) / "shaped-work.html"

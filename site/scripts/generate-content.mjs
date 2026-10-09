@@ -103,8 +103,14 @@ function fallbackTitle(path) {
 }
 
 async function markdownRecord(absolutePath, extra = {}) {
-  const raw = await readFile(absolutePath, 'utf8');
+  let raw = await readFile(absolutePath, 'utf8');
   const sourcePath = normalizePath(relative(repoRoot, absolutePath));
+  // The GitHub README has a short link to a separately hosted example.
+  // Keep it out of the byte-for-byte offline documentation portal, which
+  // does not publish that route within the standalone HTML.
+  if (sourcePath === 'README.md') {
+    raw = raw.replace(/<!-- BEGIN README-ONLY: product-ontology -->\r?\n[\s\S]*?<!-- END README-ONLY: product-ontology -->\r?\n\r?\n/g, '');
+  }
   return {
     sourcePath,
     title: titleFrom(raw, fallbackTitle(absolutePath)),

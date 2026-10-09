@@ -131,6 +131,8 @@ async function main() {
   const userDataDir = await mkdtemp(path.join(tmpdir(), 'planning-skills-browser-smoke-'));
   const publisherDir = await mkdtemp(path.join(tmpdir(), 'planning-publisher-browser-smoke-'));
   const publisherHtml = path.join(publisherDir, 'shaped-work.html');
+  const groceryHtml = path.join(publisherDir, 'grocery-ontology.html');
+
   const publisherSvgDir = path.join(publisherDir, 'boards');
   const repositoryRoot = path.resolve(siteDirectory, '..');
   const publisherRun = spawnSync(
@@ -151,6 +153,15 @@ async function main() {
     0,
     `Planning Publisher fixture generation failed:\n${publisherRun.stderr || publisherRun.stdout}`,
   );
+  const groceryRun = spawnSync('python3', [
+    path.join(repositoryRoot, 'scripts', 'publish-shaped-work.py'),
+    '--planning-dir', path.join(repositoryRoot, 'examples', 'simple-grocery-list'),
+    '--output', path.join(publisherDir, 'grocery-shaped.html'),
+    '--ontology-output', groceryHtml,
+  ], { encoding: 'utf8' });
+  assert.equal(groceryRun.status, 0,
+    `Grocery product ontology generation failed:\n${groceryRun.stderr || groceryRun.stdout}`);
+  const groceryUrl = pathToFileURL(groceryHtml).href;
   const publisherUrl = pathToFileURL(publisherHtml).href;
   const targetUrl = process.env.PORTAL_SMOKE_URL || pathToFileURL(htmlPath).href;
   const requiresDirectFile = !process.env.PORTAL_SMOKE_URL;
@@ -311,9 +322,46 @@ async function main() {
       'Planning Publisher phone viewport has document-level horizontal overflow.',
     );
 
+    // Acceptance test of the public ontology viewer using actual canonical
+    // grocery-list planning, not hand-written browser fixture content.
+    await client.call('Emulation.clearDeviceMetricsOverride');
+    await client.call('Page.navigate', { url: groceryUrl });
+    await waitFor(() => evaluate('document.querySelectorAll("#items .item").length === 6'),
+      'six grocery requirements in ontology');
+    assert.equal(await evaluate('document.querySelector("h1")?.textContent'), 'Simple Grocery List');
+    assert.equal(await evaluate('document.querySelector("#requirements-value")?.textContent'), '6 accepted');
+    assert.equal(await evaluate('document.querySelector("#slice-value")?.textContent'), 'V1');
+    assert.ok(await evaluate('document.querySelector("#notice")?.textContent.includes("No product-intent extension yet")'));
+    await evaluate('document.querySelector("[data-tab=decisions]").click(); true');
+    assert.equal(await evaluate('document.querySelectorAll("#items .item").length'), 1,
+      'Recorded human selection should appear under Decisions');
+    assert.ok(await evaluate('document.querySelector("#detail")?.textContent.includes("simpler")'),
+      'Human-selected shape rationale should remain visible');
+    await evaluate('document.querySelector("[data-tab=promises]").click(); true');
+    await evaluate('(()=>{const field=document.querySelector("#search"); field.value="persists"; field.dispatchEvent(new Event("input",{bubbles:true})); return true})()');
+    assert.equal(await evaluate('document.querySelectorAll("#items .item").length'), 1);
+    await evaluate('(()=>{const field=document.querySelector("#search"); field.value=""; field.dispatchEvent(new Event("input",{bubbles:true})); return true})()');
+    await client.call('Emulation.setDeviceMetricsOverride', {
+      width: 390, height: 844, deviceScaleFactor: 1, mobile: true,
+    });
+    await client.call('Page.reload', { ignoreCache: true });
+    await waitFor(() => evaluate('document.querySelectorAll("#items .item").length === 6'),
+      'mobile grocery ontology');
+    assert.ok(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+      'Ontology page has document-level horizontal overflow on mobile');
+    await evaluate('document.querySelector("[data-tab=coverage]").focus(); true');
+    await client.call('Input.dispatchKeyEvent', {
+      type: 'keyDown', key: 'Enter', code: 'Enter', text: '\r',
+      unmodifiedText: '\r', windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13,
+    });
+    await client.call('Input.dispatchKeyEvent', { type: 'keyUp', key: 'Enter', code: 'Enter',
+      windowsVirtualKeyCode: 13, nativeVirtualKeyCode: 13 });
+    assert.ok(await evaluate('document.querySelector("#items")?.textContent.includes("No linked checks")'),
+      'Unknown verification must not appear as a pass');
+
     assert.deepEqual(runtimeErrors, [], `Real browser reported runtime errors:\n${runtimeErrors.join('\n')}`);
     console.log(`PASS real-browser smoke: ${chrome.version}`);
-    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal interactions + generated Planning Publisher stable-ID/slice/mobile interactions`);
+    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal + Planning Publisher + grocery ontology tabs/search/keyboard/mobile interactions`);
   } finally {
     client?.close();
     if (processHandle.exitCode === null && processHandle.signalCode === null) {
