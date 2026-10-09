@@ -53,6 +53,22 @@ def project_package(package):
             'source': (package.get('sources') or {}).get('shaping', ''), 'data': r,
         }) for r in shaping.get('requirements', [])]
         bindings = []
+        # Shaping already records a human-selected direction and its rationale.
+        # Show that decision from canonical planning rather than fabricating a
+        # second decision or treating unselected candidates as rejected.
+        chosen = shaping.get('selected_shape')
+        if chosen and shaping.get('decision_status') == 'selected':
+            reasons = shaping.get('decision_rationale') or []
+            records.append(_normalize_record({
+                'kind': 'decision',
+                'id': 'selected-shape-' + str(chosen),
+                'status': 'accepted',
+                'title': 'Why we chose direction ' + str(chosen),
+                'statement': '; '.join(reasons) or 'The human-selected direction is ' + str(chosen) + '.',
+                'source': (package.get('sources') or {}).get('shaping', ''),
+                'refs': ['shape:' + str(chosen)],
+                'evidence': ['Recorded human choice in canonical shaping'],
+            }))
     if len({r['uid'] for r in records}) != len(records):
         raise ValueError('Duplicate ontology identifiers')
     return {
