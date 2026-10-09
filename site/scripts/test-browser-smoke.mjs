@@ -338,9 +338,9 @@ async function main() {
     assert.ok(await evaluate('document.querySelector("#detail")?.textContent.includes("simpler")'),
       'Human-selected shape rationale should remain visible');
     await evaluate('document.querySelector("[data-tab=promises]").click(); true');
-    await evaluate('const field=document.querySelector("#search"); field.value="persists"; field.dispatchEvent(new Event("input",{bubbles:true})); true');
+    await evaluate('(()=>{const field=document.querySelector("#search"); field.value="persists"; field.dispatchEvent(new Event("input",{bubbles:true})); return true})()');
     assert.equal(await evaluate('document.querySelectorAll("#items .item").length'), 1);
-    await evaluate('const field=document.querySelector("#search"); field.value=""; field.dispatchEvent(new Event("input",{bubbles:true})); true');
+    await evaluate('(()=>{const field=document.querySelector("#search"); field.value=""; field.dispatchEvent(new Event("input",{bubbles:true})); return true})()');
     await client.call('Emulation.setDeviceMetricsOverride', {
       width: 390, height: 844, deviceScaleFactor: 1, mobile: true,
     });
