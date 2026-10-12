@@ -6,6 +6,7 @@ Does not infer new requirements, create bindings, run code, or assert untested b
 """
 import argparse
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 
 VALID = {"PASS", "REVIEW", "DRIFT"}
@@ -90,9 +91,12 @@ def main():
     p.add_argument("--package", type=Path, required=True)
     p.add_argument("--gate-report", type=Path, required=True)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--revision", default="", help="Checked source revision from trusted CI, if known")
     args = p.parse_args()
     report = build(json.loads(args.package.read_text(encoding="utf-8")),
                    json.loads(args.gate_report.read_text(encoding="utf-8")))
+    report["generated_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    report["revision"] = args.revision
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
     print(f"Projected {len(report['impacts'])} affected intent records ({report['verdict']}) to {args.output}")
