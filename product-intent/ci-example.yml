@@ -44,7 +44,7 @@ jobs:
           # The board projection is derived solely from the protected gate output and compiled candidate package.
           # Never change the gate's exit status to make a drifted change look green.
           if [[ "$gate_exit" -eq 0 || "$gate_exit" -eq 1 ]]; then
-            python3 trusted/product-intent/board_report.py --package /tmp/head.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json
+            python3 trusted/product-intent/board_report.py --package /tmp/head.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json --revision "$(git -C candidate rev-parse --short=12 HEAD)"
           fi
           exit "$gate_exit"
       - name: Attach product-level impact for the Shaping Board
