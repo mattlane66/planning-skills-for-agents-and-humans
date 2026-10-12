@@ -4,6 +4,10 @@
 
 This is a walkthrough, not a quiz. The Compass, Model, and Reference remain available behind it. The walkthrough teaches what the collaboration feels like and how its outputs compound; the Reference lets readers select any canonical skill and copy an accurate invocation. Portable natural-language prompts are primary. Claude Code and Gemini shortcuts appear only where the repository actually supplies them, and Codex is correctly described as plugin plus natural-language invocation rather than Claude-style slash commands.
 
+## Optional companion tools
+
+The Compass includes a small section linking to the separately hosted [Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/), read-only [Product Ontology viewer](https://mattlane66.github.io/planning-skills-for-agents-and-humans/product-ontology/), and the [opt-in Product Intent guide](../product-intent/README.md). The first two links require network access; **they are not bundled into the offline portal**, and opening them is never a prerequisite for planning or build authorization. The canonical Markdown skills, selected planning artifacts, and human decision gates remain authoritative.
+
 ## Open it
 
 1. Download `site/index.html`, or clone the repository.
@@ -27,7 +31,7 @@ npm run check
 
 CI also runs `npm run test:browser` under a real Chrome/Chromium process. That smoke opens the tracked `index.html` directly over `file://`, activates a focused control from the keyboard, waits for Mermaid to render an SVG, repeats the app at a 390 px viewport, and fails on browser runtime errors. It intentionally sits outside `npm run check` because Node 20 remains supported for deterministic build checks while the CDP smoke uses Node 22's built-in WebSocket client and a locally installed browser.
 
-The hosted deployment model is documented in [`../docs/site-deployment.md`](../docs/site-deployment.md). Pull-request validation is read-only; a failing portal-drift check uploads the regenerated `index.html` and patch as an artifact instead of granting PR code write credentials. GitHub Pages deploys only from a trusted `main` commit after the tracked standalone file is reproduced exactly.
+The hosted deployment model is documented in [`../docs/site-deployment.md`](../docs/site-deployment.md). Pull-request validation is read-only; a failing portal-drift check uploads the regenerated `index.html` and patch as an artifact instead of granting PR code write credentials. GitHub Pages builds from a trusted `main` commit, reruns validation, and warns if the tracked standalone portal was stale; Repo Health separately enforces exact tracked-file parity. Pages also publishes the separately built optional viewers and the generated Shaping Board screenshot.
 
 The tracked source is organized as follows:
 

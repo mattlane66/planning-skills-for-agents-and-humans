@@ -8,6 +8,8 @@ Run the workflow from the product repository you are planning or building. Keep 
 
 **Want to see the whole loop before reading the rules?** [How Planning Skills works in practice](./how-it-works-in-practice.md) follows one grocery-list idea from messy notes through routing, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, context packaging, build, and reflection. It is illustrative, not a required sequence.
 
+**Prefer a visual surface?** Try the [optional Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/) to compare working candidate designs, or the [read-only Product Ontology viewer](https://mattlane66.github.io/planning-skills-for-agents-and-humans/product-ontology/) to inspect an accepted example. They do not run skills for you, replace project Markdown, or authorize implementation. The [opt-in Product Intent Layer](../product-intent/README.md) supports explicitly covered code checks only after the relevant decisions and scenarios have been approved.
+
 If a consequential opportunity decision depends on future-facing trends,
 advanced users, unusually high-benefit needs, pyramiding, or advanced analogs,
 start with [Lead User Research](../lead-user-research/README.md). It is an optional

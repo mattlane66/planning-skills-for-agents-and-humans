@@ -151,6 +151,16 @@ assert.match(document.querySelector('.provenance-ledger')?.textContent || '', /H
 
 await route('#/compass');
 assert.deepEqual(
+  [...document.querySelectorAll('.optional-tools-grid a')].map((item) => new URL(item.href).pathname),
+  [
+    '/planning-skills-for-agents-and-humans/shaping-board/',
+    '/planning-skills-for-agents-and-humans/product-ontology/',
+    '/mattlane66/planning-skills-for-agents-and-humans/tree/main/product-intent',
+  ],
+  'Companion surfaces must link to their actual locations, not mockups or offline bundled routes.',
+);
+assert.ok([...document.querySelectorAll('.optional-tools-grid a')].every((item) => item.target === '_blank' && item.rel.includes('noopener')), 'External companions must use safe links.');
+assert.deepEqual(
   [...document.querySelectorAll('.home-principles li strong')].map((item) => item.textContent),
   ['Explore', 'Decide', 'Build'],
   'The compass should reduce the model to exploration, human decisions, and one-slice build scope.',

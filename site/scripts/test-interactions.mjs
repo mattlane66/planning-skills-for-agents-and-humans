@@ -177,6 +177,9 @@ assert.equal(document.querySelector('#walkthrough-stage-title')?.textContent, 'S
 
 await route('#/compass');
 assert.equal(document.querySelector('h1')?.textContent, 'What is happening in your work?');
+assert.equal(document.querySelectorAll('.optional-tools-grid .optional-tool').length, 3, 'All optional companion surfaces should be discoverable.');
+assert.match(document.querySelector('.optional-tools-heading')?.textContent || '', /never replace accepted Markdown or human decisions/i);
+assert.match(document.querySelector('.optional-tools-note')?.textContent || '', /offline/i);
 
 await click('[data-action="select-entry"][data-entry="candidate"]');
 assert.equal(document.querySelector('.recommendation h2')?.textContent, 'Candidate-shape breadboard');

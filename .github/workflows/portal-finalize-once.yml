@@ -1,0 +1,44 @@
+name: Regenerate portal from trusted main (one-time)
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/src/app.js"
+      - "site/src/styles.css"
+      - "site/scripts/test-interactions.mjs"
+      - "site/scripts/test-integrity.mjs"
+permissions:
+  contents: write
+jobs:
+  sync:
+    if: github.repository == 'mattlane66/planning-skills-for-agents-and-humans'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Rebuild and validate offline portal
+        working-directory: site
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          npm run check
+          node shaping-board/test-board.mjs
+      - name: Commit reproducible generated portal
+        run: |
+          set -euo pipefail
+          git add site/index.html
+          if git diff --cached --quiet; then
+            echo "Generated portal already matches sources."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Regenerate portal for companion tool links"
+          git push origin HEAD:main

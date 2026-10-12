@@ -6,16 +6,18 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
-## Interactive documentation portal
+**One method, several ways to use it.** The 14 canonical skills and their human decision gates define the method. Agent plugins and commands invoke those skills; the documentation portal teaches them; the Shaping Board and Product Ontology viewer are optional visual surfaces. The opt-in Product Intent Layer adds bounded, evidence-backed implementation checks. None of the interfaces replaces accepted planning artifacts or authorizes a build.
 
-The repository includes a self-contained documentation portal at [`site/index.html`](./site/index.html). Download that one file and open it in a modern browser; it does not need a web server, package install, or network connection at runtime.
+## Learn the method
+
+**[Open the documentation portal](https://mattlane66.github.io/planning-skills-for-agents-and-humans/)** or download [`site/index.html`](./site/index.html) to use it offline in a modern browser; the standalone file does not need a server, installation, or runtime network connection.
 
 The portal includes the workflow explorer, searchable skills catalog, full guide reader, canonical skill references and templates, and example artifact trails. Its content is generated from this repository's canonical Markdown files and works offline after download. See [`site/README.md`](./site/README.md) for browser support, rebuild, and validation commands.
 
 <!-- BEGIN README-ONLY: product-ontology -->
 ## From skills to interactive tools
 
-Use these skills directly inside your AI tools. They can also power dedicated visual interfaces that make product decisions easier to explore, compare, and explain. **You do not need a separate app to use Planning Skills.**
+Use the skills directly inside your AI tools, or use an optional interface to make product decisions easier to explore and inspect. The tools below are companions to the canonical planning files—not alternative sources of truth or prerequisites for using the skills.
 
 ### Shaping Board
 

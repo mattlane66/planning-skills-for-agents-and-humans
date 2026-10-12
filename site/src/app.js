@@ -631,6 +631,31 @@ function compassPage() {
           <a class="text-link" href="#/skills/planning-router/guide">Still unsure? Use the router ${icon('arrow', 18)}</a>
         </div>
       </section>
+      <section class="optional-tools" aria-labelledby="optional-tools-title">
+        <div class="optional-tools-heading">
+          <p class="system-label">Optional companion tools</p>
+          <h2 id="optional-tools-title">Explore the method visually.</h2>
+          <p>The skills work directly in your agent. These separate surfaces help you inspect or compare planning work; they never replace accepted Markdown or human decisions.</p>
+        </div>
+        <div class="optional-tools-grid">
+          <a class="optional-tool" href="https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/" target="_blank" rel="noopener noreferrer">
+            <strong>Shaping Board ${icon('external', 16)}</strong>
+            <span>Compare candidate solutions, trace scenarios, and inspect working fit and trade-offs.</span>
+            <small>Working exploration · not build authorization</small>
+          </a>
+          <a class="optional-tool" href="https://mattlane66.github.io/planning-skills-for-agents-and-humans/product-ontology/" target="_blank" rel="noopener noreferrer">
+            <strong>Product Ontology ${icon('external', 16)}</strong>
+            <span>View accepted example requirements, the selected design, and what remains unverified.</span>
+            <small>Read-only projection · not live code verification</small>
+          </a>
+          <a class="optional-tool" href="${REPOSITORY_URL}/tree/main/product-intent" target="_blank" rel="noopener noreferrer">
+            <strong>Product Intent Layer ${icon('external', 16)}</strong>
+            <span>Learn about opt-in change-impact checks for explicitly mapped, approved scenarios.</span>
+            <small>Advanced extension · bounded evidence only</small>
+          </a>
+        </div>
+        <p class="optional-tools-note">These links open separate online resources; the downloaded portal itself remains self-contained and usable offline.</p>
+      </section>
     </main>`;
 }
 
