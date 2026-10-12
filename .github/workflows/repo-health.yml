@@ -56,6 +56,9 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
+      - name: Validate board Markdown adapter
+        run: python3 -m unittest discover -s tests -p 'test_shaping_board_adapter.py'
+
       - name: Check repository health
         shell: bash
         run: |
@@ -134,6 +137,7 @@ jobs:
           set -euo pipefail
           npm ci --ignore-scripts
           npm run check
+          node shaping-board/test-board.mjs
 
       - name: Verify tracked standalone portal is current
         id: portal-drift
