@@ -1,0 +1,235 @@
+{
+ "name": "DWC Requests",
+ "problem": [
+  "Maintainers have limited bandwidth. Work beyond them comes from volunteers.",
+  "More volunteers want to help than we can walk through what they could do and what would be useful.",
+  "Volunteers tend to be junior. Their changes need oversight, and each yes or no gets explained one by one in chat.",
+  "Meaningful changes span front end and back end, but issues are tracked on separate boards for each project.",
+  "Requests have to go into GitLab, which already takes a technical person. Some of the best ideas come from non-technical people."
+ ],
+ "outcome": [
+  "Work we haven't approved never starts. A volunteer can propose work, or claim work we've approved, and nothing else."
+ ],
+ "appetite": "",
+ "cut": "",
+ "slice": "",
+ "why": "",
+ "pick": null,
+ "options": [
+  {
+   "id": "A",
+   "title": "One GitLab board",
+   "promise": "Least to build; everything stays in GitLab",
+   "risk": "Requesters need GitLab; one board mixes requests and work",
+   "cuts": "No in-app explanation of yes/no",
+   "placeholder": true,
+   "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | add label | issue → approved | GitLab\nP9 | place | GitLab board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"
+  },
+  {
+   "id": "B",
+   "title": "Separate GitLab boards",
+   "promise": "Request triage stays apart from work",
+   "risk": "Issues must be moved by hand between projects",
+   "cuts": "No single view across front and back end",
+   "placeholder": true,
+   "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | move issue | → work project | GitLab\nP9 | place | Work board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"
+  },
+  {
+   "id": "C",
+   "title": "GitLab plus a bot",
+   "promise": "Automation moves approved issues for us",
+   "risk": "A bot to build and keep in sync; still GitLab sign-in",
+   "cuts": "Non-technical requesters stay out",
+   "placeholder": true,
+   "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | bot moves issue | → work project | GitLab\nP9 | place | Work board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"
+  },
+  {
+   "id": "D",
+   "title": "Our own requests app, SSO sign-in; GitLab keeps only the code",
+   "promise": "Anyone can ask; nothing starts until approved",
+   "risk": "We build and maintain a parallel app",
+   "cuts": "GitLab keeps only the code",
+   "placeholder": false,
+   "dsl": "# Nodes:  ID | place/action/question/store | Title | row; row | system | @x,y,w,h (optional)\n# Edges:  A -> B : label        (optional: ~ SVG path  @ labelX,labelY)\n# Groups: group: Name = ID ID\ngroup: requests app · everyone signs in with SSO = P1 P2 P3 P6 O1 P9 Q2 O2\ngroup: planners only = P3 P6\ngroup: GitLab · DWConnect group = P8 Q1 O3\nP1 | place | Request form | send a request | app | @20,60,200,80\nP2 | place | My requests | where each stands, and why; answer a question | app | @20,230,200,96\nP3 | place | Review board | requests to decide; open a request | app | @280,56,200,112\nP6 | place | A request · review | the ask, the thread; ask a question; approve: what's in and out; decline: say why | app | @540,56,210,150\nO1 | action | approve | request → work item | app | @810,60,200,56\nP9 | place | Claim board | approved work, who's on what; open an item | app | @1070,56,220,112\nQ2 | question | claimed? | | app | @1330,50,130,96\nO2 | action | tell the requester | status + an email | app | @1070,250,230,56\nP4 | place | Work item · nobody on it | what's in and out; claim it; do it, propose an MR | app | @250,470,230,112\nP7 | place | Work item · yours | what's in and out; its MRs, App and BackEnd; work on it in GitLab | app | @540,470,190,112\nP5 | place | Work item · taken | what's in and out, who has it; ask to take it; do it, propose an MR | app | @250,660,230,112\nP8 | place | App + BackEnd MRs | pipeline result; open an MR naming DWC-42 | GitLab | @800,470,200,96\nQ1 | question | approved? | | GitLab | @1040,470,130,96\nO3 | action | merge | MR → merged, item done | GitLab | @1230,480,210,56\nP1 -> P3 : send\nP3 -> P6 : click\nP6 -> O1 : approve\nP6 -> O2 : ask\nO1 -> P9\nO2 -> P2 : updated · emailed ~ M 1185 306 V 375 H 120 V 326 @ 670,367\nP2 -> P6 : answer ~ M 220 278 H 500 V 190 H 540 @ 350,266\nP9 -> Q2\nQ2 -> P5 : yes ~ M 1395 146 V 405 H 220 V 716 H 250 @ 228,560\nQ2 -> P4 : no ~ M 1395 146 V 405 H 365 V 470 @ 375,440\nP4 -> P7 : claim\nP7 -> P8 : open MR\nP8 -> Q1\nQ1 -> O3 : yes\n"
+  }
+ ],
+ "stories": [
+  {
+   "text": "Someone sends an idea; we ask a question; they answer",
+   "fit": "1111",
+   "path": "P1 P3 P6 P2 O2",
+   "anti": false
+  },
+  {
+   "text": "We say no, with why",
+   "fit": "1111",
+   "path": "P3 P6 O2 P2",
+   "anti": false
+  },
+  {
+   "text": "We approve it, and it's up for grabs on the claim board",
+   "fit": "1111",
+   "path": "P6 O1 P9",
+   "anti": false
+  },
+  {
+   "text": "A volunteer claims approved work and gets it merged",
+   "fit": "1111",
+   "path": "P9 Q2 P4 P7 P8 Q1 O3",
+   "anti": false
+  },
+  {
+   "text": "A volunteer does approved work without claiming it, and proposes an MR",
+   "fit": "0001",
+   "path": "P4 P5 P7 P8",
+   "anti": false
+  },
+  {
+   "text": "A volunteer approves their own idea",
+   "fit": "x000",
+   "path": "P6 O1",
+   "anti": true
+  }
+ ],
+ "reqs": [
+  {
+   "text": "Work that has not been approved never starts",
+   "src": "Outcome",
+   "f": "nuuu",
+   "star": true,
+   "why": "Approval must gate work. The board shows self-approval as a problem in A; no story shows enforcement in B–D, so that stays open.",
+   "chk": "Try to start work and open an MR without approval, including approving your own request. It must be blocked.",
+   "l": [
+    "P6 O1 P9",
+    "P6 O1 P9",
+    "P6 O1 P9",
+    "P3 P6 O1 P9 Q1"
+   ]
+  },
+  {
+   "text": "A non-technical person can send an idea",
+   "src": "Problem",
+   "f": "uuuy",
+   "star": true,
+   "why": "GitLab intake takes a technical person; D adds a request form and SSO.",
+   "chk": "Have a non-technical contributor submit an idea and answer a follow-up without using GitLab.",
+   "l": [
+    "P1",
+    "P1",
+    "P1",
+    "P1 P2"
+   ]
+  },
+  {
+   "text": "Maintainers can ask, decide and explain",
+   "src": "Problem, S1–S2",
+   "f": "yyyy",
+   "star": false,
+   "why": "Maintainer bandwidth is limited, and each yes or no should be explained in the workflow.",
+   "chk": "Ask a follow-up, accept an answer, and decline with a reason the requester can see.",
+   "l": [
+    "P3 P6 O2 P2",
+    "P3 P6 O2 P2",
+    "P3 P6 O2 P2",
+    "P3 P6 O2 P2"
+   ]
+  },
+  {
+   "text": "Front-end and back-end work followed together",
+   "src": "Problem",
+   "f": "uuuy",
+   "star": false,
+   "why": "Changes span both codebases; D shows App and BackEnd MRs linked to one item.",
+   "chk": "Link two MRs from separate projects to one approved item and follow them to done together.",
+   "l": [
+    "P8 O3",
+    "P8 O3",
+    "P8 O3",
+    "P7 P8 Q1 O3"
+   ]
+  },
+  {
+   "text": "Volunteers can claim approved work",
+   "src": "Outcome, S3–S4",
+   "f": "yyyy",
+   "star": false,
+   "why": "The boundary allows claiming approved work, not starting unapproved work.",
+   "chk": "Approve a request, claim its work item, and confirm another volunteer sees it as taken.",
+   "l": [
+    "P9",
+    "P9",
+    "P9",
+    "P9 Q2 P4 P5 P7"
+   ]
+  },
+  {
+   "text": "Requesters can find status, reasons and answers",
+   "src": "S1–S2, My requests",
+   "f": "yyyy",
+   "star": false,
+   "why": "Requesters should not have to repeat the conversation in chat.",
+   "chk": "Ask for information, receive an answer, change status, and confirm the requester sees why.",
+   "l": [
+    "P2 O2",
+    "P2 O2",
+    "P2 O2",
+    "P2 O2 P6"
+   ]
+  },
+  {
+   "text": "Fits the appetite",
+   "src": "Frame",
+   "f": "uuuu",
+   "star": false,
+   "why": "Rate each shape against the appetite you set.",
+   "chk": "Estimate each shape's build against the appetite and cut line.",
+   "l": [
+    "",
+    "",
+    "",
+    ""
+   ]
+  }
+ ],
+ "things": [
+  {
+   "name": "Request",
+   "what": "An idea sent by anyone signed in with SSO",
+   "where": "app",
+   "seen": "made in P1 · answered in P2 · decided in P6"
+  },
+  {
+   "name": "Work item",
+   "what": "An approved request, e.g. DWC-42",
+   "where": "app",
+   "seen": "made by O1 · seen in P4, P5, P7"
+  },
+  {
+   "name": "Claim",
+   "what": "A volunteer's hold on a work item",
+   "where": "app",
+   "seen": "set from P4 (via Q2) · shown in P7"
+  },
+  {
+   "name": "Merge requests",
+   "what": "App and BackEnd MRs naming the item",
+   "where": "GitLab",
+   "seen": "opened from P7 into P8 · merged by O3"
+  },
+  {
+   "name": "Person",
+   "what": "SSO identity; planners-only gates P3",
+   "where": "app",
+   "seen": "signs in to everything in the app"
+  },
+  {
+   "name": "Status + email",
+   "what": "What the requester is told, and why",
+   "where": "app",
+   "seen": "sent by O2 · read in P2"
+  }
+ ],
+ "slices": [],
+ "drift": [],
+ "rel": []
+}

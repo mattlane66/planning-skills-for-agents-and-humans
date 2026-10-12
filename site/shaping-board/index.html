@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shaping board</title>
+<style>
+:root{--bg:#fff;--pn:#fff;--tx:#1d1d1b;--mu:#7a7a74;--bd:#d9d9d2;--ac:#2f5bea;--ok:#1f8a4c;--wn:#b9770e;--no:#d33;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#16161a;--pn:#1d1d22;--tx:#ececf0;--mu:#9a9aa4;--bd:#34343c;--ac:#7c9cff;--ok:#4cc27f;--wn:#e0a84a;--no:#f07070}}
+*{box-sizing:border-box}html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--tx);font:13px/1.45 system-ui,-apple-system,"Segoe UI",sans-serif}
+#app{height:100%;display:flex;flex-direction:column}
+header{display:flex;align-items:center;gap:10px;padding:8px 16px;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+header input[data-p=name]{font-size:17px;font-weight:600;border:0;background:transparent;width:220px;padding:2px}
+.tabs{display:flex;gap:2px;background:color-mix(in srgb,var(--mu) 12%,transparent);border-radius:8px;padding:2px}
+.tabs span{padding:4px 12px;border-radius:6px;color:var(--mu);cursor:pointer}.tabs .on{background:var(--pn);color:var(--tx);box-shadow:0 1px 2px #0002}
+.sp{flex:1}
+button,select{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--pn);color:var(--tx);border-radius:6px;padding:4px 10px}
+input:not([type=checkbox]),textarea{font:inherit;width:100%;padding:5px 7px;border:1px solid var(--bd);border-radius:6px;background:var(--bg);color:var(--tx)}
+textarea{resize:vertical}.dsl{font:12px/1.4 ui-monospace,monospace;min-height:220px}
+.wrap{flex:1;display:flex;min-height:0}
+aside{width:390px;flex:none;border-right:1px solid var(--bd);overflow:auto;padding:14px}
+main{flex:1;overflow:auto;padding:14px 18px;min-width:0}
+h2{font-size:17px;font-weight:500;margin:4px 0 8px}h2 small{font-size:11px;color:var(--mu);font-weight:400}
+h3{font-size:16px;font-weight:500;margin:6px 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}h3 input:not([type=checkbox]){width:min(520px,100%);font-size:16px}
+.card{border:1px solid var(--tx);border-radius:6px;padding:4px 12px 10px;margin-bottom:14px}.card h4{margin:10px 0 4px;font-size:13px}
+table{width:100%;border-collapse:collapse}th{font-weight:400;color:var(--mu);font-size:12px;text-align:left;padding:5px 4px;border-bottom:1px solid var(--bd)}
+td{padding:5px 4px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.sm td:nth-child(n+3):not(:last-child),.sm th:nth-child(n+3):not(:last-child){text-align:center}
+.sm td.id{color:var(--mu);cursor:pointer;width:34px}.sm tr.on{background:color-mix(in srgb,var(--ac) 9%,transparent)}.sm td[data-dot]{cursor:pointer}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ac)}.dot.x{background:var(--no)}.no{color:var(--mu);opacity:.5;font-style:normal}.x{color:var(--no)}
+.opts{display:flex;gap:6px;margin:0 0 8px;flex-wrap:wrap;align-items:center}
+.opt{border:1px solid var(--bd);border-radius:8px;padding:4px 12px;cursor:pointer;color:var(--mu)}.opt.on{border-color:var(--ac);color:var(--tx);background:color-mix(in srgb,var(--ac) 10%,transparent)}
+.bdg{font-size:11px;font-weight:400;padding:2px 8px;border:1px dashed var(--mu);border-radius:99px;color:var(--mu)}.bdg.s{border-style:solid}
+.strip{display:flex;gap:20px;flex-wrap:wrap;align-items:flex-end;border-bottom:1px solid var(--bd);padding:0 0 10px;margin-bottom:10px}.strip small{display:block;font-size:11px;color:var(--mu)}.strip input{width:200px}
+.tc{border:1px solid var(--bd);border-radius:8px;padding:10px 14px;margin-bottom:8px}.tc.pk{border-color:var(--ac)}.tc p{margin:6px 0 2px}
+.mu{color:var(--mu);font-size:12px}.wn{color:var(--wn);font-size:12px}.row{display:flex;gap:6px;margin-top:8px;align-items:center}
+.bar{border-top:1px solid var(--bd);margin-top:12px;padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}.bar input{width:260px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cm{border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:4px}
+.g input,.g select{width:100%}pre.doc{white-space:pre-wrap;border:1px solid var(--bd);border-radius:8px;padding:12px;font:12px/1.5 ui-monospace,monospace}
+.fb{position:relative;overflow:hidden}.fb[data-zm]{overflow:visible}.bx{position:relative;transform-origin:0 0}.bx>*{position:absolute}
+.grp{border:1.5px dashed var(--mu);border-radius:6px;padding:3px 8px;color:var(--mu);font-size:11px}
+.n{border:1.5px solid;border-radius:5px;background:var(--pn);overflow:hidden;transition:opacity .15s}
+.n .tp{font-size:9px;color:var(--mu);padding:2px 8px 0}.n .ti{font-size:14px;padding:0 8px 3px}.n .r{font-size:11px;padding:2px 8px;background:#00000009;margin-top:1px}.n .sub{font-size:11px;color:var(--mu);padding:0}
+.n.o{border-radius:999px;border-style:dashed;padding:6px 16px}.n.o .ti{padding:0}
+.n.q{display:grid;place-items:center;text-align:center;border:0;clip-path:polygon(50% 0,100% 50%,50% 100%,0 50%);background:color-mix(in srgb,var(--mu) 22%,var(--bg));font-size:12px}
+.n.st{border-style:double;border-width:4px}.hit{box-shadow:0 0 0 2px var(--ac)}.dim{opacity:.18}
+.lab{font-size:10px;color:var(--ac);background:var(--bg);padding:0 3px;white-space:nowrap}svg{position:absolute;left:0;top:0;pointer-events:none}
+@media(max-width:760px){.wrap{flex-direction:column;overflow:auto}aside{width:100%;border-right:0;border-bottom:1px solid var(--bd);overflow:visible}main{overflow:visible}.grid{grid-template-columns:1fr}.fb{overflow:auto;max-height:75vh}.sm{display:block;overflow-x:auto}header{align-items:flex-start}header #board-projects{max-width:165px}}
+</style></head><body><div id="app"></div><input type="file" id="imp" accept=".json,application/json" hidden>
+<script>
+const KEY="shaping-board-v3",L="ABCDEFGHIJ",MK={y:["✓","var(--ok)"],p:["◐","var(--wn)"],n:["×","var(--no)"],u:["?","var(--mu)"]};
+const E={"name": "DWC Requests", "problem": ["Maintainers have limited bandwidth. Work beyond them comes from volunteers.", "More volunteers want to help than we can walk through what they could do and what would be useful.", "Volunteers tend to be junior. Their changes need oversight, and each yes or no gets explained one by one in chat.", "Meaningful changes span front end and back end, but issues are tracked on separate boards for each project.", "Requests have to go into GitLab, which already takes a technical person. Some of the best ideas come from non-technical people."], "outcome": ["Work we haven't approved never starts. A volunteer can propose work, or claim work we've approved, and nothing else."], "appetite": "", "cut": "", "slice": "", "why": "", "pick": null, "options": [{"id": "A", "title": "One GitLab board", "promise": "Least to build; everything stays in GitLab", "risk": "Requesters need GitLab; one board mixes requests and work", "cuts": "No in-app explanation of yes/no", "placeholder": true, "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | add label | issue → approved | GitLab\nP9 | place | GitLab board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"}, {"id": "B", "title": "Separate GitLab boards", "promise": "Request triage stays apart from work", "risk": "Issues must be moved by hand between projects", "cuts": "No single view across front and back end", "placeholder": true, "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | move issue | → work project | GitLab\nP9 | place | Work board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"}, {"id": "C", "title": "GitLab plus a bot", "promise": "Automation moves approved issues for us", "risk": "A bot to build and keep in sync; still GitLab sign-in", "cuts": "Non-technical requesters stay out", "placeholder": true, "dsl": "P1 | place | Request form | send a request | app\nP3 | place | Review board | requests to decide | app\nP6 | place | A request · review | ask a question; approve / decline | app\nO1 | action | bot moves issue | → work project | GitLab\nP9 | place | Work board | approved work; open an item | GitLab\nO2 | action | tell the requester | email | app\nP2 | place | My requests | status, and why | app\nP8 | place | Merge requests | pipeline result | GitLab\nO3 | action | merge | MR → merged | GitLab\nP1 -> P3 : send\nP3 -> P6\nP6 -> O1 : approve\nO1 -> P9\nP6 -> O2 : ask\nO2 -> P2 : emailed\nP9 -> P8 : open MR\nP8 -> O3\n"}, {"id": "D", "title": "Our own requests app, SSO sign-in; GitLab keeps only the code", "promise": "Anyone can ask; nothing starts until approved", "risk": "We build and maintain a parallel app", "cuts": "GitLab keeps only the code", "placeholder": false, "dsl": "# Nodes:  ID | place/action/question/store | Title | row; row | system | @x,y,w,h (optional)\n# Edges:  A -> B : label        (optional: ~ SVG path  @ labelX,labelY)\n# Groups: group: Name = ID ID\ngroup: requests app · everyone signs in with SSO = P1 P2 P3 P6 O1 P9 Q2 O2\ngroup: planners only = P3 P6\ngroup: GitLab · DWConnect group = P8 Q1 O3\nP1 | place | Request form | send a request | app | @20,60,200,80\nP2 | place | My requests | where each stands, and why; answer a question | app | @20,230,200,96\nP3 | place | Review board | requests to decide; open a request | app | @280,56,200,112\nP6 | place | A request · review | the ask, the thread; ask a question; approve: what's in and out; decline: say why | app | @540,56,210,150\nO1 | action | approve | request → work item | app | @810,60,200,56\nP9 | place | Claim board | approved work, who's on what; open an item | app | @1070,56,220,112\nQ2 | question | claimed? | | app | @1330,50,130,96\nO2 | action | tell the requester | status + an email | app | @1070,250,230,56\nP4 | place | Work item · nobody on it | what's in and out; claim it; do it, propose an MR | app | @250,470,230,112\nP7 | place | Work item · yours | what's in and out; its MRs, App and BackEnd; work on it in GitLab | app | @540,470,190,112\nP5 | place | Work item · taken | what's in and out, who has it; ask to take it; do it, propose an MR | app | @250,660,230,112\nP8 | place | App + BackEnd MRs | pipeline result; open an MR naming DWC-42 | GitLab | @800,470,200,96\nQ1 | question | approved? | | GitLab | @1040,470,130,96\nO3 | action | merge | MR → merged, item done | GitLab | @1230,480,210,56\nP1 -> P3 : send\nP3 -> P6 : click\nP6 -> O1 : approve\nP6 -> O2 : ask\nO1 -> P9\nO2 -> P2 : updated · emailed ~ M 1185 306 V 375 H 120 V 326 @ 670,367\nP2 -> P6 : answer ~ M 220 278 H 500 V 190 H 540 @ 350,266\nP9 -> Q2\nQ2 -> P5 : yes ~ M 1395 146 V 405 H 220 V 716 H 250 @ 228,560\nQ2 -> P4 : no ~ M 1395 146 V 405 H 365 V 470 @ 375,440\nP4 -> P7 : claim\nP7 -> P8 : open MR\nP8 -> Q1\nQ1 -> O3 : yes\n"}], "stories": [{"text": "Someone sends an idea; we ask a question; they answer", "fit": "1111", "path": "P1 P3 P6 P2 O2", "anti": false}, {"text": "We say no, with why", "fit": "1111", "path": "P3 P6 O2 P2", "anti": false}, {"text": "We approve it, and it's up for grabs on the claim board", "fit": "1111", "path": "P6 O1 P9", "anti": false}, {"text": "A volunteer claims approved work and gets it merged", "fit": "1111", "path": "P9 Q2 P4 P7 P8 Q1 O3", "anti": false}, {"text": "A volunteer does approved work without claiming it, and proposes an MR", "fit": "0001", "path": "P4 P5 P7 P8", "anti": false}, {"text": "A volunteer approves their own idea", "fit": "x000", "path": "P6 O1", "anti": true}], "reqs": [{"text": "Work that has not been approved never starts", "src": "Outcome", "f": "nuuu", "star": true, "why": "Approval must gate work. The board shows self-approval as a problem in A; no story shows enforcement in B–D, so that stays open.", "chk": "Try to start work and open an MR without approval, including approving your own request. It must be blocked.", "l": ["P6 O1 P9", "P6 O1 P9", "P6 O1 P9", "P3 P6 O1 P9 Q1"]}, {"text": "A non-technical person can send an idea", "src": "Problem", "f": "uuuy", "star": true, "why": "GitLab intake takes a technical person; D adds a request form and SSO.", "chk": "Have a non-technical contributor submit an idea and answer a follow-up without using GitLab.", "l": ["P1", "P1", "P1", "P1 P2"]}, {"text": "Maintainers can ask, decide and explain", "src": "Problem, S1–S2", "f": "yyyy", "star": false, "why": "Maintainer bandwidth is limited, and each yes or no should be explained in the workflow.", "chk": "Ask a follow-up, accept an answer, and decline with a reason the requester can see.", "l": ["P3 P6 O2 P2", "P3 P6 O2 P2", "P3 P6 O2 P2", "P3 P6 O2 P2"]}, {"text": "Front-end and back-end work followed together", "src": "Problem", "f": "uuuy", "star": false, "why": "Changes span both codebases; D shows App and BackEnd MRs linked to one item.", "chk": "Link two MRs from separate projects to one approved item and follow them to done together.", "l": ["P8 O3", "P8 O3", "P8 O3", "P7 P8 Q1 O3"]}, {"text": "Volunteers can claim approved work", "src": "Outcome, S3–S4", "f": "yyyy", "star": false, "why": "The boundary allows claiming approved work, not starting unapproved work.", "chk": "Approve a request, claim its work item, and confirm another volunteer sees it as taken.", "l": ["P9", "P9", "P9", "P9 Q2 P4 P5 P7"]}, {"text": "Requesters can find status, reasons and answers", "src": "S1–S2, My requests", "f": "yyyy", "star": false, "why": "Requesters should not have to repeat the conversation in chat.", "chk": "Ask for information, receive an answer, change status, and confirm the requester sees why.", "l": ["P2 O2", "P2 O2", "P2 O2", "P2 O2 P6"]}, {"text": "Fits the appetite", "src": "Frame", "f": "uuuu", "star": false, "why": "Rate each shape against the appetite you set.", "chk": "Estimate each shape's build against the appetite and cut line.", "l": ["", "", "", ""]}], "things": [{"name": "Request", "what": "An idea sent by anyone signed in with SSO", "where": "app", "seen": "made in P1 · answered in P2 · decided in P6"}, {"name": "Work item", "what": "An approved request, e.g. DWC-42", "where": "app", "seen": "made by O1 · seen in P4, P5, P7"}, {"name": "Claim", "what": "A volunteer's hold on a work item", "where": "app", "seen": "set from P4 (via Q2) · shown in P7"}, {"name": "Merge requests", "what": "App and BackEnd MRs naming the item", "where": "GitLab", "seen": "opened from P7 into P8 · merged by O3"}, {"name": "Person", "what": "SSO identity; planners-only gates P3", "where": "app", "seen": "signs in to everything in the app"}, {"name": "Status + email", "what": "What the requester is told, and why", "where": "app", "seen": "sent by O2 · read in P2"}], "slices": [], "drift": [], "rel": []};
+const clone=o=>JSON.parse(JSON.stringify(o)),$=s=>document.querySelector(s),esc=s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const blank=()=>({schema_version:3,name:"New project",appetiteAuthority:"Unset",frameAuthority:"Working",problem:[],outcome:[],appetite:"",cut:"",slice:"",why:"",pick:null,options:[{id:"A",title:"Option A",promise:"",risk:"",cuts:"",placeholder:false,dsl:"P1 | place | First screen | what someone does first | app"}],stories:[],reqs:[],things:[],slices:[],drift:[],rel:[]});
+function norm(m){
+ if(!m || typeof m!=="object" || !Array.isArray(m.options) || !m.options.length || m.options.length>10)throw Error("Invalid board: options");
+ for(const k of ["stories","reqs","things","slices","drift","rel","problem","outcome"]){if(!Array.isArray(m[k]))m[k]=[];if(m[k].length>200)throw Error("Too many "+k)}
+ if(typeof m.name!=="string"||m.name.length>200)throw Error("Invalid project name");
+ m.schema_version=3;m.appetiteAuthority=m.appetiteAuthority||"Unset";m.frameAuthority=m.frameAuthority||"Working";m.selectionAuthority=m.selectionAuthority||"Working";
+ const used=new Set();
+ m.options.forEach(o=>{if(!o||typeof o.dsl!=="string"||o.dsl.length>100000)throw Error("Invalid option");if(!/^(CURRENT|[A-J])$/.test(o.id)||used.has(o.id))throw Error("Duplicate or invalid option ID");used.add(o.id)});
+ m.reqs.forEach((r,i)=>{if(!r||typeof r.text!=="string")throw Error("Invalid requirement");r.id=r.id||"R"+(i+1);r.status=r.status||(r.star?"Must-have":"Nice-to-have");r.auth=r.auth||"Working";r.f=(r.f||"").padEnd(m.options.length,"u").slice(0,m.options.length);r.l=Array.isArray(r.l)?r.l:[];while(r.l.length<m.options.length)r.l.push("")});
+ const rids=m.reqs.map(r=>r.id);if(new Set(rids).size!==rids.length||rids.some(x=>!/^R\d+(?:\.\d+)?$/.test(x)))throw Error("Invalid requirement IDs");
+ m.stories.forEach((s,i)=>{s.id=s.id||"S"+(i+1);s.fit=(s.fit||"").padEnd(m.options.length,"0").slice(0,m.options.length);s.paths=s.paths&&typeof s.paths==="object"&&!Array.isArray(s.paths)?s.paths:{};if(s.path&&!Object.keys(s.paths).length){const source=m.options.find(o=>!o.placeholder)||m.options[0];s.paths[source.id]=s.path}});
+ m.things.forEach((t,i)=>t.id=t.id||"THING"+(i+1));
+ return m
+}
+let M;try{M=JSON.parse(localStorage.getItem(KEY)||localStorage.getItem("shaping-board-v2"))}catch(_){}try{M=norm(M&&Array.isArray(M.options)&&M.options.length?M:clone(E))}catch(_){M=norm(clone(E))}
+const makeProjectId=()=>("project-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2,7));
+let projects={};try{const saved=JSON.parse(localStorage.getItem(KEY+"-projects"));if(saved&&typeof saved==="object"&&!Array.isArray(saved))projects=saved}catch(_){}
+M.project_id=M.project_id||makeProjectId();projects[M.project_id]=clone(M);
+const T={top:"shape",sub:"board",view:"paths",opt:0,story:null,rq:null,zm:1,nr:"",undo:null,msg:""};
+const save=()=>{try{
+ M.project_id=M.project_id||makeProjectId();projects[M.project_id]=clone(M);
+ localStorage.setItem(KEY,JSON.stringify(M));
+ localStorage.setItem(KEY+"-projects",JSON.stringify(projects))
+}catch(_){T.msg="Browser storage is full or unavailable. Export JSON to avoid losing changes."}};
+const get=p=>p.split(".").reduce((o,k)=>o?.[k],M),set=(p,v)=>{const a=p.split("."),k=a.pop();a.reduce((o,x)=>o[x],M)[k]=v};
+const inp=(p,ph)=>`<input data-p="${p}" value="${esc(get(p))}" placeholder="${esc(ph||"")}">`;
+const slug=()=>M.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"board";
+const dl=(n,t,ty)=>{const a=document.createElement("a");a.href=URL.createObjectURL(t instanceof Blob?t:new Blob([t],{type:ty}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
+const ids=s=>(s||"").split(/\s+/).filter(Boolean);
+/* ---- breadboard text -> graph ---- */
+function parse(src){const g={nodes:[],edges:[],groups:[],err:[]};
+ (src||"").split("\n").forEach((ln,n)=>{ln=ln.trim();if(!ln||ln[0]==="#")return;let m;
+  if(m=ln.match(/^group:\s*(.+?)\s*=\s*(.+)$/))g.groups.push({n:m[1],ids:ids(m[2])});
+  else if(m=ln.match(/^(\S+)\s*->\s*(\S+)\s*(?::\s*([^~@]*))?(?:~\s*([^@]*))?(?:@\s*(-?\d+)\s*,\s*(-?\d+))?\s*$/))g.edges.push({a:m[1],b:m[2],l:(m[3]||"").trim(),p:(m[4]||"").trim(),lx:m[5],ly:m[6]});
+  else if(ln.includes("|")){const f=ln.split("|").map(s=>s.trim());g.nodes.push({i:f[0],k:f[1]||"place",t:f[2]||f[0],r:(f[3]||"").split(";").map(s=>s.trim()).filter(Boolean),s:f[4]||"",pos:(f[5]||"").match(/-?\d+/g)?.map(Number)||[]})}
+  else g.err.push("Line "+(n+1)+": can't read \""+ln.slice(0,40)+"\"")});
+ const seen=new Set();
+ for(const n of g.nodes){
+  if(!/^[A-Za-z][A-Za-z0-9_.-]{0,40}$/.test(n.i)||seen.has(n.i))g.err.push("Invalid or duplicated node ID: "+n.i);
+  seen.add(n.i);
+  if(!["place","action","question","store"].includes(n.k))g.err.push("Unknown kind at "+n.i);
+  if(n.pos.some(x=>!Number.isFinite(x)||Math.abs(x)>10000))g.err.push("Position out of range: "+n.i);
+ }
+ return g}
+function lay(g){const by={};g.nodes.forEach(n=>by[n.i]=n);
+ g.edges.forEach(e=>{if(!by[e.a]||!by[e.b])g.err.push("Unknown id in "+e.a+" -> "+e.b)});g.groups.forEach(q=>q.ids.forEach(i=>{if(!by[i])g.err.push("Unknown id "+i+" in group")}));
+ const adj={},st={},fw=[];g.nodes.forEach(n=>adj[n.i]=[]);g.edges.forEach(e=>by[e.a]&&by[e.b]&&adj[e.a].push(e.b));
+ const dfs=u=>{st[u]=1;adj[u].forEach(v=>{if(st[v]!==1){fw.push([u,v]);if(!st[v])dfs(v)}});st[u]=2};g.nodes.forEach(n=>{if(!st[n.i])dfs(n.i)});
+ const rk={},col={};g.nodes.forEach(n=>rk[n.i]=0);for(let k=0;k<g.nodes.length;k++)fw.forEach(([u,v])=>rk[v]=Math.max(rk[v],rk[u]+1));
+ g.nodes.forEach(n=>(col[rk[n.i]]=col[rk[n.i]]||[]).push(n));
+ Object.entries(col).forEach(([r,a])=>{let y=40;a.forEach(n=>{const q=n.k==="question";n.w=q?130:200;n.h=q?90:(n.r.length?46+n.r.length*19:50);
+  if(n.pos.length>1){n.x=n.pos[0];n.y=n.pos[1];if(n.pos[2])n.w=n.pos[2];if(n.pos[3])n.h=n.pos[3]}else{n.x=30+r*270;n.y=y}y+=n.h+34})});
+ let W=300,H=200;g.nodes.forEach(n=>{W=Math.max(W,n.x+n.w);H=Math.max(H,n.y+n.h)});return{W:W+30,H:H+50,by}}
+function draw(o,hl,uid){const g=parse(o.dsl),{W,H,by}=lay(g),ns=[...new Set(g.nodes.map(n=>n.s))];let k=0,svg="",lb="";
+ const col=n=>{const h=(ns.indexOf(n.s)*67+250)%360;return n.s?`background:color-mix(in srgb,hsl(${h} 70% 55%) 20%,var(--pn));border-color:hsl(${h} 55% 55%);`:"border-color:var(--mu);"};
+ const cl=n=>hl?(hl.has(n.i)?" hit":" dim"):"";
+ const gr=g.groups.map(q=>{const a=q.ids.map(i=>by[i]).filter(Boolean);if(!a.length)return"";const x0=Math.min(...a.map(n=>n.x))-14,y0=Math.min(...a.map(n=>n.y))-22,x1=Math.max(...a.map(n=>n.x+n.w))+14,y1=Math.max(...a.map(n=>n.y+n.h))+14;return`<div class="grp" style="left:${x0}px;top:${y0}px;width:${x1-x0}px;height:${y1-y0}px">${esc(q.n)}</div>`}).join("");
+ const nd=g.nodes.map(n=>{const st=`left:${n.x}px;top:${n.y}px;width:${n.w}px;height:${n.h}px;`,c=cl(n);
+  if(n.k==="question")return`<div class="n q${c}" style="${st}">${esc(n.t)}</div>`;
+  if(n.k==="action")return`<div class="n o${c}" style="${st}${col(n)}"><div class="ti">${esc(n.t)}</div>${n.r.length?`<div class="sub">${esc(n.r.join(" · "))}</div>`:""}</div>`;
+  return`<div class="n${n.k==="store"?" st":""}${c}" style="${st}${col(n)}"><div class="tp">${esc(n.s)}${n.k==="store"?" · store":""}</div><div class="ti">${esc(n.t)}</div>${n.r.map((r,i)=>`<div class="r">${i+1} ${esc(r)}</div>`).join("")}</div>`}).join("");
+ g.edges.forEach(e=>{const A=by[e.a],B=by[e.b];if(!A||!B)return;let d,lx,ly;
+  if(e.p && /^[MmLlHhVvCcSsQqTtAaZz0-9,.+\\-\\s]+$/.test(e.p) && e.p.length<1000){d=e.p;lx=+e.lx||0;ly=+e.ly||0}
+  else if(B.x>=A.x+A.w-4){const x1=A.x+A.w,y1=A.y+A.h/2,x2=B.x,y2=B.y+B.h/2,m=(x1+x2)/2;d=`M${x1} ${y1}H${m}V${y2}H${x2}`;lx=m+4;ly=(y1+y2)/2}
+  else{const ln=H-20+(k++)*10,x1=A.x+A.w/2,y1=A.y+A.h,x2=B.x+B.w/2,y2=B.y+B.h;d=`M${x1} ${y1}V${ln}H${x2}V${y2}`;lx=(x1+x2)/2;ly=ln-4}
+  const on=!hl||(hl.has(e.a)&&hl.has(e.b));
+  svg+=`<path d="${d}" fill="none" stroke="${hl&&on?"var(--ac)":"var(--mu)"}" stroke-width="${hl&&on?2.5:1.3}" opacity="${on?1:.15}" marker-end="url(#${uid})"/>`;
+  if(e.l)lb+=`<span class="lab" style="left:${lx}px;top:${ly-8}px;opacity:${on?1:.15}">${esc(e.l)}</span>`});
+ const H2=H+k*10;
+ return{err:g.err,html:`<div class="fb" data-w="${W}" data-h="${H2}"${uid==="m"?" data-zm=1":""}><div class="bx" style="width:${W}px;height:${H2}px"><svg width="${W}" height="${H2}"><defs><marker id="${uid}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--mu)"/></marker></defs>${svg}</svg>${gr}${nd}${lb}</div></div>`}}
+function traceInfo(story,option){
+ const g=parse(option.dsl),nodes=new Set(g.nodes.map(n=>n.i));
+ const path=ids(story.paths?.[option.id]||"");
+ if(!path.length)return{valid:false,nodes:path,errors:["No trace recorded for "+option.id]};
+ const errors=[...g.err];
+ for(const id of path)if(!nodes.has(id))errors.push("Missing node "+id);
+ for(let i=1;i<path.length;i++)if(!g.edges.some(e=>e.a===path[i-1]&&e.b===path[i]))errors.push("Missing connection "+path[i-1]+" → "+path[i]);
+ if(story.anti && story.fit[M.options.indexOf(option)]==="1")errors.push("Forbidden story marked represented");
+ return{valid:!errors.length,nodes:path,errors}
+}
+function hlFor(i){
+ const r=M.reqs[T.rq];
+ if(r){const l=ids(r.l[i]);return l.length?new Set(l):null}
+ const s=M.stories[T.story];
+ if(s){const trace=traceInfo(s,M.options[i]);return trace.nodes.length?new Set(trace.nodes):new Set()}
+ return null
+}
+function fit(){document.querySelectorAll(".fb").forEach(b=>{const W=+b.dataset.w,H=+b.dataset.h,s=Math.max(.58,Math.min(1,b.parentElement.clientWidth/W))*(b.dataset.zm?T.zm:1);b.firstChild.style.transform=`scale(${s})`;b.style.height=H*s+"px"})}
+function renderDia(){const el=$("#dia");if(!el)return;const o=M.options[T.opt],r=draw(o,hlFor(T.opt),"m");el.innerHTML=r.html;const e=$("#err");if(e)e.innerHTML=r.err.map(x=>`<div class="wn">${esc(x)}</div>`).join("");fit()}
+/* ---- views ---- */
+const tbl=(key,cols,add)=>`<table class="g"><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join("")}<th></th></tr></thead><tbody>${(M[key]||[]).map((r,i)=>`<tr>${cols.map(c=>`<td>${c[2]?`<select data-p="${key}.${i}.${c[0]}">${c[2].map(o=>`<option${r[c[0]]===o?" selected":""}>${o}</option>`).join("")}</select>`:`<input data-p="${key}.${i}.${c[0]}" value="${esc(r[c[0]])}">`}</td>`).join("")}<td><button data-del="${key}.${i}" title="Remove">×</button></td></tr>`).join("")}</tbody></table><div class="row"><button data-add="${key}">+ ${add}</button></div>`;
+const TPL={stories:()=>({id:"S"+(Math.max(0,...M.stories.map(s=>+(s.id||"").replace(/\D/g,"")||0))+1),text:"",fit:"0".repeat(M.options.length),paths:{},anti:false}),things:()=>({id:"THING"+(M.things.length+1),name:"",what:"",where:"",seen:""}),slices:()=>({name:"",stories:"",cut:""}),drift:()=>({item:"",intent:"",reality:"",status:"not checked"}),rel:()=>({req:"",check:"",status:"not verified",evidence:""})};
+const authoritySelect=(key,value,values)=>'<select data-p="'+key+'">'+values.map(x=>'<option value="'+x+'"'+(x===value?' selected':'')+'>'+x+'</option>').join('')+'</select>';
+const frame=()=>`<h2>Frame</h2><div class="card"><h4>Problem</h4><textarea data-l="problem" rows="7" placeholder="One problem per line">${esc(M.problem.join("\n"))}</textarea><h4>Outcome</h4><textarea data-l="outcome" rows="3" placeholder="What must be true when this works">${esc(M.outcome.join("\n"))}</textarea><h4>Appetite</h4>${inp("appetite","Set before choosing a shape, e.g. 4 weeks, 2 people")}<h4>Cut line</h4>${inp("cut","What goes first if time runs out")}<h4>Appetite authority</h4>${authoritySelect("appetiteAuthority",M.appetiteAuthority,["Unset","Working","Accepted"])}<h4>Frame authority</h4>${authoritySelect("frameAuthority",M.frameAuthority,["Working","Accepted","Intentionally lightweight"])}</div>`;
+const stories=()=>{const s=M.stories[T.story];return`<h2>Stories <small>click an ID to trace it</small></h2><table class="sm"><thead><tr><th></th><th>story</th>${M.options.map(o=>`<th>${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.stories.map((x,i)=>`<tr class="${T.story===i?"on":""}"><td class="id" data-story="${i}">S${i+1}${x.anti?' <b class="x">✕</b>':""}</td><td><textarea rows="2" data-p="stories.${i}.text">${esc(x.text)}</textarea></td>${[...x.fit].map((c,j)=>`<td data-dot="${i},${j}" title="Click: represented / not / violates">${c==="1"?'<i class="dot"></i>':c==="x"?'<i class="dot x"></i>':'<i class="no">–</i>'}</td>`).join("")}<td><button data-del="stories.${i}">×</button></td></tr>`).join("")}</tbody></table><div class="row"><button data-add="stories">+ story</button></div>${s?`<p class="mu">Path of S${T.story+1}: node IDs it passes through</p>${M.options.map(o=>`<label class="mu">Path in ${esc(o.id)} (space-separated node IDs)</label>${inp("stories."+T.story+".paths."+o.id,"e.g. P1 P3 P6")}`).join("")}<label class="mu"><input type="checkbox" data-p="stories.${T.story}.anti"${s.anti?" checked":""}> forbidden path (should not be possible)</label>`:""}`};
+function strip(){return`<div class="strip"><div><small>Requirements</small><b>${M.reqs.length} · ${M.reqs.filter(r=>r.star).length} starred</b></div><div><small>Chosen direction</small><b>${M.pick?esc(M.pick+" · "+M.options.find(o=>o.id===M.pick).title):"none yet"}</b></div><div><small>Proposed build slice</small>${inp("slice","none yet")}</div><div class="mu" style="flex:1;min-width:220px"><b>Nothing verified here.</b> Ratings show what the candidates model, not tested behavior.</div></div>`}
+function badges(o,i){const s=M.stories[T.story],r=M.reqs[T.rq];let h=`<span class="bdg">${M.pick===o.id?"Selected by a human · not yet reconciled":"Candidate shape · not build scope"}</span>`;
+ if(o.placeholder)h+=`<span class="bdg s wn">Placeholder sketch · not from the board</span>`;if(r)h+=`<span class="bdg s">Tracing R${T.rq+1}</span>`;
+ if(s){const c=s.fit[i],tr=traceInfo(s,o);h+=`<span class="bdg s" style="color:${c==="x"?"var(--no)":c==="1"&&tr.valid?"var(--ok)":"var(--wn)"}">${c==="1"?(tr.valid?"Trace supported":"Claimed, trace incomplete"):c==="x"?"✕ Guardrail violated":"Not represented"}${!tr.valid?" · "+esc(tr.errors[0]):""}</span>`}return h}
+const paths=()=>{const o=M.options[T.opt];return`<div class="opts">${M.options.map((x,i)=>`<span class="opt${i===T.opt?" on":""}" data-opt="${i}">${x.id}</span>`).join("")}<span class="opt" data-addopt title="Add an option">+</span></div><h3>${inp("options."+T.opt+".title","Option title")}${badges(o,T.opt)}</h3><div id="dia"></div>
+<details open style="margin-top:10px"><summary>Edit this option's breadboard</summary><p class="mu">Nodes: <code>ID | place/action/question/store | Title | row; row | system | @x,y,w,h</code> · Edges: <code>A -> B : label</code> · Groups: <code>group: Name = ID ID</code> · <code>#</code> comments. Nodes without <code>@x,y</code> are laid out automatically.</p><textarea class="dsl" data-p="options.${T.opt}.dsl" spellcheck="false">${esc(o.dsl)}</textarea><div id="err"></div><div class="row"><label class="mu"><input type="checkbox" data-p="options.${T.opt}.placeholder"${o.placeholder?" checked":""}> placeholder sketch (not from real evidence)</label><span class="sp" style="flex:1"></span><button data-delopt>Delete this option</button></div></details>`};
+const cmp=()=>`<div class="grid">${M.options.map((o,i)=>{const s=M.stories[T.story],c=s?s.fit[i]:null,tr=s?traceInfo(s,o):null;return`<div data-opt="${i}" data-view="paths" style="cursor:pointer;opacity:${c==="0"?.45:1}"><b>${o.id} · ${esc(o.title)}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""} <span class="mu">${!s?"":c==="1"?(tr.valid?"● traced":"◐ trace incomplete"):c==="x"?"✕ guardrail violated":"— not represented"}</span><div class="cm">${draw(o,hlFor(i),"c"+i).html}</div></div>`}).join("")}</div><p class="mu">Click a diagram to open it. Pick a story on the left to trace it in every option.</p>`;
+function fitv(){const st=M.reqs.filter(r=>r.star),all=M.options.filter((o,i)=>st.length&&st.every(r=>r.f[i]==="y")).map(o=>o.id),r=M.reqs[T.rq];
+ return`<table><thead><tr><th></th><th>criterion (★ matters most)</th>${M.options.map(o=>`<th style="text-align:center">${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.reqs.map((q,i)=>`<tr><td data-star="${i}" style="cursor:pointer;color:${q.star?"var(--wn)":"var(--mu)"}">${q.star?"★":"☆"}</td><td data-rq="${i}" style="cursor:pointer;${T.rq===i?"font-weight:600;color:var(--ac)":""}">R${i+1} ${esc(q.text)}</td>${[...q.f].map((c,j)=>`<td data-rate="${i},${j}" title="Click to change" style="text-align:center;cursor:pointer;font-size:16px;color:${MK[c][1]}">${MK[c][0]}</td>`).join("")}<td><button data-del="reqs.${i}">×</button></td></tr>`).join("")}</tbody></table>
+<div class="row"><input data-nr placeholder="Add a criterion…" value="${esc(T.nr)}"><button data-addreq>+</button></div>
+<p class="mu">${st.length?(all.length?"All starred criteria modeled (not verified): "+all.join(", "):"No option fully meets every starred criterion."):"Star the criteria that matter most."} ✓ modeled in the candidate, not verified · ◐ partly · × conflict shown · ? open. Click a criterion to trace it; click a mark to change it.</p>
+${r?`<div class="tc"><b>R${T.rq+1}</b>${inp("reqs."+T.rq+".text","Criterion")}<p class="mu">Importance</p>${authoritySelect("reqs."+T.rq+".status",r.status,["Core goal","Must-have","Nice-to-have","Undecided","Out"])}<p class="mu">Authority</p>${authoritySelect("reqs."+T.rq+".auth",r.auth,["Working","Accepted"])}<p class="mu">Where it came from</p>${inp("reqs."+T.rq+".src","e.g. Outcome, S3")}<p class="mu">Why it matters</p>${inp("reqs."+T.rq+".why")}<p class="mu">Check: what would show it holds</p>${inp("reqs."+T.rq+".chk")}${M.options.map((o,j)=>`<p class="mu">Nodes in ${o.id} that realize it</p>${inp("reqs."+T.rq+".l."+j,"e.g. P1 P3")}`).join("")}</div>`:""}`}
+const trade=()=>M.options.map((o,i)=>`<div class="tc${M.pick===o.id?" pk":""}"><b>${o.id}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""}${inp("options."+i+".title","Title")}<p class="mu">Promise</p>${inp("options."+i+".promise")}<p class="mu">Risk</p>${inp("options."+i+".risk")}<p class="mu">What it cuts</p>${inp("options."+i+".cuts")}<div class="row"><button data-pick="${o.id}">${M.pick===o.id?"Selected (click to clear)":"Select "+o.id}</button></div></div>`).join("");
+const things=()=>{const w={};M.things.forEach(t=>w[t.where]=(w[t.where]||0)+1);return`<p class="mu">The nouns of the product and where each lives. ${Object.entries(w).map(([k,v])=>v+" in "+(k||"?")).join(" · ")}</p>`+tbl("things",[["id","Stable ID"],["name","Thing"],["what","What it is"],["where","Lives in"],["seen","Changed or seen at"]],"thing")};
+function decisionIssues(){
+ const o=M.options.find(x=>x.id===M.pick),k=M.options.indexOf(o),issues=[];
+ if(!o)return ["Choose a preferred candidate"];
+ if(o.placeholder)issues.push("This is only a placeholder sketch");
+ if(!M.cut.trim())issues.push("Set a cut line");
+ if(!M.appetite.trim()||M.appetiteAuthority!=="Accepted")issues.push("Accept the Appetite");
+ if(!["Accepted","Intentionally lightweight"].includes(M.frameAuthority))issues.push("Accept or intentionally simplify the frame");
+ if(!M.why.trim())issues.push("Record why this candidate was chosen");
+ if(!M.reqs.length)issues.push("Define requirements");
+ for(const r of M.reqs){
+  if(r.status==="Out")continue;
+  if(r.auth!=="Accepted")issues.push(r.id+" has not been accepted");
+  if(["Core goal","Must-have","Undecided"].includes(r.status)&&r.f[k]!=="y")issues.push(r.id+" does not pass the formal fit check");if(["Core goal","Must-have"].includes(r.status)&&!ids(r.l[k]).length)issues.push(r.id+" has no supporting shape parts");
+  const nodes=new Set(parse(o.dsl).nodes.map(n=>n.i));
+  for(const id of ids(r.l[k]))if(!nodes.has(id))issues.push(r.id+" references missing node "+id);
+ }
+ for(const s of M.stories)if(s.fit[k]==="1"&&!traceInfo(s,o).valid)issues.push((s.id||"Story")+" lacks a complete trace");
+ if(parse(o.dsl).err.length)issues.push("Resolve invalid breadboard wiring");
+ return [...new Set(issues)]
+}
+const decision=()=>{
+ const o=M.options.find(x=>x.id===M.pick),issues=decisionIssues(),accepted=M.selectionAuthority==="Accepted"&&!issues.length;
+ return`<div class="bar"><b>${accepted?"Accepted selected shape":"Working preference"}:</b> ${o?esc(o.id+" · "+o.title):"nothing selected yet"} ${o?inp("why","Why this one?"):""}${o?`<button data-accept>${accepted?"Accepted":"Accept selection"}</button>`:""}<button data-top="shape" data-sub="doc">View the shape</button><span class="mu">${issues.length?"To accept: "+esc(issues.slice(0,3).join("; "))+(issues.length>3?" · "+(issues.length-3)+" more":""):"Eligible for human acceptance. Candidate evidence alone is never build scope."}</span></div>`
+};
+const board=()=>strip()+`<div class="opts">${[["paths","Paths"],["cmp","Compare"],["fit","Fit check"],["trade","Trade-offs"],["things","Things"]].map(([k,t])=>`<span class="opt${T.view===k?" on":""}" data-view="${k}">${t}</span>`).join("")}${T.view==="paths"?'<span class="opt" data-z="-1">−</span><span class="opt" data-z="1">+</span>':""}</div>`+({paths,cmp,fit:fitv,trade,things}[T.view])()+decision();
+function notes(){const o=M.options.find(x=>x.id===M.pick),k=M.options.indexOf(o),st=M.reqs.filter(r=>r.star);
+ const ln=[`# ${M.name} · shaping decision`,"","Status: working notes. A preference is not an accepted selection. Build scope needs accepted requirements/Appetite, human shape selection, an accepted reconciled selected-design breadboard and a selected slice.","",`Chosen: ${o?o.id+" · "+o.title:"none yet"}`,`Why: ${M.why||"not given"}`,`Appetite: ${M.appetite||"not set"}`,`Cut line: ${M.cut||"not set"}`,`Current slice: ${M.slice||"not set"}`,"","## Problem",...M.problem.map(x=>"- "+x),"","## Outcome",...M.outcome.map(x=>"- "+x),"","## Starred criteria",...(st.length?st.map(r=>`- ${r.text}${r.chk?" | check: "+r.chk:""}`):["- none"]),"","## Fit (✓ modeled, not verified; ◐ partly; × conflict shown; ? open)",...M.reqs.map(r=>`- ${r.text}: `+[...r.f].map((c,i)=>M.options[i].id+MK[c][0]).join(" "))];
+ if(o)ln.push("",`## Direction ${o.id}`,`Non-goals: ${o.cuts||"not given"}`,`Risk accepted: ${o.risk||"not given"}`,"Rejected alternatives:",...M.options.filter(x=>x!==o).map(x=>`- ${x.id} · ${x.title}${x.placeholder?" (placeholder sketch)":""}: ${x.risk||"no risk noted"}`),`Stable IDs in ${o.id}: ${parse(o.dsl).nodes.map(n=>n.i).join(", ")}`,`Stories supported: ${M.stories.map((s,i)=>s.fit[k]==="1"?"S"+(i+1):"").filter(Boolean).join(", ")||"none"}`);
+ const unk=M.reqs.filter(r=>o?r.f[k]==="u":r.f.includes("u"));ln.push("","## Open unknowns",...(unk.length?unk.map(r=>"- "+r.text):["- none"]));
+ if(M.slices.length)ln.push("","## Proposed slices (not build scope)",...M.slices.map(s=>`- ${s.name}: stories ${s.stories||"-"}; cut first: ${s.cut||"-"}`));
+ if(M.rel.length)ln.push("","## Verification",...M.rel.map(r=>`- [${r.status}] ${r.req}${r.evidence?" · "+r.evidence:""}`));return ln.join("\n")}
+const doc=()=>`<h2>The shape</h2><p class="mu">A read-only summary of the current decisions. Copy it or download it into your repo's planning folder.</p><div class="row"><button data-act="copy">Copy</button><button data-act="md">Download .md</button><button data-act="zip" title="frame, shaping and breadboard files in the Planning Skills format">Download planning files (.zip)</button></div><pre class="doc">${esc(notes())}</pre>`;
+function plan(){const k=M.options.findIndex(o=>o.id===M.pick),rd=[[M.appetite,"Appetite set"],[M.pick,"Direction selected by a human"],[M.why,"Reason recorded"],[M.reqs.some(r=>r.star),"At least one starred criterion"],[M.slice,"Current slice named"],[!(k>=0&&M.reqs.some(r=>r.star&&r.f[k]==="n")),"No starred criterion in conflict for the chosen direction"]];
+ return`<h2>Plan</h2><p class="mu">Turn the chosen direction into slices you can demo. For each: which stories it covers and what gets cut first. Name the one you are building now in the strip on the Shaping board.</p><div class="tc">${rd.map(([ok,t])=>`<div>${ok?'<span style="color:var(--ok)">✓</span>':'<span class="mu">○</span>'} ${t}</div>`).join("")}</div>`+tbl("slices",[["name","Slice"],["stories","Stories (e.g. S1 S2)"],["cut","Cut first"]],"slice")}
+function review(){const c={};M.drift.forEach(r=>c[r.status]=(c[r.status]||0)+1);
+ return`<h2>Review</h2><p class="mu">Compare what was intended with what exists. Seed rows from the chosen direction's breadboard, then record what you find. ${Object.entries(c).map(([k,v])=>v+" "+k).join(" · ")}</p><div class="row"><button data-act="seed">Seed from chosen option</button></div>`+tbl("drift",[["item","Item"],["intent","Intended"],["reality","Actual"],["status","Status",["not checked","as intended","drifted","not built","unplanned"]]],"row")}
+function release(){const n=M.rel.length,p=M.rel.filter(r=>r.status==="passed").length,f=M.rel.filter(r=>r.status==="failed").length;
+ return`<h2>Release</h2><p class="mu">Each criterion's check, with its result. ${n?`${p} of ${n} passed${f?" · "+f+" failed":""} · ${p===n?"every check has passed":"not ready"}`:"No checks yet."}</p><div class="row"><button data-act="sync">Sync from criteria</button></div>`+tbl("rel",[["req","Criterion"],["check","Check"],["status","Status",["not verified","passed","failed"]],["evidence","Evidence"]],"check")}
+function render(){const sh=T.top==="shape",bd=sh&&T.sub==="board";
+ $("#app").innerHTML=`<header>${inp("name","Project name")}<nav class="tabs">${["shape","plan","review","release"].map(t=>`<span class="${T.top===t?"on":""}" data-top="${t}">${t[0].toUpperCase()+t.slice(1)}</span>`).join("")}</nav>${sh?`<nav class="tabs"><span class="${T.sub==="doc"?"on":""}" data-sub="doc">The shape</span><span class="${bd?"on":""}" data-sub="board">Shaping board</span></nav>`:""}<span class="sp"></span><label class="mu" for="board-projects">Project</label><select id="board-projects" data-project aria-label="Current saved project">${Object.values(projects).map(p=>'<option value="'+esc(p.project_id)+'"'+(p.project_id===M.project_id?' selected':'')+'>'+esc(p.name)+'</option>').join("")}</select><span class="mu">${esc(T.msg)}</span>${T.undo?'<button data-act="undo">Undo</button>':""}<button data-act="imp">Import</button><button data-act="exp">Export JSON</button><button data-act="new">New</button><button data-act="ex">Example</button></header>
+ <div class="wrap">${bd?`<aside>${frame()}${stories()}</aside>`:""}<main>${sh?(bd?board():doc()):({plan,review,release}[T.top])()}</main></div>`;
+ renderDia();fit();document.querySelectorAll(".opt,.tabs span").forEach(el=>{el.setAttribute("role","button");el.setAttribute("tabindex","0")})}
+/* ---- export as the repo's planning files ---- */
+function crc32(u){const T=crc32.t||(crc32.t=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;return c>>>0}));let r=-1;for(const b of u)r=T[(r^b)&255]^(r>>>8);return(r^-1)>>>0}
+function zip(files){const en=new TextEncoder(),out=[],cen=[],u16=n=>[n&255,n>>8&255],u32=n=>[n&255,n>>8&255,n>>16&255,n>>>24&255];let off=0;
+ files.forEach(([name,text])=>{const nb=en.encode(name),d=en.encode(text),c=crc32(d),h=new Uint8Array([0x50,0x4b,3,4,20,0,0,8,0,0,0,0,0,0,...u32(c),...u32(d.length),...u32(d.length),...u16(nb.length),0,0]);
+  out.push(h,nb,d);cen.push(new Uint8Array([0x50,0x4b,1,2,20,0,20,0,0,8,0,0,0,0,0,0,...u32(c),...u32(d.length),...u32(d.length),...u16(nb.length),0,0,0,0,0,0,0,0,0,0,0,0,...u32(off),...nb]));off+=h.length+nb.length+d.length});
+ const cs=cen.reduce((a,b)=>a+b.length,0);return new Blob([...out,...cen,new Uint8Array([0x50,0x4b,5,6,0,0,0,0,...u16(files.length),...u16(files.length),...u32(cs),...u32(off),0,0])],{type:"application/zip"})}
+const cell=s=>String(s??"").replace(/\|/g,"/").replace(/\n/g," ").trim()||"not recorded";
+const RID=i=>M.reqs[i]?.id||"R"+(i+1);
+function bbMap(o){const g=parse(o.dsl),m={},pl=[],ui=[],nu=[],st=[],br=[];let p=0,u=0,n=0,s=0;
+ g.nodes.forEach((x,ix)=>{x.part=o.id+"-"+x.i;if(x.k==="place"){m[x.i]=/^P[0-9]+$/.test(x.i)?x.i:"P"+ ++p;pl.push(x);x.r.forEach(r=>ui.push({id:"U"+m[x.i].replace(/\D/g,"")+"."+(x.r.indexOf(r)+1),pl:m[x.i],x,row:r,out:[]}))}
+  else if(x.k==="store"){m[x.i]=/^S[0-9]+$/.test(x.i)?x.i:"S"+ ++s;st.push(x)}else if(x.k==="question"){m[x.i]="BR"+(br.push(x));}else{m[x.i]=/^N[0-9]+$/.test(x.i)?x.i:/^O[0-9]+$/.test(x.i)?"N"+x.i.slice(1):"N"+ ++n;nu.push(Object.assign(x,{id:m[x.i],out:[]}))}});
+ g.edges.forEach(e=>{const A=g.nodes.find(x=>x.i===e.a),B=g.nodes.find(x=>x.i===e.b);if(!A||!B)return;const w="→ "+m[e.b];
+  if(A.k==="place"){const r=ui.filter(y=>y.x===A);const r1=r.find(y=>e.l&&y.row.toLowerCase().includes(e.l.toLowerCase()))||r[0];if(r1)r1.out.push(w)}else{A.out=A.out||[];A.out.push(w)}});
+ return{g,m,pl,ui,nu,st,br}}
+function bbMd(o,mode){const{g,m,pl,ui,nu,st,br}=bbMap(o),T2=(h,rows)=>"| "+h.join(" | ")+" |\n|"+h.map(()=>"---").join("|")+"|\n"+(rows.length?rows.map(r=>"| "+r.map(cell).join(" | ")+" |").join("\n"):"| "+h.map(()=>"none").join(" | ")+" |"),w=a=>a&&a.length?a.join(", "):"—",tr=ids(M.stories.map(s=>s).length?"":"");
+ const traces=M.stories.filter(story=>!story.anti&&story.fit[M.options.indexOf(o)]==="1"&&traceInfo(story,o).valid).map(story=>{const p=traceInfo(story,o).nodes.map(id=>m[id]);const first=ui.find(y=>y.pl===p[0])||{id:p[0]||"—"};return[story.id+": "+story.text,first.id,p.join(" -> "),"—","—",p[p.length-1]||"—","candidate trace; unverified"]});
+ return`---
+planning: true
+artifact_type: breadboard
+mode: ${mode}
+status: draft
+source_of_truth: false
+feeds: []
+---
+
+# ${M.name} — Breadboard ${o.id}
+
+## Mode and authority
+
+- Mode: \`${mode}\`
+- Requirements authority: Working
+- Appetite authority: ${M.appetite?"Working":"Unset"}
+- Candidate shape: ${o.id} — ${cell(o.title)}
+- Evidence: exported from the shaping board; candidate evidence only, not build scope${o.placeholder?"; this option is a placeholder sketch, not from real evidence":""}
+
+## Places
+
+${T2(["ID","Authority","Shape part","Place","Description"],pl.map(x=>[m[x.i],"candidate",x.part,x.t,x.s||"not recorded"]))}
+
+## UI Affordances
+
+${T2(["ID","Place","Authority","Shape part","Component","Affordance","Control","Wires Out","Returns To"],ui.map(y=>[y.id,y.pl,"candidate",y.x.part,y.x.t,y.row,"click",w(y.out),"—"]))}
+
+## Non-UI Affordances
+
+${T2(["ID","Place","Authority","Shape part","Component","Affordance","Control","Wires Out","Returns To"],nu.map(x=>[x.id,"—","candidate",x.part,x.s||"system",x.t+(x.r.length?": "+x.r.join("; "):""),"call",w(x.out),"—"]))}
+
+## Stores
+
+${T2(["ID","Place","Authority","Shape part","Store","Description"],st.map(x=>[m[x.i],"—","candidate",x.part,x.t,x.r.join("; ")||"not recorded"]))}
+
+## Product-relevant branches
+
+${T2(["Branch","Trigger","User-visible consequence","Shape part","Status"],br.map(x=>[x.t,"decision point in the flow",g.edges.filter(e=>e.a===x.i).map(e=>(e.l||"next")+" → "+(m[e.b]||e.b)).join("; ")||"not recorded",x.part,"supported"]))}
+
+## Behavior traces
+
+${T2(["Scenario","Entry","Control path","Decision / branch","State / data effect","Observable consequence","Evidence or status"],traces)}
+`}
+function planningFiles(){const o=M.options.find(x=>x.id===M.pick)||M.options[0],st=M.reqs.filter(r=>r.star),A=M.options,mk=c=>c==="y"?"✅":"❌";
+ const frame=`---
+planning: true
+artifact_type: frame
+status: draft
+source_of_truth: true
+feeds:
+  - shaping
+---
+
+# ${M.name} — Frame
+
+## Source
+
+> Exported from the shaping board. Replace with source quotes, notes or links.
+
+## Current situation
+
+- Trigger or context: not recorded
+- Current approach, workaround, or nonconsumption: not recorded
+- Current result: ${cell(M.problem[0])}
+
+## Transformation frame (x → f() → y)
+
+- x — trigger/context: ${cell(M.problem.join(" "))}
+- f() — solution / shape variable: intentionally unspecified
+- y — desired outcome: ${cell(M.outcome.join(" "))}
+- Boundaries that constrain a valid transformation: ${cell(M.cut)}
+
+## Problem
+
+${M.problem.map(x=>"- "+x).join("\n")||"- not recorded"}
+
+## Outcome
+
+${M.outcome.map(x=>"- "+x).join("\n")||"- not recorded"}
+
+## Boundaries
+
+### Less about
+- ${cell(M.cut)}
+
+### More about
+- ${cell(M.outcome[0])}
+`;
+ const shaping=`---
+planning: true
+artifact_type: shaping
+status: draft
+source_of_truth: true
+feeds:
+  - breadboard
+---
+
+# ${M.name} — Shaping
+
+## Working mode
+
+- Profile: collaborative
+- Current move: ${M.pick?"selection":"fit"}
+- Entry point: existing artifact
+
+## Requirements
+
+${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|---|---|---|---|---|---|---|\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.star?"Must-have":"Nice-to-have",r.auth||"Working",r.src,r.chk?"check: "+r.chk:"",r.why].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | Working | not recorded | not recorded | not recorded |")}
+
+## Appetite
+
+- Authority: ${M.appetiteAuthority}
+- Time budget: ${cell(M.appetite)}
+- Cut line: ${cell(M.cut)}
+- Current slice: ${cell(M.slice)}
+
+## Shapes
+
+${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part | Mechanism | Flag |\n|---|---|:---:|\n${g.nodes.map((n,i)=>"| "+x.id+(i+1)+" | "+cell((n.k==="place"?"Place":n.k==="action"?"Action":n.k==="store"?"Store":"Branch")+": "+n.t+(n.r.length?" — "+n.r.join("; "):""))+" | "+(x.placeholder?"⚠️":"")+" |").join("\n")||"| "+x.id+"1 | not recorded | |"}\n`}).join("\n")}
+## Fit check
+
+- Authority: Working
+- Evaluation altitude: Design conformance
+
+${"| Req | Requirement | Status | "+A.map(x=>x.id).join(" | ")+" |\n|---|---|---|"+A.map(()=>":---:|").join("")+"\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.star?"Must-have":"Nice-to-have",...[...r.f].map(mk)].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | "+A.map(()=>"❓").join(" | ")+" |")}
+
+Working fit projection: ✅ modeled; ❌ missing, conflicted, partial, or unknown. Unknowns fail the formal gate until resolved or explicitly accepted. A placeholder (⚠️) is not decision-ready.
+
+## Reverse fit check
+
+${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---|:---:|\n"+(()=>{const g=parse(o.dsl),rows=g.nodes.map((n,i)=>{const s=M.reqs.map((r,ri)=>ids(r.l[A.indexOf(o)]).includes(n.i)?RID(ri):"").filter(Boolean);return["| "+o.id+(i+1),cell(n.t),s.join(", ")||"none recorded",s.length?"✅":"❓"]});return rows.map(r=>r.join(" | ")+" |").join("\n")||"| "+o.id+"1 | not recorded | none recorded | ❓ |"})()}
+
+## Decision
+
+- Status: ${M.pick&&M.selectionAuthority==="Accepted"&&!decisionIssues().length?"selected":M.pick?"decision-ready":"exploring"}
+- Chosen direction: ${M.pick?M.pick+" — "+cell(o.title)+(M.selectionAuthority==="Accepted"?"":" (working preference, not yet accepted)"):"not chosen yet"}
+- Why: ${cell(M.why)}
+- Rejected directions: ${M.pick?A.filter(x=>x!==o).map(x=>x.id+" — "+cell(x.risk)).join("; ")||"none":"none yet"}
+- Cuts / non-goals: ${cell(M.pick?o.cuts:M.cut)}
+`;
+ const f=[["planning/01-frame.md",frame],["planning/02-shaping.md",shaping],...A.map(candidate=>["planning/03-candidate-"+candidate.id+"-breadboard.md",bbMd(candidate,"candidate-shape")])];
+ // Draft slices stay in board JSON. Only accepted selected-design intent may define buildable slices.
+ return f}
+/* ---- actions ---- */
+function addOpt(){const id=[...L].find(c=>!M.options.some(o=>o.id===c));if(!id)return;M.options.push({id,title:"Option "+id,promise:"",risk:"",cuts:"",placeholder:false,dsl:""});M.stories.forEach(s=>s.fit+="0");M.reqs.forEach(r=>{r.f+="u";r.l.push("")});T.opt=M.options.length-1}
+function delOpt(){if(M.options.length<2)return;const i=T.opt,o=M.options[i],cut=s=>s.slice(0,i)+s.slice(i+1);M.options.splice(i,1);M.stories.forEach(s=>s.fit=cut(s.fit));M.reqs.forEach(r=>{r.f=cut(r.f);r.l.splice(i,1)});if(M.pick===o.id)M.pick=null;T.opt=0}
+function act(a){const k=M.options.findIndex(o=>o.id===M.pick);
+ if(a==="imp"){$("#imp").click();return false}
+ if(a==="exp"){dl(slug()+".board.json",JSON.stringify(M,null,2),"application/json");return false}
+ if(a==="md"){dl(slug()+"-shape.md",notes(),"text/markdown");return false}
+ if(a==="zip"){dl(slug()+"-planning.zip",zip(planningFiles()),"application/zip");return false}
+ if(a==="copy"){try{navigator.clipboard.writeText(notes());T.msg="Copied"}catch(_){T.msg="Copy blocked here; use Download"}}
+ if(a==="new"){save();T.undo=clone(M);M=norm(blank());M.project_id=makeProjectId();T.top="shape";T.sub="board";T.opt=0;T.story=T.rq=null}
+ if(a==="ex"){save();T.undo=clone(M);M=norm(clone(E));M.project_id=makeProjectId();T.top="shape";T.sub="board";T.opt=0;T.story=T.rq=null}
+ if(a==="undo"&&T.undo){M=T.undo;T.undo=null;T.opt=0;T.story=T.rq=null}
+ if(a==="seed"&&k>=0)parse(M.options[k].dsl).nodes.forEach(n=>{const it=n.i+" · "+n.t;if(!M.drift.some(r=>r.item===it))M.drift.push({item:it,intent:n.k+(n.r.length?": "+n.r.join("; "):""),reality:"",status:"not checked"})});
+ if(a==="seed"&&k<0)T.msg="Select a direction first";
+ if(a==="sync")[...M.reqs].sort((x,y)=>y.star-x.star).forEach(r=>{if(!M.rel.some(x=>x.req===r.text))M.rel.push({req:r.text,check:r.chk||"",status:"not verified",evidence:""})});
+ return true}
+document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data-sub],[data-view],[data-opt],[data-addopt],[data-delopt],[data-story],[data-dot],[data-star],[data-rq],[data-rate],[data-pick],[data-add],[data-del],[data-z],[data-act],[data-addreq],[data-accept]");if(!t)return;const d=t.dataset;T.msg="";
+ if(d.top)T.top=d.top;if(d.sub)T.sub=d.sub;if(d.view)T.view=d.view;if(d.opt!==undefined)T.opt=+d.opt;
+ if(d.addopt!==undefined)addOpt();if(d.delopt!==undefined)delOpt();
+ if(d.story!==undefined)T.story=T.story===+d.story?null:+d.story;
+ if(d.dot){const[i,j]=d.dot.split(",").map(Number),s=M.stories[i],c="10x"[("10x".indexOf(s.fit[j])+1)%3];s.fit=s.fit.slice(0,j)+c+s.fit.slice(j+1);M.selectionAuthority="Working"}
+ if(d.star!==undefined)M.reqs[+d.star].star=!M.reqs[+d.star].star;
+ if(d.rq!==undefined)T.rq=T.rq===+d.rq?null:+d.rq;
+ if(d.rate){const[i,j]=d.rate.split(",").map(Number),r=M.reqs[i],c="ypnu"[("ypnu".indexOf(r.f[j])+1)%4];r.f=r.f.slice(0,j)+c+r.f.slice(j+1);M.selectionAuthority="Working"}
+ if(d.pick){M.pick=M.pick===d.pick?null:d.pick;M.selectionAuthority="Working"}if(d.accept!==undefined){const issues=decisionIssues();if(issues.length){T.msg="Selection blocked: "+issues[0]}else{M.selectionAuthority="Accepted";T.msg="Human selection recorded"}}
+ if(d.add)M[d.add].push(TPL[d.add]());
+ if(d.del){const[k,i]=d.del.split(".");M[k].splice(+i,1);if(k==="reqs")T.rq=null;if(k==="stories")T.story=null}
+ if(d.z)T.zm=Math.max(.5,Math.min(2,T.zm+.25*d.z));
+ if(d.addreq!==undefined&&T.nr.trim()){const n=M.options.length;M.reqs.push({id:"R"+(Math.max(0,...M.reqs.map(r=>+(r.id||"").replace(/\D/g,"")||0))+1),status:"Undecided",auth:"Working",text:T.nr.trim(),src:"",why:"",chk:"",star:false,f:"u".repeat(n),l:Array(n).fill("")});T.nr=""}
+ if(d.act&&!act(d.act))return;save();render()});
+document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.nr!==undefined){T.nr=el.value;return}
+ if(el.type==="checkbox"||el.tagName==="SELECT")return;
+ if(d.l){M[d.l]=el.value.split("\n").map(s=>s.trim()).filter(Boolean);save();return}
+ if(d.p){set(d.p,el.value);if(d.p!=="name"&&d.p!=="why")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
+document.addEventListener("change",e=>{const el=e.target;if(el.dataset.project!==undefined){const next=projects[el.value];if(next){save();try{M=norm(clone(next));T.opt=0;T.rq=T.story=null;save()}catch(_){T.msg="Saved project is invalid"}render()}return}if(el.dataset.p&&(el.type==="checkbox"||el.tagName==="SELECT")){set(el.dataset.p,el.type==="checkbox"?el.checked:el.value);M.selectionAuthority="Working";save();render()}});
+document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.nr!==undefined)$("[data-addreq]").click();if((e.key==="Enter"||e.key===" ")&&e.target.matches(".opt,.tabs span")){e.preventDefault();e.target.click()}});
+$("#imp").addEventListener("change",e=>{const f=e.target.files[0];if(f)f.text().then(x=>{try{const m=JSON.parse(x);if(!Array.isArray(m.options)||!m.options.length||f.size>1024*1024)throw 0;save();T.undo=clone(M);M=norm(m);M.project_id=M.project_id||makeProjectId();T.opt=0;T.story=T.rq=null;save()}catch(_){T.msg="That file isn't a board export"}render()});e.target.value=""});
+addEventListener("resize",fit);render();
+</script></body></html>
