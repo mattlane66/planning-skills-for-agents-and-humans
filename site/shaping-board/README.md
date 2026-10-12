@@ -1,0 +1,69 @@
+# Shaping Board
+
+Optional browser surface for **Planning Skills for Agents and Humans**. The board supports flexible exploration; the canonical Markdown and human commitment gates remain authoritative.
+
+## Start
+
+- Hosted (after merging and deploying): https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/
+- Offline: download `index.html` and open it in a browser. No server, account, external assets, or API calls required.
+- **Example** loads a DWC Requests sample. The GitLab alternatives A–C are marked as placeholder sketches; none is claimed to be proven.
+- **New** creates a blank board. **Import** accepts exported `.board.json`. Save a project by **Export JSON**, then commit the file in your project's own repo. Browser autosave is convenience, not version control.
+
+## Open your own existing planning project
+
+From the Planning Skills repository, run:
+
+```bash
+python3 scripts/build_shaping_board_data.py \
+  --planning-dir /path/to/product/planning \
+  --output /path/to/product/planning/shaping.board.json
+```
+
+Then open the board and import that file. The adapter reads the project's existing frame/shaping files and available breadboard tables. It does not modify Markdown, invent a missing breadboard, or confer acceptance. Where a candidate lacks a diagram, it is deliberately left as a placeholder until shaped. The board shows accepted input information from existing artifacts, but is an **inspection/editing copy** and is not a replacement for those artifacts.
+
+For a brand-new project, use the board directly; it exports a ZIP containing a working frame, working shaping document, and *all* candidate-shape breadboards. These are starting points for review, not authorized tasks. Use the normal repo skills to reconcile selected-design intent and choose a build slice. For an existing project, **review the proposal diff and merge deliberately**: do not overwrite higher-authority accepted Markdown wholesale. The board does not provide automatic lossless Markdown round-tripping.
+
+## What's inside
+
+- **Frame:** problem and outcome, Appetite, cut line, authority
+- **Stories:** per-option traces; a complete supported trace requires connected, existing nodes and links
+- **Paths / Compare:** diagrams created from place, action, store, and decision node notation
+- **Fit check:** exploratory ✓/◐/×/? ratings, stable requirement IDs, independent requirement status and acceptance; ZIP fit is binary because unproven claims cannot pass the repo's formal check
+- **Trade-offs:** promises, accepted risks and cuts, working preferred option
+- **Things:** working product nouns, stable IDs, likely system ownership
+- **Human selection:** requires accepted requirements, Appetite, explicit cut line, resolved mandatory fit, and rationale
+- **Plan, Review, Release:** working notes and evidence bookkeeping. These tabs do not implement code, run tests, authorize work, or verify a deployed product.
+
+## Board diagram text
+
+```text
+group: Account screens = P1 U1
+P1 | place | Account page | display current status | app
+U1 | action | Confirm action | click confirm | UI
+N1 | action | Validate request | reject invalid changes | backend
+S1 | store | Account state | read and write status | db
+P1 -> U1 : use
+U1 -> N1 : submit
+N1 -> S1 : save
+```
+
+Optional `@x,y,w,h` node placement and SVG route data use numeric positioning. Broken references, duplicate node IDs, missing story links, and unrecognized graph lines should be corrected before a decision is accepted.
+
+The editor is text-first to avoid a heavyweight canvas dependency. The same board works across devices; on a narrow screen, scroll to inspect large diagrams rather than expecting microscopic cards.
+
+## Authority and scope
+
+The board's JSON is an editable working snapshot. The repository's `shaping/SKILL.md`, `breadboarding/SKILL.md`, `shaping/references/fit-checks.md`, human-decision gates, and acceptance rules control actual downstream scope. An accepted shape alone **never** promotes an exploratory candidate breadboard into selected-design intent. Accepted selected-design reconciliation and an explicitly selected slice are separate steps.
+
+The Product Intent Layer and code-drift checks remain separate opt-in tooling. The board's **Things** are *not* accepted invariants or confirmed code mappings and must not be treated as such.
+
+## Validation
+
+Run `node site/shaping-board/test-board.mjs` after `cd site && npm ci --ignore-scripts`, plus `python3 -m unittest discover -s tests -p test_shaping_board_adapter.py` from the repository root. CI also checks the documentation portal and repo health.
+
+## Limitations
+
+- The browser does not execute agent skills, call GitHub, verify source code, prove user outcomes, or promote accepted intent.
+- Existing markdown import is a **read-only projection**. Its round-trip export is a reviewable proposal, not a patcher that preserves every unrelated Markdown section.
+- Autosave is local to the browser; keep exported JSON in your own repository for durable version history.
+- Diagram editing is text-based and not multiuser; deliberately no backend.
