@@ -78,7 +78,15 @@ function parse(src){const g={nodes:[],edges:[],groups:[],err:[]};
   if(m=ln.match(/^group:\s*(.+?)\s*=\s*(.+)$/))g.groups.push({n:m[1],ids:ids(m[2])});
   else if(m=ln.match(/^(\S+)\s*->\s*(\S+)\s*(?::\s*([^~@]*))?(?:~\s*([^@]*))?(?:@\s*(-?\d+)\s*,\s*(-?\d+))?\s*$/))g.edges.push({a:m[1],b:m[2],l:(m[3]||"").trim(),p:(m[4]||"").trim(),lx:m[5],ly:m[6]});
   else if(ln.includes("|")){const f=ln.split("|").map(s=>s.trim());g.nodes.push({i:f[0],k:f[1]||"place",t:f[2]||f[0],r:(f[3]||"").split(";").map(s=>s.trim()).filter(Boolean),s:f[4]||"",pos:(f[5]||"").match(/-?\d+/g)?.map(Number)||[]})}
-  else g.err.push("Line "+(n+1)+": can't read \""+ln.slice(0,40)+"\"")});return g}
+  else g.err.push("Line "+(n+1)+": can't read \""+ln.slice(0,40)+"\"")});
+ const seen=new Set();
+ for(const n of g.nodes){
+  if(!/^[A-Za-z][A-Za-z0-9_.-]{0,40}$/.test(n.i)||seen.has(n.i))g.err.push("Invalid or duplicated node ID: "+n.i);
+  seen.add(n.i);
+  if(!["place","action","question","store"].includes(n.k))g.err.push("Unknown kind at "+n.i);
+  if(n.pos.some(x=>!Number.isFinite(x)||Math.abs(x)>10000))g.err.push("Position out of range: "+n.i);
+ }
+ return g}
 function lay(g){const by={};g.nodes.forEach(n=>by[n.i]=n);
  g.edges.forEach(e=>{if(!by[e.a]||!by[e.b])g.err.push("Unknown id in "+e.a+" -> "+e.b)});g.groups.forEach(q=>q.ids.forEach(i=>{if(!by[i])g.err.push("Unknown id "+i+" in group")}));
  const adj={},st={},fw=[];g.nodes.forEach(n=>adj[n.i]=[]);g.edges.forEach(e=>by[e.a]&&by[e.b]&&adj[e.a].push(e.b));
@@ -97,7 +105,7 @@ function draw(o,hl,uid){const g=parse(o.dsl),{W,H,by}=lay(g),ns=[...new Set(g.no
   if(n.k==="action")return`<div class="n o${c}" style="${st}${col(n)}"><div class="ti">${esc(n.t)}</div>${n.r.length?`<div class="sub">${esc(n.r.join(" · "))}</div>`:""}</div>`;
   return`<div class="n${n.k==="store"?" st":""}${c}" style="${st}${col(n)}"><div class="tp">${esc(n.s)}${n.k==="store"?" · store":""}</div><div class="ti">${esc(n.t)}</div>${n.r.map((r,i)=>`<div class="r">${i+1} ${esc(r)}</div>`).join("")}</div>`}).join("");
  g.edges.forEach(e=>{const A=by[e.a],B=by[e.b];if(!A||!B)return;let d,lx,ly;
-  if(e.p){d=e.p;lx=+e.lx||0;ly=+e.ly||0}
+  if(e.p && /^[MmLlHhVvCcSsQqTtAaZz0-9,.+\\-\\s]+$/.test(e.p) && e.p.length<1000){d=e.p;lx=+e.lx||0;ly=+e.ly||0}
   else if(B.x>=A.x+A.w-4){const x1=A.x+A.w,y1=A.y+A.h/2,x2=B.x,y2=B.y+B.h/2,m=(x1+x2)/2;d=`M${x1} ${y1}H${m}V${y2}H${x2}`;lx=m+4;ly=(y1+y2)/2}
   else{const ln=H-20+(k++)*10,x1=A.x+A.w/2,y1=A.y+A.h,x2=B.x+B.w/2,y2=B.y+B.h;d=`M${x1} ${y1}V${ln}H${x2}V${y2}`;lx=(x1+x2)/2;ly=ln-4}
   const on=!hl||(hl.has(e.a)&&hl.has(e.b));
@@ -105,7 +113,23 @@ function draw(o,hl,uid){const g=parse(o.dsl),{W,H,by}=lay(g),ns=[...new Set(g.no
   if(e.l)lb+=`<span class="lab" style="left:${lx}px;top:${ly-8}px;opacity:${on?1:.15}">${esc(e.l)}</span>`});
  const H2=H+k*10;
  return{err:g.err,html:`<div class="fb" data-w="${W}" data-h="${H2}"${uid==="m"?" data-zm=1":""}><div class="bx" style="width:${W}px;height:${H2}px"><svg width="${W}" height="${H2}"><defs><marker id="${uid}" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8z" fill="var(--mu)"/></marker></defs>${svg}</svg>${gr}${nd}${lb}</div></div>`}}
-function hlFor(i){const r=M.reqs[T.rq];if(r){const l=ids(r.l[i]);return l.length?new Set(l):null}const s=M.stories[T.story];if(s)return s.fit[i]==="0"?new Set():new Set(ids(s.path));return null}
+function traceInfo(story,option){
+ const g=parse(option.dsl),nodes=new Set(g.nodes.map(n=>n.i));
+ const path=ids(story.paths?.[option.id]||"");
+ if(!path.length)return{valid:false,nodes:path,errors:["No trace recorded for "+option.id]};
+ const errors=[...g.err];
+ for(const id of path)if(!nodes.has(id))errors.push("Missing node "+id);
+ for(let i=1;i<path.length;i++)if(!g.edges.some(e=>e.a===path[i-1]&&e.b===path[i]))errors.push("Missing connection "+path[i-1]+" → "+path[i]);
+ if(story.anti && story.fit[M.options.indexOf(option)]==="1")errors.push("Forbidden story marked represented");
+ return{valid:!errors.length,nodes:path,errors}
+}
+function hlFor(i){
+ const r=M.reqs[T.rq];
+ if(r){const l=ids(r.l[i]);return l.length?new Set(l):null}
+ const s=M.stories[T.story];
+ if(s){const trace=traceInfo(s,M.options[i]);return trace.nodes.length?new Set(trace.nodes):new Set()}
+ return null
+}
 function fit(){document.querySelectorAll(".fb").forEach(b=>{const W=+b.dataset.w,H=+b.dataset.h,s=Math.min(1,b.parentElement.clientWidth/W)*(b.dataset.zm?T.zm:1);b.firstChild.style.transform=`scale(${s})`;b.style.height=H*s+"px"})}
 function renderDia(){const el=$("#dia");if(!el)return;const o=M.options[T.opt],r=draw(o,hlFor(T.opt),"m");el.innerHTML=r.html;const e=$("#err");if(e)e.innerHTML=r.err.map(x=>`<div class="wn">${esc(x)}</div>`).join("");fit()}
 /* ---- views ---- */
@@ -117,10 +141,10 @@ const stories=()=>{const s=M.stories[T.story];return`<h2>Stories <small>click an
 function strip(){return`<div class="strip"><div><small>Requirements</small><b>${M.reqs.length} · ${M.reqs.filter(r=>r.star).length} starred</b></div><div><small>Chosen direction</small><b>${M.pick?esc(M.pick+" · "+M.options.find(o=>o.id===M.pick).title):"none yet"}</b></div><div><small>Current build slice</small>${inp("slice","none yet")}</div><div class="mu" style="flex:1;min-width:220px"><b>Nothing verified here.</b> Ratings show what the candidates model, not tested behavior.</div></div>`}
 function badges(o,i){const s=M.stories[T.story],r=M.reqs[T.rq];let h=`<span class="bdg">${M.pick===o.id?"Selected by a human · not yet reconciled":"Candidate shape · not build scope"}</span>`;
  if(o.placeholder)h+=`<span class="bdg s wn">Placeholder sketch · not from the board</span>`;if(r)h+=`<span class="bdg s">Tracing R${T.rq+1}</span>`;
- if(s){const c=s.fit[i];h+=`<span class="bdg s" style="color:${c==="1"?"var(--ok)":c==="x"?"var(--no)":"var(--mu)"}">${c==="1"?"S"+(T.story+1)+" represented":c==="x"?"✕ guardrail violated":"S"+(T.story+1)+" not represented here"}</span>`}return h}
+ if(s){const c=s.fit[i],tr=traceInfo(s,o);h+=`<span class="bdg s" style="color:${c==="x"?"var(--no)":c==="1"&&tr.valid?"var(--ok)":"var(--wn)"}">${c==="1"?(tr.valid?"Trace supported":"Claimed, trace incomplete"):c==="x"?"✕ Guardrail violated":"Not represented"}${!tr.valid?" · "+esc(tr.errors[0]):""}</span>`}return h}
 const paths=()=>{const o=M.options[T.opt];return`<div class="opts">${M.options.map((x,i)=>`<span class="opt${i===T.opt?" on":""}" data-opt="${i}">${x.id}</span>`).join("")}<span class="opt" data-addopt title="Add an option">+</span></div><h3>${inp("options."+T.opt+".title","Option title")}${badges(o,T.opt)}</h3><div id="dia"></div>
 <details open style="margin-top:10px"><summary>Edit this option's breadboard</summary><p class="mu">Nodes: <code>ID | place/action/question/store | Title | row; row | system | @x,y,w,h</code> · Edges: <code>A -> B : label</code> · Groups: <code>group: Name = ID ID</code> · <code>#</code> comments. Nodes without <code>@x,y</code> are laid out automatically.</p><textarea class="dsl" data-p="options.${T.opt}.dsl" spellcheck="false">${esc(o.dsl)}</textarea><div id="err"></div><div class="row"><label class="mu"><input type="checkbox" data-p="options.${T.opt}.placeholder"${o.placeholder?" checked":""}> placeholder sketch (not from real evidence)</label><span class="sp" style="flex:1"></span><button data-delopt>Delete this option</button></div></details>`};
-const cmp=()=>`<div class="grid">${M.options.map((o,i)=>{const s=M.stories[T.story],c=s?s.fit[i]:null;return`<div data-opt="${i}" data-view="paths" style="cursor:pointer;opacity:${c==="0"?.45:1}"><b>${o.id} · ${esc(o.title)}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""} <span class="mu">${!s?"":c==="1"?"● represented":c==="x"?"✕ violates the guardrail":"— not represented"}</span><div class="cm">${draw(o,hlFor(i),"c"+i).html}</div></div>`}).join("")}</div><p class="mu">Click a diagram to open it. Pick a story on the left to trace it in every option.</p>`;
+const cmp=()=>`<div class="grid">${M.options.map((o,i)=>{const s=M.stories[T.story],c=s?s.fit[i]:null,tr=s?traceInfo(s,o):null;return`<div data-opt="${i}" data-view="paths" style="cursor:pointer;opacity:${c==="0"?.45:1}"><b>${o.id} · ${esc(o.title)}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""} <span class="mu">${!s?"":c==="1"?(tr.valid?"● traced":"◐ trace incomplete"):c==="x"?"✕ guardrail violated":"— not represented"}</span><div class="cm">${draw(o,hlFor(i),"c"+i).html}</div></div>`}).join("")}</div><p class="mu">Click a diagram to open it. Pick a story on the left to trace it in every option.</p>`;
 function fitv(){const st=M.reqs.filter(r=>r.star),all=M.options.filter((o,i)=>st.length&&st.every(r=>r.f[i]==="y")).map(o=>o.id),r=M.reqs[T.rq];
  return`<table><thead><tr><th></th><th>criterion (★ matters most)</th>${M.options.map(o=>`<th style="text-align:center">${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.reqs.map((q,i)=>`<tr><td data-star="${i}" style="cursor:pointer;color:${q.star?"var(--wn)":"var(--mu)"}">${q.star?"★":"☆"}</td><td data-rq="${i}" style="cursor:pointer;${T.rq===i?"font-weight:600;color:var(--ac)":""}">R${i+1} ${esc(q.text)}</td>${[...q.f].map((c,j)=>`<td data-rate="${i},${j}" title="Click to change" style="text-align:center;cursor:pointer;font-size:16px;color:${MK[c][1]}">${MK[c][0]}</td>`).join("")}<td><button data-del="reqs.${i}">×</button></td></tr>`).join("")}</tbody></table>
 <div class="row"><input data-nr placeholder="Add a criterion…" value="${esc(T.nr)}"><button data-addreq>+</button></div>
