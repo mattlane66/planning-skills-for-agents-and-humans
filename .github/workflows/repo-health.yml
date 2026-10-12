@@ -57,7 +57,7 @@ jobs:
           retention-days: 7
 
       - name: Validate board Markdown adapter
-        run: python3 -m unittest discover -s tests -p 'test_shaping_board_adapter.py'
+        run: python3 -m unittest discover -s tests -p 'test_shaping_board*.py'
 
       - name: Check repository health
         shell: bash
