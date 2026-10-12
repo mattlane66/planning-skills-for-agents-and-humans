@@ -18,6 +18,7 @@ on:
       - ".github/workflows/pages.yml"
       - "scripts/capture-review-demo.mjs"
       - "scripts/build-review-demo.py"
+      - "scripts/capture-shaping-board-preview.mjs"
 
 permissions:
   contents: read
@@ -83,6 +84,9 @@ jobs:
           cp -R site/terms /tmp/planning-skills-pages/terms
           cp site/review/index.html /tmp/planning-skills-pages/review/index.html
           python3 scripts/build-review-demo.py /tmp/planning-skills-review-demo-data.json /tmp/planning-skills-pages/review
+
+      - name: Capture Shaping Board README preview
+        run: node scripts/capture-shaping-board-preview.mjs /tmp/planning-skills-pages/shaping-board/preview.png
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
