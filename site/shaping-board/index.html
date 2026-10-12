@@ -58,7 +58,7 @@ function norm(m){
  m.schema_version=3;m.appetiteAuthority=m.appetiteAuthority||"Unset";m.frameAuthority=m.frameAuthority||"Working";m.selectionAuthority=m.selectionAuthority||"Working";
  const used=new Set();
  m.options.forEach(o=>{if(!o||typeof o.dsl!=="string"||o.dsl.length>100000)throw Error("Invalid option");if(!/^(CURRENT|[A-J])$/.test(o.id)||used.has(o.id))throw Error("Duplicate or invalid option ID");used.add(o.id)});
- m.reqs.forEach((r,i)=>{if(!r||typeof r.text!=="string")throw Error("Invalid requirement");r.id=r.id||"R"+(i+1);r.status=r.status||(r.status||"Undecided");r.auth=r.auth||"Working";r.f=(r.f||"").padEnd(m.options.length,"u").slice(0,m.options.length);r.l=Array.isArray(r.l)?r.l:[];while(r.l.length<m.options.length)r.l.push("")});
+ m.reqs.forEach((r,i)=>{if(!r||typeof r.text!=="string")throw Error("Invalid requirement");r.id=r.id||"R"+(i+1);r.status=r.status||(r.star?"Must-have":"Nice-to-have");r.auth=r.auth||"Working";r.f=(r.f||"").padEnd(m.options.length,"u").slice(0,m.options.length);r.l=Array.isArray(r.l)?r.l:[];while(r.l.length<m.options.length)r.l.push("")});
  const rids=m.reqs.map(r=>r.id);if(new Set(rids).size!==rids.length||rids.some(x=>!/^R\d+(?:\.\d+)?$/.test(x)))throw Error("Invalid requirement IDs");
  m.stories.forEach((s,i)=>{s.id=s.id||"S"+(i+1);s.fit=(s.fit||"").padEnd(m.options.length,"0").slice(0,m.options.length);s.paths=s.paths&&typeof s.paths==="object"&&!Array.isArray(s.paths)?s.paths:{};if(s.path&&!Object.keys(s.paths).length){const source=m.options.find(o=>!o.placeholder)||m.options[0];s.paths[source.id]=s.path}});
  m.things.forEach((t,i)=>t.id=t.id||"THING"+(i+1));
