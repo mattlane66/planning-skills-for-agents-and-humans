@@ -264,6 +264,22 @@ async function main() {
     assert.ok(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'), 'Phone viewport has document-level horizontal overflow.');
     assert.equal(await evaluate('window.innerWidth'), 390);
 
+    // The optional companion links must render at phone width without breaking
+    // the offline portal or causing page-level horizontal scrolling.
+    await evaluate('location.hash = "#/compass"; true');
+    await waitFor(
+      () => evaluate('document.querySelectorAll(".optional-tools-grid .optional-tool").length === 3'),
+      'optional tools on the mobile Compass',
+    );
+    assert.ok(
+      await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+      'Optional companion tools cause horizontal overflow on a phone',
+    );
+    assert.ok(
+      await evaluate('[...document.querySelectorAll(".optional-tool")].every(el => el.getAttribute("href")?.startsWith("https://"))'),
+      'Companion tools should link to separate HTTPS resources',
+    );
+
     // Exercise the generated Planning Publisher artifact in the same real browser.
     await client.call('Emulation.clearDeviceMetricsOverride');
     await client.call('Page.navigate', { url: publisherUrl });
