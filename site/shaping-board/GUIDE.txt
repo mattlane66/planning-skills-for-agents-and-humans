@@ -57,9 +57,23 @@ The board's JSON is an editable working snapshot. The repository's `shaping/SKIL
 
 The Product Intent Layer and code-drift checks remain separate opt-in tooling. The board's **Things** are *not* accepted invariants or confirmed code mappings and must not be treated as such.
 
+## Product-level drift during implementation
+
+Product Intent is an opt-in extension. After accepting a selected design through the repo's normal human gates, compile the PlanningPackage and run the existing trusted Product Intent gate on changed code. Save its JSON output, including REVIEW and DRIFT reports.
+
+Create a read-only projection for the board:
+
+    python3 product-intent/board_report.py --package /tmp/planning-package.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json
+
+Open Review → Import product status JSON. See affected product invariants and decisions, their referenced requirements, changed implementation paths, approved scenario results, and coverage gaps. Fit Check also marks impacted requirements. These findings do not mutate or accept planning intent.
+
+This is manual import in v1, not a live GitHub/agent connection. To refresh it after each build, have the existing protected Product Intent gate produce a new report as a CI artifact and import that artifact. CI should preserve the gate's original nonzero exit status for REVIEW/DRIFT, even if exporting its JSON. Do not publish sensitive source paths or private scenarios on public Pages. Never accept agent-authored JSON alone as proof of PASS.
+
+PASS covers only explicitly mapped, approved and tested scenarios; REVIEW means uncertain or insufficient evidence, not demonstrated failure; DRIFT is an observed failure of an approved scenario. This is not automatic prediction of all product behavior or post-release outcomes.
+
 ## Validation
 
-Run `node site/shaping-board/test-board.mjs` after `cd site && npm ci --ignore-scripts`, plus `python3 -m unittest discover -s tests -p test_shaping_board_adapter.py` from the repository root. CI also checks the documentation portal and repo health.
+Run `node site/shaping-board/test-board.mjs` after `cd site && npm ci --ignore-scripts`, plus `python3 -m unittest discover -s tests -p 'test_shaping_board*.py'` from the repository root. CI also checks the documentation portal and repo health.
 
 ## Limitations
 

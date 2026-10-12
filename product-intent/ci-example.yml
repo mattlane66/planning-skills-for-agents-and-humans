@@ -37,4 +37,21 @@ jobs:
           git -C candidate diff --name-only "$BASE_SHA" HEAD > /tmp/changed-paths
           if [[ ! -s /tmp/changed-paths ]]; then exit 0; fi
           mapfile -t changed < /tmp/changed-paths
-          python3 trusted/product-intent/gate.py --base-package /tmp/base.json --candidate-package /tmp/head.json --trusted-manifest trusted/planning/approved-scenarios.json --code-root candidate --changed "${changed[@]}"
+          set +e
+          python3 trusted/product-intent/gate.py --base-package /tmp/base.json --candidate-package /tmp/head.json --trusted-manifest trusted/planning/approved-scenarios.json --code-root candidate --changed "${changed[@]}" > /tmp/product-intent-gate.json
+          gate_exit=$?
+          set -e
+          # The board projection is derived solely from the protected gate output and compiled candidate package.
+          # Never change the gate's exit status to make a drifted change look green.
+          if [[ "$gate_exit" -eq 0 || "$gate_exit" -eq 1 ]]; then
+            python3 trusted/product-intent/board_report.py --package /tmp/head.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json --revision "$(git -C candidate rev-parse --short=12 HEAD)"
+          fi
+          exit "$gate_exit"
+      - name: Attach product-level impact for the Shaping Board
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: product-intent-board-status
+          path: /tmp/product-status.json
+          if-no-files-found: ignore
+          retention-days: 14
