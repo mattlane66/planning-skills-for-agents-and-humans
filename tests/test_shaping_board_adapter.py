@@ -35,7 +35,7 @@ class ShapingBoardAdapterTests(unittest.TestCase):
             shaping=folder/"02-shaping.md"
             shaping.write_text(shaping.read_text(encoding="utf-8").replace(
                 "## Fit Check",
-                "### CURRENT: Existing manual list\\n\\n| Part | Mechanism |\\n|---|---|\\n| CURRENT1 | Handwritten list |\\n\\n## Fit Check"
+                "### CURRENT: Existing manual list\n\n| Part | Mechanism |\n|---|---|\n| CURRENT1 | Handwritten list |\n\n## Fit Check"
             ),encoding="utf-8")
             original=(source/"03-breadboard.md").read_text(encoding="utf-8")
             (folder/"03-current-breadboard.md").write_text(original.replace(
