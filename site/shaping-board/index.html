@@ -180,13 +180,13 @@ function zip(files){const en=new TextEncoder(),out=[],cen=[],u16=n=>[n&255,n>>8&
 const cell=s=>String(s??"").replace(/\|/g,"/").replace(/\n/g," ").trim()||"not recorded";
 const RID=i=>M.reqs[i]?.id||"R"+(i+1);
 function bbMap(o){const g=parse(o.dsl),m={},pl=[],ui=[],nu=[],st=[],br=[];let p=0,u=0,n=0,s=0;
- g.nodes.forEach((x,ix)=>{x.part=o.id+(ix+1);if(x.k==="place"){m[x.i]="P"+ ++p;pl.push(x);x.r.forEach(r=>ui.push({id:"U"+ ++u,pl:m[x.i],x,row:r,out:[]}))}
-  else if(x.k==="store"){m[x.i]="S"+ ++s;st.push(x)}else if(x.k==="question"){m[x.i]="BR"+(br.push(x));}else{m[x.i]="N"+ ++n;nu.push(Object.assign(x,{id:"N"+n,out:[]}))}});
+ g.nodes.forEach((x,ix)=>{x.part=o.id+"-"+x.i;if(x.k==="place"){m[x.i]=/^P[0-9]+$/.test(x.i)?x.i:"P"+ ++p;pl.push(x);x.r.forEach(r=>ui.push({id:"U"+m[x.i].replace(/\D/g,"")+"."+(x.r.indexOf(r)+1),pl:m[x.i],x,row:r,out:[]}))}
+  else if(x.k==="store"){m[x.i]=/^S[0-9]+$/.test(x.i)?x.i:"S"+ ++s;st.push(x)}else if(x.k==="question"){m[x.i]="BR"+(br.push(x));}else{m[x.i]=/^N[0-9]+$/.test(x.i)?x.i:/^O[0-9]+$/.test(x.i)?"N"+x.i.slice(1):"N"+ ++n;nu.push(Object.assign(x,{id:m[x.i],out:[]}))}});
  g.edges.forEach(e=>{const A=g.nodes.find(x=>x.i===e.a),B=g.nodes.find(x=>x.i===e.b);if(!A||!B)return;const w="→ "+m[e.b];
   if(A.k==="place"){const r=ui.filter(y=>y.x===A);const r1=r.find(y=>e.l&&y.row.toLowerCase().includes(e.l.toLowerCase()))||r[0];if(r1)r1.out.push(w)}else{A.out=A.out||[];A.out.push(w)}});
  return{g,m,pl,ui,nu,st,br}}
 function bbMd(o,mode){const{g,m,pl,ui,nu,st,br}=bbMap(o),T2=(h,rows)=>"| "+h.join(" | ")+" |\n|"+h.map(()=>"---").join("|")+"|\n"+(rows.length?rows.map(r=>"| "+r.map(cell).join(" | ")+" |").join("\n"):"| "+h.map(()=>"none").join(" | ")+" |"),w=a=>a&&a.length?a.join(", "):"—",tr=ids(M.stories.map(s=>s).length?"":"");
- const traces=M.stories.filter(s=>s.path).map(s=>{const p=ids(s.path).map(i=>m[i]).filter(Boolean);const first=ui.find(y=>y.pl===p[0])||{id:p[0]||"—"};return[s.text,first.id,p.join(" -> ")||"—","—","—",p[p.length-1]||"—","from the board's story path"]});
+ const traces=M.stories.filter(story=>!story.anti&&story.fit[M.options.indexOf(o)]==="1"&&traceInfo(story,o).valid).map(story=>{const p=traceInfo(story,o).nodes.map(id=>m[id]);const first=ui.find(y=>y.pl===p[0])||{id:p[0]||"—"};return[story.id+": "+story.text,first.id,p.join(" -> "),"—","—",p[p.length-1]||"—","candidate trace; unverified"]});
  return`---
 planning: true
 artifact_type: breadboard
@@ -230,7 +230,7 @@ ${T2(["Branch","Trigger","User-visible consequence","Shape part","Status"],br.ma
 
 ${T2(["Scenario","Entry","Control path","Decision / branch","State / data effect","Observable consequence","Evidence or status"],traces)}
 `}
-function planningFiles(){const o=M.options.find(x=>x.id===M.pick)||M.options[0],st=M.reqs.filter(r=>r.star),A=M.options,mk=c=>c==="y"?"✅":c==="n"?"❌":"❓";
+function planningFiles(){const o=M.options.find(x=>x.id===M.pick)||M.options[0],st=M.reqs.filter(r=>r.star),A=M.options,mk=c=>c==="y"?"✅":"❌";
  const frame=`---
 planning: true
 artifact_type: frame
@@ -288,7 +288,7 @@ feeds:
 
 ## Working mode
 
-- Profile: gated
+- Profile: collaborative
 - Current move: ${M.pick?"selection":"fit"}
 - Entry point: existing artifact
 
@@ -298,7 +298,7 @@ ${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|
 
 ## Appetite
 
-- Authority: ${M.appetite?"Working":"Unset"}
+- Authority: ${M.appetiteAuthority}
 - Time budget: ${cell(M.appetite)}
 - Cut line: ${cell(M.cut)}
 - Current slice: ${cell(M.slice)}
@@ -313,7 +313,7 @@ ${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part 
 
 ${"| Req | Requirement | Status | "+A.map(x=>x.id).join(" | ")+" |\n|---|---|---|"+A.map(()=>":---:|").join("")+"\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.star?"Must-have":"Nice-to-have",...[...r.f].map(mk)].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | "+A.map(()=>"❓").join(" | ")+" |")}
 
-✅ modeled in the candidate, not verified · ❌ conflict shown · ❓ open. A placeholder option (⚠️) is a sketch, not real evidence.
+Working fit projection: ✅ modeled; ❌ missing, conflicted, partial, or unknown. Unknowns fail the formal gate until resolved or explicitly accepted. A placeholder (⚠️) is not decision-ready.
 
 ## Reverse fit check
 
@@ -321,14 +321,14 @@ ${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---
 
 ## Decision
 
-- Status: ${M.pick?"decision-ready":"exploring"}
-- Chosen direction: ${M.pick?M.pick+" — "+cell(o.title)+" (provisional human choice recorded on the board; not yet accepted in shaping)":"not chosen yet"}
+- Status: ${M.pick&&M.selectionAuthority==="Accepted"?"selected":M.pick?"decision-ready":"exploring"}
+- Chosen direction: ${M.pick?M.pick+" — "+cell(o.title)+(M.selectionAuthority==="Accepted"?"":" (working preference, not yet accepted)"):"not chosen yet"}
 - Why: ${cell(M.why)}
 - Rejected directions: ${M.pick?A.filter(x=>x!==o).map(x=>x.id+" — "+cell(x.risk)).join("; ")||"none":"none yet"}
 - Cuts / non-goals: ${cell(M.pick?o.cuts:M.cut)}
 `;
- const f=[["planning/01-frame.md",frame],["planning/02-shaping.md",shaping],["planning/03-breadboard-"+o.id+".md",bbMd(o,"candidate-shape")]];
- if(M.slices.length)f.push(["planning/04-slices.md",`---\nplanning: true\nartifact_type: slices\nstatus: draft\n---\n\n# ${M.name} — Slices\n\n## Slice inventory\n\n| Slice | Name | Included affordances / stores | Demo | Produces | Dependencies | Unknowns |\n|---|---|---|---|---|---|---|\n${M.slices.map((s,i)=>"| V"+(i+1)+" | "+[s.name,s.stories?"stories "+s.stories:"not recorded","not recorded","not recorded","none","not recorded"].map(cell).join(" | ")+" |").join("\n")}\n`]);
+ const f=[["planning/01-frame.md",frame],["planning/02-shaping.md",shaping],...A.map(candidate=>["planning/03-candidate-"+candidate.id+"-breadboard.md",bbMd(candidate,"candidate-shape")])];
+ // Draft slices stay in board JSON. Only accepted selected-design intent may define buildable slices.
  return f}
 /* ---- actions ---- */
 function addOpt(){const id=[...L].find(c=>!M.options.some(o=>o.id===c));if(!id)return;M.options.push({id,title:"Option "+id,promise:"",risk:"",cuts:"",placeholder:false,dsl:""});M.stories.forEach(s=>s.fit+="0");M.reqs.forEach(r=>{r.f+="u";r.l.push("")});T.opt=M.options.length-1}
