@@ -43,7 +43,3 @@ The tracked source is organized as follows:
 - `scripts/test-integrity.mjs` — full route, content, accessibility-semantic, search, and mobile-safeguard checks
 
 The generated `src/generated/` and temporary `.build/` directories are intentionally ignored. The finished `index.html` remains tracked so it can be downloaded and opened immediately.
-
-## Reusable Shaping Board
-
-The optional [Shaping Board](./shaping-board/index.html) provides project-specific interactive comparison and tracing. It preserves the Planning Skills human-gate boundary: candidate diagrams and board fit labels are working evidence, and a chosen working preference is not build scope. See [Shaping Board usage](./shaping-board/README.md).
