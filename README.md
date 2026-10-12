@@ -6,6 +6,12 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
+## Interactive Shaping Board
+
+**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** to compare candidate designs, trace scenarios and requirements, inspect trade-offs, and record a human choice. The standalone, no-account board works offline; start with the included DWC Requests example or import a project `.board.json`. The example contains explicitly flagged placeholder alternatives.
+
+For an existing Planning Skills project, run `python3 scripts/build_shaping_board_data.py --planning-dir planning --output planning/shaping.board.json` and import that JSON. The adapter reads current Markdown without modifying it. The browser exports **working proposals**, not accepted selected-design authority; review those files against existing planning truth. See [the Shaping Board guide](./site/shaping-board/README.md).
+
 ## Interactive documentation portal
 
 The repository includes a self-contained documentation portal at [`site/index.html`](./site/index.html). Download that one file and open it in a modern browser; it does not need a web server, package install, or network connection at runtime.
