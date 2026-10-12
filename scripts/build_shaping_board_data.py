@@ -72,12 +72,12 @@ def build(directory):
     except ContractError as exc:
         raise SystemExit(f"Shaping Board import: {exc}") from exc
 
-    shapes = [s for s in shaping["shapes"] if s["id"] != "CURRENT"]
-    if not shapes:
+    shapes = list(shaping["shapes"])
+    if not any(s["id"] != "CURRENT" for s in shapes):
         raise SystemExit("Shaping Board import: shaping.md has no candidate shapes")
-    if len(shapes) > 10:
+    if len([s for s in shapes if s["id"] != "CURRENT"]) > 10:
         raise SystemExit("Shaping Board supports at most 10 candidates")
-    if any(not re.fullmatch(r"[A-J]", s["id"]) for s in shapes):
+    if any(not re.fullmatch(r"(?:CURRENT|[A-J])", s["id"]) for s in shapes):
         raise SystemExit("Candidate shape IDs must be A through J for the current board")
 
     existing = []
@@ -88,14 +88,18 @@ def build(directory):
             bb, _ = parse_breadboard(path)
         except (ValueError, OSError):
             continue
-        if bb["mode"] in ("candidate-shape", "selected-design"):
+        if bb["mode"] in ("current-state", "candidate-shape", "selected-design"):
             existing.append((path, bb))
     options = []
     candidate_source = {}
     for s in shapes:
+        if s["id"] == "CURRENT":
+            current = [p for p, bb in existing if bb["mode"] == "current-state"]
+            if current:
+                candidate_source["CURRENT"] = current[0]
         for path, bb in existing:
             name = path.stem
-            if re.search(r"(?:candidate[-_]?|breadboard[-_]?)(%s)(?:[-_]|$)" % s["id"], name, re.I):
+            if (s["id"] != "CURRENT" and re.search(r"(?:candidate[-_]?|breadboard[-_]?)(%s)(?:[-_]|$)" % s["id"], name, re.I)):
                 candidate_source[s["id"]] = path
                 break
         if s["id"] == shaping["selected_shape"] and s["id"] not in candidate_source:
@@ -103,22 +107,33 @@ def build(directory):
             if selected:
                 candidate_source[s["id"]] = selected[0]
         dsl = candidate_diagram(candidate_source[s["id"]])[0] if s["id"] in candidate_source else ""
-        options.append(dict(id=s["id"], title=s["name"], promise="", risk="",
+        options.append(dict(id=s["id"], title=s["name"], baseline=s["id"]=="CURRENT", promise="", risk="",
                             cuts="", placeholder=not bool(dsl), dsl=dsl))
     required = shaping["requirements"]
     fit_map = {row.get("Req", ""): row for row in shaping["fit"]}
     requirements = []
+    reverse = shaping.get("reverse_fit", [])
     for i, row in enumerate(required):
         rid = value(row, "ID") or f"R{i+1}"
         values = []
         for opt in options:
             mark = fit_map.get(rid, {}).get(opt["id"], "")
             values.append("y" if "✅" in mark else "n" if "❌" in mark else "u")
+        part_refs = {}
+        for opt in options:
+            refs_for_candidate = []
+            for rf in reverse:
+                served = set(re.findall(r"\bR\d+(?:\.\d+)?\b", value(rf, "Requirement served", "Requirement(s) served")))
+                part = value(rf, "Shape part", "Part").split(" ", 1)[0]
+                if rid in served and part.startswith(opt["id"]) and (opt["id"] != "CURRENT" or part.startswith("CURRENT")):
+                    refs_for_candidate.append(part)
+            if refs_for_candidate:
+                part_refs[opt["id"]] = list(dict.fromkeys(refs_for_candidate))
         requirements.append(dict(id=rid, text=value(row, "Requirement"),
             status=value(row, "Status") or "Undecided",
             auth=value(row, "Authority") or "Working",
             src=value(row, "Origin"), why=value(row, "Notes"),
-            chk=value(row, "Evidence refs"), star=False, f="".join(values),
+            chk=value(row, "Evidence refs"), part_refs=part_refs, star=False, f="".join(values),
             l=[""]*len(options)))
     appetite = shaping["appetite"]
     selected = shaping["selected_shape"] or None
@@ -135,7 +150,7 @@ def build(directory):
         selectionAuthority="Accepted" if selected and shaping["requirements_authority"] == "Accepted" and shaping["appetite_authority"] == "Accepted" else "Working",
         options=options, stories=[], reqs=requirements,
         things=[], slices=[], drift=[], rel=[],
-        import_note="Read-only projection of planning Markdown. Re-exported Markdown is a proposal; review changes against existing source files. Missing candidate diagrams have not been fabricated.",
+        import_note="Read-only projection of planning Markdown. Re-exported Markdown is a proposal; review changes against existing source files. Missing candidate diagrams and requirement-to-node traces have not been fabricated.",
     )
 
 
