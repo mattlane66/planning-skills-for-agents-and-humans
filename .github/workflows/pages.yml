@@ -76,6 +76,9 @@ jobs:
             --output /tmp/planning-skills-pages/product-ontology/shaped-work.html \
             --ontology-output /tmp/planning-skills-pages/product-ontology/index.html
           cp -R site/fit-check-error-model /tmp/planning-skills-pages/fit-check-error-model
+          mkdir -p /tmp/planning-skills-pages/shaping-board
+          cp site/shaping-board/index.html /tmp/planning-skills-pages/shaping-board/index.html
+          cp site/shaping-board/example-dwc-requests.board.json /tmp/planning-skills-pages/shaping-board/example-dwc-requests.board.json
           cp -R site/privacy /tmp/planning-skills-pages/privacy
           cp -R site/terms /tmp/planning-skills-pages/terms
           cp site/review/index.html /tmp/planning-skills-pages/review/index.html
