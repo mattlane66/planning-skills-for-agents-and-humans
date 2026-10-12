@@ -60,7 +60,7 @@ function norm(m){
  m.options.forEach(o=>{if(!o||typeof o.dsl!=="string"||o.dsl.length>100000)throw Error("Invalid option");if(!/^(CURRENT|[A-J])$/.test(o.id)||used.has(o.id))throw Error("Duplicate or invalid option ID");used.add(o.id)});
  m.reqs.forEach((r,i)=>{if(!r||typeof r.text!=="string")throw Error("Invalid requirement");r.id=r.id||"R"+(i+1);r.status=r.status||(r.star?"Must-have":"Nice-to-have");r.auth=r.auth||"Working";r.f=(r.f||"").padEnd(m.options.length,"u").slice(0,m.options.length);r.l=Array.isArray(r.l)?r.l:[];while(r.l.length<m.options.length)r.l.push("")});
  const rids=m.reqs.map(r=>r.id);if(new Set(rids).size!==rids.length||rids.some(x=>!/^R\d+(?:\.\d+)?$/.test(x)))throw Error("Invalid requirement IDs");
- m.stories.forEach((s,i)=>{s.id=s.id||"S"+(i+1);s.fit=(s.fit||"").padEnd(m.options.length,"0").slice(0,m.options.length);s.paths=s.paths&&typeof s.paths==="object"&&!Array.isArray(s.paths)?s.paths:{};if(s.path&&!Object.keys(s.paths).length){const source=m.options.find(o=>!o.placeholder)||m.options[0];s.paths[source.id]=s.path}});
+ m.stories.forEach((s,i)=>{s.id=/^S\d+$/.test(s.id||"")?"SC-"+s.id.slice(1):(s.id||"SC-"+(i+1));s.fit=(s.fit||"").padEnd(m.options.length,"0").slice(0,m.options.length);s.paths=s.paths&&typeof s.paths==="object"&&!Array.isArray(s.paths)?s.paths:{};if(s.path&&!Object.keys(s.paths).length){const source=m.options.find(o=>!o.placeholder)||m.options[0];s.paths[source.id]=s.path}});
  m.things.forEach((t,i)=>t.id=t.id||"THING"+(i+1));
  return m
 }
@@ -137,31 +137,31 @@ function hlFor(i){
  if(s){const trace=traceInfo(s,M.options[i]);return trace.nodes.length?new Set(trace.nodes):new Set()}
  return null
 }
-function fit(){document.querySelectorAll(".fb").forEach(b=>{const W=+b.dataset.w,H=+b.dataset.h,s=Math.max(.58,Math.min(1,b.parentElement.clientWidth/W))*(b.dataset.zm?T.zm:1);b.firstChild.style.transform=`scale(${s})`;b.style.height=H*s+"px"})}
+function fit(){document.querySelectorAll(".fb").forEach(b=>{const W=+b.dataset.w,H=+b.dataset.h,fitScale=Math.min(1,b.parentElement.clientWidth/W),s=b.dataset.zm?Math.max(.58,fitScale)*T.zm:fitScale;b.firstChild.style.transform=`scale(${s})`;b.style.height=H*s+"px"})}
 function renderDia(){const el=$("#dia");if(!el)return;const o=M.options[T.opt],r=draw(o,hlFor(T.opt),"m");el.innerHTML=r.html;const e=$("#err");if(e)e.innerHTML=r.err.map(x=>`<div class="wn">${esc(x)}</div>`).join("");fit()}
 /* ---- views ---- */
 const tbl=(key,cols,add)=>`<table class="g"><thead><tr>${cols.map(c=>`<th>${c[1]}</th>`).join("")}<th></th></tr></thead><tbody>${(M[key]||[]).map((r,i)=>`<tr>${cols.map(c=>`<td>${c[2]?`<select data-p="${key}.${i}.${c[0]}">${c[2].map(o=>`<option${r[c[0]]===o?" selected":""}>${o}</option>`).join("")}</select>`:`<input data-p="${key}.${i}.${c[0]}" value="${esc(r[c[0]])}">`}</td>`).join("")}<td><button data-del="${key}.${i}" title="Remove">×</button></td></tr>`).join("")}</tbody></table><div class="row"><button data-add="${key}">+ ${add}</button></div>`;
-const TPL={stories:()=>({id:"S"+(Math.max(0,...M.stories.map(s=>+(s.id||"").replace(/\D/g,"")||0))+1),text:"",fit:"0".repeat(M.options.length),paths:{},anti:false}),things:()=>({id:"THING"+(M.things.length+1),name:"",what:"",where:"",seen:""}),slices:()=>({name:"",stories:"",cut:""}),drift:()=>({item:"",intent:"",reality:"",status:"not checked"}),rel:()=>({req:"",check:"",status:"not verified",evidence:""})};
+const TPL={stories:()=>({id:"SC-"+(Math.max(0,...M.stories.map(s=>+(s.id||"").replace(/\D/g,"")||0))+1),text:"",fit:"0".repeat(M.options.length),paths:{},anti:false}),things:()=>({id:"THING"+(M.things.length+1),name:"",what:"",where:"",seen:""}),slices:()=>({name:"",stories:"",cut:""}),drift:()=>({item:"",intent:"",reality:"",status:"not checked"}),rel:()=>({req:"",check:"",status:"not verified",evidence:""})};
 const authoritySelect=(key,value,values)=>'<select data-p="'+key+'">'+values.map(x=>'<option value="'+x+'"'+(x===value?' selected':'')+'>'+x+'</option>').join('')+'</select>';
 const frame=()=>`<h2>Frame</h2><div class="card"><h4>Problem</h4><textarea data-l="problem" rows="7" placeholder="One problem per line">${esc(M.problem.join("\n"))}</textarea><h4>Outcome</h4><textarea data-l="outcome" rows="3" placeholder="What must be true when this works">${esc(M.outcome.join("\n"))}</textarea><h4>Appetite</h4>${inp("appetite","Set before choosing a shape, e.g. 4 weeks, 2 people")}<h4>Cut line</h4>${inp("cut","What goes first if time runs out")}<h4>Appetite authority</h4>${authoritySelect("appetiteAuthority",M.appetiteAuthority,["Unset","Working","Accepted"])}<h4>Frame authority</h4>${authoritySelect("frameAuthority",M.frameAuthority,["Working","Accepted","Intentionally lightweight"])}</div>`;
-const stories=()=>{const s=M.stories[T.story];return`<h2>Stories <small>click an ID to trace it</small></h2><table class="sm"><thead><tr><th></th><th>story</th>${M.options.map(o=>`<th>${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.stories.map((x,i)=>`<tr class="${T.story===i?"on":""}"><td class="id" data-story="${i}">S${i+1}${x.anti?' <b class="x">✕</b>':""}</td><td><textarea rows="2" data-p="stories.${i}.text">${esc(x.text)}</textarea></td>${[...x.fit].map((c,j)=>`<td data-dot="${i},${j}" title="Click: represented / not / violates">${c==="1"?'<i class="dot"></i>':c==="x"?'<i class="dot x"></i>':'<i class="no">–</i>'}</td>`).join("")}<td><button data-del="stories.${i}">×</button></td></tr>`).join("")}</tbody></table><div class="row"><button data-add="stories">+ story</button></div>${s?`<p class="mu">Path of S${T.story+1}: node IDs it passes through</p>${M.options.map(o=>`<label class="mu">Path in ${esc(o.id)} (space-separated node IDs)</label>${inp("stories."+T.story+".paths."+o.id,"e.g. P1 P3 P6")}`).join("")}<label class="mu"><input type="checkbox" data-p="stories.${T.story}.anti"${s.anti?" checked":""}> forbidden path (should not be possible)</label>`:""}`};
+const stories=()=>{const s=M.stories[T.story];return`<h2>Stories <small>click an ID to trace it</small></h2><table class="sm"><thead><tr><th></th><th>story</th>${M.options.map(o=>`<th>${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.stories.map((x,i)=>`<tr class="${T.story===i?"on":""}"><td class="id" data-story="${i}">${esc(x.id)}${x.anti?' <b class="x">✕</b>':""}</td><td><textarea rows="2" data-p="stories.${i}.text">${esc(x.text)}</textarea></td>${[...x.fit].map((c,j)=>`<td data-dot="${i},${j}" title="Click: represented / not / violates">${c==="1"?'<i class="dot"></i>':c==="x"?'<i class="dot x"></i>':'<i class="no">–</i>'}</td>`).join("")}<td><button data-del="stories.${i}">×</button></td></tr>`).join("")}</tbody></table><div class="row"><button data-add="stories">+ story</button></div>${s?`<p class="mu">Path of ${esc(s.id)}: node IDs it passes through</p>${M.options.map(o=>`<label class="mu">Path in ${esc(o.id)} (space-separated node IDs)</label>${inp("stories."+T.story+".paths."+o.id,"e.g. P1 P3 P6")}`).join("")}<label class="mu"><input type="checkbox" data-p="stories.${T.story}.anti"${s.anti?" checked":""}> forbidden path (should not be possible)</label>`:""}`};
 function strip(){return`<div class="strip"><div><small>Requirements</small><b>${M.reqs.length} · ${M.reqs.filter(r=>r.star).length} starred</b></div><div><small>Chosen direction</small><b>${M.pick?esc(M.pick+" · "+M.options.find(o=>o.id===M.pick).title):"none yet"}</b></div><div><small>Proposed build slice</small>${inp("slice","none yet")}</div><div class="mu" style="flex:1;min-width:220px"><b>Nothing verified here.</b> Ratings show what the candidates model, not tested behavior.</div></div>`}
 function badges(o,i){const s=M.stories[T.story],r=M.reqs[T.rq];let h=`<span class="bdg">${M.pick===o.id?"Selected by a human · not yet reconciled":"Candidate shape · not build scope"}</span>`;
- if(o.placeholder)h+=`<span class="bdg s wn">Placeholder sketch · not from the board</span>`;if(r)h+=`<span class="bdg s">Tracing R${T.rq+1}</span>`;
+ if(o.placeholder)h+=`<span class="bdg s wn">Placeholder sketch · not from the board</span>`;if(r)h+=`<span class="bdg s">Tracing ${esc(r.id)}</span>`;
  if(s){const c=s.fit[i],tr=traceInfo(s,o);h+=`<span class="bdg s" style="color:${c==="x"?"var(--no)":c==="1"&&tr.valid?"var(--ok)":"var(--wn)"}">${c==="1"?(tr.valid?"Trace supported":"Claimed, trace incomplete"):c==="x"?"✕ Guardrail violated":"Not represented"}${!tr.valid?" · "+esc(tr.errors[0]):""}</span>`}return h}
 const paths=()=>{const o=M.options[T.opt];return`<div class="opts">${M.options.map((x,i)=>`<span class="opt${i===T.opt?" on":""}" data-opt="${i}">${x.id}</span>`).join("")}<span class="opt" data-addopt title="Add an option">+</span></div><h3>${inp("options."+T.opt+".title","Option title")}${badges(o,T.opt)}</h3><div id="dia"></div>
 <details open style="margin-top:10px"><summary>Edit this option's breadboard</summary><p class="mu">Nodes: <code>ID | place/action/question/store | Title | row; row | system | @x,y,w,h</code> · Edges: <code>A -> B : label</code> · Groups: <code>group: Name = ID ID</code> · <code>#</code> comments. Nodes without <code>@x,y</code> are laid out automatically.</p><textarea class="dsl" data-p="options.${T.opt}.dsl" spellcheck="false">${esc(o.dsl)}</textarea><div id="err"></div><div class="row"><label class="mu"><input type="checkbox" data-p="options.${T.opt}.placeholder"${o.placeholder?" checked":""}> placeholder sketch (not from real evidence)</label><span class="sp" style="flex:1"></span><button data-delopt>Delete this option</button></div></details>`};
 const cmp=()=>`<div class="grid">${M.options.map((o,i)=>{const s=M.stories[T.story],c=s?s.fit[i]:null,tr=s?traceInfo(s,o):null;return`<div data-opt="${i}" data-view="paths" style="cursor:pointer;opacity:${c==="0"?.45:1}"><b>${o.id} · ${esc(o.title)}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""} <span class="mu">${!s?"":c==="1"?(tr.valid?"● traced":"◐ trace incomplete"):c==="x"?"✕ guardrail violated":"— not represented"}</span><div class="cm">${draw(o,hlFor(i),"c"+i).html}</div></div>`}).join("")}</div><p class="mu">Click a diagram to open it. Pick a story on the left to trace it in every option.</p>`;
-function fitv(){const st=M.reqs.filter(r=>r.star),all=M.options.filter((o,i)=>st.length&&st.every(r=>r.f[i]==="y")).map(o=>o.id),r=M.reqs[T.rq];
- return`<table><thead><tr><th></th><th>criterion (★ matters most)</th>${M.options.map(o=>`<th style="text-align:center">${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.reqs.map((q,i)=>`<tr><td data-star="${i}" style="cursor:pointer;color:${q.star?"var(--wn)":"var(--mu)"}">${q.star?"★":"☆"}</td><td data-rq="${i}" style="cursor:pointer;${T.rq===i?"font-weight:600;color:var(--ac)":""}">R${i+1} ${esc(q.text)}</td>${[...q.f].map((c,j)=>`<td data-rate="${i},${j}" title="Click to change" style="text-align:center;cursor:pointer;font-size:16px;color:${MK[c][1]}">${MK[c][0]}</td>`).join("")}<td><button data-del="reqs.${i}">×</button></td></tr>`).join("")}</tbody></table>
+function fitv(){const st=M.reqs.filter(r=>["Core goal","Must-have"].includes(r.status)),all=M.options.filter((o,i)=>o.id!=="CURRENT"&&st.length&&st.every(r=>r.f[i]==="y")).map(o=>o.id),r=M.reqs[T.rq];
+ return`<table><thead><tr><th></th><th>criterion (★ matters most)</th>${M.options.map(o=>`<th style="text-align:center">${o.id}</th>`).join("")}<th></th></tr></thead><tbody>${M.reqs.map((q,i)=>`<tr><td data-star="${i}" style="cursor:pointer;color:${q.star?"var(--wn)":"var(--mu)"}">${q.star?"★":"☆"}</td><td data-rq="${i}" style="cursor:pointer;${T.rq===i?"font-weight:600;color:var(--ac)":""}">${esc(q.id)} ${esc(q.text)}</td>${[...q.f].map((c,j)=>`<td data-rate="${i},${j}" title="Click to change" style="text-align:center;cursor:pointer;font-size:16px;color:${MK[c][1]}">${MK[c][0]}</td>`).join("")}<td><button data-del="reqs.${i}">×</button></td></tr>`).join("")}</tbody></table>
 <div class="row"><input data-nr placeholder="Add a criterion…" value="${esc(T.nr)}"><button data-addreq>+</button></div>
-<p class="mu">${st.length?(all.length?"All starred criteria modeled (not verified): "+all.join(", "):"No option fully meets every starred criterion."):"Star the criteria that matter most."} ✓ modeled in the candidate, not verified · ◐ partly · × conflict shown · ? open. Click a criterion to trace it; click a mark to change it.</p>
-${r?`<div class="tc"><b>R${T.rq+1}</b>${inp("reqs."+T.rq+".text","Criterion")}<p class="mu">Importance</p>${authoritySelect("reqs."+T.rq+".status",r.status,["Core goal","Must-have","Nice-to-have","Undecided","Out"])}<p class="mu">Authority</p>${authoritySelect("reqs."+T.rq+".auth",r.auth,["Working","Accepted"])}<p class="mu">Where it came from</p>${inp("reqs."+T.rq+".src","e.g. Outcome, S3")}<p class="mu">Why it matters</p>${inp("reqs."+T.rq+".why")}<p class="mu">Check: what would show it holds</p>${inp("reqs."+T.rq+".chk")}${M.options.map((o,j)=>`<p class="mu">Nodes in ${o.id} that realize it</p>${inp("reqs."+T.rq+".l."+j,"e.g. P1 P3")}`).join("")}</div>`:""}`}
+<p class="mu">${st.length?(all.length?"All mandatory criteria modeled (not verified): "+all.join(", "):"No option fully models every mandatory criterion."):"Mark core goals and must-haves to judge candidate fit. Stars only highlight rows."} ✓ modeled in the candidate, not verified · ◐ partly · × conflict shown · ? open. Click a criterion to trace it; click a mark to change it.</p>
+${r?`<div class="tc"><b>${esc(r.id)}</b>${inp("reqs."+T.rq+".text","Criterion")}<p class="mu">Importance</p>${authoritySelect("reqs."+T.rq+".status",r.status,["Core goal","Must-have","Nice-to-have","Undecided","Out"])}<p class="mu">Authority</p>${authoritySelect("reqs."+T.rq+".auth",r.auth,["Working","Accepted"])}<p class="mu">Where it came from</p>${inp("reqs."+T.rq+".src","e.g. Outcome, S3")}<p class="mu">Why it matters</p>${inp("reqs."+T.rq+".why")}<p class="mu">Check: what would show it holds</p>${inp("reqs."+T.rq+".chk")}${M.options.map((o,j)=>`<p class="mu">Nodes in ${o.id} that realize it</p>${inp("reqs."+T.rq+".l."+j,"e.g. P1 P3")}`).join("")}</div>`:""}`}
 const trade=()=>M.options.map((o,i)=>`<div class="tc${M.pick===o.id?" pk":""}"><b>${o.id}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""}${inp("options."+i+".title","Title")}<p class="mu">Promise</p>${inp("options."+i+".promise")}<p class="mu">Risk</p>${inp("options."+i+".risk")}<p class="mu">What it cuts</p>${inp("options."+i+".cuts")}<div class="row"><button data-pick="${o.id}">${M.pick===o.id?"Selected (click to clear)":"Select "+o.id}</button></div></div>`).join("");
 const things=()=>{const w={};M.things.forEach(t=>w[t.where]=(w[t.where]||0)+1);return`<p class="mu">The nouns of the product and where each lives. ${Object.entries(w).map(([k,v])=>v+" in "+(k||"?")).join(" · ")}</p>`+tbl("things",[["id","Stable ID"],["name","Thing"],["what","What it is"],["where","Lives in"],["seen","Changed or seen at"]],"thing")};
 function decisionIssues(){
  const o=M.options.find(x=>x.id===M.pick),k=M.options.indexOf(o),issues=[];
- if(!o)return ["Choose a preferred candidate"];
+ if(!o)return ["Choose a preferred candidate"];if(o.id==="CURRENT")issues.push("Current-state is a baseline, not a candidate for selection");
  if(o.placeholder)issues.push("This is only a placeholder sketch");
  if(!M.cut.trim())issues.push("Set a cut line");
  if(!M.appetite.trim()||M.appetiteAuthority!=="Accepted")issues.push("Accept the Appetite");
@@ -231,8 +231,8 @@ feeds: []
 ## Mode and authority
 
 - Mode: \`${mode}\`
-- Requirements authority: Working
-- Appetite authority: ${M.appetite?"Working":"Unset"}
+- Requirements authority: ${M.reqs.filter(r=>r.status!=="Out").length&&M.reqs.filter(r=>r.status!=="Out").every(r=>r.auth==="Accepted")?"Accepted":"Working"}
+- Appetite authority: ${M.appetiteAuthority}
 - Candidate shape: ${o.id} — ${cell(o.title)}
 - Evidence: exported from the shaping board; candidate evidence only, not build scope${o.placeholder?"; this option is a placeholder sketch, not from real evidence":""}
 
@@ -324,7 +324,7 @@ feeds:
 
 ## Requirements
 
-${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|---|---|---|---|---|---|---|\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.star?"Must-have":"Nice-to-have",r.auth||"Working",r.src,r.chk?"check: "+r.chk:"",r.why].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | Working | not recorded | not recorded | not recorded |")}
+${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|---|---|---|---|---|---|---|\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.status||"Undecided",r.auth||"Working",r.src,r.chk?"check: "+r.chk:"",r.why].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | Working | not recorded | not recorded | not recorded |")}
 
 ## Appetite
 
@@ -335,19 +335,19 @@ ${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|
 
 ## Shapes
 
-${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part | Mechanism | Flag |\n|---|---|:---:|\n${g.nodes.map((n,i)=>"| "+x.id+(i+1)+" | "+cell((n.k==="place"?"Place":n.k==="action"?"Action":n.k==="store"?"Store":"Branch")+": "+n.t+(n.r.length?" — "+n.r.join("; "):""))+" | "+(x.placeholder?"⚠️":"")+" |").join("\n")||"| "+x.id+"1 | not recorded | |"}\n`}).join("\n")}
+${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part | Mechanism | Flag |\n|---|---|:---:|\n${g.nodes.map((n,i)=>"| "+x.id+"-"+n.i+" | "+cell((n.k==="place"?"Place":n.k==="action"?"Action":n.k==="store"?"Store":"Branch")+": "+n.t+(n.r.length?" — "+n.r.join("; "):""))+" | "+(x.placeholder?"⚠️":"")+" |").join("\n")||"| "+x.id+"-MISSING | not recorded | |"}\n`}).join("\n")}
 ## Fit check
 
 - Authority: Working
 - Evaluation altitude: Design conformance
 
-${"| Req | Requirement | Status | "+A.map(x=>x.id).join(" | ")+" |\n|---|---|---|"+A.map(()=>":---:|").join("")+"\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.star?"Must-have":"Nice-to-have",...[...r.f].map(mk)].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | "+A.map(()=>"❓").join(" | ")+" |")}
+${"| Req | Requirement | Status | "+A.map(x=>x.id).join(" | ")+" |\n|---|---|---|"+A.map(()=>":---:|").join("")+"\n"+(M.reqs.map((r,i)=>"| "+[RID(i),r.text,r.status||"Undecided",...[...r.f].map(mk)].map(cell).join(" | ")+" |").join("\n")||"| R0 | not recorded | Core goal | "+A.map(()=>"❓").join(" | ")+" |")}
 
 Working fit projection: ✅ modeled; ❌ missing, conflicted, partial, or unknown. Unknowns fail the formal gate until resolved or explicitly accepted. A placeholder (⚠️) is not decision-ready.
 
 ## Reverse fit check
 
-${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---|:---:|\n"+(()=>{const g=parse(o.dsl),rows=g.nodes.map((n,i)=>{const s=M.reqs.map((r,ri)=>ids(r.l[A.indexOf(o)]).includes(n.i)?RID(ri):"").filter(Boolean);return["| "+o.id+(i+1),cell(n.t),s.join(", ")||"none recorded",s.length?"✅":"❓"]});return rows.map(r=>r.join(" | ")+" |").join("\n")||"| "+o.id+"1 | not recorded | none recorded | ❓ |"})()}
+${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---|:---:|\n"+(()=>{const g=parse(o.dsl),rows=g.nodes.map((n,i)=>{const s=M.reqs.map((r,ri)=>ids(r.l[A.indexOf(o)]).includes(n.i)?RID(ri):"").filter(Boolean);return["| "+o.id+"-"+n.i,cell(n.t),s.join(", ")||"none recorded",s.length?"✅":"❓"]});return rows.map(r=>r.join(" | ")+" |").join("\n")||"| "+o.id+"-MISSING | not recorded | none recorded | ❓ |"})()}
 
 ## Decision
 
@@ -357,7 +357,7 @@ ${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---
 - Rejected directions: ${M.pick?A.filter(x=>x!==o).map(x=>x.id+" — "+cell(x.risk)).join("; ")||"none":"none yet"}
 - Cuts / non-goals: ${cell(M.pick?o.cuts:M.cut)}
 `;
- const f=[["planning/01-frame.md",frame],["planning/02-shaping.md",shaping],...A.map(candidate=>["planning/03-candidate-"+candidate.id+"-breadboard.md",bbMd(candidate,"candidate-shape")])];
+ const f=[["planning/01-frame.md",frame],["planning/02-shaping.md",shaping],...A.filter(candidate=>candidate.id!=="CURRENT").map(candidate=>["planning/03-candidate-"+candidate.id+"-breadboard.md",bbMd(candidate,"candidate-shape")])];
  // Draft slices stay in board JSON. Only accepted selected-design intent may define buildable slices.
  return f}
 /* ---- actions ---- */
@@ -378,22 +378,22 @@ function act(a){const k=M.options.findIndex(o=>o.id===M.pick);
  return true}
 document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data-sub],[data-view],[data-opt],[data-addopt],[data-delopt],[data-story],[data-dot],[data-star],[data-rq],[data-rate],[data-pick],[data-add],[data-del],[data-z],[data-act],[data-addreq],[data-accept]");if(!t)return;const d=t.dataset;T.msg="";
  if(d.top)T.top=d.top;if(d.sub)T.sub=d.sub;if(d.view)T.view=d.view;if(d.opt!==undefined)T.opt=+d.opt;
- if(d.addopt!==undefined)addOpt();if(d.delopt!==undefined)delOpt();
+ if(d.addopt!==undefined){addOpt();M.selectionAuthority="Working"}if(d.delopt!==undefined){delOpt();M.selectionAuthority="Working"}
  if(d.story!==undefined)T.story=T.story===+d.story?null:+d.story;
  if(d.dot){const[i,j]=d.dot.split(",").map(Number),s=M.stories[i],c="10x"[("10x".indexOf(s.fit[j])+1)%3];s.fit=s.fit.slice(0,j)+c+s.fit.slice(j+1);M.selectionAuthority="Working"}
  if(d.star!==undefined)M.reqs[+d.star].star=!M.reqs[+d.star].star;
  if(d.rq!==undefined)T.rq=T.rq===+d.rq?null:+d.rq;
  if(d.rate){const[i,j]=d.rate.split(",").map(Number),r=M.reqs[i],c="ypnu"[("ypnu".indexOf(r.f[j])+1)%4];r.f=r.f.slice(0,j)+c+r.f.slice(j+1);M.selectionAuthority="Working"}
  if(d.pick){M.pick=M.pick===d.pick?null:d.pick;M.selectionAuthority="Working"}if(d.accept!==undefined){const issues=decisionIssues();if(issues.length){T.msg="Selection blocked: "+issues[0]}else{M.selectionAuthority="Accepted";T.msg="Human selection recorded"}}
- if(d.add)M[d.add].push(TPL[d.add]());
- if(d.del){const[k,i]=d.del.split(".");M[k].splice(+i,1);if(k==="reqs")T.rq=null;if(k==="stories")T.story=null}
+ if(d.add){M[d.add].push(TPL[d.add]());if(["stories","slices"].includes(d.add))M.selectionAuthority="Working"}
+ if(d.del){const[k,i]=d.del.split(".");M[k].splice(+i,1);if(["reqs","stories","slices"].includes(k))M.selectionAuthority="Working";if(k==="reqs")T.rq=null;if(k==="stories")T.story=null}
  if(d.z)T.zm=Math.max(.5,Math.min(2,T.zm+.25*d.z));
- if(d.addreq!==undefined&&T.nr.trim()){const n=M.options.length;M.reqs.push({id:"R"+(Math.max(0,...M.reqs.map(r=>+(r.id||"").replace(/\D/g,"")||0))+1),status:"Undecided",auth:"Working",text:T.nr.trim(),src:"",why:"",chk:"",star:false,f:"u".repeat(n),l:Array(n).fill("")});T.nr=""}
+ if(d.addreq!==undefined&&T.nr.trim()){M.selectionAuthority="Working";const n=M.options.length;M.reqs.push({id:"R"+(Math.max(0,...M.reqs.map(r=>+(r.id||"").replace(/\D/g,"")||0))+1),status:"Undecided",auth:"Working",text:T.nr.trim(),src:"",why:"",chk:"",star:false,f:"u".repeat(n),l:Array(n).fill("")});T.nr=""}
  if(d.act&&!act(d.act))return;save();render()});
 document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.nr!==undefined){T.nr=el.value;return}
  if(el.type==="checkbox"||el.tagName==="SELECT")return;
- if(d.l){M[d.l]=el.value.split("\n").map(s=>s.trim()).filter(Boolean);save();return}
- if(d.p){set(d.p,el.value);if(d.p!=="name"&&d.p!=="why")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
+ if(d.l){M[d.l]=el.value.split("\n").map(s=>s.trim()).filter(Boolean);M.selectionAuthority="Working";save();return}
+ if(d.p){set(d.p,el.value);if(d.p!=="name")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
 document.addEventListener("change",e=>{const el=e.target;if(el.dataset.project!==undefined){const next=projects[el.value];if(next){save();try{M=norm(clone(next));T.opt=0;T.rq=T.story=null;save()}catch(_){T.msg="Saved project is invalid"}render()}return}if(el.dataset.p&&(el.type==="checkbox"||el.tagName==="SELECT")){set(el.dataset.p,el.type==="checkbox"?el.checked:el.value);M.selectionAuthority="Working";save();render()}});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.nr!==undefined)$("[data-addreq]").click();if((e.key==="Enter"||e.key===" ")&&e.target.matches(".opt,.tabs span")){e.preventDefault();e.target.click()}});
 $("#imp").addEventListener("change",e=>{const f=e.target.files[0];if(f)f.text().then(x=>{try{const m=JSON.parse(x);if(!Array.isArray(m.options)||!m.options.length||f.size>1024*1024)throw 0;save();T.undo=clone(M);M=norm(m);M.project_id=M.project_id||makeProjectId();T.opt=0;T.story=T.rq=null;save()}catch(_){T.msg="That file isn't a board export"}render()});e.target.value=""});
