@@ -18,6 +18,9 @@ The portal includes the workflow explorer, searchable skills catalog, full guide
 **[Open the Product Ontology viewer](https://mattlane66.github.io/planning-skills-for-agents-and-humans/product-ontology/)** — a live, read-only view generated from the accepted *Simple Grocery List* planning example. Explore its six requirements, the chosen design, and what remains unverified. No installation or GitHub login needed.
 
 For your own product, generate the same view with `python3 scripts/publish-shaped-work.py --planning-dir planning --ontology-output planning/product-ontology.html`. This shows planning truth; it does **not** continuously monitor GitHub or prove the running product satisfies the plan.
+
+**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — explore candidate designs, compare fit, trace scenarios, and record working decisions. New projects and existing planning artifacts are supported; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). Working board material is never build authorization.
+
 <!-- END README-ONLY: product-ontology -->
 
 ## See it work in practice
