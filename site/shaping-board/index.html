@@ -55,7 +55,7 @@ function norm(m){
  if(!m || typeof m!=="object" || !Array.isArray(m.options) || !m.options.length || m.options.length>10)throw Error("Invalid board: options");
  for(const k of ["stories","reqs","things","slices","drift","rel","problem","outcome"]){if(!Array.isArray(m[k]))m[k]=[];if(m[k].length>200)throw Error("Too many "+k)}
  if(typeof m.name!=="string"||m.name.length>200)throw Error("Invalid project name");
- m.schema_version=3;m.appetiteAuthority=m.appetiteAuthority||"Unset";m.frameAuthority=m.frameAuthority||"Working";
+ m.schema_version=3;m.appetiteAuthority=m.appetiteAuthority||"Unset";m.frameAuthority=m.frameAuthority||"Working";m.selectionAuthority=m.selectionAuthority||"Working";
  const used=new Set();
  m.options.forEach(o=>{if(!o||typeof o.dsl!=="string"||o.dsl.length>100000)throw Error("Invalid option");if(!/^(CURRENT|[A-J])$/.test(o.id)||used.has(o.id))throw Error("Duplicate or invalid option ID");used.add(o.id)});
  m.reqs.forEach((r,i)=>{if(!r||typeof r.text!=="string")throw Error("Invalid requirement");r.id=r.id||"R"+(i+1);r.status=r.status||(r.status||"Undecided");r.auth=r.auth||"Working";r.f=(r.f||"").padEnd(m.options.length,"u").slice(0,m.options.length);r.l=Array.isArray(r.l)?r.l:[];while(r.l.length<m.options.length)r.l.push("")});
@@ -152,13 +152,36 @@ function fitv(){const st=M.reqs.filter(r=>r.star),all=M.options.filter((o,i)=>st
 ${r?`<div class="tc"><b>R${T.rq+1}</b>${inp("reqs."+T.rq+".text","Criterion")}<p class="mu">Importance</p>${authoritySelect("reqs."+T.rq+".status",r.status,["Core goal","Must-have","Nice-to-have","Undecided","Out"])}<p class="mu">Authority</p>${authoritySelect("reqs."+T.rq+".auth",r.auth,["Working","Accepted"])}<p class="mu">Where it came from</p>${inp("reqs."+T.rq+".src","e.g. Outcome, S3")}<p class="mu">Why it matters</p>${inp("reqs."+T.rq+".why")}<p class="mu">Check: what would show it holds</p>${inp("reqs."+T.rq+".chk")}${M.options.map((o,j)=>`<p class="mu">Nodes in ${o.id} that realize it</p>${inp("reqs."+T.rq+".l."+j,"e.g. P1 P3")}`).join("")}</div>`:""}`}
 const trade=()=>M.options.map((o,i)=>`<div class="tc${M.pick===o.id?" pk":""}"><b>${o.id}</b> ${o.placeholder?'<i class="wn">placeholder</i>':""}${inp("options."+i+".title","Title")}<p class="mu">Promise</p>${inp("options."+i+".promise")}<p class="mu">Risk</p>${inp("options."+i+".risk")}<p class="mu">What it cuts</p>${inp("options."+i+".cuts")}<div class="row"><button data-pick="${o.id}">${M.pick===o.id?"Selected (click to clear)":"Select "+o.id}</button></div></div>`).join("");
 const things=()=>{const w={};M.things.forEach(t=>w[t.where]=(w[t.where]||0)+1);return`<p class="mu">The nouns of the product and where each lives. ${Object.entries(w).map(([k,v])=>v+" in "+(k||"?")).join(" · ")}</p>`+tbl("things",[["id","Stable ID"],["name","Thing"],["what","What it is"],["where","Lives in"],["seen","Changed or seen at"]],"thing")};
-const decision=()=>{const o=M.options.find(x=>x.id===M.pick);return`<div class="bar"><b>Working decision:</b> ${o?esc(o.id+" · "+o.title):"nothing selected yet"} ${o?inp("why","Why this one? One line"):""}<button data-top="shape" data-sub="doc">View the shape</button><span class="mu">A selection is a human decision, not authorization to build.</span></div>`};
+function decisionIssues(){
+ const o=M.options.find(x=>x.id===M.pick),k=M.options.indexOf(o),issues=[];
+ if(!o)return ["Choose a preferred candidate"];
+ if(o.placeholder)issues.push("This is only a placeholder sketch");
+ if(!M.cut.trim())issues.push("Set a cut line");
+ if(!M.appetite.trim()||M.appetiteAuthority!=="Accepted")issues.push("Accept the Appetite");
+ if(!["Accepted","Intentionally lightweight"].includes(M.frameAuthority))issues.push("Accept or intentionally simplify the frame");
+ if(!M.why.trim())issues.push("Record why this candidate was chosen");
+ if(!M.reqs.length)issues.push("Define requirements");
+ for(const r of M.reqs){
+  if(r.status==="Out")continue;
+  if(r.auth!=="Accepted")issues.push(r.id+" has not been accepted");
+  if(["Core goal","Must-have","Undecided"].includes(r.status)&&r.f[k]!=="y")issues.push(r.id+" does not pass the formal fit check");
+  const nodes=new Set(parse(o.dsl).nodes.map(n=>n.i));
+  for(const id of ids(r.l[k]))if(!nodes.has(id))issues.push(r.id+" references missing node "+id);
+ }
+ for(const s of M.stories)if(s.fit[k]==="1"&&!traceInfo(s,o).valid)issues.push((s.id||"Story")+" lacks a complete trace");
+ if(parse(o.dsl).err.length)issues.push("Resolve invalid breadboard wiring");
+ return [...new Set(issues)]
+}
+const decision=()=>{
+ const o=M.options.find(x=>x.id===M.pick),issues=decisionIssues(),accepted=M.selectionAuthority==="Accepted"&&!issues.length;
+ return`<div class="bar"><b>${accepted?"Accepted selected shape":"Working preference"}:</b> ${o?esc(o.id+" · "+o.title):"nothing selected yet"} ${o?inp("why","Why this one?"):""}${o?`<button data-accept>${accepted?"Accepted":"Accept selection"}</button>`:""}<button data-top="shape" data-sub="doc">View the shape</button><span class="mu">${issues.length?"To accept: "+esc(issues.slice(0,3).join("; "))+(issues.length>3?" · "+(issues.length-3)+" more":""):"Eligible for human acceptance. Candidate evidence alone is never build scope."}</span></div>`
+};
 const board=()=>strip()+`<div class="opts">${[["paths","Paths"],["cmp","Compare"],["fit","Fit check"],["trade","Trade-offs"],["things","Things"]].map(([k,t])=>`<span class="opt${T.view===k?" on":""}" data-view="${k}">${t}</span>`).join("")}${T.view==="paths"?'<span class="opt" data-z="-1">−</span><span class="opt" data-z="1">+</span>':""}</div>`+({paths,cmp,fit:fitv,trade,things}[T.view])()+decision();
 function notes(){const o=M.options.find(x=>x.id===M.pick),k=M.options.indexOf(o),st=M.reqs.filter(r=>r.star);
- const ln=[`# ${M.name} · shaping decision`,"","Status: working notes. Candidate evidence only. Build scope needs a human-selected shape, an accepted selected-design breadboard and a selected slice.","",`Chosen: ${o?o.id+" · "+o.title:"none yet"}`,`Why: ${M.why||"not given"}`,`Appetite: ${M.appetite||"not set"}`,`Cut line: ${M.cut||"not set"}`,`Current slice: ${M.slice||"not set"}`,"","## Problem",...M.problem.map(x=>"- "+x),"","## Outcome",...M.outcome.map(x=>"- "+x),"","## Starred criteria",...(st.length?st.map(r=>`- ${r.text}${r.chk?" | check: "+r.chk:""}`):["- none"]),"","## Fit (✓ modeled, not verified; ◐ partly; × conflict shown; ? open)",...M.reqs.map(r=>`- ${r.text}: `+[...r.f].map((c,i)=>M.options[i].id+MK[c][0]).join(" "))];
+ const ln=[`# ${M.name} · shaping decision`,"","Status: working notes. A preference is not an accepted selection. Build scope needs accepted requirements/Appetite, human shape selection, an accepted reconciled selected-design breadboard and a selected slice.","",`Chosen: ${o?o.id+" · "+o.title:"none yet"}`,`Why: ${M.why||"not given"}`,`Appetite: ${M.appetite||"not set"}`,`Cut line: ${M.cut||"not set"}`,`Current slice: ${M.slice||"not set"}`,"","## Problem",...M.problem.map(x=>"- "+x),"","## Outcome",...M.outcome.map(x=>"- "+x),"","## Starred criteria",...(st.length?st.map(r=>`- ${r.text}${r.chk?" | check: "+r.chk:""}`):["- none"]),"","## Fit (✓ modeled, not verified; ◐ partly; × conflict shown; ? open)",...M.reqs.map(r=>`- ${r.text}: `+[...r.f].map((c,i)=>M.options[i].id+MK[c][0]).join(" "))];
  if(o)ln.push("",`## Direction ${o.id}`,`Non-goals: ${o.cuts||"not given"}`,`Risk accepted: ${o.risk||"not given"}`,"Rejected alternatives:",...M.options.filter(x=>x!==o).map(x=>`- ${x.id} · ${x.title}${x.placeholder?" (placeholder sketch)":""}: ${x.risk||"no risk noted"}`),`Stable IDs in ${o.id}: ${parse(o.dsl).nodes.map(n=>n.i).join(", ")}`,`Stories supported: ${M.stories.map((s,i)=>s.fit[k]==="1"?"S"+(i+1):"").filter(Boolean).join(", ")||"none"}`);
  const unk=M.reqs.filter(r=>o?r.f[k]==="u":r.f.includes("u"));ln.push("","## Open unknowns",...(unk.length?unk.map(r=>"- "+r.text):["- none"]));
- if(M.slices.length)ln.push("","## Slices",...M.slices.map(s=>`- ${s.name}: stories ${s.stories||"-"}; cut first: ${s.cut||"-"}`));
+ if(M.slices.length)ln.push("","## Proposed slices (not build scope)",...M.slices.map(s=>`- ${s.name}: stories ${s.stories||"-"}; cut first: ${s.cut||"-"}`));
  if(M.rel.length)ln.push("","## Verification",...M.rel.map(r=>`- [${r.status}] ${r.req}${r.evidence?" · "+r.evidence:""}`));return ln.join("\n")}
 const doc=()=>`<h2>The shape</h2><p class="mu">A read-only summary of the current decisions. Copy it or download it into your repo's planning folder.</p><div class="row"><button data-act="copy">Copy</button><button data-act="md">Download .md</button><button data-act="zip" title="frame, shaping and breadboard files in the Planning Skills format">Download planning files (.zip)</button></div><pre class="doc">${esc(notes())}</pre>`;
 function plan(){const k=M.options.findIndex(o=>o.id===M.pick),rd=[[M.appetite,"Appetite set"],[M.pick,"Direction selected by a human"],[M.why,"Reason recorded"],[M.reqs.some(r=>r.star),"At least one starred criterion"],[M.slice,"Current slice named"],[!(k>=0&&M.reqs.some(r=>r.star&&r.f[k]==="n")),"No starred criterion in conflict for the chosen direction"]];
@@ -321,7 +344,7 @@ ${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---
 
 ## Decision
 
-- Status: ${M.pick&&M.selectionAuthority==="Accepted"?"selected":M.pick?"decision-ready":"exploring"}
+- Status: ${M.pick&&M.selectionAuthority==="Accepted"&&!decisionIssues().length?"selected":M.pick?"decision-ready":"exploring"}
 - Chosen direction: ${M.pick?M.pick+" — "+cell(o.title)+(M.selectionAuthority==="Accepted"?"":" (working preference, not yet accepted)"):"not chosen yet"}
 - Why: ${cell(M.why)}
 - Rejected directions: ${M.pick?A.filter(x=>x!==o).map(x=>x.id+" — "+cell(x.risk)).join("; ")||"none":"none yet"}
@@ -346,15 +369,15 @@ function act(a){const k=M.options.findIndex(o=>o.id===M.pick);
  if(a==="seed"&&k<0)T.msg="Select a direction first";
  if(a==="sync")[...M.reqs].sort((x,y)=>y.star-x.star).forEach(r=>{if(!M.rel.some(x=>x.req===r.text))M.rel.push({req:r.text,check:r.chk||"",status:"not verified",evidence:""})});
  return true}
-document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data-sub],[data-view],[data-opt],[data-addopt],[data-delopt],[data-story],[data-dot],[data-star],[data-rq],[data-rate],[data-pick],[data-add],[data-del],[data-z],[data-act],[data-addreq]");if(!t)return;const d=t.dataset;T.msg="";
+document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data-sub],[data-view],[data-opt],[data-addopt],[data-delopt],[data-story],[data-dot],[data-star],[data-rq],[data-rate],[data-pick],[data-add],[data-del],[data-z],[data-act],[data-addreq],[data-accept]");if(!t)return;const d=t.dataset;T.msg="";
  if(d.top)T.top=d.top;if(d.sub)T.sub=d.sub;if(d.view)T.view=d.view;if(d.opt!==undefined)T.opt=+d.opt;
  if(d.addopt!==undefined)addOpt();if(d.delopt!==undefined)delOpt();
  if(d.story!==undefined)T.story=T.story===+d.story?null:+d.story;
- if(d.dot){const[i,j]=d.dot.split(",").map(Number),s=M.stories[i],c="10x"[("10x".indexOf(s.fit[j])+1)%3];s.fit=s.fit.slice(0,j)+c+s.fit.slice(j+1)}
+ if(d.dot){const[i,j]=d.dot.split(",").map(Number),s=M.stories[i],c="10x"[("10x".indexOf(s.fit[j])+1)%3];s.fit=s.fit.slice(0,j)+c+s.fit.slice(j+1);M.selectionAuthority="Working"}
  if(d.star!==undefined)M.reqs[+d.star].star=!M.reqs[+d.star].star;
  if(d.rq!==undefined)T.rq=T.rq===+d.rq?null:+d.rq;
- if(d.rate){const[i,j]=d.rate.split(",").map(Number),r=M.reqs[i],c="ypnu"[("ypnu".indexOf(r.f[j])+1)%4];r.f=r.f.slice(0,j)+c+r.f.slice(j+1)}
- if(d.pick)M.pick=M.pick===d.pick?null:d.pick;
+ if(d.rate){const[i,j]=d.rate.split(",").map(Number),r=M.reqs[i],c="ypnu"[("ypnu".indexOf(r.f[j])+1)%4];r.f=r.f.slice(0,j)+c+r.f.slice(j+1);M.selectionAuthority="Working"}
+ if(d.pick){M.pick=M.pick===d.pick?null:d.pick;M.selectionAuthority="Working"}if(d.accept!==undefined){const issues=decisionIssues();if(issues.length){T.msg="Selection blocked: "+issues[0]}else{M.selectionAuthority="Accepted";T.msg="Human selection recorded"}}
  if(d.add)M[d.add].push(TPL[d.add]());
  if(d.del){const[k,i]=d.del.split(".");M[k].splice(+i,1);if(k==="reqs")T.rq=null;if(k==="stories")T.story=null}
  if(d.z)T.zm=Math.max(.5,Math.min(2,T.zm+.25*d.z));
@@ -363,8 +386,8 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data
 document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.nr!==undefined){T.nr=el.value;return}
  if(el.type==="checkbox"||el.tagName==="SELECT")return;
  if(d.l){M[d.l]=el.value.split("\n").map(s=>s.trim()).filter(Boolean);save();return}
- if(d.p){set(d.p,el.value);save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
-document.addEventListener("change",e=>{const el=e.target;if(el.dataset.p&&(el.type==="checkbox"||el.tagName==="SELECT")){set(el.dataset.p,el.type==="checkbox"?el.checked:el.value);save();render()}});
+ if(d.p){set(d.p,el.value);if(d.p!=="name"&&d.p!=="why")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
+document.addEventListener("change",e=>{const el=e.target;if(el.dataset.p&&(el.type==="checkbox"||el.tagName==="SELECT")){set(el.dataset.p,el.type==="checkbox"?el.checked:el.value);M.selectionAuthority="Working";save();render()}});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.nr!==undefined)$("[data-addreq]").click()});
 $("#imp").addEventListener("change",e=>{const f=e.target.files[0];if(f)f.text().then(x=>{try{const m=JSON.parse(x);if(!Array.isArray(m.options)||!m.options.length||f.size>1024*1024)throw 0;T.undo=clone(M);M=norm(m);T.opt=0;T.story=T.rq=null;save()}catch(_){T.msg="That file isn't a board export"}render()});e.target.value=""});
 addEventListener("resize",fit);render();
