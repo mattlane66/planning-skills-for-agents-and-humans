@@ -33,7 +33,7 @@ assert.doesNotMatch(shaping, /\|\s*❓\s*\|/, 'formal fit must use binary values
 run('M.pick="D"; M.why="Candidate D is strongest"');
 assert.ok(run('decisionIssues().length') > 0, 'no acceptance with unknown appetite or requirements');
 assert.equal(run('M.selectionAuthority'), 'Working');
-assert.ok(run('planningFiles().find(([name])=>name.endsWith("02-shaping.md"))[1].includes("- Status: decision-ready")');
+assert.ok(run('planningFiles().find(([name])=>name.endsWith("02-shaping.md"))[1].includes("- Status: decision-ready")'));
 
 assert.throws(() => run('norm({name:"Unsafe",options:[{id:"A",dsl:""},{id:"A",dsl:""}]})'), /Duplicate/);
 assert.throws(() => run('norm({name:"Unsafe",options:[{id:"A",dsl:""}],reqs:[{id:"R1",text:"a"},{id:"R1",text:"b"}]})'), /Invalid requirement IDs/);
