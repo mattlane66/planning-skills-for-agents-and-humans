@@ -71,13 +71,13 @@ M.project_id=M.project_id||makeProjectId();projects[M.project_id]=clone(M);
 
 /* Optional project-scoped report feed, never a planning authority. */
 const feedRuntime={state:"off",error:"",checkedAt:"",projectId:"",seq:0};
-function currentStatus(){return M.status_feed?(feedRuntime.state==="current"&&feedRuntime.projectId===M.project_id?M.product_status:null):M.product_status}
+function currentStatus(){return M.status_feed?(feedRuntime.state==="current"&&feedRuntime.projectId===M.project_id&&M.product_status&&Date.now()-Date.parse(M.product_status.generated_at)<72*3600000?M.product_status:null):M.product_status}
 function validateStatusReport(p,expectedSha,now=Date.now()){
  if(!p||p.schema_version!==1||p.kind!=="ShapingBoardProductStatus"||!["PASS","REVIEW","DRIFT"].includes(p.verdict))throw Error("Unrecognized gate report");
  if(!/^[0-9a-f]{40}$/i.test(p.revision||"")||p.revision.toLowerCase()!==expectedSha.toLowerCase())throw Error("Status revision does not match the current repository commit");
  const stamp=Date.parse(p.generated_at||"");
  if(!Number.isFinite(stamp)||stamp>now+300000||now-stamp>72*3600000)throw Error("Report is missing, future-dated or older than 72 hours");
- if(!Array.isArray(p.impacts)||p.impacts.length>500||p.impacts.some(x=>!x||!["PASS","REVIEW","DRIFT"].includes(x.status)||!Array.isArray(x.refs)||!Array.isArray(x.changed_paths)||!Array.isArray(x.scenarios)))throw Error("Invalid impact evidence");
+ if(!Array.isArray(p.impacts)||p.impacts.length>500||p.impacts.some(x=>!x||!["PASS","REVIEW","DRIFT"].includes(x.status)||!Array.isArray(x.refs)||!Array.isArray(x.changed_paths)||!Array.isArray(x.scenarios)||x.scenarios.some(c=>!c||!["PASS","REVIEW","DRIFT"].includes(c.status))))throw Error("Invalid impact evidence");
  if(p.verdict==="PASS"&&(p.impacts.length===0||p.impacts.some(x=>x.status!=="PASS"||!x.scenarios.some(c=>c.status==="PASS"))||p.trusted_baseline_missing||p.bindings_changed||(p.unmapped_changed_paths||[]).length||(p.accepted_contract_changes||[]).length))throw Error("PASS without complete, covered scenario evidence");
  return p
 }
@@ -95,6 +95,7 @@ async function refreshStatusFeed(){
  if(!config){feedRuntime.state="off";render();return}
  feedRuntime.state="checking";render();
  try{
+  checkFeedConfig(config.url,config.repo,config.ref);
   const api="https://api.github.com/repos/"+config.repo+"/commits/"+encodeURIComponent(config.ref);
   const responses=await Promise.all([fetch(api,{credentials:"omit",cache:"no-store"}),fetch(config.url,{credentials:"omit",cache:"no-store"})]);
   if(responses.some(x=>!x.ok))throw Error("Repository revision or HTTPS report unavailable (check public access and CORS)");
@@ -102,6 +103,7 @@ async function refreshStatusFeed(){
   const head=await responses[0].json();
   if(!/^[0-9a-f]{40}$/i.test(head.sha||""))throw Error("GitHub revision unavailable");
   const report=validateStatusReport(JSON.parse(raw),head.sha);
+  if(!report.product||report.product.trim().toLowerCase()!==M.name.trim().toLowerCase())throw Error("Report product does not match this board project");
   if(seq!==feedRuntime.seq||projectId!==M.project_id)return;
   M.product_status=report;feedRuntime.state="current";feedRuntime.checkedAt=new Date().toISOString();
  }catch(error){
@@ -432,7 +434,7 @@ function act(a){const k=M.options.findIndex(o=>o.id===M.pick);
  if(a==="feed-refresh"){refreshStatusFeed();return false}
  if(a==="feed-disconnect"){delete M.status_feed;M.product_status=null;resetStatusFeed();T.msg="Status feed disconnected";return true}
  if(a==="clear-status"){if(M.status_feed){T.msg="Disconnect the feed to clear automatic evidence";return true}M.product_status=null;T.msg="Imported evidence cleared";return true}
- if(a==="exp"){const {product_status:localEvidence,...portable}=M;dl(slug()+".board.json",JSON.stringify(portable,null,2),"application/json");return false}
+ if(a==="exp"){const {product_status:localEvidence,status_feed:localFeed,...portable}=M;dl(slug()+".board.json",JSON.stringify(portable,null,2),"application/json");return false}
  if(a==="md"){dl(slug()+"-shape.md",notes(),"text/markdown");return false}
  if(a==="zip"){dl(slug()+"-planning.zip",zip(planningFiles()),"application/zip");return false}
  if(a==="copy"){try{navigator.clipboard.writeText(notes());T.msg="Copied"}catch(_){T.msg="Copy blocked here; use Download"}}
@@ -463,7 +465,7 @@ document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.nr!==u
  if(d.p){set(d.p,el.value);if(d.p!=="name")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
 document.addEventListener("change",e=>{const el=e.target;if(el.dataset.project!==undefined){const next=projects[el.value];if(next){save();try{M=norm(clone(next));T.opt=0;T.rq=T.story=null;save();refreshStatusFeed()}catch(_){T.msg="Saved project is invalid"}render()}return}if(el.dataset.p&&(el.type==="checkbox"||el.tagName==="SELECT")){set(el.dataset.p,el.type==="checkbox"?el.checked:el.value);M.selectionAuthority="Working";save();render()}});
 document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.dataset.nr!==undefined)$("[data-addreq]").click();if((e.key==="Enter"||e.key===" ")&&e.target.matches(".opt,.tabs span")){e.preventDefault();e.target.click()}});
-$("#imp").addEventListener("change",e=>{const f=e.target.files[0];if(f)f.text().then(x=>{try{const m=JSON.parse(x);if(!Array.isArray(m.options)||!m.options.length||f.size>1024*1024)throw 0;save();T.undo=clone(M);M=norm(m);M.project_id=M.project_id||makeProjectId();T.opt=0;T.story=T.rq=null;resetStatusFeed();save();refreshStatusFeed()}catch(_){T.msg="That file isn't a board export"}render()});e.target.value=""});
+$("#imp").addEventListener("change",e=>{const f=e.target.files[0];if(f)f.text().then(x=>{try{const m=JSON.parse(x);if(!Array.isArray(m.options)||!m.options.length||f.size>1024*1024)throw 0;save();T.undo=clone(M);M=norm(m);delete M.status_feed;delete M.product_status;M.project_id=M.project_id||makeProjectId();T.opt=T.story=T.rq=null;resetStatusFeed();save();refreshStatusFeed()}catch(_){T.msg="That file isn't a board export"}render()});e.target.value=""});
 $("#imp-status").addEventListener("change",e=>{const file=e.target.files[0];if(file)file.text().then(content=>{try{if(file.size>1024*1024)throw Error("File too large");const value=JSON.parse(content);if(value.schema_version!==1||value.kind!=="ShapingBoardProductStatus"||!["PASS","REVIEW","DRIFT"].includes(value.verdict)||!Array.isArray(value.impacts)||value.impacts.length>500)throw Error("Not a Product Intent board report");resetStatusFeed();delete M.status_feed;M.product_status=value;T.top="review";T.msg="Read-only Product Intent report imported";save()}catch(ex){T.msg="Could not import status: "+ex.message}render()});e.target.value=""});
-addEventListener("resize",fit);render();refreshStatusFeed();
+addEventListener("resize",fit);document.addEventListener("visibilitychange",()=>{if(!document.hidden&&M.status_feed&&Date.now()-Date.parse(feedRuntime.checkedAt||0)>5*60000)refreshStatusFeed()});addEventListener("focus",()=>{if(M.status_feed&&Date.now()-Date.parse(feedRuntime.checkedAt||0)>5*60000)refreshStatusFeed()});render();refreshStatusFeed();
 </script></body></html>
