@@ -76,6 +76,40 @@ assert.match(w.document.querySelector('main').textContent,/Failed saves preserve
 assert.match(w.document.querySelector('main').textContent,/R1/);
 assert.match(w.document.querySelector('main').textContent,/DRIFT/);
 
+
+ // Automatic reports are advisory, commit-scoped and fail closed.
+const sha='a'.repeat(40),otherSha='b'.repeat(40);
+const auto={schema_version:1,kind:'ShapingBoardProductStatus',product:'DWC Requests',verdict:'PASS',
+ revision:sha,generated_at:new Date().toISOString(),
+ impacts:[{id:'INV-1',title:'Approved isolation',status:'PASS',statement:'Preserve draft',
+ refs:['R1'],changed_paths:['src/profile.py'],scenarios:[{scenario:'SC-1',case:'save',status:'PASS'}]}],
+ unmapped_changed_paths:[],accepted_contract_changes:[],bindings_changed:false,trusted_baseline_missing:false};
+assert.equal(run('validateStatusReport('+JSON.stringify(auto)+','+JSON.stringify(sha)+').verdict'),'PASS');
+assert.throws(()=>run('validateStatusReport('+JSON.stringify(auto)+','+JSON.stringify(otherSha)+')'),/revision/);
+assert.throws(()=>run('validateStatusReport('+JSON.stringify({...auto,generated_at:new Date(Date.now()-73*3600000).toISOString()})+','+JSON.stringify(sha)+')'),/72 hours/);
+assert.throws(()=>run('validateStatusReport('+JSON.stringify({...auto,impacts:[]})+','+JSON.stringify(sha)+')'),/PASS without/);
+assert.throws(()=>run('validateStatusReport('+JSON.stringify({...auto,impacts:[{...auto.impacts[0],scenarios:[]}]})+','+JSON.stringify(sha)+')'),/PASS without/);
+assert.throws(()=>run('checkFeedConfig("http://untrusted.test/feed.json","owner/repo","main")'),/HTTPS/);
+assert.throws(()=>run('checkFeedConfig("https://untrusted.test/feed.json?token=secret","owner/repo","main")'),/HTTPS/);
+run('M.name="DWC Requests";M.status_feed={url:"https://feed.test/product-status.json",repo:"owner/repo",ref:"main"};M.product_status={verdict:"PASS"};feedRuntime.state="unavailable";feedRuntime.projectId=M.project_id;T.top="review";render()');
+assert.equal(run('currentStatus()'),null,'failed refresh must hide a cached PASS');
+assert.doesNotMatch(w.document.querySelector('main').textContent,/Covered check passed/);
+w.fetch=async url=>url.includes('api.github.com')?{ok:true,json:async()=>({sha})}:{ok:true,text:async()=>JSON.stringify(auto)};
+await run('refreshStatusFeed()');
+assert.equal(run('feedRuntime.state'),'current');
+assert.equal(run('currentStatus().verdict'),'PASS');
+assert.match(w.document.querySelector('main').textContent,/Approved isolation/);
+assert.match(w.document.querySelector('main').textContent,/a{40}/);
+w.fetch=async url=>url.includes('api.github.com')?{ok:true,json:async()=>({sha:otherSha})}:{ok:true,text:async()=>JSON.stringify(auto)};
+await run('refreshStatusFeed()');
+assert.equal(run('feedRuntime.state'),'unavailable','outdated commit must not stay green');
+assert.equal(run('currentStatus()'),null);
+assert.doesNotMatch(w.document.querySelector('main').textContent,/Covered check passed/);
+assert.match(w.document.querySelector('main').textContent,/Unverified/);
+const portableAuto=run('(()=>{const {product_status,status_feed,...portable}=M;return portable})()');
+assert.equal(portableAuto.status_feed,undefined);
+run('delete M.status_feed;M.product_status=null;resetStatusFeed();render()');
+
 // End-to-end Markdown import -> UI -> exporter -> real repo publisher contract.
 const {mkdtempSync,mkdirSync,writeFileSync,readFileSync:read} = await import('node:fs');
 const {tmpdir} = await import('node:os');

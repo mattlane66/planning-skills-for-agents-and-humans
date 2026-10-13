@@ -1,8 +1,13 @@
 # Example for a product repo. Copy to .github/workflows only after adapting paths.
-# Requires the tools in protected main and approved planning/approved-scenarios.json.
+# Requires the tools in the protected base and approved planning/approved-scenarios.json.
+# PR reports are artifacts for review; publish only a deliberately sanitized,
+# protected-main report to a trusted HTTPS endpoint if using the optional board feed.
+# GitHub Actions artifacts alone are not browser-readable status URLs.
 name: Product Intent Gate (example)
 on:
   pull_request:
+  push:
+    branches: [main]
 permissions:
   contents: read
 jobs:
@@ -12,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          ref: ${{ github.event.pull_request.base.sha }}
+          ref: ${{ github.event.pull_request.base.sha || github.event.before }}
           path: trusted
           persist-credentials: false
           fetch-depth: 0
@@ -31,7 +36,7 @@ jobs:
       - name: Check trusted behavioral scenarios against changed implementation
         shell: bash
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           set -euo pipefail
           git -C candidate diff --name-only "$BASE_SHA" HEAD > /tmp/changed-paths
@@ -44,7 +49,7 @@ jobs:
           # The board projection is derived solely from the protected gate output and compiled candidate package.
           # Never change the gate's exit status to make a drifted change look green.
           if [[ "$gate_exit" -eq 0 || "$gate_exit" -eq 1 ]]; then
-            python3 trusted/product-intent/board_report.py --package /tmp/head.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json --revision "$(git -C candidate rev-parse --short=12 HEAD)"
+            python3 trusted/product-intent/board_report.py --package /tmp/head.json --gate-report /tmp/product-intent-gate.json --output /tmp/product-status.json --revision "$(git -C candidate rev-parse HEAD)"
           fi
           exit "$gate_exit"
       - name: Attach product-level impact for the Shaping Board

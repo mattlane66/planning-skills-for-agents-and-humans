@@ -5,7 +5,7 @@ Optional browser surface for **Planning Skills for Agents and Humans**. The boar
 ## Start
 
 - Hosted (after merging and deploying): https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/
-- Offline: download `index.html` and open it in a browser. No server, account, external assets, or API calls required.
+- Offline: download `index.html` and open it in a browser. No server, account, external assets, or API calls required unless you explicitly enable the optional status feed (which needs HTTPS/CORS).
 - **Example** loads a DWC Requests sample. The GitLab alternatives A–C are marked as placeholder sketches; none is claimed to be proven.
 - **New** creates a blank board. **Import** accepts exported `.board.json`. Save a project by **Export JSON**, then commit the file in your project's own repo. Browser autosave is convenience, not version control.
 
@@ -67,7 +67,18 @@ Create a read-only projection for the board:
 
 Open Review → Import product status JSON. See affected product invariants and decisions, their referenced requirements, changed implementation paths, approved scenario results, and coverage gaps. Fit Check also marks impacted requirements. These findings do not mutate or accept planning intent.
 
-This is manual import in v1, not a live GitHub/agent connection. To refresh it after each build, have the existing protected Product Intent gate produce a new report as a CI artifact and import that artifact. CI should preserve the gate's original nonzero exit status for REVIEW/DRIFT, even if exporting its JSON. Do not publish sensitive source paths or private scenarios on public Pages. Never accept agent-authored JSON alone as proof of PASS.
+### Optional automatic status feed
+
+The Review tab can now refresh a **public, trusted-CI-published Product Intent board report** without manual re-import. This remains a read-only projection, not a new product authority or a direct GitHub Actions-artifact downloader.
+
+1. In the **product repository** (not this methods repo), adopt the `product-intent/ci-example.yml` workflow after adapting its planning paths. It runs the trusted gate for PRs and protected `main` pushes, emits the **full 40-character checked commit SHA** as `revision`, and uploads `product-status.json` as an artifact. Preserve the gate's nonzero REVIEW/DRIFT exit code. This example does **not** publish an HTTPS feed itself.
+2. If a status report can safely be public, arrange for a **separate trusted publisher operating on the protected main branch** to host a carefully reviewed, non-sensitive status JSON at an HTTPS URL with cross-origin browser access (CORS). Do not let an untrusted PR, its modified workflow, or an agent-authored report publish/overwrite that authoritative URL. Do not publicly publish proprietary source paths, scenario bodies, or sensitive intent. The provided report includes changed paths and scenario identifiers by default; sanitize these in your trusted publication step, preserving verdict, linked requirement identifiers, and each tested scenario's result. If privacy cannot be guaranteed, keep using local file import.
+3. In **Review → Automatic product status**, enter the public HTTPS JSON URL, public GitHub `owner/repo`, and protected branch (usually `main`). The report's `product` must match the Board project name. Select **Connect feed**. This configuration is saved locally for the Board project, excluded from exported Board JSON, and never requires a token.
+4. The Board checks the public GitHub branch HEAD SHA through GitHub's API and fetches the JSON report when opened, when revisiting the browser tab after five minutes, or when **Refresh now** is selected. A report with a missing or nonmatching full SHA, invalid evidence, or generation time older than 72 hours is **unverified** and cannot show PASS, even if a prior cached report was green. A connection failure also removes the old status from the UI. Other files cannot silently configure an automatic feed through Board import.
+
+**Security/interpretation:** A matching commit and HTTPS URL do not independently authenticate the report's producer or prove that tests ran. The configured publisher and protected CI process must be trusted. Even a legitimate PASS covers only approved, explicitly mapped scenarios—not all software behavior, production health, or post-release effect. GitHub Actions artifacts are not generally readable directly from an unauthenticated standalone browser, and GitHub API rate limits/CORS may prevent refresh. The Board deliberately asks for an explicit public HTTPS feed instead of storing a GitHub token.
+
+The original **Import product status JSON** remains available for offline/private projects and disables the configured automatic feed when used.
 
 PASS covers only explicitly mapped, approved and tested scenarios; REVIEW means uncertain or insufficient evidence, not demonstrated failure; DRIFT is an observed failure of an approved scenario. This is not automatic prediction of all product behavior or post-release outcomes.
 
