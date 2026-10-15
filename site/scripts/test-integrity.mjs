@@ -57,7 +57,7 @@ assert.equal(window.__PLANNING_PORTAL_READY__, true, 'The embedded application d
 const resourcePaths = new Set(content.resources.map((item) => item.sourcePath));
 const templatePaths = [...resourcePaths].filter((sourcePath) => sourcePath.startsWith('templates/'));
 const skillReferencePaths = [...resourcePaths].filter((sourcePath) => sourcePath.includes('/references/'));
-assert.equal(templatePaths.length, 20, 'Every canonical template should be embedded.');
+assert.equal(templatePaths.length, 21, 'Every canonical template should be embedded.');
 assert.equal(skillReferencePaths.length, 11, 'Every canonical skill reference should be embedded.');
 for (const item of [...content.docs, ...content.skills, ...content.resources, ...content.examples]) {
   assert.ok(item.description.length <= 240, `${item.sourcePath || item.slug} has an overlong description.`);

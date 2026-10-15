@@ -17,6 +17,7 @@ EXPECTED = {
     "breadboard",
     "select-shape",
     "reconcile-sketch",
+    "reconcile-planning-changes",
     "statechart",
     "dumplink",
     "contracts",

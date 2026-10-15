@@ -54,5 +54,9 @@
   "lead-user-research": {
     "title": "Lead User Research",
     "description": "Inspect future-facing markets with Eric von Hippel's Lead User Method when teams need evidence-traceable trend, lead-user, and opportunity research."
+  },
+  "planning-change-reconciliation": {
+    "title": "Planning Change Reconciliation",
+    "description": "Reconcile post-kickoff meeting decisions, messages, or edited drafts when they may change accepted planning, preserving human approval and readable review."
   }
 }
