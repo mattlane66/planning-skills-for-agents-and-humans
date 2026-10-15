@@ -1,6 +1,6 @@
 ---
 name: planning-change-reconciliation
-description: Reconcile post-kickoff meeting decisions, messages, feedback, or edited drafts with accepted planning artifacts while preserving human approval and readable review.
+description: Reconcile post-kickoff meeting decisions, messages, or edited drafts when they may change accepted planning, preserving human approval and readable review.
 license: MIT
 ---
 
