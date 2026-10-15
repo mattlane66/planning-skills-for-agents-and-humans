@@ -23,7 +23,9 @@ Use the skills directly inside your AI tools, or use an optional interface to ma
 
 [![The actual Shaping Board showing the DWC Requests example: candidate design comparisons and behavioral diagrams](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/preview.png)](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)
 
-**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — compare candidate designs, trace scenarios, check requirements and trade-offs, and record working decisions. Start with the example or bring your own planning artifacts; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). This is an optional working surface, **not build authorization**.
+**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — compare candidate designs, trace scenarios, check requirements and trade-offs, and record working decisions.
+
+**New — AI Workspace and Product map:** choose Codex, Claude Code or Gemini CLI; copy a project-specific starting instruction or download an agent-ready workspace ZIP; then review AI-proposed Board revisions before selectively applying them as Working. The integrated Product map shows current requirements, design references and working product nouns. **This does not embed a coding agent or connect an AI account.** See [the three-minute AI Workspace guide](./docs/shaping-board-ai-workspace.md). Start with the example or bring your own planning artifacts; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). This is an optional working surface, **not build authorization**.
 
 ### Product Ontology viewer
 
