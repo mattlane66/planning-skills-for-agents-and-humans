@@ -57,6 +57,6 @@
   },
   "planning-change-reconciliation": {
     "title": "Planning Change Reconciliation",
-    "description": "Reconcile post-kickoff decisions and review proposed changes when messages, meetings, or feedback may alter an accepted planning stack."
+    "description": "Reconcile post-kickoff meeting decisions, messages, feedback, or edited drafts with accepted planning artifacts while preserving human approval and readable review."
   }
 }

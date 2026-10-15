@@ -55,6 +55,14 @@
     [
       "lead-user-research",
       "shaping"
+    ],
+    [
+      "planning-change-reconciliation",
+      "sketch-reconciliation"
+    ],
+    [
+      "planning-change-reconciliation",
+      "breadboard-reflection"
     ]
   ],
   "skills": {
@@ -205,6 +213,16 @@
       "negative": [
         "The market need is already established; compare two concrete solution shapes against accepted requirements and stop before selection.",
         "Turn these raw interview transcripts into a bounded current-problem frame without doing future-facing Lead User discovery."
+      ]
+    },
+    "planning-change-reconciliation": {
+      "positive": [
+        "Reconcile the decisions in these new meeting notes with our accepted shaping artifacts; show me a private version-two review before any change is applied.",
+        "A project is already shaped and accepted. Review these Slack decisions, map proposed deltas to stable IDs, and tell me what requires approval."
+      ],
+      "negative": [
+        "The project has no accepted plan. Extract a useful initial frame from these raw stakeholder notes.",
+        "Compare the implemented product behavior against the accepted breadboard and identify concrete drift."
       ]
     }
   }
