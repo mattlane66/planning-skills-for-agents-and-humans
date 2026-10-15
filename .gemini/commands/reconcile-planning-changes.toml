@@ -1,0 +1,14 @@
+description = "Review ongoing decisions and propose traceable updates to accepted planning without silently promoting evidence."
+
+prompt = """
+Use this repository's planning instructions and Planning Change Reconciliation skill.
+
+Primary instructions:
+@{AGENTS.md}
+@{planning-change-reconciliation/SKILL.md}
+
+Accepted planning context and incoming evidence:
+{{args}}
+
+Separate evidence from proposals, map editorial and substantive deltas to stable IDs, and prepare private readable review when needed. Require explicit human approval before updating accepted meaning. Preserve authority and report downstream ripple; do not implement.
+"""

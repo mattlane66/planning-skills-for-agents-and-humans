@@ -45,6 +45,7 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 | Resolve one focused unknown | `shaping/SKILL.md` + `templates/spike.md` | `/spike` | `/spike` | “Run a focused spike and return R/S/fit/Appetite implications…” |
 | Candidate-shape breadboard | `breadboarding/SKILL.md` | `/breadboard` | `/breadboard` | “Use candidate-shape mode; label Working/Accepted/Unset judging inputs…” |
 | Select shape — hard gate | `shaping/SKILL.md` | `/select-shape` | `/select-shape` | “Record my selected shape after verifying accepted R/Appetite and decision-ready fit…” |
+| Reconcile post-kickoff decisions | `planning-change-reconciliation/SKILL.md` | `/reconcile-planning-changes` | `/reconcile-planning-changes` | “Review proposed changes to the accepted plan, map stable IDs, and ask me before applying consequential deltas…” |
 | Reconcile a visual | `sketch-reconciliation/SKILL.md` | `/reconcile-sketch` | `/reconcile-sketch` | “Reconcile this attached visual with accepted planning…” |
 | Current-state or selected-design breadboard | `breadboarding/SKILL.md` | `/breadboard` | `/breadboard` | “Use breadboarding in current-state / selected-design mode…” |
 | Model complex state | `statechart/SKILL.md` | `/statechart` | `/statechart` | “Use the statechart skill…” |

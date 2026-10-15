@@ -31,6 +31,25 @@ test('uses Wayfinding only for explicit multi-session decision coordination', ()
   );
 });
 
+test('routes post-kickoff evidence changes to planning reconciliation', () => {
+  assert.deepEqual(
+    recommendPlanningWorkflow('Reconcile planning changes from meeting decisions into the accepted shaping doc'),
+    ['planning-change-reconciliation'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Review planning changes in a private v2 of the accepted plan'),
+    ['planning-change-reconciliation'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('Do not use planning change reconciliation; review planning changes in the plan'),
+    ['planning-router'],
+  );
+  assert.deepEqual(
+    recommendPlanningWorkflow('I have a messy transcript and an unclear problem'),
+    ['framing-doc'],
+  );
+});
+
 test('routes option comparison to shaping', () => {
   assert.deepEqual(recommendPlanningWorkflow('Compare options and tradeoffs before choosing a direction'), ['shaping']);
 });

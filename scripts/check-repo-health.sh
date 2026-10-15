@@ -79,25 +79,25 @@ while IFS= read -r skill || [[ -n "$skill" ]]; do
 done < skill-inventory.txt
 
 CLAUDE_COMMANDS=(
-  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard statechart dumplink
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch reconcile-planning-changes breadboard statechart dumplink
   kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 BUNDLED_CLAUDE_COMMANDS=(
-  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch breadboard
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike select-shape reconcile-sketch reconcile-planning-changes breadboard
   kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 GEMINI_COMMANDS=(
-  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch statechart dumplink
+  plan wayfind frame shape criteria appetite sketch-shapes fit-check spike breadboard select-shape reconcile-sketch reconcile-planning-changes statechart dumplink
   kickoff feed-context present-plan check-drift reflect-breadboard
   lead-user lead-user-frame lead-user-discover lead-user-evidence lead-user-freeze lead-user-interpret lead-user-shape lead-user-decide lead-user-deliver
 )
 
 TEMPLATES=(
-  wayfinding-map wayfinding-ticket frame shaping sketch-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
+  wayfinding-map wayfinding-ticket frame shaping sketch-reconciliation planning-change-reconciliation breadboard statechart interface-contracts executable-breadboard dumplink
   slices context-packet kickoff breadboard-reflection drift-check agent-run-log
   orchestration-plan spike decision-log appetite-card
 )

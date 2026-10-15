@@ -4,6 +4,7 @@ export const skillNames = [
   'framing-doc',
   'shaping',
   'sketch-reconciliation',
+  'planning-change-reconciliation',
   'breadboarding',
   'statechart',
   'interface-contracts',
@@ -30,6 +31,7 @@ const skillExclusionAliases: Record<SkillName, string[]> = {
   'framing-doc': ['framing doc', 'framing document', 'framing-doc'],
   shaping: ['shaping', 'shape comparison'],
   'sketch-reconciliation': ['sketch reconciliation', 'reconcile (?:this |the )?(?:sketch|image|screenshot|wireframe|mockup)'],
+  'planning-change-reconciliation': ['planning change reconciliation', 'reconcile planning changes', 'planning-change-reconciliation'],
   breadboarding: ['breadboarding', 'breadboard', 'behavior map'],
   statechart: ['statechart', 'state machine'],
   'interface-contracts': ['interface contract', 'api contract', 'boundary contract', 'interface-contracts'],
@@ -196,6 +198,20 @@ export function recommendPlanningWorkflow(
   );
   if (leadUserResearchRequested) {
     const route = allowedRoute(['lead-user-research'], exclusions);
+    if (route.length > 0) return route;
+  }
+
+  const postKickoffReconciliation = includesAny(normalized, [
+    'planning change reconciliation', 'reconcile planning changes',
+    'review planning changes', 'post-kickoff decision',
+    'after kickoff decision', 'meeting decisions',
+    'reconcile the shaping doc', 'draft a private v2',
+    'planning doc drift',
+  ]) && includesAny(normalized, [
+    'accepted', 'plan', 'planning', 'shaping', 'kickoff', 'document', 'doc',
+  ]);
+  if (postKickoffReconciliation) {
+    const route = allowedRoute(['planning-change-reconciliation'], exclusions);
     if (route.length > 0) return route;
   }
 

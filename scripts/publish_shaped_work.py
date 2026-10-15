@@ -11,6 +11,7 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+from planning_change_review import ReviewError, write_review
 from planning_publisher_contract import (
     ContractError,
     clean_value,
@@ -225,10 +226,28 @@ def main(argv=None):
     parser.add_argument("--svg-dir", type=Path)
     parser.add_argument("--png-dir", type=Path)
     parser.add_argument("--pdf-output", type=Path)
+    parser.add_argument("--review-base", type=Path, help="Accepted Markdown baseline")
+    parser.add_argument("--review-proposal", type=Path, help="Private proposed Markdown")
+    parser.add_argument("--review-record", type=Path, help="Optional classification/provenance JSON")
+    parser.add_argument("--review-output", type=Path, help="Write read-only HTML diff")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args(argv)
 
     try:
+        review_requested = any((
+            args.review_base, args.review_proposal, args.review_record, args.review_output
+        ))
+        if review_requested:
+            if not all((args.review_base, args.review_proposal, args.review_output)):
+                raise PublisherError("Review mode requires --review-base, --review-proposal, and --review-output")
+            if any((args.frame, args.shaping, args.breadboard, args.presentation,
+                    args.output, args.json_output, args.ontology_output, args.svg_dir,
+                    args.png_dir, args.pdf_output)):
+                raise PublisherError("Review mode cannot be combined with shaped-work export options")
+            write_review(args.review_base, args.review_proposal, args.review_output,
+                         args.review_record, check=args.check)
+            print("Planning change review OK" if args.check else args.review_output)
+            return 0
         package = build_package(
             args.planning_dir,
             args.frame,
@@ -280,7 +299,7 @@ def main(argv=None):
         if svg_paths:
             print(f"Wrote {len(svg_paths)} SVG board(s) to {svg_paths[0].parent}")
         return 0
-    except (ContractError, PublisherError, ValueError) as exc:
+    except (ContractError, PublisherError, ReviewError, ValueError) as exc:
         print(f"Planning Publisher error: {exc}", file=sys.stderr)
         return 2
 
