@@ -78,10 +78,10 @@ Do not route to solution exploration merely because a solution idea is available
 11. Use the active gated/orchestrated profile when the user or automation explicitly asks for strict prerequisites. Do not silently impose that profile on an ordinary collaborative session.
 12. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
 13. Use `planning-change-reconciliation` for decision-to-plan changes after kickoff; don't confuse them with implementation-to-plan drift or visual-only evidence.
-13. Do not let an existing sketch, prototype, or candidate breadboard bypass human selection when it introduces a solution that has not been accepted.
-14. Do not let current-state or candidate-shape breadboarding become selected future intent.
-15. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
-16. Do not begin implementation or make a human scope, appetite, direction, promotion, or slice decision.
+14. Do not let an existing sketch, prototype, or candidate breadboard bypass human selection when it introduces a solution that has not been accepted.
+15. Do not let current-state or candidate-shape breadboarding become selected future intent.
+16. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
+17. Do not begin implementation or make a human scope, appetite, direction, promotion, or slice decision.
 
 ## Output
 
