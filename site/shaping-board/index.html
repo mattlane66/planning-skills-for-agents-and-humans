@@ -334,9 +334,14 @@ function bridgePackageFiles(){
  ["README-SHAPING-WORKSPACE.md",bridgeReadme()+"\n"]
  ]);
 }
+function bridgeValue(obj,key){
+ const value=obj[key];
+ if(key==="reqs"&&Array.isArray(value))return value.map(row=>{const {auth,...substance}=row;return substance});
+ return value;
+}
 function bridgeDiff(){
  if(!B.proposal || B.proposal.project_id!==M.project_id)return [];
- return BRIDGE_SECTIONS.filter(s=>s.keys.some(k=>JSON.stringify(M[k])!==JSON.stringify(B.proposal[k])));
+ return BRIDGE_SECTIONS.filter(s=>s.keys.some(k=>JSON.stringify(bridgeValue(M,k))!==JSON.stringify(bridgeValue(B.proposal,k))));
 }
 function bridgePreview(obj,keys){
  const payload={};for(const key of keys)payload[key]=obj[key];
