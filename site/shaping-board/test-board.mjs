@@ -155,7 +155,7 @@ assert.ok(w.document.querySelector('[data-ontology-rq="0"]'));
 
 // Same-project AI revisions must be compared, never silently treated as accepted.
 run('M.project_id="bridge-test"; M.selectionAuthority="Accepted";M.frameAuthority="Accepted";M.appetiteAuthority="Accepted"; M.reqs.forEach(r=>r.auth="Accepted"); B.proposal=norm(clone(M)); B.proposal.reqs[0].text="Proposed requirement"; B.proposal.selectionAuthority="Accepted"; B.proposal.product_status={verdict:"PASS"}');
-assert.deepEqual(run('bridgeDiff().map(s=>s.id)'),['design']);
+assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'design');
 assert.match(run('bridgeProposal()'),/Apply as Working/);
 assert.match(run('bridgeProposal()'),/Proposed requirement/);
 run('bridgeApply("design")');
@@ -165,7 +165,7 @@ assert.equal(run('M.selectionAuthority'),'Working');
 assert.equal(run('M.product_status'),undefined);
 assert.equal(run('bridgeDiff().length'),0);
 run('B.proposal=norm(clone(M));B.proposal.problem=["Updated problem"];B.proposal.appetite="2 weeks"; B.proposal.frameAuthority="Accepted"; B.proposal.appetiteAuthority="Accepted"');
-assert.deepEqual(run('bridgeDiff().map(s=>s.id)'),['frame','appetite']);
+assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'frame,appetite');
 run('bridgeApply("frame")');
 assert.equal(run('M.frameAuthority'),'Working');
 run('bridgeApply("appetite")');
