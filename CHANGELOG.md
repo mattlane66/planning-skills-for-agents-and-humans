@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v1.6.0 — Post-kickoff planning change reconciliation — 2026-10-14
+
 - Add a post-kickoff planning-change skill with provenance, deduplication, human gates, and downstream ripple review.
 - Add a read-only semantic-inventory/Markdown diff mode to Planning Publisher, with source-hash guards and tests.
 - Expose the skill through agent routing, MCP metadata, commands, templates, and a small example.
