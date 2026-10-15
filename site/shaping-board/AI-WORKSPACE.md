@@ -30,7 +30,7 @@ This is **not** chat, account connection, one-click plugin installation, GitHub 
 
 ## Authority and security
 
-- **An AI proposal is untrusted data.** The Board displays supported changes and does not silently accept them. Imports require matching `project_id` and schema version; proposals are not sent to any service.
+- **An AI proposal is untrusted data.** The Board displays supported changes and does not silently accept them. Imports require matching `project_id` and schema version; proposals are not sent to any service. Candidate IDs and their order must match the current Board, since fit and supporting-part references are position-indexed. Add/remove/reorder candidates in the Board before exporting a new workspace.
 - Applying any proposed section sets selection authority back to **Working**. Modified requirements become Working; frame/appetite authority also reverts to Working when those fields change. Stale imported Product Intent evidence is discarded after applying a proposal.
 - Proposal comparisons are complete and untruncated, organized by changed requirement, candidate, story and other fields. A reviewed button applies the entire section, not individual records. Proposal comparisons cover six bounded sections: framing, appetite, design/requirements/stories/fit, things, preferred direction/next slice, and proposed slices. Agent-supplied verification and release statuses, authority claims and arbitrary extra fields are never promoted through proposal application.
 - The Board's project map is a **working projection**. It is not the [compiled Product Ontology](../../product-intent/README.md), and linked elements are not evidence of runtime correctness.
