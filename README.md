@@ -27,7 +27,7 @@ Use the skills directly inside your AI tools, or use an optional interface to ma
 
 Start with the example or bring your own planning artifacts; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). This remains an optional working surface, **not build authorization**.
 
-**New — AI Workspace and Product map:** choose Codex, Claude Code or Gemini CLI; copy a project-specific starting instruction or download an agent-ready workspace ZIP; then review AI-proposed Board revisions before selectively applying them as Working. The integrated Product map shows current requirements, design references and working product nouns. **This does not embed a coding agent or connect an AI account.** See [the three-minute AI Workspace guide](./docs/shaping-board-ai-workspace.md).
+**New — AI Workspace and Product map:** choose Codex, Claude Code or Gemini CLI; copy a project-specific starting instruction or download an agent-ready workspace ZIP; then review AI-proposed Board revisions before selectively applying them as Working. The integrated Product map shows current requirements, design references and working product nouns. **This does not embed a coding agent or connect an AI account.** See [the three-minute AI Workspace guide](./site/shaping-board/AI-WORKSPACE.md).
 
 ### Product Ontology viewer
 
