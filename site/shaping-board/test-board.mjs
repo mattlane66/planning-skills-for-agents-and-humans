@@ -201,7 +201,7 @@ huge.reqs[0].text="Very long proposed requirement: "+"X".repeat(6000);
 run('B.proposal=bridgeValidateProposal('+JSON.stringify(huge)+')');
 const diffHtml=run('bridgeProposal()');
 assert.ok(diffHtml.includes("X".repeat(6000)),"entire 6,000-character change must be inspectable");
-assert.doesNotMatch(diffHtml,/preview shortened|truncated/);
+assert.ok(!diffHtml.includes("… (preview shortened"),"full preview must not hide any content");
 assert.match(diffHtml,/reqs · R1/);
 assert.equal(run('bridgeEntries(bridgeDiff()[0]).filter(row=>row.label==="reqs · R1").length'),1);
 assert.equal(run('M.reqs[0].text'),safe.reqs[0].text,"untrusted proposal is not applied automatically");
