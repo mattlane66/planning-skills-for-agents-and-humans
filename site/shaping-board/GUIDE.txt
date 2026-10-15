@@ -90,7 +90,7 @@ The **Review AI proposal** tool imports a complete schema v3 `.board.json` with 
 
 The **Product map** tab exposes the current working connections among requirements, preferred-shape node references, candidate shapes, product nouns and available read-only Product Intent results. It is not the canonical compiled Product Ontology and must not be used to infer execution coverage.
 
-**Start here:** [AI Workspace guide](../../docs/shaping-board-ai-workspace.md).
+**Start here:** [AI Workspace guide](./AI-WORKSPACE.md).
 
 ## Validation
 
