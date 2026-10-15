@@ -156,7 +156,7 @@ assert.ok(w.document.querySelector('[data-ontology-rq="0"]'));
 // Same-project AI revisions must be compared, never silently treated as accepted.
 run('M.project_id="bridge-test"; M.selectionAuthority="Accepted";M.frameAuthority="Accepted";M.appetiteAuthority="Accepted"; M.reqs.forEach(r=>r.auth="Accepted"); B.proposal=norm(clone(M)); B.proposal.reqs[0].text="Proposed requirement"; B.proposal.selectionAuthority="Accepted"; B.proposal.product_status={verdict:"PASS"}');
 assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'design');
-assert.match(run('bridgeProposal()'),/Apply as Working/);
+assert.match(run('bridgeProposal()'),/Apply reviewed section as Working/);
 assert.match(run('bridgeProposal()'),/Proposed requirement/);
 run('bridgeApply("design")');
 assert.equal(run('M.reqs[0].text'),'Proposed requirement');
