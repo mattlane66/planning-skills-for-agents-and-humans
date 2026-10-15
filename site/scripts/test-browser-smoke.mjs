@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { mkdtemp, readFile, rm } from 'node:fs/promises';
+import { mkdtemp, readFile, writeFile, readdir, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -375,9 +375,64 @@ async function main() {
     assert.ok(await evaluate('document.querySelector("#items")?.textContent.includes("No linked checks")'),
       'Unknown verification must not appear as a pass');
 
+
+    // Real browser handoff and import: open the standalone Shaping Board, not a mocked DOM.
+    await client.call('Emulation.clearDeviceMetricsOverride');
+    const boardUrl=pathToFileURL(path.join(siteDirectory,'shaping-board','index.html')).href;
+    await client.call('Page.navigate',{url:boardUrl});
+    await waitFor(()=>evaluate('document.querySelector("[data-top=workspace]")!==null'),'Shaping Board readiness');
+    await evaluate('document.querySelector("[data-top=workspace]").click(); true');
+    assert.ok(await evaluate('document.querySelector("main").textContent.includes("AI Workspace")'),
+      'Workspace tab should be visible in real browser');
+    await evaluate('(()=>{const select=document.querySelector("[data-bridge-provider]");select.value="gemini";select.dispatchEvent(new Event("change",{bubbles:true}));return true})()');
+    assert.ok(await evaluate('bridgePrompt().includes("Gemini CLI")'),'provider selection must change handoff');
+    await client.call('Browser.setDownloadBehavior',{behavior:'allow',downloadPath:publisherDir});
+    await evaluate('document.querySelector("[data-act=bridge-package]").click(); true');
+    let zipFile='';
+    await waitFor(async()=>{
+      zipFile=(await readdir(publisherDir)).find(name=>name.endsWith('-ai-workspace.zip'))||'';
+      return Boolean(zipFile);
+    },'actual Board AI workspace download');
+    const zipBytes=await readFile(path.join(publisherDir,zipFile));
+    assert.equal(zipBytes.subarray(0,4).toString('hex'),'504b0304');
+    for(const expected of ['planning/shaping.board.json','planning/AI-START-HERE.md','README-SHAPING-WORKSPACE.md']){
+      assert.ok(zipBytes.includes(Buffer.from(expected)),'Downloaded ZIP missing '+expected);
+    }
+    // Create a valid proposed revision on disk and import it using a real file input.
+    const proposedBoard=JSON.parse(await evaluate('JSON.stringify(bridgePortable())'));
+    const unchangedText=proposedBoard.reqs[0].text;
+    proposedBoard.reqs[0].text='Browser-reviewed change '+('FULL-DETAIL-'.repeat(520));
+    const proposalFile=path.join(publisherDir,'ai-proposal.board.json');
+    await writeFile(proposalFile,JSON.stringify(proposedBoard));
+    const rootNode=(await client.call('DOM.getDocument')).root;
+    const inputNode=await client.call('DOM.querySelector',{nodeId:rootNode.nodeId,selector:'#imp-proposal'});
+    assert.ok(inputNode.nodeId,'Board must have proposal file input');
+    await client.call('DOM.setFileInputFiles',{files:[proposalFile],nodeId:inputNode.nodeId});
+    await waitFor(()=>evaluate('B.proposal!==null'),'real file import');
+    assert.equal(await evaluate('M.reqs[0].text'),unchangedText,'Import must not alter planning data');
+    assert.equal(await evaluate('bridgeEntries(bridgeDiff()[0]).length'),1);
+    assert.ok(await evaluate('document.querySelector("main").textContent.includes("reqs · R1")'));
+    assert.ok(await evaluate('document.querySelector("main").textContent.includes("FULL-DETAIL-".repeat(520))'),
+      'Long proposal must be visible completely, not silently shortened');
+    await evaluate('document.querySelector("[data-act=bridge-apply-design]").click(); true');
+    assert.equal(await evaluate('M.reqs[0].text'),proposedBoard.reqs[0].text);
+    assert.equal(await evaluate('M.reqs[0].auth'),"Working");
+    assert.equal(await evaluate('M.selectionAuthority'),"Working");
+    await evaluate('document.querySelector("[data-top=ontology]").click();true');
+    assert.ok(await evaluate('document.querySelector("main").textContent.includes("Product map")'));
+    await client.call('Emulation.setDeviceMetricsOverride',{
+      width:390,height:844,deviceScaleFactor:1,mobile:true
+    });
+    assert.ok(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+      'Workspace Board has document-level overflow on phone');
+    await evaluate('document.querySelector("[data-top=workspace]").click();true');
+    assert.ok(await evaluate('document.documentElement.scrollWidth <= window.innerWidth + 1'),
+      'AI Workspace has document-level overflow on phone');
+    await client.call('Emulation.clearDeviceMetricsOverride');
+
     assert.deepEqual(runtimeErrors, [], `Real browser reported runtime errors:\n${runtimeErrors.join('\n')}`);
     console.log(`PASS real-browser smoke: ${chrome.version}`);
-    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal + Planning Publisher + grocery ontology tabs/search/keyboard/mobile interactions`);
+    console.log(`PASS ${requiresDirectFile ? 'direct file:// open, ' : ''}portal + Planning Publisher + grocery ontology + Board AI workspace/export/import/mobile interactions`);
   } finally {
     client?.close();
     if (processHandle.exitCode === null && processHandle.signalCode === null) {
