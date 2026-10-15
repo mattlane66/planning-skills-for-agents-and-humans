@@ -370,7 +370,7 @@ function bridgeValidateProposal(raw){
    for(const key of ["id","text"])str(r[key],p+"."+key,key==="id"?30:10000);
    for(const key of ["status","auth","src","why","chk"])if(r[key]!==undefined)str(r[key],p+"."+key,10000);
    if(!/^R\d+(?:\.\d+)?$/.test(r.id))fail(p+".id","expected a stable R-number identifier");
-   str(r.f,p+".f",n);
+   str(r.f,p+".f",200);
    if(r.f.length!==n||!/^[ypnu]*$/.test(r.f))fail(p+".f","expected exactly "+n+" fit ratings (y, p, n, u), one per unchanged candidate ID");
    array(r.l,p+".l",n);
    if(r.l.length!==n)fail(p+".l","expected exactly "+n+" shape-reference entries");
@@ -388,7 +388,7 @@ function bridgeValidateProposal(raw){
    const p="stories["+i+"]";obj(s,p);
    if(s.id!==undefined)str(s.id,p+".id",40);
    if(s.text!==undefined)str(s.text,p+".text",10000);
-   str(s.fit,p+".fit",n);
+   str(s.fit,p+".fit",200);
    if(s.fit.length!==n||!/^[10x]*$/.test(s.fit))fail(p+".fit","expected exactly "+n+" scenario ratings (1, 0, x), one per candidate");
    if(s.path!==undefined)str(s.path,p+".path",10000);
    if(s.paths!==undefined){
