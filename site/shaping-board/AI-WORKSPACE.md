@@ -22,7 +22,7 @@ You can also **Copy instruction** directly (or download it as text). The generat
 | --- | --- |
 | Agent-aware instruction | A task-specific prompt that points to canonical skills and respects current human gates |
 | Portable AI handoff | ZIP of working planning files, Board snapshot, starter prompt, and provider setup guide |
-| Proposal review | Import same-project v3 Board JSON, preview before/after by section, selectively apply as Working |
+| Proposal review | Import same-project v3 Board JSON, inspect complete per-record before/after changes, selectively apply sections as Working |
 | Product map | Inspect Board requirements, their selected-shape part references, candidate diagrams and product nouns; show trusted Product Intent status when present |
 | Offline use | The original standalone Board HTML continues to bundle these features without API calls or installation |
 
@@ -30,9 +30,9 @@ This is **not** chat, account connection, one-click plugin installation, GitHub 
 
 ## Authority and security
 
-- **An AI proposal is untrusted data.** The Board displays supported changes and does not silently accept them. Imports require matching `project_id` and schema version; proposals are not sent to any service.
+- **An AI proposal is untrusted data.** The Board displays supported changes and does not silently accept them. Imports require matching `project_id` and schema version; proposals are not sent to any service. Candidate IDs and their order must match the current Board, since fit and supporting-part references are position-indexed. Add/remove/reorder candidates in the Board before exporting a new workspace.
 - Applying any proposed section sets selection authority back to **Working**. Modified requirements become Working; frame/appetite authority also reverts to Working when those fields change. Stale imported Product Intent evidence is discarded after applying a proposal.
-- Proposal comparisons cover six bounded sections: framing, appetite, design/requirements/stories/fit, things, preferred direction/next slice, and proposed slices. Agent-supplied verification and release statuses, authority claims and arbitrary extra fields are never promoted through proposal application.
+- Proposal comparisons are complete and untruncated, organized by changed requirement, candidate, story and other fields. A reviewed button applies the entire section, not individual records. Proposal comparisons cover six bounded sections: framing, appetite, design/requirements/stories/fit, things, preferred direction/next slice, and proposed slices. Agent-supplied verification and release statuses, authority claims and arbitrary extra fields are never promoted through proposal application.
 - The Board's project map is a **working projection**. It is not the [compiled Product Ontology](../../product-intent/README.md), and linked elements are not evidence of runtime correctness.
 - The existing ZIP exporter is an **editing copy**, not a lossless updater for accepted Markdown. Existing repositories require a human-reviewed merge. Follow the [Shaping Board guide](./GUIDE.txt) for distinctions.
 - The Board does not request or store model API keys, logins, personal access tokens, or code access. Keep private product data in private repositories and share workspace ZIPs only with trusted agents.
@@ -52,4 +52,4 @@ The remaining vision is optional and incremental: more precise file diffs agains
 - `scripts/build_shaping_board_data.py` — existing read-only adapter from authoritative Markdown to Board JSON.
 - `mcp-server/` — existing read-only canonical Planning Skills tools; the Board does not connect to MCP directly.
 
-Use `node site/shaping-board/test-board.mjs` after `cd site && npm ci --ignore-scripts`, then the repository's existing health/CI suite.
+Use `node shaping-board/test-board.mjs` from the `site/` directory after `npm ci --ignore-scripts`; the repository's real-browser smoke suite additionally tests workspace ZIP download and proposal import.

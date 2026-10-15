@@ -35,7 +35,8 @@ td{padding:5px 4px;border-bottom:1px solid var(--bd);vertical-align:middle}
 .mu{color:var(--mu);font-size:12px}.wn{color:var(--wn);font-size:12px}.row{display:flex;gap:6px;margin-top:8px;align-items:center}
 .bar{border-top:1px solid var(--bd);margin-top:12px;padding:10px 0;display:flex;gap:8px;flex-wrap:wrap;align-items:center}.bar input{width:260px}
 .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.cm{border:1px solid var(--bd);border-radius:8px;overflow:hidden;margin-top:4px}
-.g input,.g select{width:100%}pre.doc{white-space:pre-wrap;border:1px solid var(--bd);border-radius:8px;padding:12px;font:12px/1.5 ui-monospace,monospace}
+.g input,.g select{width:100%}
+pre.bridge-full{max-height:36rem;overflow:auto;overflow-wrap:anywhere;white-space:pre-wrap}pre.doc{white-space:pre-wrap;border:1px solid var(--bd);border-radius:8px;padding:12px;font:12px/1.5 ui-monospace,monospace}
 .fb{position:relative;overflow:hidden}.fb[data-zm]{overflow:visible}.bx{position:relative;transform-origin:0 0}.bx>*{position:absolute}
 .grp{border:1.5px dashed var(--mu);border-radius:6px;padding:3px 8px;color:var(--mu);font-size:11px}
 .n{border:1.5px solid;border-radius:5px;background:var(--pn);overflow:hidden;transition:opacity .15s}
@@ -343,10 +344,92 @@ function bridgeDiff(){
  if(!B.proposal || B.proposal.project_id!==M.project_id)return [];
  return BRIDGE_SECTIONS.filter(s=>s.keys.some(k=>JSON.stringify(bridgeValue(M,k))!==JSON.stringify(bridgeValue(B.proposal,k))));
 }
-function bridgePreview(obj,keys){
- const payload={};for(const key of keys)payload[key]=obj[key];
- const result=JSON.stringify(payload,null,2);
- return esc(result.length>4500?result.slice(0,4500)+"\n… (preview shortened; entire section applied if accepted)":result);
+/* A Board proposal is untrusted. Validate before normalization can silently pad/drop fields. */
+function bridgeValidateProposal(raw){
+ const fail=(path,reason)=>{throw Error(path+": "+reason)};
+ const obj=(v,p)=>{if(!v||typeof v!=="object"||Array.isArray(v))fail(p,"expected an object");return v};
+ const str=(v,p,max=100000)=>{if(typeof v!=="string"||v.length>max)fail(p,"expected text of at most "+max+" characters")};
+ const array=(v,p,max=200)=>{if(!Array.isArray(v)||v.length>max)fail(p,"expected an array with at most "+max+" items");return v};
+ obj(raw,"board");
+ if(raw.schema_version!==3)fail("schema_version","expected Board schema v3");
+ if(typeof raw.project_id!=="string"||raw.project_id!==M.project_id)fail("project_id","must match this Board; export it again before asking the agent to revise it");
+ str(raw.name,"name",200);
+ for(const key of ["problem","outcome"])array(raw[key],key).forEach((x,i)=>str(x,key+"["+i+"]"));
+ for(const key of ["appetite","cut","slice","why"])str(raw[key],key);
+ const candidates=array(raw.options,"options",11);
+ if(!candidates.length)fail("options","at least one candidate required");
+ const currentIDs=M.options.map(x=>x.id),proposedIDs=candidates.map((o,i)=>{obj(o,"options["+i+"]");str(o.id,"options["+i+"].id",16);return o.id});
+ if(JSON.stringify(currentIDs)!==JSON.stringify(proposedIDs))fail("options","candidate IDs or order changed. Add, remove or reorder candidates in the Shaping Board first, then export a fresh workspace; positional fit cannot be safely inferred from AI output");
+ candidates.forEach((o,i)=>{
+   for(const key of ["title","dsl"])str(o[key],"options["+i+"]."+key,key==="dsl"?100000:2000);
+   for(const key of ["promise","risk","cuts"])if(o[key]!==undefined)str(o[key],"options["+i+"]."+key,10000);
+ });
+ const n=candidates.length,allowed=new Set(currentIDs);
+ array(raw.reqs,"reqs").forEach((r,i)=>{
+   const p="reqs["+i+"]";obj(r,p);
+   for(const key of ["id","text"])str(r[key],p+"."+key,key==="id"?30:10000);
+   for(const key of ["status","auth","src","why","chk"])if(r[key]!==undefined)str(r[key],p+"."+key,10000);
+   if(!/^R\d+(?:\.\d+)?$/.test(r.id))fail(p+".id","expected a stable R-number identifier");
+   str(r.f,p+".f",200);
+   if(r.f.length!==n||!/^[ypnu]*$/.test(r.f))fail(p+".f","expected exactly "+n+" fit ratings (y, p, n, u), one per unchanged candidate ID");
+   array(r.l,p+".l",n);
+   if(r.l.length!==n)fail(p+".l","expected exactly "+n+" shape-reference entries");
+   r.l.forEach((entry,j)=>str(entry,p+".l["+j+"]",10000));
+   if(r.part_refs!==undefined){
+     obj(r.part_refs,p+".part_refs");
+     for(const [id,refs] of Object.entries(r.part_refs)){
+       if(!allowed.has(id))fail(p+".part_refs."+id,"unknown candidate ID");
+       array(refs,p+".part_refs."+id).forEach((part,j)=>str(part,p+".part_refs."+id+"["+j+"]",128));
+     }
+   }
+ });
+ const idsSeen=new Set();for(const r of raw.reqs){if(idsSeen.has(r.id))fail("reqs","duplicate requirement ID "+r.id);idsSeen.add(r.id);}
+ array(raw.stories,"stories").forEach((s,i)=>{
+   const p="stories["+i+"]";obj(s,p);
+   if(s.id!==undefined)str(s.id,p+".id",40);
+   if(s.text!==undefined)str(s.text,p+".text",10000);
+   str(s.fit,p+".fit",200);
+   if(s.fit.length!==n||!/^[10x]*$/.test(s.fit))fail(p+".fit","expected exactly "+n+" scenario ratings (1, 0, x), one per candidate");
+   if(s.path!==undefined)str(s.path,p+".path",10000);
+   if(s.paths!==undefined){
+     obj(s.paths,p+".paths");
+     for(const [id,value] of Object.entries(s.paths)){
+       if(!allowed.has(id))fail(p+".paths."+id,"unknown candidate ID");
+       str(value,p+".paths."+id,10000);
+     }
+   }
+ });
+ for(const key of ["things","slices","drift","rel"])array(raw[key],key).forEach((row,i)=>obj(row,key+"["+i+"]"));
+ raw.things.forEach((thing,i)=>{for(const key of ["id","name","what","where","seen"])if(thing[key]!==undefined)str(thing[key],"things["+i+"]."+key,10000)});
+ raw.slices.forEach((slice,i)=>{for(const key of ["name","stories","cut"])if(slice[key]!==undefined)str(slice[key],"slices["+i+"]."+key,10000)});
+ if(raw.pick!==null&&raw.pick!==undefined&&!allowed.has(raw.pick))fail("pick","must identify a candidate in options");
+ return norm(clone(raw));
+}
+/* Compare all changed fields and records. No hidden or truncated content may be applied. */
+function bridgeEntries(section){
+ const result=[];
+ for(const key of section.keys){
+   const previous=bridgeValue(M,key),proposed=bridgeValue(B.proposal,key);
+   if(JSON.stringify(previous)===JSON.stringify(proposed))continue;
+   const stable=key==="options"||key==="reqs"||key==="stories"||key==="things";
+   const a=Array.isArray(previous)?previous:null,b=Array.isArray(proposed)?proposed:null;
+   if(stable&&a&&b&&a.every(row=>row&&typeof row.id==="string")&&b.every(row=>row&&typeof row.id==="string")
+      &&new Set(a.map(row=>row.id)).size===a.length&&new Set(b.map(row=>row.id)).size===b.length){
+     const before=new Map(a.map(row=>[row.id,row])),after=new Map(b.map(row=>[row.id,row]));
+     for(const id of new Set([...before.keys(),...after.keys()])){
+       const left=before.get(id),right=after.get(id);
+       if(JSON.stringify(left)!==JSON.stringify(right)){
+         result.push({label:key+" · "+id,previous:left,proposed:right});
+       }
+     }
+     if(a.map(row=>row.id).join("\u0000")!==b.map(row=>row.id).join("\u0000"))
+       result.push({label:key+" · record order",previous:a.map(row=>row.id),proposed:b.map(row=>row.id)});
+   }else result.push({label:key,previous,proposed});
+ }
+ return result;
+}
+function bridgePreview(value){
+ return esc(value===undefined?"(not present)":JSON.stringify(value,null,2));
 }
 function bridgeApply(sectionId){
  const s=bridgeDiff().find(row=>row.id===sectionId);
@@ -371,7 +454,13 @@ function bridgeProposal(){
  const diffs=bridgeDiff();
  return '<div class="tc"><h3>Proposed changes <small>untrusted, not accepted</small></h3>'+
  '<p class="mu">These are candidate revisions to this project, not a verified patch to canonical Markdown. Each applied section resets selection authority; changed requirements return to Working. No imported AI status or test evidence is trusted.</p>'+
- (diffs.length?diffs.map(s=>'<details class="tc"><summary><b>'+esc(s.title)+'</b> — review</summary><div class="grid"><div><h4>Current</h4><pre class="doc">'+bridgePreview(M,s.keys)+'</pre></div><div><h4>Proposed</h4><pre class="doc">'+bridgePreview(B.proposal,s.keys)+'</pre></div></div><div class="row"><button data-act="bridge-apply-'+s.id+'">Apply as Working</button></div></details>').join(""):'<p>No remaining supported differences.</p>')+
+ (diffs.length?diffs.map(s=>{
+ const rows=bridgeEntries(s);
+ return '<details class="tc"><summary><b>'+esc(s.title)+'</b> · '+rows.length+' changed record(s)</summary>'+
+ '<p class="mu">Review every change below. Each record expands to its full contents; nothing is truncated. Applying accepts the whole section as Working, not individual records.</p>'+
+ rows.map(row=>'<details class="tc"><summary>'+esc(row.label)+'</summary><div class="grid"><div><h4>Current</h4><pre class="doc bridge-full">'+bridgePreview(row.previous)+'</pre></div><div><h4>Proposed</h4><pre class="doc bridge-full">'+bridgePreview(row.proposed)+'</pre></div></div></details>').join("")+
+ '<div class="row"><button data-act="bridge-apply-'+s.id+'">Apply reviewed section as Working ('+rows.length+' changes)</button></div></details>';
+ }).join(""):'<p>No remaining supported differences.</p>')+
  '<div class="row"><button data-act="bridge-discard">Discard remaining proposal</button></div></div>';
 }
 function workspace(){
@@ -402,8 +491,9 @@ function ontology(){
  '<p class="mu">Selected preference: '+esc(chosen?chosen.id+" · "+chosen.title:"none")+'. A chosen candidate does not itself authorize implementation.</p></div>'+
  '<h3>Requirements → shape parts</h3>'+
  (M.reqs.length?M.reqs.map((req,i)=>{
- const links=chosen?(req.part_refs&&req.part_refs[chosen.id]||ids(req.l?.[index]||"")):[];
- const fits=chosen?req.f[index]:"u";
+ const stored=chosen&&req.part_refs&&req.part_refs[chosen.id];
+ const links=chosen?(Array.isArray(stored)?stored:ids(typeof req.l?.[index]==="string"?req.l[index]:"")):[];
+ const fits=chosen&&typeof req.f==="string"?req.f[index]:"u";
  return '<div class="tc"><div class="row"><button data-ontology-rq="'+i+'">'+esc(req.id)+'</button> <b>'+esc(req.text)+'</b> <span class="bdg">'+esc(req.auth||"Working")+'</span></div>'+
  '<p class="mu">Priority: '+esc(req.status||"Undecided")+' · Preferred shape fit: '+esc(MK[fits]?.[0]||"?")+' (modeled, not verified)'+(statusFor(req.id)?' · Product Intent: '+esc(statusFor(req.id)):"")+'</p>'+
  '<p>Referenced parts in preferred shape: '+(links.length?links.map(id=>'<code>'+esc(id)+'</code>').join(" · "):'<span class="wn">not mapped</span>')+'</p></div>';
@@ -641,8 +731,7 @@ $("#imp-proposal").addEventListener("change",e=>{
    else f.text().then(content=>{try{
      const parsed=JSON.parse(content);
      if(parsed.schema_version!==3||!parsed.project_id||parsed.project_id!==M.project_id)throw Error("This is not a schema v3 revision of the current Board project");
-     const proposed=norm(clone(parsed));
-     if(proposed.options.some(o=>typeof o.title!=="string")||proposed.reqs.some(r=>!Array.isArray(r.l)))throw Error("Invalid design structure");
+     const proposed=bridgeValidateProposal(parsed);
      B.proposal=proposed;T.top="workspace";T.msg="Proposal loaded for review; no changes applied";
    }catch(ex){T.msg="Could not review proposal: "+ex.message;}render();}).catch(()=>{T.msg="Unable to read proposal";render();});
  }

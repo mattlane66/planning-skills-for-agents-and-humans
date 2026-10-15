@@ -156,7 +156,7 @@ assert.ok(w.document.querySelector('[data-ontology-rq="0"]'));
 // Same-project AI revisions must be compared, never silently treated as accepted.
 run('M.project_id="bridge-test"; M.selectionAuthority="Accepted";M.frameAuthority="Accepted";M.appetiteAuthority="Accepted"; M.reqs.forEach(r=>r.auth="Accepted"); B.proposal=norm(clone(M)); B.proposal.reqs[0].text="Proposed requirement"; B.proposal.selectionAuthority="Accepted"; B.proposal.product_status={verdict:"PASS"}');
 assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'design');
-assert.match(run('bridgeProposal()'),/Apply as Working/);
+assert.match(run('bridgeProposal()'),/Apply reviewed section as Working/);
 assert.match(run('bridgeProposal()'),/Proposed requirement/);
 run('bridgeApply("design")');
 assert.equal(run('M.reqs[0].text'),'Proposed requirement');
@@ -173,4 +173,43 @@ assert.equal(run('M.appetiteAuthority'),'Working');
 run('B.proposal.project_id="another-project"');
 assert.equal(run('bridgeDiff().length'),0);
 
-console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge review');
+
+// AI proposal is checked before norm() could silently coerce or pad malformed values.
+run('M=norm(clone(E)); M.project_id="hardened-test";B.proposal=null;M.selectionAuthority="Accepted"');
+const safe=run('bridgePortable()');
+const importedSafe=JSON.stringify(safe);
+assert.equal(run('bridgeValidateProposal('+importedSafe+').project_id'),"hardened-test");
+const invalidCases=[
+ [x=>{[x.options[0],x.options[1]]=[x.options[1],x.options[0]]},/options: candidate IDs or order changed/],
+ [x=>{x.options.push({...x.options[0],id:"E"})},/options: candidate IDs or order changed/],
+ [x=>{x.reqs[0].f="yyyyy"},/reqs\[0\]\.f: expected exactly/],
+ [x=>{x.reqs[0].l[0]=[1,2]},/reqs\[0\]\.l\[0\]: expected text/],
+ [x=>{x.reqs[0].part_refs={UNKNOWN:["P1"]}},/reqs\[0\]\.part_refs\.UNKNOWN: unknown candidate ID/],
+ [x=>{x.stories[0].fit="aaa0"},/stories\[0\]\.fit: expected exactly/],
+ [x=>{x.stories[0].paths={UNKNOWN:"P1 P2"}},/stories\[0\]\.paths\.UNKNOWN: unknown candidate ID/],
+ [x=>{x.project_id="other"},/project_id: must match/],
+ [x=>{x.reqs[0].id="R2"},/reqs: duplicate requirement ID/],
+ [x=>{x.things[0].name={bad:true}},/things\[0\]\.name: expected text/],
+ [x=>{x.pick="E"},/pick: must identify a candidate/]
+];
+for(const [mutate,error] of invalidCases){
+ const value=structuredClone(safe);mutate(value);
+ assert.throws(()=>run('bridgeValidateProposal('+JSON.stringify(value)+')'),error);
+}
+const huge=structuredClone(safe);
+huge.reqs[0].text="Very long proposed requirement: "+"X".repeat(6000);
+run('B.proposal=bridgeValidateProposal('+JSON.stringify(huge)+')');
+const diffHtml=run('bridgeProposal()');
+assert.ok(diffHtml.includes("X".repeat(6000)),"entire 6,000-character change must be inspectable");
+assert.ok(!diffHtml.includes("… (preview shortened"),"full preview must not hide any content");
+assert.match(diffHtml,/reqs · R1/);
+assert.equal(run('bridgeEntries(bridgeDiff()[0]).filter(row=>row.label==="reqs · R1").length'),1);
+assert.equal(run('M.reqs[0].text'),safe.reqs[0].text,"untrusted proposal is not applied automatically");
+run('bridgeApply("design")');
+assert.equal(run('M.reqs[0].text'),huge.reqs[0].text);
+assert.equal(run('M.reqs.every(r=>r.auth==="Working")'),true);
+assert.equal(run('M.selectionAuthority'),"Working");
+run('M.reqs[0].part_refs={D:"bad"}; M.pick="D"; T.top="ontology";render()');
+assert.match(w.document.querySelector('main').textContent,/Product map/,"invalid legacy part_refs should not crash the view");
+
+console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge validation, inspectability and review');
