@@ -82,13 +82,23 @@ The original **Import product status JSON** remains available for offline/privat
 
 PASS covers only explicitly mapped, approved and tested scenarios; REVIEW means uncertain or insufficient evidence, not demonstrated failure; DRIFT is an observed failure of an approved scenario. This is not automatic prediction of all product behavior or post-release outcomes.
 
+## AI Workspace (local-first)
+
+The Board now has **AI Workspace** and **Product map** tabs. AI Workspace prepares provider-aware instructions for Codex, Claude Code, Gemini CLI and other agents, then exports an agent-ready ZIP containing working planning files, `planning/shaping.board.json`, a starter instruction and setup guidance. No model account connection or backend is involved. The user enables Planning Skills in their chosen agent, opens their own product repository there and performs implementation in that environment.
+
+The **Review AI proposal** tool imports a complete schema v3 `.board.json` with the same project ID. It previews changed sections and applies only manually selected sections as Working. Applied changes invalidate selection authority; changed requirements, frame and appetite are de-authorized as appropriate. AI-supplied acceptance claims, verification reports, and release/check statuses do not become accepted facts through this import. The existing **Import** button still replaces the whole working Board; use Review AI proposal for selective revisions.
+
+The **Product map** tab exposes the current working connections among requirements, preferred-shape node references, candidate shapes, product nouns and available read-only Product Intent results. It is not the canonical compiled Product Ontology and must not be used to infer execution coverage.
+
+**Start here:** [AI Workspace guide](./AI-WORKSPACE.md).
+
 ## Validation
 
 Run `node site/shaping-board/test-board.mjs` after `cd site && npm ci --ignore-scripts`, plus `python3 -m unittest discover -s tests -p 'test_shaping_board*.py'` from the repository root. CI also checks the documentation portal and repo health.
 
 ## Limitations
 
-- The browser does not execute agent skills, call GitHub, verify source code, prove user outcomes, or promote accepted intent.
+- The browser does not execute agent skills, connect an AI account, run code, call GitHub for writes, verify source code, prove user outcomes, or promote accepted intent.
 - Existing markdown import is a **read-only projection**. Its round-trip export is a reviewable proposal, not a patcher that preserves every unrelated Markdown section.
 - Autosave is local to the browser; keep exported JSON in your own repository for durable version history.
 - Diagram editing is text-based and not multiuser; deliberately no backend.

@@ -137,4 +137,40 @@ cmd=spawnSync('python3',[join(root,'scripts/publish_shaped_work.py'),'--planning
 assert.equal(cmd.status,0,'Canonical planning publisher rejected exported Markdown:\n'+cmd.stdout+'\n'+cmd.stderr);
 
 assert.equal(errors.length, 0, errors.join('\n'));
-console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema and draft export');
+
+// AI Workspace uses existing exports and does not manufacture accepted scope.
+const aiFiles=run('bridgePackageFiles()');
+assert.ok(aiFiles.some(([name])=>name==='planning/shaping.board.json'));
+assert.ok(aiFiles.some(([name])=>name==='planning/AI-START-HERE.md'));
+assert.ok(aiFiles.some(([name])=>name==='README-SHAPING-WORKSPACE.md'));
+assert.ok(aiFiles.find(([name])=>name==='planning/AI-START-HERE.md')[1].includes('planning-router'));
+assert.ok(aiFiles.find(([name])=>name==='README-SHAPING-WORKSPACE.md')[1].includes('NOT a connected AI chat'));
+assert.match(run('bridgePrompt()'),/STOP and list what is missing|Do not alter acceptance authority/);
+run('T.top="workspace";render()');
+assert.match(w.document.querySelector('main').textContent,/AI Workspace/);
+assert.ok(w.document.querySelector('[data-act="bridge-package"]'));
+run('T.top="ontology";render()');
+assert.match(w.document.querySelector('main').textContent,/working ontology/);
+assert.ok(w.document.querySelector('[data-ontology-rq="0"]'));
+
+// Same-project AI revisions must be compared, never silently treated as accepted.
+run('M.project_id="bridge-test"; M.selectionAuthority="Accepted";M.frameAuthority="Accepted";M.appetiteAuthority="Accepted"; M.reqs.forEach(r=>r.auth="Accepted"); B.proposal=norm(clone(M)); B.proposal.reqs[0].text="Proposed requirement"; B.proposal.selectionAuthority="Accepted"; B.proposal.product_status={verdict:"PASS"}');
+assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'design');
+assert.match(run('bridgeProposal()'),/Apply as Working/);
+assert.match(run('bridgeProposal()'),/Proposed requirement/);
+run('bridgeApply("design")');
+assert.equal(run('M.reqs[0].text'),'Proposed requirement');
+assert.equal(run('M.reqs.every(r=>r.auth==="Working")'),true);
+assert.equal(run('M.selectionAuthority'),'Working');
+assert.equal(run('M.product_status'),undefined);
+assert.equal(run('bridgeDiff().length'),0);
+run('B.proposal=norm(clone(M));B.proposal.problem=["Updated problem"];B.proposal.appetite="2 weeks"; B.proposal.frameAuthority="Accepted"; B.proposal.appetiteAuthority="Accepted"');
+assert.equal(run('bridgeDiff().map(s=>s.id).join(",")'),'frame,appetite');
+run('bridgeApply("frame")');
+assert.equal(run('M.frameAuthority'),'Working');
+run('bridgeApply("appetite")');
+assert.equal(run('M.appetiteAuthority'),'Working');
+run('B.proposal.project_id="another-project"');
+assert.equal(run('bridgeDiff().length'),0);
+
+console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge review');
