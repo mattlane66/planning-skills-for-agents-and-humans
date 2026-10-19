@@ -6,7 +6,7 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
-**One method, several ways to use it.** The 14 canonical skills and their human decision gates define the method. Agent plugins and commands invoke those skills; the documentation portal teaches them; the Shaping Board and Product Ontology viewer are optional visual surfaces. The opt-in Product Intent Layer adds bounded, evidence-backed implementation checks. None of the interfaces replaces accepted planning artifacts or authorizes a build.
+**One method, several ways to use it.** The 15 canonical skills and their human decision gates define the method. Agent plugins and commands invoke those skills; the documentation portal teaches them; the Shaping Board and Product Ontology viewer are optional visual surfaces. The opt-in Product Intent Layer adds bounded, evidence-backed implementation checks. None of the interfaces replaces accepted planning artifacts or authorizes a build.
 
 ## Learn the method
 
@@ -23,7 +23,11 @@ Use the skills directly inside your AI tools, or use an optional interface to ma
 
 [![The actual Shaping Board showing the DWC Requests example: candidate design comparisons and behavioral diagrams](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/preview.png)](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)
 
-**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — compare candidate designs, trace scenarios, check requirements and trade-offs, and record working decisions. Start with the example or bring your own planning artifacts; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). This is an optional working surface, **not build authorization**.
+**[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — compare candidate designs, trace scenarios, check requirements and trade-offs, and record working decisions.
+
+Start with the example or bring your own planning artifacts; see the [Shaping Board guide](./site/shaping-board/GUIDE.txt). This remains an optional working surface, **not build authorization**.
+
+**New — AI Workspace and Product map:** choose Codex, Claude Code or Gemini CLI; copy a project-specific starting instruction or download an agent-ready workspace ZIP; then review AI-proposed Board revisions before selectively applying them as Working. The integrated Product map shows current requirements, design references and working product nouns. **This does not embed a coding agent or connect an AI account.** See [the three-minute AI Workspace guide](./site/shaping-board/AI-WORKSPACE.md).
 
 ### Product Ontology viewer
 
@@ -115,7 +119,7 @@ A practical workflow is:
 5. Make the human decisions about direction and scope.
 6. Reconcile the selected direction into accepted behavior.
 7. Give the coding agent a bounded slice and compact context packet.
-8. Check drift as implementation evolves.
+8. Reconcile consequential planning decisions after kickoff; check implementation drift as the build evolves.
 
 For example, you might begin in Claude Design with a rough interface or in Claude Code with a solution idea. Capture that as candidate Shape A, extract provisional requirements from it, run a working fit check, spike the uncertain parts, breadboard only the behavior that is still hard to judge, then accept the judging criteria and Appetite before choosing a direction.
 
@@ -285,6 +289,7 @@ Start there. Add the advanced moves only when the work needs them.
 | Skill | Add it when | Output |
 | --- | --- | --- |
 | [`wayfinding`](./wayfinding/SKILL.md) | A bounded planning destination requires multiple dependent decisions or investigations across sessions. | A shared map, queryable frontier, precise tickets, fog, and exit check; never a second source of product truth. |
+| [`planning-change-reconciliation`](./planning-change-reconciliation/SKILL.md) | You have new post-kickoff decisions, messages, meeting notes, or a proposed revision to an accepted plan. | Evidence-linked deltas, a readable private diff, human decisions, and downstream reconciliation. |
 | [`sketch-reconciliation`](./sketch-reconciliation/SKILL.md) | A sketch, screenshot, wireframe, mockup, or whiteboard may clarify or contradict accepted planning. | Visual observations mapped to stable IDs, explicit deltas, a human decision gate, and synchronized accepted updates. |
 | [`statechart`](./statechart/SKILL.md) | A selected portion of an accepted selected-design breadboard has retries, timeouts, approvals, lifecycle stages, or other state complexity. | A derived state inventory, transition table, Mermaid statechart, and explicit gaps. |
 | [`interface-contracts`](./interface-contracts/SKILL.md) | A selected slice crosses a meaningful data or system boundary. | Plain-language inputs, outputs, branches, errors, and open decisions. |

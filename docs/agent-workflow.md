@@ -424,6 +424,10 @@ Rules:
 - propose a planning update if implementation reality conflicts with the plan
 - create an agent run log for meaningful runs
 
+## Post-kickoff planning changes (as needed)
+
+Use `planning-change-reconciliation` when messages, meetings, or human feedback introduce proposed changes to an *already accepted* planning stack. Keep evidence, interpretation, and approved decisions separate. Generate a private diff for substantial revisions, distinguish editorial restructuring from consequential product choices, and apply only authorized deltas across the owning artifacts. Mark downstream items stale when they have not yet been reconciled.
+
 ## 15. Check drift
 
 Use during or after implementation when the agent may have drifted.

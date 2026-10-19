@@ -862,6 +862,28 @@
         "automatic selection",
         "weak alternatives"
       ]
+    },
+    {
+      "id": "post-kickoff-proposals-never-automerge",
+      "prompt": "Use Planning Change Reconciliation on an already accepted shaping document and new meeting notes in which someone suggested batch export but the team did not decide. Produce a private proposed revision with precise source references, distinguish editorial cleanup from substantive scope changes, keep the suggestion pending, and stop for the human approval gate rather than updating accepted scope or production code.",
+      "expected_skill": "planning-change-reconciliation",
+      "expected_artifact_type": "planning-change-reconciliation",
+      "expected_gate": "planning-change-approval",
+      "implementation_allowed": false,
+      "required_evidence": [
+        "accepted baseline",
+        "source references",
+        "pending",
+        "editorial",
+        "substantive",
+        "human approval",
+        "downstream ripple"
+      ],
+      "forbidden_evidence": [
+        "automatic approval",
+        "silent scope expansion",
+        "production code"
+      ]
     }
   ]
 }

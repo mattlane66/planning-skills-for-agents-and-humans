@@ -4,6 +4,8 @@ Use this repository to preserve product intent from unclear evidence through bou
 
 These instructions are tool-neutral and apply across Claude Code, Codex, Gemini CLI, Cursor, Claude Design when the skills are available, and other agent environments. Load the active skill for detailed procedure instead of loading the whole planning stack.
 
+For changing accepted planning based on post-kickoff messages, meeting notes, or revised drafts, use `planning-change-reconciliation/SKILL.md`. Evidence must be separated from explicit decisions; editorial wording changes are not product commitments. Require human approval for consequential deltas and reconcile all downstream affected artifacts before republishing derived views.
+
 ## Default behavior
 
 Use the smallest planning move that prevents an important misunderstanding.

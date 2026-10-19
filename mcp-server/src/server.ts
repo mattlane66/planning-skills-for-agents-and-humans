@@ -115,6 +115,7 @@ const artifactTemplates = {
   'orchestration-plan': 'templates/orchestration-plan.md',
   spike: 'templates/spike.md',
   'sketch-reconciliation': 'templates/sketch-reconciliation.md',
+  'planning-change-reconciliation': 'templates/planning-change-reconciliation.md',
   'decision-log': 'templates/decision-log.md',
   'appetite-card': 'templates/appetite-card.md',
   'research-to-frame-handoff': 'lead-user-research/study-templates/research-to-frame-handoff.md',

@@ -119,6 +119,22 @@ Example:
 
 Every referenced ID must already exist in canonical planning artifacts. Unknown IDs fail publication.
 
+## Private planning-change review (read-only)
+
+For post-kickoff decisions requiring a readable proposed v2, use the same publisher entry point in **review-only** mode:
+
+```bash
+python3 scripts/publish-shaped-work.py \
+  --review-base planning/accepted-shaping.md \
+  --review-proposal planning/private-shaping-v2.md \
+  --review-record planning/change-review.json \
+  --review-output planning/private-review.html
+```
+
+The `--review-record` is optional and carries a manually classified `deltas` array (`id`, `kind`, `decision`, `summary`, `source_refs`, `targets`), plus optional `base_sha256` and `proposal_sha256` freshness guards. Use `--check` to validate without producing HTML. The diff highlights line and inline changes, classification, and provenance. It cannot determine whether a proposed product decision was genuinely approved, and it **never** edits the supplied Markdown or merges proposals into accepted planning.
+
+Keep reviews containing client evidence **private**, rather than publishing them to the documentation site. After explicit human acceptance, update canonical owning artifacts using `planning-change-reconciliation` and regenerate the normal shaped-work view.
+
 ## Visual grammar
 
 The renderer is intentionally closer to a shaped-work wall than a dependency graph:

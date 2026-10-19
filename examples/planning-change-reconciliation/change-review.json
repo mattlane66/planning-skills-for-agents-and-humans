@@ -1,0 +1,28 @@
+{
+  "deltas": [
+    {
+      "id": "D1",
+      "kind": "uncertain",
+      "decision": "pending",
+      "summary": "Meeting suggestion to consider batch export, not an approval or scope expansion",
+      "source_refs": [
+        "meeting-notes.md 10:10"
+      ],
+      "targets": [
+        "R1"
+      ]
+    },
+    {
+      "id": "D2",
+      "kind": "editorial",
+      "decision": "pending",
+      "summary": "Make R1 wording easier to scan without changing requirement meaning",
+      "source_refs": [
+        "meeting-notes.md 10:00"
+      ],
+      "targets": [
+        "R1"
+      ]
+    }
+  ]
+}

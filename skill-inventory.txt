@@ -3,6 +3,7 @@ wayfinding
 framing-doc
 shaping
 sketch-reconciliation
+planning-change-reconciliation
 breadboarding
 statechart
 interface-contracts

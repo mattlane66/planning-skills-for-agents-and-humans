@@ -220,6 +220,15 @@ modes:
     forbidden: [invented_human_decision, automatic_candidate_breadboard_promotion, production_code]
     exit_gate: shape_selected
 
+  reconcile_planning_changes:
+    skill: planning-change-reconciliation
+    command_aliases: { claude: /reconcile-planning-changes, gemini: /reconcile-planning-changes }
+    purpose: Reconcile post-kickoff evidence with accepted planning through proposed deltas and explicit human decisions.
+    requires: [existing_accepted_planning_stack, new_decision_or_feedback_evidence]
+    allowed_outputs: [evidence_inventory, classified_delta_set, private_proposed_revision, human_review, accepted_updates, downstream_ripple_status]
+    forbidden: [source_statement_as_automatic_approval, uncontrolled_overwrite, derived_view_as_authority, unapproved_scope_expansion, production_code]
+    exit_gate: accepted_changes_applied_or_pending_human_decision
+
   reconcile_sketch:
     skill: sketch-reconciliation
     command_aliases: { claude: /reconcile-sketch, gemini: /reconcile-sketch }
