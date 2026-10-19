@@ -1,0 +1,105 @@
+name: Reusable privacy guard
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  privacy:
+    name: Audit newly introduced public identifiers and credentials
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out the calling repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Inspect new commit identities and added content
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+          PULL_REQUEST: ${{ github.event_name == 'pull_request' }}
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from collections import Counter
+          from pathlib import PurePosixPath
+          import os
+          import re
+          import subprocess
+          import sys
+
+          base = os.environ.get("BASE_SHA", "")
+          head = os.environ.get("HEAD_SHA", "")
+          is_pr = os.environ.get("PULL_REQUEST") == "true"
+          SHA = re.compile(r"[0-9a-fA-F]{40}\Z")
+          if not SHA.fullmatch(base) or not SHA.fullmatch(head):
+              print("Privacy guard: missing valid comparison SHAs; refusing to certify.", file=sys.stderr)
+              sys.exit(1)
+
+          def git(*args):
+              return subprocess.check_output(["git", *args], text=True, stderr=subprocess.DEVNULL)
+
+          allowed_domains = {
+              "users.noreply.github.com", "noreply.github.com",
+          }
+          allowed_examples = {"example.com", "example.org", "example.net", "example.test", "example.invalid"}
+          email_pattern = re.compile(r"(?i)(?<![a-z0-9._%+-])[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}(?![a-z0-9.-])")
+          key_pattern = re.compile(
+              r"(?:AKIA[0-9A-Z]{16}|gh[pousr]_[A-Za-z0-9]{30,}|"
+              r"github_pat_[A-Za-z0-9_]{30,}|sk-(?:proj-|svcacct-)?[A-Za-z0-9_-]{32,}|"
+              r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----)"
+          )
+          problems = Counter()
+          try:
+              records = git("log", "--format=%H%x09%ae%x09%ce", f"{base}..{head}")
+              for record in records.splitlines():
+                  parts = record.split("\t")
+                  if len(parts) != 3:
+                      problems["unreadable commit identity"] += 1
+                      continue
+                  for email in parts[1:]:
+                      domain = email.rsplit("@", 1)[-1].lower()
+                      if domain not in allowed_domains and email.lower().split("@") != ["noreply", "github.com"]:
+                          problems["non-private commit identity"] += 1
+
+              diff_spec = f"{base}...{head}" if is_pr else f"{base}..{head}"
+              added = git("diff", "--no-ext-diff", "--unified=0", "--diff-filter=ACMR", diff_spec, "--")
+              names = git("diff", "--name-only", "--diff-filter=A", diff_spec, "--")
+          except subprocess.CalledProcessError:
+              print("Privacy guard: unable to inspect Git history; refusing to certify.", file=sys.stderr)
+              sys.exit(1)
+
+          for path in names.splitlines():
+              filename = PurePosixPath(path).name.lower()
+              if (filename == ".env" or filename.startswith(".env.") and filename not in
+                      {".env.example", ".env.sample", ".env.template"}
+                      or filename in {".npmrc", ".pypirc", "credentials.json", "id_rsa", "id_ed25519"}
+                      or filename.endswith((".pem", ".p12", ".pfx", ".key"))):
+                  problems["sensitive filename added"] += 1
+
+          for line in added.splitlines():
+              if not line.startswith("+") or line.startswith("+++"):
+                  continue
+              value = line[1:]
+              if key_pattern.search(value):
+                  problems["credential-like content added"] += 1
+              for match in email_pattern.finditer(value):
+                  address = match.group()
+                  domain = address.rsplit("@", 1)[-1].lower()
+                  if domain not in allowed_examples | allowed_domains and address.lower().split("@") != ["noreply", "github.com"]:
+                      problems["non-example email address added"] += 1
+
+          if problems:
+              for category, count in sorted(problems.items()):
+                  print(f"Privacy guard: {category}: {count}", file=sys.stderr)
+              print("No sensitive values are printed. Fix the additions and rerun.", file=sys.stderr)
+              sys.exit(1)
+          print("Privacy guard passed for newly introduced commits and content.")
+          PY
