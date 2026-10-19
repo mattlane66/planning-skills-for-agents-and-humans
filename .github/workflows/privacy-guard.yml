@@ -1,0 +1,14 @@
+name: Shared privacy guard
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  privacy:
+    uses: mattlane66/mattlane66.github.io/.github/workflows/reusable-privacy-guard.yml@d8d2903d6e5f0f2f9fdcd76513fdde4433361026
+    permissions:
+      contents: read
