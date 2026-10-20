@@ -1017,7 +1017,8 @@ function render({ preserveScroll = false } = {}) {
     page = notFoundPage();
   }
 
-  root.innerHTML = `${header(active)}${page}${searchDialog()}<div id="toast-region" aria-live="polite"></div>`;
+  // Preserve documentation anchor IDs; DOM lookups use explicit selectors, never named properties.
+  root.innerHTML = DOMPurify.sanitize(`${header(active)}${page}${searchDialog()}<div id="toast-region" aria-live="polite"></div>`, { SANITIZE_DOM: false });
   document.body.classList.toggle('dialog-open', state.searchOpen);
   if (!preserveScroll && !query.get('section')) window.scrollTo({ top: 0, behavior: 'auto' });
 

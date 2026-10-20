@@ -132,7 +132,7 @@ export async function startViewer({
           files: files.map(({ path, diagrams }) => ({ path, diagrams })),
         });
       } catch (error) {
-        sendJson(response, 500, { error: error instanceof Error ? error.message : String(error) });
+        sendJson(response, 500, { error: "Unable to load planning diagrams." });
       }
       return;
     }

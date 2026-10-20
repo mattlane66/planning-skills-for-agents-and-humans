@@ -96,6 +96,10 @@ test('serves diagrams and broadcasts a reload when a watched file changes', asyn
     }
     assert.ok(updated.revision > first.revision);
     assert.equal(updated.files[0].diagrams.length, 2);
+    await rm(filePath);
+    const failed = await fetch(`${viewer.url}/api/diagrams`);
+    assert.equal(failed.status, 500);
+    assert.deepEqual(await failed.json(), { error: 'Unable to load planning diagrams.' });
   } finally {
     clearTimeout(eventTimeout);
     eventsController.abort();
