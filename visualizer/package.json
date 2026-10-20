@@ -14,5 +14,8 @@
   },
   "dependencies": {
     "mermaid": "11.17.0"
+  },
+  "overrides": {
+    "katex": "0.18.2"
   }
 }
