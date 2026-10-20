@@ -94,13 +94,13 @@ assert.throws(()=>run('checkFeedConfig("https://untrusted.test/feed.json?token=s
 run('M.name="DWC Requests";M.status_feed={url:"https://feed.test/product-status.json",repo:"owner/repo",ref:"main"};M.product_status={verdict:"PASS"};feedRuntime.state="unavailable";feedRuntime.projectId=M.project_id;T.top="review";render()');
 assert.equal(run('currentStatus()'),null,'failed refresh must hide a cached PASS');
 assert.doesNotMatch(w.document.querySelector('main').textContent,/Covered check passed/);
-w.fetch=async url=>url.includes('api.github.com')?{ok:true,json:async()=>({sha})}:{ok:true,text:async()=>JSON.stringify(auto)};
+w.fetch=async url=>new URL(url).hostname === 'api.github.com'?{ok:true,json:async()=>({sha})}:{ok:true,text:async()=>JSON.stringify(auto)};
 await run('refreshStatusFeed()');
 assert.equal(run('feedRuntime.state'),'current');
 assert.equal(run('currentStatus().verdict'),'PASS');
 assert.match(w.document.querySelector('main').textContent,/Approved isolation/);
 assert.match(w.document.querySelector('main').textContent,/a{40}/);
-w.fetch=async url=>url.includes('api.github.com')?{ok:true,json:async()=>({sha:otherSha})}:{ok:true,text:async()=>JSON.stringify(auto)};
+w.fetch=async url=>new URL(url).hostname === 'api.github.com'?{ok:true,json:async()=>({sha:otherSha})}:{ok:true,text:async()=>JSON.stringify(auto)};
 await run('refreshStatusFeed()');
 assert.equal(run('feedRuntime.state'),'unavailable','outdated commit must not stay green');
 assert.equal(run('currentStatus()'),null);
