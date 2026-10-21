@@ -118,7 +118,7 @@ Translate hand-drawn or whiteboard stacks into the same canonical tables. If a v
 
 ## Guided whiteboard + tour capture (optional)
 
-When supplied a rough whiteboard, screenshots, and a spoken/transcribed/typed guided tour, use the [guided whiteboard capture](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/docs/guided-whiteboard-capture.md) recipe. Keep image observations separate from narrated intent, actual behavior, and assumptions; flag conflicts and unseen effects. Create ID-stable canonical tables in the **declared mode** first, then a deliberately spatial visual for human review and short prose mirroring its place/flow order. The visual is the review surface, **not an alternate source of truth**. A candidate remains exploratory until human selection and reconciliation. Never claim to have heard audio, read an image, or verified implementation when that evidence is unavailable.
+When supplied a rough whiteboard, screenshots, and a spoken/transcribed/typed guided tour, use the `docs/guided-whiteboard-capture.md` recipe. Keep image observations separate from narrated intent, actual behavior, and assumptions; flag conflicts and unseen effects. Create ID-stable canonical tables in the **declared mode** first, then a deliberately spatial visual for human review and short prose mirroring its place/flow order. The visual is the review surface, **not an alternate source of truth**. A candidate remains exploratory until human selection and reconciliation. Never claim to have heard audio, read an image, or verified implementation when that evidence is unavailable.
 
 ## Producing a visual breadboard
 

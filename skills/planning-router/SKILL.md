@@ -44,7 +44,7 @@ Do not route to solution exploration merely because a solution idea is available
 | Small, obvious, low-risk change with clear behavior and scope | No planning skill |
 | The destination is bounded, but reaching it requires multiple dependent planning decisions or investigations across sessions | `wayfinding` |
 | A consequential opportunity or product decision depends on future-facing trends, advanced users, unusually high-benefit needs, pyramiding, or advanced analogs that have not yet been established | `lead-user-research` |
-| A rough whiteboard or screenshot plus a spoken, transcribed, or typed guided tour describes an unselected solution | `shaping` in S-first mode using [guided whiteboard capture](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/docs/guided-whiteboard-capture.md); use candidate-shape `breadboarding` directly only when a named candidate and behavior question are already clear |
+| A rough whiteboard or screenshot plus a spoken, transcribed, or typed guided tour describes an unselected solution | `shaping` in S-first mode using `docs/guided-whiteboard-capture.md`; use candidate-shape `breadboarding` directly only when a named candidate and behavior question are already clear |
 | Raw notes, research, requests, or an unclear problem where no useful solution or judging structure exists yet | `framing-doc` |
 | The user has requirements, a rough solution, a prototype, or mixed material and wants to shape the problem/solution space | `shaping` |
 | The user explicitly wants to start from a proposed solution and tease out requirements or alternatives | `shaping` in S-first collaborative mode |

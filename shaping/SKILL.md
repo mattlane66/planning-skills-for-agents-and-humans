@@ -113,7 +113,7 @@ Treat an existing screen, prototype, code path, or workflow as evidence. Extract
 
 ### Guided whiteboard entry (optional)
 
-With a rough whiteboard, screenshot, and spoken/transcribed/typed guided tour, use [guided whiteboard capture](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/docs/guided-whiteboard-capture.md) as a low-friction S-first capture pattern. Name the solution as a candidate, preserve narration and image provenance, extract implied needs into provisional requirements, and breadboard only the uncertain behavior worth inspecting. A polished visual never makes R or Appetite Accepted, selects a direction, or proves value/usability. Do not infer hidden mechanisms from a static screenshot.
+With a rough whiteboard, screenshot, and spoken/transcribed/typed guided tour, use `docs/guided-whiteboard-capture.md` as a low-friction S-first capture pattern. Name the solution as a candidate, preserve narration and image provenance, extract implied needs into provisional requirements, and breadboard only the uncertain behavior worth inspecting. A polished visual never makes R or Appetite Accepted, selects a direction, or proves value/usability. Do not infer hidden mechanisms from a static screenshot.
 
 ### The collaborative shaping loop
 
