@@ -46,7 +46,7 @@ class GuidedCaptureTests(unittest.TestCase):
 
     def test_coordinated_version(self):
         version = json.loads(read("plugin.json"))["version"]
-        self.assertRegex(version, r"^[0-9]+\\.[0-9]+\\.[0-9]+$")
+        self.assertRegex(version, r"^[0-9]+[.][0-9]+[.][0-9]+$")
         for path in ("plugin.json", ".claude-plugin/plugin.json",
                      ".codex-plugin/plugin.json", "mcp-server/package.json",
                      "mcp-server/package-lock.json"):
