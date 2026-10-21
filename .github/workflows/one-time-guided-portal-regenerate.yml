@@ -1,0 +1,62 @@
+name: One-time guided capture portal regeneration
+
+on:
+  push:
+    branches:
+      - feat/guided-whiteboard-capture-v1.7.0
+
+permissions:
+  contents: read
+
+jobs:
+  regenerate:
+    if: github.repository == 'mattlane66/planning-skills-for-agents-and-humans' && github.ref == 'refs/heads/feat/guided-whiteboard-capture-v1.7.0'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout exact feature commit
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+      - name: Set up pinned Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - name: Build and verify generated portal
+        working-directory: site
+        run: |
+          set -euo pipefail
+          npm ci
+          npm run build
+          npm run validate
+      - name: Commit regenerated standalone portal to feature branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- site/index.html; then
+            echo 'Portal is already current.'
+            exit 0
+          fi
+          current_sha="$(gh api "repos/$GITHUB_REPOSITORY/contents/site/index.html?ref=feat/guided-whiteboard-capture-v1.7.0" --jq .sha)"
+          export CURRENT_SHA="$current_sha"
+          python3 - <<'PY' > /tmp/planning-portal-update.json
+          import base64
+          import json
+          import os
+          from pathlib import Path
+
+          payload = {
+              "message": "build: regenerate standalone guided capture portal",
+              "branch": "feat/guided-whiteboard-capture-v1.7.0",
+              "sha": os.environ["CURRENT_SHA"],
+              "content": base64.b64encode(Path("site/index.html").read_bytes()).decode("ascii"),
+          }
+          print(json.dumps(payload, separators=(",", ":")))
+          PY
+          gh api --method PUT "repos/$GITHUB_REPOSITORY/contents/site/index.html" --input /tmp/planning-portal-update.json --jq '.commit.sha'
