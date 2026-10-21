@@ -8,6 +8,8 @@ The example uses the same tiny grocery-list idea as [`examples/simple-grocery-li
 
 ## Start where the thinking already is
 
+Another quick entry is a rough screenshot plus a spoken/transcribed/typed top-to-bottom tour. The [guided whiteboard capture recipe](./guided-whiteboard-capture.md) turns it into working canonical tables, a deliberately composed visual, and prose in the same place order, with private, reviewable changes later. This is an optional faster capture surface, not another mandated stage or source of truth.
+
 The idea does not begin in Planning Skills.
 
 Maybe you have a note from a conversation with your partner, a few bullets in Slack, a quick Figma sketch, and a half-formed thought that this should be a tiny web page. Keep working there while the idea is cheap to change.

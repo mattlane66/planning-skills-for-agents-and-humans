@@ -4,6 +4,8 @@ Use this repository to preserve product intent from unclear evidence through bou
 
 These instructions are tool-neutral and apply across Claude Code, Codex, Gemini CLI, Cursor, Claude Design when the skills are available, and other agent environments. Load the active skill for detailed procedure instead of loading the whole planning stack.
 
+For optional fast capture from a rough whiteboard plus a guided spoken, transcribed, or typed top-to-bottom tour, follow `docs/guided-whiteboard-capture.md` within existing shaping or breadboarding. Tables remain canonical, the visual is primary for human review, prose mirrors the model, and all promotion and human decision gates remain intact.
+
 For changing accepted planning based on post-kickoff messages, meeting notes, or revised drafts, use `planning-change-reconciliation/SKILL.md`. Evidence must be separated from explicit decisions; editorial wording changes are not product commitments. Require human approval for consequential deltas and reconcile all downstream affected artifacts before republishing derived views.
 
 ## Default behavior
