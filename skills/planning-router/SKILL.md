@@ -44,6 +44,7 @@ Do not route to solution exploration merely because a solution idea is available
 | Small, obvious, low-risk change with clear behavior and scope | No planning skill |
 | The destination is bounded, but reaching it requires multiple dependent planning decisions or investigations across sessions | `wayfinding` |
 | A consequential opportunity or product decision depends on future-facing trends, advanced users, unusually high-benefit needs, pyramiding, or advanced analogs that have not yet been established | `lead-user-research` |
+| A rough whiteboard or screenshot plus a spoken, transcribed, or typed guided tour describes an unselected solution | `shaping` in S-first mode using `docs/guided-whiteboard-capture.md`; use candidate-shape `breadboarding` directly only when a named candidate and behavior question are already clear |
 | Raw notes, research, requests, or an unclear problem where no useful solution or judging structure exists yet | `framing-doc` |
 | The user has requirements, a rough solution, a prototype, or mixed material and wants to shape the problem/solution space | `shaping` |
 | The user explicitly wants to start from a proposed solution and tease out requirements or alternatives | `shaping` in S-first collaborative mode |
@@ -68,7 +69,7 @@ Do not route to solution exploration merely because a solution idea is available
 
 1. Prefer no planning skill for a contained copy edit, obvious bug fix, disposable experiment, or already-clear low-risk change.
 2. Route to the **smallest useful move that matches the current uncertainty and the user's chosen entry point**. Do not automatically force the work back to the earliest missing artifact.
-3. Choose one move only. Do not prescribe the entire downstream chain.
+3. Choose one move only. Do not prescribe the entire downstream chain. For optional guided whiteboard capture, route by the user's actual uncertainty rather than the input format; suggest the recipe *inside* the selected existing skill, never as a separate capture skill or automatic acceptance.
 4. Route to `wayfinding` only when planning itself spans sessions and needs a persistent dependency map. A long implementation or an ordinary shaping pass is not enough.
 5. When resolving an active Wayfinding ticket, route from that ticket's precise question to a leaf skill. Never route it back to `wayfinding`.
 6. Route R work, S work, fit checks, appetite work, shape comparison, and focused spikes to `shaping`. These are moves inside one shaping loop, not mandatory stages.

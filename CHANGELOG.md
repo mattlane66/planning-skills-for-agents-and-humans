@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## v1.7.0 — Guided whiteboard capture — 2026-10-21
+
+### Added
+
+- Add an optional rough screenshot plus spoken/transcribed/typed guided-tour entry path for shaping and candidate breadboarding, with a clear routing recipe, ID-stable canonical tables, a deliberately spatial visual, and matching structured prose.
+- Explain a continuous CAD-style change loop using the existing sketch and planning-change reconciliation skills: private model-first proposals, semantic/visual review diffs, and explicit human acceptance gates.
+- Add a complete fictional whiteboard → guided tour → candidate breadboard → narrated review example and regression tests for provenance, authority, ID stability, mirroring, and discovery.
+
+### Compatibility
+
+- No new canonical skill or alternate source of truth. Audio is optional. Preserve all existing human selection, Appetite, promotion, and implementation gates.
+- Coordinate portable, Claude, Codex, MCP package, and lockfile metadata for v1.7.0.
+
 ## v1.6.0 — Post-kickoff planning change reconciliation — 2026-10-14
 
 - Add a post-kickoff planning-change skill with provenance, deduplication, human gates, and downstream ripple review.

@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 390" role="img" aria-labelledby="title desc">
+<title id="title">Synthetic rough whiteboard for Queue Review</title>
+<desc id="desc">Two sketchy regions, Queue and Request, connected by Review, a Confirm button, and a question about Cancel.</desc>
+<rect width="760" height="390" fill="#f7f6f0"/>
+<g fill="none" stroke="#393d42" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+<path d="M50 48 L319 53 L310 319 L46 312 Z"/><path d="M438 39 L703 49 L694 321 L430 310 Z"/>
+<path d="M79 132 L269 126 L267 174 L79 173 Z"/><path d="M84 210 L260 207"/>
+<path d="M470 160 L653 155 L658 198 L470 202 Z"/>
+<path d="M308 150 C369 124 388 127 433 148"/><path d="M419 137 L435 148 L422 163"/>
+</g>
+<g fill="#373c43" font-family="Arial,sans-serif" font-size="22">
+<text x="82" y="96">QUEUE</text><text x="91" y="161">Review</text><text x="86" y="247">Pending items</text>
+<text x="473" y="94">REQUEST</text><text x="477" y="187">Confirm</text><text x="475" y="240">Details</text>
+<text x="337" y="106" font-size="17">tap</text><text x="480" y="288" font-size="18">Cancel ???</text>
+</g><path d="M468 297 L658 303" stroke="#bb6b43" stroke-width="2" stroke-dasharray="6 5"/>
+</svg>

@@ -109,8 +109,7 @@ Do not force an S-first conversation back through framing ceremony unless the mi
 
 ### Start from evidence or a prototype
 
-Treat an existing screen, prototype, code path, or workflow as evidence. Extract provisional R and S, map current behavior when needed, and continue through the same loop.
-
+Treat an existing screen, prototype, code path, or workflow as evidence. Extract provisional R and S, map current behavior when needed, and continue through the same loop. **Optional guided whiteboard capture:** A sketch plus spoken/transcribed/typed tour can start S-first shaping (see `docs/guided-whiteboard-capture.md`). Preserve image/narration provenance, keep R provisional, breadboard only consequential uncertainty, and never infer hidden behavior, acceptance, selection, value, or usability from the visual.
 ### The collaborative shaping loop
 
 These moves may happen in any useful order:

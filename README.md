@@ -6,6 +6,8 @@ These skills help product and engineering teams preserve intent from raw evidenc
 
 **New here? Start with the [10-minute guide](./docs/start-here.md).**
 
+**Have a rough whiteboard and a guided tour?** Use [guided whiteboard capture](./docs/guided-whiteboard-capture.md) to turn a sketch plus optional spoken, transcribed, or typed walkthrough into a working candidate breadboard: canonical tables, a deliberate spatial visual, and prose that follows the model. Later revisions use private, ID-linked proposals and existing human gates. [See the complete synthetic example](./examples/guided-whiteboard-capture/README.md). This is an optional entry, not a new skill or an alternative authority.
+
 **One method, several ways to use it.** The 15 canonical skills and their human decision gates define the method. Agent plugins and commands invoke those skills; the documentation portal teaches them; the Shaping Board and Product Ontology viewer are optional visual surfaces. The opt-in Product Intent Layer adds bounded, evidence-backed implementation checks. None of the interfaces replaces accepted planning artifacts or authorizes a build.
 
 ## Learn the method

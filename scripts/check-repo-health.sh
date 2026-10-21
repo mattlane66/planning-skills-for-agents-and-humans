@@ -105,7 +105,7 @@ TEMPLATES=(
 DOCS=(
   README.md AGENTS.md GEMINI.md PLANNING-PUBLISHER.md ASSURANCE.md CHANGELOG.md LICENSE CONTRIBUTING.md SECURITY.md CODE_OF_CONDUCT.md
   site/README.md site/index.html site/package.json site/package-lock.json
-  docs/start-here.md docs/agent-workflow.md docs/agent-context-feeding.md
+  docs/start-here.md docs/guided-whiteboard-capture.md docs/agent-workflow.md docs/agent-context-feeding.md
   docs/agent-loop-design.md docs/full-modern-agent-workflow.md
   docs/dumplink-usage.md docs/claude-slash-commands.md docs/gemini-usage.md
   docs/claude-code-plugin.md docs/codex-plugin.md docs/codex-usage.md
@@ -126,6 +126,11 @@ DOCS=(
   examples/sketch-reconciliation/02-availability-sketch.svg
   examples/sketch-reconciliation/03-reconciliation.md
   examples/solution-first-shaping/README.md
+  examples/guided-whiteboard-capture/README.md
+  examples/guided-whiteboard-capture/01-rough-whiteboard.svg
+  examples/guided-whiteboard-capture/01-guided-tour.md
+  examples/guided-whiteboard-capture/02-candidate-breadboard.md
+  examples/guided-whiteboard-capture/03-private-review.md
 )
 
 check_file_exists requirements-dev.txt
