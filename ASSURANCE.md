@@ -71,6 +71,23 @@ administration permission to change rulesets. In that case, the repository can
 verify and document the desired contract, but a repository administrator must
 enable it in GitHub settings before `main` is actually protected.
 
+## CodeQL: source versus generated bundle
+
+CodeQL analyzes maintained JavaScript/TypeScript and Python sources, including
+`site/src`. The only excluded path, `site/index.html`, is the deterministic
+self-contained build output. It inlines minified vendored JavaScript (notably
+`uuid` via the Mermaid dependency). The independent browser, build parity,
+release-install, and npm dependency-audit gates continue to cover the output.
+
+Code scanning on PR #175 raised alerts #105–107 as
+`js/biased-cryptographic-random` on line 9764 of the bundled HTML.
+The three flagged additions join hexadecimal strings in the UUID formatter
+(`fs[t[e]] + fs[t[e+1]]`), **not numeric random values**. Byte generation
+uses the platform crypto API. These are false-positive reports on generated
+vendor code, not three separate random-number weaknesses. Keep the CodeQL
+exception limited to that one generated artifact, not authored source or the
+entire query; future security alerts on maintained code must remain visible.
+
 ## External documentation links
 
 External link availability is intentionally checked outside deterministic PR

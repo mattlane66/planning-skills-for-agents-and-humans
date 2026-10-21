@@ -1,0 +1,9 @@
+name: Planning Skills source analysis
+# Only the checked-in, independently regenerated standalone portal is excluded.
+# Its authored JavaScript remains in site/src and is analyzed by CodeQL.
+# The portal also embeds minified third-party dependencies, audited by npm.
+# CodeQL's js/biased-cryptographic-random fired three times on the
+# UUID library's HEX STRING CONCATENATION in this generated HTML (PR #175).
+# It was not biased random-number arithmetic. Do not exclude site/src.
+paths-ignore:
+  - site/index.html

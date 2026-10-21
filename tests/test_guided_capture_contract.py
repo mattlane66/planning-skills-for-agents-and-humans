@@ -45,13 +45,15 @@ class GuidedCaptureTests(unittest.TestCase):
             self.assertIn(item, text)
 
     def test_coordinated_version(self):
+        version = json.loads(read("plugin.json"))["version"]
+        self.assertRegex(version, r"^[0-9]+[.][0-9]+[.][0-9]+$")
         for path in ("plugin.json", ".claude-plugin/plugin.json",
                      ".codex-plugin/plugin.json", "mcp-server/package.json",
                      "mcp-server/package-lock.json"):
-            self.assertEqual("1.7.0", json.loads(read(path))["version"], path)
+            self.assertEqual(version, json.loads(read(path))["version"], path)
         lock = json.loads(read("mcp-server/package-lock.json"))
-        self.assertEqual("1.7.0", lock["packages"][""]["version"])
-        self.assertEqual(1, read("CHANGELOG.md").count("## v1.7.0 —"))
+        self.assertEqual(version, lock["packages"][""]["version"])
+        self.assertEqual(1, read("CHANGELOG.md").count(f"## v{version} —"))
 
 if __name__ == "__main__":
     unittest.main()
