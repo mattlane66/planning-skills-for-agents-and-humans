@@ -12,7 +12,7 @@ Use this skill when an **existing accepted planning stack** may need revision be
 
 ## Narrated CAD-style revision loop
 
-A later guided tour can identify a flaw, alternative, or decision change without reconstructing the full model. Use [guided whiteboard capture](../docs/guided-whiteboard-capture.md) as an input recipe while retaining this skill's localized/substantial/editorial modes. Map the proposed deltas to stable canonical breadboard IDs **first**; privately regenerate the corresponding visual and structure-matched prose, then show a semantic inventory plus highlighted diff for review. Compose with `sketch-reconciliation` if the new evidence is visual, or `breadboard-reflection` if the claim concerns real implementation drift. Narration is not approval; accepted artifacts change only after trusted human authorization.
+A later guided tour can identify a flaw, alternative, or decision change without reconstructing the full model. Use [guided whiteboard capture](https://github.com/mattlane66/planning-skills-for-agents-and-humans/blob/main/docs/guided-whiteboard-capture.md) as an input recipe while retaining this skill's localized/substantial/editorial modes. Map the proposed deltas to stable canonical breadboard IDs **first**; privately regenerate the corresponding visual and structure-matched prose, then show a semantic inventory plus highlighted diff for review. Compose with `sketch-reconciliation` if the new evidence is visual, or `breadboard-reflection` if the claim concerns real implementation drift. Narration is not approval; accepted artifacts change only after trusted human authorization.
 
 ## Inputs and authority
 
