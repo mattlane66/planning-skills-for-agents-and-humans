@@ -241,7 +241,7 @@ Use the cheapest representation that makes the shape judgeable:
 - mechanism tables for a straightforward candidate
 - fat-marker or rough sketches when spatial arrangement matters
 - a `candidate-shape` breadboard when places, affordances, consequences, stores, or wiring must be understood before comparison
-- a focused spike when a technical or empirical unknown blocks honest judgment
+- a focused spike when a technical or empirical unknown blocks honest judgment, including an optional behavioral spike for candidate value or usability risks
 
 Candidate breadboards may be partial and may differ in depth. Do not add detail merely to make alternatives look symmetrical. Read `breadboarding/references/candidate-shape-mode.md` and invoke the breadboarding skill in candidate-shape mode when that technique is needed.
 
@@ -253,7 +253,7 @@ Candidate generation has a special failure mode: a materially better candidate c
 
 For each candidate, identify the smallest unanswered question that could change its fit, viability, or appetite implications.
 
-Use candidate breadboarding when the uncertainty is behavioral or structural. Use a focused spike when the uncertainty is technical or empirical.
+Use candidate breadboarding when the unknown is how a candidate system works or is structured. Use a focused spike when the uncertainty is technical or empirical, including how people might respond to a candidate. A behavioral spike explores plausible user reactions but is never observed human evidence (see Optional behavioral spikes below).
 
 In collaborative shaping, candidate breadboarding may use provisional requirements and an unset or provisional appetite. The output must state which judging inputs were provisional and must not claim final requirement fit or appetite fit that cannot yet be known.
 
@@ -319,6 +319,22 @@ When substantial, record it with `templates/spike.md` and return the result to t
 - fit rows to rerun
 - appetite implications, if known
 - remaining uncertainty
+
+### Optional behavioral spikes — value and usability
+
+When candidate shapes are concrete enough to compare and a **specific uncertainty about people's response** could materially change the choice or next experiment, a focused spike may use [Behavioral Simulation for Agents and Humans](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation) as a **separate, optional** evidence method. It is not a required stage, new shaping authority, or replacement for real user research or usability testing.
+
+Use the smallest bounded comparison that could reveal a decision-relevant risk:
+
+1. Identify candidate shape IDs, baseline (CURRENT, when relevant), target users, context, desired outcome, and the **one value or usability unknown**. Value asks whether the shape could plausibly serve a meaningful job. Usability asks where people might struggle to understand or operate it.
+2. Hold the same relevant scenarios, assumptions, requirements, and accepted or explicitly Working x, y, and operating model (M) constant across candidates. Describe actual mechanisms, not invented features or a favored shape's supposed advantages.
+3. If the external simulation skill is available, follow its canonical SKILL.md and PROTOCOL.md. Default a quick *unvalidated* exploratory probe to **PLAUSIBILITY_SPACE / L0_ROLEPLAY**, seeking diverse plausible reactions, breakdowns, edge cases, and rival explanations—not votes, population predictions, success percentages, or a synthetic winner. Use stronger modes and grades only when their grounding, held-out validation, and calibration requirements are actually met.
+4. In the spike record, distinguish **OBSERVED_HUMAN**, **ASSUMPTION**, and **SIMULATED_ESTIMATE**. Include model/version/configuration, scenario, input sources, evidence grade, what remains unknown, and the smallest real-world validation that could discriminate among candidates. Simulated responses never become observed user behavior, even when calibrated.
+5. Return possible R/S/fit/Appetite implications and remaining risks to Shaping as **Working candidate evidence**. Do not independently establish actual value, usability, adoption, willingness to pay, task completion, or retention. **No simulated result automatically converts an unknown Fit Check to a pass or selects a shape.**
+
+Choose a candidate breadboard when the question is **how the proposed product works**. Choose observation with real people and a prototype or other direct evidence when the decision requires **what people actually do**. If the external simulation skill is unavailable, mark a proposed simulation blocked or conduct a clearly labeled conceptual risk review, without claiming a simulation run.
+
+Skip the behavioral spike when real evidence already resolves the question or the result could not change the shaping decision. Accepted requirements, Appetite, and human selection gates remain unchanged.
 
 ## Human selection
 

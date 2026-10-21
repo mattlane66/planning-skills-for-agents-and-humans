@@ -37,6 +37,8 @@ For your own product, generate the same view with `python3 scripts/publish-shape
 
 <!-- END README-ONLY: product-ontology -->
 
+**Optional behavioral spikes:** When comparing candidate shapes, Shaping can use [Behavioral Simulation for Agents and Humans](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans) to explore possible value or usability risks. This is hypothesis generation, **not** observed human evidence, a synthetic preference vote, or a new selection gate. See the [Shaping skill](./shaping/SKILL.md) and [illustrative example](./examples/behavioral-spike/README.md).
+
 ## See it work in practice
 
 If you would rather watch the method operate than read its parts, follow [How Planning Skills works in practice](./docs/how-it-works-in-practice.md). It takes one plain grocery-list idea from messy notes and a sketch through `/plan`, framing, shaping, a code spike, breadboarding, visual reconciliation, human selection, bounded build context, implementation, and reflection. It also shows when **not** to invoke an advanced skill. The walkthrough is illustrative, not a required sequence.
