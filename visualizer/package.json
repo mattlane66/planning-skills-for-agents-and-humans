@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "esbuild": "0.28.2",
-    "mermaid": "11.17.0"
+    "mermaid": "12.2.0"
   },
   "overrides": {
     "katex": "0.18.2"
