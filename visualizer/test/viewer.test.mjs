@@ -63,6 +63,9 @@ test('serves diagrams and broadcasts a reload when a watched file changes', asyn
     const vendor = await fetch(`${viewer.url}/vendor/mermaid.esm.min.mjs`);
     assert.equal(vendor.status, 200);
     assert.match(vendor.headers.get('content-type'), /javascript/);
+    const browserModule = await vendor.text();
+    assert.match(browserModule, /0\.18\.2/, 'served browser module must contain patched KaTeX');
+    assert.doesNotMatch(browserModule, /0\.16\.47/, 'prebuilt vulnerable KaTeX must not be served');
 
     const malformedVendorPath = await fetch(`${viewer.url}/vendor/%`);
     assert.equal(malformedVendorPath.status, 400);
@@ -96,6 +99,10 @@ test('serves diagrams and broadcasts a reload when a watched file changes', asyn
     }
     assert.ok(updated.revision > first.revision);
     assert.equal(updated.files[0].diagrams.length, 2);
+    await rm(filePath);
+    const failed = await fetch(`${viewer.url}/api/diagrams`);
+    assert.equal(failed.status, 500);
+    assert.deepEqual(await failed.json(), { error: 'Unable to load planning diagrams.' });
   } finally {
     clearTimeout(eventTimeout);
     eventsController.abort();

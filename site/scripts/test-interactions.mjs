@@ -264,6 +264,9 @@ assert.equal(document.activeElement?.id, 'skill-detail-title', 'Selecting a skil
 await route('#/guides/start-here');
 assert.ok(document.querySelector('.docs-mobile-disclosure'), 'Mobile documentation should expose a compact disclosure navigation.');
 
+await route('#/skills/%22%3E%3Cimg%20src=x%20onerror=alert(1)%3E/guide');
+assert.equal(document.querySelector('[onerror], [onclick], script:not([type="module"]) img'), null, 'Route input must not introduce executable markup.');
+
 assert.deepEqual(runtimeErrors, [], `Runtime errors were reported:\n${runtimeErrors.join('\n')}`);
 dom.window.close();
 
