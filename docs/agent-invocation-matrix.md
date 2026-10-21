@@ -43,6 +43,7 @@ The default interactive profile is **collaborative shaping**: start from R, S, e
 | Work on shapes now / S-first | `shaping/SKILL.md` | `/sketch-shapes` | `/sketch-shapes` | “For this move, capture or revise S; this may be the entry point…” |
 | Run Working or decision-ready fit | `shaping/SKILL.md` | `/fit-check` | `/fit-check` | “Run fit/reverse-fit; label provisional evidence Working…” |
 | Resolve one focused unknown | `shaping/SKILL.md` + `templates/spike.md` | `/spike` | `/spike` | “Run a focused spike and return R/S/fit/Appetite implications…” |
+| Explore candidate value/usability risks (optional) | Shaping focused spike plus external [Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans) when available | `/spike` | `/spike` | “Compare candidates with a bounded behavioral plausibility spike; distinguish simulated hypotheses from actual user evidence and name the real-world test…” |
 | Candidate-shape breadboard | `breadboarding/SKILL.md` | `/breadboard` | `/breadboard` | “Use candidate-shape mode; label Working/Accepted/Unset judging inputs…” |
 | Select shape — hard gate | `shaping/SKILL.md` | `/select-shape` | `/select-shape` | “Record my selected shape after verifying accepted R/Appetite and decision-ready fit…” |
 | Reconcile post-kickoff decisions | `planning-change-reconciliation/SKILL.md` | `/reconcile-planning-changes` | `/reconcile-planning-changes` | “Review proposed changes to the accepted plan, map stable IDs, and ask me before applying consequential deltas…” |

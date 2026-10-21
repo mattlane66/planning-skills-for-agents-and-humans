@@ -42,6 +42,25 @@ What we are trying to learn. Describe the understanding to obtain, not the produ
 ## Evidence / constraints discovered
 - ...
 
+## Behavioral simulation (optional)
+
+Complete this section only when the separate [Behavioral Simulation method](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation) was actually used. A conceptual risk review is not a simulation run.
+
+- Candidate IDs and baseline; why scenarios are comparable:
+- Target user/context, outcome and value/usability question:
+- Simulation report/run reference:
+- Simulation mode and evidence grade (quick, unvalidated default: PLAUSIBILITY_SPACE / L0_ROLEPLAY):
+- Model/version/configuration and date:
+- OBSERVED_HUMAN sources (or none):
+- ASSUMPTION sources and scope:
+- SIMULATED_ESTIMATE: plausible breakdowns, alternatives, and rival mechanisms (not real population facts):
+- Held-out validation/calibration (or none):
+- What this does **not** establish:
+- Smallest real-world test and discrimination criterion:
+- Possible R/S/fit/Appetite implications and remaining uncertainty:
+
+L0/L1 output cannot establish actual value, usability, adoption, task completion, preference, or willingness to pay; simulated responses alone cannot pass a Fit Check or select a shape.
+
 ## Mechanism understanding after spike
 Describe what is now known concretely enough to revise a shape, fit check, breadboard, or implementation boundary.
 

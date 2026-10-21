@@ -23,6 +23,20 @@ Rules:
 
 If every visible row passes but a shape still feels wrong, look for a missing requirement rather than manipulating the score.
 
+## Behavioral simulation is not a Fit Check
+
+An optional focused behavioral spike may use [Behavioral Simulation for Agents and Humans](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation) to explore **possible value and usability risks** when uncertain human responses could materially affect a candidate comparison.
+
+Use the same target context, task, baseline, and accepted or explicitly Working x, y, and operating-model (M) assumptions for comparable shapes. Record mode, evidence grade, model/version, input provenance, assumptions, rival behaviors, remaining unknowns, and the smallest discriminating **real-world** test.
+
+- **PLAUSIBILITY_SPACE / L0_ROLEPLAY** is for hypotheses and failure modes, **not population predictions, preference votes, actual usability scores, or candidate success rankings**.
+- A **SIMULATED_ESTIMATE** never becomes **OBSERVED_HUMAN**. Validation may strengthen an estimate, but it never changes the source type.
+- Simulation alone cannot demonstrate actual task completion, usability, value, adoption, willingness to pay, or retention.
+- A plausible breakdown can prompt a Working requirement/shape revision or real-world test. It **cannot independently convert an unknown or ❌ Fit Check into ✅**, modify accepted requirements, or select a shape.
+- If no meaningful distinction emerges, record that fact; do not manufacture a winner.
+
+The external simulation skill owns modes, evidence grades, and validation requirements. Shaping owns candidate judgment and human selection.
+
 ## Reverse fit check
 
 This is the **Rotated Fit Check / reverse fit — Parts × Requirements**. Check whether each mechanism is justified by one or more accepted requirements and whether every accepted requirement has supporting parts.

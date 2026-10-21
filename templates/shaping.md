@@ -97,6 +97,8 @@ An agent and human need a shared shaping surface for requirements, solution shap
 |---|---|---|---|---|---|---|
 | A | spike / candidate breadboard / sketch | ... | ... | ... | ... | ... |
 
+If using an optional behavioral spike, link its focused spike and label any results SIMULATED_ESTIMATE with their evidence grade (e.g., L0_ROLEPLAY). Summarize only plausible value/usability breakdowns, rival hypotheses, and the smallest real-world test—not verified fit, measured success rates, or a selection decision.
+
 ## Fit check
 - Authority: Working | Decision-ready
 - Evaluation altitude: Design conformance

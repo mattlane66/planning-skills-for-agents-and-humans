@@ -50,6 +50,7 @@ Do not route to solution exploration merely because a solution idea is available
 | The user explicitly wants to start from requirements and let solutions emerge | `shaping` in R-first collaborative mode |
 | One named unselected candidate cannot be judged until its places, affordances, stores, consequences, or wiring are clarified | `breadboarding` in `candidate-shape` mode |
 | A focused technical or empirical unknown blocks useful shaping | `shaping` focused spike using `templates/spike.md` |
+| A counterfactual about user response to candidate shapes could expose a material value or usability risk | `shaping` optional behavioral focused spike using `templates/spike.md` and the external Behavioral Simulation skill when available |
 | New meeting, message, or feedback decisions may change an existing accepted plan after kickoff | `planning-change-reconciliation` |
 | A sketch, screenshot, wireframe, mockup, or whiteboard may change accepted intent | `sketch-reconciliation` |
 | Existing behavior needs descriptive mapping | `breadboarding` in `current-state` mode |
@@ -71,17 +72,18 @@ Do not route to solution exploration merely because a solution idea is available
 4. Route to `wayfinding` only when planning itself spans sessions and needs a persistent dependency map. A long implementation or an ordinary shaping pass is not enough.
 5. When resolving an active Wayfinding ticket, route from that ticket's precise question to a leaf skill. Never route it back to `wayfinding`.
 6. Route R work, S work, fit checks, appetite work, shape comparison, and focused spikes to `shaping`. These are moves inside one shaping loop, not mandatory stages.
-7. Route to `lead-user-research` only when Lead User Method evidence is genuinely decision-relevant. Do not use it as a generic synonym for interviews, market research, competitive research, usability testing, or ordinary source gathering.
-8. Lead User Research is an optional upstream evidence lane, not a required predecessor to framing. When the concrete problem is already understood, route directly to framing or shaping. When a completed study proposes framing implications, stop for explicit human acceptance before routing to `framing-doc`.
-9. If the user brings a concrete solution first, preserve it as a candidate shape and let shaping extract provisional requirements. Do not require a completed frame merely because R was not written first.
-10. Route directly to `breadboarding` in `candidate-shape` mode when a named candidate and decision-relevant behavioral uncertainty already exist. In collaborative mode, provisional R or appetite does not block exploration; the breadboard must label those inputs as provisional and cannot claim final fit.
-11. Use the active gated/orchestrated profile when the user or automation explicitly asks for strict prerequisites. Do not silently impose that profile on an ordinary collaborative session.
-12. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
-13. Use `planning-change-reconciliation` for decision-to-plan changes after kickoff; don't confuse them with implementation-to-plan drift or visual-only evidence.
-14. Do not let an existing sketch, prototype, or candidate breadboard bypass human selection when it introduces a solution that has not been accepted.
-15. Do not let current-state or candidate-shape breadboarding become selected future intent.
-16. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
-17. Do not begin implementation or make a human scope, appetite, direction, promotion, or slice decision.
+7. Route possible value/usability reactions to a **single optional shaping spike** only when exploring them could change a candidate, comparison, or next experiment. Use the external Behavioral Simulation skill when available; quick unvalidated outputs identify hypotheses rather than proving real-user behavior or picking a winner. If the decision instead requires what real people do, route to real-world observation/testing. Do not force a behavioral spike for every Fit Check.
+8. Route to `lead-user-research` only when Lead User Method evidence is genuinely decision-relevant. Do not use it as a generic synonym for interviews, market research, competitive research, usability testing, or ordinary source gathering.
+9. Lead User Research is an optional upstream evidence lane, not a required predecessor to framing. When the concrete problem is already understood, route directly to framing or shaping. When a completed study proposes framing implications, stop for explicit human acceptance before routing to `framing-doc`.
+10. If the user brings a concrete solution first, preserve it as a candidate shape and let shaping extract provisional requirements. Do not require a completed frame merely because R was not written first.
+11. Route directly to `breadboarding` in `candidate-shape` mode when a named candidate and decision-relevant behavioral uncertainty already exist. In collaborative mode, provisional R or appetite does not block exploration; the breadboard must label those inputs as provisional and cannot claim final fit.
+12. Use the active gated/orchestrated profile when the user or automation explicitly asks for strict prerequisites. Do not silently impose that profile on an ordinary collaborative session.
+13. Do not route to statechart, contracts, executable breadboards, Dumplink, kickoff, or context packaging merely because those skills exist. Their triggering complexity must be present.
+14. Use `planning-change-reconciliation` for decision-to-plan changes after kickoff; don't confuse them with implementation-to-plan drift or visual-only evidence.
+15. Do not let an existing sketch, prototype, or candidate breadboard bypass human selection when it introduces a solution that has not been accepted.
+16. Do not let current-state or candidate-shape breadboarding become selected future intent.
+17. Do not let a candidate breadboard feed Dumplink, context packaging, or implementation as accepted intent.
+18. Do not begin implementation or make a human scope, appetite, direction, promotion, or slice decision.
 
 ## Output
 
