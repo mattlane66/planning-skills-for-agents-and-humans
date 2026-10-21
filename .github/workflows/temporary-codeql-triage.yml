@@ -1,0 +1,29 @@
+name: Temporary CodeQL findings triage
+on:
+  push:
+    branches:
+      - security/triage-codeql-v1.7.1
+permissions:
+  contents: read
+  checks: read
+  security-events: read
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      checks: read
+      security-events: read
+    steps:
+      - name: Identify affected CodeQL check annotations (no source snippets)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          echo 'Annotations on PR #175 security check:'
+          gh api 'repos/mattlane66/planning-skills-for-agents-and-humans/check-runs/119505660066/annotations?per_page=100' \
+            --jq '.[] | {path: .path, start_line: .start_line, end_line: .end_line, annotation_level: .annotation_level, title: .title, message: .message, raw_details: (.raw_details // "" | .[0:280])}'
+          echo 'Open security alerts (rule and file only):'
+          gh api 'repos/mattlane66/planning-skills-for-agents-and-humans/code-scanning/alerts?state=open&per_page=100' \
+            --jq '.[] | {number: .number, rule: .rule.id, severity: .rule.security_severity_level, level: .rule.severity, state: .state, location: .most_recent_instance.location.path, line: .most_recent_instance.location.start_line, ref: .most_recent_instance.ref}' || true
