@@ -16,14 +16,34 @@ jobs:
       checks: read
       security-events: read
     steps:
-      - name: Identify affected CodeQL check annotations (no source snippets)
+      - name: Checkout repository for tracing generated code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Inspect code scanning alert locations and crypto uses
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-          echo 'Annotations on PR #175 security check:'
-          gh api 'repos/mattlane66/planning-skills-for-agents-and-humans/check-runs/119505660066/annotations?per_page=100' \
-            --jq '.[] | {path: .path, start_line: .start_line, end_line: .end_line, annotation_level: .annotation_level, title: .title, message: .message, raw_details: (.raw_details // "" | .[0:280])}'
-          echo 'Open security alerts (rule and file only):'
-          gh api 'repos/mattlane66/planning-skills-for-agents-and-humans/code-scanning/alerts?state=open&per_page=100' \
-            --jq '.[] | {number: .number, rule: .rule.id, severity: .rule.security_severity_level, level: .rule.severity, state: .state, location: .most_recent_instance.location.path, line: .most_recent_instance.location.start_line, ref: .most_recent_instance.ref}' || true
+          echo 'Alerts 105-107:'
+          for number in 105 106 107; do
+            gh api "repos/$GITHUB_REPOSITORY/code-scanning/alerts/$number" \
+              --jq '{number: .number, rule: .rule.id, severity: .rule.security_severity_level, tool: .tool.name, location: .most_recent_instance.location, message: .most_recent_instance.message, tags: .rule.tags}'
+          done
+          echo 'Generated-line context:'
+          python3 - <<'PY'
+          import re
+          from pathlib import Path
+          lines=Path("site/index.html").read_text().splitlines()
+          print("Total lines:",len(lines))
+          for index in range(9758,min(9768,len(lines))):
+              line=lines[index]
+              print(f"line={index+1} characters={len(line)} begins={line[:180]!r}")
+              if index==9763:
+                  for pattern in (r"getRandomValues",r"randomBytes",r"randomUUID",r"crypto",r"Math\.random",r"Math\.floor",r"\.random\("):
+                      hits=list(re.finditer(pattern,line))
+                      print(f"  token={pattern} count={len(hits)}")
+                      for hit in hits[:12]:
+                          s=hit.start()
+                          print(f"  at {s}: {line[max(0,s-160):min(len(line),s+180)]!r}")
+          PY
