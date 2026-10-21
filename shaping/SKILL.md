@@ -111,6 +111,10 @@ Do not force an S-first conversation back through framing ceremony unless the mi
 
 Treat an existing screen, prototype, code path, or workflow as evidence. Extract provisional R and S, map current behavior when needed, and continue through the same loop.
 
+### Guided whiteboard entry (optional)
+
+With a rough whiteboard, screenshot, and spoken/transcribed/typed guided tour, use [guided whiteboard capture](../docs/guided-whiteboard-capture.md) as a low-friction S-first capture pattern. Name the solution as a candidate, preserve narration and image provenance, extract implied needs into provisional requirements, and breadboard only the uncertain behavior worth inspecting. A polished visual never makes R or Appetite Accepted, selects a direction, or proves value/usability. Do not infer hidden mechanisms from a static screenshot.
+
 ### The collaborative shaping loop
 
 These moves may happen in any useful order:

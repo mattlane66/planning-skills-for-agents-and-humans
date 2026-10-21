@@ -18,6 +18,10 @@ Observable visual detail -> mapped planning IDs -> proposed deltas -> human gate
 
 The user's accompanying words outrank an inference from the image. Existing selected artifacts remain authoritative until the user accepts a change.
 
+## Guided-tour revisions
+
+A whiteboard plus narration can bootstrap an unaccepted candidate or propose changes to accepted behavior. For initial **working** capture, use [guided whiteboard capture](../docs/guided-whiteboard-capture.md) through shaping/breadboarding rather than mandatory post-kickoff reconciliation. For an **accepted** baseline, map visual observations and narrated intent separately to stable IDs, propose model-row changes, and show a private before/after visual with mirrored prose and semantic deltas. Keep the original accepted tables untouched until trusted human authorization. When the source is a spoken decision without new visual evidence, compose with `planning-change-reconciliation`.
+
 ## Inputs
 
 Use:
