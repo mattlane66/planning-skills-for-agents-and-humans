@@ -1,4 +1,5 @@
 import { createReadStream } from 'node:fs';
+import { build } from 'esbuild';
 import { stat } from 'node:fs/promises';
 import { createServer } from 'node:http';
 import { dirname, extname, resolve, sep } from 'node:path';
@@ -8,6 +9,16 @@ import { viewerHtml } from './page.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const defaultVendorRoot = resolve(here, '..', 'node_modules', 'mermaid', 'dist');
+let browserBundlePromise;
+function patchedBrowserBundle() {
+  browserBundlePromise ??= build({
+    stdin: { contents: 'export { default } from "mermaid";', resolveDir: resolve(here, '..') },
+    bundle: true, minify: true, format: 'esm', platform: 'browser',
+    target: ['safari15.4'], write: false, legalComments: 'none',
+  }).then(result => result.outputFiles[0].contents);
+  return browserBundlePromise;
+}
+
 const loopbackHosts = new Set(['127.0.0.1', '::1', '[::1]', 'localhost']);
 
 function requestHostIsAllowed(header, boundHost) {
@@ -88,6 +99,8 @@ export async function startViewer({
   const absolutePaths = filePaths.map((path) => resolve(cwd, path));
   await collectPlanningDiagrams(filePaths, cwd);
   await stat(resolve(vendorRoot, 'mermaid.esm.min.mjs'));
+  // Rebuild from the package entry so patched transitive dependencies reach browsers.
+  const mermaidBundle = vendorRoot === defaultVendorRoot ? await patchedBrowserBundle() : null;
 
   let revision = 1;
   const eventClients = new Set();
@@ -146,6 +159,12 @@ export async function startViewer({
       response.write(`event: ready\ndata: ${revision}\n\n`);
       eventClients.add(response);
       request.on('close', () => eventClients.delete(response));
+      return;
+    }
+
+    if (requestUrl.pathname === '/vendor/mermaid.esm.min.mjs' && mermaidBundle) {
+      response.writeHead(200, { 'cache-control': 'no-store', 'content-type': 'text/javascript; charset=utf-8' });
+      response.end(mermaidBundle);
       return;
     }
 

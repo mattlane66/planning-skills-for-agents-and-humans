@@ -13,6 +13,7 @@
     "check": "npm test"
   },
   "dependencies": {
+    "esbuild": "0.28.2",
     "mermaid": "11.17.0"
   },
   "overrides": {
