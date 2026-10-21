@@ -1,0 +1,57 @@
+name: Temporary verified CodeQL false-positive dispositions
+
+on:
+  push:
+    branches:
+      - security/triage-codeql-v1.7.1
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  dispositions:
+    if: github.repository == 'mattlane66/planning-skills-for-agents-and-humans'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Verify merged-main scan and classify only audited alerts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          case "$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/39685750851" --jq '.conclusion')" in
+            success) echo "Post-merge CodeQL completed successfully." ;;
+            *) echo "Post-merge CodeQL is not successful; not changing alerts." >&2; exit 1 ;;
+          esac
+
+          for number in 105 106 107; do
+            alert="$(gh api "repos/$GITHUB_REPOSITORY/code-scanning/alerts/$number")"
+            echo "$alert" | jq -e --argjson number "$number" '
+              .number == $number and
+              .rule.id == "js/biased-cryptographic-random" and
+              .most_recent_instance.location.path == "site/index.html" and
+              .most_recent_instance.location.start_line == 9764
+            ' >/dev/null
+            state="$(echo "$alert" | jq -r '.state')"
+            echo "Alert $number: before=$state"
+            if [[ "$state" == "open" ]]; then
+              gh api --method PATCH "repos/$GITHUB_REPOSITORY/code-scanning/alerts/$number" \
+                -f state=dismissed \
+                -f 'dismissed_reason=false positive' \
+                -f 'dismissed_comment=Audited PR #175: + joins hex strings in vendored UUID stringify fs[t[e+0]]+fs[t[e+1]], not numeric random values; source is crypto.getRandomValues/crypto.randomUUID. See ASSURANCE.md. Authored site/src stays scanned.' \
+                --jq '{number, state, dismissed_reason}'
+            elif [[ "$state" == "fixed" || "$state" == "dismissed" ]]; then
+              echo "No change necessary."
+            else
+              echo "Unexpected state $state; not modifying." >&2
+              exit 1
+            fi
+            gh api "repos/$GITHUB_REPOSITORY/code-scanning/alerts/$number" \
+              --jq '{number, state, dismissed_reason, fixed_at}'
+          done
