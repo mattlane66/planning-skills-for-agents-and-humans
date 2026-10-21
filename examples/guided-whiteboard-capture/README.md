@@ -1,6 +1,6 @@
 # Guided whiteboard capture — synthetic example
 
-This fictional **Queue Review** workflow demonstrates the optional guided capture recipe (`docs/guided-whiteboard-capture.md`). It is not real research, observed behavior, a validated product, or an accepted plan.
+This fictional **Queue Review** workflow demonstrates the optional guided capture method. It is not real research, observed behavior, a validated product, or an accepted plan.
 
 1. [Rough whiteboard](./01-rough-whiteboard.svg): two screens, a connecting arrow, and an unanswered “Cancel?” scribble.
 2. [Synthetic dictated tour](./01-guided-tour.md): explanatory narration rendered as text; no audio is claimed.
