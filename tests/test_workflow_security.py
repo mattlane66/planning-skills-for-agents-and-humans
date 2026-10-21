@@ -135,6 +135,27 @@ class WorkflowSecurityTests(unittest.TestCase):
             codeql["jobs"]["analyze"]["strategy"]["matrix"]["language"],
         )
 
+    def test_codeql_scans_authored_sources_but_not_generated_portal(self) -> None:
+        config = yaml.load(
+            (ROOT / ".github" / "codeql" / "codeql-config.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        # Restrict the exception to a single deterministic, third-party-bundled
+        # artifact. CodeQL must still scan all maintained JS/TS and Python sources.
+        self.assertEqual(["site/index.html"], config["paths-ignore"])
+        self.assertNotIn("paths", config)
+        workflow = yaml.load(
+            (WORKFLOWS / "codeql.yml").read_text(encoding="utf-8"),
+            Loader=yaml.BaseLoader,
+        )
+        init = next(
+            step for step in workflow["jobs"]["analyze"]["steps"]
+            if step.get("name") == "Initialize CodeQL"
+        )
+        self.assertEqual(
+            "./.github/codeql/codeql-config.yml", init["with"]["config-file"]
+        )
+
     def test_behavior_eval_uses_only_checked_in_adapter_and_exact_runtime_choice(self) -> None:
         text = (WORKFLOWS / "behavior-evals.yml").read_text(encoding="utf-8")
         payload = yaml.load(text, Loader=yaml.BaseLoader)

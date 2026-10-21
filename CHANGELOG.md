@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## v1.7.1 — CodeQL generated-bundle false-positive remediation — 2026-10-21
+
+### Security assurance
+
+- Investigate CodeQL PR #175 alerts #105–107. All three point to UUID hexadecimal string concatenation in the checked-in, third-party-bundled standalone portal; the flagged additions do not perform arithmetic on random numbers.
+- Restrict CodeQL's input-scope exception to generated `site/index.html` and keep authored `site/src` plus Python and JavaScript/TypeScript sources under analysis. Keep browser smoke, generated-portal consistency, dependency audit and release-install checks active.
+- Add a CI regression test that rejects a wider code-scanning exclusion and document the audit finding.
+- Synchronize portable, Claude, Codex and MCP release versions for v1.7.1.
+
 ## v1.7.0 — Guided whiteboard capture — 2026-10-21
 
 ### Added
