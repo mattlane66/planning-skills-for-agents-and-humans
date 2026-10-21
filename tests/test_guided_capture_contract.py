@@ -29,7 +29,7 @@ class GuidedCaptureTests(unittest.TestCase):
         for skill in ("planning-router", "shaping", "breadboarding",
                       "sketch-reconciliation", "planning-change-reconciliation"):
             canonical = read(f"{skill}/SKILL.md")
-            self.assertIn("guided whiteboard", canonical.lower(), skill)
+            self.assertIn("guided-whiteboard-capture.md", canonical, skill)
             self.assertEqual(canonical, read(f"skills/{skill}/SKILL.md"), skill)
 
     def test_example_ids_and_unknowns(self):
