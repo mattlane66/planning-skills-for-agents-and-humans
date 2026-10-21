@@ -455,7 +455,7 @@ function resetWB(){
 $('#wb-reset').addEventListener('click',resetWB);
 function wbSnapshot(){
   const reqs=wbLines('#wb-r'),cands=wbLines('#wb-c'),parts=wbLines('#wb-p');
-  const md=v=>String(v).replace(/\|/g,'\\|').replace(/\n/g,' ');
+  const md=v=>String(v).replace(/\\/g,'\\\\').replace(/\|/g,'\\|').replace(/\n/g,' ');
   let out='# Fit Check snapshot\n\n## Frame\n\n- x: '+$('#wb-x').value.trim()+'\n- y: '+$('#wb-y').value.trim()+'\n- M: '+$('#wb-m').value.trim()+'\n\n';
   out+='## Phase 1 — Fit Check (Requirements × Candidate Paths)\n\n| Requirement | '+cands.map(md).join(' | ')+' |\n| --- | '+cands.map(()=>':---:').join(' | ')+' |\n';
   reqs.forEach((r,ri)=>{out+='| R'+(ri+1)+' · '+md(r)+' | '+cands.map((_,ci)=>fitLabel(wbFitState[fitKey(ri,ci)]||'unresolved')).join(' | ')+' |\n';});
