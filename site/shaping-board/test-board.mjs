@@ -1,3 +1,4 @@
+import './test-breadboard-core.mjs';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
 import { JSDOM, VirtualConsole } from 'jsdom';
@@ -141,6 +142,7 @@ assert.equal(errors.length, 0, errors.join('\n'));
 // AI Workspace uses existing exports and does not manufacture accepted scope.
 const aiFiles=run('bridgePackageFiles()');
 assert.ok(aiFiles.some(([name])=>name==='planning/shaping.board.json'));
+assert.match(aiFiles.find(([name])=>name==='planning/BREADBOARD-LANGUAGE.md')[1],/BreadboardPatch/);
 assert.ok(aiFiles.some(([name])=>name==='planning/AI-START-HERE.md'));
 assert.ok(aiFiles.some(([name])=>name==='README-SHAPING-WORKSPACE.md'));
 assert.ok(aiFiles.find(([name])=>name==='planning/AI-START-HERE.md')[1].includes('planning-router'));
@@ -211,5 +213,32 @@ assert.equal(run('M.reqs.every(r=>r.auth==="Working")'),true);
 assert.equal(run('M.selectionAuthority'),"Working");
 run('M.reqs[0].part_refs={D:"bad"}; M.pick="D"; T.top="ontology";render()');
 assert.match(w.document.querySelector('main').textContent,/Product map/,"invalid legacy part_refs should not crash the view");
+
+// Fixed-language integration: render, diff, stale-revision guard and human Working gate.
+const fixedModel=[
+ 'version: breadboard/v1',
+ 'P1 | place | Request form | Enter request | app',
+ 'U1 | ui | Submit | Click send | app | in=P1',
+ 'N1 | nonui | Validate | Check request | backend',
+ 'U1 -> N1 : control',
+ ''
+].join('\n');
+run('M.options[0].dsl='+JSON.stringify(fixedModel)+';T.top="shape";T.sub="board";T.view="paths";T.opt=0;render()');
+const fixedWorkspace=run('bridgePackageFiles()');
+assert.equal(fixedWorkspace.find(([name])=>name==='planning/breadboard-A.dsl')[1],fixedModel);
+assert.equal(run('parse(M.options[0].dsl).err.length'),0);
+assert.match(w.document.querySelector('#dia').textContent,/Submit/);
+assert.equal(run('BB.render(M.options[0].dsl,null,"m").html'),run('BB.render(M.options[0].dsl,null,"m").html'));
+const fixedPatch={kind:'BreadboardPatch',schema_version:1,project_id:run('M.project_id'),option_id:'A',base_dsl:fixedModel,
+ operations:[{op:'update_node',id:'U1',set:{title:'Send request'}}]};
+run('B.patch='+JSON.stringify(fixedPatch)+';T.top="workspace";render()');
+assert.match(w.document.querySelector('main').textContent,/U1/);
+assert.ok(!run('M.options[0].dsl').includes('Send request'),'loading an agent patch never mutates the model');
+run('applyBreadboardPatch()');
+assert.ok(run('M.options[0].dsl').includes('Send request'));
+assert.equal(run('M.selectionAuthority'),'Working');
+assert.equal(run('M.reqs.every(r=>r.f[0]==="u")'),true);
+assert.equal(run('M.stories.every(s=>s.fit[0]==="0")'),true);
+assert.throws(()=>run('breadboardPatchPreview('+JSON.stringify(fixedPatch)+')'),/Stale/);
 
 console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge validation, inspectability and review');
