@@ -698,7 +698,7 @@ function zip(files){const en=new TextEncoder(),out=[],cen=[],u16=n=>[n&255,n>>8&
 const cell=s=>String(s??"").replace(/\|/g,"/").replace(/\n/g," ").trim()||"not recorded";
 const RID=i=>M.reqs[i]?.id||"R"+(i+1);
 function bbMap(o){const g=parse(o.dsl),m={},pl=[],ui=[],nu=[],st=[],br=[];let p=0,u=0,n=0,s=0;
- g.nodes.forEach((x,ix)=>{x.part=o.id+"-"+x.i;if(x.k==="place"){m[x.i]=/^P[0-9]+$/.test(x.i)?x.i:"P"+ ++p;pl.push(x);x.r.forEach(r=>ui.push({id:"U"+m[x.i].replace(/\D/g,"")+"."+(x.r.indexOf(r)+1),pl:m[x.i],x,row:r,out:[]}))}
+ g.nodes.forEach((x,ix)=>{x.part=o.id+"-"+x.i;if(x.k==="place"){m[x.i]=/^P[0-9]+$/.test(x.i)?x.i:"P"+ ++p;pl.push(x);if(!BB.isV1(o.dsl))x.r.forEach(r=>ui.push({id:"U"+m[x.i].replace(/\D/g,"")+"."+(x.r.indexOf(r)+1),pl:m[x.i],x,row:r,out:[]}))}
   else if(x.k==="store"){m[x.i]=/^S[0-9]+$/.test(x.i)?x.i:"S"+ ++s;st.push(x)}else if((x.k==="ui"||x.k==="action")&&/^U\d+(?:\.\d+)?$/.test(x.i)){m[x.i]=x.i;const parent=g.edges.find(e=>e.b===x.i&&g.nodes.some(n=>n.i===e.a&&n.k==="place"));ui.push({id:x.i,pl:x.parent||parent?.a||"—",x,row:x.t,out:[]})}else if(x.k==="question"||x.k==="decision"){m[x.i]="BR"+(br.push(x));}else{m[x.i]=/^N[0-9]+$/.test(x.i)?x.i:/^O[0-9]+$/.test(x.i)?"N"+x.i.slice(1):"N"+ ++n;nu.push(Object.assign(x,{id:m[x.i],out:[]}))}});
  g.edges.forEach(e=>{const A=g.nodes.find(x=>x.i===e.a),B=g.nodes.find(x=>x.i===e.b);if(!A||!B)return;const w="→ "+m[e.b];
   if(A.k==="place"){const r=ui.filter(y=>y.x===A);const r1=r.find(y=>e.l&&y.row.toLowerCase().includes(e.l.toLowerCase()))||r[0];if(r1)r1.out.push(w)}else{A.out=A.out||[];A.out.push(w)}});
@@ -726,7 +726,7 @@ feeds: []
 
 ## Places
 
-${T2(["ID","Authority","Shape part","Place","Description"],pl.map(x=>[m[x.i],"candidate",x.part,x.t,x.s||"not recorded"]))}
+${T2(["ID","Authority","Shape part","Place","Description"],pl.map(x=>[m[x.i],"candidate",x.part,x.t,BB.isV1(o.dsl)?x.detail:(x.s||"not recorded")]))}
 
 ## UI Affordances
 
@@ -823,7 +823,7 @@ ${"| ID | Requirement | Status | Authority | Origin | Evidence refs | Notes |\n|
 
 ## Shapes
 
-${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part | Mechanism | Flag |\n|---|---|:---:|\n${g.nodes.map((n,i)=>"| "+x.id+"-"+n.i+" | "+cell((n.k==="place"?"Place":n.k==="action"?"Action":n.k==="store"?"Store":"Branch")+": "+n.t+(n.r.length?" — "+n.r.join("; "):""))+" | "+(x.placeholder?"⚠️":"")+" |").join("\n")||"| "+x.id+"-MISSING | not recorded | |"}\n`}).join("\n")}
+${A.map(x=>{const g=parse(x.dsl);return`### ${x.id}: ${cell(x.title)}\n\n| Part | Mechanism | Flag |\n|---|---|:---:|\n${g.nodes.map((n,i)=>"| "+x.id+"-"+n.i+" | "+cell((n.k==="place"?"Place":n.k==="action"||n.k==="ui"?"UI affordance":n.k==="nonui"?"Non-UI affordance":n.k==="store"?"Store":"Decision")+": "+n.t+(n.r.length?" — "+n.r.join("; "):""))+" | "+(x.placeholder?"⚠️":"")+" |").join("\n")||"| "+x.id+"-MISSING | not recorded | |"}\n`}).join("\n")}
 ## Fit check
 
 - Authority: Working
