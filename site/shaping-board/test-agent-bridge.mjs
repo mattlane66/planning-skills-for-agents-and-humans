@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict';
-import { startBridge, validateRequest, validateResponse, buildPrompt } from './agent-bridge.mjs';
+import { startBridge, validateRequest, validateResponse, buildPrompt, runCodex } from './agent-bridge.mjs';
+import { mkdtemp, writeFile, chmod, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 const base = [
   'version: breadboard/v1',
@@ -66,4 +69,26 @@ try {
   const noRoute=await fetch(server.url+'../../etc/passwd');
   assert.equal(noRoute.status,404);
 } finally { await server.close(); }
+
+// Exercise the real child-process path with a fake CLI (no model calls or credentials).
+const stubDir=await mkdtemp(join(tmpdir(),'shaping-codex-test-'));
+const stub=join(stubDir,'codex-stub');
+const previous=process.env.SHAPING_TEST_PATCH;
+try {
+  await writeFile(stub,[
+    '#!/usr/bin/env node',
+    'if (!process.argv.includes("--ephemeral") || !process.argv.includes("read-only") || !process.argv.includes("--skip-git-repo-check")) process.exit(12);',
+    'let prompt="";process.stdin.on("data", part=>prompt+=part);',
+    'process.stdin.on("end",()=>{if(!prompt.includes("EXACT CANONICAL BASE_DSL")||!prompt.includes("project-unit-test"))process.exit(13);process.stdout.write(process.env.SHAPING_TEST_PATCH);});',
+    ''
+  ].join('\n'));
+  await chmod(stub,0o755);
+  process.env.SHAPING_TEST_PATCH=JSON.stringify(patch);
+  assert.deepEqual(await runCodex(expected,{codexBin:stub,timeout:8000}),patch);
+} finally {
+  if(previous===undefined)delete process.env.SHAPING_TEST_PATCH;
+  else process.env.SHAPING_TEST_PATCH=previous;
+  await rm(stubDir,{recursive:true,force:true});
+}
+
 console.log('Shaping local agent bridge: validated patch, local origin/session boundary, no auto-write');
