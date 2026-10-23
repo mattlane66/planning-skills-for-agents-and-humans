@@ -20,6 +20,7 @@ const patch = {
   ]
 };
 assert.equal(validateResponse(patch,expected).revision.changes.length,2);
+assert.equal(validateRequest({...input,option_id:'CURRENT'}).option_id,'CURRENT');
 assert.match(buildPrompt(expected),/EXACT CANONICAL BASE_DSL/);
 assert.throws(()=>validateRequest({...input,base_dsl:'P1 | place | legacy | | app\n'}),/fixed-language/);
 assert.throws(()=>validateRequest({...input,instruction:'x'.repeat(2400)}),/2200/);
