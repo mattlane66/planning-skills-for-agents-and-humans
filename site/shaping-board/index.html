@@ -417,6 +417,7 @@ function release(){const n=M.rel.length,p=M.rel.filter(r=>r.status==="passed").l
 
 /* AI Bridge: local-first handoff. No keys, tokens, accounts or agent execution. */
 const B={provider:"codex",task:"shape",proposal:null,patch:null};
+const Agent={instruction:"",busy:false,status:"",error:""};
 const BRIDGE_PROVIDERS={codex:"Codex",claude:"Claude Code",gemini:"Gemini CLI",other:"Other AI agent"};
 const BRIDGE_TASKS={explore:"Explore alternatives",shape:"Improve the shape",slice:"Plan the next slice",build:"Prepare a bounded implementation",review:"Review implementation against intent"};
 const BRIDGE_SECTIONS=[
@@ -639,16 +640,29 @@ function breadboardPatchReview(){
  '<p class="mu">Review the before and after records. This applies the whole patch as Working; it does not accept a design or authorize a build. Candidate fit and story ratings return to unknown.</p>'+
  p.revision.changes.map(c=>'<details class="tc"><summary>'+esc(c.type)+' · '+esc(c.id)+'</summary><div class="grid"><pre class="doc bridge-full">'+bridgePreview(c.before)+'</pre><pre class="doc bridge-full">'+bridgePreview(c.after)+'</pre></div></details>').join("")+
  '<details><summary>Entire proposed breadboard</summary><pre class="doc bridge-full">'+esc(p.revision.dsl)+'</pre></details>'+
- '<div class="row"><button data-act="bb-apply">Apply as Working</button><button data-act="bb-discard">Discard</button></div></div>';
+ '<div class="grid"><div><h4>Current</h4><div class="cm">'+BB.render(p.option.dsl,null,"previousmodel").html+'</div></div><div><h4>Proposed</h4><div class="cm">'+BB.render(p.revision.dsl,null,"proposedmodel").html+'</div></div></div>'+ 
+ '<div class="row"><button data-act="bb-apply">Apply as Working</button><button data-act="bb-discard">Discard</button></div></div';
 }
 function applyBreadboardPatch(){
  const p=breadboardPatchPreview(B.patch),prior=clone(M),index=M.options.indexOf(p.option);
  M.options[index].dsl=p.revision.dsl;
- M.reqs.forEach(r=>r.f=r.f.slice(0,index)+"u"+r.f.slice(index+1));
- M.stories.forEach(s=>s.fit=s.fit.slice(0,index)+"0"+s.fit.slice(index+1));
+ const requirements=[],stories=[];
+ M.reqs.forEach(r=>{
+  if((r.l[index]||"").trim() || r.part_refs?.[p.option.id])requirements.push(r.id);
+  r.f=r.f.slice(0,index)+"u"+r.f.slice(index+1);
+  r.l[index]="";if(r.part_refs)delete r.part_refs[p.option.id];
+ });
+ M.stories.forEach(st=>{
+  if(st.paths?.[p.option.id])stories.push(st.id);
+  st.fit=st.fit.slice(0,index)+"0"+st.fit.slice(index+1);
+  if(st.paths)delete st.paths[p.option.id];
+ });
+ M.reconciliation={option_id:p.option.id,state:"Working",node_changes:p.revision.changes.length,requirements,stories};
  M.selectionAuthority="Working";T.undo=prior;B.patch=null;B.proposal=null;
  delete M.product_status;delete M.status_feed;resetStatusFeed();save();
- T.msg="Applied typed patch as Working; recheck fit and reconcile accepted intent";
+ T.top="agent";T.opt=index;Agent.instruction="";
+ Agent.status="Updated "+p.option.id+" as Working. Recheck "+requirements.length+" requirement mappings and "+stories.length+" story paths before any acceptance.";
+ T.msg="Working candidate updated; reconciliation needed";
 }
 function bridgeProposal(){
  if(!B.proposal)return '<p class="mu">Import a .board.json returned by your agent to compare its proposed changes. No changes are applied without your review.</p>';
@@ -705,8 +719,8 @@ function ontology(){
 }
 
 function render(){const sh=T.top==="shape",bd=sh&&T.sub==="board";
- $("#app").innerHTML=`<header>${inp("name","Project name")}<nav class="tabs">${["shape","workspace","ontology","plan","review","release"].map(t=>`<span class="${T.top===t?"on":""}" data-top="${t}">${t[0].toUpperCase()+t.slice(1)}</span>`).join("")}</nav>${sh?`<nav class="tabs"><span class="${T.sub==="doc"?"on":""}" data-sub="doc">The shape</span><span class="${bd?"on":""}" data-sub="board">Shaping board</span></nav>`:""}<span class="sp"></span><label class="mu" for="board-projects">Project</label><select id="board-projects" data-project aria-label="Current saved project">${Object.values(projects).map(p=>'<option value="'+esc(p.project_id)+'"'+(p.project_id===M.project_id?' selected':'')+'>'+esc(p.name)+'</option>').join("")}</select><span class="mu">${esc(T.msg)}</span>${T.undo?'<button data-act="undo">Undo</button>':""}<button data-act="imp">Import</button><button data-act="exp">Export JSON</button><button data-act="new">New</button><button data-act="ex">Example</button></header>
- <div class="wrap">${bd?`<aside>${frame()}${stories()}</aside>`:""}<main>${sh?(bd?board():doc()):({workspace,ontology,plan,review,release}[T.top])()}</main></div>`;
+ $("#app").innerHTML=`<header>${inp("name","Project name")}<nav class="tabs">${["shape","agent","workspace","ontology","plan","review","release"].map(t=>`<span class="${T.top===t?"on":""}" data-top="${t}">${t==="agent"?"Shape with AI":t[0].toUpperCase()+t.slice(1)}</span>`).join("")}</nav>${sh?`<nav class="tabs"><span class="${T.sub==="doc"?"on":""}" data-sub="doc">The shape</span><span class="${bd?"on":""}" data-sub="board">Shaping board</span></nav>`:""}<span class="sp"></span><label class="mu" for="board-projects">Project</label><select id="board-projects" data-project aria-label="Current saved project">${Object.values(projects).map(p=>'<option value="'+esc(p.project_id)+'"'+(p.project_id===M.project_id?' selected':'')+'>'+esc(p.name)+'</option>').join("")}</select><span class="mu">${esc(T.msg)}</span>${T.undo?'<button data-act="undo">Undo</button>':""}<button data-act="imp">Import</button><button data-act="exp">Export JSON</button><button data-act="new">New</button><button data-act="ex">Example</button></header>
+ <div class="wrap">${bd?`<aside>${frame()}${stories()}</aside>`:""}<main>${sh?(bd?board():doc()):({agent:agentPanel,workspace,ontology,plan,review,release}[T.top])()}</main></div>`;
  renderDia();fit();document.querySelectorAll(".opt,.tabs span").forEach(el=>{el.setAttribute("role","button");el.setAttribute("tabindex","0")})}
 /* ---- export as the repo's planning files ---- */
 function crc32(u){const T=crc32.t||(crc32.t=Array.from({length:256},(_,n)=>{let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;return c>>>0}));let r=-1;for(const b of u)r=T[(r^b)&255]^(r>>>8);return(r^-1)>>>0}
@@ -871,6 +885,9 @@ ${"| Shape part | Mechanism | Requirement(s) served | Justified? |\n|---|---|---
 function addOpt(){const id=[...L].find(c=>!M.options.some(o=>o.id===c));if(!id)return;M.options.push({id,title:"Option "+id,promise:"",risk:"",cuts:"",placeholder:false,dsl:BB.VERSION+"\nP1 | place | First place | Describe the interaction | app\n"});M.stories.forEach(s=>s.fit+="0");M.reqs.forEach(r=>{r.f+="u";r.l.push("")});T.opt=M.options.length-1}
 function delOpt(){if(M.options.length<2)return;const i=T.opt,o=M.options[i],cut=s=>s.slice(0,i)+s.slice(i+1);M.options.splice(i,1);M.stories.forEach(s=>s.fit=cut(s.fit));M.reqs.forEach(r=>{r.f=cut(r.f);r.l.splice(i,1)});if(M.pick===o.id)M.pick=null;T.opt=0}
 function act(a){const k=M.options.findIndex(o=>o.id===M.pick);
+ if(a==="agent-run"){requestAgent();return false}
+ if(a==="agent-board"){T.top="shape";T.sub="board";T.view="paths";return true}
+ if(a==="agent-reconcile-export"){try{dl(slug()+"-reconciliation-draft.md",reconciliationDraft(),"text/markdown")}catch(error){T.msg=error.message}return false}
  if(a==="bb-proposal"){$("#imp-breadboard-patch").click();return false}
   if(a==="bb-discard"){B.patch=null;T.msg="Typed patch discarded";return true}
   if(a==="bb-apply"){try{applyBreadboardPatch()}catch(ex){T.msg="Cannot apply patch: "+ex.message}return true}
@@ -915,7 +932,7 @@ document.addEventListener("click",e=>{const t=e.target.closest("[data-top],[data
  if(d.z)T.zm=Math.max(.5,Math.min(2,T.zm+.25*d.z));
  if(d.addreq!==undefined&&T.nr.trim()){M.selectionAuthority="Working";const n=M.options.length;M.reqs.push({id:"R"+(Math.max(0,...M.reqs.map(r=>+(r.id||"").replace(/\D/g,"")||0))+1),status:"Undecided",auth:"Working",text:T.nr.trim(),src:"",why:"",chk:"",star:false,f:"u".repeat(n),l:Array(n).fill("")});T.nr=""}
  if(d.act&&!act(d.act))return;save();render()});
-document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.nr!==undefined){T.nr=el.value;return}
+document.addEventListener("input",e=>{const el=e.target,d=el.dataset;if(d.agentInstruction!==undefined){Agent.instruction=el.value;return}if(d.nr!==undefined){T.nr=el.value;return}
  if(el.type==="checkbox"||el.tagName==="SELECT")return;
  if(d.l){M[d.l]=el.value.split("\n").map(s=>s.trim()).filter(Boolean);M.selectionAuthority="Working";save();return}
  if(d.p){set(d.p,el.value);if(d.p!=="name")M.selectionAuthority="Working";save();if(/\.(dsl|path|l\.\d+)$/.test(d.p))renderDia()}});
