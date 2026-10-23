@@ -77,7 +77,7 @@ const previous=process.env.SHAPING_TEST_PATCH;
 try {
   await writeFile(stub,[
     '#!/usr/bin/env node',
-    'if (!process.argv.includes("--ephemeral") || !process.argv.includes("read-only") || !process.argv.includes("--skip-git-repo-check")) process.exit(12);',
+    'if (!process.argv.includes("--ignore-user-config") && process.argv.includes("--ephemeral") || !process.argv.includes("read-only") || !process.argv.includes("--skip-git-repo-check")) process.exit(12);',
     'let prompt="";process.stdin.on("data", part=>prompt+=part);',
     'process.stdin.on("end",()=>{if(!prompt.includes("EXACT CANONICAL BASE_DSL")||!prompt.includes("project-unit-test"))process.exit(13);process.stdout.write(process.env.SHAPING_TEST_PATCH);});',
     ''
