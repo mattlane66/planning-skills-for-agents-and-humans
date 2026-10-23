@@ -1,3 +1,4 @@
+import './test-agent-bridge.mjs';
 import './test-breadboard-core.mjs';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
@@ -240,5 +241,40 @@ assert.equal(run('M.selectionAuthority'),'Working');
 assert.equal(run('M.reqs.every(r=>r.f[0]==="u")'),true);
 assert.equal(run('M.stories.every(s=>s.fit[0]==="0")'),true);
 assert.throws(()=>run('breadboardPatchPreview('+JSON.stringify(fixedPatch)+')'),/Stale/);
+
+
+// Continuous localhost Codex loop: review before apply, and invalidate stale mappings/paths.
+run('window.__SHAPING_AGENT_SESSION="a".repeat(64);T.top="agent";T.opt=0;Agent.instruction="Make validation more explicit"; M.reqs[0].l[0]="U1";M.stories[0].paths.A="P1 U1";M.selectionAuthority="Accepted"; render()');
+assert.match(w.document.querySelector('main').textContent,/Shape with AI/);
+assert.ok(w.document.querySelector('[data-act="agent-run"]'));
+const nextPatch={
+ kind:'BreadboardPatch',schema_version:1,project_id:run('M.project_id'),option_id:'A',
+ base_dsl:run('BB.canonical(M.options[0].dsl)'),
+ operations:[{op:'update_node',id:'N1',set:{title:'Validate and report'}}]
+};
+let posted;
+w.fetch=async (url,options)=>{
+ posted={url,options};
+ return {ok:true,json:async()=>({proposal:nextPatch,change_count:1})};
+};
+await run('requestAgent()');
+assert.equal(posted.url,'/api/propose');
+assert.equal(posted.options.method,'POST');
+assert.equal(posted.options.headers['X-Shaping-Session'],'a'.repeat(64));
+assert.equal(run('B.patch.operations.length'),1);
+assert.ok(!run('M.options[0].dsl').includes('Validate and report'),'local Codex must not apply before review');
+assert.match(w.document.querySelector('main').textContent,/Proposed/);
+assert.ok(w.document.querySelectorAll('main .cm .fb').length>=2,'before and after diagrams are inspectable');
+w.document.querySelector('[data-act="bb-apply"]').click();
+assert.match(run('M.options[0].dsl'),/Validate and report/);
+assert.equal(run('M.reqs[0].l[0]'),'','old shape mapping must not survive semantic change');
+assert.equal(run('M.stories[0].paths.A'),undefined,'old trace must not survive semantic change');
+assert.equal(run('M.selectionAuthority'),'Working');
+assert.equal(run('M.reconciliation.option_id'),'A');
+assert.match(run('reconciliationDraft()'),/Restore requirement-to-part mappings/);
+assert.equal(run('B.patch'),null);
+assert.ok(w.document.querySelector('[data-act="agent-run"]'),'agent can continue from changed model');
+run('delete window.__SHAPING_AGENT_SESSION;Agent.instruction="Try";render()');
+assert.equal(w.document.querySelector('[data-act="agent-run"]').disabled,true,'static hosted Board must not contact localhost');
 
 console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge validation, inspectability and review');
