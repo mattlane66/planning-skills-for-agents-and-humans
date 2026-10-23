@@ -23,10 +23,6 @@ Use the skills directly inside your AI tools, or use an optional interface to ma
 
 ### Shaping Board
 
-**Fixed-language breadboards (v1):** New Board projects use stable P/U/N/Q/S components, typed wires, validation and a deterministic visual compiler—not an agent-improvised diagram. The existing AI Workspace can now review ID-addressed BreadboardPatch changes with full semantic diffs, applying them only as Working and invalidating affected fit judgments. Older boards remain readable and are not silently converted. [Language, examples and review contract](./docs/breadboard-language-v1.md).
-
-
-
 [![The actual Shaping Board showing the DWC Requests example: candidate design comparisons and behavioral diagrams](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/preview.png)](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)
 
 **[Open the Shaping Board](https://mattlane66.github.io/planning-skills-for-agents-and-humans/shaping-board/)** — compare candidate designs, trace scenarios, check requirements and trade-offs, and record working decisions.
