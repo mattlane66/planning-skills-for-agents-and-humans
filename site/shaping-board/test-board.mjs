@@ -1,3 +1,4 @@
+import './test-agent-bridge.mjs';
 import './test-breadboard-core.mjs';
 import { readFileSync } from 'node:fs';
 import assert from 'node:assert/strict';
@@ -227,6 +228,17 @@ run('M.options[0].dsl='+JSON.stringify(fixedModel)+';T.top="shape";T.sub="board"
 const fixedWorkspace=run('bridgePackageFiles()');
 assert.equal(fixedWorkspace.find(([name])=>name==='planning/breadboard-A.dsl')[1],fixedModel);
 assert.equal(run('parse(M.options[0].dsl).err.length'),0);
+
+const mappedGraph=run('parse(M.options[0].dsl)');
+assert.equal(Array.from(mappedGraph.nodes,n=>n.i).join(','),'P1,U1,N1','typed IDs must project into existing Board consumers');
+assert.equal(mappedGraph.edges[0].a,'U1');
+assert.equal(mappedGraph.edges[0].b,'N1');
+const typedStory={id:'SC-LIVE',text:'Submit then validate',fit:'1000',paths:{A:'U1 N1'},anti:false};
+assert.equal(run('traceInfo('+JSON.stringify(typedStory)+',M.options[0]).valid'),true,'typed wires must support scenario tracing');
+const typedExport=run('bbMd(M.options[0],"candidate-shape")');
+assert.match(typedExport,/Submit/,'typed UI affordances must survive planning export');
+assert.match(typedExport,/Validate/,'typed non-UI mechanisms must survive planning export');
+
 assert.match(w.document.querySelector('#dia').textContent,/Submit/);
 assert.equal(run('BB.render(M.options[0].dsl,null,"m").html'),run('BB.render(M.options[0].dsl,null,"m").html'));
 const fixedPatch={kind:'BreadboardPatch',schema_version:1,project_id:run('M.project_id'),option_id:'A',base_dsl:fixedModel,
@@ -240,5 +252,51 @@ assert.equal(run('M.selectionAuthority'),'Working');
 assert.equal(run('M.reqs.every(r=>r.f[0]==="u")'),true);
 assert.equal(run('M.stories.every(s=>s.fit[0]==="0")'),true);
 assert.throws(()=>run('breadboardPatchPreview('+JSON.stringify(fixedPatch)+')'),/Stale/);
+
+
+// Continuous localhost model loop: review before apply, and invalidate stale mappings/paths.
+run('window.__SHAPING_AGENT_SESSION="a".repeat(64);T.top="agent";T.opt=0;Agent.instruction="Make validation more explicit"; M.reqs[0].l[0]="U1";M.stories[0].paths.A="P1 U1";M.selectionAuthority="Accepted"; render()');
+assert.match(w.document.querySelector('main').textContent,/Shape with AI/);
+assert.ok(w.document.querySelector('[data-act="agent-run"]'));
+const nextPatch={
+ kind:'BreadboardPatch',schema_version:1,project_id:run('M.project_id'),option_id:'A',
+ base_dsl:run('BB.canonical(M.options[0].dsl)'),
+ operations:[{op:'update_node',id:'N1',set:{title:'Validate and report'}}]
+};
+let posted;
+w.fetch=async (url,options)=>{
+ posted={url,options};
+ return {ok:true,json:async()=>({proposal:nextPatch,change_count:1})};
+};
+await run('requestAgent()');
+assert.equal(posted.url,'/api/propose');
+assert.equal(posted.options.method,'POST');
+assert.equal(posted.options.headers['X-Shaping-Session'],'a'.repeat(64));
+assert.equal(run('B.patch.operations.length'),1);
+assert.ok(!run('M.options[0].dsl').includes('Validate and report'),'local model proposal must not apply before review');
+assert.match(w.document.querySelector('main').textContent,/Proposed/);
+assert.ok(w.document.querySelectorAll('main .cm .fb').length>=2,'before and after diagrams are inspectable');
+w.document.querySelector('[data-act="bb-apply"]').click();
+assert.match(run('M.options[0].dsl'),/Validate and report/);
+assert.equal(run('M.reqs[0].l[0]'),'','old shape mapping must not survive semantic change');
+assert.equal(run('M.stories[0].paths.A'),undefined,'old trace must not survive semantic change');
+assert.equal(run('M.selectionAuthority'),'Working');
+assert.equal(run('M.reconciliation.option_id'),'A');
+assert.match(run('reconciliationDraft()'),/Restore requirement-to-part mappings/);
+assert.equal(run('B.patch'),null);
+assert.ok(w.document.querySelector('[data-act="agent-run"]'),'agent can continue from changed model');
+run('delete window.__SHAPING_AGENT_SESSION;Agent.instruction="Try";render()');
+assert.equal(w.document.querySelector('[data-act="agent-run"]').disabled,true,'static hosted Board must not contact localhost');
+
+
+// The browser bounds large planning projects BEFORE serializing and sending requests.
+run('window.__SHAPING_AGENT_SESSION="a".repeat(64);M.reqs=Array.from({length:200},(_,i)=>({...M.reqs[0],id:"R"+(i+1),text:"X".repeat(1100)}));Agent.instruction="Reduce the submission path";render()');
+await run('requestAgent()');
+assert.ok(posted.options.body.length<180000,'browser request must stay below bridge byte/character cap');
+const bounded=JSON.parse(posted.options.body).context;
+assert.equal(bounded.requirements.length,50);
+assert.ok(bounded.requirements.every(x=>x.length<=500));
+assert.match(run('reconciliationDraft()'),/Record-level semantic changes/);
+assert.doesNotMatch(run('breadboardPatchReview()'),/<\/div<\/section>/,'closing tags must be valid');
 
 console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge validation, inspectability and review');

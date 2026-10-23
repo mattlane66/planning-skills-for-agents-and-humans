@@ -1,5 +1,24 @@
 # AI Workspace for Shaping Board
 
+## Continuous shaping with an AI model (optional local companion)
+
+The new **Shape with AI** tab supports a short, repeatable loop: describe a product idea, let a model propose a fixed-language breadboard patch, inspect the before/after diagrams and semantic changes, apply as **Working**, and ask for the next correction. No per-patch export/import is needed. The public GitHub Pages and offline versions retain the manual workflow and **never** call a model automatically.
+
+Prerequisites: Node.js 20.19+ and an **OpenAI API key with API access and billing**, separate from signing in to ChatGPT or Codex CLI. Set `OPENAI_API_KEY` privately in the environment of your **local checkout** of this repository. Do not paste it into the Board or commit it to a file. Then run:
+
+~~~bash
+node site/shaping-board/agent-bridge.mjs
+~~~
+
+Open http://127.0.0.1:43873/ in your browser. This is a different origin from GitHub Pages: import an existing `.board.json` **once** if you want to bring a hosted project into the local session. In **Shape with AI**, click **Start a new idea**, enter the desired behavior, and click **Ask AI for a revision**. Review the diagrams and full semantic diff before **Apply as Working**. Describe a correction and repeat.
+
+The companion binds to 127.0.0.1 only, serves the self-contained Board HTML, and requires a per-process secret and matching request Origin. It sends **only the bounded Board text you submit** over TLS to the OpenAI Responses API, with `tools: []`, `tool_choice: "none"` and `store: false`. The model has **no shell, filesystem, MCP, browser or project-repository access**. The API key stays on the local server, never in the browser or prompt. Responses are validated with the deterministic breadboard compiler; malformed, stale or mismatched patches cannot apply. API requests may incur charges. The default model is `gpt-6-astra`; set `SHAPING_MODEL` in your environment to use another compatible model. Do not expose the local server by tunnel or proxy.
+
+On each application the Board resets the changed candidate's fit ratings, scenario traces and requirement-to-part mappings. It marks the selection **Working** and prepares a downloadable reconciliation draft. The **human** must compare the new candidate with the accepted product repository artifacts, reconcile and approve intent, choose a slice, and verify implementation independently. No automatic upgrade of planning authority is possible.
+
+The live companion is a tool-free model endpoint, not a coding agent. Codex, Claude Code, Gemini and other coding agents continue to use the portable **AI Workspace** ZIP and manual review for repo-aware tasks. If API access is unavailable or a patch is invalid, the Board preserves the current model and reports the error. The local companion has no implementation/build endpoint.
+
+
 **Shape in the browser. Use your existing coding agent. Review what comes back.**
 
 The [Shaping Board](./) now includes **AI Workspace** and **Product map** tabs. These are local-first tools for making Planning Skills useful across Codex, Claude Code, Gemini CLI, and other agents **without building a new AI service**.
