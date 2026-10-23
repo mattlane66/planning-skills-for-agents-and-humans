@@ -1,8 +1,5 @@
 import assert from 'node:assert/strict';
-import { startBridge, validateRequest, validateResponse, buildPrompt, runCodex } from './agent-bridge.mjs';
-import { mkdtemp, writeFile, chmod, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { startBridge, validateRequest, validateResponse, buildPrompt, runModel } from './agent-bridge.mjs';
 
 const base = [
   'version: breadboard/v1',
@@ -57,7 +54,7 @@ try {
   assert.equal(invocations,0,'no cross-site execution');
   const malformed=await post({...input,option_id:'../danger'});
   assert.equal(malformed.status,422);
-  assert.equal(invocations,0,'invalid input must not spawn an agent');
+  assert.equal(invocations,0,'invalid input must not invoke a model');
   const valid=await post(input);
   assert.equal(valid.status,200,await valid.clone().text());
   const proposal=await valid.json();
@@ -70,25 +67,29 @@ try {
   assert.equal(noRoute.status,404);
 } finally { await server.close(); }
 
-// Exercise the real child-process path with a fake CLI (no model calls or credentials).
-const stubDir=await mkdtemp(join(tmpdir(),'shaping-codex-test-'));
-const stub=join(stubDir,'codex-stub');
-const previous=process.env.SHAPING_TEST_PATCH;
-try {
-  await writeFile(stub,[
-    '#!/usr/bin/env node',
-    'if (!process.argv.includes("--ignore-user-config") && process.argv.includes("--ephemeral") || !process.argv.includes("read-only") || !process.argv.includes("--skip-git-repo-check")) process.exit(12);',
-    'let prompt="";process.stdin.on("data", part=>prompt+=part);',
-    'process.stdin.on("end",()=>{if(!prompt.includes("EXACT CANONICAL BASE_DSL")||!prompt.includes("project-unit-test"))process.exit(13);process.stdout.write(process.env.SHAPING_TEST_PATCH);});',
-    ''
-  ].join('\n'));
-  await chmod(stub,0o755);
-  process.env.SHAPING_TEST_PATCH=JSON.stringify(patch);
-  assert.deepEqual(await runCodex(expected,{codexBin:stub,timeout:8000}),patch);
-} finally {
-  if(previous===undefined)delete process.env.SHAPING_TEST_PATCH;
-  else process.env.SHAPING_TEST_PATCH=previous;
-  await rm(stubDir,{recursive:true,force:true});
-}
+// Verify the model transport is tool-free and the API key never enters the prompt body.
+const outputPayload={status:'completed',output:[{type:'message',content:[{type:'output_text',text:JSON.stringify(patch)}]}]};
+let seenAPI;
+const returned=await runModel(expected,{
+  apiKey:'unit-test-secret',model:'gpt-6-astra',
+  fetcher:async (url,init)=>{
+    seenAPI={url,init};
+    return {ok:true,status:200,text:async()=>JSON.stringify(outputPayload)};
+  }
+});
+assert.deepEqual(returned,patch);
+assert.equal(seenAPI.url,'https://api.openai.com/v1/responses');
+assert.equal(seenAPI.init.headers.Authorization,'Bearer unit-test-secret');
+const payload=JSON.parse(seenAPI.init.body);
+assert.deepEqual(payload.tools,[]);
+assert.equal(payload.tool_choice,'none');
+assert.equal(payload.store,false);
+assert.match(payload.input,/EXACT CANONICAL BASE_DSL/);
+assert.ok(!seenAPI.init.body.includes('unit-test-secret'),'the API key must never enter the model prompt');
+await assert.rejects(()=>runModel(expected,{apiKey:'',fetcher:async()=>{throw Error('should not call')}}),/OPENAI_API_KEY/);
+await assert.rejects(()=>runModel(expected,{apiKey:'secret',fetcher:async()=>({ok:false,status:401})}),/HTTP 401/);
+await assert.rejects(()=>runModel(expected,{apiKey:'secret',fetcher:async()=>({
+ ok:true,status:200,text:async()=>JSON.stringify({...outputPayload,output:[]})
+})}),/no usable JSON/);
 
-console.log('Shaping local agent bridge: validated patch, local origin/session boundary, no auto-write');
+console.log('Shaping local agent bridge: validated patch, tool-free model API, local origin/session boundary, no auto-write');
