@@ -1,5 +1,8 @@
 # Shaping Board: fixed breadboard language v1
 
+**Live proposal loop:** The optional local companion (documented in [AI-WORKSPACE.md](./AI-WORKSPACE.md)) invokes a signed-in Codex CLI to return a typed BreadboardPatch directly to the Board. The human sees the old and proposed diagrams plus record-level differences before applying. Accepted planning Markdown is never automatically rewritten.
+
+
 This is a **versioned, validated semantic model**, not an agent prompt convention. Agents may propose product behaviors but cannot silently invent node types, relationships or SVG geometry.
 
 ## Authority
