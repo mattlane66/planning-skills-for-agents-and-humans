@@ -10,7 +10,7 @@ Prerequisites: Node.js 22+ and an installed, signed-in [Codex CLI](https://devel
 node site/shaping-board/agent-bridge.mjs
 ~~~
 
-Open http://127.0.0.1:43873/ in your browser. The browser stays on localhost for the entire session. In **Shape with AI**, click **Start a new idea**, enter the behavior you want, and click **Ask Codex for a revision**. Inspect the full semantic diff and before/after diagram before **Apply as Working**. Describe a correction and repeat.
+Open http://127.0.0.1:43873/ in your browser. This is a different browser origin from GitHub Pages: import your existing `.board.json` **once** if you want to carry a hosted project into the local session. The browser stays on localhost for the entire session. In **Shape with AI**, click **Start a new idea**, enter the behavior you want, and click **Ask Codex for a revision**. Inspect the full semantic diff and before/after diagram before **Apply as Working**. Describe a correction and repeat.
 
 The companion binds to 127.0.0.1 only, serves the self-contained Board HTML, requires a per-process secret and matching Origin for requests, validates every proposal with the same breadboard compiler, and runs Codex with a read-only sandbox in a disposable working directory. It cannot write, accept or publish the product's planning files. Codex CLI still uses its own configured model/provider and authentication; prompts are sent through it. Do not expose the local server by tunnel or proxy. Read-only CLI execution is **not a general-purpose security boundary**; do not run it with an untrusted CLI configuration.
 
