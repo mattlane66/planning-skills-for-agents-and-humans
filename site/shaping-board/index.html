@@ -748,7 +748,7 @@ async function requestAgent(){
  if(!instruction||instruction.length>2200){Agent.error="Describe the idea or correction in at most 2200 characters.";render();return;}
  let base;try{base=BB.canonical(option.dsl)}catch(error){Agent.error=error.message;render();return;}
  const projectId=M.project_id,optionId=option.id;
- Agent.busy=true;Agent.error="";Agent.status="Codex is preparing a typed proposal. Nothing will be applied automatically.";render();
+ B.patch=null;Agent.busy=true;Agent.error="";Agent.status="Codex is preparing a typed proposal. Nothing will be applied automatically.";render();
  try{
   const result=await fetch("/api/propose",{
    method:"POST",cache:"no-store",credentials:"omit",
