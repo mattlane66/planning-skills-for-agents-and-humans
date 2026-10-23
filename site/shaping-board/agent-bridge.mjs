@@ -85,7 +85,7 @@ export async function runCodex(req, { codexBin = 'codex', timeout = 180000 } = {
       'Allowed wires: control, navigate, read, write, return, yes, no, show. ' +
       'Return a typed JSON BreadboardPatch. Never change project files.\n');
     const child = spawn(codexBin,
-      ['exec', '--ephemeral', '--sandbox', 'read-only', '--skip-git-repo-check', '-'],
+      ['exec', '--ignore-user-config', '--ephemeral', '--sandbox', 'read-only', '--skip-git-repo-check', '-'],
       { cwd: dir, shell: false, stdio: ['pipe', 'pipe', 'pipe'] });
     let stdout = '', stderr = '', oversize = false, timedOut = false;
     const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeout);
