@@ -641,7 +641,7 @@ function breadboardPatchReview(){
  p.revision.changes.map(c=>'<details class="tc"><summary>'+esc(c.type)+' · '+esc(c.id)+'</summary><div class="grid"><pre class="doc bridge-full">'+bridgePreview(c.before)+'</pre><pre class="doc bridge-full">'+bridgePreview(c.after)+'</pre></div></details>').join("")+
  '<details><summary>Entire proposed breadboard</summary><pre class="doc bridge-full">'+esc(p.revision.dsl)+'</pre></details>'+
  '<div class="grid"><div><h4>Current</h4><div class="cm">'+BB.render(p.option.dsl,null,"previousmodel").html+'</div></div><div><h4>Proposed</h4><div class="cm">'+BB.render(p.revision.dsl,null,"proposedmodel").html+'</div></div></div>'+ 
- '<div class="row"><button data-act="bb-apply">Apply as Working</button><button data-act="bb-discard">Discard</button></div></div';
+ '<div class="row"><button data-act="bb-apply">Apply as Working</button><button data-act="bb-discard">Discard</button></div></div>';
 }
 function applyBreadboardPatch(){
  const p=breadboardPatchPreview(B.patch),prior=clone(M),index=M.options.indexOf(p.option);
@@ -726,23 +726,23 @@ function agentPanel(){
  const local=agentEnabled(),valid=BB.isV1(candidate.dsl)&&!BB.parse(candidate.dsl).err.length;
  const choices=M.options.map((o,i)=>'<button data-opt="'+i+'"'+(candidate===o?' aria-current="true"':'')+'>'+esc(o.id)+'</button>').join("");
  return '<h2>Shape with AI <small>live, human-reviewed iterations</small></h2>'+
- '<p>Describe an idea or a correction. Codex proposes typed changes. You inspect the new diagram and exact semantic diff, choose whether to apply, and repeat from the updated model. The agent cannot accept or implement a design.</p>'+
- '<section class="tc"><div class="row"><b>Candidate</b>'+choices+'<span class="sp"></span><span class="bdg">'+(local?'Local companion connected':'Manual workflow only')+'</span></div>'+
+ '<p>Describe an idea or a correction. A tool-free AI model proposes typed changes. You inspect the new diagram and exact semantic diff, choose whether to apply, and repeat from the updated model. The model cannot accept or implement a design.</p>'+
+ '<section class="tc"><div class="row"><b>Candidate</b>'+choices+'<span class="sp"></span><span class="bdg">'+(local?'Local model companion connected':'Manual workflow only')+'</span></div>'+
  '<label for="agent-idea"><b>What should the product do differently?</b></label>'+
  '<textarea id="agent-idea" data-agent-instruction maxlength="2200" rows="5" placeholder="Describe your idea, or a specific interaction that the current model gets wrong.">'+esc(Agent.instruction)+'</textarea>'+
- '<div class="row"><button data-act="agent-new">Start a new idea</button><button data-act="agent-run"'+(!local||!valid||Agent.busy?' disabled':'')+'>'+(Agent.busy?'Codex is proposing…':'Ask Codex for a revision')+'</button>'+
+ '<div class="row"><button data-act="agent-new">Start a new idea</button><button data-act="agent-run"'+(!local||!valid||Agent.busy?' disabled':'')+'>'+(Agent.busy?'AI is proposing…':'Ask AI for a revision')+'</button>'+
  '<button data-act="agent-board">Inspect candidate on Board</button></div>'+
- '<p class="'+(Agent.error?'wn':'mu')+'" role="status" aria-live="polite">'+esc(Agent.error||Agent.status||(local?'Ready. Each proposal runs your own installed Codex CLI.':'For interactive proposals start the optional local companion. The hosted and offline Board still support manual proposals.'))+'</p>'+
+ '<p class="'+(Agent.error?'wn':'mu')+'" role="status" aria-live="polite">'+esc(Agent.error||Agent.status||(local?'Ready. Proposals use the model API configured in the local companion, with no model tools.':'For interactive proposals start the optional local companion. The hosted and offline Board still support manual proposals.'))+'</p>'+
  (!valid?'<p class="wn">This candidate is legacy or invalid. Initialize a fixed-language v1 candidate on the Board first.</p>':'')+
  '</section>'+
  (B.patch?'<section><h3>Review proposed revision</h3>'+breadboardPatchReview()+'</section>':
  '<section class="tc"><h3>Current candidate diagram</h3><div class="cm">'+draw(candidate,null,"agentcurrent").html+'</div><p class="mu">A proposal never modifies this diagram until you apply it as Working.</p></section>')+
  reconciliationView()+
  '<details class="tc"><summary>Run the optional local companion</summary>'+
- '<p>From your local checkout of Planning Skills, install and sign in to Codex CLI, then run:</p>'+
+ '<p>From your local checkout of Planning Skills, configure <code>OPENAI_API_KEY</code> in your terminal and run:</p>'+
  '<pre class="doc">node site/shaping-board/agent-bridge.mjs</pre>'+
- '<p>Open <code>http://127.0.0.1:43873/</code>. The companion serves this same Board locally, invokes Codex in read-only mode for proposals, and checks that each patch conforms to the fixed language. It does not write to your product repository.</p>'+
- '<p class="mu">The hosted and standalone Board do not send any content to a model. The optional local companion uses your Codex CLI authentication. Never expose the local service through a tunnel or public proxy.</p></details>';
+ '<p>Open <code>http://127.0.0.1:43873/</code>. The companion serves this same Board locally, makes tool-free model requests for proposals, and checks that each patch conforms to the fixed language. It does not write to your product repository.</p>'+
+ '<p class="mu">The hosted and standalone Board do not send any content to a model. The optional local companion uses your server-side model API key; the browser never sees it. Never expose the local service through a tunnel or public proxy.</p></details>';
 }
 async function requestAgent(){
  if(!agentEnabled()){Agent.error="Start the local companion to use this action.";render();return;}
@@ -751,21 +751,24 @@ async function requestAgent(){
  if(!instruction||instruction.length>2200){Agent.error="Describe the idea or correction in at most 2200 characters.";render();return;}
  let base;try{base=BB.canonical(option.dsl)}catch(error){Agent.error=error.message;render();return;}
  const projectId=M.project_id,optionId=option.id;
- B.patch=null;Agent.busy=true;Agent.error="";Agent.status="Codex is preparing a typed proposal. Nothing will be applied automatically.";render();
+ B.patch=null;Agent.busy=true;Agent.error="";Agent.status="The model is preparing a typed proposal. Nothing will be applied automatically.";render();
  try{
   const result=await fetch("/api/propose",{
    method:"POST",cache:"no-store",credentials:"omit",
    headers:{"Content-Type":"application/json","X-Shaping-Session":window.__SHAPING_AGENT_SESSION},
    body:JSON.stringify({
     project_id:projectId,option_id:optionId,base_dsl:base,instruction,
-    context:{name:M.name,problem:M.problem,outcome:M.outcome,
-     requirements:M.reqs.map(r=>r.id+": "+r.text),appetite:M.appetite,cut:M.cut}
+    context:{name:M.name.slice(0,200),
+     problem:M.problem.slice(0,12).map(v=>String(v).slice(0,900)),
+     outcome:M.outcome.slice(0,8).map(v=>String(v).slice(0,900)),
+     requirements:M.reqs.slice(0,50).map(r=>(r.id+": "+r.text).slice(0,500)),
+     appetite:M.appetite.slice(0,200),cut:M.cut.slice(0,400)}
    })
   });
   const response=await result.json();
-  if(!result.ok)throw Error(response.error||"Codex request failed");
+  if(!result.ok)throw Error(response.error||"Model request failed");
   if(M.project_id!==projectId||!M.options.some(o=>o.id===optionId&&BB.isV1(o.dsl)&&BB.canonical(o.dsl)===base))
-   throw Error("Board changed while Codex was running; ask for a fresh revision");
+   throw Error("Board changed while the model was running; ask for a fresh revision");
   breadboardPatchPreview(response.proposal);
   B.patch=response.proposal;B.proposal=null;
   Agent.status=response.change_count+" semantic changes are ready for human review. Nothing applied.";
