@@ -230,7 +230,7 @@ assert.equal(fixedWorkspace.find(([name])=>name==='planning/breadboard-A.dsl')[1
 assert.equal(run('parse(M.options[0].dsl).err.length'),0);
 
 const mappedGraph=run('parse(M.options[0].dsl)');
-assert.deepEqual(mappedGraph.nodes.map(n=>n.i),['P1','U1','N1'],'typed IDs must project into existing Board consumers');
+assert.equal(Array.from(mappedGraph.nodes,n=>n.i).join(','),'P1,U1,N1','typed IDs must project into existing Board consumers');
 assert.equal(mappedGraph.edges[0].a,'U1');
 assert.equal(mappedGraph.edges[0].b,'N1');
 const typedStory={id:'SC-LIVE',text:'Submit then validate',fit:'1000',paths:{A:'U1 N1'},anti:false};
