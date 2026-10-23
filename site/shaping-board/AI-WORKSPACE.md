@@ -1,5 +1,24 @@
 # AI Workspace for Shaping Board
 
+## Continuous shaping with Codex (optional local companion)
+
+The new **Shape with AI** tab supports a short, repeatable loop: describe a product idea, let Codex propose a fixed-language breadboard patch, inspect the before/after diagrams and semantic changes, apply as **Working**, and ask for the next correction. You no longer need to download and re-import each typed patch. The web page still works on GitHub Pages and offline; those versions deliberately **do not** call a model or start a local process.
+
+Prerequisites: Node.js 22+ and an installed, signed-in [Codex CLI](https://developers.openai.com/codex/cli). From a **local checkout** of this Planning Skills repository, run:
+
+~~~bash
+node site/shaping-board/agent-bridge.mjs
+~~~
+
+Open http://127.0.0.1:43873/ in your browser. The browser stays on localhost for the entire session. In **Shape with AI**, click **Start a new idea**, enter the behavior you want, and click **Ask Codex for a revision**. Inspect the full semantic diff and before/after diagram before **Apply as Working**. Describe a correction and repeat.
+
+The companion binds to 127.0.0.1 only, serves the self-contained Board HTML, requires a per-process secret and matching Origin for requests, validates every proposal with the same breadboard compiler, and runs Codex with a read-only sandbox in a disposable working directory. It cannot write, accept or publish the product's planning files. Codex CLI still uses its own configured model/provider and authentication; prompts are sent through it. Do not expose the local server by tunnel or proxy. Read-only CLI execution is **not a general-purpose security boundary**; do not run it with an untrusted CLI configuration.
+
+On each application the Board resets the changed candidate's fit ratings, scenario traces and requirement-to-part mappings. It marks the selection **Working** and prepares a downloadable reconciliation draft. The **human** must compare the new candidate with the accepted product repository artifacts, reconcile and approve intent, choose a slice, and verify implementation independently. No automatic upgrade of planning authority is possible.
+
+Codex is the only directly invoked CLI in this version. Claude Code, Gemini and other agents continue to use the portable **AI Workspace** ZIP and manual review. If Codex is absent or a patch is invalid, the Board keeps the current model unchanged and reports the error. The local agent has no implementation/build endpoint.
+
+
 **Shape in the browser. Use your existing coding agent. Review what comes back.**
 
 The [Shaping Board](./) now includes **AI Workspace** and **Product map** tabs. These are local-first tools for making Planning Skills useful across Codex, Claude Code, Gemini CLI, and other agents **without building a new AI service**.
