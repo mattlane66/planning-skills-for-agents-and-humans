@@ -20,7 +20,7 @@
   "dependencies": {
     "dompurify": "^3.4.16",
     "marked": "^15.0.12",
-    "mermaid": "^11.6.0"
+    "mermaid": "^12.2.0"
   },
   "devDependencies": {
     "axe-core": "^4.13.0",
