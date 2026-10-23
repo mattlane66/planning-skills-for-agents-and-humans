@@ -21,7 +21,7 @@ const MAX_OUTPUT = 256000;
 export function validateRequest(v) {
   if (!v || typeof v !== 'object' || Array.isArray(v)) throw Error('Expected a request object');
   if (!/^[A-Za-z0-9_-]{1,90}$/.test(v.project_id || '')) throw Error('Invalid project ID');
-  if (!/^[A-J]$/.test(v.option_id || '')) throw Error('Invalid candidate ID');
+  if (!/^(?:[A-J]|CURRENT)$/.test(v.option_id || '')) throw Error('Invalid candidate ID');
   if (typeof v.instruction !== 'string' || !v.instruction.trim() || v.instruction.length > 2200) throw Error('Describe a change in at most 2200 characters');
   if (typeof v.base_dsl !== 'string' || v.base_dsl.length > 40000 || !BB.isV1(v.base_dsl)) throw Error('Start a fixed-language candidate first');
   const g = BB.parse(v.base_dsl);
