@@ -17,6 +17,10 @@ Load this reference only when the work needs the complete element catalog, chunk
 - [Exit conditions](#exit-conditions-are-defined-right-to-left)
 - [Cutting](#cutting)
 
+## Using the Shaping Board's fixed language
+
+When specifically editing a Shaping Board candidate already using **breadboard/v1**, express its behavior through the [fixed language](../../docs/breadboard-language-v1.md), with explicit P/U/N/Q/S types, UI containment and typed wires. Do not invent diagram primitives or SVG routes. Return an ID-addressed agent patch based on the current canonical model for human review. The Board's renderer and exported tables are views of that working candidate; accepted selected-design intent remains controlled by the usual human promotion gates. Other breadboarding modes keep their existing canonical table contract. Do not automatically translate legacy diagrams or accepted Markdown into v1.
+
 ## Catalog of elements and relationships
 
 ### Elements
