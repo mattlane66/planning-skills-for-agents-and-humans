@@ -1,15 +1,14 @@
 #!/usr/bin/env node
 /**
- * Local-only Codex companion for the Shaping Board.
- * No keys in the browser, product-repository access, build permissions, or auto-accept.
+ * Local-only, tool-free model companion for the Shaping Board.
+ * The remote model has NO filesystem, shell, MCP, or implementation tools.
+ * No API keys in the browser, product-repository access, build permissions, or auto-accept.
  */
 import { createServer } from 'node:http';
 import { randomBytes } from 'node:crypto';
-import { readFile, writeFile, mkdtemp, rm } from 'node:fs/promises';
-import { tmpdir } from 'node:os';
+import { readFile } from 'node:fs/promises';
 import { join, dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawn } from 'node:child_process';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
@@ -77,45 +76,53 @@ export function buildPrompt(req) {
   ].join('\n\n');
 }
 
-export async function runCodex(req, { codexBin = 'codex', timeout = 180000 } = {}) {
-  const dir = await mkdtemp(join(tmpdir(), 'shaping-agent-'));
+/**
+ * Tool-free Responses API call. Model sees only the bounded request text.
+ * No agent process exists, so an injected board cannot cause local file reads.
+ */
+export async function runModel(req, {
+  apiKey = process.env.OPENAI_API_KEY,
+  model = process.env.SHAPING_MODEL || 'gpt-6-astra',
+  fetcher = fetch,
+  timeout = 180000
+} = {}) {
+  if (typeof apiKey !== 'string' || !apiKey.trim())
+    throw Error('Set OPENAI_API_KEY in the terminal before launching the local companion');
+  if (!/^[A-Za-z0-9_.-]{1,90}$/.test(model)) throw Error('Invalid model configuration');
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeout);
+  let response;
   try {
-    await writeFile(join(dir, 'BREADBOARD-LANGUAGE.md'),
-      'Working proposals only. Allowed nodes: place, ui, nonui, decision, store. ' +
-      'Allowed wires: control, navigate, read, write, return, yes, no, show. ' +
-      'Return a typed JSON BreadboardPatch. Never change project files.\n');
-    const child = spawn(codexBin,
-      ['exec', '--ignore-user-config', '--ephemeral', '--sandbox', 'read-only', '--skip-git-repo-check', '-'],
-      { cwd: dir, shell: false, stdio: ['pipe', 'pipe', 'pipe'] });
-    let stdout = '', stderr = '', oversize = false, timedOut = false;
-    const timer = setTimeout(() => { timedOut = true; child.kill('SIGKILL'); }, timeout);
-    const finished = new Promise((ok, fail) => {
-      child.on('error', fail);
-      child.stdout.on('data', part => {
-        stdout += part.toString();
-        if (stdout.length > MAX_OUTPUT) { oversize = true; child.kill('SIGKILL'); }
-      });
-      child.stderr.on('data', part => { stderr = (stderr + part.toString()).slice(-2000); });
-      child.on('close', code => ok(code));
+    response = await fetcher('https://api.openai.com/v1/responses', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + apiKey.trim() },
+      body: JSON.stringify({
+        model, store: false, input: buildPrompt(req),
+        tools: [], tool_choice: 'none',
+        text: { format: { type: 'json_object' } },
+        max_output_tokens: 9000
+      }),
+      signal: controller.signal
     });
-    child.stdin.on('error', () => {});
-    child.stdin.end(buildPrompt(req));
-    let code;
-    try { code = await finished; } finally { clearTimeout(timer); }
-    if (timedOut) throw Error('Codex exceeded the three-minute limit');
-    if (oversize) throw Error('Codex response exceeded the size limit');
-    if (code !== 0) throw Error('Codex did not return a proposal (exit ' + code + '). Verify CLI installation and sign-in. ' + stderr.slice(-250));
-    let body = stdout.trim();
-    const ticks = String.fromCharCode(96).repeat(3);
-    if (body.startsWith(ticks)) body = body.replace(/^.{3}(?:json)?\s*/, '').replace(/\s*.{3}$/, '');
-    try { return JSON.parse(body); }
-    catch { throw Error('Codex did not return valid JSON. Try a smaller change'); }
-  } finally {
-    await rm(dir, { recursive: true, force: true });
-  }
+  } catch (error) {
+    if (controller.signal.aborted) throw Error('Model request exceeded the three-minute limit');
+    throw Error('Cannot contact the model API: ' + String(error.message || error).slice(0, 120));
+  } finally { clearTimeout(timer); }
+  if (!response.ok) throw Error('Model API returned HTTP ' + response.status + '. Check API credentials, model access and billing');
+  const raw = await response.text();
+  if (raw.length > 400000) throw Error('Model API response is too large');
+  let data;
+  try { data = JSON.parse(raw); } catch { throw Error('Model API did not return JSON'); }
+  if (data.status && data.status !== 'completed') throw Error('Model request was not completed');
+  const message = (data.output || []).flatMap(item => item.content || [])
+    .filter(part => part.type === 'output_text' && typeof part.text === 'string')
+    .map(part => part.text).join('');
+  if (!message || message.length > 250000) throw Error('Model returned no usable JSON proposal');
+  try { return JSON.parse(message); }
+  catch { throw Error('Model returned malformed JSON; try a smaller change'); }
 }
 
-export async function startBridge({ port = 43873, runner = runCodex } = {}) {
+export async function startBridge({ port = 43873, runner = runModel } = {}) {
   const boardHTML = await readFile(join(ROOT, 'index.html'), 'utf8');
   const token = randomBytes(32).toString('hex');
   let busy = false, server;
@@ -144,7 +151,7 @@ export async function startBridge({ port = 43873, runner = runCodex } = {}) {
         request.headers['x-shaping-session'] !== token ||
         !/^application\/json(?:;|$)/i.test(request.headers['content-type'] || ''))
       return reply(response, 403, { error: 'Only the locally served Shaping Board may request proposals' });
-    if (busy) return reply(response, 409, { error: 'Codex is already preparing a proposal' });
+    if (busy) return reply(response, 409, { error: 'A model proposal is already running' });
     try {
       let body = '';
       for await (const part of request) {
@@ -180,8 +187,8 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   } else {
     startBridge({port}).then(({url}) => {
       process.stdout.write('Open the Shaping Board: ' + url + '\n');
-      process.stdout.write('Leave this local terminal open. Requires a signed-in Codex CLI.\n');
-      process.stdout.write('Only Working proposals are returned. No product-repository files are changed.\n');
+      process.stdout.write('Leave this local terminal open. Requires OPENAI_API_KEY and API model access.\n');
+      process.stdout.write('Only tool-free Working proposals are returned. No product files can be read or changed by the model.\n');
     }).catch(error => { process.stderr.write(String(error) + '\n'); process.exitCode = 1; });
   }
 }
