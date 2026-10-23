@@ -36,7 +36,7 @@ For a brand-new project, use the board directly; it exports a ZIP containing a w
 
 ## Fixed breadboard language v1
 
-New Board projects use a versioned, typed model rather than arbitrary diagram labels. The browser embeds the shared compiler; P/place, U/ui, N/nonui, Q/decision, S/store and typed wires are validated and rendered deterministically. See [the grammar and agent-patch protocol](../../docs/breadboard-language-v1.md).
+New Board projects use a versioned, typed model rather than arbitrary diagram labels. The browser embeds the shared compiler; P/place, U/ui, N/nonui, Q/decision, S/store and typed wires are validated and rendered deterministically. See [the grammar and agent-patch protocol](./LANGUAGE.md).
 
 AI Workspace can import a typed BreadboardPatch against the exact current model, show the complete per-ID semantic diff and apply the patch as Working. It resets affected candidate fit and scenario ratings and never promotes accepted Markdown, selection or build scope. Existing diagrams retain the legacy notation; there is no silent migration. The source compiler and standalone HTML are kept in sync by scripts/inline_shaping_board_core.py.
 
