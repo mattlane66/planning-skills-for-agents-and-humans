@@ -291,7 +291,7 @@ const slug=()=>M.name.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,
 const dl=(n,t,ty)=>{const a=document.createElement("a");a.href=URL.createObjectURL(t instanceof Blob?t:new Blob([t],{type:ty}));a.download=n;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1500)};
 const ids=s=>(s||"").split(/\s+/).filter(Boolean);
 /* ---- breadboard text -> graph ---- */
-function parse(src){if(BB.isV1(src))return BB.parse(src);const g={nodes:[],edges:[],groups:[],err:[]};
+function parse(src){if(BB.isV1(src)){const v=BB.parse(src);return{nodes:v.nodes.map(n=>({...n,i:n.id,k:n.kind,t:n.title,r:n.detail?[n.detail]:[],s:n.system,pos:[]})),edges:v.edges.map(e=>({...e,a:e.from,b:e.to,l:e.kind})),groups:[],err:v.err}}const g={nodes:[],edges:[],groups:[],err:[]};
  (src||"").split("\n").forEach((ln,n)=>{ln=ln.trim();if(!ln||ln[0]==="#")return;let m;
   if(m=ln.match(/^group:\s*(.+?)\s*=\s*(.+)$/))g.groups.push({n:m[1],ids:ids(m[2])});
   else if(m=ln.match(/^(\S+)\s*->\s*(\S+)\s*(?::\s*([^~@]*))?(?:~\s*([^@]*))?(?:@\s*(-?\d+)\s*,\s*(-?\d+))?\s*$/))g.edges.push({a:m[1],b:m[2],l:(m[3]||"").trim(),p:(m[4]||"").trim(),lx:m[5],ly:m[6]});
