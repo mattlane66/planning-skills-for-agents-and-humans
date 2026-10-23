@@ -1,5 +1,8 @@
 # Shaping Board
 
+Live co-shaping: the Shape with AI tab works with an optional local Codex CLI companion. From a checkout of this repo run "node site/shaping-board/agent-bridge.mjs", then visit http://127.0.0.1:43873/. Start a new idea, write the behavior, inspect the typed proposal and before/after diagrams, apply as Working, and revise again. This local-only mode is opt-in; the hosted/offline page does not call Codex or contact localhost. Each applied typed patch invalidates that candidate's previous fit, traces and requirement mappings; the human must reconcile accepted Markdown and tests separately. See AI-WORKSPACE.md for prerequisites and security model.
+
+
 Optional browser surface for **Planning Skills for Agents and Humans**. The board supports flexible exploration; the canonical Markdown and human commitment gates remain authoritative.
 
 ## Start
