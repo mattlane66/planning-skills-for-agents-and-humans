@@ -1,22 +1,22 @@
 # AI Workspace for Shaping Board
 
-## Continuous shaping with Codex (optional local companion)
+## Continuous shaping with an AI model (optional local companion)
 
-The new **Shape with AI** tab supports a short, repeatable loop: describe a product idea, let Codex propose a fixed-language breadboard patch, inspect the before/after diagrams and semantic changes, apply as **Working**, and ask for the next correction. You no longer need to download and re-import each typed patch. The web page still works on GitHub Pages and offline; those versions deliberately **do not** call a model or start a local process.
+The new **Shape with AI** tab supports a short, repeatable loop: describe a product idea, let a model propose a fixed-language breadboard patch, inspect the before/after diagrams and semantic changes, apply as **Working**, and ask for the next correction. No per-patch export/import is needed. The public GitHub Pages and offline versions retain the manual workflow and **never** call a model automatically.
 
-Prerequisites: Node.js 22+ and an installed, signed-in [Codex CLI](https://developers.openai.com/codex/cli). From a **local checkout** of this Planning Skills repository, run:
+Prerequisites: Node.js 20.19+ and an **OpenAI API key with API access and billing**, separate from signing in to ChatGPT or Codex CLI. Set `OPENAI_API_KEY` privately in the environment of your **local checkout** of this repository. Do not paste it into the Board or commit it to a file. Then run:
 
 ~~~bash
 node site/shaping-board/agent-bridge.mjs
 ~~~
 
-Open http://127.0.0.1:43873/ in your browser. This is a different browser origin from GitHub Pages: import your existing `.board.json` **once** if you want to carry a hosted project into the local session. The browser stays on localhost for the entire session. In **Shape with AI**, click **Start a new idea**, enter the behavior you want, and click **Ask Codex for a revision**. Inspect the full semantic diff and before/after diagram before **Apply as Working**. Describe a correction and repeat.
+Open http://127.0.0.1:43873/ in your browser. This is a different origin from GitHub Pages: import an existing `.board.json` **once** if you want to bring a hosted project into the local session. In **Shape with AI**, click **Start a new idea**, enter the desired behavior, and click **Ask AI for a revision**. Review the diagrams and full semantic diff before **Apply as Working**. Describe a correction and repeat.
 
-The companion binds to 127.0.0.1 only, serves the self-contained Board HTML, requires a per-process secret and matching Origin for requests, validates every proposal with the same breadboard compiler, and runs Codex with a read-only sandbox, without user-configured tools/MCP servers, in a disposable working directory. It cannot write, accept or publish the product's planning files. Codex CLI still uses its own configured model/provider and authentication; prompts are sent through it. Do not expose the local server by tunnel or proxy. Read-only CLI execution is **not a general-purpose security boundary**; do not run it with an untrusted CLI configuration.
+The companion binds to 127.0.0.1 only, serves the self-contained Board HTML, and requires a per-process secret and matching request Origin. It sends **only the bounded Board text you submit** over TLS to the OpenAI Responses API, with `tools: []`, `tool_choice: "none"` and `store: false`. The model has **no shell, filesystem, MCP, browser or project-repository access**. The API key stays on the local server, never in the browser or prompt. Responses are validated with the deterministic breadboard compiler; malformed, stale or mismatched patches cannot apply. API requests may incur charges. The default model is `gpt-6-astra`; set `SHAPING_MODEL` in your environment to use another compatible model. Do not expose the local server by tunnel or proxy.
 
 On each application the Board resets the changed candidate's fit ratings, scenario traces and requirement-to-part mappings. It marks the selection **Working** and prepares a downloadable reconciliation draft. The **human** must compare the new candidate with the accepted product repository artifacts, reconcile and approve intent, choose a slice, and verify implementation independently. No automatic upgrade of planning authority is possible.
 
-Codex is the only directly invoked CLI in this version. Claude Code, Gemini and other agents continue to use the portable **AI Workspace** ZIP and manual review. If Codex is absent or a patch is invalid, the Board keeps the current model unchanged and reports the error. The local agent has no implementation/build endpoint.
+The live companion is a tool-free model endpoint, not a coding agent. Codex, Claude Code, Gemini and other coding agents continue to use the portable **AI Workspace** ZIP and manual review for repo-aware tasks. If API access is unavailable or a patch is invalid, the Board preserves the current model and reports the error. The local companion has no implementation/build endpoint.
 
 
 **Shape in the browser. Use your existing coding agent. Review what comes back.**
