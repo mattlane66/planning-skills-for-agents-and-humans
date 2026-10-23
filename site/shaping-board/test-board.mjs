@@ -142,6 +142,7 @@ assert.equal(errors.length, 0, errors.join('\n'));
 // AI Workspace uses existing exports and does not manufacture accepted scope.
 const aiFiles=run('bridgePackageFiles()');
 assert.ok(aiFiles.some(([name])=>name==='planning/shaping.board.json'));
+assert.match(aiFiles.find(([name])=>name==='planning/BREADBOARD-LANGUAGE.md')[1],/BreadboardPatch/);
 assert.ok(aiFiles.some(([name])=>name==='planning/AI-START-HERE.md'));
 assert.ok(aiFiles.some(([name])=>name==='README-SHAPING-WORKSPACE.md'));
 assert.ok(aiFiles.find(([name])=>name==='planning/AI-START-HERE.md')[1].includes('planning-router'));
@@ -223,6 +224,8 @@ const fixedModel=[
  ''
 ].join('\n');
 run('M.options[0].dsl='+JSON.stringify(fixedModel)+';T.top="shape";T.sub="board";T.view="paths";T.opt=0;render()');
+const fixedWorkspace=run('bridgePackageFiles()');
+assert.equal(fixedWorkspace.find(([name])=>name==='planning/breadboard-A.dsl')[1],fixedModel);
 assert.equal(run('parse(M.options[0].dsl).err.length'),0);
 assert.match(w.document.querySelector('#dia').textContent,/Submit/);
 assert.equal(run('BB.render(M.options[0].dsl,null,"m").html'),run('BB.render(M.options[0].dsl,null,"m").html'));
