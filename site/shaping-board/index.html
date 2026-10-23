@@ -657,7 +657,7 @@ function applyBreadboardPatch(){
   st.fit=st.fit.slice(0,index)+"0"+st.fit.slice(index+1);
   if(st.paths)delete st.paths[p.option.id];
  });
- M.reconciliation={option_id:p.option.id,state:"Working",node_changes:p.revision.changes.length,requirements,stories};
+ M.reconciliation={option_id:p.option.id,state:"Working",node_changes:p.revision.changes.length,changes:p.revision.changes,requirements,stories};
  M.selectionAuthority="Working";T.undo=prior;B.patch=null;B.proposal=null;
  delete M.product_status;delete M.status_feed;resetStatusFeed();save();
  T.top="agent";T.opt=index;Agent.instruction="";
@@ -703,6 +703,9 @@ function reconciliationDraft(){
  "Changed semantic records: "+r.node_changes,
  "Requirement mappings: "+(r.requirements.join(", ")||"none previously mapped"),
  "Story paths: "+(r.stories.join(", ")||"none previously traced"),
+ "",
+ "## Record-level semantic changes",
+ ...(r.changes||[]).flatMap(c=>["","### "+c.type+" "+c.id,"Before: "+JSON.stringify(c.before),"After: "+JSON.stringify(c.after)]),
  "",
  "## Current working candidate",
  "",
