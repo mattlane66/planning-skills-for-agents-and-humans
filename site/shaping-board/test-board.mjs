@@ -228,6 +228,17 @@ run('M.options[0].dsl='+JSON.stringify(fixedModel)+';T.top="shape";T.sub="board"
 const fixedWorkspace=run('bridgePackageFiles()');
 assert.equal(fixedWorkspace.find(([name])=>name==='planning/breadboard-A.dsl')[1],fixedModel);
 assert.equal(run('parse(M.options[0].dsl).err.length'),0);
+
+const mappedGraph=run('parse(M.options[0].dsl)');
+assert.deepEqual(mappedGraph.nodes.map(n=>n.i),['P1','U1','N1'],'typed IDs must project into existing Board consumers');
+assert.equal(mappedGraph.edges[0].a,'U1');
+assert.equal(mappedGraph.edges[0].b,'N1');
+const typedStory={id:'SC-LIVE',text:'Submit then validate',fit:'1000',paths:{A:'U1 N1'},anti:false};
+assert.equal(run('traceInfo('+JSON.stringify(typedStory)+',M.options[0]).valid'),true,'typed wires must support scenario tracing');
+const typedExport=run('bbMd(M.options[0],"candidate-shape")');
+assert.match(typedExport,/Submit/,'typed UI affordances must survive planning export');
+assert.match(typedExport,/Validate/,'typed non-UI mechanisms must survive planning export');
+
 assert.match(w.document.querySelector('#dia').textContent,/Submit/);
 assert.equal(run('BB.render(M.options[0].dsl,null,"m").html'),run('BB.render(M.options[0].dsl,null,"m").html'));
 const fixedPatch={kind:'BreadboardPatch',schema_version:1,project_id:run('M.project_id'),option_id:'A',base_dsl:fixedModel,
