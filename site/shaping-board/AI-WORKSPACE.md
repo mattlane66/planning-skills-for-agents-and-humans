@@ -6,7 +6,7 @@ The [Shaping Board](./) now includes **AI Workspace** and **Product map** tabs. 
 
 ## Fixed-language candidate revisions
 
-New candidates use the versioned **breadboard/v1** grammar and the deterministic compiler built into the Board. For a candidate already using that language, ask your agent for a **BreadboardPatch** (same project ID and option ID, complete exact canonical baseline, ID-addressed node/wire operations). Import it through **Review breadboard patch** to inspect complete semantic diffs and accept the atomic revision only as Working. This is not code verification or selected-design authorization. Legacy diagrams continue to use the original format and must be migrated by an explicit human-reviewed mapping. [Grammar and patch contract](../../docs/breadboard-language-v1.md).
+New candidates use the versioned **breadboard/v1** grammar and the deterministic compiler built into the Board. For a candidate already using that language, ask your agent for a **BreadboardPatch** (same project ID and option ID, complete exact canonical baseline, ID-addressed node/wire operations). Import it through **Review breadboard patch** to inspect complete semantic diffs and accept the atomic revision only as Working. This is not code verification or selected-design authorization. Legacy diagrams continue to use the original format and must be migrated by an explicit human-reviewed mapping. [Grammar and patch contract](./LANGUAGE.md).
 
 ## Three-minute workflow
 
