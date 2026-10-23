@@ -254,7 +254,7 @@ assert.equal(run('M.stories.every(s=>s.fit[0]==="0")'),true);
 assert.throws(()=>run('breadboardPatchPreview('+JSON.stringify(fixedPatch)+')'),/Stale/);
 
 
-// Continuous localhost Codex loop: review before apply, and invalidate stale mappings/paths.
+// Continuous localhost model loop: review before apply, and invalidate stale mappings/paths.
 run('window.__SHAPING_AGENT_SESSION="a".repeat(64);T.top="agent";T.opt=0;Agent.instruction="Make validation more explicit"; M.reqs[0].l[0]="U1";M.stories[0].paths.A="P1 U1";M.selectionAuthority="Accepted"; render()');
 assert.match(w.document.querySelector('main').textContent,/Shape with AI/);
 assert.ok(w.document.querySelector('[data-act="agent-run"]'));
@@ -273,7 +273,7 @@ assert.equal(posted.url,'/api/propose');
 assert.equal(posted.options.method,'POST');
 assert.equal(posted.options.headers['X-Shaping-Session'],'a'.repeat(64));
 assert.equal(run('B.patch.operations.length'),1);
-assert.ok(!run('M.options[0].dsl').includes('Validate and report'),'local Codex must not apply before review');
+assert.ok(!run('M.options[0].dsl').includes('Validate and report'),'local model proposal must not apply before review');
 assert.match(w.document.querySelector('main').textContent,/Proposed/);
 assert.ok(w.document.querySelectorAll('main .cm .fb').length>=2,'before and after diagrams are inspectable');
 w.document.querySelector('[data-act="bb-apply"]').click();
@@ -287,5 +287,16 @@ assert.equal(run('B.patch'),null);
 assert.ok(w.document.querySelector('[data-act="agent-run"]'),'agent can continue from changed model');
 run('delete window.__SHAPING_AGENT_SESSION;Agent.instruction="Try";render()');
 assert.equal(w.document.querySelector('[data-act="agent-run"]').disabled,true,'static hosted Board must not contact localhost');
+
+
+// The browser bounds large planning projects BEFORE serializing and sending requests.
+run('window.__SHAPING_AGENT_SESSION="a".repeat(64);M.reqs=Array.from({length:200},(_,i)=>({...M.reqs[0],id:"R"+(i+1),text:"X".repeat(1100)}));Agent.instruction="Reduce the submission path";render()');
+await run('requestAgent()');
+assert.ok(posted.options.body.length<180000,'browser request must stay below bridge byte/character cap');
+const bounded=JSON.parse(posted.options.body).context;
+assert.equal(bounded.requirements.length,50);
+assert.ok(bounded.requirements.every(x=>x.length<=500));
+assert.match(run('reconciliationDraft()'),/Record-level semantic changes/);
+assert.doesNotMatch(run('breadboardPatchReview()'),/<\/div<\/section>/,'closing tags must be valid');
 
 console.log('Shaping Board smoke: passed parser, per-candidate trace, gate, schema draft export and AI bridge validation, inspectability and review');
