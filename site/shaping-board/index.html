@@ -482,9 +482,28 @@ function bridgeReadme(){
  "Never assume proposed, manually checked, or AI-authored evidence proves running code works."
  ].join("\n");
 }
+function bridgeLanguageGuide(){
+ return [
+ "# Fixed Shaping Board language v1",
+ "The agent proposes typed semantic changes. The Board validates and renders them deterministically; the human reviews.",
+ "First line: version: breadboard/v1",
+ "Nodes: ID | kind | title | detail | system; a ui node must also specify | in=P1.",
+ "Node vocabulary: P/place, U/ui, N/nonui, Q/decision, S/store. Preserve IDs.",
+ "Wires: FROM -> TO : kind. Permitted: control, navigate, read, write, return, yes, no, show. yes/no originate at Q.",
+ "Do not invent SVG geometry, component kinds, accepted decisions or hidden mechanisms.",
+ "To change a v1 candidate propose JSON: kind BreadboardPatch, schema_version 1, project_id from shaping.board.json, option_id and base_dsl from the complete canonical breadboard-ID.dsl file.",
+ "Operations: add_node(node), update_node(id,set), remove_node(id), add_edge(from,to,kind), remove_edge(from,to,kind).",
+ "Nodes have id, kind, title, detail, system and parent (UI only). update_node set may alter title, detail, system, parent, never kind or ID.",
+ "Remove wires and child references before removing a node. The final graph must validate.",
+ "Return .patch.json for AI Workspace review; never apply it or authorize a build automatically.",
+ "Legacy diagrams are not silently converted. Accepted Markdown and human promotion gates remain authoritative."
+ ].join("\n");
+}
 function bridgePackageFiles(){
  const portable=bridgePortable();
  return planningFiles().concat([
+ ["planning/BREADBOARD-LANGUAGE.md",bridgeLanguageGuide()+"\n"],
+ ...M.options.filter(o=>BB.isV1(o.dsl)&&!BB.parse(o.dsl).err.length).map(o=>["planning/breadboard-"+o.id+".dsl",BB.canonical(o.dsl)]),
  ["planning/shaping.board.json",JSON.stringify(portable,null,2)+"\n"],
  ["planning/AI-START-HERE.md","# AI starter instruction\n\nCopy this instruction into your selected agent. Adapt the task in the Shaping Board and export again when necessary.\n\n"+bridgePrompt()+"\n"],
  ["README-SHAPING-WORKSPACE.md",bridgeReadme()+"\n"]
