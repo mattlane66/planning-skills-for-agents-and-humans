@@ -1,7 +1,7 @@
 const token = new URL(location.href).searchParams.get('token');
 const $ = (id) => document.getElementById(id);
 const sourceButtons = ['camera', 'screen', 'file'];
-const state = { stream: null, fileURL: null, source: null, crop: null, seen: new Set(), busy: false };
+const state = { stream: null, fileURL: null, source: null, crop: null, seen: new Set(), busy: false, generation: 0 };
 const video = $('preview');
 
 async function api(path, method = 'GET', body) {
@@ -29,7 +29,7 @@ function stopTracks() {
   state.fileURL = null;
 }
 function stopLocal() {
-  stopTracks(); state.source = null; state.seen.clear(); resetCrop();
+  state.generation++; stopTracks(); state.source = null; state.seen.clear(); resetCrop();
   $('stage').classList.remove('has-video');
   video.classList.remove('visible'); $('empty').hidden = false;
   $('stageLabel').hidden = true; $('timeline').hidden = true;
@@ -43,7 +43,7 @@ async function activate(kind, stream, url) {
   state.fileURL = url;
   if (stream) {
     video.srcObject = stream;
-    for (const track of stream.getVideoTracks()) track.addEventListener('ended', () => { stopLocal(); status('Screen or camera sharing ended.'); }, { once: true });
+    for (const track of stream.getVideoTracks()) track.addEventListener('ended', () => { if (state.stream === stream) { stopLocal(); status('Screen or camera sharing ended.'); } }, { once: true });
   } else video.src = url;
   try { await video.play(); } catch { /* Recorded media may need a separate play gesture. */ }
   video.classList.add('visible'); $('empty').hidden = true;
@@ -187,13 +187,14 @@ function delta(a, b) {
 }
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 async function afterChange(maxWaitMs) {
+  const generation = state.generation;
   await readyVideo();
   const baseline = signature();
   let previous = baseline, stable = 0, moved = false;
   const start = Date.now();
   while (Date.now() - start < maxWaitMs) {
     await sleep(300);
-    if (!state.source) throw new Error('Source was stopped during observation');
+    if (!state.source || state.generation !== generation) throw new Error('Source changed or stopped during observation');
     const next = signature();
     if (delta(baseline, next) > 7) moved = true;
     stable = moved && delta(previous, next) < 2.5 ? stable + 1 : 0;
