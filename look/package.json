@@ -1,0 +1,14 @@
+{
+  "name": "planning-skills-look",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Optional localhost camera, screen and recording observation bridge for Planning Skills agents",
+  "scripts": {
+    "start": "node src/cli.mjs",
+    "mcp": "node src/mcp.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "node --check src/server.mjs && node --check src/mcp.mjs && node --check src/cli.mjs && node --check public/app.js && npm test"
+  },
+  "engines": { "node": ">=20" }
+}

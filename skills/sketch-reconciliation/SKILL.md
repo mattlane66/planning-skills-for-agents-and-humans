@@ -33,6 +33,8 @@ Use:
 
 If the visual is unavailable or too unclear to inspect, ask for a readable attachment or a description. Do not pretend to see it.
 
+An optional `/look` observation may supply captured frames from a camera, window/screen, mirrored iPad, or video (see `look/README.md`). Record frame source, timestamp and selected crop as provenance. Compare frames to report observable changes only; a sequence of screenshots does not prove hidden behavior. The person's spoken/typed explanation remains distinct from visible evidence, and the reconciliation gate is unchanged.
+
 ## Procedure
 
 ### 1. Establish scope
