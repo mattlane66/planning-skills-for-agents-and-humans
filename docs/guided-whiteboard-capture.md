@@ -14,6 +14,18 @@
 
 Do **not** claim to have heard speech, transcribed audio, or inspected an image that is unavailable. Request only the missing explanation needed for the current decision. Keep private raw images, recordings, transcripts, secrets, or client data out of public repos and release assets unless explicitly authorized.
 
+### Optional live capture with Look
+
+The [local Look bridge](../look/README.md) can provide frames from a camera, shared screen/window, mirrored iPad, or imported screen recording to a vision-capable agent. It is an optional capture interface for this recipe, **not** a new planning skill, authority layer, or permission to change accepted artifacts.
+
+1. The person explicitly selects and grants access to the visual source in the local preview.
+2. The agent can request a frame now, inspect a person-captured frame, or wait for a bounded, locally detected settled visual change. For comparisons, capture a baseline first.
+3. Record each captured frame with source and time, and label `VISIBLE` findings separately from instructions, interpretation, and unknowns.
+4. Cropping excludes irrelevant content such as surrounding handwriting; a textual instruction to ignore it does not hide pixels from the model.
+5. Route to the existing `shaping`, `breadboarding` or `sketch-reconciliation` modes according to authority and scope, not media type.
+
+Screen recording video is not proof of hidden application state or persistence. The agent must not pretend it watched unattended video or observed a change that was not actually captured.
+
 ### Fast starting instruction
 
 > Use the existing shaping/breadboarding skills with the guided whiteboard capture recipe. This screenshot is rough solution thinking, not accepted product intent. Here is my top-to-bottom guided tour: [explanation]. Capture the proposal as candidate A. Separate what is visible from what I said, observed behavior, and your assumptions. Produce ID-stable canonical tables, a legible spatial breadboard, and short prose in the same place order. Highlight gaps and contradictions; don't invent hidden behavior, select a solution, or begin implementation.
