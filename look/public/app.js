@@ -171,12 +171,12 @@ async function captureFrame(changed = false) {
   return { mime: 'image/jpeg', data, focus: crop, source: state.source, videoTime: state.source === 'recording' ? video.currentTime : null, changed };
 }
 function signature() {
-  const crop = focusRect(), canvas = imageCanvas(48, 32);
+  const crop = focusRect(), canvas = imageCanvas(96, 64);
   canvas.getContext('2d', { willReadFrequently: true }).drawImage(video,
     video.videoWidth * crop.x, video.videoHeight * crop.y,
-    video.videoWidth * crop.width, video.videoHeight * crop.height, 0, 0, 48, 32);
-  const pixels = canvas.getContext('2d').getImageData(0, 0, 48, 32).data;
-  const gray = new Uint8Array(48 * 32);
+    video.videoWidth * crop.width, video.videoHeight * crop.height, 0, 0, 96, 64);
+  const pixels = canvas.getContext('2d').getImageData(0, 0, 96, 64).data;
+  const gray = new Uint8Array(96 * 64);
   for (let i = 0; i < gray.length; i++) gray[i] = (pixels[i * 4] * 3 + pixels[i * 4 + 1] * 6 + pixels[i * 4 + 2]) / 10;
   return gray;
 }
@@ -184,6 +184,11 @@ function delta(a, b) {
   let sum = 0;
   for (let i = 0; i < a.length; i++) sum += Math.abs(a[i] - b[i]);
   return sum / a.length;
+}
+function changedShare(a, b) {
+  let changed = 0;
+  for (let i = 0; i < a.length; i++) if (Math.abs(a[i] - b[i]) > 18) changed++;
+  return changed / a.length;
 }
 function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
 async function afterChange(maxWaitMs) {
@@ -196,7 +201,7 @@ async function afterChange(maxWaitMs) {
     await sleep(300);
     if (!state.source || state.generation !== generation) throw new Error('Source changed or stopped during observation');
     const next = signature();
-    if (delta(baseline, next) > 7) moved = true;
+    if (delta(baseline, next) > 1.3 || changedShare(baseline, next) > .003) moved = true;
     stable = moved && delta(previous, next) < 2.5 ? stable + 1 : 0;
     if (stable >= 3) return captureFrame(true);
     previous = next;
