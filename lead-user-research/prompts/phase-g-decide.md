@@ -141,6 +141,8 @@ a selected project shape, selected-design intent, active scope, or build authori
 
 #For an empirical TEST, specify the explanation and rival, intervention/comparator, observable prediction, measurement and success/stop thresholds in the structured action fields; distinguish hypothesized from measured effects and predefine what result changes the decision. When relevant, recommend independent typical-user tests under realistic or explicitly justified future conditions: actual use, repeat use, switching or payment rather than hypothetical ratings alone. Do not impose commercial tests on a noncommercial decision. Hand off market size, economic demand and unit economics to underwriting. Preserve the existing authority boundary.
 
+Test the need formulation as well as mechanism when uncertainty warrants: compare the proposed pairing against the existing practice and a credible alternative formulation or substitute, predefine observations that could overturn either, and record revision triggers in action_now and change conditions. Do not infer demand from hypothetical benefit.
+
 ## Decision status
 
 For SCOUT:

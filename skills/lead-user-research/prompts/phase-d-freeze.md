@@ -30,6 +30,8 @@ If a consequential branch now requires direct contact, record the fieldwork refe
 
 For marginal value, compare at least the plausible next evidence moves when consequential: what uncertainty each could resolve, its expected decision consequence, likely effort/access and whether the current decision would change. Record the chosen stopping or repair rationale in the existing marginal-value dimension. Unknown value stays unknown; avoid invented numerical expected values or fixed quotas.
 
+For open opportunity research, assess whether the initial formulation materially excluded plausible solution-led, pair-led, positive-outcome or substitute-activity routes. Record the decision-relative limitation or bounded repair in existing coverage and sufficiency rationales. No mandatory new search quota.
+
 ## Audit
 
 Check:

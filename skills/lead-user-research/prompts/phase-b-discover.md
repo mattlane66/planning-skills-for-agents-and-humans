@@ -102,6 +102,10 @@ For each material `Q##` search record, persist when knowable:
 - explicit limits on what those interest signals can establish.
 
 Interest, popularity, stars, or query/posting frequency may route discovery. They do **not** establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+## Optional pair-first discovery and positive deviance
+
+Within authorized scope, consider need-led (search for responses to a need), solution-led (investigate unusual practices/capabilities and possible uses), and pair-led (start from observed valuable arrangements) routes. Record direction and unexpected leads in existing search records. Look for unusually good outcomes under comparable constraints, not only severe struggles; seek matched contrasts and investigate resource, skill, selection and context differences before inferring causes. Distinguish an observed user-made pairing from an imagined application; the latter is a hypothesis, and capability evidence is NONHUMAN_CONTEXT. Preserve trend-first qualification. Compare causal, purpose-level and substitute-activity formulations without silently changing the research decision or hard scope. See [need–solution discovery](../references/need-solution-discovery.md).
+
 ## Task 3 — Attribute-specific pyramiding
 
 Every substantive pyramid must have a specified `target_attribute` or information target before the first hop. Seek someone who has more of that attribute or someone with better information about who does.

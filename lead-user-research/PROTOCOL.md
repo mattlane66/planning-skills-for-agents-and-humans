@@ -213,6 +213,10 @@ Keep routing signals separate from substantive evidence. Fame, search frequency,
 
 When such a signal is recorded, label its role and preserve its limitations. Never promote a discovery signal into qualification or decision evidence merely because it is easy to count.
 
+## Open problem formulation and need–solution pair discovery
+
+Frame the decision and domain before discovery; the need need not be fully formulated. A starting problem is a revisable hypothesis, not a hard search constraint unless the human explicitly makes it one. Within authorized scope, permit need-led, solution-led and pair-led discovery, including unexpectedly successful practices, repurposed capabilities and outcomes that reveal previously unrecognized needs. Preserve the trend-first LU1/LU2 qualification requirement; a capability or apparent pairing is not itself human evidence. See [need–solution discovery](references/need-solution-discovery.md) for proportionate methods, viability and revision safeguards. This is an operational adaptation of von Hippel & von Krogh (2016), a conceptual paper, not proof of superior effectiveness.
+
 ## Public-web need–solution mining
 
 As a complementary discovery lane, semantically search openly available user-generated content for bounded episodes containing both:

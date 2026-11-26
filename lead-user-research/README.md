@@ -124,6 +124,8 @@ research evidence into accepted planning intent.
 
 The optional [empirical enhancements](references/empirical-enhancements.md) improve candidate discovery, qualification diagnostics, cross-domain synthesis, and experiment design without replacing the Lead User Method or adding phases. Apply them only when their information value warrants the effort. Their combined superiority has not been established.
 
+For open-ended opportunity research, [need–solution discovery](references/need-solution-discovery.md) adds solution-led and pair-led search, positive deviance, innovation-origin tracing, alternative problem formulations, relative viability and controlled reframing. It is optional and does not change qualification or human authority.
+
 ## Hybrid safeguards
 
 The workflow may use public-web need–solution mining and interest signals to discover promising episodes, but treats fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish as **discovery signals only**. They do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.

@@ -630,6 +630,10 @@ needed to resolve it.
 
 No new required files or fields; use existing records. In search_log.json query_or_route/next_branch describe network boundary, edge definition, brokerage method, alternative routes, expected information, observed effort (units), yield and stopping rationale; coverage.json records missing populations and selection bias. In LU qualification rationales/caveats record any respondent-administered instrument/version, referent, source refs, administration and missingness, scoring limits and behavioral corroboration; qualitative facets are not psychometric scores. Use evidence records for actual responses and observations, not generated ratings. For cross-domain transfer, retain differences in needs.json transferability_assessment and mechanism assumptions/risks. In decision_outcome.json action_now, specify predictions, comparison, observed outcomes and revision thresholds in existing action fields. These optional narratives do not relax validation or count as evidence solely because recorded.
 
+## Optional need–solution discovery provenance
+
+Use existing records, not mandatory new registries: search_log.json for discovery direction and clues; evidence and trace records for innovation chronology and comparable outcomes; hypotheses/findings/needs/principles for rival formulations and pairing viability; coverage/sufficiency for formulation blind spots; change_log.json for old/new formulations, reasons, refs and approval provenance. Post-freeze evidence follows the PF## fingerprint contract. Material frame revision invalidates dependent human acceptance, criteria, comparison, selection, decision and handoff; preserve superseded material in change history and re-run affected gates. Scope changes require explicit human authority. Do not represent an inferred need as observed or a hypothesized pairing as qualified.
+
 ## Authority
 
 When records disagree:

@@ -98,6 +98,8 @@ Transferability asks whether the underlying need/principle plausibly survives ou
 
 For cross-domain learning, distinguish a principle from its source mechanism: compare the conditions that make it work in the source domain with target-domain constraints, and retain incompatibilities. Record observed implementation, repeated use, abandonment and diffusion only when supported by traces, with lineage and temporal caveats; do not infer prevalence or causation from diffusion. Keep novelty and applicability distinct when considering implications.
 
+Compare evidence-backed formulations at causal, purpose and substitute-activity levels; distinguish actual use from inferred purposes. For promising observed or hypothesized pairings, assess benefit relative to the current baseline, effort/cost, target constraints, externalities and evidentiary gaps. Keep technical/use viability distinct from market economics. Record old/new formulations, rationale and refs in change_log.json; seek human approval before material scope change. Do not convert a speculative pairing into a qualified need.
+
 ## 8. Contradictions and hypothesis disposition
 
 Actively test the strongest interpretations against contrary evidence, formal contrastive cases, rival explanations, and coverage gaps.

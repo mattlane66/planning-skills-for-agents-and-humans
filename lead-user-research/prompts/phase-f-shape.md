@@ -88,6 +88,8 @@ Freeze the research-local criteria before evaluating mechanisms. Hold x and y co
 
 Do not treat these R## rows as accepted project requirements. Their identity is local to the research workspace until the research-to-planning handoff maps them into project planning with explicit provenance.
 
+A prototype may reveal a different need, but never revise criteria mid-comparison to favor a mechanism. If new evidence warrants a material reformulation, record the post-freeze evidence change using the existing PF## procedure, reassess affected qualification, sufficiency, interpretation and concept gates, preserve superseded records in change history, invalidate dependent approvals/criteria/comparisons/selections/decisions/handoff, and obtain renewed human acceptance before a new comparison. If material research scope changes, return to Frame with human approval; create a new study if required to preserve the original frozen record.
+
 ## Concept generation
 
 Generate enough materially different candidate mechanisms to test the research-local fit criteria.

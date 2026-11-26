@@ -74,6 +74,8 @@ Verify mechanically where possible:
 
 Report which optional discovery, qualification and concept-evaluation techniques were actually used, observed effort and yield where recorded, and limits of network coverage, measurement administration, automated classification and testing. Surface these in the canonical brief's existing coverage, caveats, uncertainties and action fields; do not introduce new claims in derived views. Do not claim the hybrid method is empirically superior.
 
+When pair-first discovery or reframing materially affected the decision, report the initial and revised formulations, evidence, approval status, viability limits and superseded decisions in existing brief sections. Preserve observed vs hypothesized pairings and distinguish conceptual inspiration from empirical validation.
+
 ## Capability honesty
 
 If PDF generation, HTML generation, interactive validation, browser testing, or another delivery capability is unavailable:

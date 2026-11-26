@@ -31,6 +31,8 @@ Preserve or define:
 16. likely discoverability biases in an AI-plus-search study;
 17. actual study execution level — DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT — and its basis.
 
+An open opportunity study may begin with a domain, decision and provisional learning objective rather than a fully formulated problem. Mark any starting need formulation provisional/hypothetical and preserve hard human search constraints. Do not silently turn an initial clue into a required problem.
+
 ## Hypothesis challenge setup
 
 For every starting hypothesis create or update H## in hypotheses.json. Before broad discovery, define when possible:

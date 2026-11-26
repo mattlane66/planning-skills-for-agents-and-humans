@@ -40,6 +40,8 @@ If Lead User evidence is already sufficient for the need/mechanism question and 
 
 Read [references/empirical-enhancements.md](references/empirical-enhancements.md) when network-assisted discovery, comparative screening, respondent measurement, cross-domain recombination or a theory-driven test could materially improve the decision. Use existing registries and rationale fields to preserve provenance; do not add mandatory quotas, psychometric gates or phases. Follow the phase-specific additions below and in the phase prompts; record the selected technique, limitations and why it was useful.
 
+For open opportunity searches, use [need–solution discovery](references/need-solution-discovery.md): frame the decision without prespecifying a need, search from needs, solutions or observed pairings, investigate positive deviance and innovation origins, compare alternative formulations and relative viability, and reopen affected judgments when new evidence warrants it. Preserve authorized scope, freeze integrity and human gates.
+
 ## Research brief — canonical input
 
 The reusable research brief preserves the input contract from the canonical prompt:

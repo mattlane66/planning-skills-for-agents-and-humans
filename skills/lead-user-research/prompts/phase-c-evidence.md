@@ -138,6 +138,8 @@ When the evidence supports it, add temporal context: first observed, recurrence,
 
 Do not turn the workaround into the need, rank fit points, isolate the priority problem, or generate producer solutions in Phase C. Preserve the trace for post-freeze interpretation.
 
+When an implemented innovation is a pivotal clue, trace backward from observed use/outcome through adoption, creation or encounter, and evidence of when the need became recognized. Record chronology, sources, prior baseline, and competing accounts; distinguish stated from inferred motives and keep unknowns. For positive deviance, compare resources, conditions and outcomes and seek contrary cases; a good outcome does not establish a causal mechanism or LU1/LU2.
+
 ## Hypothesis and contrastive-case evidence
 
 Attach atomic evidence to H## as evidence for/against and populate contrastive cases with evidence refs and a bounded interpretation. Do not assign a favorable final hypothesis status merely because one batch looks supportive.
