@@ -17,6 +17,7 @@ from research_refinements import (
     validate_rare_search, validate_transfer_contrasts,
 )
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
+from simulation_handoff import inspect as inspect_simulation
 from study_fingerprint import evidence_fingerprint, study_fingerprint
 from validation_schema import (
     ANALYSIS_VALIDATION, BRANCH_INDEPENDENCE, BRIEF_FIELD_STATUS, CONCEPT_SELECTION_STATUS,
@@ -1580,6 +1581,9 @@ def main() -> int:
     for comparison in comparisons:
         if comparison["status"] in ("STALE", "NONCOMPARABLE"):
             warnings.append(f'{comparison["scenario"]["scenario_id"]} is {comparison["status"]}')
+
+    if any(result["status"] == "QUARANTINED" for result in inspect_simulation(root)):
+        warnings.append("Simulation return quarantined; ordinary research continues independently.")
 
     for warning in warnings:
         print(f"WARNING: {warning}", file=sys.stderr)

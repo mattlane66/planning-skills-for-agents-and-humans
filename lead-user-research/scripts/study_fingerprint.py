@@ -17,6 +17,7 @@ STATE_FILES = (
     "freeze.json",
     "decision_outcome.json",
     "counterfactuals.json",
+    "simulation.json",
     "trends.json",
     "candidates.json",
     "sources.json",
@@ -65,7 +66,13 @@ def _normalized_state(root: Path, filenames: tuple[str, ...]) -> dict[str, Any]:
         path = root / filename
         if not path.exists():
             continue
-        value = json.loads(path.read_text(encoding="utf-8"))
+        raw = path.read_bytes()
+        try:
+            value = json.loads(raw)
+        except (ValueError, UnicodeDecodeError):
+            if filename != "simulation.json":
+                raise
+            value = {"quarantined_bytes_sha256": hashlib.sha256(raw).hexdigest()}
         if filename == "manifest.json" and isinstance(value, dict):
             value = {
                 key: item

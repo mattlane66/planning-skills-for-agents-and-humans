@@ -25,7 +25,9 @@ Existing registries cover search and lineage, contrastive hypotheses, observabil
 
 | S3 | Conditional M, target contrasts and distinct branches with a fixed frame and PASS requirements. Host digest covers the validator imports. 87 lead-user tests passed. |
 
-| S4 | Optional evidence-first CF sidecar with study identity, stable fingerprints, shared comparison basis and stale status. |
+| S4 | Optional evidence-first CF sidecar with study identity, stable fingerprints, shared comparison basis and stale status. 89 lead-user tests passed. |
+
+| S5 | Pinned offline simulation handoff and isolated, grade-aware return quarantine. |
 
 ## Requirements and verification
 
