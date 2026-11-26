@@ -230,3 +230,11 @@ a low-rank inspection and deduplicate by known original provenance. Supply
 JSON objects with `source_ref` and optional `original_ref`, in rank order.
 Inspect the originals before recording them as inspected. A ranked result list
 cannot represent sources excluded by access or language.
+
+## Optional high-volume screening
+
+When the bounded retrieval corpus is too large to inspect directly, see [discovery screening](../references/discovery-screening.md). Consider X, Reddit, GitHub, Hacker News, YouTube and specialist forums where relevant and accessible. Use Jev only after exact human processing approval, reserve low-ranked and unknown cases, retain every result and inspect originals. No provider score qualifies a Lead User or establishes evidence. If access or credentials are missing, continue ordinary discovery and log the limitation.
+
+For relevant X branches, follow [X discovery](../references/x-discovery.md): prefer authorized official API retrieval when available, choose explicit queries/time windows/read limits, inspect originals and conversations, and log any access gap. Otherwise use authorized host search. Do not auto-export posts to screening providers.
+
+For semantic X search or thread exploration, consider [Grok native X Search](../references/grok-x-discovery.md) where approved and available. Use direct X API for bounded reproducible queries; use host search if neither credential is available. Grok citations must be reopened and scope verified. No auto-export to Jev or automatic paid fallback.
