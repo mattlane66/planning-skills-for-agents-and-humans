@@ -91,3 +91,5 @@ search workflows, match access, cost and researcher time, blind the judges,
 measure rare-episode recall, false exclusions, novel supported needs, effort,
 and downstream outcomes. Record failures and costs. Do not enable by default
 until evidence warrants it.
+
+For direct X retrieval, use the [bounded official API adapter](x-discovery.md) or authorized host search. No X data is automatically transferred to Jev; separately verify processing rights and approve the minimized corpus.

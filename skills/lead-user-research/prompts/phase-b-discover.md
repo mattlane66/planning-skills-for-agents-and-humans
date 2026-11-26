@@ -234,3 +234,5 @@ cannot represent sources excluded by access or language.
 ## Optional high-volume screening
 
 When the bounded retrieval corpus is too large to inspect directly, see [discovery screening](../references/discovery-screening.md). Consider X, Reddit, GitHub, Hacker News, YouTube and specialist forums where relevant and accessible. Use Jev only after exact human processing approval, reserve low-ranked and unknown cases, retain every result and inspect originals. No provider score qualifies a Lead User or establishes evidence. If access or credentials are missing, continue ordinary discovery and log the limitation.
+
+For relevant X branches, follow [X discovery](../references/x-discovery.md): prefer authorized official API retrieval when available, choose explicit queries/time windows/read limits, inspect originals and conversations, and log any access gap. Otherwise use authorized host search. Do not auto-export posts to screening providers.
