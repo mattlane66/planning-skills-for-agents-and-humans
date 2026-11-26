@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 CHANGELOG = ROOT / "CHANGELOG.md"
 STABLE_TAG = re.compile(r"^v(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$")
 VERSION_FILES = (
+    Path("plugin.json"),
     Path(".claude-plugin/plugin.json"),
     Path(".codex-plugin/plugin.json"),
     Path("mcp-server/package.json"),

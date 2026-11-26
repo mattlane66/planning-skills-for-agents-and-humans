@@ -91,3 +91,10 @@ workflow. Retain the earlier version of the standalone walkthrough.
 - [Methodology evidence ledger](../../lead-user-research/references/methodology-evidence.md)
 - [Prospective benchmark and rubric](../../lead-user-research/references/empirical-evaluation.md)
 - Updated fictional presentation: `lead-user-research-interactive-v10.html`
+
+## Release-preparation follow-up
+
+- Coordinated repository and plugin distribution version: v1.8.0. Protocol/state compatibility remains 1.7.
+- The release lockfile probe (https://github.com/mattlane66/planning-skills-for-agents-and-humans/actions/runs/45895130810) resolved all identified MCP dependency issues using npm; zero vulnerabilities and 26 passing MCP tests. Final full-repository CI is still required on the exact release candidate.
+- The reviewed standalone presentation was recovered from the maintainer's Library. Original SHA-256: `af28582d219e4d73351e0d165e95c058baca133879b21ea87d9914ac1f786ca7`. The repository copy changes only four revision-branch source links to `main` for stable post-release navigation. SHA-256: `49ab27fc3cba30995dd30e2d1cca156b60a6d187caef4fcd5b9a913f92f7413d`. GitHub blob `38badcc80ace7cebc3974f0005b1fd190b61845a`.
+- Pages stages the presentation at `lead-user-research/` on the next authorized deployment. Nothing has been published by this follow-up.
