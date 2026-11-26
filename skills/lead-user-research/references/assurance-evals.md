@@ -103,3 +103,23 @@ runtime/model combinations; do not treat one passing model as universal assuranc
 Keep failures visible rather than weakening the shared case. Adapter and validator
 subprocesses have timeouts; `--artifacts-dir` optionally retains the generated study
 for failure analysis.
+
+## Optional comparisons and simulation
+
+The ordinary case stays in the default suite. The separate
+`evals/lead-user-optional-assurance-cases.json` adds an offline comparison
+with a stub L0 return and an adversarial L4 impersonation. Both run through
+the host validator and renderer. The optional fixture overlay is only
+available to the fixture scorer. A command adapter receives its public
+prompt and source corpus without the overlay or expected verdict.
+
+```bash
+python scripts/run-lead-user-assurance-evals.py \
+  --cases evals/lead-user-optional-assurance-cases.json \
+  --adapter fixture --runtime ci --runtime-version 1 --model reference \
+  --commit-sha "$(git rev-parse HEAD)"
+```
+
+Use this cases file with the command adapter for blind optional-flow assurance.
+A stub run tests isolation and state transitions. See [empirical evaluation](empirical-evaluation.md)
+for how to test human outcomes and whether the workflow improves decisions.

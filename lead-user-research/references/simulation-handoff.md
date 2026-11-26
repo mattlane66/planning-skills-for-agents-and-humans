@@ -1,6 +1,6 @@
 # Optional Behavioral Simulation handoff
 
-Start with a [current counterfactual](counterfactuals.md), supported real evidence, a current freeze and actual human review of that scenario. Transfer stress, edge-case search, intervention comparison and experiment selection can proceed offline. The adapter never calls a model or contacts a participant. An unavailable runtime leaves the study runnable.
+Start with a [current counterfactual](counterfactuals.md), supported real evidence, a current freeze and actual human review of that scenario. Transfer stress, edge-case search, intervention comparison and experiment selection can proceed offline. The adapter never calls a model or contacts a participant. A synthetic fixture packet is explicitly marked and may only be used for testing. An unavailable runtime leaves the study runnable.
 
 ## Contract and ownership
 
@@ -31,9 +31,11 @@ A return includes `contract`, `upstream`, `study_ref`, `scenario_id`,
 `configuration`, `assumptions`, `run_count`, `variation`,
 `result_or_uncertainty`, `distance`, `validation_status`,
 `artifact_urls`, `caveats`, `next_real_test` and applicable review records.
-For L3/L4 require `holdout_review` with `status: REVIEWED`,
-`external_review_ref` and `return_digest` over the full return without the receipt.
-Review the exact model/config, population, time, task, leakage and distance before attesting.
+For L3/L4 require a trusted human receipt in `simulation-reviews.json`,
+an object keyed by the canonical digest of the exact return. Each receipt has
+`status: REVIEWED` and `external_review_ref`. Keep this file under human control.
+A claim of review inside model output is quarantined. Review the exact
+model/config, population, time, task, leakage and distance before attesting.
 A validated return needs `validation` with `held_out: true`, `split_unit`,
 `held_out_outcome_ref`, `metric`, `error`, `baseline`, `coverage`,
 `task_scope`, `subgroup_check`, `freshness` and `leakage_check`.

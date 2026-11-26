@@ -60,3 +60,8 @@ over asking one long session to run the entire study from memory.
 You do not need to run the Python commands yourself. They are infrastructure Codex can use to initialize the workspace, validate the persisted state, determine the next valid phase, and render the Decision Brief.
 
 For the broader cross-platform workflow and mode definitions, see `QUICKSTART.md`. For the canonical methodology, see `PROTOCOL.md`.
+
+For material behavioral uncertainty after evidence and interpretation, use the
+[optional offline comparison](references/counterfactuals.md). Use
+[adaptive fieldwork](references/adaptive-fieldwork.md) only if the decision
+requires evidence the available traces cannot supply.

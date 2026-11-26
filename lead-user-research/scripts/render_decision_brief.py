@@ -15,6 +15,8 @@ from report_safety import (
     redact_sensitive_text,
     safe_outward_url,
 )
+from counterfactuals import inspect as inspect_counterfactuals
+from simulation_handoff import inspect as inspect_simulation
 from study_fingerprint import study_fingerprint
 
 
@@ -96,6 +98,17 @@ def render_action(action: dict[str, Any]) -> list[str]:
         bullets(action.get("evidence_to_collect", [])),
         "",
     ]
+    design = action.get("test_design")
+    if isinstance(design, dict):
+        labels = (
+            ("Crux", "crux"), ("Observation", "observation"), ("Refuter", "refuter"),
+            ("Why this next", "qualitative_priority"), ("Cost", "cost"),
+            ("Feasibility", "feasibility"), ("Permission", "permission"),
+            ("If positive", "if_positive"), ("If negative", "if_negative"),
+            ("If ambiguous", "if_ambiguous"),
+        )
+        lines += [f"- **{label}:** {markdown_escape(design.get(key, 'UNKNOWN'))}" for label, key in labels]
+        lines.append("")
     return lines
 
 
@@ -133,6 +146,82 @@ def redact_withheld_source_urls(rendered: str, sources: list[dict[str, Any]]) ->
             f"{source_id} (citation withheld)",
         )
     return rendered
+
+
+SIMULATION_HEADING = "## Behavioral Simulation status"
+
+
+def simulation_lines(root: Path) -> list[str]:
+    results = inspect_simulation(root)
+    if not results:
+        return []
+    lines = [SIMULATION_HEADING, "",
+             "Model-derived material may suggest an empirical test. It carries no human evidence or gate authority.", ""]
+    for result in results:
+        status = result["status"]
+        if status == "MODEL_DERIVED":
+            lines.append(f'- {safe_token(result["scenario_id"])} — {safe_token(result["grade"])}; '
+                         f'{safe_token(result["validation"])}. Use: suggest a real-world test.')
+        else:
+            lines.append(f"- {status}")
+    return lines + [""]
+
+
+def optional_analysis_lines(root: Path, hypotheses: list, needs: list, principles: list) -> list[str]:
+    sections: list[str] = []
+    contrasts = [
+        (row.get("hypothesis_id"), row["contrast"]) for row in hypotheses
+        if isinstance(row.get("contrast"), dict)
+    ]
+    mechanisms = [
+        (row.get("principle_id"), row["conditional_mechanism"]) for row in principles
+        if isinstance(row.get("conditional_mechanism"), dict)
+    ]
+    if contrasts or mechanisms:
+        sections += ["## Working inferences and rivals", ""]
+        for ref, row in contrasts:
+            if row.get("kind") == "NOT_APPLICABLE":
+                sections.append(f'- {safe_token(ref)} — {markdown_escape(row.get("rationale", "UNKNOWN"))}')
+            else:
+                differs = markdown_escape(row.get("discriminating_observation", "UNKNOWN"))
+                sections.append(f'- {safe_token(ref)} — {markdown_escape(row.get("alternative", "UNKNOWN"))}. '
+                                f'Distinguish by observing {differs}.')
+        for ref, row in mechanisms:
+            sections.append(f'- {safe_token(ref)} — Proposed M: {markdown_escape(row.get("condition", "UNKNOWN"))}. '
+                            f'{markdown_escape(row.get("behavioral_relation", "UNKNOWN"))}.')
+        sections.append("")
+
+    transfer = [
+        (row.get("need_id"), contrast) for row in needs
+        for contrast in (row.get("transferability_assessment") or {}).get("contrasts", [])
+        if isinstance(contrast, dict)
+    ]
+    if transfer:
+        sections += ["## Transfer assumptions", ""]
+        for ref, row in transfer:
+            sections.append(f'- {safe_token(ref)} — {markdown_escape(row.get("dimension", "UNKNOWN"))}: '
+                            f'{safe_token(row.get("status", "UNKNOWN"))}. '
+                            f'Refuter: {markdown_escape(row.get("refuter", "UNKNOWN"))}.')
+        sections.append("")
+
+    comparisons, errors = inspect_counterfactuals(root)
+    if comparisons or errors:
+        sections += ["## Intervention comparisons", "",
+                     "Analyst hypotheses over the recorded baseline. Test the predicted behavior in the real workflow.", ""]
+        if errors:
+            sections.append("- Review the local comparison state before using it.")
+        else:
+            for result in comparisons:
+                row = result["scenario"]
+                status = result["status"]
+                prefix = f'- {safe_token(row["scenario_id"])} — {status}'
+                if status == "CURRENT":
+                    prefix += (f': {markdown_escape(row["intervention"])}. '
+                               f'Refuter: {markdown_escape(row["refuter"])}. '
+                               f'Next test: {markdown_escape(row["smallest_test"])}.')
+                sections.append(prefix)
+        sections.append("")
+    return sections + simulation_lines(root)
 
 
 def main() -> int:
@@ -414,6 +503,9 @@ def main() -> int:
         "",
     ]
 
+    principles = load(root, "principles.json", [])
+    lines += optional_analysis_lines(root, hypotheses, needs, principles)
+
     lines += ["## Evidence drill-down", ""]
     drill_evidence_refs: list[str] = []
     for ref in outcome.get("decisive_finding_refs", []):
@@ -468,6 +560,10 @@ def main() -> int:
     rendered = "\n".join(lines).rstrip() + "\n"
     rendered = redact_private_entities(rendered, episodes)
     rendered = redact_withheld_source_urls(rendered, sources)
+    for row in evidence:
+        excerpt = row.get("verbatim_excerpt")
+        if isinstance(excerpt, str) and len(excerpt.strip()) >= 20:
+            rendered = redact_sensitive_text(rendered, excerpt, "[source excerpt withheld]")
     output = Path(args.output) if args.output else root / "outputs" / "decision-brief.md"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(rendered, encoding="utf-8")

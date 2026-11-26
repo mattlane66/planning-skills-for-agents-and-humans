@@ -39,3 +39,6 @@ Use **STANDARD** when unsure.
 Discovery seeds and candidate-profile hypotheses guide where to look first. They do not establish Lead User status, count as LU1/LU2 evidence, or close the search universe. Continue pyramiding and advanced-analog discovery beyond them unless an explicit search constraint says otherwise. A supplied source list is a seed set unless the human clearly makes it a hard boundary.
 
 If only the domain and decision are known, start anyway. Phase A records every reusable field as `USER_SUPPLIED`, `PROVISIONAL`, or `UNKNOWN`; every drafted field must be labeled **PROVISIONAL** and surfaced rather than silently treated as user-provided.
+
+For consequential hypotheses, add the closest rival or null, the observation
+that would distinguish it, and the scope or permission needed to observe it.

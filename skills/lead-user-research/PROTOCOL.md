@@ -876,6 +876,14 @@ skill, the public task, and a controlled source corpus; then independently valid
 score the resulting JSON and Decision Brief. Record runtime, model, version, commit,
 repeat number, and failures. Cross-model results remain model- and version-specific.
 
+## Optional research references
+
+- [Evidence-first counterfactuals](references/counterfactuals.md)
+- [Versioned Behavioral Simulation handoff](references/simulation-handoff.md)
+- [Adaptive fieldwork](references/adaptive-fieldwork.md)
+- [Research basis and limits](references/methodology-evidence.md)
+- [Prospective evaluation](references/empirical-evaluation.md)
+
 ## Final standard
 
 The research should let a human act without reconstructing the research process, while still being able to inspect the evidence trail.

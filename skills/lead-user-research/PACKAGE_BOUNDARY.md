@@ -148,3 +148,11 @@ This boundary decision does not:
 - turn Lead User evidence into market validation;
 - grant research-local concepts implementation authority;
 - require a user to repeat decisions whose relevant planning prerequisites are already satisfied and whose provenance is preserved.
+
+## Optional external behavior modeling
+
+The [simulation adapter](references/simulation-handoff.md) prepares a minimized
+permission-scoped packet and records model-derived provenance. Behavioral
+Simulation owns its engine, grounding, validation and calibration. Lead User
+Research owns the human evidence, freeze and decision-relative gates. SIDA
+is a read-only methodological reference for the offline comparison.

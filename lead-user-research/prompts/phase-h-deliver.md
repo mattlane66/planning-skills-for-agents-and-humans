@@ -89,3 +89,9 @@ If PDF generation, HTML generation, interactive validation, browser testing, or 
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+When present, render pivotal limits, working rivals and conditional mechanisms,
+load-bearing transfer conditions, current counterfactuals and the next real test.
+Simulation is a conditional status appendix. Never render raw returned model text
+or restricted traces. Keep the decision and action first and use the host renderer
+and state fingerprint for file-backed delivery.

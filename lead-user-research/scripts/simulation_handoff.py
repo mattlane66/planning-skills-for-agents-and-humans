@@ -16,6 +16,7 @@ from study_fingerprint import canonical_digest
 
 CONTRACT = "lur-simulation-handoff-v1"
 FILE = "simulation.json"
+REVIEWS_FILE = "simulation-reviews.json"
 UPSTREAM = {
     "repository": "mattlane66/behavioral-simulation-for-agents-and-humans",
     "commit": "c11d29c8d121728306037dd799669bb0ef7cfabf",
@@ -33,7 +34,7 @@ RETURN_FIELDS = {
     "evidence_fingerprint", "source_type", "run_id", "mode", "achieved_grade", "ran_at", "model",
     "model_version", "configuration", "assumptions", "run_count", "variation", "result_or_uncertainty",
     "distance", "validation_status", "artifact_urls", "caveats", "next_real_test", "validation",
-    "calibration", "holdout_review",
+    "calibration",
 }
 FORBIDDEN = (
     "Human observation, human sample count, qualification or sufficiency",
@@ -65,7 +66,17 @@ def current_scenarios(root: Path) -> dict[str, dict]:
 
 
 def private_material(root: Path, packet: dict) -> bool:
-    text = json.dumps(packet, ensure_ascii=False)
+    def packet_strings(value):
+        if isinstance(value, dict):
+            for item in value.values():
+                yield from packet_strings(item)
+        elif isinstance(value, list):
+            for item in value:
+                yield from packet_strings(item)
+        elif isinstance(value, str):
+            yield value
+
+    text = "\n".join(packet_strings(packet))
     if re.search(r"\b(?:https?://|www\.|[\w.+-]+@[\w.-]+\.[a-z]{2,})", text, re.I):
         return True
     episodes = read_json(root, "lu_episodes.json", [])
@@ -110,6 +121,7 @@ def packet_for(study: StudyBasis, scenario: dict, request: dict) -> dict:
     return {
         "contract": CONTRACT, "upstream": UPSTREAM, "study_ref": study.study_ref,
         "evidence_fingerprint": study.fingerprint, "scenario_id": scenario["scenario_id"],
+        "synthetic_fixture": study.fixture,
         "scenario_digest": scenario["scenario_digest"], "purpose": scenario["purpose"],
         "research_refs": [f"{study.study_ref}:{ref}" for ref in [basis["episode_ref"], *basis["evidence_refs"]]],
         "frame_and_criteria_refs": [
@@ -156,16 +168,14 @@ def load_requests(root: Path) -> dict:
     return value
 
 
-def reviewed_provenance(record: dict) -> bool:
-    """Check an external review receipt. Empirical verification belongs upstream."""
-    review = record.get("holdout_review")
+def reviewed_provenance(record: dict, reviews: dict) -> bool:
+    """Check an independently recorded receipt. Empirical review belongs upstream."""
+    digest = canonical_digest(record)
+    review = reviews.get(digest)
     validation = record.get("validation")
     if not isinstance(review, dict) or not isinstance(validation, dict):
         return False
-    if not nonempty(review.get("external_review_ref")) or review.get("status") != "REVIEWED" \
-            or review.get("return_digest") != canonical_digest({
-                key: value for key, value in record.items() if key != "holdout_review"
-            }):
+    if not nonempty(review.get("external_review_ref")) or review.get("status") != "REVIEWED":
         return False
     required = ("split_unit", "held_out_outcome_ref", "metric", "error", "baseline", "coverage",
                 "task_scope", "subgroup_check", "freshness", "leakage_check")
@@ -182,7 +192,7 @@ def reviewed_provenance(record: dict) -> bool:
             and all(nonempty(calibration.get(key)) for key in required))
 
 
-def return_issue(record: dict, packet: dict) -> str | None:
+def return_issue(record: dict, packet: dict, reviews: dict) -> str | None:
     if set(record) - RETURN_FIELDS or record.get("source_type") != "SIMULATED_ESTIMATE":
         return "unexpected fields or source type"
     for key in ("contract", "upstream", "study_ref", "scenario_id", "evidence_fingerprint",
@@ -212,7 +222,7 @@ def return_issue(record: dict, packet: dict) -> str | None:
         return "missing external artifact locations"
     if grade in GRADES[:3] and record.get("validation_status") != "NOT_VALIDATED":
         return "unvalidated mode claims validation"
-    if grade in GRADES[3:] and not reviewed_provenance(record):
+    if grade in GRADES[3:] and not reviewed_provenance(record, reviews):
         return "no applicable reviewed holdout or calibration provenance"
     return None
 
@@ -232,6 +242,9 @@ def inspect(root: Path) -> list[dict]:
         if not returns:
             status = "UNAVAILABLE" if state.get("execution_status") == "UNAVAILABLE" else "NOT_RUN"
             return [{"status": status}]
+        reviews = read_json(root, REVIEWS_FILE, {})
+        if not isinstance(reviews, dict):
+            raise ValueError("Trusted human receipts must be a digest-keyed object")
         current = current_scenarios(root)
         results: list[dict] = []
         seen: set[str] = set()
@@ -243,7 +256,7 @@ def inspect(root: Path) -> list[dict]:
                 if len(matching) != 1:
                     raise ValueError("Missing unique processing approval")
                 packet = prepared_packet(study, scenario, matching[0])
-                issue = return_issue(record, packet)
+                issue = return_issue(record, packet, reviews)
                 if issue:
                     raise ValueError(issue)
                 if record["run_id"] in seen:

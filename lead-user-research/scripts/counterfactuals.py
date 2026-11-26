@@ -31,11 +31,15 @@ SCENARIO_FIELDS = (
 )
 
 
+def reject_non_finite(value: str):
+    raise ValueError(f"Non-finite value in JSON: {value}")
+
+
 def read_json(root: Path, filename: str, default=None):
     path = root / filename
     if not path.exists():
         return default
-    return json.loads(path.read_text(encoding="utf-8"))
+    return json.loads(path.read_text(encoding="utf-8"), parse_constant=reject_non_finite)
 
 
 def indexed(root: Path, filename: str, id_field: str) -> dict[str, dict]:
@@ -56,6 +60,7 @@ class StudyBasis:
     evidence: dict = field(repr=False)
     episodes: dict = field(repr=False)
     needs: dict = field(repr=False)
+    findings: dict = field(repr=False)
     frames: dict = field(repr=False)
     criteria: dict = field(repr=False)
     concepts: dict = field(repr=False)
@@ -73,7 +78,8 @@ class StudyBasis:
             root, study_ref, fingerprint, freeze.get("status") == "FROZEN" and expected == fingerprint,
             manifest.get("fixture_type") == "SYNTHETIC_REFERENCE",
             indexed(root, "evidence.json", "evidence_id"), indexed(root, "lu_episodes.json", "lu_id"),
-            indexed(root, "needs.json", "need_id"), indexed(root, "shaping_frame.json", "frame_id"),
+            indexed(root, "needs.json", "need_id"), indexed(root, "findings.json", "finding_id"),
+            indexed(root, "shaping_frame.json", "frame_id"),
             indexed(root, "fit_criteria.json", "requirement_id"), indexed(root, "concepts.json", "concept_id"),
         )
 
@@ -99,6 +105,13 @@ def check_basis(study: StudyBasis, scenario: dict, basis: dict, owner: str,
     episode = study.episodes.get(episode_ref) if isinstance(episode_ref, str) else None
     if need is None or not episode or episode.get("status") != "QUALIFIED":
         errors.append(f"{owner} requires a local interpreted need and qualified episode")
+    elif not any(
+        episode_ref in as_string_list(study.findings.get(ref, {}).get("lu_refs"))
+        for ref in as_string_list(need.get("finding_ids"))
+    ) and not any(
+        ref.startswith(f"{episode_ref}:") for ref in as_string_list(need.get("trace_refs"))
+    ):
+        errors.append(f"{owner} episode is unlinked to the interpreted need")
     refs = set(as_string_list(basis.get("evidence_refs")))
     qualification = set(as_string_list((episode or {}).get("lu1_evidence"))) | set(
         as_string_list((episode or {}).get("lu2_evidence"))
@@ -111,6 +124,13 @@ def check_basis(study: StudyBasis, scenario: dict, basis: dict, owner: str,
             errors.append(f"{owner} has missing or unresolved grounding {ref}")
         elif row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED" and not study.fixture:
             errors.append(f"{owner} grounding {ref} is simulated")
+    if not study.fixture and not any(
+        study.evidence.get(ref, {}).get("evidence_basis") in {
+            "REAL_HUMAN_TRACE", "REAL_HUMAN_STATEMENT", "REAL_HUMAN_ARTIFACT", "INDEPENDENT_OBSERVATION", "EVENT_LOG",
+        }
+        for ref in qualification
+    ):
+        errors.append(f"{owner} requires human episode grounding")
 
     frame_ref = basis.get("frame_ref")
     if frame_ref is None:
@@ -143,11 +163,11 @@ def check_basis(study: StudyBasis, scenario: dict, basis: dict, owner: str,
         return
     candidate = study.concepts.get(candidate_ref) if isinstance(candidate_ref, str) else None
     if not candidate or candidate.get("need_id") != need_ref:
-        errors.append(f"{owner} has a missing or foreign candidate")
+        stale.append("candidate is missing or belongs to a different need")
     elif candidate.get("selection_status") == "REJECTED" or not all(
         candidate.get("requirement_fit", {}).get(ref) is True for ref in all_need_criteria
     ):
-        errors.append(f"{owner} candidate must obey all frozen PASS requirements")
+        stale.append("candidate was rejected or no longer fits the fixed requirements")
     elif scenario.get("candidate_digest") != candidate_digest(candidate):
         stale.append("candidate intervention changed")
 
@@ -226,6 +246,8 @@ def inspect(root: Path) -> tuple[list[dict], list[str]]:
         stale: list[str] = []
         if fingerprint != study.fingerprint:
             stale.append("evidence changed")
+        elif not study.freeze_current:
+            stale.append("no current evidence freeze")
         else:
             try:
                 check_basis(study, scenario, basis, owner, errors, stale)
@@ -252,7 +274,24 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("workspace", type=Path)
     parser.add_argument("--basis", metavar="FRAME_REF", help="Print current evidence and frame digests")
+    parser.add_argument("--digests", metavar="CF_ID", help="Print scenario and basis bindings for local review")
     arguments = parser.parse_args()
+    if arguments.digests:
+        try:
+            study = StudyBasis.load(arguments.workspace)
+            sidecar = read_json(arguments.workspace, FILE)
+            scenario, = [row for row in sidecar.get("scenarios", []) if row.get("scenario_id") == arguments.digests]
+            if not study.study_ref or sidecar.get("study_ref") != study.study_ref:
+                raise ValueError("Study identity mismatch")
+            candidate = study.concepts.get(scenario.get("candidate_ref"))
+            print(json.dumps({
+                "evidence_fingerprint": study.fingerprint,
+                "candidate_digest": candidate_digest(candidate) if candidate else None,
+                "scenario_digest": scenario_digest(study.study_ref, study.fingerprint, scenario),
+            }, indent=2))
+        except (ValueError, KeyError, TypeError, AttributeError, OSError):
+            parser.error("Expected one local draft with a study identity")
+        return 0
     if arguments.basis:
         study = StudyBasis.load(arguments.workspace)
         frame = study.frames.get(arguments.basis)

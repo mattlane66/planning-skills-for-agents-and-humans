@@ -381,3 +381,69 @@ class RevisionStudyTests(unittest.TestCase):
         self.assertEqual([arm["id"] for arm in manifest["arms"]], ["A", "B", "C", "D"])
         self.assertTrue(manifest["arms"][-1]["eligible_subset_only"])
         self.assertFalse(manifest["empirical_results"])
+
+    def test_report_keeps_untrusted_return_text_out_and_checks_status(self):
+        state, record = self.simulation_fixture()
+        state.update(execution_status="RETURN_RECORDED", returns=[record])
+        self.write("simulation.json", state)
+        self.assertEqual(self.script("render_decision_brief.py").returncode, 0)
+        report = self.study / "outputs/decision-brief.md"
+        brief = report.read_text()
+        self.assertIn("## Intervention comparisons", brief)
+        self.assertIn("## Behavioral Simulation status", brief)
+        self.assertIn("NOT_VALIDATED", brief)
+        self.assertNotIn(record["result_or_uncertainty"], brief)
+        result = self.script("validate_study.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report.write_text(brief.replace("NOT_VALIDATED", "CALIBRATION_REVIEWED"))
+        self.assertIn("simulation status disagrees", self.script("validate_study.py").stderr)
+
+    def test_external_review_receipt_cannot_come_from_simulated_return(self):
+        state, record = self.simulation_fixture()
+        from simulation_handoff import StudyBasis, prepared_packet
+        from counterfactuals import scenario_digest
+        from study_fingerprint import canonical_digest
+
+        scenarios = self.read("counterfactuals.json")
+        scenario = scenarios["scenarios"][1]
+        scenario["counterfactual_distance"] = "NEAR_OOD"
+        scenario["scenario_digest"] = scenario_digest(scenarios["study_ref"], scenario["evidence_fingerprint"], scenario)
+        scenario["review_digest"] = scenario["scenario_digest"]
+        self.write("counterfactuals.json", scenarios)
+        request = state["handoffs"][0]
+        request.update(mode="INDIVIDUAL_PROXY", target_grade="L3_HELD_OUT_VALIDATED")
+        packet = prepared_packet(StudyBasis.load(self.study), scenario, request, preview=True)
+        request["packet_digest"] = packet["packet_digest"]
+        record.update(mode=request["mode"], achieved_grade=request["target_grade"],
+                      validation_status="HELD_OUT_REVIEWED", packet_digest=packet["packet_digest"],
+                      scenario_digest=packet["scenario_digest"], distance=packet["distance"])
+        record["validation"] = {key: "Fictional reviewed fixture" for key in (
+            "split_unit", "held_out_outcome_ref", "metric", "error", "baseline", "coverage",
+            "task_scope", "subgroup_check", "freshness", "leakage_check",
+        )}
+        record["validation"]["held_out"] = True
+        state.update(execution_status="RETURN_RECORDED", returns=[record])
+        self.write("simulation.json", state)
+        self.assertEqual(json.loads(self.script("simulation_handoff.py").stdout), [{"status": "QUARANTINED"}])
+        self.write("simulation-reviews.json", {canonical_digest(record): {
+            "status": "REVIEWED", "external_review_ref": "Fictional independent receipt",
+        }})
+        self.assertEqual(json.loads(self.script("simulation_handoff.py").stdout)[0]["status"], "MODEL_DERIVED")
+        record["configuration"] = "Different model scope with stale review"
+        self.write("simulation.json", state)
+        self.assertEqual(json.loads(self.script("simulation_handoff.py").stdout), [{"status": "QUARANTINED"}])
+
+    def test_interpretation_only_counterfactual_needs_no_shaping_frame(self):
+        sidecar = self.comparison_fixture()
+        from counterfactuals import scenario_digest
+
+        for name in ("shaping_frame", "fit_criteria", "concepts"):
+            self.write(name + ".json", [])
+        scenario = sidecar["scenarios"][0]
+        scenario["purpose"] = "TRANSFER_STRESS"
+        scenario["basis"].update(frame_ref=None, frame_digest=None, requirement_refs=[])
+        scenario["scenario_digest"] = scenario_digest(sidecar["study_ref"], scenario["evidence_fingerprint"], scenario)
+        sidecar["scenarios"] = [scenario]
+        self.write("counterfactuals.json", sidecar)
+        results = json.loads(self.script("counterfactuals.py").stdout)
+        self.assertEqual(results["comparisons"][0]["status"], "CURRENT")

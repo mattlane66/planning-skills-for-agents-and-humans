@@ -17,6 +17,7 @@ from research_refinements import (
     validate_interview_context, validate_learning_iterations, validate_next_observation,
     validate_rare_search, validate_test_design, validate_transfer_contrasts,
 )
+from render_decision_brief import SIMULATION_HEADING, simulation_lines
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
 from simulation_handoff import inspect as inspect_simulation
 from study_fingerprint import evidence_fingerprint, study_fingerprint
@@ -1591,6 +1592,12 @@ def main() -> int:
         if comparison["status"] in ("STALE", "NONCOMPARABLE"):
             warnings.append(f'{comparison["scenario"]["scenario_id"]} is {comparison["status"]}')
 
+    if decision_brief_text:
+        simulation = simulation_lines(root)
+        if simulation and "\n".join(simulation).rstrip() not in decision_brief_text:
+            errors.append("Decision Brief simulation status disagrees with authoritative simulation state")
+        if not simulation and SIMULATION_HEADING in decision_brief_text:
+            errors.append("Decision Brief claims simulation without structured simulation state")
     if any(result["status"] == "QUARANTINED" for result in inspect_simulation(root)):
         warnings.append("Simulation return quarantined; ordinary research continues independently.")
 

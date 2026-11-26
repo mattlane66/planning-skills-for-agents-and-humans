@@ -19,7 +19,8 @@ Copy one basis literally to compare alternatives. Use study-local IDs in the sid
 
 ```bash
 python lead-user-research/scripts/counterfactuals.py <workspace> --basis SF1
+python lead-user-research/scripts/counterfactuals.py <workspace> --digests CF1
 python lead-user-research/scripts/counterfactuals.py <workspace>
 ```
 
-The check reports current, stale, noncomparable and invalid records. A changed evidence, frame, criterion or candidate basis requires a new scenario and review before reuse. Use a new CF## and retain the original as history. A stale or noncomparable comparison cannot be used for simulation. Existing study phases operate with or without the sidecar.
+Set the evidence and candidate digests before copying the scenario digest. These commands print bindings and leave local files untouched. The check reports current, stale, noncomparable and invalid records. A changed evidence, frame, criterion or candidate basis requires a new scenario and review before reuse. Use a new CF## and retain the original as history. A stale or noncomparable comparison cannot be used for simulation. Existing study phases operate with or without the sidecar.

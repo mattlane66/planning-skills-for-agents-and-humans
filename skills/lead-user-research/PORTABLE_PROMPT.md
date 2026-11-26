@@ -608,3 +608,33 @@ Lead User Research is optional upstream evidence, not a mandatory predecessor to
 framing. At completion, propose evidence-backed research-to-frame implications and
 stop for explicit human acceptance. The research record remains evidence; it does
 not automatically become an accepted frame or product decision.
+
+## Optional refinements inside A–H
+
+- A: For a consequential hypothesis keep a real null or rival, differing observable
+  predictions, a refuter and the next observability move. Give a reason when a null
+  does not apply.
+- B: Find rare constraint, abandonment, modification, unusual investment and
+  negative-case signals on independent branches. Inspect original and low-ranked
+  results when ranking is available. Keep access limits and derivative lineage.
+  Map structural analogs by the relationship, important mismatch and break condition.
+- C/D: Audit decisive atomic claims for exact location, access, attribution,
+  context, claim type, entailment, independence and contradictions. Keep human
+  review distinct. Repair or exclude unresolved pivotal support. Interview only
+  with consent and when traces are insufficient. Record spontaneous vs probed.
+- E/F: State conditional mechanism M apart from candidate intervention and predicted
+  behavior. Keep rival, negative and unassessed cases. Unresolved load-bearing
+  transfer closes the gate. With human-accepted x/y and fixed PASS requirements,
+  generate independent branches, collapse functional duplicates, and preserve fit
+  and human selection.
+- G/H: Prefer the smallest real observation that could change the decision.
+  Record positive, negative and ambiguous outcomes and a stop condition. Optionally
+  compare interventions over the same accepted frame, baseline, target, evidence
+  and outcome window. On an E-only route test a transfer or evidence assumption
+  without creating a design choice. Keep compatible optional records in the
+  continuation packet using study-local IDs and available fingerprints.
+- With supported evidence, an optional external model handoff can suggest objections
+  or tests. Export only minimized, permissioned, reviewed grounding, and explicitly
+  mark NOT_RUN/UNAVAILABLE without a runtime. Keep generated text and grade outside
+  evidence, qualification, gate support, fit and human approval. Do not claim local
+  hashes, fixture validation or execution you did not perform.
