@@ -6,7 +6,13 @@ Start with a [current counterfactual](counterfactuals.md), supported real eviden
 
 Use `simulation.json` with `contract: lur-simulation-handoff-v1`, `study_ref`, `upstream`, `execution_status: NOT_RUN | UNAVAILABLE | RETURN_RECORDED`, `handoffs: []` and `returns: []`. Pin repository `mattlane66/behavioral-simulation-for-agents-and-humans` to commit `c11d29c8d121728306037dd799669bb0ef7cfabf`, schema version `0.1.0`. [Pinned schemas](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/c11d29c8d121728306037dd799669bb0ef7cfabf/behavioral-simulation/schemas).
 
-A handoff row has `scenario_id`, `mode`, `target_grade`, `permission_scope: REDACTED_SUMMARY_ONLY`, `approval_ref` and `packet_digest`. Prepare a local preview, have a human inspect the exact minimized material and record scoped approval before obtaining the portable packet.
+A handoff row has `scenario_id`, `mode`, `target_grade` and
+`permission_scope: REDACTED_SUMMARY_ONLY`. Prepare a local preview. Have a human
+inspect the exact minimized material and record permission in the `permissions`
+object of `simulation-reviews.json`. Key each receipt by the preview's
+`packet_digest` and include `approval_ref` and `permission_scope`. Keep the file
+under human control. The validator binds receipts to bytes; the research custodian
+establishes consent and custody.
 
 ```bash
 python lead-user-research/scripts/simulation_handoff.py <workspace> --prepare CF1 --preview
@@ -32,7 +38,7 @@ A return includes `contract`, `upstream`, `study_ref`, `scenario_id`,
 `result_or_uncertainty`, `distance`, `validation_status`,
 `artifact_urls`, `caveats`, `next_real_test` and applicable review records.
 For L3/L4 require a trusted human receipt in `simulation-reviews.json`,
-an object keyed by the canonical digest of the exact return. Each receipt has
+under the `returns` object keyed by the canonical digest of the exact return. Each receipt has
 `status: REVIEWED` and `external_review_ref`. Keep this file under human control.
 A claim of review inside model output is quarantined. Review the exact
 model/config, population, time, task, leakage and distance before attesting.

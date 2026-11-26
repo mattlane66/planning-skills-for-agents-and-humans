@@ -100,7 +100,7 @@ Discover:
 - Contradictions and outliers remain visible.
 - Starting hypotheses are challenged with observable predictions, plausible refuters, rival explanations, and contrastive cases; never label a hypothesis CONFIRMED.
 - Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are never human evidence.
-- When a supported need/mechanism is no longer the main uncertainty and the next question is counterfactual behavior under a changed condition, route to Behavioral Simulation (https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation). Treat every returned result as model-derived evidence at its declared evidence grade; never use it to establish LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence.
+- When supported evidence leaves a consequential changed-condition question, prepare an offline analyst comparison first. Export only a minimized packet grounded in a current human-reviewed scenario with explicit processing permission. Use the separately versioned Behavioral Simulation contract (schema 0.1.0 at c11d29c8d121728306037dd799669bb0ef7cfabf) when available. Mark NOT_RUN or UNAVAILABLE as applicable, and keep model-derived material out of human evidence and gates.
 - Prefer behavioral, documentary, or event traces over default interviews when the decision-critical variable is trace-observable.
 - AI coding/extraction of a large corpus requires task-specific sampled validation before its derived evidence is frozen.
 - Insufficient evidence is a valid result.

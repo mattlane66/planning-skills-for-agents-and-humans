@@ -143,7 +143,7 @@ The handoff is bidirectional. If Market Opportunity Underwriting identifies a lo
 
 ## Behavioral Simulation handoff
 
-When the supported Lead User evidence has made the need or mechanism concrete enough and the next uncertainty is **counterfactual human response under a changed condition**, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
+When supported evidence leaves a consequential uncertainty about behavior under a changed condition, begin with an [offline comparison](references/counterfactuals.md). Use the [pinned Behavioral Simulation adapter](references/simulation-handoff.md) only with a current human-reviewed scenario, minimized grounding and explicit processing permission for the packet.
 
 Appropriate uses include:
 
@@ -309,7 +309,7 @@ Once a need, constraint, or mechanism is supported by real Lead User evidence, a
 
 > **What might this person or population do if a relevant condition changed?**
 
-Route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)** rather than stretching Lead User evidence into a counterfactual prediction.
+A [reviewed and permissioned simulation packet](references/simulation-handoff.md) is optional when the offline comparison still leaves a consequential behavioral question.
 
 Behavioral Simulation may consume namespaced Lead User findings as grounding and return:
 - plausibility-space scenarios and edge cases;

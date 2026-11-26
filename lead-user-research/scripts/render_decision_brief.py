@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from report_safety import (
+    identifying_report_excerpt,
     identity_pattern,
     markdown_escape,
     redact_sensitive_text,
@@ -131,20 +132,16 @@ def redact_private_entities(rendered: str, episodes: list[dict[str, Any]]) -> st
     return rendered
 
 
-def redact_withheld_source_urls(rendered: str, sources: list[dict[str, Any]]) -> str:
-    """Remove withheld URLs even when a free-text field caused Markdown escaping."""
+def redact_withheld_sources(rendered: str, sources: list[dict[str, Any]]) -> str:
+    """Remove withheld citation locations and identifiers from outward prose."""
     for source in sources:
         if not isinstance(source, dict) or source.get("outward_citation_allowed") is True:
             continue
-        url = source.get("url")
-        if not isinstance(url, str) or not url.strip():
-            continue
         source_id = markdown_escape(source.get("source_id", "Source"))
-        rendered = redact_sensitive_text(
-            rendered,
-            url,
-            f"{source_id} (citation withheld)",
-        )
+        for field in ("url", "immutable_identifier"):
+            value = source.get(field)
+            if isinstance(value, str) and value.strip():
+                rendered = redact_sensitive_text(rendered, value, f"{source_id} (citation withheld)")
     return rendered
 
 
@@ -224,13 +221,7 @@ def optional_analysis_lines(root: Path, hypotheses: list, needs: list, principle
     return sections + simulation_lines(root)
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("workspace")
-    parser.add_argument("--output", default=None)
-    args = parser.parse_args()
-
-    root = Path(args.workspace)
+def render(root: Path) -> str:
     manifest = load(root, "manifest.json", {})
     decision = load(root, "decision.json", {})
     outcome = load(root, "decision_outcome.json", {})
@@ -559,11 +550,21 @@ def main() -> int:
 
     rendered = "\n".join(lines).rstrip() + "\n"
     rendered = redact_private_entities(rendered, episodes)
-    rendered = redact_withheld_source_urls(rendered, sources)
+    rendered = redact_withheld_sources(rendered, sources)
     for row in evidence:
         excerpt = row.get("verbatim_excerpt")
-        if isinstance(excerpt, str) and len(excerpt.strip()) >= 20:
+        if identifying_report_excerpt(excerpt):
             rendered = redact_sensitive_text(rendered, excerpt, "[source excerpt withheld]")
+    return rendered
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("workspace")
+    parser.add_argument("--output", default=None)
+    args = parser.parse_args()
+    root = Path(args.workspace)
+    rendered = render(root)
     output = Path(args.output) if args.output else root / "outputs" / "decision-brief.md"
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(rendered, encoding="utf-8")

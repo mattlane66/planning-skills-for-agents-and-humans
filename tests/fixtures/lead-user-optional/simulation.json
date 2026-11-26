@@ -12,9 +12,7 @@
       "scenario_id": "CF2",
       "mode": "PLAUSIBILITY_SPACE",
       "target_grade": "L0_ROLEPLAY",
-      "permission_scope": "REDACTED_SUMMARY_ONLY",
-      "approval_ref": "Fictional packet approval",
-      "packet_digest": "sha256:20c4ff33647c30bde2952d5aaeca8b37131873162ccaaf00ac5e3332f3fb9936"
+      "permission_scope": "REDACTED_SUMMARY_ONLY"
     }
   ],
   "returns": [

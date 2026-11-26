@@ -8,6 +8,8 @@ from datetime import datetime
 import json
 from pathlib import Path
 import re
+import subprocess
+import sys
 
 from counterfactuals import StudyBasis, inspect as inspect_counterfactuals, read_json
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
@@ -28,7 +30,7 @@ GRADES = (
     "L0_ROLEPLAY", "L1_PERSON_GROUNDED", "L2_POPULATION_GROUNDED",
     "L3_HELD_OUT_VALIDATED", "L4_DECISION_CALIBRATED",
 )
-REQUEST_FIELDS = {"scenario_id", "mode", "target_grade", "permission_scope", "approval_ref", "packet_digest"}
+REQUEST_FIELDS = {"scenario_id", "mode", "target_grade", "permission_scope"}
 RETURN_FIELDS = {
     "contract", "upstream", "study_ref", "scenario_id", "scenario_digest", "packet_digest",
     "evidence_fingerprint", "source_type", "run_id", "mode", "achieved_grade", "ran_at", "model",
@@ -92,7 +94,7 @@ def private_material(root: Path, packet: dict) -> bool:
                 if nonempty(row.get(field)) and contains_sensitive_text(text, row[field]):
                     return True
     return any(
-        isinstance(row.get("verbatim_excerpt"), str) and len(row["verbatim_excerpt"].strip()) >= 20
+        isinstance(row.get("verbatim_excerpt"), str) and row["verbatim_excerpt"].strip()
         and contains_sensitive_text(text, row["verbatim_excerpt"])
         for row in evidence
     )
@@ -134,7 +136,7 @@ def packet_for(study: StudyBasis, scenario: dict, request: dict) -> dict:
     }
 
 
-def prepared_packet(study: StudyBasis, scenario: dict, request: dict, *, preview=False) -> dict:
+def prepared_packet(study: StudyBasis, scenario: dict, request: dict, *, permissions=None, preview=False) -> dict:
     if not study.freeze_current or scenario.get("human_review") != "REVIEWED":
         raise ValueError("A current evidence freeze and human-reviewed scenario are required")
     if set(request) - REQUEST_FIELDS:
@@ -152,8 +154,11 @@ def prepared_packet(study: StudyBasis, scenario: dict, request: dict, *, preview
     if private_material(study.root, packet):
         raise ValueError("Remove private material and URLs before preparing a portable handoff")
     digest = canonical_digest(packet)
-    if not preview and (not nonempty(request.get("approval_ref")) or request.get("packet_digest") != digest):
-        raise ValueError("Explicit processing permission must bind the exact minimized packet")
+    if not preview:
+        receipt = (permissions or {}).get(digest)
+        if not isinstance(receipt, dict) or receipt.get("permission_scope") != request["permission_scope"] \
+                or not nonempty(receipt.get("approval_ref")):
+            raise ValueError("Explicit processing permission must bind the exact minimized packet")
     return {**packet, "packet_digest": digest, "execution_status": "NOT_RUN"}
 
 
@@ -166,6 +171,17 @@ def load_requests(root: Path) -> dict:
     if value.get("execution_status") not in ("NOT_RUN", "UNAVAILABLE", "RETURN_RECORDED"):
         raise ValueError("Unsupported simulation execution status")
     return value
+
+
+def load_review_receipts(root: Path) -> tuple[dict, dict]:
+    receipts = read_json(root, REVIEWS_FILE, {})
+    if not isinstance(receipts, dict) or set(receipts) - {"permissions", "returns"}:
+        raise ValueError("Keep permission and review receipts under human control")
+    permissions = receipts.get("permissions", {})
+    returns = receipts.get("returns", {})
+    if not isinstance(permissions, dict) or not isinstance(returns, dict):
+        raise ValueError("Receipt registries must be digest-keyed objects")
+    return permissions, returns
 
 
 def reviewed_provenance(record: dict, reviews: dict) -> bool:
@@ -242,9 +258,7 @@ def inspect(root: Path) -> list[dict]:
         if not returns:
             status = "UNAVAILABLE" if state.get("execution_status") == "UNAVAILABLE" else "NOT_RUN"
             return [{"status": status}]
-        reviews = read_json(root, REVIEWS_FILE, {})
-        if not isinstance(reviews, dict):
-            raise ValueError("Trusted human receipts must be a digest-keyed object")
+        permissions, reviews = load_review_receipts(root)
         current = current_scenarios(root)
         results: list[dict] = []
         seen: set[str] = set()
@@ -255,7 +269,7 @@ def inspect(root: Path) -> list[dict]:
                 matching = [item for item in requests if isinstance(item, dict) and item.get("scenario_id") == scenario_id]
                 if len(matching) != 1:
                     raise ValueError("Missing unique processing approval")
-                packet = prepared_packet(study, scenario, matching[0])
+                packet = prepared_packet(study, scenario, matching[0], permissions=permissions)
                 issue = return_issue(record, packet, reviews)
                 if issue:
                     raise ValueError(issue)
@@ -284,6 +298,12 @@ def main() -> int:
     if not args.prepare:
         print(json.dumps(inspect(args.workspace), indent=2))
         return 0
+    validation = subprocess.run(
+        [sys.executable, str(Path(__file__).with_name("validate_study.py")), str(args.workspace), "--state-only"],
+        capture_output=True, check=False,
+    )
+    if validation.returncode:
+        parser.error("Handoff requires structurally valid study state. Run validate_study.py --state-only for the workspace.")
     try:
         requests = load_requests(args.workspace)
         study = StudyBasis.load(args.workspace)
@@ -293,7 +313,8 @@ def main() -> int:
         choices = [row for row in requests["handoffs"] if row["scenario_id"] == args.prepare]
         if len(choices) != 1:
             raise ValueError("Specify one processing request for the scenario")
-        packet = prepared_packet(study, scenario, choices[0], preview=args.preview)
+        permissions, _ = load_review_receipts(args.workspace)
+        packet = prepared_packet(study, scenario, choices[0], permissions=permissions, preview=args.preview)
     except (OSError, ValueError, TypeError, KeyError, AttributeError) as exc:
         parser.error(f"Handoff unavailable ({type(exc).__name__}). Check local state, scope and permission.")
     if args.preview:

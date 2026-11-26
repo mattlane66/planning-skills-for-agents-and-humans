@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import re
-from urllib.parse import unquote, urlsplit
+from urllib.parse import quote, unquote, urlsplit
 
 
 _MARKDOWN_SPECIAL = re.compile(r"([\\`*_{}\[\]()<>#!|~])")
@@ -30,12 +30,17 @@ def contains_private_identity(text: str, identity: str) -> bool:
     return identity_pattern(identity).search(text) is not None
 
 
+def identifying_report_excerpt(value: object) -> bool:
+    """Recognize a source span in prose without confusing short words with headings."""
+    return isinstance(value, str) and len(value.strip()) >= 8
+
+
 def sensitive_text_variants(value: str) -> set[str]:
     """Return renderer-produced variants of sensitive source text."""
     raw = value.strip()
     if not raw:
         return set()
-    variants = {raw, markdown_escape(raw)}
+    variants = {raw, markdown_escape(raw), quote(raw, safe="")}
     safe_url = safe_outward_url(raw)
     if safe_url:
         variants.add(safe_url)

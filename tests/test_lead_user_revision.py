@@ -38,7 +38,7 @@ class RevisionStudyTests(unittest.TestCase):
                         interpretation_completion="NOT_STARTED")
         self.write("manifest.json", manifest)
         freeze = self.read("freeze.json")
-        freeze.update(status="NOT_FROZEN", frozen_at=None, evidence_fingerprint=None,
+        freeze.update(status="OPEN", frozen_at=None, evidence_fingerprint=None,
                       evidence_count=None, qualified_lu_count=None, independent_lineage_count=None)
         self.write("freeze.json", freeze)
         for name in ("findings", "needs", "principles", "shaping_frame", "fit_criteria", "concepts"):
@@ -277,6 +277,11 @@ class RevisionStudyTests(unittest.TestCase):
         self.write("counterfactuals.json", sidecar)
         self.assertIn("scenario digest does not match", self.script("counterfactuals.py").stdout)
 
+    def approve_packet(self, packet):
+        self.write("simulation-reviews.json", {"permissions": {packet["packet_digest"]: {
+            "approval_ref": "Fictional packet approval", "permission_scope": "REDACTED_SUMMARY_ONLY",
+        }}})
+
     def simulation_fixture(self):
         sidecar = self.comparison_fixture()
         from simulation_handoff import CONTRACT, UPSTREAM, StudyBasis, prepared_packet
@@ -288,7 +293,7 @@ class RevisionStudyTests(unittest.TestCase):
         request = {"scenario_id": "CF2", "mode": "PLAUSIBILITY_SPACE", "target_grade": "L0_ROLEPLAY",
                    "permission_scope": "REDACTED_SUMMARY_ONLY"}
         packet = prepared_packet(StudyBasis.load(self.study), scenario, request, preview=True)
-        request.update(approval_ref="Fictional packet approval", packet_digest=packet["packet_digest"])
+        self.approve_packet(packet)
         state = {"contract": CONTRACT, "study_ref": sidecar["study_ref"], "upstream": UPSTREAM,
                  "execution_status": "NOT_RUN", "handoffs": [request], "returns": []}
         self.write("simulation.json", state)
@@ -314,8 +319,7 @@ class RevisionStudyTests(unittest.TestCase):
         self.assertIn(f'{state["study_ref"]}:E2', packet["research_refs"])
         self.assertNotIn("Operator Alpha", result.stdout)
         self.assertNotIn("source-corpus", result.stdout)
-        state["handoffs"][0]["packet_digest"] = "invalid"
-        self.write("simulation.json", state)
+        self.write("simulation-reviews.json", {"permissions": {}})
         self.assertNotEqual(self.script("simulation_handoff.py", "--prepare", "CF2").returncode, 0)
         state["execution_status"] = "UNAVAILABLE"
         self.write("simulation.json", state)
@@ -396,7 +400,9 @@ class RevisionStudyTests(unittest.TestCase):
         result = self.script("validate_study.py")
         self.assertEqual(result.returncode, 0, result.stderr)
         report.write_text(brief.replace("NOT_VALIDATED", "CALIBRATION_REVIEWED"))
-        self.assertIn("simulation status disagrees", self.script("validate_study.py").stderr)
+        self.assertIn("differs from the canonical render", self.script("validate_study.py").stderr)
+        report.write_text(brief + "\n### Verified simulation finding\nCF2 proved adoption.\n")
+        self.assertIn("differs from the canonical render", self.script("validate_study.py").stderr)
 
     def test_external_review_receipt_cannot_come_from_simulated_return(self):
         state, record = self.simulation_fixture()
@@ -413,7 +419,7 @@ class RevisionStudyTests(unittest.TestCase):
         request = state["handoffs"][0]
         request.update(mode="INDIVIDUAL_PROXY", target_grade="L3_HELD_OUT_VALIDATED")
         packet = prepared_packet(StudyBasis.load(self.study), scenario, request, preview=True)
-        request["packet_digest"] = packet["packet_digest"]
+        self.approve_packet(packet)
         record.update(mode=request["mode"], achieved_grade=request["target_grade"],
                       validation_status="HELD_OUT_REVIEWED", packet_digest=packet["packet_digest"],
                       scenario_digest=packet["scenario_digest"], distance=packet["distance"])
@@ -425,9 +431,11 @@ class RevisionStudyTests(unittest.TestCase):
         state.update(execution_status="RETURN_RECORDED", returns=[record])
         self.write("simulation.json", state)
         self.assertEqual(json.loads(self.script("simulation_handoff.py").stdout), [{"status": "QUARANTINED"}])
-        self.write("simulation-reviews.json", {canonical_digest(record): {
+        receipts = self.read("simulation-reviews.json")
+        receipts["returns"] = {canonical_digest(record): {
             "status": "REVIEWED", "external_review_ref": "Fictional independent receipt",
-        }})
+        }}
+        self.write("simulation-reviews.json", receipts)
         self.assertEqual(json.loads(self.script("simulation_handoff.py").stdout)[0]["status"], "MODEL_DERIVED")
         record["configuration"] = "Different model scope with stale review"
         self.write("simulation.json", state)
@@ -447,3 +455,86 @@ class RevisionStudyTests(unittest.TestCase):
         self.write("counterfactuals.json", sidecar)
         results = json.loads(self.script("counterfactuals.py").stdout)
         self.assertEqual(results["comparisons"][0]["status"], "CURRENT")
+
+    def test_packet_command_requires_structurally_valid_freeze_and_concept_gate(self):
+        self.simulation_fixture()
+        freeze = self.read("freeze.json")
+        self.write("freeze.json", {**freeze, "frozen_at": ""})
+        self.assertNotEqual(self.script("simulation_handoff.py", "--prepare", "CF2").returncode, 0)
+        self.write("freeze.json", freeze)
+        needs = self.read("needs.json")
+        needs[0]["concept_gate_status"] = "FAIL"
+        self.write("needs.json", needs)
+        self.assertNotEqual(self.script("simulation_handoff.py", "--prepare", "CF2").returncode, 0)
+
+    def test_private_short_verbatim_excerpt_cannot_leave_workspace(self):
+        self.comparison_fixture()
+        from simulation_handoff import private_material
+
+        evidence = self.read("evidence.json")
+        evidence[0]["verbatim_excerpt"] = "Sample private text"
+        self.write("evidence.json", evidence)
+        self.assertTrue(private_material(self.study, {"baseline": "Sample private text"}))
+        self.assertFalse(private_material(self.study, {"baseline": "Generalized baseline"}))
+
+    def test_bounded_sample_finds_rare_original_among_popular_derivatives(self):
+        self.comparison_fixture()
+        from sample_discovery import inspection_batch
+
+        ranked = [
+            {"source_ref": "SRC9", "original_ref": "SRC2"},
+            {"source_ref": "SRC3", "original_ref": "SRC2"},
+            {"source_ref": "SRC2"},
+            {"source_ref": "SRC1"},
+            {"source_ref": "SRC4"},
+        ]
+        batch = inspection_batch(ranked, budget=2, low_rank_count=1)
+        self.assertEqual([row["original_ref"] for row in batch], ["SRC2", "SRC4"])
+        self.assertTrue(batch[-1]["low_rank_sample"])
+        source = (self.study / "source-corpus/operator-gamma.md").read_text()
+        self.assertIn("abandon", source.lower())
+
+    def test_excluded_trend_claim_cannot_support_qualification_or_sufficiency(self):
+        self.start_evidence_repair()
+        evidence = self.read("evidence.json")
+        evidence[0]["claim_audit"] = {"decision_use": "EXCLUDED", "human_review": "NOT_REVIEWED", "checks": {
+            key: {"status": "FAIL", "rationale": "Fictional contradictory source", "refs": []}
+            for key in ("access", "attribution", "context", "claim_type", "entailment",
+                        "independent_support", "contradictions")
+        }}
+        self.write("evidence.json", evidence)
+        errors = self.script("validate_study.py").stderr
+        self.assertIn("qualification trend relies on unresolved or excluded audited evidence E1", errors)
+        self.assertIn("sufficient trend_support relies on unresolved or excluded audited evidence E1", errors)
+
+    def test_unparseable_scenario_content_reports_a_structural_error(self):
+        sidecar = self.comparison_fixture()
+        for bad in (float("inf"), "\udfff"):
+            with self.subTest(bad=repr(bad)):
+                sidecar["scenarios"][0]["refuter"] = bad
+                self.write("counterfactuals.json", sidecar)
+                result = self.script("counterfactuals.py")
+                self.assertEqual(result.returncode, 1)
+                self.assertNotIn("Traceback", result.stderr)
+                self.assertEqual(self.script("render_decision_brief.py").returncode, 0)
+
+    def test_short_common_excerpt_does_not_corrupt_structural_report_headings(self):
+        script_dir = PACKAGE / "scripts"
+        sys.path.insert(0, str(script_dir))
+        self.addCleanup(sys.path.remove, str(script_dir))
+        from study_fingerprint import evidence_fingerprint
+
+        evidence = self.read("evidence.json")
+        evidence[0]["verbatim_excerpt"] = "test"
+        evidence[1]["verbatim_excerpt"] = "a"
+        self.write("evidence.json", evidence)
+        freeze = self.read("freeze.json")
+        freeze["evidence_fingerprint"] = evidence_fingerprint(self.study)
+        self.write("freeze.json", freeze)
+        result = self.script("render_decision_brief.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = (self.study / "outputs/decision-brief.md").read_text()
+        self.assertIn("## Recommendation — TEST", report)
+        self.assertIn("- Study status: COMPLETE", report)
+        result = self.script("validate_study.py")
+        self.assertEqual(result.returncode, 0, result.stderr)

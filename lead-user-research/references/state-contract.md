@@ -721,7 +721,7 @@ digest functions. The sidecar contributes to the Decision Brief fingerprint
 when present. It never changes the Evidence Freeze fingerprint.
 
 See [simulation handoff](simulation-handoff.md) for the optional `simulation.json`
-adapter and separate return status. It contributes to the report fingerprint only.
+adapter, trusted human receipts in `simulation-reviews.json` and separate return status. These contribute to the report fingerprint only.
 The Evidence Freeze, ownership and evaluation of the human research stay independent.
 
 ## Optional learning detail

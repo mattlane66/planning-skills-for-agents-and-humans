@@ -714,9 +714,21 @@ def score_workspace(
     if optional_status:
         scenarios, comparison_errors = inspect_counterfactuals(artifact_root)
         simulations = inspect_simulation(artifact_root)
+        groups: dict[str, list[dict]] = {}
+        for row in scenarios:
+            if row["status"] == "CURRENT":
+                scenario = row["scenario"]
+                groups.setdefault(scenario["comparison_id"], []).append(scenario)
+        comparable_ids = {
+            row["scenario_id"] for group in groups.values()
+            if len({row["intervention"] for row in group}) >= 2 for row in group
+        }
+        matching_return = optional_status != "MODEL_DERIVED" or any(
+            row.get("scenario_id") in comparable_ids for row in simulations
+        )
         add_check(
             checks, failures, "optional-comparison-and-simulation",
-            not comparison_errors and sum(row["status"] == "CURRENT" for row in scenarios) >= 2
+            not comparison_errors and bool(comparable_ids) and matching_return
             and [row["status"] for row in simulations] == [optional_status]
             and "## Behavioral Simulation status" in brief,
             "a comparable evidence-first record and the expected isolated simulation status are present",
@@ -847,6 +859,7 @@ def run_case(
                 manifest.update(json.loads((OPTIONAL_FIXTURE / "manifest-patch.json").read_text(encoding="utf-8")))
                 manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
                 shutil.copy2(OPTIONAL_FIXTURE / "counterfactuals.json", artifact_root)
+                shutil.copy2(OPTIONAL_FIXTURE / "simulation-reviews.json", artifact_root)
                 simulation = json.loads((OPTIONAL_FIXTURE / "simulation.json").read_text(encoding="utf-8"))
                 if case["expected_simulation_status"] == "QUARANTINED":
                     simulation["returns"][0]["achieved_grade"] = "L4_DECISION_CALIBRATED"
