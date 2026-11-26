@@ -27,7 +27,9 @@ Existing registries cover search and lineage, contrastive hypotheses, observabil
 
 | S4 | Optional evidence-first CF sidecar with study identity, stable fingerprints, shared comparison basis and stale status. 89 lead-user tests passed. |
 
-| S5 | Pinned offline simulation handoff and isolated, grade-aware return quarantine. |
+| S5 | Pinned offline simulation handoff and isolated, grade-aware return quarantine. 91 lead-user tests passed. |
+
+| S6 | Bounded learning, neutral fieldwork, discriminating A## actions and prospective benchmark manifest/rubric. |
 
 ## Requirements and verification
 

@@ -201,3 +201,15 @@ Trace every decisive inference to its supporting evidence. Exclude claims whose 
 An evidence-first counterfactual can be delivered offline. After E, the question can be a transfer or test-priority assumption without Phase F. After F it can compare candidates over the same evidence and approved basis. Do not rank by synthetic response or treat a comparison as a causal effect.
 
 If a reviewed comparison leaves material behavioral uncertainty, see [simulation handoff](../references/simulation-handoff.md). Route a minimized approved packet to the separate method, or record NOT_RUN/UNAVAILABLE. Return plausible objections to the empirical test plan with their provenance. Generated material stays outside evidence, transfer support, Fit Check, and selection.
+
+Choose the cheapest feasible observation that separates a live rival and could
+change the pending decision. Compare the decision impact and discriminatory
+value of an artifact, log, direct observation or consented interview relative to
+effort. Record the crux, observation, refuter, time/cost, feasibility, permission,
+and what each positive, negative and ambiguous result changes. Keep the existing
+A## owner, deliverable and stop condition. An ambiguous or no-effect outcome
+may end the effort or redirect it. If permission or cost is unknown, say UNKNOWN.
+
+Timebox critique → retrieve → revise. For each round keep the objection, needed
+evidence, actual action, observation or UNKNOWN, revision and decision effect.
+Stop at diminishing decision value, the timebox or an existing scope boundary.

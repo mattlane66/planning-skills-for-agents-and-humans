@@ -14,7 +14,8 @@ from counterfactuals import inspect as inspect_counterfactuals
 from research_refinements import (
     claim_can_support_decision, pivotal_claim_blockers, validate_analog, validate_claim_audit,
     validate_conditional_mechanism, validate_generation, validate_hypothesis_contrast,
-    validate_rare_search, validate_transfer_contrasts,
+    validate_interview_context, validate_learning_iterations, validate_next_observation,
+    validate_rare_search, validate_test_design, validate_transfer_contrasts,
 )
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
 from simulation_handoff import inspect as inspect_simulation
@@ -378,12 +379,18 @@ def main() -> int:
     for row in hypotheses:
         if isinstance(row, dict):
             validate_hypothesis_contrast(row, evidence_ids, errors)
+            validate_learning_iterations(row, evidence_ids, errors)
+
+    for row in observability:
+        if isinstance(row, dict):
+            validate_next_observation(row, hypothesis_ids, errors)
 
     for row in evidence:
         if not isinstance(row, dict):
             continue
         eid = row.get("evidence_id", "<unknown>")
         validate_claim_audit(row, source_by_id, evidence_ids, errors)
+        validate_interview_context(row, is_synthetic_fixture, errors)
         sid = row.get("source_id")
         if not isinstance(sid, str) or sid not in source_ids:
             errors.append(f"{eid} references missing source_id: {sid}")
@@ -1416,6 +1423,8 @@ def main() -> int:
             action_ids: set[str] = set()
             for index, action in enumerate(actions):
                 action_id = validate_action(action, index, errors)
+                if isinstance(action, dict):
+                    validate_test_design(action, hypothesis_ids, observability_ids, errors)
                 if action_id:
                     if action_id in action_ids:
                         errors.append(f"duplicate action_id: {action_id}")

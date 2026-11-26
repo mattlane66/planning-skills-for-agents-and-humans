@@ -341,3 +341,43 @@ class RevisionStudyTests(unittest.TestCase):
                 result = json.loads(self.script("simulation_handoff.py").stdout)
                 self.assertEqual(result, [{"status": "QUARANTINED"}])
         self.assertEqual(evidence_fingerprint(self.study), freeze_before)
+
+    def test_test_design_is_falsifiable_and_preserves_ambiguity(self):
+        outcomes = self.read("decision_outcome.json")
+        action = outcomes["action_now"][0]
+        action["test_design"] = {
+            "crux": "Does a simpler workflow reduce omissions?",
+            "observation": "Inspect corrections and missing decisions in equal tasks",
+            "refuter": "Omissions do not decline at matched effort",
+            "qualitative_priority": "The existing log can resolve this first",
+            "cost": "One review", "permission": "UNKNOWN", "feasibility": "Available log",
+            "hypothesis_refs": ["H1"], "observability_refs": ["O1"],
+            "if_positive": "Repeat the test", "if_negative": "Abandon the mechanism",
+            "if_ambiguous": "Hold and inspect the confound",
+        }
+        self.write("decision_outcome.json", outcomes)
+        self.assertNotIn("test_design", self.script("validate_study.py").stderr)
+        action["test_design"]["if_ambiguous"] = "Repeat the test"
+        self.write("decision_outcome.json", outcomes)
+        self.assertIn("ambiguous observation cannot carry", self.script("validate_study.py").stderr)
+
+    def test_interviewer_prose_never_counts_as_participant_statement(self):
+        self.start_evidence_repair()
+        evidence = self.read("evidence.json")
+        context = {"speaker": "PARTICIPANT", "elicitation": "SPONTANEOUS", "question_context": "Open account",
+                   "consent_ref": "Synthetic fixture", "recording": "NONE"}
+        evidence[0]["interview_context"] = context
+        self.write("evidence.json", evidence)
+        self.assertNotIn("interview_context", self.script("validate_study.py").stderr)
+        context.update(speaker="INTERVIEWER", elicitation="PROBED", recording="UNAUTHORIZED")
+        self.write("evidence.json", evidence)
+        errors = self.script("validate_study.py").stderr
+        for expected in ("attributed participant", "question_text", "recording status"):
+            self.assertIn(expected, errors)
+
+    def test_empirical_benchmark_remains_prospective(self):
+        manifest = json.loads((PACKAGE / "references/empirical-benchmark.json").read_text())
+        self.assertEqual(manifest["status"], "PROPOSED_NOT_RUN")
+        self.assertEqual([arm["id"] for arm in manifest["arms"]], ["A", "B", "C", "D"])
+        self.assertTrue(manifest["arms"][-1]["eligible_subset_only"])
+        self.assertFalse(manifest["empirical_results"])

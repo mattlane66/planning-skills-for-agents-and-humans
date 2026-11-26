@@ -245,3 +245,81 @@ def validate_generation(row: dict, frames: dict, criteria: dict, seen: set[tuple
         if entry in seen:
             errors.append(f"{label} duplicates a functional mechanism on the same frame")
         seen.add(entry)
+
+
+def validate_learning_iterations(row: dict, evidence_ids: set[str], errors: list[str]) -> None:
+    if "learning_iterations" not in row:
+        return
+    label = f"{row.get('hypothesis_id', 'hypothesis')} learning_iterations"
+    iterations = row["learning_iterations"]
+    if not isinstance(iterations, list):
+        errors.append(f"{label} must be a list")
+        return
+    for index, step in enumerate(iterations, 1):
+        owner = f"{label} {index}"
+        if not isinstance(step, dict):
+            errors.append(f"{owner} must be an object")
+            continue
+        for field in ("objection", "evidence_needed", "action", "result", "revision", "decision_effect"):
+            require_nonempty_string(step, field, owner, errors)
+        refs = require_string_list(step, "evidence_refs", owner, errors,
+                                   nonempty=step.get("result") != "UNKNOWN")
+        refs_exist(refs, evidence_ids, "learning evidence", owner, errors)
+    require_nonempty_string(row, "learning_stop_condition", label, errors)
+
+
+def validate_interview_context(row: dict, synthetic_fixture: bool, errors: list[str]) -> None:
+    owner = row.get("evidence_id", "evidence")
+    context = optional_object(row, "interview_context", owner, errors)
+    if context is None:
+        return
+    label = f"{owner} interview_context"
+    supported = row.get("evidence_basis") == "REAL_HUMAN_STATEMENT" or (
+        synthetic_fixture and row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED"
+    )
+    if not supported or context.get("speaker") != "PARTICIPANT":
+        errors.append(f"{label} only records the attributed participant statement")
+    if context.get("elicitation") not in ("SPONTANEOUS", "PROBED"):
+        errors.append(f"{label} requires SPONTANEOUS or PROBED elicitation")
+    for field in ("question_context", "consent_ref"):
+        require_nonempty_string(context, field, label, errors)
+    if context.get("elicitation") == "PROBED":
+        require_nonempty_string(context, "question_text", label, errors)
+    if context.get("recording") not in ("NONE", "CONSENTED"):
+        errors.append(f"{label} requires NONE or CONSENTED recording status")
+
+
+def validate_next_observation(row: dict, hypothesis_ids: set[str], errors: list[str]) -> None:
+    owner = row.get("observability_id", "observability")
+    observation = optional_object(row, "next_observation", owner, errors)
+    if observation is None:
+        return
+    label = f"{owner} next_observation"
+    for field in ("observation", "rationale", "cost_or_time", "permission", "feasibility"):
+        require_nonempty_string(observation, field, label, errors)
+    if observation.get("route") not in ("ARTIFACT", "LOG", "OBSERVATION", "INTERVIEW", "UNKNOWN"):
+        errors.append(f"{label} requires an observability route")
+    if row.get("resolution") == "RESOLVED_BY_TRACES" and observation.get("route") == "INTERVIEW":
+        errors.append(f"{label} use the sufficient trace for this question")
+    refs = require_string_list(observation, "hypothesis_refs", label, errors)
+    refs_exist(refs, hypothesis_ids, "hypothesis", label, errors)
+
+
+def validate_test_design(action: dict, hypothesis_ids: set[str], observability_ids: set[str],
+                         errors: list[str]) -> None:
+    owner = action.get("action_id", "action")
+    design = optional_object(action, "test_design", owner, errors)
+    if design is None:
+        return
+    label = f"{owner} test_design"
+    for field in ("crux", "observation", "refuter", "qualitative_priority", "cost",
+                  "permission", "feasibility", "if_positive", "if_negative", "if_ambiguous"):
+        require_nonempty_string(design, field, label, errors)
+    refs = require_string_list(design, "hypothesis_refs", label, errors, nonempty=True)
+    refs_exist(refs, hypothesis_ids, "discriminated hypothesis", label, errors)
+    refs = require_string_list(design, "observability_refs", label, errors)
+    refs_exist(refs, observability_ids, "observability", label, errors)
+    if design.get("if_positive") == design.get("if_negative"):
+        errors.append(f"{label} the two discriminating outcomes must change the decision differently")
+    if design.get("if_positive") == design.get("if_ambiguous"):
+        errors.append(f"{label} an ambiguous observation cannot carry the positive consequence")

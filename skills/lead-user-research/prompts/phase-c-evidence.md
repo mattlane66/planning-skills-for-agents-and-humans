@@ -208,3 +208,8 @@ After writing and validating this phase, follow
 `scripts/next_research_move.py`; do not advance from invocation history alone.
 
 Audit atomic evidence the decision relies on. Inspect the smallest source span. Check access, actor attribution, time and context, statement versus observed behavior, entailment, independence, and contradictions or missing coverage. Record each result and its sources with human review status separately. Model-assisted checks can flag errors and unknowns. Inspect the original before resolving them. Keep unverifiable claims as gaps or explicitly exclude them from decision use.
+
+Use [adaptive fieldwork](../references/adaptive-fieldwork.md) only for relevant
+observability gaps. Prefer traces when sufficient. If you conduct a permitted
+interview, distinguish spontaneous and probed statements, record the exact
+question context and preserve UNKNOWNs.

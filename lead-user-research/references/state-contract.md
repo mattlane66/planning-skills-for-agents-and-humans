@@ -723,3 +723,22 @@ when present. It never changes the Evidence Freeze fingerprint.
 See [simulation handoff](simulation-handoff.md) for the optional `simulation.json`
 adapter and separate return status. It contributes to the report fingerprint only.
 The Evidence Freeze, ownership and evaluation of the human research stay independent.
+
+## Optional learning detail
+
+- H## `learning_iterations` records `objection`, `evidence_needed`, `action`,
+  `result`, `revision`, `decision_effect` and `evidence_refs` (atomic evidence
+  required for a non-UNKNOWN result). Record `learning_stop_condition` on the
+  hypothesis. Log post-freeze changes through the existing change protocol.
+- E### `interview_context` records `speaker: PARTICIPANT`,
+  `elicitation: SPONTANEOUS | PROBED`, `question_context`, `question_text`
+  when probed, `consent_ref`, and `recording: NONE | CONSENTED`.
+  This is local interview context, never a public report field.
+- O## `next_observation` records `route: ARTIFACT | LOG | OBSERVATION |
+  INTERVIEW | UNKNOWN`, `observation`, `rationale`, `cost_or_time`,
+  `permission`, `feasibility` and `hypothesis_refs`.
+- A## `test_design` records `crux`, `observation`, `refuter`,
+  `qualitative_priority`, `cost`, `permission`, `feasibility`,
+  `hypothesis_refs`, `observability_refs`, `if_positive`, `if_negative`,
+  and `if_ambiguous`. Reuse the existing action fields for owner, timebox,
+  deliverable and stop condition. State UNKNOWN for unknown logistics.
