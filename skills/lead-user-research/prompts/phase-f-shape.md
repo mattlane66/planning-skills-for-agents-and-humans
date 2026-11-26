@@ -88,6 +88,8 @@ Freeze the research-local criteria before evaluating mechanisms. Hold x and y co
 
 Do not treat these R## rows as accepted project requirements. Their identity is local to the research workspace until the research-to-planning handoff maps them into project planning with explicit provenance.
 
+A prototype may reveal a different need, but never revise criteria mid-comparison to favor a mechanism. If new evidence warrants a material reformulation, record the post-freeze evidence change using the existing PF## procedure, reassess affected qualification, sufficiency, interpretation and concept gates, preserve superseded records in change history, invalidate dependent approvals/criteria/comparisons/selections/decisions/handoff, and obtain renewed human acceptance before a new comparison. If material research scope changes, return to Frame with human approval; create a new study if required to preserve the original frozen record.
+
 ## Concept generation
 
 Generate enough materially different candidate mechanisms to test the research-local fit criteria.
@@ -101,6 +103,8 @@ If only one credible mechanism emerges:
 - say so;
 - re-examine whether the criteria are too mechanism-specific;
 - preserve the result if they are still valid.
+
+When warranted, recombine supported principles from independent users/domains and involve actual lead users and typical target users in subsequent collaborative development. Compare candidate novelty and target-context applicability separately in mechanism assumptions/risks; ratings or design fit are not measured performance. Preserve the binary research-local Fit Check, human selection and rotation. An AI-only recombination is a hypothesis, not a completed lead-user workshop.
 
 ## Compare
 
@@ -155,3 +159,7 @@ After writing and validating this phase, follow
 `scripts/next_research_move.py`; do not advance from invocation history alone.
 
 When the completed research is handed into product planning, preserve the Phase F records and human provenance as research evidence. Do not rebuild them merely because the package boundary changed. An accepted handoff with useful Phase F material normally enters `shaping` in collaborative mode as **Working** planning material; planning promotion gates still govern acceptance, Appetite, project selection, and build scope.
+
+Once the human accepts x/y and the PASS criteria are fixed, use separate generation branches over the same frame, requirements and boundaries. Branches can change the functional principle, transfer a structural analog, eliminate a step or rearrange the workflow within the boundaries. Keep candidate lists separate until synthesis. Collapse paraphrases by functional mechanism, retaining the discarded alternative and reason. Reject boundary violations. If one credible option survives, say why and recheck overconstraint. Generate no quota. Distinguish general M, intervention f(), its predicted behavior and how to test it. Retain binary Fit Check, human selection and rotated Fit Check.
+
+When the remaining uncertainty is behavioral, optionally compare candidate interventions in [counterfactuals](../references/counterfactuals.md). Hold x/y, frozen requirements, baseline, target, episode, evidence, horizon and outcomes fixed. State the changed conditions and a real-world refuter for each hypothesis.

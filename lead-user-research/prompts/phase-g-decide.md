@@ -139,7 +139,11 @@ not a selected project shape and not a selected planning shape. They are evidenc
 planning inputs after an accepted handoff; they are not accepted product requirements,
 a selected project shape, selected-design intent, active scope, or build authorization.
 
-### Decision status
+#For an empirical TEST, specify the explanation and rival, intervention/comparator, observable prediction, measurement and success/stop thresholds in the structured action fields; distinguish hypothesized from measured effects and predefine what result changes the decision. When relevant, recommend independent typical-user tests under realistic or explicitly justified future conditions: actual use, repeat use, switching or payment rather than hypothetical ratings alone. Do not impose commercial tests on a noncommercial decision. Hand off market size, economic demand and unit economics to underwriting. Preserve the existing authority boundary.
+
+Test the need formulation as well as mechanism when uncertainty warrants: compare the proposed pairing against the existing practice and a credible alternative formulation or substitute, predefine observations that could overturn either, and record revision triggers in action_now and change conditions. Do not infer demand from hypothetical benefit.
+
+## Decision status
 
 For SCOUT:
 
@@ -191,3 +195,21 @@ and model checks.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Trace every decisive inference to its supporting evidence. Exclude claims whose pivotal attribution, entailment or independent support remains unresolved. A well-supported negative or a bounded HOLD is a deliverable.
+
+An evidence-first counterfactual can be delivered offline. After E, the question can be a transfer or test-priority assumption without Phase F. After F it can compare candidates over the same evidence and approved basis. Do not rank by synthetic response or treat a comparison as a causal effect.
+
+If a reviewed comparison leaves material behavioral uncertainty, see [simulation handoff](../references/simulation-handoff.md). Route a minimized approved packet to the separate method, or record NOT_RUN/UNAVAILABLE. Return plausible objections to the empirical test plan with their provenance. Generated material stays outside evidence, transfer support, Fit Check, and selection.
+
+Choose the cheapest feasible observation that separates a live rival and could
+change the pending decision. Compare the decision impact and discriminatory
+value of an artifact, log, direct observation or consented interview relative to
+effort. Record the crux, observation, refuter, time/cost, feasibility, permission,
+and what each positive, negative and ambiguous result changes. Keep the existing
+A## owner, deliverable and stop condition. An ambiguous or no-effect outcome
+may end the effort or redirect it. If permission or cost is unknown, say UNKNOWN.
+
+Timebox critique → retrieve → revise. For each round keep the objection, needed
+evidence, actual action, observation or UNKNOWN, revision and decision effect.
+Stop at diminishing decision value, the timebox or an existing scope boundary.

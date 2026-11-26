@@ -55,7 +55,7 @@ For every H##, execute the highest-value targeted refutation searches before tre
 
 Record searches that fail to find evidence as search outcomes, not proof that the hypothesis is true.
 
-## Task 2 — Candidate discovery through three Lead User paths
+## Task 2 — Candidate discovery
 
 For each important trend or high-value emerging need, explicitly consider all three Lead User discovery paths:
 
@@ -84,7 +84,7 @@ These are **discovery/prioritization aids only**. They do not establish LU1 or L
 
 Do not optimize for fame.
 
-## Task 2A — Public-web need–solution mining
+## Task 2A — Public web mining
 
 When public user-generated content is relevant, run a complementary `WEB_NEED_SOLUTION` lane. Search semantically for bounded episodes that contain both a problem/need expression and a user-created response, modification, workaround, invention, or abandonment. Do not rely only on exact phrases such as "I invented" or "I solved this."
 
@@ -102,6 +102,10 @@ For each material `Q##` search record, persist when knowable:
 - explicit limits on what those interest signals can establish.
 
 Interest, popularity, stars, or query/posting frequency may route discovery. They do **not** establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+## Optional pair-first discovery and positive deviance
+
+Within authorized scope, consider need-led (search for responses to a need), solution-led (investigate unusual practices/capabilities and possible uses), and pair-led (start from observed valuable arrangements) routes. Record direction and unexpected leads in existing search records. Look for unusually good outcomes under comparable constraints, not only severe struggles; seek matched contrasts and investigate resource, skill, selection and context differences before inferring causes. Distinguish an observed user-made pairing from an imagined application; the latter is a hypothesis, and capability evidence is NONHUMAN_CONTEXT. Preserve trend-first qualification. Compare causal, purpose-level and substitute-activity formulations without silently changing the research decision or hard scope. See [need–solution discovery](../references/need-solution-discovery.md).
+
 ## Task 3 — Attribute-specific pyramiding
 
 Every substantive pyramid must have a specified `target_attribute` or information target before the first hop. Seek someone who has more of that attribute or someone with better information about who does.
@@ -168,6 +172,12 @@ For material `Q##` records use `search_type: ENABLER_SCAN` and `evidentiary_role
 > capability change → newly feasible behavior → solution-space implication → relevance to an evidenced need/trend
 
 Enabler evidence is `NONHUMAN_CONTEXT`. It may change hypotheses, boundaries, or later mechanism search, but it cannot establish LU1/LU2 or substitute for human need evidence.
+## Optional network-assisted search and adaptive allocation
+
+When legitimately accessible relationship data are relevant, define nodes, edge meaning, graph boundary, missing populations and time window. Use brokerage/betweenness as a candidate-routing signal, not number of contacts or evidence of LU1/LU2. A public interaction graph is a partial proxy for the underlying network. Record the route and limitations in search_log.json and coverage.json. Seek independent seeds outside the visible network. If using ML or clustering, inspect sampled classifications against independent human judgments when material and retain false positives/negatives and sampling limitations.
+
+Compare the next referral hop, screening of another population, and deeper investigation of a current candidate. Choose the most promising decision-relevant uncertainty reduction relative to effort, access and coverage bias; document alternatives, expected information, actual effort (with units), candidate yield and termination rationale in the existing search-log narrative fields. Do not claim a numerical optimum without measured inputs. Screening and pyramiding are complementary; neither qualifies an episode. See [empirical enhancements](../references/empirical-enhancements.md).
+
 ## Coverage check
 
 Update likely over/underrepresented populations as search paths develop.
@@ -208,3 +218,15 @@ Discovery path, technical expertise, community resources, and pyramid position a
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Find the cases ordinary search misses
+
+Give rare signals their own search branch. Look for unusual constraints or failures, user modifications and abandoned workarounds, time or money spent, early exposure, and negative cases. Search relevant languages and specialist communities. Use offline referrals where publication is unlikely. In large corpora, combine lexical and semantic retrieval if both are available, rerank bounded batches, inspect originals, and sample low-ranked results. Log access limits, likely misses and shared upstream sources. Record signals as triage, not as LU scores or prevalence.
+
+Before searching for an analog, state the context, functional relationship, bottleneck, constraints, desired outcome and proposed mechanism. Find a domain where the relationship is more acute. Trace actual cases and map what corresponds, what differs and the condition that would break transfer. Keep unsupported correspondences speculative. Use the existing advanced-analog candidate and evidence records.
+
+For a ranked file-backed result list, `scripts/sample_discovery.py` can reserve
+a low-rank inspection and deduplicate by known original provenance. Supply
+JSON objects with `source_ref` and optional `original_ref`, in rank order.
+Inspect the originals before recording them as inspected. A ranked result list
+cannot represent sources excluded by access or language.

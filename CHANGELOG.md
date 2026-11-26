@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+## v1.8.0 — Evidence-first Lead User Research
+
+- Extend Lead User Research v1.7 with rare-signal search, structural analogs,
+  pivotal claim checks, conditional interpretation and distinct mechanism comparison.
+- Add optional evidence-first counterfactuals, a versioned offline Behavioral
+  Simulation handoff and test-selection guidance. Keep older studies compatible
+  and preserve their evidence fingerprints.
+- Coordinate v1.8.0 plugin and MCP release metadata; update Undici, Hono, MCP SDK, Zod, body-parser, fast-uri and qs. Resolve and verify patched transitive dependencies with npm's lockfile resolver and retain all dependency audits.
+- Include the reviewed interactive Lead User Research walkthrough at `site/lead-user-research/index.html`; publish it with the trusted Pages workflow.
+- Document the evidence basis and preregistration protocol. Fixture checks cover
+  the artifacts and gates. Prospective effectiveness remains open.
+
 ## v1.7.1 — CodeQL generated-bundle false-positive remediation — 2026-10-21
 
 ### Security assurance

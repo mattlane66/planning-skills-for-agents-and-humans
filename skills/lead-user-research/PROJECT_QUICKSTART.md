@@ -107,3 +107,8 @@ The saved files are the research memory. The conversation is not.
 Unlike the Codex/repository path, this setup may not be able to run `validate_study.py` or `next_research_move.py`. The AI should be explicit about that limitation rather than claiming deterministic validation it did not perform.
 
 For an ordinary chat with no persistent files, use `PORTABLE_PROMPT.md` instead. For the full repository-backed Codex path, use `CODEX_QUICKSTART.md`. For the broader cross-platform workflow and mode definitions, see `QUICKSTART.md`.
+
+For material behavioral uncertainty after evidence and interpretation, use the
+[optional offline comparison](references/counterfactuals.md). Use
+[adaptive fieldwork](references/adaptive-fieldwork.md) only if the decision
+requires evidence the available traces cannot supply.

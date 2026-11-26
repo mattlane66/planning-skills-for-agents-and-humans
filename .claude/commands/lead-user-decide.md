@@ -21,3 +21,7 @@ structured decision outcome before narrative rendering, preserve privacy-safe
 evidence drilldowns and eligible citations, and make actions operational. Prepare
 the decision; do not invent the human's authorization. End with the deterministic
 phase handoff.
+
+For a consequential live rival, write the smallest discriminating real test.
+Optional counterfactuals and simulation follow the Phase G prompt and stay
+outside human evidence and approval.

@@ -10,7 +10,18 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
+from counterfactuals import inspect as inspect_counterfactuals
+from research_refinements import (
+    claim_can_support_decision, pivotal_claim_blockers, validate_analog, validate_claim_audit,
+    validate_conditional_mechanism, validate_generation, validate_hypothesis_contrast,
+    validate_interview_context, validate_learning_iterations, validate_next_observation,
+    validate_rare_search, validate_test_design, validate_transfer_contrasts,
+)
+from render_decision_brief import SIMULATION_HEADING, render
+from report_safety import (
+    contains_private_identity, contains_sensitive_text, safe_outward_url,
+)
+from simulation_handoff import inspect as inspect_simulation
 from study_fingerprint import evidence_fingerprint, study_fingerprint
 from validation_schema import (
     ANALYSIS_VALIDATION, BRANCH_INDEPENDENCE, BRIEF_FIELD_STATUS, CONCEPT_SELECTION_STATUS,
@@ -28,8 +39,8 @@ from validation_schema import (
 from validation_state import validate_freeze_state, validate_manifest_state, validate_sufficiency_state
 
 def main() -> int:
-    if len(sys.argv) != 2:
-        print("Usage: validate_study.py <workspace>", file=sys.stderr)
+    if len(sys.argv) not in (2, 3) or len(sys.argv) == 3 and sys.argv[2] != "--state-only":
+        print("Usage: validate_study.py <workspace> [--state-only]", file=sys.stderr)
         return 2
 
     root = Path(sys.argv[1])
@@ -162,6 +173,7 @@ def main() -> int:
         cid = row.get("candidate_id", "<unknown>")
         for field in ["candidate_ref", "discovery_basis", "disposition"]:
             require_nonempty_string(row, field, cid, errors)
+        validate_analog(row, cid, evidence_ids, errors)
         discovery_path = row.get("discovery_path")
         if discovery_path is not None and discovery_path not in DISCOVERY_PATH:
             errors.append(f"{cid} has invalid discovery_path {discovery_path!r}")
@@ -367,10 +379,21 @@ def main() -> int:
         if isinstance(row, dict) and isinstance(row.get("analysis_run_id"), str)
     }
 
+    for row in hypotheses:
+        if isinstance(row, dict):
+            validate_hypothesis_contrast(row, evidence_ids, errors)
+            validate_learning_iterations(row, evidence_ids, errors)
+
+    for row in observability:
+        if isinstance(row, dict):
+            validate_next_observation(row, hypothesis_ids, errors)
+
     for row in evidence:
         if not isinstance(row, dict):
             continue
         eid = row.get("evidence_id", "<unknown>")
+        validate_claim_audit(row, source_by_id, evidence_ids, errors)
+        validate_interview_context(row, is_synthetic_fixture, errors)
         sid = row.get("source_id")
         if not isinstance(sid, str) or sid not in source_ids:
             errors.append(f"{eid} references missing source_id: {sid}")
@@ -555,6 +578,7 @@ def main() -> int:
             errors.append(f"{tid} {status} requires observable_indicators")
 
     trace_ref_ids: set[str] = set()
+    trace_evidence: dict[str, list[str]] = {}
 
     for row in episodes:
         if not isinstance(row, dict):
@@ -601,6 +625,8 @@ def main() -> int:
             )
             for ref in qualification_refs:
                 evidence_row = evidence_by_id.get(ref, {})
+                if not claim_can_support_decision(evidence_row):
+                    errors.append(f"{luid} qualification uses unresolved or excluded audited evidence {ref}")
                 if (
                     evidence_row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED"
                     and not is_synthetic_fixture
@@ -660,7 +686,9 @@ def main() -> int:
                         if step_id in step_ids:
                             errors.append(f"{luid} trace has duplicate step_id {step_id}")
                         step_ids.add(step_id)
-                        trace_ref_ids.add(f"{luid}:{step_id}")
+                        trace_id = f"{luid}:{step_id}"
+                        trace_ref_ids.add(trace_id)
+                        trace_evidence[trace_id] = as_string_list(step.get("evidence_refs"))
                     refs_exist(
                         step.get("evidence_refs", []),
                         evidence_ids,
@@ -686,7 +714,12 @@ def main() -> int:
                         if fit_point_id in fit_point_ids:
                             errors.append(f"{luid} trace has duplicate fit_point_id {fit_point_id}")
                         fit_point_ids.add(fit_point_id)
-                        trace_ref_ids.add(f"{luid}:{fit_point_id}")
+                        trace_id = f"{luid}:{fit_point_id}"
+                        trace_ref_ids.add(trace_id)
+                        trace_evidence[trace_id] = (
+                            as_string_list(point.get("evidence_refs"))
+                            + trace_evidence.get(f"{luid}:{point.get('step_ref')}", [])
+                        )
                     step_ref = point.get("step_ref")
                     if not isinstance(step_ref, str) or step_ref not in step_ids:
                         errors.append(f"{luid} trace fit point {index} references missing step_ref: {step_ref}")
@@ -811,6 +844,39 @@ def main() -> int:
         ):
             errors.append(f"{fid} {label} requires evidence, LU, or trace refs")
 
+    support_links = dict(trace_evidence)
+    for tid, trend in trend_by_id.items():
+        support_links[tid] = as_string_list(trend.get("evidence_refs"))
+    for episode in episodes:
+        if not isinstance(episode, dict) or not isinstance(episode.get("lu_id"), str):
+            continue
+        support_links[episode["lu_id"]] = [
+            *as_string_list(episode.get("lu1_evidence")), *as_string_list(episode.get("lu2_evidence")),
+            *as_string_list([episode.get("trend_id")]),
+        ]
+    for fid, finding in finding_by_id.items():
+        support_links[fid] = [
+            *as_string_list(finding.get("evidence_refs")), *as_string_list(finding.get("lu_refs")),
+            *as_string_list(finding.get("trace_refs")),
+        ]
+
+    def validate_support(refs: Any, owner: str) -> None:
+        pending = as_string_list(refs).copy()
+        seen: set[str] = set()
+        while pending:
+            ref = pending.pop()
+            if ref in seen:
+                continue
+            seen.add(ref)
+            atomic = evidence_by_id.get(ref)
+            if atomic is not None and not claim_can_support_decision(atomic):
+                errors.append(f"{owner} relies on unresolved or excluded audited evidence {ref}")
+            pending.extend(support_links.get(ref, []))
+
+    for episode in episodes:
+        if isinstance(episode, dict) and episode.get("status") == "QUALIFIED":
+            validate_support([episode.get("trend_id")], f'{episode.get("lu_id")} qualification trend')
+
     for row in needs:
         if not isinstance(row, dict):
             continue
@@ -830,6 +896,7 @@ def main() -> int:
             errors.append(
                 f"{nid} has invalid propagation_status {row.get('propagation_status')!r}"
             )
+        validate_transfer_contrasts(row, evidence_by_id, finding_by_id, errors)
         gate = row.get("concept_gate_status", "NOT_ASSESSED")
         if gate not in GATE:
             errors.append(f"{nid} has invalid concept_gate_status {gate!r}")
@@ -848,6 +915,8 @@ def main() -> int:
             require_bool(gate_checks, field, f"{nid} concept_gate_checks", errors)
         if gate == "PASS":
             require_nonempty_string(row, "concept_gate_rationale", nid, errors)
+            for field in ("finding_ids", "relevant_trends", "trace_refs"):
+                validate_support(row.get(field), f"{nid} concept gate {field}")
             if not row.get("finding_ids"):
                 errors.append(f"{nid} PASS requires supporting finding_ids")
             if not row.get("relevant_trends"):
@@ -893,7 +962,12 @@ def main() -> int:
                 finding = finding_by_id.get(finding_ref, {})
                 if finding.get("epistemic_label") not in {"VERIFIED", "INFERRED"}:
                     continue
-                finding_has_atomic_support = bool(finding.get("evidence_refs"))
+                finding_evidence_refs = as_string_list(finding.get("evidence_refs"))
+                if any(not claim_can_support_decision(evidence_by_id.get(ref, {}))
+                       for ref in finding_evidence_refs):
+                    errors.append(f"{nid} PASS uses unresolved or excluded audited evidence through {finding_ref}")
+                    continue
+                finding_has_atomic_support = bool(finding_evidence_refs)
                 for lu_ref in as_string_list(finding.get("lu_refs")):
                     episode = episode_by_id.get(lu_ref, {})
                     if episode.get("status") != "QUALIFIED":
@@ -930,6 +1004,7 @@ def main() -> int:
                     errors,
                     nonempty=True,
                 )
+                validate_support(transferability_refs, f"{nid} transferability")
                 refs_exist(
                     transferability_refs,
                     evidence_ids | finding_ids,
@@ -941,6 +1016,7 @@ def main() -> int:
     for row in principles:
         if not isinstance(row, dict):
             continue
+        validate_conditional_mechanism(row, lu_ids, hypothesis_ids, errors)
         spid = row.get("principle_id", "<unknown>")
         require_nonempty_string(row, "principle", spid, errors)
         nid = row.get("need_id")
@@ -986,6 +1062,7 @@ def main() -> int:
             if row.get("accepted_by_human") is not True:
                 errors.append(f"{sfid} ACCEPTED requires accepted_by_human=true")
             require_nonempty_string(row, "acceptance_note", sfid, errors)
+            validate_support(row.get("evidence_refs"), f"{sfid} accepted frame")
             if not row.get("evidence_refs"):
                 errors.append(f"{sfid} ACCEPTED requires evidence_refs")
         elif row.get("accepted_by_human") is True:
@@ -1024,6 +1101,7 @@ def main() -> int:
         for field in fit_checks:
             require_bool(row, field, rid, errors)
         if status == "PASS":
+            validate_support(row.get("evidence_refs"), f"{rid} PASS criterion")
             if not row.get("evidence_refs"):
                 errors.append(f"{rid} PASS requires evidence_refs")
             frame = shaping_frame_by_id.get(row.get("frame_ref"), {})
@@ -1034,9 +1112,11 @@ def main() -> int:
                     errors.append(f"{rid} PASS requires {field}=true")
 
     selected_by_need: dict[str, int] = {}
+    functional_mechanisms: set[tuple[str, str]] = set()
     for row in concepts:
         if not isinstance(row, dict):
             continue
+        validate_generation(row, shaping_frame_by_id, criterion_by_id, functional_mechanisms, errors)
         mid = row.get("concept_id", "<unknown>")
         require_nonempty_string(row, "mechanism", mid, errors)
         nid = row.get("need_id")
@@ -1179,6 +1259,18 @@ def main() -> int:
     for values, label, owner in search_refs_to_check:
         refs_exist(values, all_structured_refs, label, owner, errors)
 
+    for row in search_log:
+        if isinstance(row, dict) and isinstance(row.get("search_id"), str):
+            validate_rare_search(row, row["search_id"], source_ids | candidate_ids, errors)
+
+    if isinstance(sufficiency, dict) and sufficiency.get("status") == "SUFFICIENT":
+        dimensions = sufficiency.get("dimensions")
+        if isinstance(dimensions, dict):
+            for label, dimension in dimensions.items():
+                if isinstance(dimension, dict):
+                    validate_support(dimension.get("supporting_refs"), f"sufficient {label}")
+        for ref in pivotal_claim_blockers(evidence):
+            errors.append(f"Sufficient evidence requires repair of pivotal claim {ref}")
     validate_sufficiency_state(sufficiency, all_structured_refs, pyramid_ids, errors)
     validate_freeze_state(
             root, freeze, sufficiency, episodes, evidence, independent_lineage_count,
@@ -1345,7 +1437,7 @@ def main() -> int:
 
     decision_brief_text = validate_manifest_state(
             root, manifest, mode, fixture_type, is_synthetic_fixture, study_status, evidence,
-            concepts, findings, needs, principles, errors,
+            concepts, findings, needs, principles, errors, check_report=len(sys.argv) == 2,
         )
     if not isinstance(decision_outcome, dict):
         errors.append("decision_outcome.json must contain a JSON object")
@@ -1374,6 +1466,8 @@ def main() -> int:
             ]
             for field in string_list_fields:
                 require_string_list(decision_outcome, field, "decision_outcome", errors)
+            for field in ("decisive_finding_refs", "decisive_lu_refs"):
+                validate_support(decision_outcome.get(field), f"decision_outcome {field}")
             actions = decision_outcome.get("action_now")
             if not isinstance(actions, list):
                 errors.append("decision_outcome action_now must be a list")
@@ -1381,6 +1475,8 @@ def main() -> int:
             action_ids: set[str] = set()
             for index, action in enumerate(actions):
                 action_id = validate_action(action, index, errors)
+                if isinstance(action, dict):
+                    validate_test_design(action, hypothesis_ids, observability_ids, errors)
                 if action_id:
                     if action_id in action_ids:
                         errors.append(f"duplicate action_id: {action_id}")
@@ -1518,28 +1614,40 @@ def main() -> int:
         for source in sources:
             if not isinstance(source, dict) or source.get("outward_citation_allowed") is True:
                 continue
-            url = source.get("url")
-            if (
-                isinstance(url, str)
-                and url
-                and contains_sensitive_text(decision_brief_text, url)
-            ):
-                errors.append(
-                    f"complete Decision Brief exposes withheld URL for {source.get('source_id')}"
-                )
+            for field, label in (("url", "URL"), ("immutable_identifier", "source identifier")):
+                value = source.get(field)
+                if isinstance(value, str) and value.strip() and contains_sensitive_text(decision_brief_text, value):
+                    errors.append(
+                        f"complete Decision Brief exposes withheld {label} for {source.get('source_id')}"
+                    )
         for evidence_row in evidence:
             if not isinstance(evidence_row, dict):
                 continue
             excerpt = evidence_row.get("verbatim_excerpt")
             if (
-                isinstance(excerpt, str)
-                and len(excerpt.strip()) >= 20
-                and excerpt.strip() in decision_brief_text
+                isinstance(excerpt, str) and len(excerpt.strip()) >= 20
+                and contains_sensitive_text(decision_brief_text, excerpt)
             ):
                 errors.append(
                     "complete Decision Brief reproduces raw excerpt for "
                     f"{evidence_row.get('evidence_id')}"
                 )
+
+    comparisons, comparison_errors = inspect_counterfactuals(root)
+    errors.extend(comparison_errors)
+    for comparison in comparisons:
+        if comparison["status"] in ("STALE", "NONCOMPARABLE"):
+            warnings.append(f'{comparison["scenario"]["scenario_id"]} is {comparison["status"]}')
+
+    if decision_brief_text:
+        optional_report = any((root / name).exists() for name in ("counterfactuals.json", "simulation.json"))
+        if optional_report and not errors:
+            if decision_brief_text != render(root):
+                errors.append("Decision Brief differs from the canonical render of authoritative state")
+        elif SIMULATION_HEADING in decision_brief_text and not (root / "simulation.json").exists():
+            errors.append("Decision Brief claims simulation without structured simulation state")
+    if any(result["status"] == "QUARANTINED" for result in inspect_simulation(root)):
+        warnings.append("Simulation return quarantined; ordinary research continues independently.")
 
     for warning in warnings:
         print(f"WARNING: {warning}", file=sys.stderr)

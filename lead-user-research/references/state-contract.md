@@ -156,6 +156,13 @@ Candidate records may optionally include:
 
 `technical_expertise` and `community_resources` are discovery/prioritization aids only. They do not establish LU1, do not establish LU2, are not required for Lead User status, and must never compensate for missing LU1/LU2 evidence. Likewise, a candidate's discovery path or position in a pyramid does not qualify the candidate as a Lead User.
 
+An `ADVANCED_ANALOG` candidate can carry `structural_analog`. Record
+`context`, `relationship`, `bottleneck`, `constraints`, `desired_outcome`,
+`hypothesized_mechanism`, `analog_domain`, `correspondence`, `disanalogy`,
+`potential_principle`, `break_condition`, `status` and `evidence_refs`.
+`SPECULATIVE` can precede evidence. `OBSERVED_ANALOG` requires atomic case
+evidence of the relationship. Neither establishes transfer to the target.
+
 ### `sources.json`
 
 Array of:
@@ -356,6 +363,18 @@ Search rows (`Q##`) may optionally include:
 ```
 
 For `WEB_NEED_SOLUTION`, use `evidentiary_role: DISCOVERY_SIGNAL`. For `ENABLER_SCAN`, use `evidentiary_role: CONTEXT`. Search/post frequency, stars, fame, referral position, technical sophistication, community reputation, and prototype polish are discovery/context signals only; they do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+A `Q##` can carry `rare_signal_check` with `channel` (include language or
+referral reach), `access_limits`, `likely_missing`, `batch_bound`, `signals`,
+`methods`, `inspected_original_refs` and `low_rank_sample_refs`. Lists of
+inspected and sampled refs point to candidate or source records. The low-rank
+sample is a subset of the inspected originals. Record
+`low_rank_sample_rationale` if there was no ranked corpus or no sample.
+Use lineage to mark derivatives and track the original. Example: inspect a
+rare, low-ranked abandoned jig from a maintenance forum plus an offline
+referral. A popular repost points to the same original. If a high-throughput
+analog relied on a skilled operator, record the mismatch before proposing
+its assembly principle for a novice workflow.
+
 ### `sufficiency.json`
 
 For STANDARD/FULL, records the interpretive stopping decision before Evidence Freeze:
@@ -626,6 +645,14 @@ needed to resolve it.
 
 `FULL_LEAD_USER_PROJECT` requires `study_execution_basis` to include `direct_lead_user_participation` and `direct_concept_development_participation`. AI-generated concept shaping from public evidence remains `DESK_RESEARCH`.
 
+## Optional empirical enhancement provenance (backward-compatible)
+
+No new required files or fields; use existing records. In search_log.json query_or_route/next_branch describe network boundary, edge definition, brokerage method, alternative routes, expected information, observed effort (units), yield and stopping rationale; coverage.json records missing populations and selection bias. In LU qualification rationales/caveats record any respondent-administered instrument/version, referent, source refs, administration and missingness, scoring limits and behavioral corroboration; qualitative facets are not psychometric scores. Use evidence records for actual responses and observations, not generated ratings. For cross-domain transfer, retain differences in needs.json transferability_assessment and mechanism assumptions/risks. In decision_outcome.json action_now, specify predictions, comparison, observed outcomes and revision thresholds in existing action fields. These optional narratives do not relax validation or count as evidence solely because recorded.
+
+## Optional need–solution discovery provenance
+
+Use existing records, not mandatory new registries: search_log.json for discovery direction and clues; evidence and trace records for innovation chronology and comparable outcomes; hypotheses/findings/needs/principles for rival formulations and pairing viability; coverage/sufficiency for formulation blind spots; change_log.json for old/new formulations, reasons, refs and approval provenance. Post-freeze evidence follows the PF## fingerprint contract. Material frame revision invalidates dependent human acceptance, criteria, comparison, selection, decision and handoff; preserve superseded material in change history and re-run affected gates. Scope changes require explicit human authority. Do not represent an inferred need as observed or a hypothesized pairing as qualified.
+
 ## Authority
 
 When records disagree:
@@ -637,3 +664,81 @@ When records disagree:
 5. conversational memory.
 
 Never silently rewrite reviewed human decisions.
+
+## Consequential contrasts and claim audits
+
+Add `contrast` on the existing H## for consequential hypotheses. Use
+`kind: NULL | RIVAL` with `alternative`, `primary_predictions`,
+`observable_predictions` for the alternative, `discriminating_observation`,
+`refuter`, `evidence_for_alternative` and `evidence_against_alternative`.
+Predictions must make different observations plausible. Use
+`kind: NOT_APPLICABLE` with a reason in `rationale` when needed. Use the
+existing status/update fields and change log for revisions.
+
+Add `claim_audit` to a decisive atomic E###. Use its existing `source_id`
+and `exact_location` for the source span. Record `decision_use`
+(`PIVOTAL | EXPLORATORY | EXCLUDED`), `human_review`
+(`REVIEWED | NOT_REVIEWED`), `review_ref` when reviewed, and `checks`
+keyed by `access`, `attribution`, `context`, `claim_type`, `entailment`,
+`independent_support`, and `contradictions`. Each dimension holds
+`status`, `rationale`, and `refs` to supporting SRC/E records. Status
+is `PASS | FAIL | UNKNOWN | NOT_RUN`. Independence and contradictions
+also allow reasoned `NOT_APPLICABLE`. PASS requires supporting refs.
+The validator checks structure and local lineage. A human review
+attestation is only recorded for a real human review.
+
+Use E records with unresolved pivotal audits to track repair, or mark
+them EXCLUDED and remove them from support chains before deciding.
+Current frozen records are immutable. Correct through post-freeze
+change handling or a successor study rather than adding fields in-place.
+
+## Conditional interpretation and diverse candidates
+
+A principle may carry `conditional_mechanism` with `status: PROPOSED`,
+`condition`, `behavioral_relation`, `supporting_episodes`,
+`conflicting_episodes`, `unassessed_episodes`, `rival_hypothesis_refs`
+and `discriminating_observation`. Keep M separate from intervention and predicted effect.
+
+A need's established `transferability_assessment` may carry `contrasts`.
+Rows record `dimension`, `lead_user_situation`, `target_situation`,
+`load_bearing`, `status: SUPPORTED | CONTRADICTED | UNKNOWN`,
+`evidence_refs` (E/F only) and `refuter`. A load-bearing contrast needs
+support through atomic evidence for the existing concept gate to PASS.
+A simulated stress test can propose what to observe and cannot supply that support.
+
+A concept's optional `generation` has `frame_ref`, `basis_digest` from
+`shaping_basis_digest`, `branch`, `functional_key`, `boundary_status:
+PASS | FAIL`, `predicted_behavior`, `distinctness_rationale` and
+`collapsed_alternatives` (name each merged option and why). Assign the same
+functional key to equivalent mechanisms after inspecting their operations.
+Fit and human decision fields remain authoritative. When frame or criteria
+content changes, regenerate the comparison on the newly accepted basis.
+
+### Optional comparison state
+
+See [counterfactuals](counterfactuals.md) for the versioned sidecar and canonical
+digest functions. The sidecar contributes to the Decision Brief fingerprint
+when present. It never changes the Evidence Freeze fingerprint.
+
+See [simulation handoff](simulation-handoff.md) for the optional `simulation.json`
+adapter, trusted human receipts in `simulation-reviews.json` and separate return status. These contribute to the report fingerprint only.
+The Evidence Freeze, ownership and evaluation of the human research stay independent.
+
+## Optional learning detail
+
+- H## `learning_iterations` records `objection`, `evidence_needed`, `action`,
+  `result`, `revision`, `decision_effect` and `evidence_refs` (atomic evidence
+  required for a non-UNKNOWN result). Record `learning_stop_condition` on the
+  hypothesis. Log post-freeze changes through the existing change protocol.
+- E### `interview_context` records `speaker: PARTICIPANT`,
+  `elicitation: SPONTANEOUS | PROBED`, `question_context`, `question_text`
+  when probed, `consent_ref`, and `recording: NONE | CONSENTED`.
+  This is local interview context, never a public report field.
+- O## `next_observation` records `route: ARTIFACT | LOG | OBSERVATION |
+  INTERVIEW | UNKNOWN`, `observation`, `rationale`, `cost_or_time`,
+  `permission`, `feasibility` and `hypothesis_refs`.
+- A## `test_design` records `crux`, `observation`, `refuter`,
+  `qualitative_priority`, `cost`, `permission`, `feasibility`,
+  `hypothesis_refs`, `observability_refs`, `if_positive`, `if_negative`,
+  and `if_ambiguous`. Reuse the existing action fields for owner, timebox,
+  deliverable and stop condition. State UNKNOWN for unknown logistics.

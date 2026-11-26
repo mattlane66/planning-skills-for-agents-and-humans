@@ -249,6 +249,7 @@ def validate_manifest_state(
     needs: list[Any],
     principles: list[Any],
     errors: list[str],
+    *, check_report: bool = True,
 ) -> str | None:
     decision_brief_text: str | None = None
     if not isinstance(manifest, dict):
@@ -304,15 +305,16 @@ def validate_manifest_state(
                 errors.append("complete study requires evidence_completion COMPLETED")
             if mode in {"STANDARD", "FULL"} and manifest.get("interpretation_completion") != "COMPLETED":
                 errors.append("complete STANDARD/FULL study requires interpretation_completion COMPLETED")
-            decision_brief = root / "outputs" / "decision-brief.md"
-            try:
-                decision_brief_text = decision_brief.read_text(encoding="utf-8")
-            except OSError:
-                decision_brief_text = None
-            if not decision_brief_text or not decision_brief_text.strip():
-                errors.append(
-                    "complete study requires non-empty outputs/decision-brief.md"
-                )
+            if check_report:
+                decision_brief = root / "outputs" / "decision-brief.md"
+                try:
+                    decision_brief_text = decision_brief.read_text(encoding="utf-8")
+                except OSError:
+                    decision_brief_text = None
+                if not decision_brief_text or not decision_brief_text.strip():
+                    errors.append(
+                        "complete study requires non-empty outputs/decision-brief.md"
+                    )
         level = manifest.get("study_execution_level")
         if level not in EXECUTION_LEVEL:
             errors.append(f"manifest has invalid study_execution_level {level!r}")

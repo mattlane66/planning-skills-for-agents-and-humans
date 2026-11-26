@@ -101,3 +101,9 @@ Choose the smallest planning move after this handoff is ACCEPTED:
 The planning step may reject, revise, or remap any proposed implication. It must still enforce the planning promotion gates that Phase F did not satisfy—especially accepted project requirements, Appetite/cut line, decision-ready fit, explicit project shape selection when needed, selected-design reconciliation, and active scope.
 
 Do not ask the human to repeat a Phase F frame or mechanism decision solely because the handoff occurred. Revisit the decision when the relevant planning gate was not actually met or when a consequential planning input has changed.
+
+## Working research hypotheses and next tests (when relevant)
+
+| Namespaced hypothesis or action | Evidence and current status | What would change the decision |
+|---|---|---|
+| `LUR:<study_id>:H##` / `LUR:<study_id>:A##` | Cite real source refs; distinguish observed outcome, analyst inference and model-derived suggestion | Positive, negative and ambiguous decision consequences |

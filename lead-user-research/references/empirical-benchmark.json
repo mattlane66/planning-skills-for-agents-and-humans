@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "status": "PROPOSED_NOT_RUN",
+  "baseline_commit": "5cb4ba9bda112d0157592f8b8b5cd90d5944bba2",
+  "arms": [
+    {"id": "A", "method": "Human-led Lead User Method"},
+    {"id": "B", "method": "Pinned baseline AI-assisted skill"},
+    {"id": "C", "method": "Revised evidence-first skill"},
+    {"id": "D", "method": "Revised skill plus separately validated simulation", "eligible_subset_only": true}
+  ],
+  "preregister_before_observation": [
+    "decisions_and_tasks", "domain_sampling", "budget_and_access", "eligibility",
+    "grader_blinding_and_adjudication", "source_cutoff", "outcome_measures",
+    "holdout_unit_and_leakage", "exclusions", "thresholds", "analysis", "rollback"
+  ],
+  "outcomes": [
+    "bounded_episode_precision_and_recall", "overlooked_supported_needs",
+    "atomic_attribution_and_entailment", "distinct_viable_mechanisms",
+    "test_discrimination_and_decision_effect", "time_and_cost"
+  ],
+  "prospective_tasks": [],
+  "empirical_results": []
+}

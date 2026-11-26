@@ -21,11 +21,14 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DEFAULT_CASES = ROOT / "evals" / "lead-user-assurance-cases.json"
+OPTIONAL_FIXTURE = ROOT / "tests" / "fixtures" / "lead-user-optional"
 REFERENCE_STUDY = ROOT / "lead-user-research" / "examples" / "reference-study"
 LEAD_USER_SCRIPTS = ROOT / "lead-user-research" / "scripts"
 sys.path.insert(0, str(LEAD_USER_SCRIPTS))
 
 from report_safety import contains_sensitive_text  # noqa: E402
+from counterfactuals import inspect as inspect_counterfactuals  # noqa: E402
+from simulation_handoff import inspect as inspect_simulation  # noqa: E402
 
 PUBLIC_WORKSPACE_ENTRIES = (
     ".agent-orchestration.yaml",
@@ -217,6 +220,13 @@ def artifact_digest(root: pathlib.Path) -> str:
 TRUSTED_VALIDATOR_FILES = (
     LEAD_USER_SCRIPTS / "validate_study.py",
     LEAD_USER_SCRIPTS / "report_safety.py",
+    LEAD_USER_SCRIPTS / "render_decision_brief.py",
+    LEAD_USER_SCRIPTS / "counterfactuals.py",
+    LEAD_USER_SCRIPTS / "freeze_evidence.py",
+    LEAD_USER_SCRIPTS / "simulation_handoff.py",
+    LEAD_USER_SCRIPTS / "research_refinements.py",
+    LEAD_USER_SCRIPTS / "validation_schema.py",
+    LEAD_USER_SCRIPTS / "validation_state.py",
     LEAD_USER_SCRIPTS / "study_fingerprint.py",
 )
 
@@ -701,6 +711,30 @@ def score_workspace(
         "the brief exposes the accepted frame, selection provenance, rotated mechanism state, and fixture warning",
     )
 
+    optional_status = case.get("expected_simulation_status")
+    if optional_status:
+        scenarios, comparison_errors = inspect_counterfactuals(artifact_root)
+        simulations = inspect_simulation(artifact_root)
+        groups: dict[str, list[dict]] = {}
+        for row in scenarios:
+            if row["status"] == "CURRENT":
+                scenario = row["scenario"]
+                groups.setdefault(scenario["comparison_id"], []).append(scenario)
+        comparable_ids = {
+            row["scenario_id"] for group in groups.values()
+            if len({row["intervention"] for row in group}) >= 2 for row in group
+        }
+        matching_return = optional_status != "MODEL_DERIVED" or any(
+            row.get("scenario_id") in comparable_ids for row in simulations
+        )
+        add_check(
+            checks, failures, "optional-comparison-and-simulation",
+            not comparison_errors and bool(comparable_ids) and matching_return
+            and [row["status"] for row in simulations] == [optional_status]
+            and "## Behavioral Simulation status" in brief,
+            "a comparable evidence-first record and the expected isolated simulation status are present",
+        )
+
     privacy_leaks: list[str] = []
     if isinstance(episodes, list):
         for row in episodes:
@@ -820,6 +854,23 @@ def run_case(
         if adapter == "fixture":
             artifact_root.parent.mkdir(parents=True, exist_ok=True)
             shutil.copytree(REFERENCE_STUDY, artifact_root)
+            if case.get("expected_simulation_status"):
+                manifest_path = artifact_root / "manifest.json"
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest.update(json.loads((OPTIONAL_FIXTURE / "manifest-patch.json").read_text(encoding="utf-8")))
+                manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+                shutil.copy2(OPTIONAL_FIXTURE / "counterfactuals.json", artifact_root)
+                shutil.copy2(OPTIONAL_FIXTURE / "simulation-reviews.json", artifact_root)
+                simulation = json.loads((OPTIONAL_FIXTURE / "simulation.json").read_text(encoding="utf-8"))
+                if case["expected_simulation_status"] == "QUARANTINED":
+                    simulation["returns"][0]["achieved_grade"] = "L4_DECISION_CALIBRATED"
+                (artifact_root / "simulation.json").write_text(
+                    json.dumps(simulation, indent=2) + "\n", encoding="utf-8",
+                )
+                subprocess.run(
+                    [sys.executable, str(LEAD_USER_SCRIPTS / "render_decision_brief.py"), str(artifact_root)],
+                    cwd=ROOT, capture_output=True, text=True, check=True,
+                )
             adapter_result = {
                 "model_output": "[reference fixture: no model was invoked]",
             }

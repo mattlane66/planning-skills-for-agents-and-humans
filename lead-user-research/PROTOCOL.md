@@ -75,6 +75,10 @@ Record what the study actually did:
 
 Do not represent an AI-only or public-source Phase F as equivalent to the collaborative later stages of a full Lead User project. A desk study may still be rigorous and decision-useful; label it honestly.
 
+## Evidence-informed extensions (optional; v1.7-compatible)
+
+Use [the empirical enhancements reference](references/empirical-enhancements.md) to choose proportionate improvements to individual research operations. Preserve LU1/LU2, independent corroboration, the evidence freeze and all human gates. Network brokerage and screening scores route discovery; they do not establish qualification. A hierarchical lead-userness questionnaire is optional, requires actual respondent answers and appropriate administration, and never substitutes for episode-level evidence. Compare search options by expected decision-relevant information per effort; record realized effort and outcomes without claiming a calculated optimum. Distinguish novelty from target-context applicability, extract principles before adapting or combining mechanisms, and test the resulting causal explanation against observable alternatives. Real market behavior belongs to downstream validation/underwriting; hypothetical purchase intent is not payment. The extensions are research-informed design choices, not a validated superior end-to-end method.
+
 ## Canonical research brief
 
 Every study begins from the same research-input contract:
@@ -139,7 +143,7 @@ The handoff is bidirectional. If Market Opportunity Underwriting identifies a lo
 
 ## Behavioral Simulation handoff
 
-When the supported Lead User evidence has made the need or mechanism concrete enough and the next uncertainty is **counterfactual human response under a changed condition**, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
+When supported evidence leaves a consequential uncertainty about behavior under a changed condition, begin with an [offline comparison](references/counterfactuals.md). Use the [pinned Behavioral Simulation adapter](references/simulation-handoff.md) only with a current human-reviewed scenario, minimized grounding and explicit processing permission for the packet.
 
 Appropriate uses include:
 
@@ -159,7 +163,7 @@ Persist each H## with:
 - claim and scope;
 - observable predictions defined before the main search when possible;
 - strongest plausible refuter;
-- rival explanations;
+- a null or rival and divergent observable predictions for consequential claims, or a rationale when no meaningful contrast applies;
 - targeted refutation searches;
 - evidence for and against;
 - formal contrastive cases;
@@ -209,6 +213,10 @@ Keep routing signals separate from substantive evidence. Fame, search frequency,
 
 When such a signal is recorded, label its role and preserve its limitations. Never promote a discovery signal into qualification or decision evidence merely because it is easy to count.
 
+## Open problem formulation and need–solution pair discovery
+
+Frame the decision and domain before discovery; the need need not be fully formulated. A starting problem is a revisable hypothesis, not a hard search constraint unless the human explicitly makes it one. Within authorized scope, permit need-led, solution-led and pair-led discovery, including unexpectedly successful practices, repurposed capabilities and outcomes that reveal previously unrecognized needs. Preserve the trend-first LU1/LU2 qualification requirement; a capability or apparent pairing is not itself human evidence. See [need–solution discovery](references/need-solution-discovery.md) for proportionate methods, viability and revision safeguards. This is an operational adaptation of von Hippel & von Krogh (2016), a conceptual paper, not proof of superior effectiveness.
+
 ## Public-web need–solution mining
 
 As a complementary discovery lane, semantically search openly available user-generated content for bounded episodes containing both:
@@ -219,6 +227,8 @@ As a complementary discovery lane, semantically search openly available user-gen
 Do not depend only on exact phrases such as "I invented" or "I solved this." Expand semantically around problem, attempt, modification, failure, workaround, and outcome language. Record the platform/community, query/route, semantic expansions, candidate need–solution pair, and any posting/search/attention signal that influenced prioritization.
 
 Posting or query frequency may indicate discoverability or possible general interest. It is **not** population prevalence, commercial potential, LU1/LU2 evidence, or market validation.
+A bounded rare-signal branch looks for hidden constraints, adaptations, abandoned work and unusual investment. Where ranking is used, inspect some low-ranked originals and document access limits, referral reach and likely missing cases. Reposts retain original lineage. Rank is useful for triage and says nothing about prevalence.
+
 ## Pyramiding
 
 Do not merely search sideways for similar examples.
@@ -259,7 +269,7 @@ Search beyond the target product category for domains with more extreme:
 - resource constraint;
 - maturity of the problem.
 
-Reject superficial analogies.
+Abstract the functional relationship before searching. Map a sourced analog to the original context and name its limiting mismatch and the condition that would break transfer. Keep an unobserved analog speculative.
 
 ## Enabler / discontinuity scan
 
@@ -281,7 +291,10 @@ Prefer:
 
 An unknown engineer maintaining a costly workaround may be more informative than a famous person casually asking for a feature.
 
-Every consequential VERIFIED claim should trace to atomic evidence.
+Every consequential VERIFIED claim should trace to atomic evidence. Audit pivotal
+claims for access, attribution, context, claim type, entailment, independent
+support and contradictions. Record audit outcomes and human review separately.
+Repair or explicitly exclude unresolved pivotal claims through existing gates.
 
 Every atomic E### records an explicit evidence basis. VERIFIED and INFERRED findings
 must retain a direct or transitive path through evidence, qualified LU episodes, or
@@ -296,7 +309,7 @@ Once a need, constraint, or mechanism is supported by real Lead User evidence, a
 
 > **What might this person or population do if a relevant condition changed?**
 
-Route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)** rather than stretching Lead User evidence into a counterfactual prediction.
+A [reviewed and permissioned simulation packet](references/simulation-handoff.md) is optional when the offline comparison still leaves a consequential behavioral question.
 
 Behavioral Simulation may consume namespaced Lead User findings as grounding and return:
 - plausibility-space scenarios and edge cases;
@@ -619,6 +632,13 @@ Classify:
 
 Do not infer population prevalence from Lead User evidence.
 
+For a consequential interpretation, write M as condition and hypothesized
+behavioral relation. Trace supporting, conflicting and unassessed episodes,
+live rivals and a next observation. Contrast the lead-user and target situations
+on load-bearing conditions. An unresolved load-bearing transfer condition
+closes the existing concept gate. A simulation can expose a failure condition
+to investigate. Its output has no gate authority.
+
 ## Concept Generation Gate
 
 Do not automatically proceed to ideas.
@@ -639,6 +659,11 @@ Otherwise report:
 Persist the six gate tests as explicit booleans. PASS requires `transferability_supported = true`, a transferability assessment of SUPPORTED or PLAUSIBLE, an evidence-backed
 VERIFIED or INFERRED relevant trend and a supporting finding with an atomic evidence
 path to a QUALIFIED LU episode on that same trend; a rationale alone is not enough.
+
+Generate concept mechanisms in separate branches after accepting the research
+frame and freezing its PASS criteria. Keep x/y and boundaries fixed. Collapse
+paraphrases by function and preserve genuinely different alternatives.
+Record a candidate effect as a separate hypothesis about the proposed f().
 
 ## Fit Check
 
@@ -850,6 +875,14 @@ an adapter's self-reported checklist as proof. Blind evaluations should stage on
 skill, the public task, and a controlled source corpus; then independently validate and
 score the resulting JSON and Decision Brief. Record runtime, model, version, commit,
 repeat number, and failures. Cross-model results remain model- and version-specific.
+
+## Optional research references
+
+- [Evidence-first counterfactuals](references/counterfactuals.md)
+- [Versioned Behavioral Simulation handoff](references/simulation-handoff.md)
+- [Adaptive fieldwork](references/adaptive-fieldwork.md)
+- [Research basis and limits](references/methodology-evidence.md)
+- [Prospective evaluation](references/empirical-evaluation.md)
 
 ## Final standard
 

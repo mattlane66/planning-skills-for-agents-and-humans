@@ -31,6 +31,8 @@ Preserve or define:
 16. likely discoverability biases in an AI-plus-search study;
 17. actual study execution level — DESK_RESEARCH | FIELDWORK_ENRICHED | FULL_LEAD_USER_PROJECT — and its basis.
 
+An open opportunity study may begin with a domain, decision and provisional learning objective rather than a fully formulated problem. Mark any starting need formulation provisional/hypothetical and preserve hard human search constraints. Do not silently turn an initial clue into a required problem.
+
 ## Hypothesis challenge setup
 
 For every starting hypothesis create or update H## in hypotheses.json. Before broad discovery, define when possible:
@@ -41,6 +43,8 @@ For every starting hypothesis create or update H## in hypotheses.json. Before br
 - targeted refutation searches.
 
 Use status UNTESTED. Never use CONFIRMED.
+
+For consequential hypotheses, distinguish the proposed causal explanation from its prediction: why the condition would produce the observed need, what rival could explain it, and which observation would discriminate between them. Preserve these in the existing hypothesis fields; do not invent causality.
 
 ## Observability map
 
@@ -96,3 +100,5 @@ Do not proceed by inventing missing scope. Mark consequential ambiguity.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+For a consequential H##, name the relevant null or closest rival and the prediction that differs. For example, the apparent new need may be an old need made visible by better logs. Record what would distinguish that account from an actual change in behavior, and where it is observable. If no meaningful contrast applies, record why. Preserve revisions in the hypothesis and change ledgers.

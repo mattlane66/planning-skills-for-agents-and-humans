@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { JSDOM, VirtualConsole } from 'jsdom';
@@ -58,7 +58,15 @@ const resourcePaths = new Set(content.resources.map((item) => item.sourcePath));
 const templatePaths = [...resourcePaths].filter((sourcePath) => sourcePath.startsWith('templates/'));
 const skillReferencePaths = [...resourcePaths].filter((sourcePath) => sourcePath.includes('/references/'));
 assert.equal(templatePaths.length, 21, 'Every canonical template should be embedded.');
-assert.equal(skillReferencePaths.length, 11, 'Every canonical skill reference should be embedded.');
+const expectedSkillReferences = (await Promise.all(content.skills.map(async ({ slug }) => {
+  const referenceRoot = path.join(siteDirectory, '..', slug, 'references');
+  const names = await readdir(referenceRoot).catch((error) => {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  });
+  return names.filter((name) => name.endsWith('.md')).map((name) => `${slug}/references/${name}`);
+}))).flat().sort();
+assert.deepEqual(skillReferencePaths.sort(), expectedSkillReferences, 'Every canonical skill reference should be embedded.');
 for (const item of [...content.docs, ...content.skills, ...content.resources, ...content.examples]) {
   assert.ok(item.description.length <= 240, `${item.sourcePath || item.slug} has an overlong description.`);
   assert.ok(!item.description.endsWith('…'), `${item.sourcePath || item.slug} has a truncated description.`);

@@ -74,3 +74,9 @@ Cross-platform invocation:
 - Gemini CLI: use `/lead-user-*` only when the repo-local `.gemini/commands/` wrappers are present; a native Agent Skills install should name `lead-user-research`, the next phase, and the workspace in natural language.
 - Codex and other skill-capable agents: name `lead-user-research`, the next phase, and the workspace.
 - Plain chat: name the phase and provide the portable prompt continuation.
+
+Carry only the working hypotheses and test outcomes that matter for the next
+decision, with `LUR:<study_id>:<local-id>`, current evidence provenance, and
+contradictions or UNKNOWNs. Optional stale comparisons and model-derived
+results may explain a test suggestion. They confer no approval and cannot
+delay an otherwise valid ordinary Phase G or H.

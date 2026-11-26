@@ -96,6 +96,10 @@ Separately create `transferability_assessment` for each important need:
 
 Transferability asks whether the underlying need/principle plausibly survives outside the extreme user's special conditions. It is not a prevalence estimate. A Lead User workaround may be non-transferable while the underlying need remains transferable.
 
+For cross-domain learning, distinguish a principle from its source mechanism: compare the conditions that make it work in the source domain with target-domain constraints, and retain incompatibilities. Record observed implementation, repeated use, abandonment and diffusion only when supported by traces, with lineage and temporal caveats; do not infer prevalence or causation from diffusion. Keep novelty and applicability distinct when considering implications.
+
+Compare evidence-backed formulations at causal, purpose and substitute-activity levels; distinguish actual use from inferred purposes. For promising observed or hypothesized pairings, assess benefit relative to the current baseline, effort/cost, target constraints, externalities and evidentiary gaps. Keep technical/use viability distinct from market economics. Record old/new formulations, rationale and refs in change_log.json; seek human approval before material scope change. Do not convert a speculative pairing into a qualified need.
+
 ## 8. Contradictions and hypothesis disposition
 
 Actively test the strongest interpretations against contrary evidence, formal contrastive cases, rival explanations, and coverage gaps.
@@ -130,3 +134,9 @@ Do not create concepts in this phase.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Compare the divergent observable predictions of the leading and rival hypotheses against the same evidence and counterexamples. Retain alternatives that survive the current tests. Cite the observation that would distinguish accounts that remain live.
+
+Write general M as a condition and hypothesized behavior. Keep the observed situation/action, stated outcome, inferred need and principle distinct. Link evidence-backed supporting episodes, counterexamples, ambiguous or unassessed episodes, rival mechanisms and an observation that could distinguish them. Co-occurrence alone leaves a proposed explanation.
+
+For transfer, contrast the source episode and target situation on cost, expertise, time, ongoing upkeep, infrastructure, risk, regulation or workflow where material. Mark load-bearing conditions and UNKNOWNs and name the next observation that could overturn the transfer. If any load-bearing gap is unresolved, close the concept gate and gather real evidence. A plausibility stress test after supported evidence may suggest a failure condition or empirical test only.

@@ -89,6 +89,10 @@ Keep separate:
 
 Use UNKNOWN whenever the source does not establish an element.
 
+## Optional lead-userness diagnostic
+
+When real respondents and an appropriate instrument are available, use the published Paulus et al. (2025) hierarchical scale (30 items or the published six-item short form). LU1 facets: ideas, information, experience. LU2 facets: problems, needs, gains. Preserve the exact version, referent (trend/need/time), administration, response basis, missing items and scoring procedure; follow the authors' instructions and record limitations of translations or adaptations. Do not invent cutoffs or responses, derive validated scores from public traces, or label an unadministered scale as a measurement. Use qualitative facet evidence as a diagnostic only when no survey was administered. Corroborate with behavior and comparison evidence; LU1/LU2 remain the sole qualification criteria. Record diagnostics in qualification rationales/caveats and source/evidence records as appropriate. See [empirical enhancements](../references/empirical-enhancements.md).
+
 ## Episode tracing
 
 For LU episodes likely to materially support later need interpretation or concept shaping, trace the episode as far as the evidence permits.
@@ -133,6 +137,8 @@ Tracing is not a third Lead User qualification criterion. Do not infer LU status
 When the evidence supports it, add temporal context: first observed, recurrence, persistence, abandonment or reversal, and observed outcome. For structured event logs, process-mining-style reconstruction may describe actual sequence variants and bottlenecks, but it must not invent motive or causality.
 
 Do not turn the workaround into the need, rank fit points, isolate the priority problem, or generate producer solutions in Phase C. Preserve the trace for post-freeze interpretation.
+
+When an implemented innovation is a pivotal clue, trace backward from observed use/outcome through adoption, creation or encounter, and evidence of when the need became recognized. Record chronology, sources, prior baseline, and competing accounts; distinguish stated from inferred motives and keep unknowns. For positive deviance, compare resources, conditions and outcomes and seek contrary cases; a good outcome does not establish a causal mechanism or LU1/LU2.
 
 ## Hypothesis and contrastive-case evidence
 
@@ -200,3 +206,10 @@ Do not run the full evidence machinery merely because it exists.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Audit atomic evidence the decision relies on. Inspect the smallest source span. Check access, actor attribution, time and context, statement versus observed behavior, entailment, independence, and contradictions or missing coverage. Record each result and its sources with human review status separately. Model-assisted checks can flag errors and unknowns. Inspect the original before resolving them. Keep unverifiable claims as gaps or explicitly exclude them from decision use.
+
+Use [adaptive fieldwork](../references/adaptive-fieldwork.md) only for relevant
+observability gaps. Prefer traces when sufficient. If you conduct a permitted
+interview, distinguish spontaneous and probed statements, record the exact
+question context and preserve UNKNOWNs.

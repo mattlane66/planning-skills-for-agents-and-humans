@@ -28,6 +28,10 @@ Do not substitute a source/user quota for this judgment. SUFFICIENT means the co
 
 If a consequential branch now requires direct contact, record the fieldwork referral rather than pretending more public search resolves it.
 
+For marginal value, compare at least the plausible next evidence moves when consequential: what uncertainty each could resolve, its expected decision consequence, likely effort/access and whether the current decision would change. Record the chosen stopping or repair rationale in the existing marginal-value dimension. Unknown value stays unknown; avoid invented numerical expected values or fixed quotas.
+
+For open opportunity research, assess whether the initial formulation materially excluded plausible solution-led, pair-led, positive-outcome or substitute-activity routes. Record the decision-relative limitation or bounded repair in existing coverage and sufficiency rationales. No mandatory new search quota.
+
 ## Audit
 
 Check:
@@ -110,3 +114,5 @@ changed evidence.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Use the existing sufficiency dimensions for pivotal audit gaps. Return to B for missing coverage and C for missing or misattributed evidence. A claim marked pivotal with unresolved audit checks blocks freeze. If the decision can proceed without it, mark the claim excluded, remove it from qualifying, gate and decisive support, and record the consequence. Preserve negative or unknown outcomes.

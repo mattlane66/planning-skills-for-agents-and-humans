@@ -5,10 +5,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from research_refinements import pivotal_claim_blockers
 from study_fingerprint import evidence_fingerprint
 
 
@@ -71,6 +74,19 @@ def main() -> int:
         parser.error("manifest.evidence_completion must be COMPLETED before Evidence Freeze")
     if sufficiency.get("status") != "SUFFICIENT":
         parser.error("sufficiency.status must be SUFFICIENT before Evidence Freeze")
+
+    blockers = pivotal_claim_blockers(evidence)
+    if blockers:
+        parser.error("repair pivotal claims before Evidence Freeze: " + ", ".join(blockers))
+
+    if any(isinstance(row, dict) and "claim_audit" in row for row in evidence):
+        state_check = subprocess.run(
+            [sys.executable, str(Path(__file__).with_name("validate_study.py")),
+             str(root), "--state-only"],
+            capture_output=True, text=True, check=False,
+        )
+        if state_check.returncode:
+            parser.error("repair invalid study state before freeze:\n" + state_check.stderr.strip())
 
     counts = {
         "evidence_count": len(evidence),

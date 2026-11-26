@@ -72,6 +72,10 @@ Verify mechanically where possible:
 - PASS, PROVISIONAL, and FAIL shaping records remain visibly distinct;
 - structured operational actions remain complete across formats.
 
+Report which optional discovery, qualification and concept-evaluation techniques were actually used, observed effort and yield where recorded, and limits of network coverage, measurement administration, automated classification and testing. Surface these in the canonical brief's existing coverage, caveats, uncertainties and action fields; do not introduce new claims in derived views. Do not claim the hybrid method is empirically superior.
+
+When pair-first discovery or reframing materially affected the decision, report the initial and revised formulations, evidence, approval status, viability limits and superseded decisions in existing brief sections. Preserve observed vs hypothesized pairings and distinguish conceptual inspiration from empirical validation.
+
 ## Capability honesty
 
 If PDF generation, HTML generation, interactive validation, browser testing, or another delivery capability is unavailable:
@@ -85,3 +89,9 @@ If PDF generation, HTML generation, interactive validation, browser testing, or 
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+When present, render pivotal limits, working rivals and conditional mechanisms,
+load-bearing transfer conditions, current counterfactuals and the next real test.
+Simulation is a conditional status appendix. Never render raw returned model text
+or restricted traces. Keep the decision and action first and use the host renderer
+and state fingerprint for file-backed delivery.
