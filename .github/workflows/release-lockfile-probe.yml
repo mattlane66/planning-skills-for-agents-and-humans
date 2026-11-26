@@ -1,0 +1,28 @@
+name: Release lockfile probe (read-only)
+on:
+  push:
+    branches: [lead-user-release-lockfile-probe]
+permissions:
+  contents: read
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+      - name: Resolve patched dependency versions
+        working-directory: mcp-server
+        run: |
+          set -euo pipefail
+          cp package-lock.json /tmp/old-lock.json
+          npm pkg set overrides.@hono/node-server=2.1.6 overrides.fast-uri=3.1.9 overrides.qs=6.16.1 overrides.body-parser=2.4.0
+          npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+          node --input-type=module -e 'import fs from "node:fs";const a=JSON.parse(fs.readFileSync("/tmp/old-lock.json"));const b=JSON.parse(fs.readFileSync("package-lock.json")); const keys=new Set([...Object.keys(a.packages),...Object.keys(b.packages)]); console.log("LOCK_DELTA="+JSON.stringify(Object.fromEntries([...keys].filter(k=>JSON.stringify(a.packages[k])!==JSON.stringify(b.packages[k])).map(k=>[k,b.packages[k]??null])))); console.log("MANIFEST="+JSON.stringify(JSON.parse(fs.readFileSync("package.json"))));'
+          npm ci --ignore-scripts --no-audit --no-fund
+          npm audit --audit-level=moderate
+          npm run check
