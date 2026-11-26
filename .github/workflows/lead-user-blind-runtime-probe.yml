@@ -1,0 +1,90 @@
+name: Lead User blind runtime probe
+on:
+  push:
+    branches: [lead-user-blind-runtime-probe]
+permissions:
+  contents: read
+jobs:
+  blind:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with:
+          node-version: "22"
+      - name: Check configured evaluation credential and select available model
+        id: credential
+        env:
+          EVAL_KEY: ${{ secrets.PLANNING_SKILLS_EVAL_API_KEY }}
+        run: |
+          set -euo pipefail
+          if [[ -z "$EVAL_KEY" ]]; then
+            echo "BLOCKED: PLANNING_SKILLS_EVAL_API_KEY is not configured."
+            exit 1
+          fi
+          if [[ "$EVAL_KEY" != sk-* || "$EVAL_KEY" == sk-ant-* ]]; then
+            echo "BLOCKED: the configured evaluation credential is not an OpenAI API key."
+            exit 1
+          fi
+          python3 - <<'PY'
+          import json, os, urllib.request
+          request = urllib.request.Request("https://api.openai.com/v1/models", headers={"Authorization": "Bearer " + os.environ["EVAL_KEY"]})
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  ids = {x["id"] for x in json.load(response)["data"]}
+          except Exception as exc:
+              raise SystemExit("BLOCKED: model-list request failed: " + type(exc).__name__)
+          model = next((x for x in ("gpt-6.2", "gpt-6", "gpt-5.6", "gpt-5.4", "gpt-5") if x in ids), None)
+          if not model:
+              raise SystemExit("BLOCKED: no preferred evaluation model is available")
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              print("model=" + model, file=out)
+          print("Selected evaluation model:", model)
+          PY
+      - name: Install exact Codex CLI version
+        id: cli
+        run: |
+          set -euo pipefail
+          version="$(npm view @openai/codex version)"
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$ ]]
+          npm install --global "@openai/codex@$version"
+          codex --version
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - name: Prepare disposable artifact-writing adapter
+        run: |
+          cat > /tmp/lead-user-blind-adapter.py <<'PY'
+          import json, os, pathlib, subprocess, sys
+          case = json.load(sys.stdin)
+          if set(case) != {"schema_version", "id", "prompt"} or case["schema_version"] != 1:
+              raise SystemExit("Invalid public case")
+          root = pathlib.Path(os.environ["PLANNING_SKILLS_EVAL_WORKSPACE"]).resolve()
+          if root != pathlib.Path.cwd().resolve():
+              raise SystemExit("Workspace mismatch")
+          dest = root / ".runtime-final-message.txt"
+          prompt = case["prompt"] + "\n\nUse only the staged workspace and the packaged skills. Do not inspect host files, repository history or any evaluator/scorer. Only write inside the current workspace."
+          command = ["codex", "exec", "--ephemeral", "--ignore-user-config", "--sandbox", "workspace-write", "--skip-git-repo-check", "--model", os.environ["EVAL_MODEL"], "--output-last-message", str(dest), prompt]
+          env = {k:v for k,v in os.environ.items() if k not in {"GITHUB_TOKEN", "GH_TOKEN", "PLANNING_SKILLS_EVAL_API_KEY"}}
+          result = subprocess.run(command, cwd=root, env=env, text=True, capture_output=True, timeout=800)
+          if result.returncode or not dest.is_file():
+              print("Codex exited without a final response; exit=" + str(result.returncode), file=sys.stderr)
+              raise SystemExit(2)
+          print(json.dumps({"model_output":dest.read_text(encoding="utf-8")}))
+          PY
+      - name: Run blind artifact assurance on closed synthetic corpus
+        env:
+          OPENAI_API_KEY: ${{ secrets.PLANNING_SKILLS_EVAL_API_KEY }}
+          EVAL_MODEL: ${{ steps.credential.outputs.model }}
+          CLI_VERSION: ${{ steps.cli.outputs.version }}
+        run: |
+          set -euo pipefail
+          python3 scripts/run-lead-user-assurance-evals.py --adapter command --adapter-command "python3 /tmp/lead-user-blind-adapter.py" --runtime codex --runtime-version "$CLI_VERSION" --model "$EVAL_MODEL" --commit-sha e8a82c1c0a80d64b330f1e229116ea13035d9b1b --adapter-timeout-seconds 850 --report /tmp/lead-user-blind-report.json
+      - name: Upload blind report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: lead-user-blind-report
+          path: /tmp/lead-user-blind-report.json
+          if-no-files-found: warn
