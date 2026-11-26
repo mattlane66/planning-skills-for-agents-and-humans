@@ -14,6 +14,14 @@ These optional extensions preserve the v1.7 evidence and authority contract. The
 
 Lilien et al. (2002) observed much higher forecast sales in a quasi-experimental 3M comparison; forecast sales are not actual revenue, and the projects were not randomized. The original method remains the foundation.
 
+## Complementary findings
+
+- Fang et al. (2024) demonstrate automated candidate and need identification in online communities; validate classifications rather than assuming generalization.
+- Schweisfurth & Dharmawan (2019) associate lead userness with implementation and diffusion within one firm's shopfloor; track actual outcomes and lineage, not merely idea ratings.
+- De Jong et al. (2024) find the relationship between customer lead userness and radical opportunities is stronger in shorter customer relationships (139 high-tech small firms); search beyond established customers when seeking radical change. This is observational evidence, not proof of causation.
+- Goeldner, Kruse & Herstatt (2017), a single-domain working paper, found the contest generated more ideas but the lead-user process yielded higher-rated concepts at greater staffing cost; choose the method according to the uncertainty, not a universal ranking.
+- Camuffo, Gambardella & Jannace (2025), a working paper comparing theory-plus-experimentation with experimentation alone, supports studying explicit causal explanations; it is not direct validation of lead-user research.
+
 ## Phase B: adaptive search
 
 Define a trend, attribute, decision-critical uncertainty, and search boundary first. Use a public or consented relationship graph only if its edge meaning is relevant (e.g., referrals or collaboration, not mere co-mentions). Document collection window, missing populations and edges, directed/undirected treatment, metric and limits. Betweenness is a routing signal, not proof of expertise or lead-userness. No graph? Use ordinary screening/pyramiding. Avoid private or sensitive relationship inference. Do not equate independent branches with disconnected clusters if they share upstream evidence.
@@ -41,5 +49,11 @@ Preregister a multi-domain, matched-budget comparison: classical Lead User Resea
 - Kratzer, Lettl, Franke & Gloor (2016), The Social Network Position of Lead Users. https://doi.org/10.1111/jpim.12291
 - Paulus, Jordanow & Heidenreich (2025), Measuring Lead Userness: Development and Validation of a Hierarchical Scale. https://doi.org/10.1111/caim.70006
 - Camuffo et al. (2024), A scientific approach to entrepreneurial decision-making: Large-scale replication and extension. https://doi.org/10.1002/smj.3580
+
+- Fang et al. (2024), A machine learning and clustering-based methodology for the identification of lead users and their needs from online communities. https://doi.org/10.1016/j.eswa.2024.123381
+- Schweisfurth & Dharmawan (2019), Does lead userness foster idea implementation and diffusion? https://doi.org/10.1016/j.respol.2018.08.018
+- De Jong et al. (2024), Industrial product development with lead users as a source of Schumpeterian opportunity. https://doi.org/10.1111/jpim.12739
+- Goeldner, Kruse & Herstatt (2017), Lead User Method vs. Innovation Contest. Working paper. https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3070877
+- Camuffo, Gambardella & Jannace (2025), Causal Theories and Performance. Working paper. https://cepr.org/publications/dp20300
 
 The cited findings concern specific studies and settings, not universal superiority. The integration and evaluation design above are proposals.
