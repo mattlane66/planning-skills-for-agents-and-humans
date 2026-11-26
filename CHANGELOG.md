@@ -9,7 +9,7 @@
 - Add optional evidence-first counterfactuals, a versioned offline Behavioral
   Simulation handoff and test-selection guidance. Keep older studies compatible
   and preserve their evidence fingerprints.
-- Prepare coordinated release metadata and update Undici, Hono, the MCP SDK and Zod using existing reviewed dependency proposals. Further dependency remediation and release checks remain required.
+- Coordinate v1.8.0 plugin and MCP release metadata; update Undici, Hono, MCP SDK, Zod, body-parser, fast-uri and qs. Resolve and verify patched transitive dependencies with npm's lockfile resolver and retain all dependency audits.
 - Document the evidence basis and preregistration protocol. Fixture checks cover
   the artifacts and gates. Prospective effectiveness remains open.
 
