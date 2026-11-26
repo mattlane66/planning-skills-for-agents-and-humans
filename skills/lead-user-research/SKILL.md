@@ -341,6 +341,8 @@ Record interpretation completion after considering the complete frozen corpus, i
 
 Use [prompts/phase-e-interpret.md](prompts/phase-e-interpret.md).
 
+Write general conditional M separately from a candidate product change and predicted effect. Check whether load-bearing transfer conditions hold in the target setting.
+
 ### F — Shape
 
 Run only if a need passes the Concept Generation Gate. Reopen its pivotal traces; if missing chronology, motivation, or outcome prevents a defensible shaping frame, keep it UNKNOWN or fail the gate.
@@ -353,6 +355,8 @@ After research-local acceptance, derive research-local R## fit criteria with `fr
 Persist the six Concept Generation Gate checks, including transferability; PASS must trace through atomic evidence and a supporting finding to a QUALIFIED LU episode on an evidence-backed VERIFIED/INFERRED relevant trend.
 Generate materially different candidate mechanisms, run research-local criteria × mechanisms, and, after explicit human research selection with persisted provenance, run Rotated Fit Check / reverse fit as Parts × criteria. A research-local `M## SELECTED` is not a selected project shape, selected-design intent, active scope, or build authorization. **Do not invent weak alternatives to satisfy a quota.**
 Use [prompts/phase-f-shape.md](prompts/phase-f-shape.md).
+
+Generate mechanisms in separate branches over the same accepted frame and frozen criteria. Deduplicate by how they work.
 
 ### G — Decide
 

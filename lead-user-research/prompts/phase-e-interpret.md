@@ -136,3 +136,7 @@ After writing and validating this phase, follow
 `scripts/next_research_move.py`; do not advance from invocation history alone.
 
 Compare the divergent observable predictions of the leading and rival hypotheses against the same evidence and counterexamples. Retain alternatives that survive the current tests. Cite the observation that would distinguish accounts that remain live.
+
+Write general M as a condition and hypothesized behavior. Keep the observed situation/action, stated outcome, inferred need and principle distinct. Link evidence-backed supporting episodes, counterexamples, ambiguous or unassessed episodes, rival mechanisms and an observation that could distinguish them. Co-occurrence alone leaves a proposed explanation.
+
+For transfer, contrast the source episode and target situation on cost, expertise, time, ongoing upkeep, infrastructure, risk, regulation or workflow where material. Mark load-bearing conditions and UNKNOWNs and name the next observation that could overturn the transfer. If any load-bearing gap is unresolved, close the concept gate and gather real evidence. A plausibility stress test after supported evidence may suggest a failure condition or empirical test only.

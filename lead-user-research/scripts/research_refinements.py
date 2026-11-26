@@ -150,3 +150,98 @@ def pivotal_claim_blockers(evidence: list) -> list[str]:
         and row["claim_audit"].get("decision_use") == "PIVOTAL"
         and not claim_can_support_decision(row)
     ]
+
+
+def validate_conditional_mechanism(row: dict, episode_ids: set[str], hypothesis_ids: set[str],
+                                   errors: list[str]) -> None:
+    owner = row.get("principle_id", "principle")
+    mechanism = optional_object(row, "conditional_mechanism", owner, errors)
+    if mechanism is None:
+        return
+    label = f"{owner} conditional_mechanism"
+    for field in ("condition", "behavioral_relation", "discriminating_observation"):
+        require_nonempty_string(mechanism, field, label, errors)
+    if mechanism.get("status") != "PROPOSED":
+        errors.append(f"{label} is a PROPOSED interpretation")
+    for field in ("supporting_episodes", "conflicting_episodes", "unassessed_episodes"):
+        refs = require_string_list(mechanism, field, label, errors)
+        refs_exist(refs, episode_ids, field, label, errors)
+    refs = require_string_list(mechanism, "rival_hypothesis_refs", label, errors, nonempty=True)
+    refs_exist(refs, hypothesis_ids, "rival hypothesis", label, errors)
+
+
+def validate_transfer_contrasts(row: dict, evidence: dict, findings: dict, errors: list[str]) -> None:
+    assessment = row.get("transferability_assessment")
+    if not isinstance(assessment, dict) or "contrasts" not in assessment:
+        return
+    owner = f"{row.get('need_id', 'need')} transferability contrasts"
+    contrasts = assessment["contrasts"]
+    if not isinstance(contrasts, list) or not contrasts:
+        errors.append(f"{owner} requires at least one contrast")
+        return
+    for index, contrast in enumerate(contrasts, 1):
+        label = f"{owner} row {index}"
+        if not isinstance(contrast, dict):
+            errors.append(f"{label} must be an object")
+            continue
+        for field in ("dimension", "lead_user_situation", "target_situation", "refuter"):
+            require_nonempty_string(contrast, field, label, errors)
+        load_bearing = contrast.get("load_bearing")
+        if type(load_bearing) is not bool:
+            errors.append(f"{label} load_bearing must be boolean")
+        status = contrast.get("status")
+        if status not in ("SUPPORTED", "CONTRADICTED", "UNKNOWN"):
+            errors.append(f"{label} invalid status")
+        refs = require_string_list(contrast, "evidence_refs", label, errors,
+                                   nonempty=status in ("SUPPORTED", "CONTRADICTED"))
+        refs_exist(refs, set(evidence) | set(findings), "transfer evidence", label, errors)
+        if row.get("concept_gate_status") != "PASS" or load_bearing is not True:
+            continue
+        atomic = [
+            atomic_ref for ref in refs for atomic_ref in (
+                [ref] if ref in evidence else as_string_list(findings.get(ref, {}).get("evidence_refs"))
+            )
+        ]
+        if status != "SUPPORTED" or not atomic or any(
+            not claim_can_support_decision(evidence[ref]) for ref in atomic if ref in evidence
+        ):
+            errors.append(f"{label} unresolved load-bearing contrast blocks concept gate PASS")
+
+
+def validate_generation(row: dict, frames: dict, criteria: dict, seen: set[tuple[str, str]],
+                        errors: list[str]) -> None:
+    from study_fingerprint import shaping_basis_digest
+
+    owner = row.get("concept_id", "concept")
+    generation = optional_object(row, "generation", owner, errors)
+    if generation is None:
+        return
+    label = f"{owner} generation"
+    for field in ("branch", "functional_key", "basis_digest", "boundary_status",
+                  "predicted_behavior", "distinctness_rationale"):
+        require_nonempty_string(generation, field, label, errors)
+    require_string_list(generation, "collapsed_alternatives", label, errors)
+    if generation.get("boundary_status") not in ("PASS", "FAIL"):
+        errors.append(f"{label} boundary_status must be PASS or FAIL")
+    if generation.get("boundary_status") == "FAIL" and row.get("selection_status") != "REJECTED":
+        errors.append(f"{label} boundary violation requires a rejected candidate")
+    frame_ref = generation.get("frame_ref")
+    frame = frames.get(frame_ref) if isinstance(frame_ref, str) else None
+    if not frame or frame.get("status") != "ACCEPTED" or frame.get("accepted_by_human") is not True \
+            or frame.get("need_id") != row.get("need_id"):
+        errors.append(f"{label} requires the accepted frame for this need")
+        return
+    need_criteria = [
+        item for item in criteria.values()
+        if item.get("need_id") == row.get("need_id") and item.get("status") == "PASS"
+    ]
+    if not need_criteria or any(item.get("frame_ref") != frame_ref for item in need_criteria):
+        errors.append(f"{label} requires a single frame for all frozen PASS criteria")
+    if generation.get("basis_digest") != shaping_basis_digest(frame, need_criteria):
+        errors.append(f"{label} comparison basis is stale")
+    key = generation.get("functional_key")
+    if isinstance(key, str) and row.get("selection_status") != "REJECTED":
+        entry = (frame_ref, key.strip().casefold())
+        if entry in seen:
+            errors.append(f"{label} duplicates a functional mechanism on the same frame")
+        seen.add(entry)

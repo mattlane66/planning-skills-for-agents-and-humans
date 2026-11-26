@@ -75,22 +75,32 @@ def _normalized_state(root: Path, filenames: tuple[str, ...]) -> dict[str, Any]:
     return state
 
 
-def study_fingerprint(root: Path) -> str:
+def canonical_digest(value: Any) -> str:
     canonical = json.dumps(
-        _normalized_state(root, STATE_FILES),
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
+        value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), allow_nan=False,
     ).encode("utf-8")
     return f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+
+
+def shaping_basis_digest(frame: dict, criteria: list[dict]) -> str:
+    """Bind fixed x/y and boundaries to the actual set of PASS requirements."""
+    frame_fields = ("frame_id", "need_id", "x", "y", "gap", "boundaries", "evidence_refs")
+    criterion_fields = ("requirement_id", "frame_ref", "need_id", "origin",
+                        "requirement", "evidence_refs")
+    requirements = [
+        {key: row.get(key) for key in criterion_fields}
+        for row in criteria if row.get("status") == "PASS" and row.get("frame_ref") == frame.get("frame_id")
+    ]
+    return canonical_digest({
+        "frame": {key: frame.get(key) for key in frame_fields},
+        "requirements": sorted(requirements, key=lambda row: str(row["requirement_id"])),
+    })
+
+
+def study_fingerprint(root: Path) -> str:
+    return canonical_digest(_normalized_state(root, STATE_FILES))
 
 
 def evidence_fingerprint(root: Path) -> str:
     """Fingerprint only the decision-relative evidence state frozen in Phase D."""
-    canonical = json.dumps(
-        _normalized_state(root, EVIDENCE_STATE_FILES),
-        ensure_ascii=False,
-        sort_keys=True,
-        separators=(",", ":"),
-    ).encode("utf-8")
-    return f"sha256:{hashlib.sha256(canonical).hexdigest()}"
+    return canonical_digest(_normalized_state(root, EVIDENCE_STATE_FILES))

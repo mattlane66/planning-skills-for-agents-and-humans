@@ -691,3 +691,25 @@ Use E records with unresolved pivotal audits to track repair, or mark
 them EXCLUDED and remove them from support chains before deciding.
 Current frozen records are immutable. Correct through post-freeze
 change handling or a successor study rather than adding fields in-place.
+
+## Conditional interpretation and diverse candidates
+
+A principle may carry `conditional_mechanism` with `status: PROPOSED`,
+`condition`, `behavioral_relation`, `supporting_episodes`,
+`conflicting_episodes`, `unassessed_episodes`, `rival_hypothesis_refs`
+and `discriminating_observation`. Keep M separate from intervention and predicted effect.
+
+A need's established `transferability_assessment` may carry `contrasts`.
+Rows record `dimension`, `lead_user_situation`, `target_situation`,
+`load_bearing`, `status: SUPPORTED | CONTRADICTED | UNKNOWN`,
+`evidence_refs` (E/F only) and `refuter`. A load-bearing contrast needs
+support through atomic evidence for the existing concept gate to PASS.
+A simulated stress test can propose what to observe and cannot supply that support.
+
+A concept's optional `generation` has `frame_ref`, `basis_digest` from
+`shaping_basis_digest`, `branch`, `functional_key`, `boundary_status:
+PASS | FAIL`, `predicted_behavior`, `distinctness_rationale` and
+`collapsed_alternatives` (name each merged option and why). Assign the same
+functional key to equivalent mechanisms after inspecting their operations.
+Fit and human decision fields remain authoritative. When frame or criteria
+content changes, regenerate the comparison on the newly accepted basis.

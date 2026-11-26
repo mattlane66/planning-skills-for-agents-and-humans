@@ -21,7 +21,9 @@ Existing registries cover search and lineage, contrastive hypotheses, observabil
 | S0 | Baseline lead-user regression 80 passed. Structural reference validation passed. Controller returned COMPLETE (H). Fixture assurance passed 1/1 cases and 15/15 checks. Source-by-source limits are in the methodology ledger. |
 
 | S1 | Rare search and bounded structural analog records. 82 lead-user tests passed, including under-ranked source and unsupported analog checks. |
-| S2 | Consequential contrast and pivotal audit, including qualification, freeze repair, decisive review and host validation. |
+| S2 | Consequential contrast and pivotal audit, including qualification, freeze repair, decisive review and host validation. 84 lead-user tests passed. |
+
+| S3 | Conditional M, target contrasts and distinct branches with a fixed frame and PASS requirements. Host digest covers the validator imports. |
 
 ## Requirements and verification
 

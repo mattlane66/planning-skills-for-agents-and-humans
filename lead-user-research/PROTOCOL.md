@@ -632,6 +632,13 @@ Classify:
 
 Do not infer population prevalence from Lead User evidence.
 
+For a consequential interpretation, write M as condition and hypothesized
+behavioral relation. Trace supporting, conflicting and unassessed episodes,
+live rivals and a next observation. Contrast the lead-user and target situations
+on load-bearing conditions. An unresolved load-bearing transfer condition
+closes the existing concept gate. A simulation can expose a failure condition
+to investigate. Its output has no gate authority.
+
 ## Concept Generation Gate
 
 Do not automatically proceed to ideas.
@@ -652,6 +659,11 @@ Otherwise report:
 Persist the six gate tests as explicit booleans. PASS requires `transferability_supported = true`, a transferability assessment of SUPPORTED or PLAUSIBLE, an evidence-backed
 VERIFIED or INFERRED relevant trend and a supporting finding with an atomic evidence
 path to a QUALIFIED LU episode on that same trend; a rationale alone is not enough.
+
+Generate concept mechanisms in separate branches after accepting the research
+frame and freezing its PASS criteria. Keep x/y and boundaries fixed. Collapse
+paraphrases by function and preserve genuinely different alternatives.
+Record a candidate effect as a separate hypothesis about the proposed f().
 
 ## Fit Check
 

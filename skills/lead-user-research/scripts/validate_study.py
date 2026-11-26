@@ -12,7 +12,8 @@ from typing import Any
 
 from research_refinements import (
     claim_can_support_decision, pivotal_claim_blockers, validate_analog, validate_claim_audit,
-    validate_hypothesis_contrast, validate_rare_search,
+    validate_conditional_mechanism, validate_generation, validate_hypothesis_contrast,
+    validate_rare_search, validate_transfer_contrasts,
 )
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
 from study_fingerprint import evidence_fingerprint, study_fingerprint
@@ -842,6 +843,7 @@ def main() -> int:
             errors.append(
                 f"{nid} has invalid propagation_status {row.get('propagation_status')!r}"
             )
+        validate_transfer_contrasts(row, evidence_by_id, finding_by_id, errors)
         gate = row.get("concept_gate_status", "NOT_ASSESSED")
         if gate not in GATE:
             errors.append(f"{nid} has invalid concept_gate_status {gate!r}")
@@ -958,6 +960,7 @@ def main() -> int:
     for row in principles:
         if not isinstance(row, dict):
             continue
+        validate_conditional_mechanism(row, lu_ids, hypothesis_ids, errors)
         spid = row.get("principle_id", "<unknown>")
         require_nonempty_string(row, "principle", spid, errors)
         nid = row.get("need_id")
@@ -1051,9 +1054,11 @@ def main() -> int:
                     errors.append(f"{rid} PASS requires {field}=true")
 
     selected_by_need: dict[str, int] = {}
+    functional_mechanisms: set[tuple[str, str]] = set()
     for row in concepts:
         if not isinstance(row, dict):
             continue
+        validate_generation(row, shaping_frame_by_id, criterion_by_id, functional_mechanisms, errors)
         mid = row.get("concept_id", "<unknown>")
         require_nonempty_string(row, "mechanism", mid, errors)
         nid = row.get("need_id")

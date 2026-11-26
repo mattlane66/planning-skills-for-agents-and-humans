@@ -143,3 +143,63 @@ class RevisionStudyTests(unittest.TestCase):
         claim["claim_audit"]["checks"]["access"]["refs"] = ["SRC999"]
         self.write("evidence.json", evidence)
         self.assertIn("requires the accessible underlying source", self.script("validate_study.py").stderr)
+
+    def test_unresolved_transfer_and_synthetic_refs_cannot_support_existing_gate(self):
+        needs = self.read("needs.json")
+        contrast = {"dimension": "expertise", "lead_user_situation": "Dedicated expert",
+                    "target_situation": "Novice rotation", "load_bearing": True, "status": "UNKNOWN",
+                    "evidence_refs": [], "refuter": "Novices maintain the transfer with equal effort"}
+        needs[0]["transferability_assessment"]["contrasts"] = [contrast]
+        self.write("needs.json", needs)
+        self.assertIn("unresolved load-bearing contrast", self.script("validate_study.py").stderr)
+        contrast.update(status="SUPPORTED", evidence_refs=["SIMULATED_ESTIMATE:RUN1"])
+        self.write("needs.json", needs)
+        errors = self.script("validate_study.py").stderr
+        self.assertIn("unresolved load-bearing contrast", errors)
+        self.assertIn("missing transfer evidence", errors)
+        contrast.update(evidence_refs=["E3"])
+        self.write("needs.json", needs)
+        self.assertNotIn("contrasts", self.script("validate_study.py").stderr)
+
+    def test_mechanism_remains_proposed_with_conflicting_cases(self):
+        principles = self.read("principles.json")
+        principles[0]["conditional_mechanism"] = {
+            "status": "PROPOSED", "condition": "When recovery costs exceed maintenance",
+            "behavioral_relation": "Operators may sustain a handoff practice",
+            "supporting_episodes": ["LU1"], "conflicting_episodes": ["LU3"],
+            "unassessed_episodes": [], "rival_hypothesis_refs": ["H1"],
+            "discriminating_observation": "Compare work with equal continuity but different upkeep",
+        }
+        self.write("principles.json", principles)
+        self.assertNotIn("conditional_mechanism", self.script("validate_study.py").stderr)
+        principles[0]["conditional_mechanism"]["status"] = "CAUSALLY_IDENTIFIED"
+        self.write("principles.json", principles)
+        self.assertIn("PROPOSED interpretation", self.script("validate_study.py").stderr)
+
+    def test_candidates_deduplicate_and_hold_frame_criteria_fixed(self):
+        script_dir = PACKAGE / "scripts"
+        sys.path.insert(0, str(script_dir))
+        self.addCleanup(sys.path.remove, str(script_dir))
+        from study_fingerprint import shaping_basis_digest
+
+        frames = self.read("shaping_frame.json")
+        criteria = self.read("fit_criteria.json")
+        concepts = self.read("concepts.json")
+        digest = shaping_basis_digest(frames[0], criteria)
+        for concept, functional_key in zip(concepts, ("capture", "incremental-ledger")):
+            concept["generation"] = {
+                "branch": functional_key, "functional_key": functional_key, "frame_ref": "SF1",
+                "boundary_status": "PASS", "predicted_behavior": "Less recovery effort",
+                "distinctness_rationale": "Different trigger and update path",
+                "collapsed_alternatives": [], "basis_digest": digest,
+            }
+        self.write("concepts.json", concepts)
+        self.assertNotIn("generation", self.script("validate_study.py").stderr)
+        concepts[1]["generation"].update(functional_key="CAPTURE", boundary_status="FAIL")
+        self.write("concepts.json", concepts)
+        errors = self.script("validate_study.py").stderr
+        self.assertIn("duplicates a functional mechanism", errors)
+        self.assertIn("boundary violation", errors)
+        criteria[0]["requirement"] += " Materially different requirement."
+        self.write("fit_criteria.json", criteria)
+        self.assertIn("comparison basis is stale", self.script("validate_study.py").stderr)
