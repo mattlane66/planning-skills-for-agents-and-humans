@@ -226,14 +226,19 @@ class RevisionStudyTests(unittest.TestCase):
             "outcome_space": ["Minutes and omissions"],
         }
         scenarios = []
-        for index, (ref, intervention) in enumerate(((None, "STATUS_QUO"), ("M1", "Packet and confirmation")), 1):
+        interventions = (
+            (None, "STATUS_QUO", [], "Existing workflow is a stable comparator"),
+            ("M1", "Packet and confirmation", ["Handoff generation"], "Enough context remains visible"),
+            ("M2", "Shared incremental ledger", ["Sync timing"], "Upkeep can stay below recovery cost"),
+        )
+        for index, (ref, intervention, changed, assumption) in enumerate(interventions, 1):
             scenario = {
                 "scenario_id": f"CF{index}", "comparison_id": "handoff",
                 "purpose": "INTERVENTION_COMPARE", "evidence_fingerprint": study.fingerprint,
                 "basis": dict(basis), "provenance": "ANALYST_HYPOTHESIS", "human_review": "NOT_REVIEWED",
                 "candidate_ref": ref, "candidate_digest": candidate_digest(study.concepts[ref]) if ref else None,
-                "intervention": intervention, "changed_conditions": ["Handoff generation"] if ref else [],
-                "critical_assumption": "Enough context remains visible", "counterfactual_distance": "NEAR_OOD",
+                "intervention": intervention, "changed_conditions": changed,
+                "critical_assumption": assumption, "counterfactual_distance": "NEAR_OOD",
                 "distance_rationale": "Modest change in the same fictional workflow",
                 "predicted_behavior": "Fewer omissions", "rival_explanation": "Familiarity drives recovery",
                 "refuter": "Omissions stay constant", "if_disproved": "Investigate visibility",
@@ -251,20 +256,20 @@ class RevisionStudyTests(unittest.TestCase):
         self.write("counterfactuals.json", sidecar)
         result = self.script("counterfactuals.py")
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertEqual([row["status"] for row in json.loads(result.stdout)["comparisons"]], ["CURRENT"] * 2)
+        self.assertEqual([row["status"] for row in json.loads(result.stdout)["comparisons"]], ["CURRENT"] * 3)
         differing = deepcopy(sidecar)
         row = differing["scenarios"][1]
         row["basis"]["target"] = "A different population"
         row["scenario_digest"] = scenario_digest(differing["study_ref"], row["evidence_fingerprint"], row)
         self.write("counterfactuals.json", differing)
         result = json.loads(self.script("counterfactuals.py").stdout)
-        self.assertEqual([row["status"] for row in result["comparisons"]], ["NONCOMPARABLE"] * 2)
+        self.assertEqual([row["status"] for row in result["comparisons"]], ["NONCOMPARABLE"] * 3)
         self.write("counterfactuals.json", sidecar)
         criteria = self.read("fit_criteria.json")
         criteria[0]["requirement"] += " Revised condition."
         self.write("fit_criteria.json", criteria)
         result = json.loads(self.script("counterfactuals.py").stdout)
-        self.assertEqual([row["status"] for row in result["comparisons"]], ["STALE"] * 2)
+        self.assertEqual([row["status"] for row in result["comparisons"]], ["STALE"] * 3)
 
     def test_comparison_detects_foreign_study_and_tampered_content(self):
         sidecar = self.comparison_fixture()
