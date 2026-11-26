@@ -42,6 +42,8 @@ For every starting hypothesis create or update H## in hypotheses.json. Before br
 
 Use status UNTESTED. Never use CONFIRMED.
 
+For consequential hypotheses, distinguish the proposed causal explanation from its prediction: why the condition would produce the observed need, what rival could explain it, and which observation would discriminate between them. Preserve these in the existing hypothesis fields; do not invent causality.
+
 ## Observability map
 
 Create O## records in observability.json for facts or variables that could materially change the decision. Record whether each appears TRACE_OBSERVABLE, PARTIALLY_OBSERVABLE, NOT_OBSERVABLE, or UNKNOWN. Do not recommend fieldwork merely because an item is unknown.

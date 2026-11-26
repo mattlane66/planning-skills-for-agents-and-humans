@@ -75,6 +75,10 @@ Record what the study actually did:
 
 Do not represent an AI-only or public-source Phase F as equivalent to the collaborative later stages of a full Lead User project. A desk study may still be rigorous and decision-useful; label it honestly.
 
+## Evidence-informed extensions (optional; v1.7-compatible)
+
+Use [the empirical enhancements reference](references/empirical-enhancements.md) to choose proportionate improvements to individual research operations. Preserve LU1/LU2, independent corroboration, the evidence freeze and all human gates. Network brokerage and screening scores route discovery; they do not establish qualification. A hierarchical lead-userness questionnaire is optional, requires actual respondent answers and appropriate administration, and never substitutes for episode-level evidence. Compare search options by expected decision-relevant information per effort; record realized effort and outcomes without claiming a calculated optimum. Distinguish novelty from target-context applicability, extract principles before adapting or combining mechanisms, and test the resulting causal explanation against observable alternatives. Real market behavior belongs to downstream validation/underwriting; hypothetical purchase intent is not payment. The extensions are research-informed design choices, not a validated superior end-to-end method.
+
 ## Canonical research brief
 
 Every study begins from the same research-input contract:

@@ -96,6 +96,8 @@ Separately create `transferability_assessment` for each important need:
 
 Transferability asks whether the underlying need/principle plausibly survives outside the extreme user's special conditions. It is not a prevalence estimate. A Lead User workaround may be non-transferable while the underlying need remains transferable.
 
+For cross-domain learning, distinguish a principle from its source mechanism: compare the conditions that make it work in the source domain with target-domain constraints, and retain incompatibilities. Record observed implementation, repeated use, abandonment and diffusion only when supported by traces, with lineage and temporal caveats; do not infer prevalence or causation from diffusion. Keep novelty and applicability distinct when considering implications.
+
 ## 8. Contradictions and hypothesis disposition
 
 Actively test the strongest interpretations against contrary evidence, formal contrastive cases, rival explanations, and coverage gaps.

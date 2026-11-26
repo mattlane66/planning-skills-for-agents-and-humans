@@ -120,6 +120,10 @@ load-bearing future-facing need uncertainty back to Lead User Research. Neither
 method is a mandatory predecessor of the other, and neither automatically promotes
 research evidence into accepted planning intent.
 
+## Evidence-informed extensions
+
+The optional [empirical enhancements](references/empirical-enhancements.md) improve candidate discovery, qualification diagnostics, cross-domain synthesis, and experiment design without replacing the Lead User Method or adding phases. Apply them only when their information value warrants the effort. Their combined superiority has not been established.
+
 ## Hybrid safeguards
 
 The workflow may use public-web need–solution mining and interest signals to discover promising episodes, but treats fame, search/post frequency, stars, referral position, technical sophistication, community reputation, and prototype polish as **discovery signals only**. They do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.

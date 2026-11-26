@@ -89,6 +89,10 @@ Keep separate:
 
 Use UNKNOWN whenever the source does not establish an element.
 
+## Optional lead-userness diagnostic
+
+When real respondents and an appropriate instrument are available, use the published Paulus et al. (2025) hierarchical scale (30 items or the published six-item short form). LU1 facets: ideas, information, experience. LU2 facets: problems, needs, gains. Preserve the exact version, referent (trend/need/time), administration, response basis, missing items and scoring procedure; follow the authors' instructions and record limitations of translations or adaptations. Do not invent cutoffs or responses, derive validated scores from public traces, or label an unadministered scale as a measurement. Use qualitative facet evidence as a diagnostic only when no survey was administered. Corroborate with behavior and comparison evidence; LU1/LU2 remain the sole qualification criteria. Record diagnostics in qualification rationales/caveats and source/evidence records as appropriate. See [empirical enhancements](../references/empirical-enhancements.md).
+
 ## Episode tracing
 
 For LU episodes likely to materially support later need interpretation or concept shaping, trace the episode as far as the evidence permits.

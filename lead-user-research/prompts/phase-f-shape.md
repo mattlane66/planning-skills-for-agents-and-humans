@@ -102,6 +102,8 @@ If only one credible mechanism emerges:
 - re-examine whether the criteria are too mechanism-specific;
 - preserve the result if they are still valid.
 
+When warranted, recombine supported principles from independent users/domains and involve actual lead users and typical target users in subsequent collaborative development. Compare candidate novelty and target-context applicability separately in mechanism assumptions/risks; ratings or design fit are not measured performance. Preserve the binary research-local Fit Check, human selection and rotation. An AI-only recombination is a hypothesis, not a completed lead-user workshop.
+
 ## Compare
 
 Run the first Fit Check as **Research-local criteria × candidate mechanisms**.

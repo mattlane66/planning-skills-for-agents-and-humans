@@ -41,6 +41,10 @@ Fixture runs establish structural/scorer assurance only. Command-adapter runs ad
 evidence about the recorded runtime's behavior on the supplied task. Neither proves
 that a model's interpretations are true or that a synthetic result generalizes to a market.
 
+## Proposed empirical method comparison (not yet run)
+
+See [empirical enhancements](empirical-enhancements.md) for a separate, preregistered comparative research design. Structural assurance is not a test of comparative effectiveness. Never infer superiority from fixture pass rates or agent self-reports.
+
 ## Credential-free scorer test
 
 ```bash

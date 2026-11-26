@@ -36,6 +36,10 @@ Treat starting hypotheses as falsifiable claims: define observable predictions a
 
 If Lead User evidence is already sufficient for the need/mechanism question and the active uncertainty becomes **what might people do under a changed condition**, hand the supported evidence to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)**. Use simulation for counterfactual scenario exploration, candidate-intervention comparison, edge cases, or prioritizing real-world tests. Treat every returned simulation as model-derived evidence under its own evidence grade; never use it to establish Lead User qualification or to overwrite contradictory human evidence.
 
+## Optional empirical enhancements
+
+Read [references/empirical-enhancements.md](references/empirical-enhancements.md) when network-assisted discovery, comparative screening, respondent measurement, cross-domain recombination or a theory-driven test could materially improve the decision. Use existing registries and rationale fields to preserve provenance; do not add mandatory quotas, psychometric gates or phases. Follow the phase-specific additions below and in the phase prompts; record the selected technique, limitations and why it was useful.
+
 ## Research brief — canonical input
 
 The reusable research brief preserves the input contract from the canonical prompt:

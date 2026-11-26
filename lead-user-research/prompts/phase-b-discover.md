@@ -168,6 +168,12 @@ For material `Q##` records use `search_type: ENABLER_SCAN` and `evidentiary_role
 > capability change → newly feasible behavior → solution-space implication → relevance to an evidenced need/trend
 
 Enabler evidence is `NONHUMAN_CONTEXT`. It may change hypotheses, boundaries, or later mechanism search, but it cannot establish LU1/LU2 or substitute for human need evidence.
+## Optional network-assisted search and adaptive allocation
+
+When legitimately accessible relationship data are relevant, define nodes, edge meaning, graph boundary, missing populations and time window. Use brokerage/betweenness as a candidate-routing signal, not number of contacts or evidence of LU1/LU2. A public interaction graph is a partial proxy for the underlying network. Record the route and limitations in search_log.json and coverage.json. Seek independent seeds outside the visible network. If using ML or clustering, inspect sampled classifications against independent human judgments when material and retain false positives/negatives and sampling limitations.
+
+Compare the next referral hop, screening of another population, and deeper investigation of a current candidate. Choose the most promising decision-relevant uncertainty reduction relative to effort, access and coverage bias; document alternatives, expected information, actual effort (with units), candidate yield and termination rationale in the existing search-log narrative fields. Do not claim a numerical optimum without measured inputs. Screening and pyramiding are complementary; neither qualifies an episode. See [empirical enhancements](../references/empirical-enhancements.md).
+
 ## Coverage check
 
 Update likely over/underrepresented populations as search paths develop.

@@ -28,6 +28,8 @@ Do not substitute a source/user quota for this judgment. SUFFICIENT means the co
 
 If a consequential branch now requires direct contact, record the fieldwork referral rather than pretending more public search resolves it.
 
+For marginal value, compare at least the plausible next evidence moves when consequential: what uncertainty each could resolve, its expected decision consequence, likely effort/access and whether the current decision would change. Record the chosen stopping or repair rationale in the existing marginal-value dimension. Unknown value stays unknown; avoid invented numerical expected values or fixed quotas.
+
 ## Audit
 
 Check:

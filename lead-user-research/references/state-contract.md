@@ -626,6 +626,10 @@ needed to resolve it.
 
 `FULL_LEAD_USER_PROJECT` requires `study_execution_basis` to include `direct_lead_user_participation` and `direct_concept_development_participation`. AI-generated concept shaping from public evidence remains `DESK_RESEARCH`.
 
+## Optional empirical enhancement provenance (backward-compatible)
+
+No new required files or fields; use existing records. In search_log.json query_or_route/next_branch describe network boundary, edge definition, brokerage method, alternative routes, expected information, observed effort (units), yield and stopping rationale; coverage.json records missing populations and selection bias. In LU qualification rationales/caveats record any respondent-administered instrument/version, referent, source refs, administration and missingness, scoring limits and behavioral corroboration; qualitative facets are not psychometric scores. Use evidence records for actual responses and observations, not generated ratings. For cross-domain transfer, retain differences in needs.json transferability_assessment and mechanism assumptions/risks. In decision_outcome.json action_now, specify predictions, comparison, observed outcomes and revision thresholds in existing action fields. These optional narratives do not relax validation or count as evidence solely because recorded.
+
 ## Authority
 
 When records disagree:

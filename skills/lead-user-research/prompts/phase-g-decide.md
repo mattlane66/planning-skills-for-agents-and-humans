@@ -139,7 +139,9 @@ not a selected project shape and not a selected planning shape. They are evidenc
 planning inputs after an accepted handoff; they are not accepted product requirements,
 a selected project shape, selected-design intent, active scope, or build authorization.
 
-### Decision status
+#For an empirical TEST, specify the explanation and rival, intervention/comparator, observable prediction, measurement and success/stop thresholds in the structured action fields; distinguish hypothesized from measured effects and predefine what result changes the decision. When relevant, recommend independent typical-user tests under realistic or explicitly justified future conditions: actual use, repeat use, switching or payment rather than hypothetical ratings alone. Do not impose commercial tests on a noncommercial decision. Hand off market size, economic demand and unit economics to underwriting. Preserve the existing authority boundary.
+
+## Decision status
 
 For SCOUT:
 
