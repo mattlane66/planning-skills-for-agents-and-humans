@@ -1,6 +1,6 @@
 {
   "name": "planning-skills-mcp-server",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "private": true,
   "description": "MCP adapter that exposes Planning Skills SKILL.md files as callable tools.",
   "type": "module",
@@ -17,8 +17,8 @@
     "dev:http": "tsx src/http.ts"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.32.0",
-    "zod": "^3.23.8"
+    "@modelcontextprotocol/sdk": "^1.32.2",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
