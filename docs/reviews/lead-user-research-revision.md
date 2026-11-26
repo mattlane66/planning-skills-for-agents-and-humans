@@ -59,8 +59,9 @@ Run `python -m unittest discover -s tests -p 'test_lead_user*.py'` after each sl
 | Legacy validator and controller example | Structural validation passed; Phase H COMPLETE |
 | `scripts/run-lead-user-assurance-evals.py --adapter fixture` | Ordinary case passed 15 checks. Optional cases file passed 2 cases with 16 checks each. |
 | `scripts/build_claude_skills.py` and `scripts/check-release-install.py` after release build | 15 validated upload ZIPs and fresh install checks passed |
-| Local links, frontmatter, actionlint, mirror comparison, `git diff --check` | Passed |
+| Local links, frontmatter, actionlint, privacy guard, mirror comparison, `git diff --check` | Passed |
 | Portal `npm run check`, Shaping Board test and Chromium smoke | Passed. Integrity check traversed 168 routes, including the added references. |
+| Pinned Behavioral Simulation schemas | Validated the four pinned JSON Schemas and checked the exact prepared fixture input against upstream input schema 0.1.0. |
 | Standalone presentation | Chromium at 1440×900 and 390×844. Eight phases, expanded protocol notes, optional simulation disclosure, completed Decision Brief download, no page errors. |
 | `bash scripts/check-repo-health.sh` | Two failures in dependency audits for the existing portal and MCP server lockfiles. Their functional checks passed. The same failures appeared at baseline. This revision leaves those lockfiles intact. |
 
