@@ -281,6 +281,8 @@ Trend precedes Lead User qualification.
 
 Use [prompts/phase-b-discover.md](prompts/phase-b-discover.md).
 
+Use a bounded rare-signal branch for consequential gaps. Inspect original low-ranked cases where retrieval is ranked. Map advanced analogs by relationship and limiting mismatch.
+
 ### C — Evidence
 
 Inspect promising cases in bounded batches.

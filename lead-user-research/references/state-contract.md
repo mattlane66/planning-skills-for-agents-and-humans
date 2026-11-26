@@ -156,6 +156,13 @@ Candidate records may optionally include:
 
 `technical_expertise` and `community_resources` are discovery/prioritization aids only. They do not establish LU1, do not establish LU2, are not required for Lead User status, and must never compensate for missing LU1/LU2 evidence. Likewise, a candidate's discovery path or position in a pyramid does not qualify the candidate as a Lead User.
 
+An `ADVANCED_ANALOG` candidate can carry `structural_analog`. Record
+`context`, `relationship`, `bottleneck`, `constraints`, `desired_outcome`,
+`hypothesized_mechanism`, `analog_domain`, `correspondence`, `disanalogy`,
+`potential_principle`, `break_condition`, `status` and `evidence_refs`.
+`SPECULATIVE` can precede evidence. `OBSERVED_ANALOG` requires atomic case
+evidence of the relationship. Neither establishes transfer to the target.
+
 ### `sources.json`
 
 Array of:
@@ -356,6 +363,18 @@ Search rows (`Q##`) may optionally include:
 ```
 
 For `WEB_NEED_SOLUTION`, use `evidentiary_role: DISCOVERY_SIGNAL`. For `ENABLER_SCAN`, use `evidentiary_role: CONTEXT`. Search/post frequency, stars, fame, referral position, technical sophistication, community reputation, and prototype polish are discovery/context signals only; they do not establish LU1/LU2, propagation, prevalence, commercial potential, feasibility, or a build decision.
+A `Q##` can carry `rare_signal_check` with `channel` (include language or
+referral reach), `access_limits`, `likely_missing`, `batch_bound`, `signals`,
+`methods`, `inspected_original_refs` and `low_rank_sample_refs`. Lists of
+inspected and sampled refs point to candidate or source records. The low-rank
+sample is a subset of the inspected originals. Record
+`low_rank_sample_rationale` if there was no ranked corpus or no sample.
+Use lineage to mark derivatives and track the original. Example: inspect a
+rare, low-ranked abandoned jig from a maintenance forum plus an offline
+referral. A popular repost points to the same original. If a high-throughput
+analog relied on a skilled operator, record the mismatch before proposing
+its assembly principle for a novice workflow.
+
 ### `sufficiency.json`
 
 For STANDARD/FULL, records the interpretive stopping decision before Evidence Freeze:

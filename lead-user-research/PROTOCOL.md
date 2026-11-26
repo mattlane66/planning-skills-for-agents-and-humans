@@ -227,6 +227,8 @@ As a complementary discovery lane, semantically search openly available user-gen
 Do not depend only on exact phrases such as "I invented" or "I solved this." Expand semantically around problem, attempt, modification, failure, workaround, and outcome language. Record the platform/community, query/route, semantic expansions, candidate need–solution pair, and any posting/search/attention signal that influenced prioritization.
 
 Posting or query frequency may indicate discoverability or possible general interest. It is **not** population prevalence, commercial potential, LU1/LU2 evidence, or market validation.
+A bounded rare-signal branch looks for hidden constraints, adaptations, abandoned work and unusual investment. Where ranking is used, inspect some low-ranked originals and document access limits, referral reach and likely missing cases. Reposts retain original lineage. Rank is useful for triage and says nothing about prevalence.
+
 ## Pyramiding
 
 Do not merely search sideways for similar examples.
@@ -267,7 +269,7 @@ Search beyond the target product category for domains with more extreme:
 - resource constraint;
 - maturity of the problem.
 
-Reject superficial analogies.
+Abstract the functional relationship before searching. Map a sourced analog to the original context and name its limiting mismatch and the condition that would break transfer. Keep an unobserved analog speculative.
 
 ## Enabler / discontinuity scan
 

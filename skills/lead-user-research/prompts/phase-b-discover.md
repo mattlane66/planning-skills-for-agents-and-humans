@@ -218,3 +218,9 @@ Discovery path, technical expertise, community resources, and pyramid position a
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Find the cases ordinary search misses
+
+Give rare signals their own search branch. Look for unusual constraints or failures, user modifications and abandoned workarounds, time or money spent, early exposure, and negative cases. Search relevant languages and specialist communities. Use offline referrals where publication is unlikely. In large corpora, combine lexical and semantic retrieval if both are available, rerank bounded batches, inspect originals, and sample low-ranked results. Log access limits, likely misses and shared upstream sources. Record signals as triage, not as LU scores or prevalence.
+
+Before searching for an analog, state the context, functional relationship, bottleneck, constraints, desired outcome and proposed mechanism. Find a domain where the relationship is more acute. Trace actual cases and map what corresponds, what differs and the condition that would break transfer. Keep unsupported correspondences speculative. Use the existing advanced-analog candidate and evidence records.

@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from research_refinements import validate_analog, validate_rare_search
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
 from study_fingerprint import evidence_fingerprint, study_fingerprint
 from validation_schema import (
@@ -162,6 +163,7 @@ def main() -> int:
         cid = row.get("candidate_id", "<unknown>")
         for field in ["candidate_ref", "discovery_basis", "disposition"]:
             require_nonempty_string(row, field, cid, errors)
+        validate_analog(row, cid, evidence_ids, errors)
         discovery_path = row.get("discovery_path")
         if discovery_path is not None and discovery_path not in DISCOVERY_PATH:
             errors.append(f"{cid} has invalid discovery_path {discovery_path!r}")
@@ -1178,6 +1180,10 @@ def main() -> int:
 
     for values, label, owner in search_refs_to_check:
         refs_exist(values, all_structured_refs, label, owner, errors)
+
+    for row in search_log:
+        if isinstance(row, dict) and isinstance(row.get("search_id"), str):
+            validate_rare_search(row, row["search_id"], source_ids | candidate_ids, errors)
 
     validate_sufficiency_state(sufficiency, all_structured_refs, pyramid_ids, errors)
     validate_freeze_state(
