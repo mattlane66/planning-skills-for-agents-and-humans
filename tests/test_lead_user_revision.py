@@ -527,6 +527,7 @@ class RevisionStudyTests(unittest.TestCase):
         evidence = self.read("evidence.json")
         evidence[0]["verbatim_excerpt"] = "test"
         evidence[1]["verbatim_excerpt"] = "a"
+        evidence[2]["verbatim_excerpt"] = "Recommendation"
         self.write("evidence.json", evidence)
         freeze = self.read("freeze.json")
         freeze["evidence_fingerprint"] = evidence_fingerprint(self.study)
@@ -536,5 +537,30 @@ class RevisionStudyTests(unittest.TestCase):
         report = (self.study / "outputs/decision-brief.md").read_text()
         self.assertIn("## Recommendation — TEST", report)
         self.assertIn("- Study status: COMPLETE", report)
+        result = self.script("validate_study.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def test_short_distinct_source_identifier_redacted_from_optional_prose(self):
+        sidecar = self.comparison_fixture()
+        from counterfactuals import scenario_digest
+        from study_fingerprint import evidence_fingerprint
+
+        evidence = self.read("evidence.json")
+        evidence[0]["verbatim_excerpt"] = "Q7JQ3P4"
+        self.write("evidence.json", evidence)
+        fingerprint = evidence_fingerprint(self.study)
+        freeze = self.read("freeze.json")
+        freeze["evidence_fingerprint"] = fingerprint
+        self.write("freeze.json", freeze)
+        sidecar["scenarios"][1]["smallest_test"] = "Observe task Q7JQ3P4 in the real workflow"
+        for scenario in sidecar["scenarios"]:
+            scenario["evidence_fingerprint"] = fingerprint
+            scenario["scenario_digest"] = scenario_digest(sidecar["study_ref"], fingerprint, scenario)
+        self.write("counterfactuals.json", sidecar)
+        result = self.script("render_decision_brief.py")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        report = (self.study / "outputs/decision-brief.md").read_text()
+        self.assertIn("Observe task source excerpt withheld in the real workflow", report)
+        self.assertNotIn("Q7JQ3P4", report)
         result = self.script("validate_study.py")
         self.assertEqual(result.returncode, 0, result.stderr)

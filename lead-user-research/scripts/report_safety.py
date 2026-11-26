@@ -32,7 +32,11 @@ def contains_private_identity(text: str, identity: str) -> bool:
 
 def identifying_report_excerpt(value: object) -> bool:
     """Recognize a source span in prose without confusing short words with headings."""
-    return isinstance(value, str) and len(value.strip()) >= 8
+    if not isinstance(value, str):
+        return False
+    value = value.strip()
+    identifier = re.fullmatch(r"(?=[A-Z0-9_-]*[0-9])(?=[A-Z0-9_-]*[A-Z])[A-Z0-9_-]{4,}", value)
+    return len(value) >= 8 or identifier is not None
 
 
 def sensitive_text_variants(value: str) -> set[str]:

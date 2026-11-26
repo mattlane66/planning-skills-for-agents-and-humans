@@ -19,7 +19,7 @@ from research_refinements import (
 )
 from render_decision_brief import SIMULATION_HEADING, render
 from report_safety import (
-    contains_private_identity, contains_sensitive_text, identifying_report_excerpt, safe_outward_url,
+    contains_private_identity, contains_sensitive_text, safe_outward_url,
 )
 from simulation_handoff import inspect as inspect_simulation
 from study_fingerprint import evidence_fingerprint, study_fingerprint
@@ -1625,7 +1625,7 @@ def main() -> int:
                 continue
             excerpt = evidence_row.get("verbatim_excerpt")
             if (
-                identifying_report_excerpt(excerpt)
+                isinstance(excerpt, str) and len(excerpt.strip()) >= 20
                 and contains_sensitive_text(decision_brief_text, excerpt)
             ):
                 errors.append(
