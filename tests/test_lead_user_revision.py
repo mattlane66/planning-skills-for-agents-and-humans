@@ -95,3 +95,51 @@ class RevisionStudyTests(unittest.TestCase):
         errors = self.script("validate_study.py").stderr
         self.assertIn("requires non-empty disanalogy", errors)
         self.assertIn("evidence_refs", errors)
+
+    def test_nested_rival_requires_distinct_predictions_and_refuter(self):
+        self.start_evidence_repair()
+        rows = self.read("hypotheses.json")
+        contrast = {"kind": "NULL", "alternative": "Old need is newly visible",
+                    "primary_predictions": ["More actual handoffs"],
+                    "observable_predictions": ["No change in handoffs at equal logging"],
+                    "discriminating_observation": "Handoffs before and after logging",
+                    "refuter": "Actual handoff rate changed at equal visibility",
+                    "evidence_for_alternative": ["E5"], "evidence_against_alternative": []}
+        rows[0]["contrast"] = contrast
+        self.write("hypotheses.json", rows)
+        self.assertNotIn("contrast", self.script("validate_study.py").stderr)
+        contrast["observable_predictions"] = contrast["primary_predictions"]
+        del contrast["refuter"]
+        self.write("hypotheses.json", rows)
+        errors = self.script("validate_study.py").stderr
+        self.assertIn("different predictions", errors)
+        self.assertIn("requires non-empty refuter", errors)
+        rows[0]["contrast"] = {"kind": "NOT_APPLICABLE"}
+        self.write("hypotheses.json", rows)
+        self.assertIn("requires non-empty rationale", self.script("validate_study.py").stderr)
+
+    def test_unresolved_pivotal_claim_blocks_qualification_and_freeze_and_routes_repair(self):
+        self.start_evidence_repair()
+        manifest = self.read("manifest.json")
+        manifest["evidence_completion"] = "COMPLETED"
+        self.write("manifest.json", manifest)
+        evidence = self.read("evidence.json")
+        claim = next(row for row in evidence if row["evidence_id"] == "E2")
+        claim["claim_audit"] = {"decision_use": "PIVOTAL", "human_review": "NOT_REVIEWED", "checks": {
+            key: {"status": "PASS", "rationale": "Fictional audit record", "refs": [claim["source_id"]]}
+            for key in ("access", "attribution", "context", "claim_type", "entailment",
+                        "independent_support", "contradictions")
+        }}
+        for dim, status in (("attribution", "FAIL"), ("entailment", "FAIL"), ("contradictions", "UNKNOWN")):
+            claim["claim_audit"]["checks"][dim]["status"] = status
+        self.write("evidence.json", evidence)
+        errors = self.script("validate_study.py").stderr
+        self.assertIn("qualification uses unresolved", errors)
+        self.assertIn("requires repair of pivotal claim E2", errors)
+        self.assertIn("repair pivotal claims", self.script("freeze_evidence.py").stderr)
+        result = json.loads(self.script("next_research_move.py", "--json").stdout)
+        self.assertEqual(result["next_phase"], "C")
+        self.assertIn("Unresolved pivotal claim: E2", result["blockers"])
+        claim["claim_audit"]["checks"]["access"]["refs"] = ["SRC999"]
+        self.write("evidence.json", evidence)
+        self.assertIn("requires the accessible underlying source", self.script("validate_study.py").stderr)

@@ -664,3 +664,30 @@ When records disagree:
 5. conversational memory.
 
 Never silently rewrite reviewed human decisions.
+
+## Consequential contrasts and claim audits
+
+Add `contrast` on the existing H## for consequential hypotheses. Use
+`kind: NULL | RIVAL` with `alternative`, `primary_predictions`,
+`observable_predictions` for the alternative, `discriminating_observation`,
+`refuter`, `evidence_for_alternative` and `evidence_against_alternative`.
+Predictions must make different observations plausible. Use
+`kind: NOT_APPLICABLE` with a reason in `rationale` when needed. Use the
+existing status/update fields and change log for revisions.
+
+Add `claim_audit` to a decisive atomic E###. Use its existing `source_id`
+and `exact_location` for the source span. Record `decision_use`
+(`PIVOTAL | EXPLORATORY | EXCLUDED`), `human_review`
+(`REVIEWED | NOT_REVIEWED`), `review_ref` when reviewed, and `checks`
+keyed by `access`, `attribution`, `context`, `claim_type`, `entailment`,
+`independent_support`, and `contradictions`. Each dimension holds
+`status`, `rationale`, and `refs` to supporting SRC/E records. Status
+is `PASS | FAIL | UNKNOWN | NOT_RUN`. Independence and contradictions
+also allow reasoned `NOT_APPLICABLE`. PASS requires supporting refs.
+The validator checks structure and local lineage. A human review
+attestation is only recorded for a real human review.
+
+Use E records with unresolved pivotal audits to track repair, or mark
+them EXCLUDED and remove them from support chains before deciding.
+Current frozen records are immutable. Correct through post-freeze
+change handling or a successor study rather than adding fields in-place.

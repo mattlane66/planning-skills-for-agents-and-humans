@@ -134,3 +134,5 @@ Do not create concepts in this phase.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Compare the divergent observable predictions of the leading and rival hypotheses against the same evidence and counterexamples. Retain alternatives that survive the current tests. Cite the observation that would distinguish accounts that remain live.

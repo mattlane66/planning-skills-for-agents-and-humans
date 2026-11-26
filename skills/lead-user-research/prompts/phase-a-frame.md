@@ -100,3 +100,5 @@ Do not proceed by inventing missing scope. Mark consequential ambiguity.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+For a consequential H##, name the relevant null or closest rival and the prediction that differs. For example, the apparent new need may be an old need made visible by better logs. Record what would distinguish that account from an actual change in behavior, and where it is observable. If no meaningful contrast applies, record why. Preserve revisions in the hypothesis and change ledgers.

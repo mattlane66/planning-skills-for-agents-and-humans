@@ -10,7 +10,10 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from research_refinements import validate_analog, validate_rare_search
+from research_refinements import (
+    claim_can_support_decision, pivotal_claim_blockers, validate_analog, validate_claim_audit,
+    validate_hypothesis_contrast, validate_rare_search,
+)
 from report_safety import contains_private_identity, contains_sensitive_text, safe_outward_url
 from study_fingerprint import evidence_fingerprint, study_fingerprint
 from validation_schema import (
@@ -369,10 +372,15 @@ def main() -> int:
         if isinstance(row, dict) and isinstance(row.get("analysis_run_id"), str)
     }
 
+    for row in hypotheses:
+        if isinstance(row, dict):
+            validate_hypothesis_contrast(row, evidence_ids, errors)
+
     for row in evidence:
         if not isinstance(row, dict):
             continue
         eid = row.get("evidence_id", "<unknown>")
+        validate_claim_audit(row, source_by_id, evidence_ids, errors)
         sid = row.get("source_id")
         if not isinstance(sid, str) or sid not in source_ids:
             errors.append(f"{eid} references missing source_id: {sid}")
@@ -603,6 +611,8 @@ def main() -> int:
             )
             for ref in qualification_refs:
                 evidence_row = evidence_by_id.get(ref, {})
+                if not claim_can_support_decision(evidence_row):
+                    errors.append(f"{luid} qualification uses unresolved or excluded audited evidence {ref}")
                 if (
                     evidence_row.get("evidence_basis") == "SYNTHETIC_OR_SIMULATED"
                     and not is_synthetic_fixture
@@ -895,7 +905,12 @@ def main() -> int:
                 finding = finding_by_id.get(finding_ref, {})
                 if finding.get("epistemic_label") not in {"VERIFIED", "INFERRED"}:
                     continue
-                finding_has_atomic_support = bool(finding.get("evidence_refs"))
+                finding_evidence_refs = as_string_list(finding.get("evidence_refs"))
+                if any(not claim_can_support_decision(evidence_by_id.get(ref, {}))
+                       for ref in finding_evidence_refs):
+                    errors.append(f"{nid} PASS uses unresolved or excluded audited evidence through {finding_ref}")
+                    continue
+                finding_has_atomic_support = bool(finding_evidence_refs)
                 for lu_ref in as_string_list(finding.get("lu_refs")):
                     episode = episode_by_id.get(lu_ref, {})
                     if episode.get("status") != "QUALIFIED":
@@ -1185,6 +1200,9 @@ def main() -> int:
         if isinstance(row, dict) and isinstance(row.get("search_id"), str):
             validate_rare_search(row, row["search_id"], source_ids | candidate_ids, errors)
 
+    if isinstance(sufficiency, dict) and sufficiency.get("status") == "SUFFICIENT":
+        for ref in pivotal_claim_blockers(evidence):
+            errors.append(f"Sufficient evidence requires repair of pivotal claim {ref}")
     validate_sufficiency_state(sufficiency, all_structured_refs, pyramid_ids, errors)
     validate_freeze_state(
             root, freeze, sufficiency, episodes, evidence, independent_lineage_count,
@@ -1380,6 +1398,10 @@ def main() -> int:
             ]
             for field in string_list_fields:
                 require_string_list(decision_outcome, field, "decision_outcome", errors)
+            for ref in as_string_list(decision_outcome.get("decisive_finding_refs")):
+                for evidence_ref in as_string_list(finding_by_id.get(ref, {}).get("evidence_refs")):
+                    if not claim_can_support_decision(evidence_by_id.get(evidence_ref, {})):
+                        errors.append(f"{ref} decisive finding uses unresolved or excluded audited evidence {evidence_ref}")
             actions = decision_outcome.get("action_now")
             if not isinstance(actions, list):
                 errors.append("decision_outcome action_now must be a list")

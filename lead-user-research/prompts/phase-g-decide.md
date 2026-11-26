@@ -195,3 +195,5 @@ and model checks.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Trace every decisive inference to its supporting evidence. Exclude claims whose pivotal attribution, entailment or independent support remains unresolved. A well-supported negative or a bounded HOLD is a deliverable.

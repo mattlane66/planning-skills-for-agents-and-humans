@@ -301,6 +301,8 @@ Use Trace only for a specific real use case: direct observation, a detailed firs
 
 Use [prompts/phase-c-evidence.md](prompts/phase-c-evidence.md).
 
+Record divergent predictions for consequential nulls or rivals. Inspect the precise source span for each pivotal claim and record attribution, entailment, access, independence and contradiction checks. Repair or exclude unsupported pivotal claims through the existing sufficiency route.
+
 ### D — Freeze
 
 For STANDARD/FULL, first make an explicit decision-relative research-sufficiency judgment, then structurally validate and audit the evidence before interpretive synthesis.

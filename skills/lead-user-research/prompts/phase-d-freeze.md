@@ -114,3 +114,5 @@ changed evidence.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Use the existing sufficiency dimensions for pivotal audit gaps. Return to B for missing coverage and C for missing or misattributed evidence. A claim marked pivotal with unresolved audit checks blocks freeze. If the decision can proceed without it, mark the claim excluded, remove it from qualifying, gate and decisive support, and record the consequence. Preserve negative or unknown outcomes.

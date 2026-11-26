@@ -9,6 +9,8 @@ from pathlib import Path
 from typing import Any
 
 
+from research_refinements import pivotal_claim_blockers
+
 PHASE_COMMANDS = {
     "A": "/lead-user-frame",
     "B": "/lead-user-discover",
@@ -229,6 +231,14 @@ def recommend(root: Path) -> dict[str, Any]:
             ),
             blockers=[f"Insufficient dimension: {name}" for name in sorted(insufficient)],
         )
+    audit_blockers = pivotal_claim_blockers(evidence if isinstance(evidence, list) else [])
+    if audit_blockers:
+        return result(
+            current_phase=current_phase, state="READY", next_phase="C",
+            reason="Repair the pivotal source claims before assessing sufficiency or relying on the freeze.",
+            blockers=[f"Unresolved pivotal claim: {ref}" for ref in audit_blockers],
+        )
+
     if sufficiency_status != "SUFFICIENT" or not isinstance(freeze, dict) or freeze.get("status") != "FROZEN":
         return result(
             current_phase=current_phase,

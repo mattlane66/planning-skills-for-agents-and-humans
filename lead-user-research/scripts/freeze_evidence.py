@@ -9,6 +9,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from research_refinements import pivotal_claim_blockers
 from study_fingerprint import evidence_fingerprint
 
 
@@ -71,6 +72,10 @@ def main() -> int:
         parser.error("manifest.evidence_completion must be COMPLETED before Evidence Freeze")
     if sufficiency.get("status") != "SUFFICIENT":
         parser.error("sufficiency.status must be SUFFICIENT before Evidence Freeze")
+
+    blockers = pivotal_claim_blockers(evidence)
+    if blockers:
+        parser.error("repair pivotal claims before Evidence Freeze: " + ", ".join(blockers))
 
     counts = {
         "evidence_count": len(evidence),

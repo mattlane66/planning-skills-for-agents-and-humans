@@ -206,3 +206,5 @@ Do not run the full evidence machinery merely because it exists.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+Audit atomic evidence the decision relies on. Inspect the smallest source span. Check access, actor attribution, time and context, statement versus observed behavior, entailment, independence, and contradictions or missing coverage. Record each result and its sources with human review status separately. Model-assisted checks can flag errors and unknowns. Inspect the original before resolving them. Keep unverifiable claims as gaps or explicitly exclude them from decision use.

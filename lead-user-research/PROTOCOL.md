@@ -163,7 +163,7 @@ Persist each H## with:
 - claim and scope;
 - observable predictions defined before the main search when possible;
 - strongest plausible refuter;
-- rival explanations;
+- a null or rival and divergent observable predictions for consequential claims, or a rationale when no meaningful contrast applies;
 - targeted refutation searches;
 - evidence for and against;
 - formal contrastive cases;
@@ -291,7 +291,10 @@ Prefer:
 
 An unknown engineer maintaining a costly workaround may be more informative than a famous person casually asking for a feature.
 
-Every consequential VERIFIED claim should trace to atomic evidence.
+Every consequential VERIFIED claim should trace to atomic evidence. Audit pivotal
+claims for access, attribution, context, claim type, entailment, independent
+support and contradictions. Record audit outcomes and human review separately.
+Repair or explicitly exclude unresolved pivotal claims through existing gates.
 
 Every atomic E### records an explicit evidence basis. VERIFIED and INFERRED findings
 must retain a direct or transitive path through evidence, qualified LU episodes, or
