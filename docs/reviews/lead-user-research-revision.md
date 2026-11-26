@@ -23,7 +23,9 @@ Existing registries cover search and lineage, contrastive hypotheses, observabil
 | S1 | Rare search and bounded structural analog records. 82 lead-user tests passed, including under-ranked source and unsupported analog checks. |
 | S2 | Consequential contrast and pivotal audit, including qualification, freeze repair, decisive review and host validation. 84 lead-user tests passed. |
 
-| S3 | Conditional M, target contrasts and distinct branches with a fixed frame and PASS requirements. Host digest covers the validator imports. |
+| S3 | Conditional M, target contrasts and distinct branches with a fixed frame and PASS requirements. Host digest covers the validator imports. 87 lead-user tests passed. |
+
+| S4 | Optional evidence-first CF sidecar with study identity, stable fingerprints, shared comparison basis and stale status. |
 
 ## Requirements and verification
 

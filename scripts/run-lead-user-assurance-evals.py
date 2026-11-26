@@ -217,6 +217,7 @@ def artifact_digest(root: pathlib.Path) -> str:
 TRUSTED_VALIDATOR_FILES = (
     LEAD_USER_SCRIPTS / "validate_study.py",
     LEAD_USER_SCRIPTS / "report_safety.py",
+    LEAD_USER_SCRIPTS / "counterfactuals.py",
     LEAD_USER_SCRIPTS / "research_refinements.py",
     LEAD_USER_SCRIPTS / "validation_schema.py",
     LEAD_USER_SCRIPTS / "validation_state.py",

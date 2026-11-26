@@ -7,6 +7,7 @@ import argparse
 import json
 from datetime import datetime, timezone
 from pathlib import Path
+from uuid import uuid4
 
 
 EMPTY_LIST_FILES = [
@@ -77,6 +78,7 @@ def main() -> int:
         root / "manifest.json",
         {
             "protocol_version": "1.7",
+            "study_id": uuid4().hex,
             "fixture_type": "NONE",
             "mode": mode,
             "phase": "A",

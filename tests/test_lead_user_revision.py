@@ -203,3 +203,76 @@ class RevisionStudyTests(unittest.TestCase):
         criteria[0]["requirement"] += " Materially different requirement."
         self.write("fit_criteria.json", criteria)
         self.assertIn("comparison basis is stale", self.script("validate_study.py").stderr)
+
+    def comparison_fixture(self):
+        script_dir = PACKAGE / "scripts"
+        sys.path.insert(0, str(script_dir))
+        self.addCleanup(sys.path.remove, str(script_dir))
+        from counterfactuals import StudyBasis, candidate_digest, scenario_digest
+        from study_fingerprint import shaping_basis_digest
+
+        manifest = self.read("manifest.json")
+        manifest["study_id"] = "1" * 32
+        self.write("manifest.json", manifest)
+        study = StudyBasis.load(self.study)
+        basis = {
+            "need_ref": "N1", "frame_ref": "SF1",
+            "frame_digest": shaping_basis_digest(study.frames["SF1"], study.pass_criteria("SF1")),
+            "requirement_refs": ["R1", "R2"], "episode_ref": "LU1",
+            "evidence_refs": ["E2", "E3"], "decision": "Choose the next test", "owner": "Team",
+            "consequence_if_wrong": "Costly prototype rework", "target": "Fictional teams",
+            "baseline": "Observed handoff rework in the fictional episode", "unknowns": ["Transfer"],
+            "held_constant": ["Same input workspace context"], "time_horizon": "One handoff",
+            "outcome_space": ["Minutes and omissions"],
+        }
+        scenarios = []
+        for index, (ref, intervention) in enumerate(((None, "STATUS_QUO"), ("M1", "Packet and confirmation")), 1):
+            scenario = {
+                "scenario_id": f"CF{index}", "comparison_id": "handoff",
+                "purpose": "INTERVENTION_COMPARE", "evidence_fingerprint": study.fingerprint,
+                "basis": dict(basis), "provenance": "ANALYST_HYPOTHESIS", "human_review": "NOT_REVIEWED",
+                "candidate_ref": ref, "candidate_digest": candidate_digest(study.concepts[ref]) if ref else None,
+                "intervention": intervention, "changed_conditions": ["Handoff generation"] if ref else [],
+                "critical_assumption": "Enough context remains visible", "counterfactual_distance": "LOCAL",
+                "predicted_behavior": "Fewer omissions", "rival_explanation": "Familiarity drives recovery",
+                "refuter": "Omissions stay constant", "if_disproved": "Investigate visibility",
+                "smallest_test": "Observe two matched handoff tasks",
+            }
+            scenario["scenario_digest"] = scenario_digest(study.study_ref, study.fingerprint, scenario)
+            scenarios.append(scenario)
+        return {"contract": "lur-counterfactuals-v1", "study_ref": study.study_ref, "scenarios": scenarios}
+
+    def test_evidence_first_comparison_validates_offline_and_flags_mismatch(self):
+        from copy import deepcopy
+
+        sidecar = self.comparison_fixture()
+        from counterfactuals import scenario_digest
+        self.write("counterfactuals.json", sidecar)
+        result = self.script("counterfactuals.py")
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertEqual([row["status"] for row in json.loads(result.stdout)["comparisons"]], ["CURRENT"] * 2)
+        differing = deepcopy(sidecar)
+        row = differing["scenarios"][1]
+        row["basis"]["target"] = "A different population"
+        row["scenario_digest"] = scenario_digest(differing["study_ref"], row["evidence_fingerprint"], row)
+        self.write("counterfactuals.json", differing)
+        result = json.loads(self.script("counterfactuals.py").stdout)
+        self.assertEqual([row["status"] for row in result["comparisons"]], ["NONCOMPARABLE"] * 2)
+        self.write("counterfactuals.json", sidecar)
+        criteria = self.read("fit_criteria.json")
+        criteria[0]["requirement"] += " Revised condition."
+        self.write("fit_criteria.json", criteria)
+        result = json.loads(self.script("counterfactuals.py").stdout)
+        self.assertEqual([row["status"] for row in result["comparisons"]], ["STALE"] * 2)
+
+    def test_comparison_detects_foreign_study_and_tampered_content(self):
+        sidecar = self.comparison_fixture()
+        sidecar["study_ref"] = "LUR:" + "2" * 32
+        self.write("counterfactuals.json", sidecar)
+        result = self.script("counterfactuals.py")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("LUR namespace", result.stdout)
+        sidecar["study_ref"] = "LUR:" + "1" * 32
+        sidecar["scenarios"][0]["refuter"] = "Changed without updating hash"
+        self.write("counterfactuals.json", sidecar)
+        self.assertIn("scenario digest does not match", self.script("counterfactuals.py").stdout)

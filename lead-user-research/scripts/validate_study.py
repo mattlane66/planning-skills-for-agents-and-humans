@@ -10,6 +10,7 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from counterfactuals import inspect as inspect_counterfactuals
 from research_refinements import (
     claim_can_support_decision, pivotal_claim_blockers, validate_analog, validate_claim_audit,
     validate_conditional_mechanism, validate_generation, validate_hypothesis_contrast,
@@ -1573,6 +1574,12 @@ def main() -> int:
                     "complete Decision Brief reproduces raw excerpt for "
                     f"{evidence_row.get('evidence_id')}"
                 )
+
+    comparisons, comparison_errors = inspect_counterfactuals(root)
+    errors.extend(comparison_errors)
+    for comparison in comparisons:
+        if comparison["status"] in ("STALE", "NONCOMPARABLE"):
+            warnings.append(f'{comparison["scenario"]["scenario_id"]} is {comparison["status"]}')
 
     for warning in warnings:
         print(f"WARNING: {warning}", file=sys.stderr)

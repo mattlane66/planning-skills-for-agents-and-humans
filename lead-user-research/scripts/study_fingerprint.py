@@ -16,6 +16,7 @@ STATE_FILES = (
     "sufficiency.json",
     "freeze.json",
     "decision_outcome.json",
+    "counterfactuals.json",
     "trends.json",
     "candidates.json",
     "sources.json",

@@ -713,3 +713,9 @@ PASS | FAIL`, `predicted_behavior`, `distinctness_rationale` and
 functional key to equivalent mechanisms after inspecting their operations.
 Fit and human decision fields remain authoritative. When frame or criteria
 content changes, regenerate the comparison on the newly accepted basis.
+
+### Optional comparison state
+
+See [counterfactuals](counterfactuals.md) for the versioned sidecar and canonical
+digest functions. The sidecar contributes to the Decision Brief fingerprint
+when present. It never changes the Evidence Freeze fingerprint.

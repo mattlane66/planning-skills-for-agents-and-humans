@@ -197,3 +197,5 @@ After writing and validating this phase, follow
 `scripts/next_research_move.py`; do not advance from invocation history alone.
 
 Trace every decisive inference to its supporting evidence. Exclude claims whose pivotal attribution, entailment or independent support remains unresolved. A well-supported negative or a bounded HOLD is a deliverable.
+
+An evidence-first counterfactual can be delivered offline. After E, the question can be a transfer or test-priority assumption without Phase F. After F it can compare candidates over the same evidence and approved basis. Do not rank by synthetic response or treat a comparison as a causal effect.
