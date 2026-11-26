@@ -10,6 +10,7 @@ import json
 from pathlib import Path
 import re
 
+from freeze_evidence import independent_lineage_count
 from research_refinements import claim_can_support_decision
 from study_fingerprint import canonical_digest, evidence_fingerprint, shaping_basis_digest
 from validation_schema import FINGERPRINT_PATTERN, as_string_list, require_nonempty_string, require_string_list
@@ -18,6 +19,11 @@ from validation_schema import FINGERPRINT_PATTERN, as_string_list, require_nonem
 CONTRACT = "lur-counterfactuals-v1"
 FILE = "counterfactuals.json"
 PURPOSES = ("TRANSFER_STRESS", "INTERVENTION_COMPARE", "EDGE_CASE", "TEST_PRIORITY")
+DISTANCES = ("IN_DISTRIBUTION", "NEAR_OOD", "FAR_OOD", "UNKNOWN")
+CONCEPT_CHECKS = (
+    "credible_trend", "qualified_lu_support", "need_workaround_separation",
+    "fitness_evidence_sufficient", "transferability_supported", "no_blocking_contradiction",
+)
 CF_ID = re.compile(r"CF[0-9]+\Z")
 STUDY_ID = re.compile(r"[a-f0-9]{32}\Z")
 BASIS_FIELDS = (
@@ -28,7 +34,7 @@ BASIS_FIELDS = (
 SCENARIO_FIELDS = (
     "scenario_id", "comparison_id", "purpose", "basis", "intervention", "changed_conditions",
     "candidate_ref", "candidate_digest", "critical_assumption", "predicted_behavior", "rival_explanation",
-    "refuter", "if_disproved", "smallest_test", "provenance", "counterfactual_distance",
+    "refuter", "if_disproved", "smallest_test", "provenance", "counterfactual_distance", "distance_rationale",
 )
 
 
@@ -80,11 +86,20 @@ class StudyBasis:
             dated_freeze = isinstance(frozen_at, str) and datetime.fromisoformat(frozen_at) is not None
         except ValueError:
             dated_freeze = False
-        freeze_current = freeze.get("status") == "FROZEN" and expected == fingerprint and dated_freeze
+        evidence = indexed(root, "evidence.json", "evidence_id")
+        episodes = indexed(root, "lu_episodes.json", "lu_id")
+        qualified_count = sum(row.get("status") == "QUALIFIED" for row in episodes.values())
+        lineage_count = independent_lineage_count(read_json(root, "lineage.json", []))
+        freeze_current = (
+            freeze.get("status") == "FROZEN" and expected == fingerprint and dated_freeze
+            and freeze.get("evidence_count") == len(evidence)
+            and freeze.get("qualified_lu_count") == qualified_count
+            and freeze.get("independent_lineage_count") == lineage_count
+        )
         return cls(
             root, study_ref, fingerprint, freeze_current,
             manifest.get("fixture_type") == "SYNTHETIC_REFERENCE",
-            indexed(root, "evidence.json", "evidence_id"), indexed(root, "lu_episodes.json", "lu_id"),
+            evidence, episodes,
             indexed(root, "needs.json", "need_id"), indexed(root, "findings.json", "finding_id"),
             indexed(root, "shaping_frame.json", "frame_id"),
             indexed(root, "fit_criteria.json", "requirement_id"), indexed(root, "concepts.json", "concept_id"),
@@ -146,7 +161,9 @@ def check_basis(study: StudyBasis, scenario: dict, basis: dict, owner: str,
         if scenario.get("purpose") == "INTERVENTION_COMPARE":
             errors.append(f"{owner} intervention comparison requires an accepted shaping frame")
         return
-    if not need or need.get("concept_gate_status") != "PASS":
+    gate_checks = (need or {}).get("concept_gate_checks")
+    if not need or need.get("concept_gate_status") != "PASS" or not isinstance(gate_checks, dict) \
+            or not all(gate_checks.get(key) is True for key in CONCEPT_CHECKS):
         stale.append("existing concept gate is closed")
     frame = study.frames.get(frame_ref) if isinstance(frame_ref, str) else None
     if not frame or frame.get("status") != "ACCEPTED" or frame.get("accepted_by_human") is not True:
@@ -223,10 +240,12 @@ def inspect(root: Path) -> tuple[list[dict], list[str]]:
             errors.append(f"{owner} has unsupported scenario fields")
         for name in ("comparison_id", "intervention", "critical_assumption", "predicted_behavior",
                      "rival_explanation", "refuter", "if_disproved", "smallest_test",
-                     "counterfactual_distance"):
+                     "distance_rationale"):
             require_nonempty_string(scenario, name, owner, errors)
         if scenario.get("purpose") not in PURPOSES or scenario.get("provenance") != "ANALYST_HYPOTHESIS":
             errors.append(f"{owner} requires a supported purpose and ANALYST_HYPOTHESIS provenance")
+        if scenario.get("counterfactual_distance") not in DISTANCES:
+            errors.append(f"{owner} requires an upstream distance classification")
         changed = require_string_list(scenario, "changed_conditions", owner, errors)
         if bool(changed) == (scenario.get("intervention") == "STATUS_QUO"):
             errors.append(f"{owner} must name changed conditions, or use an unchanged STATUS_QUO")

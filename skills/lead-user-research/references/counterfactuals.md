@@ -12,7 +12,7 @@ Each scenario records:
 | Binding | Current `evidence_fingerprint` and `scenario_digest` computed by `scenario_digest(study_ref, fingerprint, scenario)` from the documented script |
 | Basis | `need_ref`, `episode_ref`, `evidence_refs`, `decision`, `owner`, `consequence_if_wrong`, `target`, `baseline` (including UNKNOWN if needed), `unknowns`, `held_constant`, `time_horizon`, `outcome_space` |
 | Shaping basis | Within basis, `frame_ref`, `frame_digest`, `requirement_refs`. Use null, null, [] for the E-only route. Supply local `candidate_ref` and its `candidate_digest` for a candidate intervention. The standard-library script exposes both hash functions. |
-| Hypothesis | `provenance: ANALYST_HYPOTHESIS`, `intervention` or STATUS_QUO, `changed_conditions` (empty for STATUS_QUO), `critical_assumption`, `predicted_behavior`, `rival_explanation`, `refuter`, `if_disproved`, `smallest_test`, `counterfactual_distance` |
+| Hypothesis | `provenance: ANALYST_HYPOTHESIS`, `intervention` or STATUS_QUO, `changed_conditions` (empty for STATUS_QUO), `critical_assumption`, `predicted_behavior`, `rival_explanation`, `refuter`, `if_disproved`, `smallest_test`, `counterfactual_distance: IN_DISTRIBUTION | NEAR_OOD | FAR_OOD | UNKNOWN`, `distance_rationale` |
 | Review | `human_review: NOT_REVIEWED` for drafts. For REVIEWED, record actual `review_ref` and `review_digest` equal to the scenario digest. |
 
 Copy one basis literally to compare alternatives. Use study-local IDs in the sidecar. Start with the LU1 and LU2 evidence for the selected qualified episode and add only relevant scoped evidence. Use namespaced references when handing off externally. Record the actual baseline and its limits. Do not substitute the expected effect for an observed result.

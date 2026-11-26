@@ -24,7 +24,6 @@ UPSTREAM = {
     "commit": "c11d29c8d121728306037dd799669bb0ef7cfabf",
     "schema_version": "0.1.0",
 }
-DISTANCES = ("IN_DISTRIBUTION", "NEAR_OOD", "FAR_OOD", "UNKNOWN")
 MODES = ("PLAUSIBILITY_SPACE", "INDIVIDUAL_PROXY", "POPULATION_PREDICTION", "MULTI_AGENT_DYNAMICS")
 GRADES = (
     "L0_ROLEPLAY", "L1_PERSON_GROUNDED", "L2_POPULATION_GROUNDED",
@@ -130,6 +129,7 @@ def packet_for(study: StudyBasis, scenario: dict, request: dict) -> dict:
             f"{study.study_ref}:{ref}" for ref in [basis["frame_ref"], *basis["requirement_refs"]] if ref
         ],
         "assumptions_and_rivals": assumptions, "distance": scenario["counterfactual_distance"],
+        "distance_rationale": scenario["distance_rationale"],
         "disconfirming_observations": [scenario["refuter"]],
         "permission_scope": request["permission_scope"],
         "upstream_input": upstream_input,
@@ -146,11 +146,7 @@ def prepared_packet(study: StudyBasis, scenario: dict, request: dict, *, permiss
         raise ValueError("Unsupported mode/target-grade pair")
     if request.get("permission_scope") != "REDACTED_SUMMARY_ONLY":
         raise ValueError("Only explicitly permitted redacted summaries cross this adapter")
-    if scenario.get("counterfactual_distance") not in DISTANCES and mode != "PLAUSIBILITY_SPACE":
-        raise ValueError("Use an upstream distance classification before grounded simulation")
     packet = packet_for(study, scenario, request)
-    if packet["distance"] not in DISTANCES:
-        packet["distance"] = "UNKNOWN"
     if private_material(study.root, packet):
         raise ValueError("Remove private material and URLs before preparing a portable handoff")
     digest = canonical_digest(packet)

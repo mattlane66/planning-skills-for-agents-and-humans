@@ -222,6 +222,7 @@ TRUSTED_VALIDATOR_FILES = (
     LEAD_USER_SCRIPTS / "report_safety.py",
     LEAD_USER_SCRIPTS / "render_decision_brief.py",
     LEAD_USER_SCRIPTS / "counterfactuals.py",
+    LEAD_USER_SCRIPTS / "freeze_evidence.py",
     LEAD_USER_SCRIPTS / "simulation_handoff.py",
     LEAD_USER_SCRIPTS / "research_refinements.py",
     LEAD_USER_SCRIPTS / "validation_schema.py",

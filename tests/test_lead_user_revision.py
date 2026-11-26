@@ -233,7 +233,8 @@ class RevisionStudyTests(unittest.TestCase):
                 "basis": dict(basis), "provenance": "ANALYST_HYPOTHESIS", "human_review": "NOT_REVIEWED",
                 "candidate_ref": ref, "candidate_digest": candidate_digest(study.concepts[ref]) if ref else None,
                 "intervention": intervention, "changed_conditions": ["Handoff generation"] if ref else [],
-                "critical_assumption": "Enough context remains visible", "counterfactual_distance": "LOCAL",
+                "critical_assumption": "Enough context remains visible", "counterfactual_distance": "NEAR_OOD",
+                "distance_rationale": "Modest change in the same fictional workflow",
                 "predicted_behavior": "Fewer omissions", "rival_explanation": "Familiarity drives recovery",
                 "refuter": "Omissions stay constant", "if_disproved": "Investigate visibility",
                 "smallest_test": "Observe two matched handoff tasks",
@@ -461,8 +462,15 @@ class RevisionStudyTests(unittest.TestCase):
         freeze = self.read("freeze.json")
         self.write("freeze.json", {**freeze, "frozen_at": ""})
         self.assertNotEqual(self.script("simulation_handoff.py", "--prepare", "CF2").returncode, 0)
+        self.write("freeze.json", {**freeze, "qualified_lu_count": 500})
+        results = json.loads(self.script("counterfactuals.py").stdout)
+        self.assertTrue(all(row["status"] == "STALE" for row in results["comparisons"]))
         self.write("freeze.json", freeze)
         needs = self.read("needs.json")
+        needs[0]["concept_gate_checks"]["transferability_supported"] = False
+        self.write("needs.json", needs)
+        results = json.loads(self.script("counterfactuals.py").stdout)
+        self.assertTrue(all(row["status"] == "STALE" for row in results["comparisons"]))
         needs[0]["concept_gate_status"] = "FAIL"
         self.write("needs.json", needs)
         self.assertNotEqual(self.script("simulation_handoff.py", "--prepare", "CF2").returncode, 0)
