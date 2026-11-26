@@ -920,3 +920,7 @@ Primary von Hippel references:
 Secondary Christensen reference:
 
 - Christensen Institute, Jobs to Be Done: https://www.christenseninstitute.org/theory/jobs-to-be-done/
+
+## Optional high-volume discovery screening
+
+Use [discovery screening](references/discovery-screening.md) when a bounded corpus is too large to inspect directly. Jev is an opt-in external screening adapter, not source retrieval or evidence. Retain all results, reserve low-rank inspection, and preserve human processing approval and all existing research gates. Ordinary discovery remains the default.

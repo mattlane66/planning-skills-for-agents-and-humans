@@ -638,3 +638,5 @@ not automatically become an accepted frame or product decision.
   mark NOT_RUN/UNAVAILABLE without a runtime. Keep generated text and grade outside
   evidence, qualification, gate support, fit and human approval. Do not claim local
   hashes, fixture validation or execution you did not perform.
+
+Optional high-volume screening: consider X, Reddit, GitHub, Hacker News, YouTube and relevant specialist communities. If an approved external decision model is available, use it only to prioritize original inspection across independent signal lanes, including rare cases and low-ranked audits; never qualify from scores. Log inaccessible platforms and continue ordinary discovery without the service.

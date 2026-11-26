@@ -230,3 +230,7 @@ a low-rank inspection and deduplicate by known original provenance. Supply
 JSON objects with `source_ref` and optional `original_ref`, in rank order.
 Inspect the originals before recording them as inspected. A ranked result list
 cannot represent sources excluded by access or language.
+
+## Optional high-volume screening
+
+When the bounded retrieval corpus is too large to inspect directly, see [discovery screening](../references/discovery-screening.md). Consider X, Reddit, GitHub, Hacker News, YouTube and specialist forums where relevant and accessible. Use Jev only after exact human processing approval, reserve low-ranked and unknown cases, retain every result and inspect originals. No provider score qualifies a Lead User or establishes evidence. If access or credentials are missing, continue ordinary discovery and log the limitation.

@@ -162,3 +162,7 @@ mechanisms are ready, [compare them over the same evidence](references/counterfa
 workflow. The offline route reaches the same human gates and produces a decision brief.
 See [research basis and limits](references/methodology-evidence.md) and the
 [prospective evaluation protocol](references/empirical-evaluation.md).
+
+## Optional high-volume discovery screening
+
+Use [discovery screening](references/discovery-screening.md) when a bounded corpus is too large to inspect directly. Jev is an opt-in external screening adapter, not source retrieval or evidence. Retain all results, reserve low-rank inspection, and preserve human processing approval and all existing research gates. Ordinary discovery remains the default.
