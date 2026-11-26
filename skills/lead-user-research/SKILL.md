@@ -496,3 +496,5 @@ For a complete synthetic, validator-ready v1.7 example, inspect `examples/refere
 Use [discovery screening](references/discovery-screening.md) when a bounded corpus is too large to inspect directly. Jev is an opt-in external screening adapter, not source retrieval or evidence. Retain all results, reserve low-rank inspection, and preserve human processing approval and all existing research gates. Ordinary discovery remains the default.
 
 For relevant X discovery, use the optional [bounded X search adapter](references/x-discovery.md) or authorized host search; the ordinary method has no dependency on X credentials. Retrieved post references remain discovery signals and do not establish qualification.
+
+For semantic social discovery and thread context, [Grok native X Search](references/grok-x-discovery.md) is an optional additional route. It needs a separately approved xAI account and spend exposure; citations are inspection leads, not evidence. Direct X and host search remain available.

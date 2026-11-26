@@ -642,3 +642,5 @@ not automatically become an accepted frame or product decision.
 Optional high-volume screening: consider X, Reddit, GitHub, Hacker News, YouTube and relevant specialist communities. If an approved external decision model is available, use it only to prioritize original inspection across independent signal lanes, including rare cases and low-ranked audits; never qualify from scores. Log inaccessible platforms and continue ordinary discovery without the service.
 
 When X is relevant, prefer authorized official search API access with explicit date/query/read budgets or host search; inspect original posts and conversations. Record coverage gaps and never treat retrieval as qualification. No automatic external processing of X content.
+
+Optional native Grok X Search can complement direct X API queries for semantic discovery and threads. Require approved cost exposure and scope, retain citation leads only, verify originals, and never auto-export posts to another provider.

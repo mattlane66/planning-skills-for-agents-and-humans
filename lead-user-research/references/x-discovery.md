@@ -106,3 +106,5 @@ stop reason in existing Q## search logs; no new evidence fields or gates.
 A retrieved post is only a discovery signal until original context is inspected
 and the existing LU1/LU2 evidence, lineage, contradiction and sufficiency rules
 are satisfied.
+
+For semantic X discovery, the optional [Grok native X Search adapter](grok-x-discovery.md) complements direct query retrieval. It uses a separate xAI key and explicit approved spend exposure; only structured post citations become inspection leads. No automatic external screening.

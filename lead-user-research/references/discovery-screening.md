@@ -93,3 +93,5 @@ and downstream outcomes. Record failures and costs. Do not enable by default
 until evidence warrants it.
 
 For direct X retrieval, use the [bounded official API adapter](x-discovery.md) or authorized host search. No X data is automatically transferred to Jev; separately verify processing rights and approve the minimized corpus.
+
+For semantic X discovery, the optional [Grok native X Search adapter](grok-x-discovery.md) complements direct query retrieval. It uses a separate xAI key and explicit approved spend exposure; only structured post citations become inspection leads. No automatic external screening.
