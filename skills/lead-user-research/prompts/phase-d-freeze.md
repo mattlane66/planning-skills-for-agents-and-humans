@@ -110,3 +110,6 @@ changed evidence.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+
+Simulation is not a sufficiency repair in itself. Only independently inspected human/nonhuman evidence appropriate to each gate can close a gap. Route suggested queries through B/C and reassess D; if no real evidence can be obtained, keep the affected dimension insufficient.

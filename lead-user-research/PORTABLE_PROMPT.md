@@ -100,7 +100,7 @@ Discover:
 - Contradictions and outliers remain visible.
 - Starting hypotheses are challenged with observable predictions, plausible refuters, rival explanations, and contrastive cases; never label a hypothesis CONFIRMED.
 - Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are never human evidence.
-- When a supported need/mechanism is no longer the main uncertainty and the next question is counterfactual behavior under a changed condition, route to Behavioral Simulation (https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation). Treat every returned result as model-derived evidence at its declared evidence grade; never use it to establish LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence.
+- When a consequential unknown can be investigated through hypothetical scenarios before, during or after discovery, route to Behavioral Simulation (https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation). Treat every returned result as model-derived evidence at its declared evidence grade; never use it to establish LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence.
 - Prefer behavioral, documentary, or event traces over default interviews when the decision-critical variable is trace-observable.
 - AI coding/extraction of a large corpus requires task-specific sampled validation before its derived evidence is frozen.
 - Insufficient evidence is a valid result.
@@ -594,3 +594,10 @@ Lead User Research is optional upstream evidence, not a mandatory predecessor to
 framing. At completion, propose evidence-backed research-to-frame implications and
 stop for explicit human acceptance. The research record remains evidence; it does
 not automatically become an accepted frame or product decision.
+
+
+## Optional simulation-assisted discovery lane
+
+When a consequential discovery, repair or interpretation uncertainty remains, consider the [shared simulation-assisted discovery contract](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/blob/79b72edf06529164476970887b4dca58da0d08d4/behavioral-simulation/references/scarce-evidence.md). This is an optional research instrument, not a phase prerequisite. Use PLAUSIBILITY_SPACE for overlooked circumstances, candidate profiles, rival mechanisms and attribute-specific search directions; INDIVIDUAL_PROXY only with eligible real person grounding (otherwise L0 exploratory scenarios); POPULATION_PREDICTION only with a defensible real sampling frame; MULTI_AGENT_DYNAMICS for conditional diffusion and changing constraints. Run one mode per study/run as specified by Behavioral Simulation. The four modes need not all run.
+
+Record the unresolved variable, existing refs, scarcity/coverage constraint, mode/grade, assumptions, scenario, model/config, simulated output and next empirical search or test in a **separate simulation workspace**. Import only hypothesis/search directions (PROVISIONAL, never evidence) into the normal search process. Never populate sources, candidates as actual people, evidence, episodes, lineage, trend support, LU1/LU2 or sufficiency from generated material. Independently locate and inspect real sources before creating evidence records; no simulation may close an empirical gap or make a study FULL_LEAD_USER_PROJECT. If new evidence arrives post-freeze use the existing post-freeze change contract. SSR is optional ordinal attitude measurement, not lead-user scoring. Rectification requires a separate representative sampling design and paired real labels, never convenience lead-user cases; its results remain model-assisted estimates outside the Lead User corpus. No grade or evidence promotion from computation alone.

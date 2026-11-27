@@ -139,7 +139,7 @@ The handoff is bidirectional. If Market Opportunity Underwriting identifies a lo
 
 ## Behavioral Simulation handoff
 
-When the supported Lead User evidence has made the need or mechanism concrete enough and the next uncertainty is **counterfactual human response under a changed condition**, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
+When a decision-critical unknown can be formulated as a useful scenario or counterfactual before, during or after discovery, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
 
 Appropriate uses include:
 
@@ -887,3 +887,10 @@ Primary von Hippel references:
 Secondary Christensen reference:
 
 - Christensen Institute, Jobs to Be Done: https://www.christenseninstitute.org/theory/jobs-to-be-done/
+
+
+## Optional simulation-assisted discovery lane
+
+When a consequential discovery, repair or interpretation uncertainty remains, consider the [shared simulation-assisted discovery contract](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/blob/79b72edf06529164476970887b4dca58da0d08d4/behavioral-simulation/references/scarce-evidence.md). This is an optional research instrument, not a phase prerequisite. Use PLAUSIBILITY_SPACE for overlooked circumstances, candidate profiles, rival mechanisms and attribute-specific search directions; INDIVIDUAL_PROXY only with eligible real person grounding (otherwise L0 exploratory scenarios); POPULATION_PREDICTION only with a defensible real sampling frame; MULTI_AGENT_DYNAMICS for conditional diffusion and changing constraints. Run one mode per study/run as specified by Behavioral Simulation. The four modes need not all run.
+
+Record the unresolved variable, existing refs, scarcity/coverage constraint, mode/grade, assumptions, scenario, model/config, simulated output and next empirical search or test in a **separate simulation workspace**. Import only hypothesis/search directions (PROVISIONAL, never evidence) into the normal search process. Never populate sources, candidates as actual people, evidence, episodes, lineage, trend support, LU1/LU2 or sufficiency from generated material. Independently locate and inspect real sources before creating evidence records; no simulation may close an empirical gap or make a study FULL_LEAD_USER_PROJECT. If new evidence arrives post-freeze use the existing post-freeze change contract. SSR is optional ordinal attitude measurement, not lead-user scoring. Rectification requires a separate representative sampling design and paired real labels, never convenience lead-user cases; its results remain model-assisted estimates outside the Lead User corpus. No grade or evidence promotion from computation alone.
