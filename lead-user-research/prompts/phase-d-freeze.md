@@ -113,3 +113,7 @@ After writing and validating this phase, follow
 
 
 Simulation is not a sufficiency repair in itself. Only independently inspected human/nonhuman evidence appropriate to each gate can close a gap. Route suggested queries through B/C and reassess D; if no real evidence can be obtained, keep the affected dimension insufficient.
+
+## Simulation-assisted research
+
+No simulated output supplies a missing sufficiency rationale. Re-run B/C for actual evidence; if a search fails, preserve insufficiency. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

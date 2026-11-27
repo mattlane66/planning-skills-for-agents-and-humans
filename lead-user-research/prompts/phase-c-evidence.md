@@ -200,3 +200,7 @@ Do not run the full evidence machinery merely because it exists.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+For real people, optionally use section 4 to design a permissioned proxy and held-out test. Do not append generated dialogue to evidence; preserve any observed new source through ordinary registration. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

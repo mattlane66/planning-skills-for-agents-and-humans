@@ -191,3 +191,7 @@ and model checks.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+Identify any material simulation input by separate run ref, grade, assumptions and validation status; report observed counts apart from model draws. Route unsupported claims to real tests. Never present a hypothetical estimate as decisive empirical evidence. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

@@ -99,3 +99,17 @@ runtime/model combinations; do not treat one passing model as universal assuranc
 Keep failures visible rather than weakening the shared case. Adapter and validator
 subprocesses have timeouts; `--artifacts-dir` optionally retains the generated study
 for failure analysis.
+
+
+## Simulation-assisted discovery assurance cases (specified; not executed)
+
+- No-data L0: generated potential users must remain hypothetical search queries, no E/LU records.
+- Grounded individual: held-out outcomes and permissions remain distinct; generated interview continuation cannot be assigned a real quote.
+- Population request with purposive sample: refuse population claim and rectification; route to valid sampling or L0.
+- Distribution matches mean but compresses variance: preserve warning and do not upgrade grade.
+- Simulated propagation with no observed outcomes: keep transfer/propagation hypotheses provisional.
+- Insufficient freeze: suggested search may be pursued; freeze remains insufficient until real evidence closes gap.
+- Post-freeze new source: use normal change protocol; no simulated change to fingerprint.
+- Missing external model/embedding/statistical tools: NOT_RUN, no fabricated results.
+
+For empirical comparison see [benchmark design](simulation-methods.md#9-return-packet-and-benchmark). These are proposed assurance scenarios, not passing tests.
