@@ -1036,7 +1036,10 @@ class LeadUserResearchTests(unittest.TestCase):
                     "why": ["The need is supported in a qualified Lead User episode.", "Private-enterprise coverage remains weak."],
                     "decisive_finding_refs": ["F1"],
                     "decisive_lu_refs": ["LU1"],
-                    "critical_uncertainties": ["Whether the behavior propagates beyond public advanced users."],
+                    "critical_uncertainties": [
+                        "Whether the behavior propagates beyond public advanced users.",
+                        "Simulation context (provisional). R005 explored a generated context recovery scenario.",
+                    ],
                     "action_now": [
                         {
                             "action_id": "A1",
@@ -1054,7 +1057,10 @@ class LeadUserResearchTests(unittest.TestCase):
                     "what_evidence_supports": ["A future-facing need for lower-cost context recovery."],
                     "what_evidence_does_not_support": ["Population prevalence or willingness to pay."],
                     "contradictions": ["Public-source discoverability may overstate tool builders."],
-                    "recommended_next_evidence": ["Direct enterprise interviews."],
+                    "recommended_next_evidence": [
+                        "Direct enterprise interviews.",
+                        "Test the generated context recovery scenario in an observed handoff.",
+                    ],
                     "priority_human_review": ["Review LU1 qualification and propagation inference."],
                 },
             )
@@ -1075,6 +1081,10 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertLess(brief.index("## Recommendation"), brief.index("## Discovery coverage"))
             self.assertLess(brief.index("## Action now"), brief.index("## What the evidence supports"))
             self.assertIn("## What would change this decision", brief)
+            decisive, uncertainty = brief.split("## Critical uncertainty", 1)
+            self.assertNotIn("R005", decisive)
+            self.assertIn(r"Simulation context \(provisional\). R005", uncertainty)
+            self.assertIn("Test the generated context recovery scenario in an observed handoff.", brief)
             self.assertIn("Execution level: DESK_RESEARCH", brief)
             self.assertNotIn("Example user", brief)
             self.assertNotIn("https://example.com", brief)
@@ -1328,6 +1338,34 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertIn("cannot be persisted as human evidence", result.stderr)
+
+    def test_validator_rejects_model_assisted_estimate_as_atomic_evidence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+            evidence = json.loads((workspace / "evidence.json").read_text(encoding="utf-8"))
+            evidence[0]["evidence_basis"] = "MODEL_ASSISTED_STATISTICAL_ESTIMATE"
+            self.write_json(workspace, "evidence.json", evidence)
+            result = self.validate(workspace)
+            self.assertEqual(1, result.returncode)
+            self.assertIn("MODEL_ASSISTED_STATISTICAL_ESTIMATE", result.stderr)
+
+    def test_live_study_rejects_explicit_model_types_despite_real_basis(self):
+        for filename, field, expected in (
+            ("evidence.json", "evidence_type", "cannot be persisted as atomic evidence"),
+            ("sources.json", "source_type", "cannot be registered as a source"),
+        ):
+            with self.subTest(field=field), tempfile.TemporaryDirectory() as tmp:
+                workspace = self.init_workspace(tmp)
+                self.write_valid_evidence_core(workspace)
+                rows = json.loads((workspace / filename).read_text(encoding="utf-8"))
+                for label in ("SIMULATED_ESTIMATE", "MODEL_ASSISTED_STATISTICAL_ESTIMATE"):
+                    rows[0][field] = label
+                    self.write_json(workspace, filename, rows)
+                    result = self.validate(workspace)
+                    self.assertEqual(1, result.returncode)
+                    self.assertIn(f"{label} {expected}", result.stderr)
 
     def test_freeze_blocks_open_observability_and_unvalidated_ai_analysis(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -595,13 +595,34 @@ framing. At completion, propose evidence-backed research-to-frame implications a
 stop for explicit human acceptance. The research record remains evidence; it does
 not automatically become an accepted frame or product decision.
 
-
-## Optional simulation-assisted discovery lane
-
-When a consequential discovery, repair or interpretation uncertainty remains, consider the [shared simulation-assisted discovery contract](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/blob/79b72edf06529164476970887b4dca58da0d08d4/behavioral-simulation/references/scarce-evidence.md). This is an optional research instrument, not a phase prerequisite. Use PLAUSIBILITY_SPACE for overlooked circumstances, candidate profiles, rival mechanisms and attribute-specific search directions; INDIVIDUAL_PROXY only with eligible real person grounding (otherwise L0 exploratory scenarios); POPULATION_PREDICTION only with a defensible real sampling frame; MULTI_AGENT_DYNAMICS for conditional diffusion and changing constraints. Run one mode per study/run as specified by Behavioral Simulation. The four modes need not all run.
-
-Record the unresolved variable, existing refs, scarcity/coverage constraint, mode/grade, assumptions, scenario, model/config, simulated output and next empirical search or test in a **separate simulation workspace**. Import only hypothesis/search directions (PROVISIONAL, never evidence) into the normal search process. Never populate sources, candidates as actual people, evidence, episodes, lineage, trend support, LU1/LU2 or sufficiency from generated material. Independently locate and inspect real sources before creating evidence records; no simulation may close an empirical gap or make a study FULL_LEAD_USER_PROJECT. If new evidence arrives post-freeze use the existing post-freeze change contract. SSR is optional ordinal attitude measurement, not lead-user scoring. Rectification requires a separate representative sampling design and paired real labels, never convenience lead-user cases; its results remain model-assisted estimates outside the Lead User corpus. No grade or evidence promotion from computation alone.
-
 ### Simulation under scarce evidence
 
-Before, during or after discovery, select only the mode warranted: plausibility space (overlooked cases, alternate paths); individual proxy (permissioned real person grounding); population prediction (eligible separate real sampling frame); multi-agent dynamics (conditional diffusion). Generate search/refutation hypotheses, independently inspect real sources, and return to normal evidence gates. For ordinal attitudes compare direct, follow-up and semantic similarity ratings, with predeclared anchors and real holdouts. For scarce population labels use statistical rectification only with the appropriate real sampling design, independent predictor, labeled/unlabeled units and explicit uncertainty. Check bias, variance, distribution, cross-item dependence, dimensionality, group associations, effect sizes and incentivized behavior where applicable. Calibration requires held-out actual error, not model certainty. Do not claim to run unavailable tools or invent human records. See the local research reference when available: https://github.com/mattlane66/planning-skills-for-agents-and-humans/tree/main/lead-user-research/references. No simulation closes empirical sufficiency or qualifies LU1/LU2.
+Choose one mode per separate companion run: plausibility space for overlooked
+cases, individual proxy for permissioned person evidence, population prediction
+for a separate defensible real sampling frame, or multi-agent dynamics for
+conditional trajectories. Keep the run, its assumptions, output, grade and
+validation status outside the Lead User workspace. When no companion runtime
+is available, keep a separate, labeled exploratory packet and record computation
+as NOT_RUN.
+
+Before or during discovery, turn generated scenarios into provisional searches,
+observable LU1 advancement and LU2 benefit probes, and possible refuters.
+During interpretation and propagation analysis, hold observed facts fixed,
+compare rival mechanisms and seek dated independent origins, receipts and
+behavioral follow-through. In counterfactual tests, keep the baseline and
+outcome fixed, vary the named condition and seek an actual behavioral test.
+
+Do not add generated or model-assisted outputs to sources, actual candidate
+records, evidence, episode traces, lineage, trend support or freeze sufficiency.
+Only independently located and inspected real sources may create those records.
+Use the existing post-freeze change contract when new evidence arrives. Keep
+human measurements, generated scenarios and model-assisted statistical
+estimates distinct. No computation by itself promotes a grade.
+
+For a fixed ordinal attitude, compare direct, follow-up and semantic similarity
+ratings with predeclared anchors and real holdouts. For scarce population labels,
+rectify only under a separately declared real sampling design with a frozen
+predictor, paired human labels, disjoint real covariates and appropriate
+uncertainty. Check relevant bias, spread, joint structure, subgroup effects and
+behavior; calibration requires held-out observed errors. See the [operating
+methods](references/simulation-methods.md) when available.

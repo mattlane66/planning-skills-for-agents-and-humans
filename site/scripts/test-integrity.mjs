@@ -79,7 +79,11 @@ assert.deepEqual(
   [...expectedSkillReferences].sort(),
   'Every canonical skill reference should be embedded.',
 );
-for (const name of ['simulation-methods.md', 'simulation-measurement-evaluation.md', 'simulation-discovery-worksheet.md']) {
+for (const name of [
+  'simulation-methods.md', 'simulation-measurement-evaluation.md',
+  'simulation-discovery-worksheet.md', 'simulation-source-coverage.md',
+  'simulation-traceability.md',
+]) {
   assert.ok(resourcePaths.has(`lead-user-research/references/${name}`), `Missing Lead User reference: ${name}`);
 }
 for (const item of [...content.docs, ...content.skills, ...content.resources, ...content.examples]) {
@@ -101,6 +105,18 @@ for (const example of content.examples) {
   }
 }
 
+const sectionLinks = new Map();
+const idsByRoute = new Map();
+function routeAndSection(href) {
+  const [path, query] = href.split('?');
+  const params = new URLSearchParams(query);
+  const section = params.get('section');
+  params.delete('section');
+  if (path.startsWith('#/examples/') && params.get('file') === 'README.md') params.delete('file');
+  const route = params.size ? `${path}?${params}` : path;
+  return { route, section };
+}
+
 for (const targetRoute of routes) {
   await route(targetRoute);
   assert.ok(document.querySelector('main#main-content'), `${targetRoute} did not render the main landmark.`);
@@ -109,12 +125,12 @@ for (const targetRoute of routes) {
 
   const navigationLabels = [...document.querySelectorAll('nav')].map((nav) => nav.getAttribute('aria-label')).filter(Boolean);
   assert.equal(new Set(navigationLabels).size, navigationLabels.length, `${targetRoute} has duplicate navigation landmark labels.`);
+  idsByRoute.set(routeAndSection(targetRoute).route, new Set(
+    [...document.querySelectorAll('[id]')].map((node) => node.id),
+  ));
 
-  for (const anchor of document.querySelectorAll('a[href*="section="]')) {
-    const href = anchor.getAttribute('href');
-    const query = href.includes('?') ? href.slice(href.indexOf('?') + 1) : '';
-    const section = new URLSearchParams(query).get('section');
-    assert.ok(section && document.getElementById(section), `${targetRoute} links to missing section ${section || '(empty)'}.`);
+  for (const anchor of document.querySelectorAll('a[href^="#/"][href*="section="]')) {
+    sectionLinks.set(anchor.getAttribute('href'), targetRoute);
   }
 
   for (const anchor of document.querySelectorAll('.markdown-body a[href]')) {
@@ -122,6 +138,11 @@ for (const targetRoute of routes) {
     assert.ok(!/^#[^/]/.test(href), `${targetRoute} contains a raw same-page hash that would bypass the router: ${href}`);
     assert.ok(!new RegExp(`^https://github\\.com/[^/]+/[^/]+/blob/main/.+\\.md(?:#.*)?$`).test(href), `${targetRoute} sends an embedded Markdown reference to GitHub: ${href}`);
   }
+}
+
+for (const [href, source] of sectionLinks) {
+  const { route: destination, section } = routeAndSection(href);
+  assert.ok(section && idsByRoute.get(destination)?.has(section), `${source} links to missing section ${href}.`);
 }
 
 await route('#/');

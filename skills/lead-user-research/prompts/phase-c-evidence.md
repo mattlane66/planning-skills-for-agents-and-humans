@@ -203,4 +203,4 @@ After writing and validating this phase, follow
 
 ## Simulation-assisted research
 
-For real people, optionally use section 4 to design a permissioned proxy and held-out test. Do not append generated dialogue to evidence; preserve any observed new source through ordinary registration. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
+Turn an unresolved qualification claim into paired probes for LU1 advancement and LU2 benefit, with a possible refuter for each. Use plausibility scenarios to expose confounds such as resources, policy or access. If person-level modeling is eligible, a permissioned proxy can help choose a novel behavioral probe. Record the observed human outcome through normal registration and preserve unknown chronology, intent or qualification until verified. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

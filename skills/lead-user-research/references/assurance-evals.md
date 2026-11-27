@@ -115,10 +115,11 @@ for failure analysis.
 For empirical comparison see [benchmark design](simulation-methods.md#9-return-packet-and-benchmark). These are proposed assurance scenarios, not passing tests.
 
 
-## Simulation measurement cases (specified; not empirical results)
+## Simulation measurement and evidence checks
 
-- SSR nonzero epsilon fixture must distinguish the Eq. 8 single-minimum correction from the existing uniform-epsilon implementation; check rescaled-cosine epsilon conversion, zero total and temperature. See [measurement reference](simulation-measurement-evaluation.md#4-ordinal-elicitation-and-ssr-equation-conformance).
-- PPI fixture checks paired residuals and disjoint real sample units, lambda=0 baseline, fixed-weight arithmetic, uncertainty and zero-variance tuning fallback. Reject same-person duplication, nonrepresentative frames and unsupported design claims. Adaptive tuning requires its own tested implementation and inference design.
-- Matching aggregate responses but failed individual/variance/conditional fidelity must retain the failure. No predictive use outside held-out scope.
+- [Scaled Interview draft PR #25](https://github.com/mattlane66/scaled-interview-data-assistant/pull/25) tests positive epsilon, tied minima, zero-epsilon compatibility, degenerate anchors and temperature. The [measurement reference](simulation-measurement-evaluation.md#4-ordinal-elicitation-and-ssr-equation-conformance) gives hand-checkable fixtures and the rescaled-cosine conversion.
+- [Behavioral Simulation draft PR #3](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/pull/3) tests paired residuals, disjoint sample IDs, design attestation, the human-only baseline and independent-pilot weighting. An attestation is a structural check. Inference with a panel, complex survey or adaptive weight requires a separate validated procedure.
+- Lead User tests reject a model-assisted estimate passed as atomic evidence. The live evidence gates depend on provenance, and scientific validation requires human holdouts.
+- Empirical fidelity remains open. Report individual, spread and conditional failures even when aggregates match. Keep predictive use within the tested scope.
 - Simulated social events with missing logged receipts or invalid actions must not count as executed outcomes, much less observed human outcomes.
-- All of the above are proposed test cases; no new model run or empirical validation follows from the reference.
+- Provider-backed scenario and empirical comparisons remain open.

@@ -116,4 +116,4 @@ Simulation is not a sufficiency repair in itself. Only independently inspected h
 
 ## Simulation-assisted research
 
-No simulated output supplies a missing sufficiency rationale. Re-run B/C for actual evidence; if a search fails, preserve insufficiency. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
+If a scenario suggests a missing observable, assign the exact real search or fieldwork as a B/C repair and reassess in D. If the search yields no appropriate evidence, retain the open sufficiency gap and its rationale. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

@@ -72,6 +72,14 @@ Verify mechanically where possible:
 - PASS, PROVISIONAL, and FAIL shaping records remain visibly distinct;
 - structured operational actions remain complete across formats.
 
+## Simulation reporting check
+
+Where a simulation affected the recommendation, confirm the Decision Brief and
+derived views show the provisional simulation context and pending real test from
+`decision_outcome.json`. Confirm separate run ref, assumptions and validation status. Keep
+scenario outputs and model-assisted estimates distinct from observed claims, counts
+and source drill-down. Retain the unresolved test where validation is unavailable.
+
 ## Capability honesty
 
 If PDF generation, HTML generation, interactive validation, browser testing, or another delivery capability is unavailable:

@@ -1,12 +1,11 @@
 # Simulation-assisted Lead User Research — operating methods
 
-Status: proposed research extension, not a validated improvement to the Lead User Method.
-Source review date: 2026-11-27. This document turns the simulation literature into
-conditional research moves. It does not claim that every paper, supplement and
-replication artifact has been read end to end. See the coverage ledger below.
-Von Hippel remains the governing methodology. Behavioral Simulation remains the
-owner of simulation modes, evidence grades, execution and validation. This local
-reference owns how those methods are used in Lead User Research.
+Research extension under review. See the [source-coverage ledger](simulation-source-coverage.md)
+for exact versions and open coverage, and the [traceability matrix](simulation-traceability.md)
+for methods, dispositions and verification. Von Hippel governs Lead User Research.
+Behavioral Simulation owns execution and grade validation. Scaled Interview owns
+run-bound ordinal measurement. This reference specifies when those methods help
+the Lead User workflow and what can return to it.
 
 ## 1. Route the unknown
 
@@ -26,6 +25,15 @@ to satisfy a quota, confirm a favored concept, or fill a missing evidence field.
 | How to measure a generated ordinal attitude? | DLR/FLR/SSR comparison | Eligible simulation run, fixed construct | Measurement of generated text |
 | Can real labels improve an estimate from many model predictions? | PPI/DSL rectification | Separate eligible survey design | Scoped model-assisted estimate |
 | Is the result trustworthy enough for its intended use? | Held-out fidelity, distortion, robustness and error-prediction tests | Plan before generation; assess afterward | Validation report, no evidence promotion |
+
+| Research move | Smallest useful contribution | Empirical follow-through |
+|---|---|---|
+| A/B Discovery | Generate gaps in the search matrix, abandoned attempts and rival analogs | Search independently via target, advanced-analog and attribute-specific paths. |
+| C Qualification | Branch on a suspected confound. Write an observable advancement indicator for LU1, a benefit signal for LU2 and a refuter for each. A permissioned proxy can help design a follow-up. | Compare actual timing and behavior to the relevant trend and comparator. Obtain a real trace or first-person evidence of unusually high benefit. |
+| B/C/D Evidence-gap repair | Compare observations that would distinguish explanations. Prioritize the real test that could change the sufficiency decision. | Rerun B/C, then reassess D. Keep the unresolved dimension open if the required evidence is still missing. |
+| E Interpretation | Hold frozen facts constant and generate mechanisms with different observable implications. | Check each against counterexamples and contrasts in the frozen record. Apply the change contract to new evidence. |
+| E Propagation | Compare transmission, independent reinvention, incentives and selection under a varied network or constraint. | Seek dated receipts, independent origins and use-after-receipt. Keep reach, adoption, continued use and abandonment distinct. |
+| F/G Counterfactual | Hold baseline and outcome fixed, vary one named intervention or use a declared factorial design. Include null, downside, non-use and substitution. | Use the existing gates. Test a named intervention, observable outcome and rival on actual people or systems. |
 
 Run one mode per simulation study/run under the companion skill. Select only the
 methods required. A material lack of real evidence must remain open after simulation.
@@ -60,6 +68,14 @@ Local procedure:
 4. Branch from one fixed state and generate alternative plausible futures, including
    adverse outcomes and no effect. Record seeds/config where supported. Do not
    assign frequencies to alternative paths without a validated sampling model.
+   For a second scope of Multiverse, hold the design fixed and regenerate an entire
+   community using another composition of seed personas. Compare what changed
+   with what persisted across compositions. Keep simulated norm guidance soft
+   where users can violate it, and validate actual hard action constraints separately.
+   In the original system each reply is conditioned on the ancestry of the
+   selected branch, with an explicitly selected speaker and an option to end.
+   When testing interventions, distinguish replacing the utterance (a changed
+   input) from keeping it and drawing another continuation (sampling variation).
 5. Extract distinct mechanisms and convert them into a specific observable prediction,
    refuter and query or fieldwork plan. Search separately through target, advanced
    analog and attribute-specific paths. Do not count simulations as search results.
@@ -80,13 +96,20 @@ Local procedure:
 - Each agent has a bounded experience log; each memory has time and source
   (observed grounding vs simulated event). Retrieve using normalized recency,
   relevance and importance scores. Treat their weights and decay as parameters
-  to test, not universal human properties. The paper's example uses creation/access
-  timestamps, exponential recency decay (0.995 per sandbox hour), model-assigned
-  importance on a 1–10 scale, embedding cosine relevance and a normalized weighted
-  sum. Log each retrieved record and score; test against simpler retrieval.
+  to test. The paper (§4.1) uses 0.995 raised to elapsed sandbox hours since access,
+  model-assigned importance on a 1–10 scale, cosine relevance, per-component
+  min–max normalization and equal weights. The public Smallville code uses a
+  different recency function over ascending last-access rank, default decay 0.99
+  (older entries get higher raw recency), a default top-30 rank cutoff and
+  explicit weights 0.5 recency, 3 relevance and 2 importance before per-agent
+  multipliers. Declare which variant ran. Log retrieved records and scores,
+  handle constant components as ties, and compare with simpler retrieval.
 - Make reflections cite prior memory IDs; retain reflection as model inference.
   Plan at a coarse horizon, refine to executable actions, react to new observations,
-  update shared environment and record the consequences. No future information
+  update shared environment and record the consequences. Keep a spatial or
+  workflow-affordance graph distinct from the social graph. Store relevant
+  relationships as cited inferences. If activities can collide, preserve the
+  schedule, conflict resolution and state update order in the event log. No future information
   may leak into current state or private memory into another agent. The original
   example triggers reflection at accumulated importance 150, forms questions from
   recent memories, retrieves relevant records and derives insights with citations.
@@ -125,7 +148,11 @@ Local procedure:
   responses, interview-only and combined grounding; add a concise summary variant
   if data minimization is required. Don't assume richer is always better.
 - Reserve genuinely unseen questions/outcomes for the same individual; separate
-  repeated-item retest prediction from new-item generalization. For training or
+  repeated-item retest prediction from new-item generalization. Mask related item
+  families (the source masks whole Big Five traits) and have a person check
+  interview–outcome overlaps. Label any inferred answer trace as direct
+  statement, supported inference or missing. Test the contribution of grounding
+  with summaries and controlled removal of relevant versus arbitrary facts. For training or
   tuning, split at participant level and keep all their dependent records together.
   Check semantic duplicates, not just IDs. Compare same-person held-out outcomes
   and, when feasible, a human repeat measurement.
@@ -173,6 +200,9 @@ Local procedure:
   Exclude leakage and ambiguous labels. Respect licensing and privacy.
 - Compare direct prompts, reasoning prompts, nearest-stimulus few-shot examples
   retrieved only from training data, and task-specific adaptation if eligible.
+  Record the base model, checkpoint split, and inference prompt. In DPO the
+  prompt stays fixed to the focal person. The comparison answer comes from a
+  different person under the same stimulus and must actually differ.
   The paper compares supervised fine-tuning, supervised tuning augmented with
   answer-conditioned reasoning traces, and contrastive preference tuning (DPO).
   For the latter, construct contrast pairs within a common stimulus/condition and
@@ -187,8 +217,13 @@ Local procedure:
   according to the claimed generalization. Report which dimension is actually
   unseen. Validate with the same unit and scale as the intended decision.
 - For ordered outcomes compare normalized Wasserstein distance; for unordered
-  categories use TVD. Report individual accuracy separately, groupwise error and
-  human-only resampling/no-information baselines. Normalize ordered distances by
+  categories use TVD as a local extension. For SocSci210-style individual
+  accuracy subtract mean normalized absolute error from one. Normalize by the
+  scale width within each condition/outcome pair, then aggregate by study and
+  across studies. The proceedings formula displays absolute-value bars.
+  Verify the authors’ exact evaluator before claiming replication. Report exact
+  match separately when useful. Declare the scale bounds and report zero-width
+  cases. Compare groupwise error and human-only resampling/no-information baselines. Normalize ordered distances by
   response scale range where applicable. Aggregate within condition/outcome then
   across studies with an explicit weighting rule; preserve subgroup error gaps. Do not pool all groups until
   poor performance disappears. Estimate treatment effects only with an appropriate
@@ -213,14 +248,13 @@ Local procedure:
   normalize to a PMF. Aggregate across preregistered anchor sets and repeated
   draws within the same unit; retain per-set sensitivity. Reject degenerate
   embeddings. Keep verbatim text as simulated text.
-- Implementation conformance caveat: v3 equation (8) adds epsilon at the
-  minimum-similarity index via a Kronecker delta. The existing Scaled Interview
-  `simulation/ssr.py` instead adds epsilon to every anchor before temperature
-  power. They are not equivalent for nonzero epsilon. The [authors' implementation](https://github.com/pymc-labs/semantic-similarity-rating/blob/main/semantic_similarity_rating/compute.py) confirms the single-minimum correction, but uses rescaled cosine `(1+cos)/2`; the epsilon scale must also be converted when comparing to raw cosine. Until an equation-level
-  conformance test is added, use epsilon=0 and temperature=1 for the common
-  unmodified transform, and label any other configuration as an implementation
-  variant, not a faithful reproduction of the paper. Do not silently change the
-  companion implementation or its defaults from this repository.
+- For nonzero epsilon use the explicit `MAIER_V3_SINGLE_MINIMUM` transform in
+  [Scaled Interview draft PR #25](https://github.com/mattlane66/scaled-interview-data-assistant/pull/25)
+  or the [authors' library](https://github.com/pymc-labs/semantic-similarity-rating/blob/main/semantic_similarity_rating/compute.py).
+  Convert epsilon for the authors' rescaled cosine. Released Scaled Interview
+  and the compatibility entry point in Behavioral Simulation use uniform epsilon.
+  Both agree at epsilon zero for nondegenerate scores. Record the transform and
+  keep provider temperature distinct from PMF temperature.
 - Compare PMFs with real human held-out response distributions (KS similarity for
   ordered categories, TVD), and across-concept mean correlations. If replicating
   correlation attainment, use repeated equal-sized human split-half cohorts,
@@ -245,8 +279,12 @@ rather than spend them all on adaptation.
 Compare demographics-only prompting, historical-response/persona grounding,
 domain adaptation trained on permitted past responses, and external population
 distribution adaptation where the external data are relevant and authorized.
-These are alternatives, not prerequisites; distinguish historical panel data
-from independent cross-sectional samples.
+These are alternatives. In panels hold out the target wave and control for
+question overlap. Domain fine-tuning uses historical question/covariate/response
+triplets. SubPOP aligns first-token multiple-choice probabilities to subgroup
+distributions by KL divergence. It is a population objective; free-text outcomes
+need a predefined coding rule applied symmetrically to human and generated text.
+Keep label mapping and person dependence across waves explicit.
 
 Local procedure:
 - Only on a separate defined population estimand and eligible real sampling
@@ -259,7 +297,9 @@ Local procedure:
   frozen predictor independent of inference samples, and fixed lambda in [0,1],
   estimate mean = lambda * mean(pred_U) + mean(y_H - lambda*pred_H).
   Estimated variance = lambda^2 * var(pred_U)/N + var(y_H-lambda*pred_H)/n.
-  Lambda=0 is human-only, lambda=1 full correction. Compare precision and real
+  Lambda=0 is human-only. Lambda=1 is full correction, the DSL-named special
+  case in this survey paper. Broader design-based DSL requires its own design
+  and variance procedure. Compare precision and real
   coverage against human-only and raw simulation; don't assume improvement.
   Pilot the budget allocation between training and correction with independent
   data; assess effective sample size gains only at adequate interval coverage.
@@ -267,7 +307,7 @@ Local procedure:
   is undefined if the reference mean is zero.
 - For PPI++ power tuning or quantile/regression estimating equations, route to a
   validated statistical implementation and document the theorem/sampling design.
-  The preprint appendix power-tuning description is inconsistent with main
+  The survey paper's appendix power-tuning description is inconsistent with main
   equation conventions; use main equation (1) for the mean. The original
   [PPI++ section 6](https://arxiv.org/html/2311.01453v2) confirms weighting the
   prediction contribution on both samples. See the measurement reference for
@@ -276,9 +316,11 @@ Local procedure:
   or claiming observed sample size increased.
 - Report n human, N real covariate units, model draws separately; estimator,
   interval method, bias, variance, coverage, subgroup errors and actual effective
-  sample size comparison if supported. Fixed-weight implementation is in the
-  companion [draft PR #3](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/pull/3);
-  not an automatic Lead User workspace operation.
+  sample size comparison if supported. Use the fixed-weight or disjoint-pilot mean implementation in
+  [Behavioral Simulation draft PR #3](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/pull/3).
+  Its variance formula targets independent samples from a common distribution.
+  Reproduction of a fixed finite panel or a weighted survey requires design-aware
+  inference. Keep the model-assisted estimate outside the Lead User workspace.
 
 ## 8. Conditional fidelity, model risk and calibrated error
 
@@ -293,7 +335,11 @@ public product methodology, not an independently replicated result.
   magnitude, sign, uncertainty and variance gaps. Test prompt paraphrase, option
   order, model/version, temperature and time sensitivity; use human variance/effect
   estimates for planning human sample size. Do not power an experiment from
-  synthetic variance.
+  synthetic variance. Test one-question versus jointly elicited answers, first
+  versus second person, inconsistent or invalid replies, outcome type, and
+  retraining/version effects where these could alter the decision. Keep
+  self-reported confidence, variation across draws and predictive uncertainty
+  against human outcomes separate.
 - Treat the foundation model as part of the measurement instrument. Record
   access/model/config/data lineage; compare independent baselines, evaluate
   robustness, group fairness, privacy, security, cost and suitability. Shared
@@ -303,9 +349,16 @@ public product methodology, not an independently replicated result.
   separate error predictor on prior labeled questions, evaluate on unseen query
   families with groupwise/nested splits. Compare simple distribution features,
   question embeddings and, only if actually accessible, model representations
-  or a tuned error-prediction model. Report RMSE, discrimination (AUROC for
-  threshold) and correlation as separate diagnostics; examine calibration and
-  coverage of accepted decisions. No generic product threshold imports.
+  or a tuned error-prediction model. Simile compares basic feature regression,
+  generic embeddings, nested layer selection for ridge probes, continued
+  fine-tuning with an error head, and the same training from the stock model.
+  Use accessible baselines. Preserve real question-family and experimental-sample
+  grouping. Match population, date, action space and stimulus in the actual
+  benchmark, and disclose ground-truth sampling uncertainty. Report RMSE, Pearson
+  correlation, and threshold AUROC separately. Agree with decision owners on
+  consequences, tolerable error and the decision itself. Check calibration and
+  coverage of accepted cases. Report calibration in the intended deployment
+  distribution before using a confidence label.
 - Recheck drift, freshness, counterfactual distance, subgroup error and changes in
   model/configuration. Decline predictive use if outside validated scope. Record
   whether each metric was computed or remains NOT_ASSESSED.
@@ -326,25 +379,3 @@ precision of proposed searches, false positives, effort and missed real cases.
 Use independent human adjudicators and retained sources. Report uncertainty,
 disagreement, failed runs, and no-improvement cases. Never confuse a successful
 fixture validation with scientific validation.
-
-## Source coverage ledger
-
-All eight sources identified; original source records checked on 2026-11-27.
-The following is a transparent **partial primary-source extraction**, not a
-full-paper reading certificate. Each source link is versioned where available.
-
-| Source | Examined in this pass | Outstanding before comprehensive sign-off |
-|---|---|---|
-| Social Simulacra v1 | Main methods, generation/WhatIf/Multiverse, comparison arms, designer evaluation, examples and conclusion | Replication and complete line-by-line review not certified |
-| Generative Agents v2 | Main architecture, controlled and end-to-end evaluation, discussion and limitations; network and event measurements | Appendix details and replication not fully checked |
-| Rich Self-Reports v4 | Full PDF retrieved; main results, distortion definitions, SI evaluation tables, baselines, fine-tuning, individuation and exploratory-analysis disclosures examined | Full 123-page line-by-line reading and replication not certified |
-| SocSci210 | Proceedings abstract, preprint methods, training, metrics, subgroup results and appendix passages | Preprint Appendix C/F checked; proceedings PDF still timed out; remaining appendix details and version reconciliation |
-| Foundation Models v3 | Abstract and evaluation sections/excerpts | Full report, including application/security/fairness sections |
-| SSR v3 | Main methods, rating appendix, anchor construction, comparison baseline, equation (8)/(9), authors' compute.py and Scaled Interview implementation comparison | Companion implementation correction and empirical replication |
-| Valid Survey Simulations | Proceedings abstract, preprint methodology, evaluation, ablation and per-model appendix tables; PPI++ original §6 derivation checked | Full replication code and final proceedings version not audited |
-| Synthetic Replacements | Publisher article mean/variance/regression excerpts | Remaining article, sensitivity analysis, supplements and replication |
-| Simile | Public confidence and What-If pages, error-model and metrics excerpts | Remaining text/claims; private architecture not available |
-
-No full-text reproduction is included. Local procedures are original adaptations,
-not claims that the source authors validated Lead User Research. Maintain this
-ledger as later full-paper reviews are completed.

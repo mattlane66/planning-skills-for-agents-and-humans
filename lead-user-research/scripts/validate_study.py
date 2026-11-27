@@ -27,6 +27,11 @@ from validation_schema import (
 )
 from validation_state import validate_freeze_state, validate_manifest_state, validate_sufficiency_state
 
+MODEL_OUTPUT_TYPES = {
+    "MODEL_ASSISTED_STATISTICAL_ESTIMATE", "SIMULATED_ESTIMATE", "SYNTHETIC_OR_SIMULATED",
+}
+
+
 def main() -> int:
     if len(sys.argv) != 2:
         print("Usage: validate_study.py <workspace>", file=sys.stderr)
@@ -320,6 +325,8 @@ def main() -> int:
         sid = source.get("source_id", "<unknown>")
         for field in ["title", "source_type", "access_date"]:
             require_nonempty_string(source, field, sid, errors)
+        if not is_synthetic_fixture and valid_enum(source.get("source_type"), MODEL_OUTPUT_TYPES):
+            errors.append(f"{sid} {source['source_type']} cannot be registered as a source")
         has_url = isinstance(source.get("url"), str) and bool(source["url"].strip())
         has_immutable_id = isinstance(source.get("immutable_identifier"), str) and bool(
             source["immutable_identifier"].strip()
@@ -380,6 +387,8 @@ def main() -> int:
                 f"{source_by_id[sid].get('coverage')!r}"
             )
         require_nonempty_string(row, "evidence_type", eid, errors)
+        if not is_synthetic_fixture and valid_enum(row.get("evidence_type"), MODEL_OUTPUT_TYPES):
+            errors.append(f"{eid} {row['evidence_type']} cannot be persisted as atomic evidence")
         basis = row.get("evidence_basis")
         if basis not in EVIDENCE_BASIS:
             errors.append(f"{eid} has invalid evidence_basis {basis!r}")

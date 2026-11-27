@@ -194,4 +194,12 @@ After writing and validating this phase, follow
 
 ## Simulation-assisted research
 
-Identify any material simulation input by separate run ref, grade, assumptions and validation status; report observed counts apart from model draws. Route unsupported claims to real tests. Never present a hypothetical estimate as decisive empirical evidence. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
+Identify any material scenario, prediction or model-assisted statistical estimate by separate run ref, assumptions, scope and validation status. Report observed human counts, real covariate units and model draws distinctly. Use independently inspected evidence for decisive claims and route exploratory outputs to real tests. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
+
+In file-backed mode, place an outward-safe item headed “Simulation context
+(provisional)” in `decision_outcome.json.critical_uncertainties`, with the
+companion run ref, result type, scope, remaining assumptions and validation status.
+Use `recommended_next_evidence` for the pending human test. The Decision Brief
+renderer reads both fields. Keep the separate run and any private details in the
+worksheet. Do not add companion IDs to decisive evidence refs or edit generated
+Markdown to compensate for missing state.

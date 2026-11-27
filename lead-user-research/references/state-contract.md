@@ -313,6 +313,16 @@ Tracks discovery bias:
 ```
 
 Use this for pivotal needs. Do not substitute a fixed branch count for a judgment about genuinely independent discovery.
+### Simulation output provenance
+
+Keep simulation outputs and model-assisted statistical estimates in their
+companion analyses. The live validator flags explicit model output types
+`SIMULATED_ESTIMATE`, `MODEL_ASSISTED_STATISTICAL_ESTIMATE` and
+`SYNTHETIC_OR_SIMULATED` in source and evidence type fields. A real basis on
+the same row does not change this. Structural checks cannot establish the
+authenticity of a mislabeled source. Verify actual provenance before registering
+a source or observation. The synthetic assurance fixture keeps its own rules.
+
 ### `search_log.json`
 
 Array of major search families, pyramids, analog pivots, and abandoned branches. Do not record every trivial query.

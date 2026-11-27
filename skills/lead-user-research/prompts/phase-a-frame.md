@@ -99,4 +99,4 @@ After writing and validating this phase, follow
 
 ## Simulation-assisted research
 
-Declare the specific uncertainty and counterfactual before choosing any simulation mode. Register empirical observability and the real research budget. An L0 scenario may refine search hypotheses, never provide scope facts. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
+Declare the specific uncertainty before choosing a simulation mode. Name the empirical observation that could resolve it and the research effort available. An L0 scenario can refine search hypotheses. Keep scope facts tied to actual sources. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
