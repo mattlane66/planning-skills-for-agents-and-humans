@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { JSDOM, VirtualConsole } from 'jsdom';
@@ -58,7 +58,30 @@ const resourcePaths = new Set(content.resources.map((item) => item.sourcePath));
 const templatePaths = [...resourcePaths].filter((sourcePath) => sourcePath.startsWith('templates/'));
 const skillReferencePaths = [...resourcePaths].filter((sourcePath) => sourcePath.includes('/references/'));
 assert.equal(templatePaths.length, 21, 'Every canonical template should be embedded.');
-assert.equal(skillReferencePaths.length, 11, 'Every canonical skill reference should be embedded.');
+const expectedSkillReferences = new Set();
+for (const skill of content.skills) {
+  const relativeDirectory = path.posix.join(path.posix.dirname(skill.sourcePath), 'references');
+  let names;
+  try {
+    names = await readdir(path.resolve(siteDirectory, '..', relativeDirectory), { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') continue;
+    throw error;
+  }
+  for (const entry of names) {
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      expectedSkillReferences.add(path.posix.join(relativeDirectory, entry.name));
+    }
+  }
+}
+assert.deepEqual(
+  skillReferencePaths.filter((sourcePath) => expectedSkillReferences.has(sourcePath)).sort(),
+  [...expectedSkillReferences].sort(),
+  'Every canonical skill reference should be embedded.',
+);
+for (const name of ['simulation-methods.md', 'simulation-measurement-evaluation.md', 'simulation-discovery-worksheet.md']) {
+  assert.ok(resourcePaths.has(`lead-user-research/references/${name}`), `Missing Lead User reference: ${name}`);
+}
 for (const item of [...content.docs, ...content.skills, ...content.resources, ...content.examples]) {
   assert.ok(item.description.length <= 240, `${item.sourcePath || item.slug} has an overlong description.`);
   assert.ok(!item.description.endsWith('…'), `${item.sourcePath || item.slug} has a truncated description.`);
