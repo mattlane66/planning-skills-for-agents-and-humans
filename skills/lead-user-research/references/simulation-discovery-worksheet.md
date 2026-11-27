@@ -11,7 +11,11 @@ Keep this file outside the canonical empirical corpus and retain the companion r
 - Target construct / estimand / unit / horizon:
 - Model/version, configuration, seed, prompt, provenance:
 - Training, tuning, correction and holdout roles:
-- Planned comparisons and decision threshold:
+- Planned comparisons and decision threshold (see simulation-measurement-evaluation.md):
+- Actual evaluation unit, split manifest and leakage check:
+- Measurement/estimator version, anchor or correction-weight provenance:
+- Human-only and model baseline results, where applicable:
+- Undefined/NOT_ASSESSED/NOT_APPLICABLE metrics with reason:
 - Generated output refs (SIMULATED_ESTIMATE; no human evidence):
 - Failure modes, rival mechanisms, null outcomes:
 - Fidelity checks (computed results or NOT_ASSESSED):

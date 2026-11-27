@@ -141,7 +141,7 @@ Distortion audit (adaptation of v4 Table 1 and SI 9.13):
 | Distribution distortion | ordered earth mover distance or categorical TVD |
 | Excess cross-item dependence | mean absolute Spearman correlation and matrix differences |
 | Dimensionality collapse | first component share, same coding/scaling and missing-data policy |
-| Sorting/stereotyping | compare predeclared group/attribute associations, avoid sensitive proxies unless necessary and permitted |
+| Ideological sorting (or a declared domain-specific analogue) | mean absolute correlation of responses with the specified organizing variable; group stereotyping is a separate audit |
 | Inflated intervention effects | compare estimated signs and magnitudes to held-out human contrasts |
 | Hyper-rationality | compare to actual incentivized choices and a stated theoretical baseline |
 
@@ -216,7 +216,7 @@ Local procedure:
 - Implementation conformance caveat: v3 equation (8) adds epsilon at the
   minimum-similarity index via a Kronecker delta. The existing Scaled Interview
   `simulation/ssr.py` instead adds epsilon to every anchor before temperature
-  power. They are not equivalent for nonzero epsilon. Until an equation-level
+  power. They are not equivalent for nonzero epsilon. The [authors' implementation](https://github.com/pymc-labs/semantic-similarity-rating/blob/main/semantic_similarity_rating/compute.py) confirms the single-minimum correction, but uses rescaled cosine `(1+cos)/2`; the epsilon scale must also be converted when comparing to raw cosine. Until an equation-level
   conformance test is added, use epsilon=0 and temperature=1 for the common
   unmodified transform, and label any other configuration as an implementation
   variant, not a faithful reproduction of the paper. Do not silently change the
@@ -268,8 +268,10 @@ Local procedure:
 - For PPI++ power tuning or quantile/regression estimating equations, route to a
   validated statistical implementation and document the theorem/sampling design.
   The preprint appendix power-tuning description is inconsistent with main
-  equation conventions; use main equation (1) for the mean and verify the
-  original PPI++ methodology before implementing adaptive tuning. No informal
+  equation conventions; use main equation (1) for the mean. The original
+  [PPI++ section 6](https://arxiv.org/html/2311.01453v2) confirms weighting the
+  prediction contribution on both samples. See the measurement reference for
+  the scalar optimal weight and conditions on tuning. No informal
   tuning on inference outcomes, naive binomial CIs on generated respondents,
   or claiming observed sample size increased.
 - Report n human, N real covariate units, model draws separately; estimator,
@@ -308,6 +310,8 @@ public product methodology, not an independently replicated result.
   model/configuration. Decline predictive use if outside validated scope. Record
   whether each metric was computed or remains NOT_ASSESSED.
 
+Read [Simulation measurement and evaluation](simulation-measurement-evaluation.md) for precise evaluation definitions, leakage controls, SSR conformance fixtures, rectification and the local execution checklist. Do not select metrics after inspecting their results.
+
 ## 9. Return packet and benchmark
 
 Use the [run worksheet](simulation-discovery-worksheet.md) for every material
@@ -331,13 +335,13 @@ full-paper reading certificate. Each source link is versioned where available.
 
 | Source | Examined in this pass | Outstanding before comprehensive sign-off |
 |---|---|---|
-| Social Simulacra v1 | HTML introduction, method headings, persona expansion and branching excerpts, evaluation context | Read all remaining sections, examples and limitations in full |
-| Generative Agents v2 | Architecture sections 4–6, retrieval, reflection, planning and ablation passages | Remaining sections and replication details |
-| Rich Self-Reports v4 | Abstract, main results, evaluation figure and SI 9.13 excerpts | Remaining 123-page paper/SI, exact distortion formulas and training splits |
-| SocSci210 | Proceedings abstract, preprint methods, training, metrics, subgroup results and appendix passages | Full proceedings PDF timed out; reconcile versions and audit remaining appendices |
+| Social Simulacra v1 | Main methods, generation/WhatIf/Multiverse, comparison arms, designer evaluation, examples and conclusion | Replication and complete line-by-line review not certified |
+| Generative Agents v2 | Main architecture, controlled and end-to-end evaluation, discussion and limitations; network and event measurements | Appendix details and replication not fully checked |
+| Rich Self-Reports v4 | Full PDF retrieved; main results, distortion definitions, SI evaluation tables, baselines, fine-tuning, individuation and exploratory-analysis disclosures examined | Full 123-page line-by-line reading and replication not certified |
+| SocSci210 | Proceedings abstract, preprint methods, training, metrics, subgroup results and appendix passages | Preprint Appendix C/F checked; proceedings PDF still timed out; remaining appendix details and version reconciliation |
 | Foundation Models v3 | Abstract and evaluation sections/excerpts | Full report, including application/security/fairness sections |
-| SSR v3 | HTML methods/results, metrics, anchor appendix passages, compared equation (8) with current Scaled Interview code | Remaining appendix/code audit and reproduction; resolve nonzero-epsilon discrepancy |
-| Valid Survey Simulations | Proceedings abstract, PDF equation page, preprint methodology/appendix/ablation excerpts | All remaining pages and appendices, replication code, original PPI++ convention verification |
+| SSR v3 | Main methods, rating appendix, anchor construction, comparison baseline, equation (8)/(9), authors' compute.py and Scaled Interview implementation comparison | Companion implementation correction and empirical replication |
+| Valid Survey Simulations | Proceedings abstract, preprint methodology, evaluation, ablation and per-model appendix tables; PPI++ original §6 derivation checked | Full replication code and final proceedings version not audited |
 | Synthetic Replacements | Publisher article mean/variance/regression excerpts | Remaining article, sensitivity analysis, supplements and replication |
 | Simile | Public confidence and What-If pages, error-model and metrics excerpts | Remaining text/claims; private architecture not available |
 

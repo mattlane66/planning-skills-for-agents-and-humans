@@ -113,3 +113,12 @@ for failure analysis.
 - Missing external model/embedding/statistical tools: NOT_RUN, no fabricated results.
 
 For empirical comparison see [benchmark design](simulation-methods.md#9-return-packet-and-benchmark). These are proposed assurance scenarios, not passing tests.
+
+
+## Simulation measurement cases (specified; not empirical results)
+
+- SSR nonzero epsilon fixture must distinguish the Eq. 8 single-minimum correction from the existing uniform-epsilon implementation; check rescaled-cosine epsilon conversion, zero total and temperature. See [measurement reference](simulation-measurement-evaluation.md#4-ordinal-elicitation-and-ssr-equation-conformance).
+- PPI fixture checks paired residuals and disjoint real sample units, lambda=0 baseline, fixed-weight arithmetic, uncertainty and zero-variance tuning fallback. Reject same-person duplication, nonrepresentative frames and unsupported design claims. Adaptive tuning requires its own tested implementation and inference design.
+- Matching aggregate responses but failed individual/variance/conditional fidelity must retain the failure. No predictive use outside held-out scope.
+- Simulated social events with missing logged receipts or invalid actions must not count as executed outcomes, much less observed human outcomes.
+- All of the above are proposed test cases; no new model run or empirical validation follows from the reference.
