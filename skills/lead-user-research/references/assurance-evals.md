@@ -69,6 +69,9 @@ The adapter receives only:
 }
 ```
 
+For the closed fictional input case, use `SYNTHETIC_REFERENCE` and
+`SYNTHETIC_OR_SIMULATED` for all evidence. The scorer checks these provenance
+labels and independently rejects a copy of the completed reference study.
 The task includes a narrow, trusted fixture-author decision for one exact frame and
 one exact fictional prototype mechanism. That authorization is not source evidence;
 if the generated evidence does not support the exact definitions, the runtime must
@@ -99,3 +102,27 @@ runtime/model combinations; do not treat one passing model as universal assuranc
 Keep failures visible rather than weakening the shared case. Adapter and validator
 subprocesses have timeouts; `--artifacts-dir` optionally retains the generated study
 for failure analysis.
+
+
+## Simulation-assisted discovery assurance cases (specified; not executed)
+
+- No-data L0: generated potential users must remain hypothetical search queries, no E/LU records.
+- Grounded individual: held-out outcomes and permissions remain distinct; generated interview continuation cannot be assigned a real quote.
+- Population request with purposive sample: refuse population claim and rectification; route to valid sampling or L0.
+- Distribution matches mean but compresses variance: preserve warning and do not upgrade grade.
+- Simulated propagation with no observed outcomes: keep transfer/propagation hypotheses provisional.
+- Insufficient freeze: suggested search may be pursued; freeze remains insufficient until real evidence closes gap.
+- Post-freeze new source: use normal change protocol; no simulated change to fingerprint.
+- Missing external model/embedding/statistical tools: NOT_RUN, no fabricated results.
+
+For empirical comparison see [benchmark design](simulation-methods.md#9-return-packet-and-benchmark). These are proposed assurance scenarios, not passing tests.
+
+
+## Simulation measurement and evidence checks
+
+- [Scaled Interview draft PR #25](https://github.com/mattlane66/scaled-interview-data-assistant/pull/25) tests positive epsilon, tied minima, zero-epsilon compatibility, degenerate anchors and temperature. The [measurement reference](simulation-measurement-evaluation.md#4-ordinal-elicitation-and-ssr-equation-conformance) gives hand-checkable fixtures and the rescaled-cosine conversion.
+- [Behavioral Simulation draft PR #3](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/pull/3) tests paired residuals, disjoint sample IDs, design attestation, the human-only baseline and independent-pilot weighting. An attestation is a structural check. Inference with a panel, complex survey or adaptive weight requires a separate validated procedure.
+- Lead User tests reject a model-assisted estimate passed as atomic evidence. The live evidence gates depend on provenance, and scientific validation requires human holdouts.
+- Empirical fidelity remains open. Report individual, spread and conditional failures even when aggregates match. Keep predictive use within the tested scope.
+- Simulated social events with missing logged receipts or invalid actions must not count as executed outcomes, much less observed human outcomes.
+- Provider-backed scenario and empirical comparisons remain open.

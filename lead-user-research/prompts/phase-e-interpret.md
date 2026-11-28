@@ -116,6 +116,11 @@ Update:
 - hypotheses.json;
 - change_log.json.
 
+The last two files participate in the evidence fingerprint. If either changes,
+record the changes with `scripts/record_post_freeze_evidence.py` before validating.
+For interpretation-only updates, describe the disposition and bookkeeping and
+state that the source evidence is unchanged. Keep the original freeze.
+
 After the entire frozen corpus has been interpreted, set
 `manifest.interpretation_completion = COMPLETED`. This marker is required even when
 the supported result is explicitly negative and `findings.json`, `needs.json`, and
@@ -130,3 +135,7 @@ Do not create concepts in this phase.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+Pair rival needs or propagation mechanisms with different observable implications. For conditional diffusion specify who can learn from whom, which constraints could change, how receipt and adoption differ, and where spread could stall. Retain scenario trajectories separately from findings. New empirical evidence follows the post-freeze change contract. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

@@ -100,7 +100,7 @@ Discover:
 - Contradictions and outliers remain visible.
 - Starting hypotheses are challenged with observable predictions, plausible refuters, rival explanations, and contrastive cases; never label a hypothesis CONFIRMED.
 - Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are never human evidence.
-- When a supported need/mechanism is no longer the main uncertainty and the next question is counterfactual behavior under a changed condition, route to Behavioral Simulation (https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation). Treat every returned result as model-derived evidence at its declared evidence grade; never use it to establish LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence.
+- When a consequential unknown can be investigated through hypothetical scenarios before, during or after discovery, route to Behavioral Simulation (https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation). Treat every returned result as model-derived evidence at its declared evidence grade; never use it to establish LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence.
 - Prefer behavioral, documentary, or event traces over default interviews when the decision-critical variable is trace-observable.
 - AI coding/extraction of a large corpus requires task-specific sampled validation before its derived evidence is frozen.
 - Insufficient evidence is a valid result.
@@ -594,3 +594,35 @@ Lead User Research is optional upstream evidence, not a mandatory predecessor to
 framing. At completion, propose evidence-backed research-to-frame implications and
 stop for explicit human acceptance. The research record remains evidence; it does
 not automatically become an accepted frame or product decision.
+
+### Simulation under scarce evidence
+
+Choose one mode per separate companion run: plausibility space for overlooked
+cases, individual proxy for permissioned person evidence, population prediction
+for a separate defensible real sampling frame, or multi-agent dynamics for
+conditional trajectories. Keep the run, its assumptions, output, grade and
+validation status outside the Lead User workspace. When no companion runtime
+is available, keep a separate, labeled exploratory packet and record computation
+as NOT_RUN.
+
+Before or during discovery, turn generated scenarios into provisional searches,
+observable LU1 advancement and LU2 benefit probes, and possible refuters.
+During interpretation and propagation analysis, hold observed facts fixed,
+compare rival mechanisms and seek dated independent origins, receipts and
+behavioral follow-through. In counterfactual tests, keep the baseline and
+outcome fixed, vary the named condition and seek an actual behavioral test.
+
+Do not add generated or model-assisted outputs to sources, actual candidate
+records, evidence, episode traces, lineage, trend support or freeze sufficiency.
+Only independently located and inspected real sources may create those records.
+Use the existing post-freeze change contract when new evidence arrives. Keep
+human measurements, generated scenarios and model-assisted statistical
+estimates distinct. No computation by itself promotes a grade.
+
+For a fixed ordinal attitude, compare direct, follow-up and semantic similarity
+ratings with predeclared anchors and real holdouts. For scarce population labels,
+rectify only under a separately declared real sampling design with a frozen
+predictor, paired human labels, disjoint real covariates and appropriate
+uncertainty. Check relevant bias, spread, joint structure, subgroup effects and
+behavior; calibration requires held-out observed errors. See the [operating
+methods](references/simulation-methods.md) when available.

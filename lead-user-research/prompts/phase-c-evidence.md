@@ -200,3 +200,7 @@ Do not run the full evidence machinery merely because it exists.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+Turn an unresolved qualification claim into paired probes for LU1 advancement and LU2 benefit, with a possible refuter for each. Use plausibility scenarios to expose confounds such as resources, policy or access. If person-level modeling is eligible, a permissioned proxy can help choose a novel behavioral probe. Record the observed human outcome through normal registration and preserve unknown chronology, intent or qualification until verified. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

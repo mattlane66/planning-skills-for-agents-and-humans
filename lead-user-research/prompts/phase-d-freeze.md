@@ -102,11 +102,20 @@ Later evidence may be added, but every post-freeze search must record:
 
 For file-backed studies, make that authorization explicit with
 `scripts/record_post_freeze_evidence.py`, which records a `PF##` change and the
-resulting evidence fingerprint. Do not silently rerun the original freeze over
-changed evidence.
+resulting evidence fingerprint. The fingerprint also covers `hypotheses.json`
+and `change_log.json`. Use the same command for planned later writes to those
+files, and state whether they were interpretation or whether source evidence
+actually changed. Keep the original freeze and its fingerprint.
 
 ## Phase handoff
 
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+
+Simulation is not a sufficiency repair in itself. Only independently inspected human/nonhuman evidence appropriate to each gate can close a gap. Route suggested queries through B/C and reassess D; if no real evidence can be obtained, keep the affected dimension insufficient.
+
+## Simulation-assisted research
+
+If a scenario suggests a missing observable, assign the exact real search or fieldwork as a B/C repair and reassess in D. If the search yields no appropriate evidence, retain the open sufficiency gap and its rationale. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

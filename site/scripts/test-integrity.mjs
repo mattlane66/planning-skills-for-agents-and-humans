@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { JSDOM, VirtualConsole } from 'jsdom';
@@ -58,7 +58,34 @@ const resourcePaths = new Set(content.resources.map((item) => item.sourcePath));
 const templatePaths = [...resourcePaths].filter((sourcePath) => sourcePath.startsWith('templates/'));
 const skillReferencePaths = [...resourcePaths].filter((sourcePath) => sourcePath.includes('/references/'));
 assert.equal(templatePaths.length, 21, 'Every canonical template should be embedded.');
-assert.equal(skillReferencePaths.length, 11, 'Every canonical skill reference should be embedded.');
+const expectedSkillReferences = new Set();
+for (const skill of content.skills) {
+  const relativeDirectory = path.posix.join(path.posix.dirname(skill.sourcePath), 'references');
+  let names;
+  try {
+    names = await readdir(path.resolve(siteDirectory, '..', relativeDirectory), { withFileTypes: true });
+  } catch (error) {
+    if (error.code === 'ENOENT') continue;
+    throw error;
+  }
+  for (const entry of names) {
+    if (entry.isFile() && entry.name.endsWith('.md')) {
+      expectedSkillReferences.add(path.posix.join(relativeDirectory, entry.name));
+    }
+  }
+}
+assert.deepEqual(
+  skillReferencePaths.filter((sourcePath) => expectedSkillReferences.has(sourcePath)).sort(),
+  [...expectedSkillReferences].sort(),
+  'Every canonical skill reference should be embedded.',
+);
+for (const name of [
+  'simulation-methods.md', 'simulation-measurement-evaluation.md',
+  'simulation-discovery-worksheet.md', 'simulation-source-coverage.md',
+  'simulation-traceability.md', 'simulation-source-audit.md', 'simulation-benchmark-results.md',
+]) {
+  assert.ok(resourcePaths.has(`lead-user-research/references/${name}`), `Missing Lead User reference: ${name}`);
+}
 for (const item of [...content.docs, ...content.skills, ...content.resources, ...content.examples]) {
   assert.ok(item.description.length <= 240, `${item.sourcePath || item.slug} has an overlong description.`);
   assert.ok(!item.description.endsWith('…'), `${item.sourcePath || item.slug} has a truncated description.`);
@@ -78,6 +105,18 @@ for (const example of content.examples) {
   }
 }
 
+const sectionLinks = new Map();
+const idsByRoute = new Map();
+function routeAndSection(href) {
+  const [path, query] = href.split('?');
+  const params = new URLSearchParams(query);
+  const section = params.get('section');
+  params.delete('section');
+  if (path.startsWith('#/examples/') && params.get('file') === 'README.md') params.delete('file');
+  const route = params.size ? `${path}?${params}` : path;
+  return { route, section };
+}
+
 for (const targetRoute of routes) {
   await route(targetRoute);
   assert.ok(document.querySelector('main#main-content'), `${targetRoute} did not render the main landmark.`);
@@ -86,12 +125,12 @@ for (const targetRoute of routes) {
 
   const navigationLabels = [...document.querySelectorAll('nav')].map((nav) => nav.getAttribute('aria-label')).filter(Boolean);
   assert.equal(new Set(navigationLabels).size, navigationLabels.length, `${targetRoute} has duplicate navigation landmark labels.`);
+  idsByRoute.set(routeAndSection(targetRoute).route, new Set(
+    [...document.querySelectorAll('[id]')].map((node) => node.id),
+  ));
 
-  for (const anchor of document.querySelectorAll('a[href*="section="]')) {
-    const href = anchor.getAttribute('href');
-    const query = href.includes('?') ? href.slice(href.indexOf('?') + 1) : '';
-    const section = new URLSearchParams(query).get('section');
-    assert.ok(section && document.getElementById(section), `${targetRoute} links to missing section ${section || '(empty)'}.`);
+  for (const anchor of document.querySelectorAll('a[href^="#/"][href*="section="]')) {
+    sectionLinks.set(anchor.getAttribute('href'), targetRoute);
   }
 
   for (const anchor of document.querySelectorAll('.markdown-body a[href]')) {
@@ -99,6 +138,11 @@ for (const targetRoute of routes) {
     assert.ok(!/^#[^/]/.test(href), `${targetRoute} contains a raw same-page hash that would bypass the router: ${href}`);
     assert.ok(!new RegExp(`^https://github\\.com/[^/]+/[^/]+/blob/main/.+\\.md(?:#.*)?$`).test(href), `${targetRoute} sends an embedded Markdown reference to GitHub: ${href}`);
   }
+}
+
+for (const [href, source] of sectionLinks) {
+  const { route: destination, section } = routeAndSection(href);
+  assert.ok(section && idsByRoute.get(destination)?.has(section), `${source} links to missing section ${href}.`);
 }
 
 await route('#/');

@@ -96,3 +96,7 @@ Do not proceed by inventing missing scope. Mark consequential ambiguity.
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+Declare the specific uncertainty before choosing a simulation mode. Name the empirical observation that could resolve it and the research effort available. An L0 scenario can refine search hypotheses. Keep scope facts tied to actual sources. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.

@@ -1,3 +1,5 @@
+import hashlib
+import importlib.util
 import json
 import pathlib
 import subprocess
@@ -11,6 +13,49 @@ RUNNER = ROOT / "scripts" / "run-lead-user-assurance-evals.py"
 
 
 class LeadUserAssuranceEvalRunnerTests(unittest.TestCase):
+    def test_blind_synthetic_brief_requires_the_non_empirical_warning(self):
+        spec = importlib.util.spec_from_file_location("lead_user_assurance", RUNNER)
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        case = json.loads(runner.DEFAULT_CASES.read_text())["cases"][0]
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = pathlib.Path(tmp)
+            study = workspace / case["artifact_root"]
+            import shutil
+            shutil.copytree(runner.REFERENCE_STUDY, study)
+            brief = study / "outputs" / "decision-brief.md"
+            warning = "Synthetic reference fixture — not empirical human or market evidence."
+            raw = brief.read_text()
+            self.assertIn(warning, raw)
+            brief.write_text(raw.replace(warning, ""))
+            checks, _, _ = runner.score_workspace(workspace, case, "command")
+            self.assertFalse(next(row["passed"] for row in checks if row["name"] == "rendered-state-parity"))
+
+    def test_fixture_source_match_verifies_an_optional_checksum(self):
+        spec = importlib.util.spec_from_file_location("lead_user_assurance", RUNNER)
+        runner = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(runner)
+        source = ROOT / "lead-user-research" / "examples" / "reference-study" / "source-corpus" / "operator-beta.md"
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        expected = pathlib.PurePosixPath("inputs/lead-user-corpus", source.name)
+        self.assertTrue(runner.matches_fixture_source(str(expected), expected))
+        self.assertTrue(runner.matches_fixture_source(
+            f"{expected} sha256:{digest}", expected,
+        ))
+        self.assertTrue(runner.matches_fixture_source(
+            f"{expected}#sha256={digest}", expected,
+        ))
+        self.assertFalse(runner.matches_fixture_source(
+            f"{expected} sha256:{'0' * 64}", expected,
+        ))
+        self.assertFalse(runner.matches_fixture_source(
+            f"{expected}#sha256={'0' * 64}", expected,
+        ))
+        self.assertFalse(runner.matches_fixture_source(
+            f"inputs/other.md sha256:{digest}", expected,
+        ))
+        self.assertFalse(runner.matches_fixture_source(f"https://other.invalid/{source.name}", expected))
+
     def test_reference_fixture_exercises_every_artifact_check(self):
         with tempfile.TemporaryDirectory() as tmp:
             report_path = pathlib.Path(tmp) / "report.json"

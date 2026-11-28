@@ -137,18 +137,14 @@ That sibling methodology owns business-level cruxes and fatal gates, bottom-up T
 
 The handoff is bidirectional. If Market Opportunity Underwriting identifies a load-bearing uncertainty about future-facing needs, advanced users, emerging workarounds, or transferability, it may invoke Lead User Research as the evidence method for that crux. Neither methodology is a mandatory predecessor of the other, and neither automatically promotes evidence into accepted product-planning truth.
 
-## Behavioral Simulation handoff
+## Simulation-assisted research
 
-When the supported Lead User evidence has made the need or mechanism concrete enough and the next uncertainty is **counterfactual human response under a changed condition**, route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans)** rather than treating LLM role-play as additional Lead User evidence.
-
-Appropriate uses include:
-
-- exploring a breadth of plausible reactions or emergent failure modes before fieldwork;
-- comparing concept probes to decide which deserves real-world testing;
-- estimating a person- or population-level response only when the simulation method's grounding and validation requirements are met;
-- routing the highest-value next empirical test.
-
-Simulation outputs remain model-derived evidence. They cannot establish LU1, LU2, observed behavior, need importance, propagation, prevalence, or fieldwork completion. Even a held-out validated or calibrated simulation does not retroactively become a human observation.
+Use the [simulation operating methods](references/simulation-methods.md) when a named
+decision-critical question can benefit from a scenario, proxy or bounded prediction.
+Choose one eligible mode per companion run. Use the resulting search hypotheses in
+normal discovery, use conditional simulations to design observations or tests, and
+retain any numerical estimates with their separate provenance and validation status.
+The section below on the evidence boundary governs everything returned from a run.
 
 ## Hypothesis falsification ledger
 
@@ -290,27 +286,24 @@ QUALIFIED LU episodes with atomic LU1/LU2 support.
 
 Synthetic personas, simulated respondents, LLM role-play, and model-generated user reactions are **never human evidence**. They may generate rival hypotheses, search terms, edge cases, or test questions, but they cannot establish LU1, LU2, human behavior, need importance, motivation, propagation, or prevalence.
 
-### Behavioral Simulation handoff
+### Simulation evidence boundary
 
-Once a need, constraint, or mechanism is supported by real Lead User evidence, a different question may become decision-critical:
-
-> **What might this person or population do if a relevant condition changed?**
-
-Route that question to **[Behavioral Simulation](https://github.com/mattlane66/behavioral-simulation-for-agents-and-humans/tree/main/behavioral-simulation)** rather than stretching Lead User evidence into a counterfactual prediction.
-
-Behavioral Simulation may consume namespaced Lead User findings as grounding and return:
-- plausibility-space scenarios and edge cases;
-- individual-proxy estimates grounded in real person-level evidence;
-- population predictions when real population data support them;
-- multi-agent dynamics when interactions over time matter;
-- validation/calibration results and a recommended next real-world test.
-
-The handoff does not change evidence type. A SIMULATED_ESTIMATE, even when held-out validated or calibrated, is still model-derived evidence. It cannot establish or retroactively strengthen LU1/LU2, observed behavior, need importance, motivation, propagation, or prevalence. If simulation conflicts with decisive human evidence, preserve the conflict and investigate it; do not silently replace the observation with the model.
-
+Keep simulated scenarios and model predictions in the companion run, linked by a
+run reference in the [worksheet](references/simulation-discovery-worksheet.md).
+A model-assisted statistical estimate combines predictions with human labels under
+a declared sampling design. Keep that estimate in its own analysis; only the
+independently collected human measurements are empirical records. Neither the
+generated outputs nor the corrected estimate populate evidence, real candidate
+records, episode chronology, lineage, trend support, empirical propagation, LU1/LU2,
+or freeze sufficiency. Retain conflicting human observations and use the conflict
+to target refutation. Inspect real leads independently and apply the post-freeze
+change contract to any new evidence found after freeze.
 
 Repository assurance may use an explicitly labeled SYNTHETIC_REFERENCE fixture to
-exercise validators and renderers. Its output must say that it is non-empirical, and
-blind/runtime evaluation must reject that fixture mode.
+exercise validators and renderers. Its output must say that it is non-empirical.
+A blind evaluation with a trusted fictional corpus uses the same label and must
+construct its own study. The scorer rejects the checked-in completed reference
+result. Live research forbids synthetic evidence for qualification.
 
 When available, behavioral traces such as commits, issue histories, version histories, support interactions, workflow logs, telemetry, and event logs may provide stronger evidence than retrospective preference statements. Treat event-log reconstruction as process evidence, not as automatic proof of motive or causality.
 

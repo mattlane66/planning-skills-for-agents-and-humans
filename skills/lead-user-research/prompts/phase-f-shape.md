@@ -124,6 +124,15 @@ set `selected_by_human = true`, record the human's bounded research rationale in
 
 A research-local selected mechanism cannot remain selected without explicit human provenance or with an unrun rotation. Its SELECTED state still does not authorize a project shape or implementation.
 
+## Simulation-assisted comparison
+
+After the existing human and evidence gates, model reactions to a changed mechanism,
+constraint or incentive using the [simulation operating methods](../references/simulation-methods.md).
+Hold baseline, eligible population and outcome fixed across alternatives. Include
+no change and plausible adverse responses. Use the result to design a human test.
+Keep concept fit, selection and authorization under their existing evidence and
+human decision gates.
+
 ## Layer-preserving rejection
 
 If a candidate mechanism or implementation part is rejected for technical, economic, safety, regulatory, operational, or timing reasons, persist a `rejection_record` with:
@@ -147,6 +156,11 @@ Update:
 - `fit_criteria.json`;
 - `concepts.json`;
 - `change_log.json`.
+
+The change log participates in the evidence fingerprint. If you update it,
+record a `PF##` event using `scripts/record_post_freeze_evidence.py` before
+validating. For shaping-only bookkeeping, describe the change without claiming
+that any observations were added.
 
 ## Phase handoff
 

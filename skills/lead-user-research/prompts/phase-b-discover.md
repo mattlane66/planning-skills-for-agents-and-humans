@@ -55,7 +55,7 @@ For every H##, execute the highest-value targeted refutation searches before tre
 
 Record searches that fail to find evidence as search outcomes, not proof that the hypothesis is true.
 
-## Task 2 — Candidate discovery through three Lead User paths
+## Task 2 — Three discovery paths
 
 For each important trend or high-value emerging need, explicitly consider all three Lead User discovery paths:
 
@@ -84,7 +84,7 @@ These are **discovery/prioritization aids only**. They do not establish LU1 or L
 
 Do not optimize for fame.
 
-## Task 2A — Public-web need–solution mining
+## Task 2A — Web need–solution mining
 
 When public user-generated content is relevant, run a complementary `WEB_NEED_SOLUTION` lane. Search semantically for bounded episodes that contain both a problem/need expression and a user-created response, modification, workaround, invention, or abandonment. Do not rely only on exact phrases such as "I invented" or "I solved this."
 
@@ -208,3 +208,7 @@ Discovery path, technical expertise, community resources, and pyramid position a
 After writing and validating this phase, follow
 `references/phase-handoff.md`. For a file-backed study, derive the next move with
 `scripts/next_research_move.py`; do not advance from invocation history alone.
+
+## Simulation-assisted research
+
+Use the breadth and frontier procedures to identify missing circumstances, analog mechanisms and ways a search might miss failures or non-use. Produce provisional queries, attribute combinations and refuters. Follow the ordinary three-path search process and log actual searches in Q##. A generated branch supplies neither a result nor an independent referral. Read [the local operating methods](../references/simulation-methods.md) and [optional worksheet](../references/simulation-discovery-worksheet.md). If no consequential unknown warrants simulation, skip it.
