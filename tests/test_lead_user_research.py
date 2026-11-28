@@ -1091,6 +1091,10 @@ class LeadUserResearchTests(unittest.TestCase):
             self.assertNotIn("Primary artifact", brief)
             self.assertNotIn("Maintains a persistent context system after repeated context loss", brief)
             self.assertIn("An anonymized advanced operator", brief)
+            self.assertIn("- Evidence: [E1](#e1)", brief)
+            self.assertIn("- LU1 evidence: [E1](#e1)", brief)
+            self.assertIn("- LU2 evidence: [E1](#e1)", brief)
+            self.assertEqual(1, brief.count("#### E1\n"))
 
             outcome = json.loads((workspace / "decision_outcome.json").read_text(encoding="utf-8"))
             outcome["action_now"][0].pop("stop_condition")
@@ -1328,6 +1332,32 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(0, result.returncode, result.stderr)
 
+    def test_companion_run_does_not_advance_or_change_empirical_state(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            companion = pathlib.Path(tmp) / "simulation-run.json"
+            companion.write_text(
+                json.dumps({"evidence_type": "SIMULATED_ESTIMATE", "candidate": "Generated rider"}),
+                encoding="utf-8",
+            )
+            self.assertEqual("B", self.next_move(workspace)["next_phase"])
+            self.assertEqual([], json.loads((workspace / "evidence.json").read_text()))
+            self.assertEqual("OPEN", json.loads((workspace / "freeze.json").read_text())["status"])
+            self.assertEqual(0, self.validate(workspace).returncode)
+
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+            evidence, freeze = workspace / "evidence.json", workspace / "freeze.json"
+            before = evidence.read_bytes(), freeze.read_bytes()
+            companion.write_text(
+                json.dumps({"evidence_type": "SIMULATED_ESTIMATE", "outcome": "Workaround abandoned"}),
+                encoding="utf-8",
+            )
+            validation = self.validate(workspace)
+            self.assertEqual(0, validation.returncode, validation.stderr)
+            self.assertEqual(before, (evidence.read_bytes(), freeze.read_bytes()))
+            self.assertEqual("behavior", json.loads(evidence.read_text())[0]["evidence_type"])
+
     def test_validator_rejects_synthetic_or_simulated_human_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:
             workspace = self.init_workspace(tmp)
@@ -1338,6 +1368,36 @@ class LeadUserResearchTests(unittest.TestCase):
             result = self.validate(workspace)
             self.assertEqual(1, result.returncode)
             self.assertIn("cannot be persisted as human evidence", result.stderr)
+
+    def test_post_freeze_bookkeeping_requires_explicit_fingerprint_record(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = self.init_workspace(tmp)
+            self.write_valid_evidence_core(workspace)
+            self.freeze_valid(workspace)
+            freeze_path = workspace / "freeze.json"
+            initial = json.loads(freeze_path.read_text())["evidence_fingerprint"]
+            self.write_json(workspace, "change_log.json", [{
+                "change_id": "CH1",
+                "changed_at": "2026-11-28T00:00:00+00:00",
+                "phase": "E",
+                "change": "Recorded the interpretation of the frozen trace.",
+                "reason": "Make the hypothesis assessment auditable.",
+            }])
+            before = self.validate(workspace)
+            self.assertEqual(1, before.returncode)
+            self.assertIn("frozen evidence changed", before.stderr)
+            subprocess.run([
+                sys.executable, str(LEAD / "scripts" / "record_post_freeze_evidence.py"),
+                str(workspace), "--change-id", "PF1",
+                "--sought-because", "Pending Phase E bookkeeping.",
+                "--trigger", "Interpretation of the frozen trace.",
+                "--state-change", "Appended to change_log.json. Source evidence is unchanged.",
+            ], check=True, capture_output=True, text=True)
+            after = self.validate(workspace)
+            self.assertEqual(0, after.returncode, after.stderr)
+            recorded = json.loads(freeze_path.read_text())
+            self.assertEqual(initial, recorded["evidence_fingerprint"])
+            self.assertNotEqual(initial, recorded["post_freeze_evidence"][0]["resulting_evidence_fingerprint"])
 
     def test_validator_rejects_model_assisted_estimate_as_atomic_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:

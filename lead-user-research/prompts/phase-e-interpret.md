@@ -116,6 +116,11 @@ Update:
 - hypotheses.json;
 - change_log.json.
 
+The last two files participate in the evidence fingerprint. If either changes,
+record the changes with `scripts/record_post_freeze_evidence.py` before validating.
+For interpretation-only updates, describe the disposition and bookkeeping and
+state that the source evidence is unchanged. Keep the original freeze.
+
 After the entire frozen corpus has been interpreted, set
 `manifest.interpretation_completion = COMPLETED`. This marker is required even when
 the supported result is explicitly negative and `findings.json`, `needs.json`, and

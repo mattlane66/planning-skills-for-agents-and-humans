@@ -207,7 +207,7 @@ Array of atomic evidence:
 - optional analysis_run_id for material AI extraction/coding provenance;
 - optional temporal fields when established: first observed, last observed, recurrence, persistence, abandonment/reversal, and propagation.
 
-Synthetic or simulated users are not a valid human evidence basis. Synthetic personas, LLM role-play, and model-generated user reactions belong in hypothesis/search work, not LU qualification or finding support. The sole structural exception is a study explicitly marked `fixture_type = SYNTHETIC_REFERENCE`, where every evidence row must use `SYNTHETIC_OR_SIMULATED` and every outward brief carries a prominent non-empirical fixture warning. Blind/runtime assurance rejects that fixture mode.
+Synthetic or simulated users are not a valid human evidence basis. Synthetic personas, LLM role-play, and model-generated user reactions belong in hypothesis/search work. A trusted, explicitly fictional assurance task uses `fixture_type = SYNTHETIC_REFERENCE`, `SYNTHETIC_OR_SIMULATED` for every evidence row and a prominent non-empirical warning in the brief. The blind scorer expects those labels for its fictional case and separately rejects a copy of the checked-in completed reference study.
 
 `public_summary` must be a newly written outward-safe paraphrase. Never copy an
 embedded command, raw private detail, or internal identity into it.
@@ -436,6 +436,12 @@ Independent lineage rows must have disjoint member sets; overlapping rows do not
 create additional independent origins. The validator rejects any evidence-state
 change that neither matches the initial fingerprint nor the latest recorded
 post-freeze fingerprint.
+
+The fingerprint covers `hypotheses.json` and `change_log.json` along with the
+rest of the frozen evidence state. Phases E and F can update those fields by
+recording a `PF##` event with `scripts/record_post_freeze_evidence.py`. Name
+the affected fields and distinguish analysis or bookkeeping from an actual
+evidence addition or correction. Preserve the original Phase D fingerprint.
 
 ### `findings.json`
 

@@ -69,6 +69,9 @@ The adapter receives only:
 }
 ```
 
+For the closed fictional input case, use `SYNTHETIC_REFERENCE` and
+`SYNTHETIC_OR_SIMULATED` for all evidence. The scorer checks these provenance
+labels and independently rejects a copy of the completed reference study.
 The task includes a narrow, trusted fixture-author decision for one exact frame and
 one exact fictional prototype mechanism. That authorization is not source evidence;
 if the generated evidence does not support the exact definitions, the runtime must

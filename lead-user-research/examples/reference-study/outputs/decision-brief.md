@@ -185,6 +185,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Claim: One fictional advanced operator sustained a structured handoff packet and reported substantially lower reconstruction effort while preserving decisions and constraints.
 - Confidence rationale: The synthetic episode contains separate advancement and benefit observations, but the reported result is not independently measured.
 - LU refs: LU1
+- Evidence: [E2](#e2), [E3](#e3)
 - Contradictions: F4
 
 ### F3
@@ -193,6 +194,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Claim: The second fictional adoption is derivative and therefore does not add independent confirmation of either discovery or benefit.
 - Confidence rationale: The fixture explicitly states that the operator copied the first operator's template.
 - LU refs: LU2
+- Evidence: [E4](#e4)
 - Contradictions: none recorded
 
 ### F4
@@ -201,6 +203,7 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Claim: An independent fictional counterexample abandoned a detailed handoff ledger because its maintenance cost exceeded its recovery value.
 - Confidence rationale: The behavior is explicit in the synthetic record, although its time values are self-estimated and fictional.
 - LU refs: LU3
+- Evidence: [E5](#e5)
 - Contradictions: F2
 
 ### LU1
@@ -211,8 +214,10 @@ In this fictional scenario, run a bounded three-week prototype validation focuse
 - Emerging need: Preserve current decisions, constraints, and open questions across AI-agent handoffs with less reconstruction effort.
 - Advancement indicator: Four-agent coordination plus eight weeks of maintained handoff infrastructure.
 - LU1 rationale: Coordinating four agents and sustaining explicit handoff infrastructure places this episode ahead on the multi-workspace coordination trend defined by T1.
+- LU1 evidence: [E2](#e2)
 - Benefit signal: Eight weeks of maintenance and a reported 75% reduction in handoff effort.
 - LU2 rationale: The sustained workaround and reported reduction from about 20 to five minutes per handoff indicate unusually high expected and realized benefit in the fictional record.
+- LU2 evidence: [E3](#e3)
 - Qualification caveats: All evidence is synthetic and not independently measured.
 
 #### E2

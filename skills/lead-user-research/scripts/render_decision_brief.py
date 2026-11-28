@@ -65,6 +65,10 @@ def ref_link(ref: str) -> str:
     return f"[{markdown_escape(ref)}](#{anchor})"
 
 
+def evidence_links(refs: list[str]) -> str:
+    return ", ".join(ref_link(ref) for ref in dict.fromkeys(refs)) or "none recorded"
+
+
 def public_lu_label(row: dict[str, Any]) -> str:
     label = row.get("public_label")
     if isinstance(label, str) and label.strip():
@@ -388,6 +392,18 @@ def main() -> int:
     lines += ["### Inaccessible / private areas", "", bullets(coverage.get("inaccessible_or_private", [])), ""]
     lines += ["### Corrective discovery", "", bullets(coverage.get("corrective_actions", [])), ""]
     lines += ["### Fieldwork referrals", "", bullets(coverage.get("fieldwork_referrals", [])), ""]
+    branch_independence = coverage.get("branch_independence")
+    if isinstance(branch_independence, dict):
+        lines += [
+            "### Discovery branch independence",
+            "",
+            f"- Status: {safe_token(branch_independence.get('status', 'NOT_ASSESSED'))}",
+            f"- Rationale: {markdown_escape(branch_independence.get('rationale', 'None recorded'))}",
+            f"- Branches: {safe_join(branch_independence.get('branches'), '; ')}",
+            f"- Shared visibility: {safe_join(branch_independence.get('correlated_or_shared_visibility'), '; ')}",
+            f"- Next actions: {safe_join(branch_independence.get('next_actions'), '; ')}",
+            "",
+        ]
 
     lines += ["## Recommended next evidence", "", bullets(outcome.get("recommended_next_evidence", [])), ""]
     lines += ["## Priority human review", "", bullets(outcome.get("priority_human_review", [])), ""]
@@ -418,19 +434,28 @@ def main() -> int:
     drill_evidence_refs: list[str] = []
     for ref in outcome.get("decisive_finding_refs", []):
         row = finding_by_id.get(ref, {})
+        finding_evidence = list(row.get("evidence_refs", []))
+        for lu_ref in row.get("lu_refs", []):
+            episode = lu_by_id.get(lu_ref, {})
+            finding_evidence.extend(episode.get("lu1_evidence", []))
+            finding_evidence.extend(episode.get("lu2_evidence", []))
+        finding_evidence = [item for item in finding_evidence if item in evidence_by_id]
         lines += [f"### {safe_token(ref)}", ""]
         lines += [
             f"- Epistemic label: {markdown_escape(row.get('epistemic_label', 'UNKNOWN'))}",
             f"- Claim: {markdown_escape(row.get('claim', 'Missing finding text'))}",
             f"- Confidence rationale: {markdown_escape(row.get('confidence_rationale', 'None recorded'))}",
             f"- LU refs: {safe_join(row.get('lu_refs', []))}",
+            f"- Evidence: {evidence_links(finding_evidence)}",
             f"- Contradictions: {safe_join(row.get('contradictions', []), '; ', 'none recorded')}",
             "",
         ]
-        drill_evidence_refs.extend(row.get("evidence_refs", []))
+        drill_evidence_refs.extend(finding_evidence)
 
     for ref in outcome.get("decisive_lu_refs", []):
         row = lu_by_id.get(ref, {})
+        lu1_evidence = [item for item in row.get("lu1_evidence", []) if item in evidence_by_id]
+        lu2_evidence = [item for item in row.get("lu2_evidence", []) if item in evidence_by_id]
         lines += [f"### {safe_token(ref)}", ""]
         lines += [
             f"- Public label: {markdown_escape(public_lu_label(row))}",
@@ -439,13 +464,15 @@ def main() -> int:
             f"- Emerging need: {markdown_escape(row.get('need_statement', 'UNKNOWN'))}",
             f"- Advancement indicator: {markdown_escape(row.get('advancement_indicator', 'UNKNOWN'))}",
             f"- LU1 rationale: {markdown_escape(row.get('lu1_rationale', 'UNKNOWN'))}",
+            f"- LU1 evidence: {evidence_links(lu1_evidence)}",
             f"- Benefit signal: {markdown_escape(row.get('benefit_signal', 'UNKNOWN'))}",
             f"- LU2 rationale: {markdown_escape(row.get('lu2_rationale', 'UNKNOWN'))}",
+            f"- LU2 evidence: {evidence_links(lu2_evidence)}",
             f"- Qualification caveats: {safe_join(row.get('qualification_caveats', []), '; ', 'none recorded')}",
             "",
         ]
-        drill_evidence_refs.extend(row.get("lu1_evidence", []))
-        drill_evidence_refs.extend(row.get("lu2_evidence", []))
+        drill_evidence_refs.extend(lu1_evidence)
+        drill_evidence_refs.extend(lu2_evidence)
 
     seen: set[str] = set()
     for ref in drill_evidence_refs:

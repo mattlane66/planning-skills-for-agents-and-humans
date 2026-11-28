@@ -102,8 +102,10 @@ Later evidence may be added, but every post-freeze search must record:
 
 For file-backed studies, make that authorization explicit with
 `scripts/record_post_freeze_evidence.py`, which records a `PF##` change and the
-resulting evidence fingerprint. Do not silently rerun the original freeze over
-changed evidence.
+resulting evidence fingerprint. The fingerprint also covers `hypotheses.json`
+and `change_log.json`. Use the same command for planned later writes to those
+files, and state whether they were interpretation or whether source evidence
+actually changed. Keep the original freeze and its fingerprint.
 
 ## Phase handoff
 

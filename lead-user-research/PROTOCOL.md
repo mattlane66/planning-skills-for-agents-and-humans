@@ -300,8 +300,10 @@ to target refutation. Inspect real leads independently and apply the post-freeze
 change contract to any new evidence found after freeze.
 
 Repository assurance may use an explicitly labeled SYNTHETIC_REFERENCE fixture to
-exercise validators and renderers. Its output must say that it is non-empirical, and
-blind/runtime evaluation must reject that fixture mode.
+exercise validators and renderers. Its output must say that it is non-empirical.
+A blind evaluation with a trusted fictional corpus uses the same label and must
+construct its own study. The scorer rejects the checked-in completed reference
+result. Live research forbids synthetic evidence for qualification.
 
 When available, behavioral traces such as commits, issue histories, version histories, support interactions, workflow logs, telemetry, and event logs may provide stronger evidence than retrospective preference statements. Treat event-log reconstruction as process evidence, not as automatic proof of motive or causality.
 

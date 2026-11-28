@@ -82,7 +82,7 @@ assert.deepEqual(
 for (const name of [
   'simulation-methods.md', 'simulation-measurement-evaluation.md',
   'simulation-discovery-worksheet.md', 'simulation-source-coverage.md',
-  'simulation-traceability.md',
+  'simulation-traceability.md', 'simulation-source-audit.md', 'simulation-benchmark-results.md',
 ]) {
   assert.ok(resourcePaths.has(`lead-user-research/references/${name}`), `Missing Lead User reference: ${name}`);
 }

@@ -187,10 +187,10 @@ measurements from generalization to genuinely novel questions.
 
 ## 5. Population response modelling
 
-Source: Kolluri et al., [EMNLP 2025](https://aclanthology.org/2025.emnlp-main.1530/);
-[arXiv:2509.05830](https://arxiv.org/abs/2509.05830), sections on metrics,
-generalization, prompting and subgroup results. The preprint and proceedings
-abstracts report different relative gains; cite the exact version, not a merged value.
+Source: Kolluri et al., [EMNLP 2025 proceedings PDF](https://aclanthology.org/2025.emnlp-main.1530.pdf)
+and [arXiv:2509.05830v2](https://arxiv.org/abs/2509.05830v2). The Anthology landing
+page reports different headline gains from the PDF and v2. Cite the PDF and the
+table, metric, split, and comparator.
 
 Local procedure:
 - Define the estimand, target population, sampling frame, real covariates, stimulus,
@@ -216,6 +216,10 @@ Local procedure:
 - Separate holdouts by question/outcome, condition, participant and entire study,
   according to the claimed generalization. Report which dimension is actually
   unseen. Validate with the same unit and scale as the intended decision.
+  For smaller-label comparisons, keep the unseen participant set fixed across
+  budgets. Compare with uniform, midpoint, and same-size empirical resampling
+  baselines. Report subgroup performance spread with group sizes and
+  uncertainty separately from the distribution of predicted outcomes.
 - For ordered outcomes compare normalized Wasserstein distance; for unordered
   categories use TVD as a local extension. For SocSci210-style individual
   accuracy subtract mean normalized absolute error from one. Normalize by the
@@ -285,6 +289,10 @@ triplets. SubPOP aligns first-token multiple-choice probabilities to subgroup
 distributions by KL divergence. It is a population objective; free-text outcomes
 need a predefined coding rule applied symmetrically to human and generated text.
 Keep label mapping and person dependence across waves explicit.
+For adaptation ablations, compare single- and multi-turn elicitation with and
+without profile information. Run a same-item previous-wave response as a baseline
+where permitted. Freeze the complete-case evaluation frame and report refusals
+and failures per model. Use the same held-out splits across compared methods.
 
 Local procedure:
 - Only on a separate defined population estimand and eligible real sampling
@@ -340,6 +348,11 @@ public product methodology, not an independently replicated result.
   retraining/version effects where these could alter the decision. Keep
   self-reported confidence, variation across draws and predictive uncertainty
   against human outcomes separate.
+- Check rating digit heaping and censoring. Compare the spread within repeated
+  draws against the spread across people. To test internal coherence, score
+  rationales and ratings separately, using blinded comparisons where practical.
+  Agreement between generation and scoring models can describe internal
+  coherence. Observed behavior remains the external criterion.
 - Treat the foundation model as part of the measurement instrument. Record
   access/model/config/data lineage; compare independent baselines, evaluate
   robustness, group fairness, privacy, security, cost and suitability. Shared
@@ -358,7 +371,9 @@ public product methodology, not an independently replicated result.
   correlation, and threshold AUROC separately. Agree with decision owners on
   consequences, tolerable error and the decision itself. Check calibration and
   coverage of accepted cases. Report calibration in the intended deployment
-  distribution before using a confidence label.
+  distribution before using a confidence label. Choose acceptance thresholds on
+  development/calibration data. Verify on a separate time or question-family
+  holdout and record bucket counts, grouped uncertainty and risk versus coverage.
 - Recheck drift, freshness, counterfactual distance, subgroup error and changes in
   model/configuration. Decline predictive use if outside validated scope. Record
   whether each metric was computed or remains NOT_ASSESSED.

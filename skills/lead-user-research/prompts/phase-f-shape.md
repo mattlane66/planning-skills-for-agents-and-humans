@@ -157,6 +157,11 @@ Update:
 - `concepts.json`;
 - `change_log.json`.
 
+The change log participates in the evidence fingerprint. If you update it,
+record a `PF##` event using `scripts/record_post_freeze_evidence.py` before
+validating. For shaping-only bookkeeping, describe the change without claiming
+that any observations were added.
+
 ## Phase handoff
 
 After writing and validating this phase, follow
